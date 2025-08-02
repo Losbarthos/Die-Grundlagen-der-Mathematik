@@ -1,0 +1,4772 @@
+%============================================================
+%  Bd. 03 - Mengenlehre %============================================================
+
+\documentclass[main.tex]{subfiles}
+
+
+\ifSubfilesClassLoaded{
+    \usepackage{xr}
+    \externaldocument{_B01}
+  \externaldocument{_B02}
+}{
+   % Code für als Subfile eingebunden
+}
+
+\title{Bd. 03 - Mengenlehre}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{3}
+
+
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+%\listoftheorems
+
+
+
+\chapter{Einführung}
+
+Die Mengenlehre ist ein fundamentaler Teil der Mathematik, der die Grundlage für viele andere Bereiche bildet. In diesem Kapitel werden wir die Zermelo-Fraenkel (ZF) Axiome der Mengenlehre einführen und diskutieren. Dabei bezeichnen \( A \), \( B \), \( C \) und \( D \) stets Mengen, es sei denn, es wird ausdrücklich etwas anderes angegeben. Alle Variablen, die als Mengen bezeichnet werden, sind implizit durch Allquantoren gebunden, es sei denn, es wird ein anderer Quantor verwendet. Das bedeutet, dass Aussagen wie „\( A = B \)“ oder „\( A \neq B \)“ für alle Mengen \( A \) und \( B \) gelten, ohne dass dies explizit angegeben werden muss.
+
+\chapter{Die Zermelo-Fraenkel-Axiome}
+Nachdem wir die grundlegenden Begriffe und Notationen eingeführt haben, wenden wir uns nun den Zermelo-Fraenkel-Axiomen zu, die das Fundament der modernen Mengenlehre bilden. Diese Axiome definieren, wie Mengen gebildet werden können und welche Eigenschaften sie besitzen.
+\begin{definition}[Begriff der Menge]
+Der \textbf{Begriff der Menge} wird durch das \textbf{Element-Symbol} \(\in\) \textbf{implizit definiert}. 
+Das Symbol \(\in\) ist ein binäres Prädikat, das die Mitgliedschaft zwischen einem Element und einer Menge 
+ausdrückt, also \(x \in y\) bedeutet, dass \(x\) ein Element von \(y\) ist. Die Eigenschaften von \(\in\) 
+werden durch die folgenden Axiome der Zermelo-Fraenkel-Mengenlehre festgelegt, welche zusammen die Menge von 
+Aussagen \(\Phi(\in)\) bilden:
+\end{definition}
+
+\FormulaAxiomAuto[Extensionalität]{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}
+
+\FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
+
+\FormulaDefAuto[Leere Menge]{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
+\begin{remark}
+    Hieraus gewinnen wir für alle \(x\):
+    \[
+    x \not\in \emptyset.
+    \]
+Das Symbol \(\emptyset\) wird oft verwendet, um die leere Menge zu repräsentieren. Es stammt aus der skandinavischen Schreibweise des Buchstabens "`O"' und wurde von den Mathematikern André Weil und Bourbaki eingeführt. Es ist wichtig zu beachten, dass \(\emptyset\) nur ein Symbol ist und nicht als eine Zahl oder ein anderes mathematisches Objekt betrachtet werden sollte. In der Mengenlehre repräsentiert es speziell eine Menge, die keine Elemente enthält.
+\end{remark}
+
+\FormulaThmAuto{ \exists! O\forall x (x \not\in O) }
+\begin{tabproof}
+  \proofstep{}{ \exists O\forall x (x \not\in O) }{ \FormulaRefAuto{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)} }
+  \proofstep{2}{ \forall x (x \not\in O) }{ \rA }
+  \proofstep{3}{ \forall x (x \not\in P) }{ \rA }
+  \proofstep{2}{ \forall x (x \not\in O \lor x \in P) }{ \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
+  \proofstep{3}{ \forall x (x \not\in P \lor x \in O) }{ \FormulaRefAuto{ \forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
+  \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) } }
+  \proofstep{2,3}{ O = P }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } }
+  \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
+\end{tabproof}
+
+\FormulaAxiomAuto[Aussonderung]{\forall A\;\forall P\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)\Bigr)}
+
+
+\FormulaDefAuto[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}[Sei \(A\) eine Menge und \(P\) ein einstelliges Prädikat. Wir definieren:]
+\begin{remark}
+Hieraus gewinnen wir für alle \(x\) das Axiom:
+\[
+x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x).
+\]    
+\end{remark}
+
+\FormulaThmAuto[Zur Eindeutigkeit]{ \forall x (x \in B \leftrightarrow P(x)), \forall x (x \in C \leftrightarrow P(x)) \vdash B = C }
+\begin{tabproof}
+  \proofstep{1}{ \forall x (x \in B \leftrightarrow P(x)) }{ \rA }
+  \proofstep{2}{ \forall x (x \in C \leftrightarrow P(x)) }{ \rA }
+  \proofstep{1,2}{ \forall x (x \in B \leftrightarrow x \in C) }{ \FormulaRefAuto{ \forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x)) }{1,2} }
+  \proofstep{1,2}{ B = C }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{3} }
+\end{tabproof}
+
+\FormulaThmAuto[Eindeutigkeit der Komprehension]{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }
+\begin{tabproof}
+  \proofstep{1}{ \exists B(\forall x(x \in B\leftrightarrow P(x))) }{ \rA }
+  \proofstep{2}{ \forall x(x \in A\leftrightarrow P(x)) }{ \rA }
+  \proofstep{3}{ \forall x(x \in B\leftrightarrow P(x)) }{ \rA }
+  \proofstep{2,3}{ A = B }{ \FormulaRefAuto{ \forall x (x \in B \leftrightarrow P(x)), \forall x (x \in C \leftrightarrow P(x)) \vdash B = C }{2,3} }
+  \proofstep{1}{ \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
+\end{tabproof}
+
+\FormulaThmAuto{ \forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x))) }
+\begin{tabproof}
+  \proofstep{1}{ \forall x (P(x) \rightarrow x \in A) }{ \rA }
+  \proofstep{1}{ \forall x(x \in A \land P(x) \leftrightarrow P(x)) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
+  \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{ \FormulaRefAuto{ \{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr) } } }
+  \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) } }
+\end{tabproof}
+
+\FormulaDefAuto[Schnitt]{A \cap B := \{ x \in A \mid x \in B \}}
+
+\FormulaAxiomAuto[Paarmenge]{ \forall A,B\;\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }
+
+\FormulaDefAuto[Paarmenge]{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}[Wir definieren für gegebene Mengen \(A\) und \(B\):]
+\begin{remark}
+Hieraus gewinnen wir für alle \(x\):
+\[
+x \in \{A,B\}
+\;\eqvdash\;
+(x = A \lor x = B).
+\]
+\end{remark}
+
+\FormulaDefAuto[Geordnetes Paar]{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}
+\begin{remark}
+	Ein geordnetes Paar ist eine Paarmenge und damit eindeutig bestimmt.
+\end{remark}
+
+\FormulaAxiomAuto[Vereinigung]{\forall A\;\exists C\;\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)\Bigr)}
+
+\FormulaDefAuto[Vereinigung]{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}[Für eine Menge \(A\) definieren wir:]
+\begin{remark}
+    Hieraus folgt für alle \(x\):
+\[
+x \in \bigcup A 
+\;\eqvdash\;
+\exists B\,(B \in A \,\land\, x \in B).
+\]
+\end{remark}
+
+\FormulaDefAuto[Teilmenge]{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }[Für Mengen \(A\) und \(B\) definieren wir:]{%
+In Worten: \(A\) ist Teilmenge von \(B\).
+}
+
+\FormulaAxiomAuto[Potenzmenge]{ \forall A\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }
+
+\FormulaDefAuto[Potenzmenge]{ \mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }[Für eine Menge \(A\) definieren wir:]
+\begin{remark}
+Hieraus ergibt sich für alle \(x\):
+\[
+x \in \powerset(A) 
+\;\eqvdash\; 
+x \subseteq A.
+\]
+\end{remark}
+
+\FormulaAxiomAuto[Unendlichkeit]{ \exists A\;\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr) }
+
+\FormulaAxiomAuto[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }
+
+\begin{remark}
+Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge ein 
+\textbf{Minimalelement} enthält.    
+\end{remark}
+
+\FormulaAxiomAuto[Ersetzung (Relationenform)]{
+\forall A\;\forall R\;\Bigl( \forall x\in A\;\exists! y\;(x,y)\in R\;\rightarrow\; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr) \Bigr)
+}
+
+\FormulaAxiomAuto[Auswahlaxiom (AC)]{
+\forall x,y \in X \Bigl(x\neq \emptyset \land (x=y\lor x\cap y=\emptyset)\Bigr)
+\;\vdash\;\exists Y\,\forall x \in X\,\exists z\bigl(Y\cap x = \{z\}\bigr)
+}[Sei \(X\) eine Menge, dann gilt:]
+\begin{remark}
+Auf Methaebene definieren wir für beliebige Mengen \(x\) und \(A\): \[x\not\in A:=\neg(x\in A)\]
+\end{remark}
+\begin{remark}
+Im folgenden Abschnitten bezeichnen wir \(A,B,C\) als Mengen. Für die Elemente von Mengen verwenden wir häufig Kleinbuchstaben als Symbole wie \(x,y,z\).
+\end{remark}
+
+\section{Ungleichheit von Mengen}
+
+\FormulaThmAuto{
+A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\land x\not\in B)
+}
+\begin{tabproofwide}
+  \proofstepwide{A \neq B}{\leftrightarrow}{\neg(\forall x(x\in A\leftrightarrow x\in B))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}}
+  \proofstepwide{}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\FormulaRefAuto{\neg\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{1}}}
+  \proofstepwide*{}{\lor}{\exists x(x \in A\land x\not\in B)}{}
+  \proofstepwide{A \neq B}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\rChain{1,2}}}
+  \proofstepwide*{}{\lor}{\exists x(x \in A\land x\not\in B)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{x\in A, x\not\in B\vdash A\neq B}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{x\not\in B}{\rA}
+  \proofstep{1}{\exists x(x\in A\land x\not\in B)}{\rEI{\rAI{1,2}}}
+  \proofstep{1}{A\neq B}{\FormulaRefAuto{A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor \exists x (x \in A\land x\not\in B)}{\rOIa{3}}}
+\end{tabproof}
+
+
+\chapter{Eigenschaften}
+
+\section{Teilmengen}
+
+\subsection{Grundlegende Eigenschaften}
+
+\FormulaThmAuto{ A\subseteq B,\, x\in A \vdash x\in B }
+\begin{tabproof}
+  \proofstep{1}{ A\subseteq B }{ \rA }
+  \proofstep{2}{ x\in A }{ \rA }
+  \proofstep{1}{ x\in A \rightarrow x\in B }{ \rUE{ \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1} } }
+  \proofstep{1,2}{ x\in B }{ \rRE{2,3} }
+\end{tabproof}
+
+\FormulaThmAuto{ A = B,\, x \in A \vdash x \in B }
+\begin{tabproof}
+  \proofstep{1}{ A = B }{ \rA }
+  \proofstep{2}{ x \in A }{ \rA }
+  \proofstep{1}{ x \in A \leftrightarrow x \in B }{ \rUE{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } } }
+  \proofstep{1,2}{ x \in B }{ \FormulaRefAuto{ P \leftrightarrow Q,\; P \vdash Q }{3,2} }
+\end{tabproof}
+
+\FormulaThmAuto{ a \in A,\; b \not\in A \vdash a \neq b }
+\begin{tabproof}
+  \proofstep{1}{ a \in A }{ \rA }
+  \proofstep{2}{ b \not\in A }{ \rA }
+  \proofstep{3}{ a = b }{ \rA }
+  \proofstep{1,3}{ b \in A }{ \rIE{3,1} }
+  \proofstep{1,2,3}{ \bot }{ \rAI{4,2} }
+  \proofstep{1,2}{ a \neq b }{ \rCI{3,5} }
+\end{tabproof}
+
+\subsection{Ordnungsrelation}
+
+\FormulaThmAuto[Reflexivität von Teilmengen]{ A \subseteq A }
+\begin{tabproof}
+  \proofstep{}{ x \in A \rightarrow x \in A }{ \FormulaRefAuto{ P \rightarrow P } }
+  \proofstep{}{ \forall x(x \in A \rightarrow x \in A) }{ \rUI{1} }
+  \proofstep{}{ A \subseteq A }{ \FormulaRefAuto{ A \subseteq B := \forall x\,(x \in A \rightarrow x \in B) }{2} }
+\end{tabproof}
+
+
+\FormulaThmAuto[Antisymmetrie von Teilmengen]{ A \subseteq B \land B \subseteq A \eqvdash A = B }
+\begin{tabproofwide}
+  \proofstepwide{A \subseteq B \land B \subseteq A}{\leftrightarrow}{\forall x(x \in A \rightarrow x \in B)}{\multirow{2}{*}{\FormulaRefAuto{ A \subseteq B := \forall x\,(x \in A \rightarrow x \in B) }}}
+  \proofstepwide{}{ \land }{\forall x(x \in B \rightarrow x \in A)}{}
+  \proofstepwide*{}{ \leftrightarrow }{\forall x(x \in A \leftrightarrow x \in B)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
+  \proofstepwide{}{ \leftrightarrow }{A = B}{\FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{2}}
+  \proofstepwide*{A \subseteq B \land B \subseteq A}{ \leftrightarrow }{A = B}{\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto[Transitivität von Teilmengen]{
+A \subseteq B, B \subseteq C \vdash A \subseteq C
+}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{B \subseteq C}{\rA}
+  \proofstep{1}{\forall x(x \in A \rightarrow x \in B)}{\FormulaRefAuto{A \subseteq B := \forall x(x \in A \rightarrow x \in B)}{1}}
+  \proofstep{1}{\forall x(x \in B \rightarrow x \in C)}{\FormulaRefAuto{A \subseteq B := \forall x(x \in A \rightarrow x \in B)}{2}}
+  \proofstep{1,2}{\forall x(x \in A \rightarrow x \in C)}{\FormulaRefAuto{\forall x(P(x) \rightarrow Q(x)), \forall x(Q(x) \rightarrow R(x)) \vdash \forall x(P(x) \rightarrow R(x))}{3,4}}
+  \proofstep{1,2}{A \subseteq C}{\FormulaRefAuto{A \subseteq B := \forall x(x \in A \rightarrow x \in B)}{5}}
+\end{tabproof}
+
+\FormulaThmAuto[Rechtsverträglichkeit von \(\subseteq\) und \(=\)]{
+A \subseteq B, B = C \vdash A \subseteq C
+}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{B = C}{\rA}
+  \proofstep{3}{B \subseteq C}{\rAEa{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{2}}}
+  \proofstep{4}{A \subseteq C}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{1,3}}
+\end{tabproof}
+
+\begin{remark}[Gemischte Kettenregel]
+Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in einer \emph{Kette} \((\subseteq,=^{*})\) kombiniert werden,  da sie \emph{rechts-verträglich} sind. Ebenso ist \(=\) wegen \FormulaRefAuto{a = b \vdash b = a}{} außerdem Symmetrisch, was mit dem Stern in der Kette illustriert wird.
+\end{remark}
+
+\section{Leere Menge}
+
+
+\FormulaThmAuto{\forall A\,(\emptyset\subseteq A)}
+\begin{tabproof}
+  \proofstep{}{x \not\in \emptyset}{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}}
+  \proofstep{}{x \not\in A \rightarrow x \not\in \emptyset}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{}}
+  \proofstep{}{x \in \emptyset \rightarrow x \in A}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{2}}
+  \proofstep{}{\forall x(x \in \emptyset \rightarrow x \in A)}{\rUI{3}}
+  \proofstep{}{\emptyset \subseteq A}{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{4}}
+  \proofstep{}{\forall A(\emptyset \subseteq A)}{\rUI{5}}
+\end{tabproof}
+
+\FormulaThmAuto{
+A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
+}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{\forall x \in B\,(x \not\in A)}{\rA}
+  \proofstep{3}{x \in A}{\rA}
+  \proofstep{1,3}{x \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{1,3}}
+  \proofstep{2}{x \in B \rightarrow x \not\in A}{\rUE{2}}
+  \proofstep{2}{x \in A \rightarrow x \not\in B}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{5}}
+  \proofstep{2,3}{x \not\in B}{\rRE{3,6}}
+  \proofstep{1,2,3}{\bot}{\rBI{4,7}}
+  \proofstep{1,2}{x \not\in A}{\rCI{3,8}}
+  \proofstep{1,2}{\forall x\,(x \not\in A)}{\rUI{9}}
+  \proofstep{1,2}{A = \emptyset}{\FormulaRefAuto{\emptyset := \iota O\,(\forall x\,(x \not\in O))}{10}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in S \vdash S \neq \emptyset}
+\begin{tabproof}
+  \proofstep{1}{a \in S}{\rA}
+  \proofstep{}{a \not\in \emptyset}{\FormulaRefAuto{\emptyset := \iota O\,(\forall x\,(x \not\in O))}}
+  \proofstep{1}{S \neq \emptyset}{\FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists x\,(x \in S) \vdash S \neq \emptyset}
+\begin{tabproof}
+  \proofstep{1}{\exists x\,(x \in S)}{\rA}
+  \proofstep{2}{a \in S}{\rA}
+  \proofstep{2}{S \neq \emptyset}{\FormulaRefAuto{a \in S \vdash S \neq \emptyset}{2}}
+  \proofstep{1}{S \neq \emptyset}{\rEE{1,2,3}}
+\end{tabproof}
+
+
+\section{Ausgesonderte Menge}
+
+\FormulaThmAuto{x \not\in \{x \in A \mid P(x)\}\eqvdash (x \not\in A \lor \neg P(x))}
+\begin{tabproofwide}
+  \proofstepwide{x \not\in \{x \in A \mid P(x)\}}{\leftrightarrow}{\neg(x \in A \land P(x))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\{x\in A \mid P(x)\} := \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)) ))}}}
+  \proofstepwide{\neg(x \in A \land P(x))}{\leftrightarrow}{x \not\in A \lor \neg P(x)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}}
+  \proofstepwide{x \not\in \{x \in A \mid P(x)\}}{\leftrightarrow}{x \not\in A \lor \neg P(x)}{\rChain{1,2}}
+\end{tabproofwide}
+
+\FormulaThmAuto{\{ x \in A \mid P(x) \} \subseteq A}
+\begin{tabproof}
+  \proofstep{1}{x \in \{ x \in A \mid P(x) \}}{\rA}
+  \proofstep{1}{x \in A \land P(x)}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x))))}{1}}
+  \proofstep{1}{x \in A}{\rAEa{2}}
+  \proofstep{}{ \{ x \in A \mid P(x) \} \subseteq A }{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,3}}}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x \in A\,(P(x)),\, y \in A \vdash P(y)}
+\begin{tabproof}
+  \proofstep{1}{\forall x \in A\,(P(x))}{\rA}
+  \proofstep{2}{y \in A}{\rA}
+  \proofstep{1}{y \in A \rightarrow P(y)}{\rUE{1}}
+  \proofstep{1,2}{P(y)}{\rRE{3,2}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x \in M(P(x)) \eqvdash M = \{x \in M \mid P(x)\}}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x \in M(P(x))}{\rA}
+  \proofstep{1}{x \in M \rightarrow P(x)}{\rUE{1}}
+  \proofstep{1}{x \in M \leftrightarrow (x \in M \land P(x))}{\FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (P \land Q)}{2}}
+  \proofstep{1}{x \in M \leftrightarrow x \in \{x \in M \mid P(x)\}}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{3}}
+  \proofstep{1}{\forall x (x \in M \leftrightarrow x \in \{x \in M \mid P(x)\})}{\rUI{4}}
+  \proofstep{1}{M = \{x \in M \mid P(x)\}}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{M = \{x \in M \mid P(x)\}}{\rA}
+  \proofstep{2}{y \in M}{\rA}
+  \proofstep{1,2}{y \in \{x \in M \mid P(x)\}}{\FormulaRefAuto{A = B,\, x \in A \vdash x \in B}{1,2}}
+  \proofstep{1,2}{P(y)}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{3}}}
+  \proofstep{1}{y \in M \rightarrow P(y)}{\rRI{2,4}}
+  \proofstep{1}{\forall x \in M(P(x))}{\rUI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+\section{Schnittmengen}
+
+\FormulaThmAuto{x \in A \cap B \vdash x \in A}
+\begin{tabproof}
+\proofstep{1}{x \in A \cap B}{\rA}
+\proofstep{1}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}}}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in A \cap B \vdash x \in B}
+\begin{tabproof}
+\proofstep{1}{x \in A \cap B}{\rA}
+\proofstep{1}{x \in B}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}}}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in A \cap B \eqvdash x \in A \land x \in B}
+\begin{tabproof}
+\proofstepstar{}{x \in A \cap B \leftrightarrow x \in A \land x \in B}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in (A \cap B) \cap C \eqvdash (x \in A \land x \in B) \land x \in C}
+\begin{tabproofwide}
+  \proofstepwide{x \in (A \cap B)}{\leftrightarrow}{x \in A \land x \in B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide{x \in (A \cap B) \cap C}{\leftrightarrow}{x \in (A \cap B) \land x \in C}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide{}{\leftrightarrow}{(x \in A \land x \in B) \land x \in C}{\rLRS{1}}
+  \proofstepwide{x \in (A \cap B) \cap C}{\leftrightarrow}{(x \in A \land x \in B) \land x \in C}{\rChain{2,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{x \in A \cap (B \cap C) \eqvdash x \in A \land (x \in B \land x \in C)}
+\begin{tabproofwide}
+  \proofstepwide{x \in B \cap C}{\leftrightarrow}{x \in B \land x \in C}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide{x \in A \cap (B \cap C)}{\leftrightarrow}{x \in A \land x \in (B \cap C)}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \land (x \in B \land x \in C)}{\rLRS{1}}
+  \proofstepwide{x \in A \cap (B \cap C)}{\leftrightarrow}{x \in A \land (x \in B \land x \in C)}{\rChain{2,3}}
+\end{tabproofwide}
+
+
+\FormulaThmAuto[Idempotenz des Schnitts]{A = A \cap A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A \cap A}{\leftrightarrow}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \mid P(x)\} := \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x))))}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}}}}
+  \proofstepwide{A}{=}{A \cap A}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto[Kommutativität des Schnitts]{A \cap B = B \cap A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A \cap B}{\leftrightarrow}{x \in A \land x \in B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide{}{ \leftrightarrow }{x \in B \land x \in A}{\FormulaRefAuto{P \land Q \vdash Q \land P}{1}}
+  \proofstepwide{}{ \leftrightarrow }{x \in B \cap A}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{2}}
+  \proofstepwide{x \in A \cap B}{\leftrightarrow}{x \in B \cap A}{\rChain{1,3}}
+  \proofstepwide{A \cap B}{=}{B \cap A}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}}}
+\end{tabproofwide}
+
+
+\FormulaThmAuto[Assoziativität des Schnitts]{(A \cap B) \cap C = A \cap (B \cap C)}
+\begin{tabproofwide}
+  \proofstepwide{x \in (A \cap B) \cap C}{\leftrightarrow}{(x \in A \land x \in B) \land x \in C}{\FormulaRefAuto{x \in (A \cap B) \cap C \eqvdash (x \in A \land x \in B) \land x \in C}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \land (x \in B \land x \in C)}{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R}{1}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \cap (B \cap C)}{\FormulaRefAuto{x \in A \cap (B \cap C) \eqvdash x \in A \land (x \in B \land x \in C)}{}}
+  \proofstepwide{x \in (A \cap B) \cap C}{\leftrightarrow}{x \in A \cap (B \cap C)}{\rChain{1,3}}
+  \proofstepwide{(A \cap B) \cap C}{=}{A \cap (B \cap C)}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}}}
+\end{tabproofwide}
+
+\section{Russel Paradoxon und die universelle Menge}
+
+\FormulaThmAuto[Russells Paradoxon in der ZF-Mengenlehre]{\neg \exists U \forall A (A \in U \leftrightarrow A \not\in A)}
+\begin{tabproof}
+\proofstep{1}{\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rA}
+\proofstep{2}{\forall A (A \in U \leftrightarrow A \notin A)}{\rA}
+\proofstep{2}{U \in U \leftrightarrow U \notin U}{\rUE{2}}
+\proofstep{}{\neg(U \in U \leftrightarrow U \notin U)}{\FormulaRefAuto{\neg (P\leftrightarrow \neg P)}}
+\proofstep{2}{\bot}{\rBI{3,4}}
+\proofstep{1}{\bot}{\rEE{1,2,5}}
+\proofstep{}{\neg\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rCI{1,6}}
+\end{tabproof}
+
+
+
+Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann führt dies aufgrund des nachstehenden Satzes zu einem Widerspruch. 
+
+
+
+\begin{theorem}[Nichtexistenz einer universellen Menge]
+\label{nExUFaALpAInURp}
+\[\neg \exists U \forall A (A \in U)\] 
+\end{theorem}
+
+\begin{proof}
+        \begin{tempdefinition}
+            \[\forall C(R_C\coloneqq \{x\in C\mid x\not\in x\})\]
+        \end{tempdefinition}
+	\[
+	\begin{array}{llll}
+		1 & (1) & \exists U \forall A (A \in U) & \rA \\
+		2 & (2) & \forall A (A \in U) & \rA \\
+            3 & (3) & R_U\in R_U & \rA \\
+		3 & (4) & R_U\not\in R_U & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rUE{\RDefineEqualsLbxInUMidxNotinxRb{3}}}} \\ 
+            3 & (5) & \bot & \rBI{3,4} \\   
+              & (6) & R_U\not\in R_U & \rCI{3,5} \\   
+		   & (7) & R_U\not\in U\lor R_U\in R_U & \FormulaRefAuto{x \not\in \{x \in A \mid P(x)\}\eqvdash (x \not\in A \lor \neg P(x))}{\RDefineEqualsLbxInUMidxNotinxRb{6}}  \\
+		   & (8) & R_U\not\in R_U\rightarrow R_U\not\in U &  \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{7}} \\
+		   & (9) & R_U\not\in U & \rRE{6,8} \\
+		2 & (10) & R_U\in U & \rUE{2} \\
+		2 & (11) & \bot & \rBI{9,10} \\	
+		1 & (12) & \bot & \rEE{1,2,11} \\	
+		   & (13) & \neg\exists U \forall A (A \in U) & \rCI{1,12} \\									  			  
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AcaBSubseteqA}
+\[A \cap B \subseteq A\]
+\end{theorem}
+\begin{proof}
+    \[
+        \begin{array}{llll}
+		1 & (1) & x \in A \cap B & \rA \\
+		1 & (2) & x \in A & \rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}} \\
+		& (3) & A \cap B \subseteq A & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AcaBSubseteqB}
+\[A \cap B \subseteq B\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+	   1 & (1) & x \in A \cap B & \rA \\
+	   1 & (2) & x \in B & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}} \\
+	    & (3) & A \cap B \subseteq B & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBImpAcaCSubseteqBcaC}
+\[A \subseteq B \vdash A \cap C \subseteq B\cap C\]
+\end{theorem}
+\begin{proof}
+    \[
+        \begin{array}{llll}
+	   1 & (1) & A \subseteq B & \rA \\
+          2 & (2) & x\in A\cap C & \rA \\
+          2 & (3) & x\in A & \FormulaRefAuto{x \in A \cap B \vdash x \in A}{2}  \\
+          2 & (4) & x\in C & \FormulaRefAuto{x \in A \cap B \vdash x \in B}{2} \\
+          1,2 & (5) & x\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{1,3} \\
+          1,2 & (6) & x\in B\cap C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{5,4}}  \\
+          1 & (7) & A\cap C\subseteq B\cap C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{2,6}}} \\
+        \end{array}
+    \]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBEqvAcaBEqualsA}
+\[A \subseteq B \eqvdash A \cap B = A\]
+\end{theorem}
+\begin{proof}
+    \(\vdash:\)
+    \[
+        \begin{array}{lllcll}
+	   1 & (1) & \multicolumn{3}{l}{A \subseteq B} & \rA \\
+	    & (2) & \multicolumn{3}{l}{A\cap B\subseteq A} & \AcaBSubseteqA{} \\
+	      & (3) & A&=&A\cap A & \FormulaRefAuto{A = A \cap A}{} \\		
+	   1 & (4) & &\subseteq &A\cap B & \ASubseteqBImpAcaCSubseteqBcaC{1} \\	
+          1 & (5) & A&\subseteq &A\cap B & \rChain{3,4} \\	
+          1 & (6) & A\cap B&=&A & \FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{\rAI{2,5}} \\	
+        \end{array}
+    \]
+    \(\dashv:\)
+    \[
+        \begin{array}{llll}
+	   1 & (1) & A\cap B = A & \rA \\
+	   1 & (2) & A\subseteq A\cap B & \rAEb{\FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{1}} \\			
+	   1 & (3) & A\cap B\subseteq B & \AcaBSubseteqB{} \\	
+	   1 & (4) & A\subseteq B & \FormulaRefAuto{ A \subseteq B, B \subseteq C \vdash A \subseteq C }{2,3} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{BSubseteqAEqvAcaBEqualsB}
+\[B \subseteq A \eqvdash A \cap B = B\]
+\end{theorem}
+\begin{proof}
+    \[
+        \begin{array}{llll}
+	      & (1) & B \subseteq A\leftrightarrow B\cap A = B & \ASubseteqBEqvAcaBEqualsA{} \\
+	    & (2) & B\cap A=A\cap B & \FormulaRefAuto{A \cap B = B \cap A}{} \\
+            & (3) & B \subseteq A\leftrightarrow A\cap B = B & \rLRS{2,1} \\
+        \end{array}
+    \]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{EmptysetcaAEqualsEmptyset}
+\[\emptyset\cap A = \emptyset\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+	   & (1) & \emptyset\subseteq A & \rUE{\FormulaRefAuto{\forall A\,(\emptyset\subseteq A)}{}} \\
+	   & (2) & \emptyset\cap A  = \emptyset & \ASubseteqBEqvAcaBEqualsA{1} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AcaEmptysetEqualsEmptyset}
+\[A\cap\emptyset = \emptyset\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+	   & (1) & \emptyset\subseteq A & \rUE{\FormulaRefAuto{\forall A\,(\emptyset\subseteq A)}{}} \\
+	   & (2) & A\cap\emptyset = \emptyset & \BSubseteqAEqvAcaBEqualsB{1} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AcaBEqualsEmptysetwxInAImpxNotinB}
+\[A\cap B = \emptyset, x\in A\vdash x\not\in B\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+            1       & (1) & A\cap B = \emptyset & \rA \\
+	    2       & (2) & x\in A & \rA \\
+            3       & (3) & x\in B & \rA \\
+            2,3     & (4) & x\in A\cap B & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,3}} \\
+            1,2,3   & (5) & x\in \emptyset & \rIE{1,4} \\
+                    & (6) & x\not\in \emptyset & \rUE{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}} \\
+                    & (7) & \bot & \rBI{5,6} \\           
+            1,2     & (8) & x\not\in B & \rCE{1,2} \\  
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AcaBEqualsEmptysetwxInBImpxNotinA}
+\[A\cap B = \emptyset, x\in B\vdash x\not\in A\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+            1 & (1) & A\cap B = \emptyset & \rA \\
+	    2 & (2) & x\in B & \rA \\
+              & (3) & B \cap A = A \cap B & \FormulaRefAuto{A \cap B = B \cap A}{} \\
+            1 & (4) & B \cap A = \emptyset & \rIE{1,3} \\
+            1,2 & (5) & x\not\in B & \AcaBEqualsEmptysetwxInAImpxNotinB{5,2} \\
+	\end{array}
+    \]
+\end{proof}
+
+\subsection{Der unendliche Schnitt}
+
+In diesem Abschnitt sei \( P \) ein Prädikat, das einer Menge \( A \) eine Eigenschaft zuweist.
+
+\begin{tempdefinition}[Universelle Schnittmenge mit Einschränkung auf \( B \)]
+\label{DefBigcapLbAMidPLpARpRbMidSubB}
+\[
+\forall B\Bigl(I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)
+\]    
+\end{tempdefinition}
+
+
+\begin{lemma}[ ]
+\label{PLpCRpImpISubBSubseteqISubC}
+\[P(C)\vdash I_B \subseteq I_C\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & P(C) & \rA \\				
+		2 & (2) & x\in I_B & \rA \\
+		2 & (3) & \forall P(A)(x\in A) & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\DefBigcapLbAMidPLpARpRbMidSubB{2}}} \\	
+		2 & (4) & P(C)\rightarrow x\in C & \rUE{3} \\
+		1, 2 & (5) & x\in C & \rRE{1,4} \\
+		1, 2 & (6) & x\in I_C & \DefBigcapLbAMidPLpARpRbMidSubB{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rAI{5,3}}} \\	
+		2 & (7) &  I_B\subseteq I_C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{2,6}}} \\			   
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{lemma}[ ]
+\label{PLpBRpwPLpCRpImpISubBEqualsISubC}
+\[P(B),P(C)\vdash I_B = I_C\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) &  P(B) & \rA \\	
+		2 & (2) &  P(C) & \rA \\		
+            2 & (3) & I_B\subseteq I_C & \PLpCRpImpISubBSubseteqISubC{2} \\			
+            1 & (4) & I_C\subseteq I_C & \PLpCRpImpISubBSubseteqISubC{1} \\			
+            1,2 & (5) & I_B=I_C & \FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{3,4} \\				
+	\end{array}
+	\]
+\end{proof}
+
+\begin{lemma}[ ]
+\label{ExDLpPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp}
+\[
+\exists D(P(D)) \vdash \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+\]
+\begin{proof}
+\[
+\begin{array}{lllll}
+1   & (1)  & P(B) & \rA \\
+2   & (2)  & \exists D\,P(D) & \rA \\
+3   & (3)  & P(D) & \rA \\
+1,3  & (4)  & I_D = I_B & \PLpBRpwPLpCRpImpISubBEqualsISubC{1,3} \\
+3   & (5)  & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \rEI{\rUI{\rRI{1,4}}} \\
+2   & (6)  & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \rEE{2,3,5} \\
+\end{array}
+\]
+\end{proof}
+\end{lemma}
+
+\begin{lemma}[ ]
+\label{FaDLpnPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp}
+\[
+\forall D(\neg P(D)) \vdash \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+\]
+\begin{proof}
+\[
+\begin{array}{lllll}
+1   & (1)  & \forall D(\neg P(D)) & \rA \\
+1   & (2)  & \forall B \Bigl(\neg P(B)\lor C=I_B\Bigr)
+          & \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))}         ChatGPT fragen{1} \\
+1   & (3)  & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \rLRS{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{},2} \\
+1   & (4) & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \rEI{3} \\
+\end{array}
+\]
+\end{proof}
+\end{lemma}
+
+
+\begin{lemma}[ ]
+\label{PLpDRpImpExCFaBLpPLpBRpToCEqualsLbxInBMidFaALpPLpARpToxInARpRb}
+\[
+\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+\]
+\end{lemma}
+
+\begin{proof}
+\[
+\begin{array}{llll}
+        & (1)  & \exists D(P(D))\lor\forall D(\neg P(D)) 
+          & \rLRS{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg\exists x (P(x))}{},\FormulaRefAuto{P \lor \neg P}} \\
+    \multicolumn{4}{l}{\quad \textbf{Fall 1:} \quad \exists D(P(D))\vdash\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)} \\[1ex]
+    \quad 2   & (2)  & \exists D(P(D)) 
+          & \rA \\
+    \quad 2   & (3)  & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) 
+          & \ExDLpPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp{2} \\
+    \multicolumn{4}{l}{\quad \textbf{Fall 2:} \quad \forall D(\neg P(D))\vdash\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)} \\
+    \quad 4   & (4)  & \forall D(\neg P(D))
+          & \rA \\
+    \quad 4   & (5)  & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \FaDLpnPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp{4} \\
+        & (6) & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
+          & \rOE{1,2,3,4,5} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{lemma}[ ]
+\label{PLpBSubZeroRpwFaBLpPLpBRpToCEqualsISubBRpwFaBLpPLpBRpToDEqualsISubBRpImpCEqualsD}
+\[
+P(B_0),\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr),\; \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr)\vdash C=D
+\]
+\end{lemma}
+\begin{proof}
+% Wir führen ein beliebiges Element B_0 ein, für das P(B_0) gilt.
+\[
+\begin{array}{llll}
+1 & (1) & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \rA \\
+2 & (2) & \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr) & \rA \\
+3 & (3) & P(B_0) & \rA \\
+1 & (4) & P(B_0)\rightarrow C=I_{B_0} & \rUE{1} \\
+1,3 & (5) & C=I_{B_0} & \rRE{3,4} \\
+2 & (6) & P(B_0)\rightarrow D=I_{B_0} & \rUE{2} \\
+2,3 & (7) & D=I_{B_0} & \rRE{3,6} \\
+1,2,3 & (8) & C=D & \FormulaRefAuto{a = b,\, c = b \vdash a = c}{5,7} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{PLpDRpImpExonlyoneCFaBLpPLpBRpToCEqualsISubBRp}
+\[P(D)\vdash \exists! C\forall B(P(B)\rightarrow C=I_B)\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+ & (1) & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \PLpDRpImpExCFaBLpPLpBRpToCEqualsLbxInBMidFaALpPLpARpToxInARpRb{} \\	
+2 & (2) & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \rA \\
+3 & (3) & \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr) & \rA \\
+4 & (4) & P(D) & \rA \\
+2,3,4 & (5) & C=D & \PLpBSubZeroRpwFaBLpPLpBRpToCEqualsISubBRpwFaBLpPLpBRpToDEqualsISubBRpImpCEqualsD{4,2,3} \\
+4 & (6) & \exists! C\forall B(P(B)\rightarrow C=I_B) & \UEI{1,2,3,5} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{definition}[Der unendliche Schnitt]
+\label{DefBigcapSubLbPLpARpRbA}
+\[\exists A P(A)\rightarrow \bigcap_{P(B)} B:= \iota C\forall D(P(D)\rightarrow C=I_D)\]
+\end{definition}
+
+
+\begin{theorem}[ ]
+\label{PLpARpImpBigcapSubLbPLpBRpRbBEqualsISubA}
+\[P(A)\vdash \bigcap_{P(B)} B = I_A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+1 & (1) & P(A)  & \rA \\	
+1 & (2) & \exists M(P(M)) & \rEI{1}  \\	
+1 & (3) & \forall D\Bigr(P(D)\rightarrow \bigcap_{P(B)} B=I_D\Bigl)  & \DefBigcapSubLbPLpARpRbA{2}  \\	
+1 & (4) & P(A)\rightarrow \bigcap_{P(B)} B=I_A  & \rUE{3}  \\
+1 & (5) & \bigcap_{P(B)} B=I_A  & \rRE{4,1}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{PLpARpImpxInBigcapSubLbPLpBRpRbBLrFaCLpPLpCRpToxInCRp}
+\[P(A)\vdash x\in \bigcap_{P(B)} B \leftrightarrow \forall C(P(C)\rightarrow x\in C)\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+1 & (1) & \multicolumn{3}{l}{P(A)}  & \rA \\
+2 & (2) & \multicolumn{3}{l}{\forall C(P(C)\rightarrow x\in C)}  & \rA \\
+ & (3) & \multicolumn{3}{l}{\forall C(P(C)\rightarrow x\in C)\rightarrow x\in A}  & \rRI{2,\FormulaRefAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}} \\
+1 & (4) & x\in \bigcap_{P(B)} B &\leftrightarrow& x\in I_A  & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\PLpARpImpBigcapSubLbPLpBRpRbBEqualsISubA{1}}} \\
+1 & (5) &  &\leftrightarrow& x\in A\land \forall C(P(C)\rightarrow x\in C)  & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rIE{\rUE{\DefBigcapLbAMidPLpARpRbMidSubB{}},4}}  \\
+1 & (6) &  &\leftrightarrow& \forall C(P(C)\rightarrow x\in C)  & \FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{3} \\
+1 & (7) & x\in \bigcap_{P(B)} B &\leftrightarrow& \forall C(P(C)\rightarrow x\in C)  & \rChain{4,6} \\
+\end{array}
+\]
+\end{proof}
+
+
+
+
+\label{PLpCRpImpBigcapSubLbPLpARpRbASubseteqC}
+\begin{theorem}[\(P(C)\vdash \bigcap_{P(A)} A\subseteq C\)]
+\end{theorem}
+
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & P(C) & \rA \\
+		2 & (2) & x\in\bigcap_{P(A)} A & \rA \\
+		2 & (3) & \forall A(P(A)\rightarrow x\in A) & \PLpARpImpxInBigcapSubLbPLpBRpRbBLrFaCLpPLpCRpToxInCRp{2} \\
+		1,2 & (4) & x\in C & \FormulaRefAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}{1,3} \\		
+		1 & (5) & \forall x(x\in\bigcap_{P(A)} A\rightarrow x\in C) & \rUI{\rRI{2,4}} \\	
+		1 & (6) & \bigcap_{P(A)} A\subseteq  C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{5} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+\section{Eigenschaften der Paarmenge}
+
+\begin{theorem}[ ]
+\label{xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb}
+\[x\not\in \{a,b\}\eqvdash x\neq a\land x\neq b\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		& (1) & x\not\in \{a,b\}&\leftrightarrow& \neg(x=a\lor x=b) & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)} \\
+        & (2) & &\leftrightarrow& x\neq a\land x\neq b & \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{1} \\
+	\end{array}
+	\]	
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aInLbawbRb}
+\[a\in \{a,b\}\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		& (1) & a=a & \rIE{} \\
+		& (2) & a=a\lor a=b & \rOIa{1}  \\
+		& (3) & a\in \{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2}  \\
+	\end{array}
+	\]	
+\end{proof}
+
+\begin{theorem}[ ]
+\label{bInLbawbRb}
+\[b\in \{a,b\}\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		& (1) & b=b & \rIE{} \\
+		& (2) & b=a\lor b=b & \rOIb{1}  \\
+		& (3) & b\in \{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2}  \\
+	\end{array}
+	\]	
+\end{proof}
+
+\begin{theorem}[ ]
+\label{LbawbRbEqualsLbbwaRb}
+\[\{a,b\}=\{b,a\}\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		& (1) & x\in\{a,b\} &\leftrightarrow& x=a\lor x=b & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{} \\
+        & (2) &  &\leftrightarrow& x=b\lor x=a & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{1} \\
+        & (3) &  &\leftrightarrow& \in\{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2} \\
+        & (4) & x\in\{a,b\} &\leftrightarrow& x\in\{b,a\} & \rChain{1,3} \\
+        & (5) & \{a,b\} &=& \{b,a\} & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}} \\
+	\end{array}
+	\]	
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{LbawbRbNotEqualsEmptyset}
+\[\{a,b\}\neq\emptyset\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		& (1) & a\in \{a,b\} & \aInLbawbRb{} \\
+		& (2) & \{a,b\}\neq\emptyset & \FormulaRefAuto{\exists x\,(x \in S) \vdash S \neq \emptyset}{1}  \\
+	\end{array}
+	\]	
+\end{proof}
+
+\begin{definition}[Einermenge]
+\label{DefLbaRb}
+\[
+\{a\} := \{a,a\}
+\]
+\end{definition}
+
+\begin{theorem}[ ]
+\label{aInLbaRb}
+\[a\in \{a\}\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a\in \{a,a\} & \aInLbawbRb{} \\
+		   & (2) & a\in \{a\} & \DefLbaRb{1} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{xInLbaRbEqvxEqualsa}
+\[x\in \{a\}\eqvdash x=a\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		   & (1) & x\in \{a\}&\leftrightarrow& x\in \{a,a\} & \rIE{\DefLbaRb{}, 1} \\
+          & (2) & &\leftrightarrow& x=a\lor x=a & \rIE{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}, 1} \\
+          & (3) & &\leftrightarrow& x=a & \FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{2} \\
+          & (4) & x\in \{a\} &\leftrightarrow& x=a & \rChain{1,3} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}
+\label{xNotinLbaRbEqvxNotEqualsa}
+\[x\not\in \{a\}\eqvdash x\neq a\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		   & (1) & x\not\in \{a\}\leftrightarrow x\neq a & \FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\xInLbaRbEqvxEqualsa{}} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}
+\label{aInAImpLbaRbSubseteqA}
+\[a\in A\vdash \{a\}\subseteq A\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & x\in \{a\} & \rA \\
+		2 & (2) & a\in A & \rA \\
+		1 & (3) & x=a & \xInLbaRbEqvxEqualsa{1} \\		
+		1,2 & (4) & x\in A & \rIE{3,2} \\	
+		2 & (5) & \{a\}\subseteq A & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,4}}} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\section{Definition und Eigenschaften der Differenz}
+
+\begin{definition}[ ]
+\label{DefASetminusB}
+\[A \setminus B := \{ x \in A \mid x \not\in B \}\]
+\end{definition}
+
+\begin{theorem}[ ]
+\label{xInASetminusBLrxInAAndxNotinB}
+\[x\in A\setminus B\leftrightarrow x\in A\land x\not\in B \]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{lllcll}
+	      & (1) & x\in A\setminus B&\leftrightarrow& x\in \{x\in A\mid x\not\in B\} & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\DefASetminusB{}}} \\
+        & (2) & &\leftrightarrow& x\in A\land x\not\in B & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{1} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{cInASetminusLbaRbImpcNotEqualsa}
+\[ c\in A\setminus\{a\}\vdash c\neq a \]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+	    1 & (1) & c\in A\setminus\{a\} & \rA \\
+        1 & (2) & c\not\in \{a\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
+		1 & (3) & c\neq a & \cInASetminusLbaRbImpcNotEqualsa{2} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{cInASetminusLbawbRbImpcNotEqualsa}
+\[ c\in A\setminus\{a,b\}\vdash c\neq a \]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & c\in A\setminus\{a,b\} & \rA \\
+		1 & (2) & c\not\in \{a,b\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
+		1 & (3) & c\neq a & \rAEa{\xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb{2}} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{cInASetminusLbawbRbImpcNotEqualsb}
+\[ c\in A\setminus\{a,b\}\vdash c\neq b \]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & c\in A\setminus\{a,b\} & \rA \\
+		1 & (2) & c\not\in \{a,b\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
+		1 & (3) & c\neq b & \rAEb{\xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb{2}} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{cInASetminusBwbInBImpcNotEqualsb}
+\[ c\in A\setminus B, b\in B\vdash c\neq b \]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & c\in A\setminus B & \rA \\
+		2 & (2) & b\in B & \rA \\
+		1 & (3) & c\not\in B & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
+		1,2 & (4) & c\neq b & \FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,3} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aNotinASetminusLbaRb}
+\[a\not\in A\setminus\{a\}\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & a\in A\setminus\{a\} & \rA \\
+		& (2) & a=a & \rII \\
+		1 & (3) & a\neq a & \cInASetminusLbaRbImpcNotEqualsa{1} \\
+		1 & (4) & \bot & \rBI{2,3} \\
+		& (5) & a\not\in A\setminus\{a\} & \rCI{1,4} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{aNotinASetminusLbawbRb}
+\[a\not\in A\setminus\{a,b\}\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & a\in A\setminus\{a,b\} & \rA \\
+		& (2) & a=a & \rII \\
+		1 & (3) & a\neq a & \cInASetminusLbawbRbImpcNotEqualsa{1} \\
+		1 & (4) & \bot & \rBI{2,3} \\
+		& (5) & a\not\in A\setminus\{a,b\} & \rCI{1,4} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{bNotinASetminusLbawbRb}
+\[b\not\in A\setminus\{a,b\}\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & b\in A\setminus\{a,b\} & \rA \\
+		& (2) & b=b & \rII \\
+		1 & (3) & b\neq b & \cInASetminusLbawbRbImpcNotEqualsb{1} \\
+		1 & (4) & \bot & \rBI{2,3} \\
+		& (5) & b\not\in A\setminus\{a,b\} & \rCI{1,4} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aInAwaNotEqualsbImpaInASetminusLbbRb}
+\[a\in A, a\neq b\vdash a\in A\setminus\{b\}\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & a\in A & \rA \\
+		2 & (2) & a\neq b & \rA \\
+		2 & (3) & a\not\in \{b\} & \xNotinLbaRbEqvxNotEqualsa{2} \\
+		1,2 & (4) & a\in A\setminus \{b\} & \xInASetminusBLrxInAAndxNotinB{\rAI{1,3}} \\
+	\end{array}
+    \]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{aInAwbNotEqualsaImpaInASetminusLbbRb}
+\[a\in A, b\neq a\vdash a\in A\setminus\{b\}\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		1 & (1) & a\in A & \rA \\
+		2 & (2) & b\neq a & \rII \\
+            2 & (3) & a\neq b & \FormulaRefAuto{a \neq b \vdash b \neq a}{2} \\
+		1,2 & (4) & a\in A\setminus \{b\} & \aInAwaNotEqualsbImpaInASetminusLbbRb{1,3} \\
+	\end{array}
+    \]
+\end{proof}
+
+\section{Folgen über Indexmengen}
+
+\begin{definition}[Folge über einer Indexmenge]
+Sei $I$ eine Menge, genannt \textbf{Indexmenge}, und sei $F\colon I\to A$ eine Funktion mit einer Menge $A$ als Zielmenge.
+
+Dann definieren wir die \textbf{Folge} $(a_i)_{i\in I}$ durch:
+\[
+(a_i)_{i\in I} \coloneqq \{F(i)\mid i\in I\}.
+\]
+
+Dabei setzen wir für jedes $i\in I$ fest:
+\[
+a_i := F(i).
+\]
+
+Die Menge $\{F(i)\mid i\in I\}$ existiert nach dem Ersetzungsaxiom eindeutig, da $F$ eine Funktion mit Definitionsbereich $I$ ist.
+\end{definition}
+
+
+
+\section{Definition und Eigenschaften der Vereinigung}
+
+\begin{definition}[Vereinigung zweier Mengen]
+\label{DefAcuB}
+    \[
+	A \cup B \coloneqq \bigcup \{ A, B \}
+	\]
+\end{definition}
+
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBImpBigcupASubseteqBigcupB}
+\[A \subseteq B \vdash \bigcup A \subseteq \bigcup B\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & A \subseteq B & \rA \\
+		2 & (2) & x\in\bigcup A & \rA \\
+		2 & (3) & \exists X(X\in A\land x\in X) & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{2} \\
+		4 & (4) & C\in A\land x\in C & \rA \\
+		4 & (5) & C\in A & \rAEa{4} \\
+		4 & (6) & x\in C & \rAEb{4} \\
+		1,4 & (7) & C\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,1} \\
+		1,4 & (8) & x\in\bigcup B & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{\rEI{\rAI{7,6}}} \\
+		1,2 & (9) & x\in\bigcup B & \rEE{3,4,8} \\
+		1 & (10) & \bigcup A\subseteq \bigcup B & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRE{2,9}}} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{zInAcuBEqvLpzInAOrzInBRp}
+\[z \in A \cup B \eqvdash (z \in A \lor z \in B)\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+& (1) & z\in A \cup B &\leftrightarrow & z\in \bigcup \{ A, B \} & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\DefAcuB{}}} \\	
+& (2) &  &\leftrightarrow & \exists C(C\in \{A, B\}\land x\in C) & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{1} \\	
+& (3) &  &\leftrightarrow & \exists C((C=A\lor C=B)\land x\in C) & \rLRS{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}} \\
+& (4) &  &\leftrightarrow & x\in A\lor x\in B & \FormulaRefAuto{\exists c((c=a\lor c=b)\land P(c))\dashv \vdash P(a)\lor P(b)}{3}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInAImpzInAcuB}
+\[z\in A\vdash z \in A \cup B\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+1 & (1) & z\in A  & \rA  \\	
+1 & (2) & z\in A\lor z\in B  & \rOIa{1}  \\	
+1 & (3) & z\in A\cup B  & \zInAcuBEqvLpzInAOrzInBRp{2}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInBImpzInAcuB}
+\[z\in B\vdash z \in A \cup B\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+1 & (1) & z\in B  & \rA  \\	
+1 & (2) & z\in A\lor z\in B  & \rOIb{1}  \\	
+1 & (3) & z\in A\cup B  & \zInAcuBEqvLpzInAOrzInBRp{2}  \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{xInLbawbRbEqvxInLbaRbcuLbbRb}
+\[x\in \{a,b\}\eqvdash x\in \{a\}\cup \{b\}\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+  & (1) & x\in \{a\}&\leftrightarrow& x=a & \xInLbaRbEqvxEqualsa{} \\
+  & (2) & x\in \{b\}&\leftrightarrow& x=b & \xInLbaRbEqvxEqualsa{} \\
+  & (3) & B\in\{\{a\},\{b\}\}&\leftrightarrow& B=\{a\}\lor B=\{b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}  \\
+  & (4) & x\in \{a,b\}&\leftrightarrow& x=a\lor x=b & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{} \\
+  & (5) & &\leftrightarrow& x\in\{a\}\lor x=b & \rLRS{1}\\
+  & (6) & &\leftrightarrow& x\in\{a\}\lor x\in\{b\} & \rLRS{2}\\
+  & (7) & &\leftrightarrow& \exists B((B=\{a\}\lor B=\{b\})\land x\in B) & \FormulaRefAuto{\exists c((c=a\lor c=b)\land P(c))\dashv \vdash P(a)\lor P(b)}{6}\\
+  & (8) & &\leftrightarrow& \exists B(B\in\{\{a\},\{b\}\}\land x\in B) & \rLRS{3}\\
+  & (9) & &\leftrightarrow& x\in\bigcup \{\{a\},\{b\}\} & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{8}\\
+  & (10) & &\leftrightarrow& x\in\{a\}\cup\{b\} & \DefAcuB{8}\\
+  & (11) & x\in \{a,b\}&\leftrightarrow& x\in\{a\}\cup\{b\} & \rChain{4,10}\\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{LbawbRbEqualsLbaRbcuLbbRb}
+\[\{a,b\}=\{a\}\cup \{b\}\]
+\end{theorem}
+
+\begin{proof}
+\[
+\begin{array}{llll}
+ & (1) & x\in \{a,b\}\leftrightarrow x\in \{a\}\cup \{b\} & \xInLbawbRbEqvxInLbaRbcuLbbRb{} \\
+ & (2) & \{a,b\}=\{a\}\cup \{b\} & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{aInAcuLbaRb}
+\[a\in A\cup\{a\}\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+ & (1) & a\in\{a\} & \aInLbaRb{} \\
+ & (2) & a\in A\cup\{a\} & \zInBImpzInAcuB{1} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{aInLbaRbcuA}
+\[a\in \{a\}\cup A\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{llll}
+		& (1) & a\in\{a\} & \aInLbaRb{} \\
+		& (1) & a\in\{a\}\cup A & \zInAImpzInAcuB{1} \\
+	\end{array}
+    \]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aNotinBwAEqualsBcuLbaRbImpANsubseteqB}
+\[a\not\in B, A=B\cup \{a\}\vdash A\nsubseteq B\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a\not\in B & \rA \\
+		2 & (2) & A=B\cup \{a\} & \rA \\
+		3 & (3) & A\subseteq B & \rA \\
+		& (4) & a\in B\cup \{a\} & \aInAcuLbaRb{} \\
+		2 & (5) & a\in A & \rIE{2,4} \\
+		2,3 & (6) & a\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,3} \\
+		2,3 & (7) & a\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,3} \\
+		1,2,3 & (8) & \bot & \rBI{1,7} \\
+		1,2 & (9) & A\nsubseteq B & \rBI{1,7} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{xInAEqvxInAcuA}
+\[x\in A \eqvdash x\in A \cup A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & x \in A &\leftrightarrow& x\in A\lor x\in A & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{} \\
+ & (2) & &\leftrightarrow& x\in A\cup A & \zInAcuBEqvLpzInAOrzInBRp{} \\
+  & (3) & x \in A&\leftrightarrow& x\in A\cup A & \rChain{1,2} \\
+\end{array}
+\]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{AEqualsAcuA}
+\[A = A \cup A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) &x \in A&\leftrightarrow& x\in A\cup A & \xInAEqvxInAcuA{} \\
+ & (2) & A&=& A\cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{xInAcuBEqualsxInBcuA}
+\[x\in A \cup B \eqvdash x\in B \cup A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & x \in A\cup B &\leftrightarrow& x\in A\lor x\in B & \zInAcuBEqvLpzInAOrzInBRp{} \\
+ & (2) &  &\leftrightarrow& x\in B\lor x\in A & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{1} \\
+ & (3) &  &\leftrightarrow& x\in B\cup A & \zInAcuBEqvLpzInAOrzInBRp{2} \\
+ & (4) & x \in A\cup B&\leftrightarrow& x\in B\cup A & \rChain{1,3} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{AcuBEqualsBcuA}
+\[A \cup B = B \cup A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) &  x \in A\cup B&\leftrightarrow& x\in B\cup A & \xInAcuBEqualsxInBcuA{} \\
+ & (2) & A \cup B &=& B \cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{xInAEqvxInAcuEmptyset}
+\[x\in A\eqvdash x\in A\cup\emptyset\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & x\in A &\leftrightarrow & x\in A\lor x\in\emptyset & \FormulaRefAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}} \\
+ & (2) &  &\leftrightarrow & x\in A\cup\emptyset & \zInAcuBEqvLpzInAOrzInBRp{1} \\
+  & (3) &  x\in A &\leftrightarrow & x\in A\cup\emptyset & \rChain{1,2} \\
+\end{array}
+\]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{AEqualsAcuEmptyset}
+\[A=A\cup\emptyset\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    1 & (1) & x\in A &\leftrightarrow & x\in A\cup\emptyset & \xInAEqvxInAcuEmptyset{} \\  
+    1 & (2) & A &=& A\cup\emptyset & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{AEqualsEmptysetcuA}
+\[A=\emptyset\cup A\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		   & (1) & A=A\cup\emptyset & \AEqualsAcuEmptyset{} \\
+          & (2) & A\cup\emptyset = \emptyset\cup A & \AcuBEqualsBcuA{} \\
+          & (3) & A = \emptyset\cup A & \rIE{2,1} \\
+  
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{AcuLbARbEqualsLbEmptysetRbEqualsEqvAEqualsEmptyset}
+\[ A \cup \{A\} = \{\emptyset\} = \eqvdash A = \emptyset\]
+\end{theorem}
+\begin{proof}
+\(\vdash:\)
+\[
+\begin{array}{llll}
+    1       & (1) & \{\emptyset\} = A \cup \{A\} & \rA \\
+            & (2) & A\in A \cup \{A\} & \aInAcuLbaRb{} \\
+    1       & (3) & A\in\{\emptyset\} & \FormulaRefAuto{ A = B,\, x \in A \vdash x \in B }{1,2} \\
+    1       & (4) & A=\emptyset & \xInLbaRbEqvxEqualsa{3} \\
+\end{array}
+\]
+\(\dashv:\)
+\[
+\begin{array}{llll}
+    1 & (1) & A = \emptyset & \rA \\
+      & (2) & \{\emptyset\} = \emptyset\cup\{\emptyset\} & \AEqualsEmptysetcuA{} \\
+    1 & (3) &  A\cup\{A\} = \{\emptyset\} & \rIE{1,\FormulaRefAuto{a = b \vdash b = a}{2}} \\
+\end{array}
+\]
+
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInAcuBEqvzNotinATozInB}
+\[z\in A \cup B \eqvdash z\not\in A \rightarrow z\in B\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{lllcll}
+	   & (1) & z \in A \cup B&\leftrightarrow & z\in A\lor z\in B & \zInAcuBEqvLpzInAOrzInBRp{}  \\
+          & (2) & &\leftrightarrow & z\not\in A\rightarrow z\in B & \FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1} \\
+	\end{array}
+	\]		
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInAcuBEqvzNotinBTozInA}
+\[z\in A \cup B \eqvdash z\not\in B \rightarrow z\in A\]
+\end{theorem}
+\begin{proof}
+    \[
+	\begin{array}{lllcll}
+	   & (1) & z \in A \cup B&\leftrightarrow & z\in A\lor z\in B & \zInAcuBEqvLpzInAOrzInBRp{}  \\
+          & (2) & &\leftrightarrow & z\not\in B\rightarrow z\in A & \FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1} \\
+	\end{array}
+	\]		
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInLpAcuBRpcuCEqvLpzInAOrzInBRpOrzInC}
+\[z \in (A \cup B)\cup C \eqvdash (z \in A \lor z \in B)\lor z\in C\]
+\end{theorem}	
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+    & (1) & z\in (A \cup B)\cup C&\leftrightarrow& z\in (A \cup B)\lor z\in C & \zInAcuBEqvLpzInAOrzInBRp{} \\	
+    & (2) & &\leftrightarrow&  (z\in A \lor z\in B)\lor z\in C & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInAcuLpBcuCRpEqvzInAOrLpzInBOrzInCRp}
+\[z \in A \cup (B\cup C) \eqvdash z \in A \lor (z \in B\lor z\in C)\]
+\end{theorem}	
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+    & (1) & z \in A \cup (B\cup C)&\leftrightarrow& z\in A\lor z\in ( B\cup C) & \zInAcuBEqvLpzInAOrzInBRp{} \\	
+    & (2) & &\leftrightarrow&  z \in A \lor (z \in B\lor z\in C) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInLpAcuBRpcuCEqvzInAcuLpBcuCRp}
+\[z \in (A \cup B)\cup C \eqvdash z \in  A \cup (B\cup C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+    & (1) & z \in (A \cup B)\cup C&\leftrightarrow& (z \in A \lor z \in B)\lor z\in C & \zInLpAcuBRpcuCEqvLpzInAOrzInBRpOrzInC{} \\	
+    & (2) & &\leftrightarrow&  z \in A \lor (z \in B\lor z\in C) & \FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}{1} \\
+    & (3) & &\leftrightarrow&  z \in A \cup (B\cup C) & \zInAcuLpBcuCRpEqvzInAOrLpzInBOrzInCRp{2} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[Assoziativität der Vereinigung]
+\label{LpAcuBRpcuCEqualsAcuLpBcuCRp}
+\[(A \cup B) \cup C = A \cup (B \cup C)\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in (A \cup B)\cup C &\leftrightarrow& z \in  A \cup (B\cup C) & \zInLpAcuBRpcuCEqvzInAcuLpBcuCRp{} \\
+    & (2) & (A \cup B)\cup C &=& A \cup (B\cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInAcuLpBcaCRpEqvzInAOrLpzInBAndzInCRp}
+\[z \in A \cup (B\cap C) \eqvdash z \in A \lor (z \in B\land z\in C)\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in A \cup (B\cap C) &\leftrightarrow& z \in A \lor z\in (B\cap C) & \zInAcuBEqvLpzInAOrzInBRp{}  \\
+    & (2) & &\leftrightarrow& z \in A \lor (z\in B\land z\in C) & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInLpAcaBRpcuCEqvLpzInAAndzInBRpOrzInC}
+\[z \in (A\cap B)\cup C \eqvdash (z \in A\land z\in B)\lor z\in C\]
+\end{theorem}	
+
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in (A\cap B)\cup C &\leftrightarrow& z \in (A\cap B)\cup z\in C & \zInAcuBEqvLpzInAOrzInBRp{}  \\
+    & (2) & &\leftrightarrow& (z \in A\land z\in B)\lor z\in C & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInAcaLpBcuCRpEqvzInAAndLpzInBOrzInCRp}
+\[z \in A\cap (B\cup C) \eqvdash z \in A\land (z\in B\lor z\in C)\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in A\cap (B\cup C) &\leftrightarrow& z \in A\land z\in (B\cup C) & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
+    & (2) & &\leftrightarrow& z \in A\land (z\in B\lor z\in C) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInLpAcuBRpcaCEqvzInLpzInAOrzInCRpAndzInC}
+\[z \in (A\cup B)\cap C \eqvdash z \in (z\in A\lor z\in C)\land z\in C\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in (A\cup B)\cap C &\leftrightarrow& z \in (A\cup B)\land z\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
+    & (2) & &\leftrightarrow& (z\in A\lor z\in B)\land z\in C & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp}
+\[z \in (A\cup B)\cap (C\cup D) \eqvdash (z \in A\lor z\in B)\land (z\in C\lor z\in D)\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in (A\cup B)\cap (C\cup D) &\leftrightarrow& z \in (A\cup B)\land z\in (C\cup D) & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
+    & (2) & &\leftrightarrow&  (z \in A\lor z\in B)\land (z\in C\lor z\in D) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp}
+\[z \in (A\cap B)\cup (C\cap D) \eqvdash (z \in A\land z\in B)\lor (z\in C\land z\in D)\]
+\end{theorem}	
+\begin{proof}
+\[
+\begin{array}{lllcll}
+    & (1) & z \in (A\cap B)\cup (C\cap D) &\leftrightarrow& z \in (A\cap B)\lor z\in (C\cap D) & \zInAcuBEqvLpzInAOrzInBRp{}  \\
+    & (2) & &\leftrightarrow&   (z \in A\land z\in B)\lor (z\in C\land z\in D) & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
+\end{array}
+\]
+\end{proof}
+
+
+
+
+\begin{theorem}[ ]
+\label{zInAcaLpBcuCRpEqvzInLpAcaBRpcuLpAcaCRp}
+\[z\in A \cap (B \cup C) \eqvdash z\in (A \cap B) \cup (A \cap C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in A \cap (B \cup C)&\leftrightarrow& z \in A\land (z\in B\lor z\in C)  & \zInAcaLpBcuCRpEqvzInAAndLpzInBOrzInCRp{} \\
+& (2) & &\leftrightarrow& (z \in A\land z\in B)\lor (z\in A\land z\in C)  & \FormulaRefAuto{P \land (Q\lor R) \dashv \vdash  (P \land Q) \lor (P\land R)}{1} \\
+& (3) & &\leftrightarrow& z \in (A\cap B)\cup (A\cap C)  & \zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp{2} \\
+& (4) &  z\in A \cap (B \cup C) &\leftrightarrow& z \in (A\cap B)\cup (A\cap C)  & \rChain{1,3}{2} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInLpAcuBRpcaCEqvzInLpAcaCRpcuLpBcaCRp}
+\[z\in (A \cup B)\cap C \eqvdash z\in (A \cap C) \cup (B \cap C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in (A \cup B)\cap C &\leftrightarrow& (z\in A\lor z\in B)\land z\in C  & \zInLpAcuBRpcaCEqvzInLpzInAOrzInCRpAndzInC{} \\
+& (2) & &\leftrightarrow& (z\in A\land z\in C)\lor (z\in B\land z\in C)  & \FormulaRefAuto{(P\lor Q)\land R \dashv \vdash  (P \land R) \lor (Q\land R)}{1} \\
+& (3) & &\leftrightarrow& z\in (A \cap C)\cup (B \cap C)  & \zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp{2} \\
+& (4) & z\in (A \cup B)\cap C &\leftrightarrow& z\in (A \cap C)\cup (B \cap C)  & \rChain{1,3} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{zInLpAcaBRpcuCEqvzInLpAcuCRpcaLpBcuCRp}
+\[z\in (A \cap B)\cup C \eqvdash z\in (A \cup C) \cap (B \cup C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in (A \cap B)\cup C &\leftrightarrow& (z \in A\land z\in B)\lor z\in C  & \zInLpAcaBRpcuCEqvLpzInAAndzInBRpOrzInC{} \\
+& (2) & &\leftrightarrow& (z \in A\lor z\in C)\land (z\in B\land z\in C)  & \FormulaRefAuto{(P\land Q)\lor R \dashv \vdash (P \lor R) \land (Q\lor R)}{1} \\
+& (3) & &\leftrightarrow& z\in (A \cup C) \cap (B \cup C)  & \zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp{2} \\
+& (4) &  z\in (A \cap B)\cup C &\leftrightarrow& z\in (A \cup C) \cap (B \cup C)  & \rChain{1,3} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{zInAcuLpBcaCRpEqvzInLpAcuBRpcaLpAcuCRp}
+\[z\in A\cup (B \cap C) \eqvdash z\in (A \cup B) \cap (A \cup C)\]
+\end{theorem}
+
+\begin{proof}
+\[
+\begin{array}{lllcll}
+& (1) & z\in A \cup (B \cap C) &\leftrightarrow& z \in A \lor (z\in B \land z\in C)  & \zInAcuLpBcaCRpEqvzInAOrLpzInBAndzInCRp{} \\
+& (2) & &\leftrightarrow& (z \in A\lor z\in B) \land (z \in A \lor z\in C)  & \FormulaRefAuto{P \lor (Q \land R) \dashv \vdash (P \lor Q) \land (P \lor R)}{1} \\
+& (3) & &\leftrightarrow& z\in (A \cup B) \cap (A \cup C)  & \zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp{2} \\
+& (4) &  z\in A \cup (B \cap C) &\leftrightarrow& z\in (A \cup B) \cap (A \cup C)  & \rChain{1,3} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{AcuLpBcaCRpEqualsLpAcuBRpcaLpAcuCRp}
+\[A \cup (B \cap C) = (A \cup B) \cap (A \cup C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) &  z\in A \cup (B \cap C) &\leftrightarrow& z \in (A\cup B)\cap (A\cup C)  & \zInAcuLpBcaCRpEqvzInLpAcuBRpcaLpAcuCRp{} \\
+& (2) & A \cup (B \cap C) &=& (A \cup B) \cap (A \cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{LpAcaBRpcuCEqualsLpAcuCRpcaLpBcuCRp}
+\[(A \cap B)\cup C = (A \cup C) \cap (B \cup C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in (A \cap B)\cup C &\leftrightarrow& z \in (A \cup C) \cap (B \cup C) & \zInLpAcaBRpcuCEqvzInLpAcuCRpcaLpBcuCRp{} \\
+& (2) & (A \cap B)\cup C &=& (A \cup C) \cap (B \cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{AcaLpBcuCRpEqualsLpAcaBRpcuLpAcaCRp}
+\[A \cap (B \cup C) = (A \cap B) \cup (A \cap C)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in A \cap (B \cup C) &\leftrightarrow& z \in (A \cap B) \cup (A \cap C) & \zInAcaLpBcuCRpEqvzInLpAcaBRpcuLpAcaCRp{} \\
+& (2) & A \cap (B \cup C) &=& (A \cap B) \cup (A \cap C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{LpAcuBRpcaCEqualsLpAcaCRpcuLpBcaCRp}
+\[(A \cup B)\cap C = (A \cap C) \cup (B \cap C)\]
+\end{theorem}
+
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+& (1) & z\in (A \cup B)\cap C &\leftrightarrow& z \in (A \cap C) \cup (B \cap C) & \zInLpAcuBRpcaCEqvzInLpAcaCRpcuLpBcaCRp{} \\
+& (2) & (A \cup B)\cap C &=& (A \cap C) \cup (B \cap C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
+	\end{array}
+	\]
+\end{proof}
+
+\section{Eigenschaften von Teilmengen in Bezug auf Vereinigung und Durchschnitt}
+
+\begin{theorem}[ ]
+\label{ASubseteqAcuB}
+\[A\subseteq A\cup B\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & x\in A &\rightarrow& x\in A\lor x\in B & \FormulaRefAuto{P \rightarrow P \lor Q}{} \\
+ & (2) &        &\rightarrow& x\in A\cup B & \zInAcuBEqvLpzInAOrzInBRp{1} \\
+ & (3) & x\in A  &\rightarrow& x\in A\cup B & \rChain{1,2} \\
+ & (4) &  A\subseteq A\cup B & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{3}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{ASubseteqBcuA}
+\[A\subseteq B\cup A\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & x\in A &\rightarrow& x\in B\lor x\in A & \FormulaRefAuto{P \rightarrow Q \lor P}{} \\
+ & (2) &        &\rightarrow& x\in A\cup B & \zInAcuBEqvLpzInAOrzInBRp{1} \\
+ & (3) & x\in A  &\rightarrow& x\in B\cup A & \rChain{1,2} \\
+ & (4) &  A\subseteq B\cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{3}} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{ASubseteqCwBSubseteqCImpAcuBSubseteqC}
+\[A \subseteq C, B \subseteq C \vdash A \cup B \subseteq C\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & A \subseteq C & & & \rA \\
+ & (2) & B \subseteq C & & & \rA \\
+ & (3) & z \in A \cup B & \rightarrow & z\in A \lor z \in B & \zInAcuBEqvLpzInAOrzInBRp{} \\
+1,2 & (4) & & \rightarrow & z \in C & \FormulaRefAuto{P\rightarrow Q, R\rightarrow Q, P\lor R\vdash Q}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{2}},3}  \\
+1,2 & (5) & z \in A \cup B&\rightarrow& z \in C & \rChain{3,4} \\
+1,2 & (6) & A \cup B \subseteq C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBImpAcuCSubseteqBcuC}
+\[A \subseteq B \vdash A \cup C \subseteq B \cup C\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & A \subseteq B & & & \rA \\
+ & (2) & z\in A\cup C &\rightarrow & z\in A\lor z\in C & \zInAcuBEqvLpzInAOrzInBRp{} \\
+1 & (3) &   &\rightarrow & z\in B\lor z\in C & \FormulaRefAuto{P\rightarrow Q, P\lor R\vdash Q\lor R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},2} \\
+1 & (4) &   &\rightarrow & z\in B\cup C & \zInAcuBEqvLpzInAOrzInBRp{3} \\
+1 & (5) &  z\in A\cup C &\rightarrow & z\in B\cup C & \rChain{2,4} \\
+1 & (6) &  A\cup C\subseteq B\cup C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{ASubseteqBImpCcuASubseteqCcuB}
+\[A \subseteq B \vdash C\cup A \subseteq C\cup B\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & A \subseteq B & & & \rA \\
+ & (2) & C\cup A &=& A\cup C & \AcuBEqualsBcuA{} \\
+1 & (3) &   &\subseteq & B\cup C & \ASubseteqBImpAcuCSubseteqBcuC{1} \\
+1 & (4) &   &=& C\cup B & \AcuBEqualsBcuA{3} \\
+1 & (5) &  C\cup A &\subseteq & C\cup B & \rChain{2,4} \\
+\end{array}
+\]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBwCSubseteqDImpAcuCSubseteqBcuD}
+\[A \subseteq B, C \subseteq D \vdash A \cup C \subseteq B \cup D\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & A \subseteq B & & & \rA \\
+ & (2) & C \subseteq D & & & \rA \\
+1 & (3) & A\cup C &\subseteq & B\cup C & \ASubseteqBImpAcuCSubseteqBcuC{1} \\
+1,2 & (4) &  &\subseteq & B\cup D & \ASubseteqBImpCcuASubseteqCcuB{2} \\
+1,2 & (5) &  A\cup C &\subseteq & B\cup D & \rChain{3,4} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[ ]
+\[A \subseteq B\vdash A \cap C \subseteq B \cap C\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{lllcll}
+ & (1) & A \subseteq B & & & \rA \\
+ & (2) & z\in A\cap C &\rightarrow & z\in A\land z\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{} \\
+1 & (3) &   &\rightarrow & z\in B\lor z\in C & \FormulaRefAuto{P\rightarrow Q, P\lor R\vdash Q\lor R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},2} \\
+1 & (4) &   &\rightarrow & z\in B\cup C & \zInAcuBEqvLpzInAOrzInBRp{3} \\
+1 & (5) &  z\in A\cup C &\rightarrow & z\in B\cup C & \rChain{2,4} \\
+1 & (6) &  A\cup C\subseteq B\cup C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{ASubseteqBwCSubseteqDImpAcaCSubseteqBcaD}
+\[A \subseteq B, C \subseteq D \vdash A \cap C \subseteq B \cap D\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		1 & (1) & A \subseteq B & & & \rA \\
+		2 & (2) & C \subseteq D & & & \rA \\
+		   & (3) & x \in A \cap C &\rightarrow &x\in A\land x\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{} \\
+        1 & (4) & &\rightarrow &x\in B\land x\in C & \FormulaRefAuto{P\rightarrow Q, P\land R\vdash Q\land R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},3} \\
+        1,2 & (5) & &\rightarrow &x\in B\land x\in D & \FormulaRefAuto{P\rightarrow Q, R\land P\vdash R\land Q}         ChatGPT fragen{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{2}},4} \\
+        1,2 & (6) & &\rightarrow &x\in B\cap D & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{5} \\
+        1,2 & (7) & x\in A\cap C &\rightarrow &x\in B\cap D & \rChain{3,6} \\
+        1,2 & (8) & A\cap C\subseteq B\cap D & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{7}} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aInAwbInBImpLbawbRbSubseteqAcuB}
+\[a\in A, b\in B\vdash \{a,b\}\subseteq A\cup B\]
+\end{theorem}	
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a\in A & \rA \\
+		2 & (2) & b\in B & \rA \\
+		1 & (3) & \{a\}\subseteq A & \aInAImpLbaRbSubseteqA{1} \\
+		2 & (4) & \{b\}\subseteq B & \aInAImpLbaRbSubseteqA{2} \\
+		1,2 & (5) & \{a\}\cup \{b\}\subseteq A\cup B & \ASubseteqBwCSubseteqDImpAcuCSubseteqBcuD{3,4} \\
+		& (6) & \{a,b\} = \{a\}\cup \{b\}  & \LbawbRbEqualsLbaRbcuLbbRb{} \\
+		& (7) & \{a,b\}\subseteq A\cup B & \rIE{6,5} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{aInAwbInAImpLbawbRbSubseteqA}
+\[a\in A, b\in A\vdash \{a,b\}\subseteq A\]
+\end{theorem}	
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		1 & (1) & a\in A & & & \rA \\
+		2 & (2) & b\in A & & & \rA \\
+        1,2 & (3) & \{a,b\}&\subseteq& A\cup A & \aInAwbInBImpLbawbRbSubseteqAcuB{1,2} \\
+        1,2 & (4) & &=& A & \AEqualsAcuA{3} \\
+        1,2 & (5) & \{a,b\} &\subseteq & A & \rChain{3,4} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\chapter{Die Potenzmenge}
+
+\section{Eigenschaften der Potenzmenge}
+
+\begin{theorem}[ ]
+\label{ASubseteqBImpPowersetLpARpSubseteqPowersetLpBRp}
+\[A \subseteq B \vdash \powerset(A) \subseteq \powerset(B)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lllcll}
+		1 & (1) & A \subseteq B & & &\rA \\
+		   & (2) & x\in\powerset(A) &\rightarrow &x\subseteq A & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{} \\
+        1 & (3) &  &\rightarrow & x\subseteq B & \FormulaRefAuto{ A \subseteq B, B \subseteq C \vdash A \subseteq C }{2,1} \\
+		  1 & (4) & &\rightarrow&x\in\powerset(B) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{3} \\
+		   & (5) & x\in\powerset(A)&\rightarrow&x\in\powerset(B) & \rChain{2,4} \\
+        1 & (6) & \powerset(A)\subseteq \powerset(B) & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[ ]
+\label{aInAImpLbaRbInPowersetLpARp}
+\[a\in A \vdash \{a\}\in\powerset(A)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a \in A & \rA \\
+		1 & (2) & \{a\}\subseteq A & \aInAImpLbaRbSubseteqA{1} \\
+		1 & (3) & a\in\powerset(A) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{2} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{theorem}[ ]
+\label{ASubseteqBwaInPowersetLpARpImpaInPowersetLpBRp}
+\[A\subseteq B, a\in \powerset(A)\vdash a\in\powerset(B)\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & A\subseteq B & \rA \\
+		2 & (2) & a\in\powerset(A) & \rA{} \\
+		1 & (3) & \powerset(A) \subseteq \powerset(B) & \ASubseteqBImpPowersetLpARpSubseteqPowersetLpBRp{1} \\
+        1,2 & (4) & a\in \powerset(B) & \rRE{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{3}},2} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+\begin{theorem}[ ]
+\label{aInPowersetLpARpImpFaBLpaInPowersetLpAcuBRpRp}
+\[a\in \powerset(A) \vdash \forall B(a\in\powerset(A\cup B))\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a\in \powerset(A) & \rA \\
+        1 & (2) & A\subseteq A\cup B & \FormulaRefAuto{ A \subseteq A }cuB{} \\
+        1 & (3) & a\in\powerset(A\cup B) & \ASubseteqBwaInPowersetLpARpImpaInPowersetLpBRp{2,1} \\
+        1 & (4) & \forall B(a\in\powerset(A\cup B)) & \rUI{3} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+\chapter{Das kartesische Produkt}
+
+
+\subsection{Existenz des karthesischen Produktes}
+
+
+
+\begin{theorem}[ ]
+\label{aInAwbInBImpLpawbRpInPowersetLpPowersetLpAcuBRpRp}
+\[a\in A, b\in B \vdash (a,b)\in \powerset(\powerset(A \cup B))\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & a\in A & \rA \\
+		2 & (2) & b\in B & \rA \\
+		1,2 & (3) & \{a,b\}\subseteq A\cup B & \aInAwbInBImpLbawbRbSubseteqAcuB{1,2} \\
+		1,2 & (4) & \{a,b\}\in \powerset(A\cup B) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{3} \\
+		1 & (5) & a\in A\cup B & \zInAImpzInAcuB{1} \\
+		1 & (6) & \{a\}\in \powerset(A\cup B) & \aInAImpLbaRbInPowersetLpARp{5} \\
+		1,2 & (7) & \{\{a\},\{a,b\}\}\subseteq \powerset(A\cup B) & \aInAwbInAImpLbawbRbSubseteqA{6,4} \\
+		1,2 & (8) & \{\{a\},\{a,b\}\}\in \powerset(\powerset(A\cup B)) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{7} \\
+		1,2 & (9) & (a,b)\in \powerset(\powerset(A\cup B)) & \DefLpawbRp{8} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\begin{theorem}[Eindeutige Existenz des kartesischen Produkts]
+\label{ExonlyoneCFaLpawbRpLpLpawbRpInCLrLpaEqualsAAndbInBRpRp}
+\[\exists! C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B))\]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+  & (1) & \exists C\forall (a,b)(a\in A\land b\in B \rightarrow (a,b)\in C) & \rEI{\aInAwbInBImpLpawbRpInPowersetLpPowersetLpAcuBRpRp{}} \\
+  & (2) & \exists! C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B)) & \FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{1} \\
+\end{array}
+\]
+\end{proof}
+
+
+\begin{definition}[Kartesisches Produkt ($A\times B$)]
+\label{DefAtiB}
+\[
+A\times B := \iota C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B))
+\]
+\end{definition}
+
+\chapter{Funktionen}
+\begin{definition}[Implizite Definition des Funktionssymbols]
+Seien \(A,B\) Mengen. Wir führen die Notation
+\[
+F\colon A \to B
+\]
+als neues Symbol \textbf{implizit} ein, indem wir folgende axiomatische Eigenschaften festlegen:
+
+\begin{enumerate}
+    \item \textbf{Existenz als Menge geordneter Paare:}
+    \[
+    F \subseteq A\times B.
+    \]
+
+    \item \textbf{Funktionale Eindeutigkeit:}
+    \[
+    \forall x\in A\,\forall y,z\in B\;\bigl((x,y)\in F\wedge(x,z)\in F\rightarrow y=z\bigr).
+    \]
+
+    \item \textbf{Totale Definition auf der Domäne:}
+    \[
+    \forall x\in A\,\exists y\in B\;(x,y)\in F.
+    \]
+\end{enumerate}
+Die Schreibweise \(F\colon A\to B\) bedeutet somit genau, dass die Eigenschaften (1), (2) und (3) gelten. Dabei heißt:
+\begin{itemize}
+    \item \(A\) der \textbf{Definitionsbereich (Domäne)} von \(F\), notiert als \(\mathrm{dom}(F)\),
+    \item \(B\) der \textbf{Wertebereich (Kodomain)} von \(F\),
+\end{itemize}
+\end{definition}
+\begin{remark}
+Aufgrund des Ersetzungsaxioms ist das Bild \(F(A)\) unter einer Funktion \(F:A\to B\) eine Menge.
+\end{remark}
+
+\FormulaAxiomAuto[Ersetzung]{ \forall A\;\forall F\;\exists C\;\Bigl(\forall y\;\bigl(y \in C \;\leftrightarrow\; \exists x\,(x \in A \land y = F(x))\bigr)\Bigr) }
+
+
+
+\begin{definition}[Bild einer Menge unter einer Funktion]
+Seien \(A\) eine Menge und \(F\) ein Funktionensymbol, welches auf der Domäne \(A\) 
+definiert ist. Dann definieren wir:
+\[
+\{F(x)\mid x\in A \}:= F(A) := \iota C\bigl(\forall y\,(y\in C \leftrightarrow \exists x\,(x\in A \land y=F(x)))\bigr).
+\]
+Daraus ergibt sich für alle \(y\):
+\[
+y \in F(A)\;\eqvdash\; \exists x\,(x\in A\land y=F(x)).
+\]
+Die Eindeutigkeit der \textbf{Bildmenge} \(F(A)\) wird in Theorem \(\FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{}\) gezeigt.
+\end{definition}
+
+
+\FormulaAxiomAuto[Ersetzung]{ \forall A\;\forall F\;\exists C\;\Bigl(\forall y\;\bigl(y \in C \;\leftrightarrow\; \exists x\,(x \in A \land y = F(x))\bigr)\Bigr) }
+
+
+
+\label{aInbImpbNotina}
+\begin{theorem}[\(a\in b \vdash b\not\in a\)]
+\end{theorem}
+\begin{proof}
+\[
+\begin{array}{llll}
+    1 & (1) & a \in b & \rA \\
+    2 & (2) & b \in a & \rA \\
+      & (3) & \{a, b\} \neq \emptyset & \LbawbRbNotEqualsEmptyset{} \\
+      & (4) & \exists x \in \{a, b\}(x \cap \{a, b\} = \emptyset) & \Regularitaet{} \\
+    5 & (5) & a \cap \{a,b\} = \emptyset & \rA \\
+      & (6) & b \in \{a,b\} & \bInLbawbRb{} \\
+    1 & (7) & a \in b & \rA \\
+    1,2 & (8) & b \in a \land a \in b & \rAI{2,1} \\
+    1,2 & (9) & a \in b \Rightarrow b \in a \Rightarrow a \in b \Rightarrow b \in a \Rightarrow \dots & \text{(zyklisch)} \\
+    1,2 & (10) & b \in a, a \in b \Rightarrow a \cap \{a,b\} \neq \emptyset & \text{(da \(b \in a\) und \(b \in \{a,b\}\))} \\
+    1,2,5 & (11) & \bot & \rBI{5,10} \\
+    1 & (12) & b \not\in a & \rCI{2,11} \\
+\end{array}
+\]
+\end{proof}
+
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 &  (1) & a\in b & \rA \\
+		2 &  (2) & b\in a & \rA \\
+		&  (3) & \{a,b\}\neq\emptyset & \LbawbRbNotEqualsEmptyset{} \\
+		&  (4) & \exists x\in\{a,b\}(x\cap \{a,b\} = \emptyset) & \FormulaRefAuto[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{3} \\
+		&  (5) & c\in\{a,b\}\land c\cap \{a,b\} = \emptyset & \rEE{4} \\
+		&  (6) & c\in\{a,b\} & \rAEa{5} \\
+		&  (7) & c\cap \{a,b\} = \emptyset & \rAEb{5} \\		
+		&  (8) & c=a\lor c=b & \pairE{6}  \\
+		9 & (9) & c=a & \rA \\
+		9 & (10) & a\cap \{a,b\} = \emptyset & \rIE{9,7} \\
+		& (11) & a\in \{a,b\}  &  \pairIb \\
+		& (12) & b\in \{a,b\}  &  \pairIb \\
+		2 & (13) & b\in a\land b\in \{a,b\}  &  \rAI{2,11} \\
+		2 & (14) & b\in a\cap \{a,b\}  &  \capI{13} \\
+		2 & (15) & \exists x(x\in a\cap \{a,b\})  &  \rEI{14} \\
+		2 & (16) & a\cap \{a,b\}\neq\emptyset  &  \ExxInSImpSNotEqualsEmptyset{15} \\
+		2,9 & (17) & \bot  &  \rBI{10,16} \\
+		9 & (18) & b\not\in a  &  \rCI{2,17} \\
+		9 & (19) & a\not\in b\lor b\not\in a  &  \rOIa{18} \\		
+		20 & (20) & c=b & \rA \\
+		20 & (21) & b\cap \{a,b\} = \emptyset & \rIE{20,7} \\
+		1 & (22) & a\in b\land a\in \{a,b\}  &  \rAI{1,12} \\
+		1 & (23) & a\in b\cap \{a,b\}  &  \capI{22} \\
+		1 & (24) & \exists x(x\in b\cap \{a,b\})  &  \rEI{23} \\
+		1 & (25) & b\cap \{a,b\}\neq\emptyset  &  \ExxInSImpSNotEqualsEmptyset{24} \\
+		1,20 & (26) & \bot  &  \rBI{21,25} \\
+		20 & (27) & a\not\in b  &  \rCI{1,26} \\
+		20 & (28) & a\not\in b\lor b\not\in a  &  \rOIb{27} \\
+		& (29) & a\not\in b\lor b\not\in a  &  \rOIb{27} \\
+		& (30) & a\in b\rightarrow b\not\in a  & \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{29} \\
+		1 & (31) & b\not\in a  & \rRE{1,29} \\			
+	\end{array}
+	\]
+\end{proof}
+
+
+
+
+\chapter{Das Unendlichkeit}
+
+Das Unendlichkeit (\(Inf.\)) ist ein weiteres grundlegendes Axiom in der Zermelo-Fraenkel Mengenlehre. Es garantiert die Existenz mindestens einer unendlichen Menge und ist somit die Grundlage für die Entwicklung der Theorie der natürlichen Zahlen in der Mengenlehre. Formal ausgedrückt:
+
+\label{ExALpEmptysetInAAndFaxInALpxcuLbxRbInARpRp}
+\[
+\exists A (\emptyset \in A \land \forall x\in A (x \cup \{x\} \in A))
+\]
+
+Dieses Axiom garantiert, dass es mindestens eine Menge \( A \) gibt, die das leere Set enthält und für jedes Element \( x \) in \( A \), das Set \( x \cup \{x\} \) ebenfalls in \( A \) ist.
+
+\chapter{Das Regularität}
+\label{rule:Regularity}
+Das Regularität (Reg.), auch als Fundierung bekannt, ist ein weiteres grundlegendes Axiom in der Zermelo-Fraenkel Mengenlehre. Es wird verwendet, um das Induktionsprinzip zu beweisen. Formal ausgedrückt:
+
+\label{FaALpANotEqualsEmptysetToExxInALpxcaAEqualsEmptysetRpRp}
+\[
+\forall A (A \neq \emptyset \rightarrow \exists x\in A (x \cap A = \emptyset))
+\]
+
+\section{Regel der Regularität}
+\label{rule:RegI}
+
+% Regel für die Einführung der Regularität
+Wir führen im Folgenden die Regel der Regularität ein. Diese Regel ermöglicht es, aus der Annahme, dass eine Menge \(A\) nicht leer ist (\(A \neq \emptyset\)), die Existenz eines Elements \(x\) in \(A\) zu schlussfolgern, für das gilt, dass \(x\) und \(A\) disjunkt sind (\(x \cap A = \emptyset\)):
+
+\[
+\begin{array}{llll}
+	i & (1) & A \neq \emptyset & \rA \\
+	i & (2) & \exists x \in A (x \cap A = \emptyset) & \RegI{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+
+\chapter{Die Menge der natürlichen Zahlen}
+
+\begin{definition}[Existenz der natürlichen Zahlen in ZF ($Df.\mathbb{N}$)]
+	Unter Verwendung des Axioms der Unendlichkeit und des Aussonderungsaxioms kann die Menge der natürlichen Zahlen \( \mathbb{N} \) in der ZF-Mengenlehre definiert werden als:
+	\[
+	\mathbb{N} := \bigcap \{A\mid \emptyset \in A\land \forall x\in A(x\cup \{x\}\in A) \}
+	\]
+\end{definition}
+
+\subsubsection{Regeln für die Zugehörigkeit zu den natürlichen Zahlen}
+\label{rule:NaturalI} \label{rule:NaturalE}
+
+Basierend auf unserer Definition für die natürlichen Zahlen können wir zwei grundlegende Regeln formulieren: die Einführungs- und die Eliminierungsregel. Diese basieren auf den Regeln für den unendlichen Schnitt (siehe z.B. $\bigcapI{...}$).
+
+Die Einführungsregel für die natürlichen Zahlen (\( \NaturalI{...}\)) besagt, dass wenn wir zeigen können, dass ein Element \(x\) in jeder Menge enthalten ist, die das Unendlichkeit erfüllt, dann ist \(x\) ein Element der natürlichen Zahlen.
+
+\[
+\begin{array}{llll}
+	i & (1) & \forall A(\emptyset\in A\land \forall y\in A(y\cup \{y\}\in A)\rightarrow x\in A) & ... \\
+	i & (2) & x\in \mathbb{N} & \NaturalI{1} \\
+\end{array}
+\]
+
+Die Eliminierungsregel für den unendlichen Schnitt (\( \NaturalE{...}\)) besagt, dass wenn wir wissen, dass ein Element \(x\) ein Element von $\mathbb{N}$ ist, dann diese Eigenschaft \(P\) erfüllt, dann ist \(x\) auch in \(B\) enthalten.
+
+\[
+\begin{array}{llll}
+	i & (1) & x\in \mathbb{N} & ... \\
+	i & (2) & \forall A(\emptyset\in A\land \forall x\in A(x\cup \{x\}\in A)\rightarrow x\in A) & \NaturalE{1} \\
+\end{array}
+\]
+
+\(i\) sind dabei Listen von Annahmen.
+
+\subsubsection{Regeln für die Nichtzugehörigkeit zu den natürlichen Zahlen}
+\label{rule:NotNaturalI} \label{rule:NotNaturalE}
+
+Um das Konzept der natürlichen Zahlen weiter zu verfeinern, führen wir Regeln für den Umgang mit der Negation, d.h., der Nichtzugehörigkeit zu den natürlichen Zahlen, ein. Diese Regeln sind essentiell für Beweise, die die Nichtzugehörigkeit einer Zahl zu den natürlichen Zahlen behandeln.
+
+Die Einführungsregel für \(x \not\in \mathbb{N}\) (\(\NotNaturalI{...}\)) besagt, dass, wenn gezeigt werden kann, dass ein Element \(x\) in einer Menge \(A\) nicht enthalten ist, die das Unendlichkeit erfüllt, dann ist \(x\) kein Element der natürlichen Zahlen.
+
+\[
+\begin{array}{llll}
+	i & (1) & \emptyset\in A\land \forall y\in A(y\cup\{y\}\in A)\land x\not\in A) & ... \\
+        j & (2) &  \forall y\in A(y\cup\{y\}\in A) & ... \\
+        k & (3) &  x\not\in A & ... \\
+	i,j,k & (4) & x \not\in \mathbb{N} & \NotNaturalI{1,2,3} \\
+\end{array}
+\]
+
+Die Eliminierungsregel für \(x \not\in \mathbb{N}\) (\(\NotNaturalE{...}\)) ermöglicht es uns, aus der Tatsache, dass \(x\) nicht zu \(\mathbb{N}\) gehört, die Existenz einer Menge zu folgern, welche das Unendlichkeit erfüllt und x nicht enthält.
+
+\[
+\begin{array}{llll}
+	i & (1) & x \not\in \mathbb{N} & ... \\
+	i & (2) & \exists A(\emptyset\in A\land \forall y\in A(y\cup\{y\}\in A)\land x\not\in A) & \NotNaturalE{1} \\
+\end{array}
+\]
+
+Hierbei ist \(i\) eine Liste von Annahmen.
+
+
+\label{EmptysetInNatural}
+\begin{theorem}[\(\emptyset\in\mathbb{N}\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & \emptyset\in A\land \forall x\in A(x\cup \{x\}\in A & \rA \\
+		1 & (2) & \emptyset\in A & \rAEa{1} \\
+		& (3) & \emptyset\in A\land \forall x\in A(x\cup \{x\}\in A\rightarrow \emptyset\in A & \rII{1,2} \\
+		& (4) & \emptyset\in\mathbb{N} & \NaturalI{3} \\
+	\end{array}
+	\]
+\end{proof}
+
+\label{nInNaturalImpncuLbnRbInNatural}
+\begin{theorem}[\(n\in\mathbb{N}\vdash n\cup\{n\}\in\mathbb{N}\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & n\in\mathbb{N} & \rA \\
+		2 & (2) & \emptyset\in A\land \forall x\in A(x\cup \{x\}\in A) & \rA \\
+		1 & (3) & \forall X(\emptyset\in X\land \forall y\in X(y\cup \{y\}\in X)\rightarrow n\in X) & \NaturalE{1} \\
+		1 & (4) & \emptyset\in A\land \forall y\in A(y\cup \{y\}\in A)\rightarrow n\in A & \NaturalE{1} \\
+		1,2 & (5) & n\in A & \rRE{4,2} \\
+		2 & (6) & \forall x\in A(x\cup \{x\}\in A) & \rRE{4,2} \\
+		1,2 & (7) & n\cup \{n\}\in A & \FormulaRefAuto{\forall x \in A\,(P(x)),\, y \in A \vdash P(y)}{5,6} \\
+		1 & (8) & \emptyset\in A\land \forall x\in A(x\cup \{x\}\in A)\rightarrow n\cup \{n\}\in A & \rRI{2,7} \\
+		1 & (9) & \forall x(\emptyset\in X\land \forall x\in X(x\cup \{x\}\in X)\rightarrow n\cup \{n\}\in X) & \rRI{8} \\	
+		1 & (10) & n\cup \{n\}\in \mathbb{N} & \NaturalI{9} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{definition}[\(0:=\emptyset\) (Definition der Zahl \(0\))]
+\end{definition}
+
+
+\begin{definition}[\(1 := 0\cup \{0\}\) (Definition der Zahl \(1\))]
+\end{definition}
+
+\begin{definition}[\(n\in\mathbb{N}\rightarrow n+1:=n\cup\{n\}\) (Definition des Nachfolgers)]
+\end{definition}
+
+\subsubsection{Regeln für die Definition der natürlichen Zahlen}
+
+\label{rule:zeroSetDefinition} \label{rule:oneSetDefinition} \label{rule:successorSetDefinition}
+
+% Regel für die Definition der Zahl \(0\)
+\[
+\begin{array}{llll}
+	& (1) & 0 = \emptyset & \zeroSetDefinition \\
+\end{array}
+\]
+
+% Regel für die Definition des Nachfolgers einer natürlichen Zahl
+\[
+\begin{array}{llll}
+	i & (1) & n \in \mathbb{N} & \rA \\
+	i & (2) & n + 1 = n \cup \{n\} & \successorSetDefinition{1} \\
+\end{array}
+\]
+
+% Regel für die Definition der Zahl \(1\)
+\[
+\begin{array}{llll}
+	& (1) & 1 = 0 \cup \{0\} & \oneSetDefinition \\
+ 	& (1) & 1 = 0+1 & \oneSetDefinition \\
+\end{array}
+\]
+
+
+\label{OneEqualsLbEmptysetRb}
+\begin{theorem}[\(1=\{\emptyset\}\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		      & (1) & 1=0\cup\{0\} & \oneSetDefinition{}\\
+		    & (2) & 0=\emptyset  & \zeroSetDefinition{}\\
+		    & (3) & 1=\emptyset\cup\{\emptyset\} & \rIE{2,1} \\		
+            & (4) & 1=\{\emptyset\} & \AEqualsEmptysetcuA{3} \\		
+	\end{array}
+	\]
+\end{proof}
+
+\label{nInNaturalImpnInnPlusOne}
+\begin{theorem}[\(n\in\mathbb{N}\vdash n\in n+1\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		  1   & (1) & n\in\mathbb{N} & \rA\\
+		1   & (2) & n+1=n\cup\{n\}  & \successorSetDefinition{1}\\
+            & (3) & n\in n\cup\{n\}  & \aInAcuLbaRb{}\\
+        1   & (4) & n\in n+1  & \rIE{2,3}
+	\end{array}
+	\]
+\end{proof}
+
+\label{nInNaturalImpnPlusOneNotEqualsZero}
+\begin{theorem}[\(n\in\mathbb{N}\vdash n+1\neq 0\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		  1   & (1) & n\in\mathbb{N} & \rA\\
+		1   & (2) & n\in n+1  & \OneEqualsLbEmptysetRb{1}\\
+  		1   & (3) & \exists x(x\in n+1)  & \rEI{2}\\
+        1   & (4) & n+1\neq \emptyset  & \ExxInSImpSNotEqualsEmptyset{3}\\
+            & (5) & 0=\emptyset  & \zeroSetDefinition{}\\
+        1   & (6) & n+1\neq 0  & \rIE{5,4}\\
+	\end{array}
+	\]
+\end{proof}
+
+\label{ImpOneNotEqualsZero}
+\begin{theorem}[\(\vdash 1\neq 0\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		      & (1) & 1=0+1 & \oneSetDefinition{}\\
+		    & (2) & 0+1\neq 0  & \nInNaturalImpnPlusOneNotEqualsZero{}\\
+  		    & (3) & 1\neq 0  & \rEI{2}\\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+
+\subsubsection{Regeln für die Zugehörigkeit zu natürlichen Zahlen}
+\label{rule:zeroIsNaturalNumber} \label{rule:oneIsNaturalNumber} \label{rule:successorIsNaturalNumber}
+
+% Regel für die Einführung einer natürlichen Zahl
+Wir führen im Folgenden die Regeln der Elementzugehörigkeit von \(0 \in \mathbb{N}\), \(1 \in \mathbb{N}\) und \(n+1 \in \mathbb{N}\) unter der Voraussetzung, dass \(n \in \mathbb{N}\) ist, ein:
+
+% Regel, dass 0 eine natürliche Zahl ist
+\[
+\begin{array}{llll}
+	& (1) & 0\in\mathbb{N} & \zeroIsNaturalNumber \\
+\end{array}
+\]
+\textbf{Daraus folgt:} \(0 \in \mathbb{N}\).
+
+% Regel, dass 1 eine natürliche Zahl ist
+\[
+\begin{array}{llll}
+	& (1) & 1\in\mathbb{N} & \oneIsNaturalNumber \\
+\end{array}
+\]
+
+% Regel für den Nachfolger einer natürlichen Zahl
+\[
+\begin{array}{llll}
+	i & (1) & n \in \mathbb{N} & \rA \\
+	i & (2) & n+1\in\mathbb{N} & \successorIsNaturalNumber{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+Diese Regeln und Definitionen bilden die Grundlage für das Verständnis der Konstruktion der natürlichen Zahlen und ihrer Eigenschaften gemäß den Peano-Axiomen.
+
+
+\label{mInNaturalwmNotEqualsZeroImpExxInNaturalLpxPlusOneEqualsmRp}
+\begin{theorem}[\(m\in\mathbb{N}, m\neq 0\vdash\exists x\in\mathbb{N}(x+1=m)\) (Existenz des Vorgängers)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1  & (1) & m\in\mathbb{N} & \rA\\
+		2  & (2) & m\neq 0 & \rA\\
+		3  & (3) & \forall x\in\mathbb{N}(x+1\neq m) & \rA \\		
+		& (4) & m\not\in \mathbb{N}\setminus\{m\} & \aNotinASetminusLbaRb{} \\
+		& (5) & 0\in\mathbb{N} & \zeroIsNaturalNumber \\
+		2  & (6) & 0\in\mathbb{N}\setminus\{m\} & \aInAwbNotEqualsaImpaInASetminusLbbRb{5,2} \\
+		7 & (7) & y\in\mathbb{N}\setminus\{m\} & \rA \\
+		7 & (8) & y\in\mathbb{N} & \diffEa{7} \\
+  		3,7 & (9) & y+1\neq m & \FormulaRefAuto{\forall x \in A\,(P(x)),\, y \in A \vdash P(y)}{3,8} \\
+		7  & (10) & y+1\in\mathbb{N} & \successorIsNaturalNumber{8}  \\
+		3,7 & (11) & y+1\in\mathbb{N}\setminus\{m\} & \aInAwaNotEqualsbImpaInASetminusLbbRb{10,9}  \\
+		3 & (12) & \forall y\in\mathbb{N}\setminus\{m\}(y+1\in\mathbb{N}\setminus\{m\})  & \rSetUIa{7,11}  \\
+           2,3 & (13) & m\not\in\mathbb{N}  & \NotNaturalI{6,12,4}  \\ 
+		1,2,3 & (14) & \bot  & \rBI{1,13} \\	
+		1,2 & (15) & \neg(\forall x\in\mathbb{N}(x+1\neq m))  & \rCI{3,14} \\	
+		1,2 & (16) & \exists x\in\mathbb{N}(x+1= m)  & \ExxInALpPLpxRpRpEqvnFaxInALpnPLpxRpRp{15} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+
+\label{mInNaturalwmNotEqualsZeroImpExonlyonexInNaturalLpxPlusOneEqualsmRp}
+\begin{theorem}[\(m\in\mathbb{N}, m\neq 0\vdash\exists! x\in\mathbb{N}(x+1=m)\) (Eindeutigkeit des Vorgängers in $\mathbb{N}$)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{lll p{4cm}}
+		1  & (1) & m\in\mathbb{N} & \rA\\
+		2  & (2) & m\neq 0 & \rA\\
+		1,2  & (3) & \exists x\in\mathbb{N}(x+1=m) & \mInNaturalwmNotEqualsZeroImpExxInNaturalLpxPlusOneEqualsmRp{1,2}\\
+		4  & (4) & a\in\mathbb{N}\land a+1=m  & \rA\\
+		5  & (5) & b\in\mathbb{N}\land b+1=m  & \rA\\
+		4  & (6) & a+1=m & \rAEb{4}\\
+		5  & (7) & b+1=m & \rAEb{5}\\
+		4  & (8) & a\cup \{a\}=m & \successorSetDefinition{6} \\
+		5  & (9) & b\cup \{b\}=m & \successorSetDefinition{7} \\	
+		4,5 & (10) & a\cup\{a\}=b\cup \{b\} & \FormulaRefAuto{a = b,\, c = b \vdash a = c}{8,9} \\
+		& (11) & b\in b\cup\{b\} & \aInAcuLbaRb{} \\
+		& (12) & a\in a\cup\{a\} & \aInAcuLbaRb{} \\
+		4,5 & (13) & b\in a\cup\{a\} & \rIE{10,11} \\
+		4,5 & (14) & a\in b\cup\{b\} & \rIE{10,12} \\
+		4,5 & (15) & b\not\in \{a\}\rightarrow b\in a & \zInAcuBEqvzNotinBTozInA{13} \\
+		4,5 & (16) & a\not\in \{b\}\rightarrow a\in b & \zInAcuBEqvzNotinBTozInA{14} \\
+		17 & (17) & a\neq b & \rA \\
+		17 & (18) & a\not\in \{b\} & \nUnitSetE{17} \\
+		17 & (19) & b\not\in \{a\} & \nUnitSetE{17} \\
+		4,5,17 & (20) & b\in a & \rIE{19,15} \\
+		4,5,17 & (21) & a\in b & \rIE{18,16} \\
+		4,5,17 & (22) & b\not\in a & \aInbImpbNotina{21} \\
+		4,5,17 & (23) & \bot & \rBI{20,22} \\		
+		4,5 & (23) & a=b & \rCE{17,23} \\	
+		1,2 & (24) & \exists!x(x\in \mathbb{N}\land x+1=m) & \UEI{3,4,5,23} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\label{def:predecessor}
+\begin{definition}[Definition des Vorgängers]
+Für eine natürliche Zahl \( n \in \mathbb{N} \) und \( n \neq 0 \) definieren wir den Vorgänger \( n-1 \) von \( n \) als die natürliche Zahl \( x \), die die Gleichung \( x + 1 = n \) erfüllt:
+\[
+n-1 := x, \text{ wobei } x \in \mathbb{N} \text{ und } x + 1 = n.
+\]
+\end{definition}
+
+\subsubsection{Regeln für die Einführung und Elimination des Vorgängers in den  natürlichen Zahlen}
+\label{rule:rPredecessorI} \label{rule:rPredecessorEa} \label{rule:rPredecessorEb} \label{rule:rPredecessorEc}
+
+% Regel für die Einführung eines Vorgängers in den natürlichen Zahlen
+Wir führen im Folgenden die Regeln für den Vorgänger \(n-1\) einer natürlichen Zahl \(n\) unter der Voraussetzung, dass \(n \in \mathbb{N}\) und \(n \neq 0\) ist, ein:
+
+% Regel für die Zugehörigkeit des Vorgängers zu den natürlichen Zahlen
+\[
+\begin{array}{llll}
+	i & (1) & n \in \mathbb{N} & ... \\
+	j & (2) & n \neq 0 & ... \\
+	i,j & (3) & n-1 \in \mathbb{N} & \rPredecessorI{1, 2} \\
+        i,j & (4) & n = (n-1)+1 & \rPredecessorI{1,2} \\
+        i,j & (5) & n = (n+1)-1 & \rPredecessorI{1,2} \\
+\end{array}
+\]
+
+\(i, j\) sind dabei Listen von Annahmen.
+
+% Regel für die Eliminierung des Vorgängers
+Wir führen im Folgenden die Regel für die Eliminierung des Vorgängers ein, welche es erlaubt, aus der Annahme \(n-1\in\mathbb{N}\) zu folgern, dass \(n\) eine natürliche Zahl größer als \(0\) ist:
+
+\[
+\begin{array}{llll}
+	i & (1) & n-1 \in \mathbb{N} & ... \\
+	i & (2) & n \in \mathbb{N} & \rPredecessorEa{1} \\
+    i & (3) & n = (n-1)+1 & \rPredecessorEa{1} \\
+    i & (4) & n = (n+1)-1 & \rPredecessorEc{2} \\
+	i & (5) & n \neq 0 & \rPredecessorEb{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+\subsubsection{Regel für die Eindeutigkeit des Vorgängers}
+\label{rule:rPredecessorUniqueness}
+
+Die Regel für die Eindeutigkeit des Vorgängers besagt, dass wenn zwei natürliche Zahlen \(m\) und \(n\) gleich sind, auch ihre Vorgänger gleich sind. Formal lässt sich dies so ausdrücken:
+
+\[
+m = n \rightarrow (m-1 = n-1)
+\]
+
+Im Kalkül des natürlichen Schließens wird dies folgendermaßen formalisiert:
+
+\[
+\begin{array}{llll}
+i & (1) & m\in\mathbb{N} & ... \\
+j & (2) & n\in\mathbb{N} & ... \\
+k & (3) & m\neq 0 & ... \\
+l & (1) & m = n & ... \\
+i,j,k,l & (2) & m - 1 = n - 1 & \rPredecessorUniqueness{1,2,3,4}
+\end{array}
+\]
+
+alternativ kann folgende Regel verwendet werden:
+
+\[
+\begin{array}{llll}
+i & (1) & m\in\mathbb{N} & ... \\
+j & (2) & n\in\mathbb{N} & ... \\
+k & (3) & n\neq 0 & ... \\
+l & (1) & m = n & ... \\
+i,j,k,l & (2) & m - 1 = n - 1 & \rPredecessorUniqueness{1,2,3,4}
+\end{array}
+\]
+
+\(i,j,k\) und \(l\) ist dabei eine Listen von Annahmen.
+
+\label{nInNaturalwnNotEqualsZeroImpnMinusOneInn}
+\begin{theorem}[\(n\in\mathbb{N}, n\neq 0\vdash n-1\in n\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 & (1) & n\in\mathbb{N} & \rA \\
+  		2 & (2) & n\neq 0 & \rA \\
+  		1,2 & (3) & n-1\in\mathbb{N} & \rPredecessorI{1,2} \\
+            1,2 & (4) & (n-1)+1 = (n-1)\cup \{n-1\} & \successorSetDefinition{3} \\
+            1,2 & (5) & n = (n-1)+1 & \rPredecessorEa{3} \\
+            1,2 & (6) & n = (n-1)\cup \{n-1\} & \rIE{5,4} \\
+                & (7) & n-1\in (n-1)\cup \{n-1\} & \aInAcuLbaRb{} \\
+            1,2 & (8) & n-1\in n & \rIE{6,7} \\
+	\end{array}
+	\]
+\end{proof}
+
+
+\chapter{Das Prinzip der vollständigen Induktion}
+
+\begin{tempdefinition}
+    \[S:=\{n\in\mathbb{N} \mid \neg P(n)\}\]
+\end{tempdefinition}
+
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLo}
+\begin{lemma}[1]
+\[s\in S\vdash s\in\mathbb{N}\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 &  (1) & s\in S & \rA \\
+		1 &  (2) & s\in \{n\in\mathbb{N} \mid \neg P(n)\} & \rIE{df(S),1} \\	
+		1 &  (3) & s\in\mathbb{N} & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{2} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLoo}
+\begin{lemma}[2]
+\[s\in S\vdash \neg P(s)\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		% Annahme: Induktionsprinzip ist falsch
+		1 &  (1) & s\in S & \rA \\
+		1 &  (2) & s\in \{n\in\mathbb{N} \mid \neg P(n)\} & \rIE{df(S),1} \\	
+		1 &  (3) & \neg P(s) & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{2} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLooo}
+\begin{lemma}[3]
+\[s\not\in S, s\in \mathbb{N}\vdash P(s)\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 &  (1) & s\not\in S & \rA \\
+            2 &  (2) & s\in \mathbb{N} & \rA \\
+            1 &  (3) & s\not\in \{n\in\mathbb{N} \mid \neg P(n)\} & \rIE{df(S), 1} \\
+		1,2 &  (4) & P(s) & \notxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpa{3,2} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLoooo}
+\begin{lemma}[4]
+\[\neg (\forall n \in \mathbb{N} \, P(n))\vdash S\neq\emptyset\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		% Annahme: Induktionsprinzip ist falsch
+		1 &  (1) & \neg (\forall n \in \mathbb{N} \, P(n)) & \rA \\
+		1 &  (2) & \exists n \in \mathbb{N} \neg P(n) & \ExxInALpPLpxRpRpEqvnFaxInALpnPLpxRpRp{1} \\
+		1 &  (3) & m\in\mathbb{N}\land \neg P(m) & \rSetEEa{2} \\
+		1 &  (4) & m\in \{n\in\mathbb{N}\mid \neg P(n)\} & \inI{4} \\
+		1 &  (5) & m\in S & \rIE{df(S),4} \\
+		1 &  (6) & S\neq\emptyset & \ExxInSImpSNotEqualsEmptyset{5} \\	
+	\end{array}
+	\]
+\end{proof}
+
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLooooo}
+\begin{lemma}[5]
+\[S\neq\emptyset, P(0) \vdash \exists x-1\in \mathbb{N} (P(x-1)\land P(x))\]
+\end{lemma}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1 &  (1) & S\neq\emptyset & \rA \\
+		2 &  (2) & P(0) & \rA \\	
+		1 &  (3) & \exists x\in S(x\cap S=\emptyset) & \RegI{2} \\	
+		1 & (4) & s\in S\land s\cap S=\emptyset & \rSetEEa{3} \\
+		1 & (5) & s\in S & \rAEa{4} \\
+		1 & (6) & s\cap S=\emptyset & \rAEb{4} \\
+		1 & (7) & s\in\mathbb{N} & \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLo{5} \\
+		1 & (8) & \neg P(s) & \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLoo{5} \\
+            9 & (9) & s=0 & \rA \\
+            1,9 & (10) & \neg P(0) & \rIE{9,8} \\
+		1,2,9 & (11) & \bot & \rBI{2,10} \\
+		1,2 & (12) & s\neq 0 & \rCI{9,11} \\
+            1,2 & (13) & s-1\in s & \nInNaturalwnNotEqualsZeroImpnMinusOneInn{7,12}  \\
+            1,2 & (14) & s-1\not\in S & \AcaBEqualsEmptysetwxInAImpxNotinB{6,13}  \\
+            1,2 & (15) & s-1\in \mathbb{N} & \rPredecessorI{7,12}  \\
+            1,2 & (16) & P(s-1)& \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLooo{14,15}  \\
+            1,2 & (16) & P(s-1)\land \neg P(s)& \rAI{16,8}  \\
+            1,2 & (17) & \exists x-1\in\mathbb{N} (P(x-1)\land \neg P(x))& \rSetEIa{15,16}  \\           
+	\end{array}
+	\]
+\end{proof}
+%ISE
+\label{PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRp}
+\begin{theorem}[\(P(0), \forall n \in \mathbb{N} (P(n) \rightarrow P(n+1)) \vdash \forall n \in \mathbb{N} P(n)\) (Induktionsprinzip)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		% Annahme: Induktionsprinzip ist falsch
+		1 &  (1) & \neg (\forall n \in \mathbb{N} \, P(n)) & \rA \\
+		2 &  (2) & P(0) & \rA \\			
+		3 &  (3) & \forall n \in \mathbb{N}(P(n)\rightarrow P(n+1)) & \rA \\
+		1 &  (4) & S\neq\emptyset & \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLo{1} \\	
+            1,2 & (5) & \exists x-1\in\mathbb{N}(P(x-1)\land\neg P(x))& \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLooooo{4,2}  \\
+            1,2 & (6) & s-1\in\mathbb{N}\land (P(s-1)\land\neg P(s))& \rSetEEa{5}  \\
+            1,2 & (7) & s-1\in\mathbb{N}& \rAEa{6}  \\
+            1,2 & (8) & P(s-1)\land\neg P(s)& \rAEb{6}  \\
+            1,2 & (9) & P(s-1)& \rAEa{8}  \\
+            1,2 & (10) & \neg P(s)& \rAEb{8}  \\
+            3 & (11) & s-1\in\mathbb{N}\rightarrow (P(s-1)\rightarrow P(s))& \rUE{3}  \\
+            1,2,3 & (12) & P(s-1)\rightarrow P(s)& \rRE{7,11}  \\
+            1,2,3 & (13) & P(s)& \rRE{9,12}  \\
+            1,2,3 & (14) & \bot & \rBI{10,13}  \\
+            2,3 & (15) & \forall n \in \mathbb{N} \, P(n) & \rCE{1,14}  \\
+	\end{array}
+	\]
+\end{proof}
+
+\section{Regel der vollständigen Induktion über den natürlichen Zahlen}
+\label{rule:rInductionN}
+
+Die Regel der vollständigen Induktion über den natürlichen Zahlen (\(\rInductionN{}\)) erlaubt es, nach der Herleitung von \(P(0)\), der Annahme \(P(n)\) für ein beliebiges \(n \in \mathbb{N}\), und der Herleitung von \(P(n+1)\) aus diesen Annahmen, direkt auf die Aussage \(\forall n \in \mathbb{N} P(n)\) zu schließen. Es ist somit nicht mehr notwendig, die Zwischenschritte \(\forall n \in \mathbb{N} (P(n) \rightarrow P(n+1))\) explizit aufzuschreiben.
+
+\[
+\begin{array}{llll}
+    i & (1) & P(0) & ... \\
+    2 & (2) & P(n) & \rA \\
+    3 & (3) & n \in \mathbb{N} & \rA \\
+    2,3,j & (4) & P(n+1) & ... \\
+    i,j & (5) & \forall n \in \mathbb{N} P(n) & \rInductionN{1,2,3,4}
+\end{array}
+\]
+
+\[
+\begin{array}{llll}
+    i & (1) & P(0) & ... \\
+    2 & (2) & P(n) & \rA \\
+    3 & (3) & n \in \mathbb{N} & \rA \\
+    2,3,j & (4) & P(n+1) & ... \\
+    3,i,j & (5) & P(n) & \rInductionN{1,2,3,4}
+\end{array}
+\]
+
+Hierbei beziehen sich \(n\) und \(P(n)\) auf ein beliebiges Element und eine beliebige Aussage über \(\mathbb{N}\). Der Ausdruck \(\rInductionN{1,4}\) zeigt an, dass die Regel der vollständigen Induktion angewendet wurde, um die allgemeine Aussage \(\forall n \in \mathbb{N} P(n)\) abzuleiten.
+
+\(i\) und \(j\) sind dabei Listen von Annahmen, und \(n\) kommt in keiner der Annahmen \(i\) und \(j\) vor, aus denen \(P(0)\) und \(P(n+1)\) abgeleitet werden.
+
+
+
+
+
+
+\subsection{Induktive Definition von Tupel-Mengen}
+
+\begin{definition}
+Sei $A$ eine Menge und $n \in \mathbb{N}$. Dann definieren wir die n-Tupel-Menge $A^n$ induktiv als:
+\begin{itemize}
+    \item $A^0 := \emptyset$, die leere Menge.
+    \item $A^{n+1} := A^n \times A$.
+\end{itemize}
+\end{definition}
+
+\paragraph{Regeln für \( A^n \).}
+\label{rule:zeroPowerSet} \label{rule:nextPowerSet}
+\[
+\begin{array}{llll}
+	& (1) & A^0=\emptyset & \zeroPowerSet{} \\
+\end{array}
+\]
+
+\[
+\begin{array}{llll}
+	& (1) & A^{n+1}=A^n\times A & \nextPowerSet{} \\
+\end{array}
+\]
+
+\begin{theorem}[(\(n\in\mathbb{N}, A\) ist eine Menge \(\vdash A^n\) ist eine Menge.]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		  1 &  (1) & A \text{ ist eine Menge} & \rA{} \\
+            &  (2) & A^0=\emptyset & \zeroPowerSet{} \\
+            &  (3) & \emptyset \text{ ist eine Menge} & \remptysetIsSet{} \\
+            &  (4) & A^0 \text{ ist eine Menge} & \rIE{1,2} \\
+            5 &  (5) & n\in\mathbb{N} & \rA \\
+            6 &  (6) & A^n \text{ ist eine Menge} & \rA \\
+              &  (7) & A^{n+1}=A^n\times A & \nextPowerSet{}  \\
+            1,6  &  (8) & A^n\times A \text{ ist eine Menge} & \cartesianSetExists{6,1}  \\
+            1,6  &  (9) & A^{n+1} \text{ ist eine Menge} & \rIE{7,8}  \\
+            1,5  &  (10) & A^{n} \text{ ist eine Menge} & \rInductionN{4,5,6,9}  \\
+	\end{array}
+	\]
+\end{proof}
+
+\paragraph{Existenzregel von Tupel-Mengen}
+\label{rule:PowerSetExists}
+Die Existenzregel stellt sicher, dass für alle Mengen \(A\) und alle \(n\in\mathbb{N}\) \(A^{n}\) ebenfalls eine Menge ist.
+
+\[
+\begin{array}{llll}
+	i & (1) & A \text{ ist eine Menge} & \dots  \\
+        j & (2) & n\in\mathbb{N} & \dots  \\
+	i,j & (3) & A^n\text{ ist eine Menge} & \PowerSetExists{1,2} \\
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\label{xInBLrExiInILpxInASubiRp}
+\begin{theorem}[Existenz einer Menge, die alle Elemente indizierter Mengen enthält]
+    Sei \( I \) eine Menge und \( A_i \) für jedes \( i \in I \) eine Menge, die durch ein Element \( i \) aus der Indexmenge \( I \) indiziert ist. Dann existiert eine Menge \( B \) mit der Eigenschaft, dass für jedes Element \( x \) gilt:
+    \[
+    x \in B \leftrightarrow \exists i \in I(x \in A_i).
+    \]
+\end{theorem}
+
+\begin{tempdefinition}
+    \[
+    \forall i \in I \, (F(i) := A_i)
+    \]
+    \[
+    B := \bigcup \{ A_i \mid i \in I \}
+    \]
+\end{tempdefinition}
+
+\begin{proof}
+    Wir wissen bereits, dass \(B\) eine Menge ist. Wir zeigen nun noch, dass das so gewählte B die im Theorem aufgestellte Eigenschaft erfüllt.
+
+    
+    \(\vdash\):
+    \[
+	\begin{array}{llll}
+		1 &  (1) & x\in B & \rA \\
+		1 &  (2) & x\in\bigcup\{A_n\mid n\in I\} & \rIE{df(B), 1} \\			
+		1 &  (3) & \exists C(C\in \{A_n\mid n\in I\}\land x\in C)  & \bigcupE{2} \\
+		4 &  (4) & C\in \{A_n\mid n\in I\}\land x\in C & \rA \\	
+  	4 &  (5) & C\in \{A_n\mid n\in I\} & \rAEa{4} \\	
+        4 &  (6) & x\in C & \rAEb{4} \\
+        4 &  (7) & \exists j\in I(C = F(j)) & \replacementE{5} \\
+        8 &  (8) & j\in I\land C = F(j) & \rA \\
+        8 &  (9) & j\in I & \rAEa{8} \\
+        8 &  (10) & C=F(j) & \rAEb{8} \\
+        8 &  (11) & A_j = F(j) & \rIE{df(F), 10} \\
+        8 &  (12) & A_j=C & \rIE{10,11} \\
+        4,8 &  (13) & x\in A_j & \rIE{12,6} \\
+        4,8 &  (14) & \exists i\in I(x\in A_i) & \rSetEIa{9,13} \\
+        4 &  (15) & \exists i\in I(x\in A_i) & \rEE{7,8,14} \\
+        1 &  (16) & \exists i\in I(x\in A_i) & \rEE{3,4,15} \\
+	\end{array}
+    \]
+
+    \(\dashv\):
+    \[
+	\begin{array}{llll}
+		1 &  (1) & \exists i\in I(x\in A_i) & \rA \\
+		2 &  (2) & i\in I\land x\in A_i & \rA \\	
+        2 &  (3) & i\in I & \rAEa{2} \\
+        2 &  (4) & x\in A_i & \rAEb{2} \\
+        2 &  (5) & F(i)=A_i & \rIE{df(F), 4} \\	
+        2 &  (6) & A_i\in\{A_n\mid n\in I\} & \replacementI{5,3} \\	
+        2 &  (7) & x\in\bigcup \{A_n\mid n\in I\} & \bigcupI{3,5} \\	
+        2 &  (8) & x\in B & \rIE{df(B), 7} \\	
+	\end{array}
+    \]
+\end{proof}
+
+\label{FaxLpxInBLrExiInILpxInASubiRpRpAndFaxLpxInCLrExiInILpxInASubiRpRpImpBEqualsC}
+\begin{theorem}[\(\forall x (x \in B \leftrightarrow \exists i \in I (x \in A_i)) \land \forall x (x \in C \leftrightarrow \exists i \in I (x \in A_i)) \vdash B = C\) (Eindeutigkeit der Menge, die alle indizierten Mengen umfasst)]
+    Seien \( I \) eine Menge, \( B \) und \( C \) Mengen, und sei \( A_i \) für jedes \( i \in I \) eine Menge, die durch ein Element \( i \) aus \( I \) indiziert ist. Dann gilt:
+    \[
+    \forall x (x \in B \leftrightarrow \exists i \in I \, (x \in A_i)) \land \forall x (x \in C \leftrightarrow \exists i \in I \, (x \in A_i)) \vdash B = C
+    \]
+\end{theorem}
+
+\begin{tempdefinition}
+    \[
+    \forall x \, (Q(x) := \exists i \in I \, (x \in A_i))
+    \]
+\end{tempdefinition}
+
+\begin{proof}
+    \[
+    \begin{array}{ll p{5cm} p{4cm}}
+        1 & (1) & \ensuremath{\forall x (x \in B \leftrightarrow \exists i \in I \, (x \in A_i)) \land \forall x (x \in C \leftrightarrow \exists i \in I \, (x \in A_i))} & \rA \\
+        1 & (2) & \ensuremath{\forall x (x \in B \leftrightarrow Q(x)) \land \forall x (x \in C \leftrightarrow Q(x))} & \rIE{df(Q), 1} \\
+        1 & (3) & \ensuremath{B = C} & \FaxLpxInBLrPLpxRpRpAndFaxLpxInCLrPLpxRpRpImpBEqualsC{2} \\
+    \end{array}
+    \]
+\end{proof}
+
+\begin{definition}[Vereinigung über eine Indexmenge]
+    Sei \( I \) eine Menge und \( A_i \) für jedes \( i \in I \) eine Menge, die durch das Element \( i \) aus \( I \) indiziert ist. Die Vereinigung der Mengen \( A_i \) über alle \( i \in I \) ist definiert als die Menge
+    \[
+    \bigcup_{i \in I} A_i := \{ x \mid \exists i \in I \, (x \in A_i) \}.
+    \]
+\end{definition}
+
+\subsection{Regeln für die Vereinigung}
+\label{rule:bigunionI} \label{rule:bigunionE}
+
+% Einführungsregel für die Vereinigung
+Die Einführungsregel für die Vereinigung (\(\bigcup I\)) besagt, dass, wenn ein Element \( x \) zu einer der Mengen \( A_i \) gehört, wobei \( i \in I \), dann gehört \( x \) auch zur Vereinigung \(\bigcup_{i \in I} A_i\).
+\[
+\begin{array}{llll}
+    i & (1) & x \in A_i & ... \\
+    i & (2) & i \in I & ... \\
+    i & (3) & x \in \bigcup_{i \in I} A_i & \bigunionI{1,2} \\
+\end{array}
+\]
+
+% Eliminierungsregel für die Vereinigung
+Die Eliminierungsregel für die Vereinigung (\(\bigcup E\)) besagt, dass, wenn ein Element \( x \) in der Vereinigung \(\bigcup_{i \in I} A_i\) liegt, es ein \( i \in I \) gibt, sodass \( x \in A_i \) ist.
+\[
+\begin{array}{llll}
+    i & (1) & x \in \bigcup_{i \in I} A_i & ... \\
+    i & (2) & \exists i \in I \, (x \in A_i) & \bigunionE{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+
+\chapter{Abbildungen}
+
+\begin{definition}[Abbildung]
+    Der \textbf{Begriff der Abbildung (oder Funktion)} \( f: A \to B \) wird \textbf{implizit definiert}. Das Symbol \( f \) ist eine Relation zwischen den Mengen \( A \) und \( B \), die die folgenden Eigenschaften erfüllt:
+    
+    \begin{itemize}
+        \item \textbf{Definitionsbereich (Domain)}: Die Menge \( A \), aus der die Elemente stammen, die durch die Abbildung \( f \) abgebildet werden, heißt \textbf{Definitionsbereich} oder \textbf{Domäne} der Abbildung. Es gilt:
+        \[
+        \text{Dom}(f) = A.
+        \]
+        
+        \item \textbf{Wertebereich (Codomain)}: Die Menge \( B \), in die die Elemente abgebildet werden, heißt \textbf{Wertebereich} oder \textbf{Codomäne} der Abbildung. Es gilt:
+        \[
+        \text{Cod}(f) = B.
+        \]
+        
+        \item \textbf{Bild (Image)}: Die Menge der tatsächlich angenommenen Werte der Abbildung heißt \textbf{Bildbereich} oder \textbf{Bild} der Abbildung. Es gilt:
+        \[
+        f(A) = \{ f(a) \mid a \in A \} \subseteq B.
+        \]
+        
+        \item \textbf{Teilmenge des kartesischen Produkts}: Die Abbildung \( f \) ist eine Teilmenge des kartesischen Produkts \( A \times B \):
+        \[
+        f \subseteq A \times B.
+        \]
+        
+        \item \textbf{Eindeutigkeit}: Für jedes \( a \in A \) existiert genau ein \( b \in B \), sodass \( (a, b) \in f \) ist. Dieses eindeutige \( b \) wird als \( f(a) \) bezeichnet:
+        \[
+        \forall a \in A \, \exists! b \in B \, \big( (a, b) \in f \big) \quad \text{und} \quad b = f(a).
+        \]
+    \end{itemize}
+\end{definition}
+\begin{remark}
+     Für den Bildbereich \( f(A) = \{ f(a) \mid a \in A \} \) existiert nach dem Ersetzungsaxiom eine Menge, die alle durch \( f \) definierten Bilder umfasst. Somit ist \( f(A) \subseteq B \) als Menge definiert und durch das Ersetzungsaxiom in ZFC immer gegeben.
+\end{remark}
+
+Die Definition von Abbildungen verwendet das \textit{Potenzmenge}, welches die Existenz des kartesischen Produkts \( A \times B \) sicherstellt, sowie das \textit{Aussonderungsaxiom}, welches die Auswahl derjenigen Paare erlaubt, die die Bedingung der Eindeutigkeit erfüllen.
+
+
+\subsubsection*{Einführungsregel für Funktionen}
+\label{rule:toI}
+Die Einführungsregel für Funktionen \( f: A \to B \) ermöglicht es, eine Funktion zu definieren, indem für jedes Element \( a \in A \) ein eindeutiges Element \( b \in B \) bestimmt wird, sodass \( f(a) = b \) gilt. Diese Regel basiert auf der Definition der Abbildung und der Eindeutigkeit der Zuordnung.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f\subseteq A\times B & ... \\
+    j       & (2) & \forall a \in A \, \exists! b \in B \, ((a, b) \in f) & ... \\
+    i,j     & (3) & f:A\rightarrow B & \toI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Funktionen}
+\label{rule:toE}
+Die Eliminierungsregel für Funktionen \( f: A \to B \) erlaubt es, aus der Tatsache, dass eine Funktion \( f \) existiert und ein Element \( a \in A \) auf ein \( b \in B \) abbildet, die Zugehörigkeit von \( a \) zu \( A \) und \( b \) zu \( B \) abzuleiten.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f:A\rightarrow B & ... \\
+    i       & (2) & f\subseteq A\times B & \toE{1} \\
+    i       & (3) & \forall a \in A \, \exists! b \in B \, ((a, b) \in f) & \toE{1} \\
+\end{array}
+\]
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall a\in A(f(a)\in B) & ... \\
+    i       & (2) & \forall a \in A \, \exists! b \in B \, ((a, b) \in f) & \toE{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\begin{definition}[Binäre Operation]
+    eine \textbf{binäre Operation} auf einer Menge \( A \) ist eine Abbildung \( \cdot : A \times A \to A \), die zwei Elemente \( a, b \in A \) nimmt und das Ergebnis \( a \cdot b \in A \) liefert. Diese Operation wird definiert durch:
+    
+    \[
+    \forall a,b\in A(a \cdot b := \cdot(a, b)) 
+    \]
+\end{definition}
+
+\subsubsection*{Einführungsregel für binäre Operationen}
+\label{rule:cdotI}
+
+Die Einführungsregel besagt, dass für alle \( a, b \in A \), das Ergebnis der binären Operation \( a \cdot b \) ebenfalls in \( A \) liegt:
+
+\[
+\begin{array}{llll}
+    (1) & a \in A & & \\
+    (2) & b \in A & & \\
+    (3) & a \cdot b \in A & \cdotI{1,2} & 
+\end{array}
+\]
+
+
+\begin{theorem}[\(\forall a\in A(f(a)\in B)\vdash f:A\rightarrow B\)]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1   &  (1) & \forall a\in A(f(a)\in B) & \rA \\
+            1   &  (2) & a\in A\rightarrow f(a)\in B & \rSetUEb{1} \\
+            3   &  (3) & a\in A & \rA \\
+            1,3 &  (4) & f(a)\in B & \rRE{2,3} \\
+            1,3 &  (5) & (a,f(a))\in A\times B & \timesI{3,4} \\
+	\end{array}
+	\]
+\end{proof}
+
+\begin{definition}[Injektivität]
+    Sei \( f: A \to B \) eine Abbildung. Die Abbildung \( f \) heißt \textbf{injektiv} (oder \textbf{eineindeutig}), wenn:
+    \[
+    \forall a_1,a_2\in A(f(a_1) = f(a_2) \rightarrow a_1 = a_2)
+    \]
+    eine injektive Abbildung ordnet also unterschiedlichen Elementen des Definitionsbereichs unterschiedliche Elemente im Wertebereich zu.
+\end{definition}
+
+\subsubsection*{Einführungsregel für Injektivität}
+\label{rule:InjI}
+
+Die Einführungsregel für die Injektivität einer Funktion \( f: A \to B \) ermöglicht es, die Injektivität zu zeigen, indem man beweist, dass für beliebige \( a_1, a_2 \in A \) die Gleichheit \( f(a_1) = f(a_2) \) impliziert, dass \( a_1 = a_2 \) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall a_1, a_2 \in A \, (f(a_1) = f(a_2) \rightarrow a_1 = a_2) & ... \\
+    i       & (2) & f \text{ ist injektiv} & \InjI{1}
+\end{array}
+\]
+
+Diese Regel definiert, dass wenn die Bedingung erfüllt ist, \( f \) als injektiv angenommen werden kann.
+
+\(i\) ist dabei dabei eine Liste von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Injektivität}
+\label{rule:InjE}
+
+Die Eliminierungsregel für Injektivität erlaubt es, aus der Injektivität einer Funktion und der Tatsache, dass \( f(a_1) = f(a_2) \), darauf zu schließen, dass \( a_1 = a_2 \) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f \text{ ist injektiv} & ... \\
+    2       & (2) & f(a_1) = f(a_2) & \rA \\
+    i,2     & (3) & a_1 = a_2 & \InjE{1,2}
+\end{array}
+\]
+
+Hierbei zeigt die Eliminationsregel, dass die Gleichheit der Funktionswerte \( f(a_1) = f(a_2) \) aufgrund der Injektivität der Funktion zur Gleichheit der Argumente \( a_1 = a_2 \) führt.
+
+\(i\) ist dabei dabei eine Liste von Annahmen.
+
+\begin{definition}[Surjektivität]
+    Sei \( f: A \to B \) eine Abbildung. Die Abbildung \( f \) heißt \textbf{surjektiv} (oder \textbf{auf}), wenn: 
+    \[
+    \forall b\in B\exists a\in A(f(a) = b).
+    \]
+\end{definition}
+
+\subsubsection*{Einführungsregel für Surjektivität}
+\label{rule:SurjI}
+
+Die Einführungsregel für die Surjektivität einer Funktion \( f: A \to B \) ermöglicht es, die Surjektivität zu zeigen, indem man für jedes \( b \in B \) ein entsprechendes \( a \in A \) findet, sodass \( f(a) = b \) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall b \in B \, \exists a \in A \, (f(a) = b) & ... \\
+    i       & (2) & f \text{ ist surjektiv} & \SurjI{1}
+\end{array}
+\]
+
+Diese Regel definiert, dass wenn die Bedingung erfüllt ist, \( f \) als surjektiv angenommen werden kann.
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Surjektivität}
+\label{rule:SurjE}
+
+Die Eliminierungsregel für Surjektivität erlaubt es, aus der Surjektivität einer Funktion zu folgern, dass für jedes \( b \in B \) ein Element \( a \in A \) existiert, sodass \( f(a) = b \) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f \text{ ist surjektiv} & ... \\
+    i     & (2) & \forall b\in A\exists a \in A \, (f(a) = b) & \SurjE{1}
+\end{array}
+\]
+
+Hierbei zeigt die Eliminationsregel, dass für jedes \( b \in B \), welches im Wertebereich liegt, ein \( a \in A \) existiert, sodass \( f(a) = b \) gilt.
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+\begin{definition}[Bijektivität]
+    Sei \( f: A \to B \) eine Abbildung. Die Abbildung \( f \) heißt \textbf{bijektiv} (oder \textbf{umkehrbar eindeutig}), wenn sie sowohl injektiv als auch surjektiv ist. 
+\end{definition}
+
+\subsubsection*{Einführungsregel für Bijektivität}
+\label{rule:BijectionI}
+
+Die Einführungsregel für die Bijektivität einer Funktion \( f: A \to B \) ermöglicht es, die Bijektivität zu zeigen, indem man sowohl die Injektivität als auch die Surjektivität der Funktion nachweist.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f \text{ ist injektiv} & ... \\
+    j       & (2) & f \text{ ist surjektiv} & ... \\
+    i,j     & (3) & f \text{ ist bijektiv} & \BijectionI{1,2}
+\end{array}
+\]
+
+Diese Regel legt fest, dass \( f \) als bijektiv angenommen werden kann, wenn sowohl die Injektivitäts- als auch die Surjektivitätsbedingungen erfüllt sind.
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Bijektivität}
+\label{rule:BijectionE}
+
+Die Eliminierungsregel für Bijektivität erlaubt es, aus der Bijektivität einer Funktion \( f \) abzuleiten, dass \( f \) sowohl injektiv als auch surjektiv ist.
+
+\[
+\begin{array}{llll}
+    i       & (1) & f \text{ ist bijektiv} & ... \\
+    i       & (2) & f \text{ ist injektiv} & \BijectionE{1}\\
+    i       & (2) & f \text{ ist surjektiv} & \BijectionE{1}
+\end{array}
+\]
+
+Hierbei zeigt die Eliminierungsregel, dass die Bijektivität von \( f \) sowohl die Injektivität als auch die Surjektivität impliziert.
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+
+
+\chapter{Folgen}
+
+\section{Einführung in Folgen}
+eine \textbf{Folge} ist eine systematische Anordnung von Elementen in einer bestimmten Reihenfolge. Formal betrachtet ist eine Folge eine Abbildung, die jedem natürlichen Index \(n\) ein Element aus einer bestimmten Menge zuordnet.
+
+\begin{definition}[Endliche und unendliche Folge]
+    Sei \(A\) eine Menge.
+
+    \begin{itemize}
+        \item eine \textbf{endliche Folge} in \(A\) der Länge \(n \in \mathbb{N}\) ist eine Abbildung
+        \[
+        a: \{0, 1, \dots, n\} \to A.
+        \]
+        Wir schreiben eine solche Folge häufig als \((a_k)_{k=0}^n\) oder in der Form \((a_0, a_1, \dots, a_n)\), wobei das \(k\)-te Element der Folge \(a\) durch \(a_k := a(k)\) gegeben ist.
+
+        \item eine \textbf{unendliche Folge} in \(A\) ist eine Abbildung
+        \[
+        a: \mathbb{N} \to A,
+        \]
+        die jedem \(n \in \mathbb{N}\) ein Element \(a(n) \in A\) zuordnet. Wir schreiben eine solche Folge häufig als \((a_n)_{n \in \mathbb{N}}\) oder in der Form \((a_0, a_1, a_2, \dots)\), wobei das \(n\)-te Element der Folge \(a\) durch \(a_n := a(n)\) gegeben ist.
+    \end{itemize}
+\end{definition}
+
+\section{Menge aller Folgen}
+
+\label{ExCFafLpfInCLrfDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpLbZerowOnewDotswnMinusOneRbToARp}
+\begin{theorem}[Existenz von \(A^n\)]
+ Sei \(A\) eine Menge. Dann existiert eine Menge \(C\) aller Funktionen von \(\{0,1,...n-1\}\) nach \(A\) so, dass für alle \(f\) gilt:
+ \[f\in C\leftrightarrow f: \{0, 1, \dots, n-1\} \to A\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{ll  p{4.7cm} p{4cm}}
+		1 & (1) & \ensuremath{f: \{0, 1, \dots, n-1\} \to A} & \rA \\
+		1 & (2) & \ensuremath{f\subseteq \{0, 1, \dots, n-1\}\times A} & \toE{1} \\
+		1 & (3) & \ensuremath{f \in \powerset(\{0, 1, \dots, n-1\} \times A)} &  \powersetI{1} \\
+          & (4) & \ensuremath{f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \powerset(\{0, 1, \dots, n-1\} \times A)} &  \rRI{1,3} \\
+          & (5) & \ensuremath{\forall f(f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \powerset(\{0, 1, \dots, n-1\} \times A))} &  \rUI{5} \\
+          & (6) & \ensuremath{\exists C\forall f(f\in C\leftrightarrow f: \{0, 1, \dots, n-1\} \to A)} &  \ExALpFaxLpPLpxRpToxInARpRpImpExBFaxLpxInBLrPLpxRpRp{5} \\
+	\end{array}
+	\]
+\end{proof}
+
+\label{FaxLpxxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpLrxDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpLbZerowOnewDotswnMinusOneRbToARpAndFaxLpxInFLrxDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpLbZerowOnewDotswnMinusOneRbToARpImpEEqualsF}
+\begin{theorem}[Eindeutigkeit der Menge \(A^n\)]
+    Sei \(A\) eine Menge und seien \(E\) und \(F\) zwei Mengen, die beide die Menge aller Funktionen von \(\{0, 1, \dots, n-1\}\) nach \(A\) darstellen. Dann gilt unter Verwendung des Extensionalitätsaxioms:
+    \[
+    \forall x  (x \in E \leftrightarrow x: \{0, 1, \dots, n-1\} \to A) \land \forall x  (x \in F \leftrightarrow x: \{0, 1, \dots, n-1\} \to A) \vdash E = F.
+    \]
+\end{theorem}
+\begin{tempdefinition}
+    \[\forall x(Q(x):= x: \{0, 1, \dots, n-1\} \to A)\]
+\end{tempdefinition}
+\begin{proof}
+    \[
+    \begin{array}{ll p{6cm} p{4cm}}
+        1 & (1) & \ensuremath{\forall x \, (x \in E \leftrightarrow x: \{0, 1, \dots, n-1\} \to A) \land \forall x \, (x \in F \leftrightarrow x: \{0, 1, \dots, n-1\} \to A)} &  \rA \\
+        1 & (2) & \ensuremath{\forall x (x \in E \leftrightarrow Q(x)) \land \forall x (x \in C \leftrightarrow Q(x))} & \rIE{df(Q), 1} \\
+        1 & (3) & \ensuremath{E=F} &  \FaxLpxInBLrPLpxRpRpAndFaxLpxInCLrPLpxRpRpImpBEqualsC{2} \\
+    \end{array}
+    \]
+\end{proof}
+
+\label{ExCFafLpfInCLrfDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpNaturalToARp}
+\begin{theorem}[Existenz von \(A^\mathbb{N}\)]
+ Sei \(A\) eine Menge. Dann existiert eine Menge \(C\) aller Funktionen von \(\mathbb{N}\) nach \(A\) so, dass für alle \(f\) gilt:
+ \[f\in C\leftrightarrow f: \mathbb{N} \to A\]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{ll  p{4.7cm} p{4cm}}
+		1 & (1) & \ensuremath{f: \mathbb{N} \to A} & \rA \\
+		1 & (2) & \ensuremath{f\subseteq \mathbb{N}\times A} & \toE{1} \\
+		1 & (3) & \ensuremath{f \in \powerset(\mathbb{N} \times A)} &  \powersetI{1} \\
+          & (4) & \ensuremath{f:\mathbb{N} \to A\rightarrow f \in \powerset(\mathbb{N} \times A)} &  \rRI{1,3} \\
+          & (5) & \ensuremath{\forall f(f: \mathbb{N} \to A\rightarrow f \in \powerset(\mathbb{N} \times A))} &  \rUI{5} \\
+          & (6) & \ensuremath{\exists C\forall f(f\in C\leftrightarrow f: \mathbb{N} \to A)} &  \ExALpFaxLpPLpxRpToxInARpRpImpExBFaxLpxInBLrPLpxRpRp{5} \\
+	\end{array}
+	\]
+\end{proof}
+
+\label{FaxLpxxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpLrxDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpNaturalToARpAndFaxLpxInFLrxDefxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpNaturalToARpImpEEqualsF}
+\begin{theorem}[Eindeutigkeit der Menge \(A^\mathbb{N}\)]
+    Sei \(A\) eine Menge und seien \(E\) und \(F\) zwei Mengen, die beide die Menge aller Funktionen von \(\mathbb{N}\) nach \(A\) darstellen. Dann gilt unter Verwendung des Extensionalitätsaxioms:
+    \[
+    \forall x  (x \in E \leftrightarrow x: \mathbb{N} \to A) \land \forall x  (x \in F \leftrightarrow x:\mathbb{N} \to A) \vdash E = F.
+    \]
+\end{theorem}
+\begin{tempdefinition}
+    \[\forall x(Q(x):= x: \mathbb{N} \to A)\]
+\end{tempdefinition}
+\begin{proof}
+    \[
+    \begin{array}{ll p{6cm} p{4cm}}
+        1 & (1) & \ensuremath{\forall x \, (x \in E \leftrightarrow x: \mathbb{N} \to A) \land \forall x \, (x \in F \leftrightarrow x: \mathbb{N} \to A)} &  \rA \\
+        1 & (2) & \ensuremath{\forall x (x \in E \leftrightarrow Q(x)) \land \forall x (x \in C \leftrightarrow Q(x))} & \rIE{df(Q), 1} \\
+        1 & (3) & \ensuremath{E=F} &  \FaxLpxInBLrPLpxRpRpAndFaxLpxInCLrPLpxRpRpImpBEqualsC{2} \\
+    \end{array}
+    \]
+\end{proof}
+
+\begin{definition}[Menge aller Funktionen von \(\{0, 1, \dots, n-1\}\) nach \(A\)]
+    Sei \(A\) eine Menge. Dann bezeichnet \(A^n\) die Menge aller Funktionen von \(\{0, 1, \dots, n-1\}\) nach \(A\), definiert als:
+    \[
+    A^n := \{ f \mid f: \{0, 1, \dots, n-1\} \to A \}.
+    \]
+\end{definition}
+
+\begin{definition}[Menge aller endlichen Folgen]
+    Sei \(A\) eine Menge. Die Menge aller endlichen Folgen mit Werten in \(A\) wird durch
+    \[
+    A^{*} := \bigcup_{n \in \mathbb{N}} A^n
+    \]
+    definiert, wobei \( A^n \) die Menge aller Abbildungen \( f: \{0, 1, \dots, n-1\} \to A \) darstellt. Jedes Element von \(A^{*}\) ist also eine endliche Folge in \(A\).
+\end{definition}
+
+Hierbei bezeichnet \(A^{n}\) die Menge aller endlichen Folgen der Länge \(n\) mit Elementen aus \(A\). Durch die Vereinigung über alle \(n\) erhalten wir die Menge aller möglichen endlichen Folgen in \(A\).
+
+\begin{definition}[Menge aller unendlichen Folgen]
+    Sei \(A\) eine Menge. Die Menge aller unendlichen Folgen mit Werten in \(A\) wird durch
+    \[
+    A^{\mathbb{N}} := \{f \mid f: \mathbb{N} \to A\}
+    \]
+    definiert. Jedes Element von \(A^{\mathbb{N}}\) ist also eine unendliche Folge in \(A\).
+\end{definition}
+
+
+\chapter{Einführung in Relationen}
+
+\section{Binäre Relationen}
+
+\begin{definition}[Binäre Relation]
+    eine \textbf{binäre Relation} auf einer Menge \(S\) ist eine Teilmenge \(R \subseteq S \times S\). Man schreibt \(a \, R \, b\), wenn \((a,b) \in R\).
+\end{definition}
+
+\begin{remark}
+    eine binäre Relation kann als eine Verknüpfung zwischen Elementen einer Menge \(S\) betrachtet werden. Es wird geschrieben \(a \, R \, b\), wenn \(a\) in Relation zu \(b\) steht.
+\end{remark}
+
+\subsubsection*{Einführungsregel für binäre Relationen}
+\label{rule:rBinaryRelationI}
+Die Einführungsregel für eine binäre Relation \(R\) ermöglicht es, eine Relation auf einer Menge \(S\) zu definieren, indem \(R\) als Teilmenge von \(S \times S\) spezifiziert wird.
+
+\[
+\begin{array}{llll}
+    i       & (1) & R \subseteq S \times S & \dots \\
+    i       & (2) & R \text{ ist eine binäre Relation auf } S & \rBinaryRelationI{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Eliminierungsregel für binäre Relationen}
+\label{rule:rBinaryRelationE}
+Die Eliminierungsregel für binäre Relationen ermöglicht es, aus der Tatsache, dass \(R \subseteq S \times S\) eine Relation auf \(S\) ist, abzuleiten, dass für \(a, b \in S\), wenn \((a,b) \in R\), dann steht \(a\) in Relation zu \(b\).
+
+\[
+\begin{array}{llll}
+    i       & (1) & R \text{ ist eine binäre Relation auf } S & \dots \\
+    i,j     & (2) & R \subseteq S \times S & \rBinaryRelationE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+
+
+\section{Äquivalenzrelationen}
+
+\begin{definition}[Äquivalenzrelation]
+    Sei \(S\) eine Menge. Der \textbf{Begriff der Äquivalenzrelation} auf \(S\) wird durch das \textbf{Symbol} \(\sim\) \textbf{implizit definiert}. Dabei gelten die folgenden Axiome:
+    
+    \begin{itemize}
+        \item \textbf{Reflexivität}:
+        \[
+        \forall a \in S (a \sim a).
+        \]
+        
+        \item \textbf{Symmetrie}: 
+        \[
+        \forall a, b \in S (a \sim b \rightarrow b \sim a).
+        \]
+        
+        \item \textbf{Transitivität}: 
+        \[
+        \forall a, b, c \in S ((a \sim b \land b \sim c) \rightarrow a \sim c).
+        \]
+    \end{itemize}
+\end{definition}
+
+\begin{remark}
+    Äquivalenzrelationen auf einer Menge \(S\) teilen die Menge in disjunkte Äquivalenzklassen auf, wobei jede Klasse durch die Relation \(\sim\) definiert wird.
+\end{remark}
+
+\subsubsection*{Einführungsregel für Äquivalenzrelationen}
+\label{rule:rEquivalenceRelationI}
+Die Einführungsregel für Äquivalenzrelationen \(\sim\) ermöglicht es, eine Relation als Äquivalenzrelation zu definieren, indem Reflexivität, Symmetrie und Transitivität nachgewiesen werden. Diese Regel basiert auf den Axiomen der Äquivalenzrelation.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall a \in S (a \sim a) & \dots \\
+    j       & (2) & \forall a, b \in S (a \sim b \rightarrow b \sim a) & \dots \\
+    k       & (3) & \forall a, b, c \in S ((a \sim b \land b \sim c) \rightarrow a \sim c) & \dots \\
+    i,j,k   & (4) & \sim \text{ ist eine Äquivalenzrelation auf } S & \rEquivalenceRelationI{1,2,3}
+\end{array}
+\]
+
+\(i\), \(j\), und \(k\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Äquivalenzrelationen}
+\label{rule:rEquivalenceRelationE}
+Die Eliminierungsregel für Äquivalenzrelationen \(\sim\) erlaubt es, aus der Tatsache, dass \(\sim\) eine Äquivalenzrelation ist, die Reflexivität, Symmetrie und Transitivität abzuleiten.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \sim \text{ ist eine Äquivalenzrelation auf } S & \dots \\
+    i       & (2) & \forall a \in S (a \sim a) & \rEquivalenceRelationE{1} \\
+    i       & (3) & \forall a, b \in S (a \sim b \rightarrow b \sim a) & \rEquivalenceRelationE{1} \\
+    i       & (4) & \forall a, b, c \in S ((a \sim b \land b \sim c) \rightarrow a \sim c) & \rEquivalenceRelationE{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Reflexivität}
+\label{rule:rReflexivityEqRI}
+Die Einführungsregel für Reflexivität ermöglicht es, die Reflexivität einer Relation \(\sim\) zu zeigen, indem bewiesen wird, dass \(a \sim a\) für alle \(a \in S\) gilt.
+
+\[
+\begin{array}{llll}
+      & (1) & a \sim a & \rReflexivityEqRI{}
+\end{array}
+\]
+
+\subsubsection*{Einführungsregel für Symmetrie}
+\label{rule:rSymmetryEqRI}
+Die Einführungsregel für Symmetrie ermöglicht es, die Symmetrie einer Relation \(\sim\) zu zeigen, indem bewiesen wird, dass \(a \sim b \rightarrow b \sim a\) für alle \(a, b \in S\) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & a \sim b & \dots \\
+    i       & (2) & b \sim a & \rSymmetryEqRI{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Transitivität}
+\label{rule:rTransitivityEqRI}
+Die Einführungsregel für Transitivität ermöglicht es, die Transitivität einer Relation \(\sim\) zu zeigen, indem bewiesen wird, dass \(a \sim b \land b \sim c \rightarrow a \sim c\) für alle \(a, b, c \in S\).
+
+\[
+\begin{array}{llll}
+    i           & (1) & a \sim b & \dots \\
+    j           & (2) & b \sim c & \dots \\
+    i,j         & (3) & a \sim c & \rTransitivityEqRI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\label{FaSLpEqualsxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRpquivalencerelationSRp}
+\begin{theorem}[\(\forall S(= \text{ ist eine Äquivalenzrelation auf } S)\)]
+\end{theorem}
+\begin{proof}
+    Sei \(S\) eine beliebige Menge. Dann gilt für alle \(a,b,c\in S\):
+	\[
+	\begin{array}{llll}
+		    & (1) & a \sim a & \rII{}\\
+                & (2) & a=b\rightarrow b=a & \FormulaRefAuto{a = b \vdash b = a}{}\\
+		    & (3) & a=b\land b=c\rightarrow a=c & \FormulaRefAuto{a = b,\, b = c \vdash a = c}{}\\
+                & (4) & = \text{ ist eine Äquivalenzrelation auf } S & \rEquivalenceRelationI{1,2,3}\\
+	\end{array}
+	\]
+\end{proof}
+
+
+\subsection{Kettennotation für Äquivalenzrelationen}
+
+Die Gleichheitsketten-Notation lässt sich analog auf Äquivalenzrelationen anwenden. Dabei wird das Symbol \(=\) durch \(\sim\) ersetzt, und die Kettennotation basiert auf der Transitivität der Äquivalenzrelation:
+\[
+a \sim b, \, b \sim c \vdash a \sim c.
+\]
+
+Für die Darstellung verwenden wir die gleiche Struktur, wobei jede Transformation in der Kette durch die entsprechende Regel begründet wird:
+\[
+a \sim b \stackrel{\text{Regel}_1}{\sim} c \stackrel{\text{Regel}_2}{\sim} d.
+\]
+
+Ebenso ist die tabellarische Notation möglich:
+\[
+\begin{array}{llclll}
+	1 & (1) & a & \sim & b & \rA \\
+	1 & (2) &   & \sim & c & \text{Regel}_1 \\
+	1 & (3) &   & \sim & d & \text{Regel}_2 \\
+        1 & (4) & a & \sim & d & \rTransitivityEqRI{1,3} \\
+\end{array}
+\]
+
+Aufgrund \(\rSymmetryEqRI{}\) können wir auch eine tabellarische Notation der folgenden Form anwenden:
+\[
+\begin{array}{llclll}
+	1 & (1) & a & \sim & b & \rA \\
+	1 & (2) &   & \sim & c & \text{Regel}_1 \\
+	1 & (3) &   & \sim & d & \text{Regel}_2 \\
+        1 & (4) & d & \sim & a & \rTransitivityEqRI{1,3} \\
+\end{array}
+\]
+
+\begin{remark}
+    Durch die Anwendung der bereits beschriebenen Kettennotation auf Äquivalenzrelationen können Beweise übersichtlicher dargestellt werden, ohne die mathematische Präzision zu verlieren.
+\end{remark}
+
+\section{Ordnungsrelationen}
+
+\subsection{Halbordnungen}
+
+\begin{definition}[Halbordnung]
+    eine \textbf{Halbordnung} auf einer Menge \( S \) ist eine binäre Relation, die die folgenden Axiome erfüllt:
+
+    \begin{itemize}
+        \item \textbf{Reflexivität}:
+        \[
+        \forall a \in S \, (a \leq a).
+        \]
+        
+        \item \textbf{Antisymmetrie}: 
+        \[
+        \forall a, b \in S \, \big( (a \leq b \land b \leq a) \rightarrow a = b \big).
+        \]
+        
+        \item \textbf{Transitivität}: 
+        \[
+        \forall a, b, c \in S \, \big( (a \leq b \land b \leq c) \rightarrow a \leq c \big).
+        \]
+    \end{itemize}
+
+    \(\geq\) wird als durch \(\leq\) wie folgt definiert:
+    \[
+    a \geq b \coloneqq b \leq a.
+    \]
+\end{definition}
+
+\begin{remark}
+    Halbordnungen auf einer Menge \( S \) erlauben die Vergleichbarkeit der Elemente dieser Menge nach bestimmten Kriterien, wobei die genannten Axiome die Grundlage für diesen Vergleich bilden. Im Gegensatz zu Totalordnungen ist es bei Halbordnungen nicht erforderlich, dass jedes Paar von Elementen vergleichbar ist. Die Relation \(\geq\) bietet eine alternative Perspektive auf dieselbe Halbordnung, indem sie die Richtung der Vergleichsrelation umkehrt.
+\end{remark}
+
+\subsubsection*{Einführungsregel für Halbordnungen}
+\label{rule:rPartialOrderRelationI}
+Die Einführungsregel für Halbordnungen \(\leq\) ermöglicht es, eine Relation als Halbordnung zu definieren, indem Reflexivität, Antisymmetrie und Transitivität nachgewiesen werden. Diese Regel basiert auf den Axiomen der Halbordnung.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall a \in S (a \leq a) & \dots \\
+    j       & (2) & \forall a, b \in S ((a \leq b \land b \leq a) \rightarrow a = b) & \dots \\
+    k       & (3) & \forall a, b, c \in S ((a \leq b \land b \leq c) \rightarrow a \leq c) & \dots \\
+    i,j,k   & (4) & \leq \text{ ist eine Halbordnung auf } S & \rPartialOrderRelationI{1,2,3}
+\end{array}
+\]
+
+\(i\), \(j\), und \(k\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Halbordnungen}
+\label{rule:rPartialOrderRelationE}
+Die Eliminierungsregel für Halbordnungen \(\leq\) erlaubt es, aus der Tatsache, dass \(\leq\) eine Halbordnung ist, die Reflexivität, Antisymmetrie und Transitivität abzuleiten.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \leq \text{ ist eine Halbordnung auf } S & \dots \\
+    i       & (2) & \forall a \in S (a \leq a) & \rPartialOrderRelationE{1} \\
+    i       & (3) & \forall a, b \in S ((a \leq b \land b \leq a) \rightarrow a = b) & \rPartialOrderRelationE{1} \\
+    i       & (4) & \forall a, b, c \in S ((a \leq b \land b \leq c) \rightarrow a \leq c) & \rPartialOrderRelationE{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Reflexivität}
+\label{rule:rReflexivityOrdRI}
+Die Einführungsregel für Reflexivität ermöglicht es, die Reflexivität einer Halbordnung \(\leq\) zu zeigen, indem bewiesen wird, dass \(a \leq a\) für alle \(a \in S\) gilt.
+
+\[
+\begin{array}{llll}
+          & (1) & a \leq a & \rReflexivityOrdRI{}
+\end{array}
+\]
+
+\subsubsection*{Einführungsregel für Antisymmetrie}
+\label{rule:rAntisymmetryOrdRI}
+Die Einführungsregel für Antisymmetrie ermöglicht es, die Antisymmetrie einer Halbordnung \(\leq\) zu zeigen, indem bewiesen wird, dass \(a \leq b \land b \leq a \rightarrow a = b\) für alle \(a, b \in S\).
+
+\[
+\begin{array}{llll}
+    i       & (1) & a \leq b & \dots \\
+    j       & (2) & b \leq a & \dots \\
+    i,j     & (3) & a = b & \rAntisymmetryOrdRI{1,2}
+\end{array}
+\]
+
+\(i,j,k\) und \(l\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Transitivität}
+\label{rule:rTransitivityOrdRI}
+Die Einführungsregel für Transitivität ermöglicht es, die Transitivität einer Halbordnung \(\leq\) zu zeigen, indem bewiesen wird, dass \(a \leq b \land b \leq c \rightarrow a \leq c\) für alle \(a, b, c \in S\).
+
+\[
+\begin{array}{llll}
+    i           & (1) & a \leq b & \dots \\
+    j           & (2) & b \leq c & \dots \\
+    i,j         & (3) & a \leq c & \rTransitivityOrdRI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\paragraph{Einführungsregel für \(\geq\)}
+\label{rule:rgeqI}
+Die Einführungsregel für \(\geq\) (\(\geq I\)) besagt, dass, wenn \(b \leq a\) bewiesen ist, daraus direkt \(a \geq b\) gefolgert werden kann. Dies ergibt sich unmittelbar aus der Definition von \(\geq\).
+
+\[
+\begin{array}{llll}
+    i & (1) & b \leq a & \text{...} \\
+    i & (2) & a \geq b & \rgeqI{1} \\
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für \(\geq\) }
+\label{rule:rgeqE}
+Die Eliminierungsregel für \(\geq\) (\(\geq E\)) besagt, dass, wenn \(a \geq b\) bewiesen ist, daraus \(b \leq a\) gefolgert werden kann. Auch dies ergibt sich direkt aus der Definition von \(\geq\).
+
+\[
+\begin{array}{llll}
+    i & (1) & a \geq b & \text{...} \\
+    i & (2) & b \leq a & \rgeqE{1} \\
+\end{array}
+\]
+\(i\) ist dabei eine Liste von Annahmen.
+
+\paragraph{Bemerkung}
+
+Die Regeln \(\geq I\) und \(\geq E\) basieren auf der Definition von \(\geq\) und nutzen die Umkehrung der Relation \(\leq\). Sie können in Beweisen verwendet werden, um die Äquivalenz dieser beiden Relationen auszudrücken.
+
+\subsection{Totale Ordnung}
+
+\begin{definition}[Totale Ordnung]
+    eine \textbf{totale Ordnung} auf einer Menge \(S\) ist eine Halbordnung \(\leq\) auf \(S\), die zusätzlich das Totalität erfüllt:
+    
+    \[
+    \forall a, b \in S (a \leq b \lor b \leq a).
+    \]
+\end{definition}
+
+\begin{remark}
+    eine totale Ordnung stellt sicher, dass jedes Paar von Elementen der Menge \(S\) vergleichbar ist. Das bedeutet, dass für alle \(a, b \in S\) entweder \(a \leq b\) oder \(b \leq a\) gilt. Sie erweitert damit den Begriff der Ordnungsrelation um das Totalität.
+\end{remark}
+
+\subsubsection*{Einführungsregel für totale Ordnung}
+\label{rule:rTotalOrderI}
+Die Einführungsregel für totale Ordnungen \(\leq\) besagt, dass eine Relation als totale Ordnung definiert werden kann, wenn gezeigt wird, dass es sich um eine Ordnungsrelation handelt und das Totalität erfüllt ist.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \leq \text{ ist eine Halbordnung auf } S & \dots \\
+    j       & (2) & \forall a, b \in S (a \leq b \lor b \leq a) & \dots \\
+    i,j     & (3) & \leq \text{ ist eine totale Ordnung auf } S & \rTotalOrderI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für totale Ordnung}
+\label{rule:rTotalOrderE}
+Die Eliminierungsregel für totale Ordnungen \(\leq\) besagt, dass aus der Annahme, dass \(\leq\) eine totale Ordnung ist, das Totalität abgeleitet werden kann, zusammen mit den Eigenschaften der zugrunde liegenden Ordnungsrelation.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \leq \text{ ist eine totale Ordnung auf } S & \dots \\
+    i       & (2) & \leq \text{ ist eine Halbordnung auf } S & \rTotalOrderE{1} \\
+    i       & (3) & \forall a, b \in S (a \leq b \lor b \leq a) & \rTotalOrderE{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Totalität}
+\label{rule:rTotalityOrdRI}
+Die Einführungsregel für Totalität ermöglicht es, die Totalität einer Ordnungsrelation \(\leq\) zu zeigen, indem bewiesen wird, dass für alle \(a, b \in S\) entweder \(a \leq b\) oder \(b \leq a\) gilt.
+
+\[
+\begin{array}{llll}
+           & (1) & a \leq b \lor b \leq a & \rTotalityOrdRI{}
+\end{array}
+\]
+
+\subsection{Strikte Ordnung}
+
+\begin{definition}[Strikte Ordnung]
+    eine \textbf{strikte Ordnung} auf einer Menge \( S \) ist eine binäre Relation, die die folgenden Axiome erfüllt:
+    
+    \begin{itemize}
+        \item \textbf{Irreflexivität}:
+        \[
+        \forall a \in S \, \neg (a < a).
+        \]
+        
+        \item \textbf{Transitivität}: 
+        \[
+        \forall a, b, c \in S \, \big( (a < b \land b < c) \rightarrow a < c \big).
+        \]
+    \end{itemize}
+
+    Die \textbf{geordnete Relation} \(>\) wird als die \textbf{duale Relation} zu \(<\) definiert durch:
+    \[
+    a > b \coloneqq b < a.
+    \]
+\end{definition}
+
+\begin{remark}
+    Strikte Ordnungen auf einer Menge \( S \) erlauben eine strikte Vergleichbarkeit der Elemente dieser Menge, wobei die Irreflexivität sicherstellt, dass kein Element sich selbst in Relation steht. Strikte Ordnungen bilden die Grundlage für viele Anwendungen in der algebraischen Strukturtheorie. Die Relation \(>\) bietet eine alternative Perspektive auf dieselbe strikte Ordnung, indem sie die Richtung der Vergleichsrelation umkehrt.
+\end{remark}
+
+\subsubsection*{Einführungsregel für Strikte Ordnungen}
+\label{rule:rStrictOrderRelationI}
+Die Einführungsregel für strikte Ordnungen \(<\) ermöglicht es, eine Relation als strikte Ordnung zu definieren, indem Irreflexivität, Transitivität und Totalität nachgewiesen werden.
+
+\[
+\begin{array}{llll}
+    i       & (1) & \forall a \in S \, \neg (a < a) & \dots \\
+    j       & (2) & \forall a, b, c \in S ((a < b \land b < c) \rightarrow a < c) & \dots \\
+    i,j     & (3) & < \text{ ist eine strikte Ordnung auf } S & \rStrictOrderRelationI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für Strikte Ordnungen}
+\label{rule:rStrictOrderRelationE}
+Die Eliminierungsregel für strikte Ordnungen \(<\) erlaubt es, aus der Tatsache, dass \(<\) eine strikte Ordnung ist, die Irreflexivität, Transitivität und Totalität abzuleiten.
+
+\[
+\begin{array}{llll}
+    i       & (1) & < \text{ ist eine strikte Ordnung auf } S & \dots \\
+    i       & (2) & \forall a \in S \, \neg (a < a) & \rStrictOrderRelationE{1} \\
+    i       & (3) & \forall a, b, c \in S ((a < b \land b < c) \rightarrow a < c) & \rStrictOrderRelationE{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Irreflexivität}
+\label{rule:rIrreflexivityStrictRI}
+Die Einführungsregel für Irreflexivität ermöglicht es, die Irreflexivität einer strikten Ordnung \(<\) zu zeigen, indem bewiesen wird, dass \( \neg (a < a) \) für alle \(a \in S\) gilt.
+
+\[
+\begin{array}{llll}
+    i       & (1) & < \text{ ist eine strikte Ordnung auf } S & \dots \\
+    j       & (2) & a \in S & \dots \\
+    i,j     & (3) & \neg (a < a) & \rIrreflexivityStrictRI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Transitivität}
+\label{rule:rTransitivityStrictRI}
+Die Einführungsregel für Transitivität ermöglicht es, die Transitivität einer strikten Ordnung \(<\) zu zeigen, indem bewiesen wird, dass \(a < b \land b < c \rightarrow a < c\) für alle \(a, b, c \in S\).
+
+\[
+\begin{array}{llll}
+    i           & (1) & a < b & \dots \\
+    j           & (2) & b < c & \dots \\
+    i,j         & (3) & a < c & \rTransitivityStrictRI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\paragraph{Einführungsregel für \(>\)}
+\label{rule:rgtI}
+Die Einführungsregel für \(>\) (\(> I\)) besagt, dass, wenn \(b < a\) bewiesen ist, daraus direkt \(a > b\) gefolgert werden kann. Dies ergibt sich unmittelbar aus der Definition von \(>\).
+
+\[
+\begin{array}{llll}
+    i & (1) & b < a & \text{...} \\
+    i & (2) & a > b & \rgtI{1} \\
+\end{array}
+\]
+
+Hierbei ist \(i\) eine Liste von Annahmen, die zur Herleitung der entsprechenden Zeilen verwendet wird.
+
+\paragraph{Eliminierungsregel für \(>\)}
+\label{rule:rgtE}
+Die Eliminierungsregel für \(>\) (\(> E\)) besagt, dass, wenn \(a > b\) bewiesen ist, daraus \(b < a\) gefolgert werden kann. Auch dies ergibt sich direkt aus der Definition von \(>\).
+
+\[
+\begin{array}{llll}
+    i & (1) & a > b & \text{...} \\
+    i & (2) & b < a & \rgtE{1} \\
+\end{array}
+\]
+
+\(i\) ist dabei eine Liste von Annahmen.
+
+\label{aGneqbImpaGeqb}
+\begin{theorem}[\(a > b\vdash a\geq b\)]
+Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+\[a<b\vdash \neg(b<a)\]
+\end{theorem}
+\begin{proof}
+    Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+	\[
+	\begin{array}{llll}
+		1   & (1) & a > b & \rA\\
+            1   & (2) & b<a & \rgtE{1}\\
+		1   & (3) & b\leq a & \InducedStrictOrderE{2}\\
+            1   & (4) & a\geq b & \rgeqI{3}\\
+	\end{array}
+	\]
+\end{proof}
+
+
+
+\label{aLneqbImpnLpbLneqaRp}
+\begin{theorem}[\(a<b\vdash \neg(b<a)\) (Asymmetrische strikte Ordnungen)]
+Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+\[a<b\vdash \neg(b<a)\]
+\end{theorem}
+\begin{proof}
+    Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+	\[
+	\begin{array}{llll}
+		1   & (1) & a<b & \rA\\
+        2   & (2) & b<a & \rA\\
+		1,2 & (3) & a<a & \rTransitivityStrictRI{1,2}\\
+            & (4) & a<a & \rIrreflexivityStrictRI{}\\
+        1,2 & (5) & \bot & \rBI{3,4}\\
+        1   & (6) & \neg(b<a) & \rCI{2,5}\\
+	\end{array}
+	\]
+\end{proof}
+
+\label{aEqualsbImpnLpaLneqbRp}
+\begin{theorem}[\(a=b\vdash \neg(a<b)\)]
+Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+\[a=b\vdash \neg(a<b)\]
+\end{theorem}
+\begin{proof}
+    Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+	\[
+	\begin{array}{llll}
+		1   & (1) & a=b & \rA\\
+            & (2) & \neg(a<a) & \rReflexivityOrdRI{}\\
+		1   & (3) & \neg(a<b) & \rIE{1,2}\\
+	\end{array}
+	\]
+\end{proof}
+
+\label{aEqualsbImpnLpbLneqaRp}
+\begin{theorem}[\(a=b\vdash \neg(b<a)\)]
+Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+\[a=b\vdash \neg(b<a)\]
+\end{theorem}
+\begin{proof}
+    Sei \(<\) eine strikte Ordnung auf \(S\) und \(a,b\in  S\), dann gilt:
+	\[
+	\begin{array}{llll}
+		1   & (1) & a=b & \rA\\
+            & (2) & \neg(a<a) & \rReflexivityOrdRI{}\\
+		1   & (3) & \neg(b<a) & \rIE{1,2}\\
+	\end{array}
+	\]
+\end{proof}
+
+\subsection{Totale Strikte Ordnung}
+
+\begin{definition}[Totale Strikte Ordnung]
+    eine \textbf{totale strikte Ordnung} ist eine strikte Ordnung \(<\) auf einer Menge \(S\), die zusätzlich das Totalität erfüllt:
+    
+    \[
+    \forall a, b \in S (a < b \lor b < a).
+    \]
+\end{definition}
+
+\begin{remark}
+    eine totale strikte Ordnung stellt sicher, dass jedes Paar von Elementen der Menge \(S\) strikt vergleichbar ist. Das bedeutet, dass für alle \(a, b \in S\) entweder \(a < b\) oder \(b < a\) gilt. Sie erweitert den Begriff der strikten Ordnung um das Totalität.
+\end{remark}
+
+\subsubsection*{Einführungsregel für totale strikte Ordnung}
+\label{rule:rTotalStrictOrderI}
+Die Einführungsregel für totale strikte Ordnungen \(<\) besagt, dass eine Relation als totale strikte Ordnung definiert werden kann, wenn gezeigt wird, dass es sich um eine strikte Ordnung handelt und das Totalität erfüllt ist.
+
+\[
+\begin{array}{llll}
+    i       & (1) & < \text{ ist eine strikte Ordnung} & \dots \\
+    j       & (2) & \forall a, b \in S (a < b \lor b < a) & \dots \\
+    i,j     & (3) & < \text{ ist eine totale strikte Ordnung.} & \rTotalStrictOrderI{1,2}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsubsection*{Eliminierungsregel für totale strikte Ordnung}
+\label{rule:rTotalStrictOrderE}
+Die Eliminierungsregel für totale strikte Ordnungen \(<\) besagt, dass aus der Annahme, dass \(<\) eine totale strikte Ordnung ist, das Totalität abgeleitet werden kann, zusammen mit den Eigenschaften der zugrunde liegenden strikten Ordnung.
+
+\[
+\begin{array}{llll}
+    i       & (1) & < \text{ ist eine totale strikte Ordnung auf } S & \dots \\
+    i       & (2) & \forall a, b \in S (a < b \lor b < a) & \rTotalStrictOrderE{1} \\
+    i       & (3) & < \text{ ist eine strikte Ordnung auf }S & \rTotalStrictOrderE{1}
+\end{array}
+\]
+
+\(i\) ist dabei die Liste der Annahmen.
+
+\subsubsection*{Einführungsregel für Totalität}
+\label{rule:rTotalityStrictRI}
+Die Einführungsregel für Totalität ermöglicht es, die Totalität einer totalen strikten Ordnung \(<\) zu zeigen, indem bewiesen wird, dass für alle \(a, b \in S\) entweder \(a < b\) oder \(b < a\) gilt.
+
+\[
+\begin{array}{llll}
+       & (1) & a < b \lor b < a & \rTotalityStrictRI{}
+\end{array}
+\]
+
+\subsection{Induzierte strikte Ordnung aus einer Halbordnung}
+
+\begin{definition}[Induzierte Ordnung aus totaler Ordnung]
+    Sei \(\leq\) eine Halbordnung auf einer Menge \(S\). Dann definieren wir die zugehörige Ordnung \(<\) auf \(S\) durch:
+    \[
+    \forall a, b \in S \, (a < b \coloneqq a \leq b \land a \neq b).
+    \]
+\end{definition}
+
+\begin{remark}
+    Die Ordnung \(<\) wird auch als die von der Halbordnung \(\leq\) induzierte  Ordnung bezeichnet. Sie verfeinert die Relation \(\leq\), indem sie die Gleichheit ausschließt.
+\end{remark}
+
+\subsubsection{Regeln für die induzierte Ordnung}
+\label{rule:InducedStrictOrderE} \label{rule:InducedStrictOrderI}
+
+Die induzierte Ordnung, dargestellt durch das Symbol \(<\), ist eine Beziehung zwischen zwei Elementen einer Menge \(S\). Basierend auf unserer Definition für die induzierte strikte Ordnung, können wir zwei grundlegende Regeln einführen: die Einführungs- und die Eliminierungsregel.
+
+\paragraph{Einführungsregel für die induzierte Ordnung (\(<\))}
+Die Einführungsregel für die induzierte Ordnung (\(< I\)) besagt, dass wenn wir zeigen können, dass \(a \leq b\) und gleichzeitig \(a \neq b\) gilt, dann können wir daraus schließen, dass \(a < b\) gilt. Dabei dürfen \(a\) und \(b\) aus keiner der Annahmen eliminiert worden sein.
+
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq b & \dots \\
+    j   & (2) & a \neq b & \dots \\
+    i,j & (3) & a < b & \InducedStrictOrderI{1,2}
+\end{array}
+\]
+
+bzw.
+
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq b & \dots \\
+    j   & (2) & b \neq a & \dots \\
+    i,j & (3) & a < b & \InducedStrictOrderI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für die induzierte Ordnung \(<\)}
+Die Eliminierungsregel für die induzierte Ordnung (\(< E\)) besagt, dass wenn wir wissen, dass \(a <_{\leq} b\) gilt, dann können wir daraus schließen, dass sowohl \(a \leq b\) als auch \(a \neq b\) gelten.
+
+\[
+\begin{array}{llll}
+    i & (1) & a < b & \dots \\
+    i & (2) & a \leq b & \InducedStrictOrderE{1} \\
+    i & (3) & a \neq b & \InducedStrictOrderE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\label{InducedStrictOrderImpnLpaLneqaRp}
+\begin{theorem}[Irreflexivität der induzierten Ordnung]
+    Sei \(<\) die aus der Halbordnung \(\leq\) induzierte Ordnung auf \(S\) und \(a\in S\). Dann gilt:
+    \[
+    \vdash \neg (a < a).
+    \]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1   & (1) & a<a & \rA\\
+		1   & (2) & a\neq a & \InducedStrictOrderE{1}\\
+		  & (3) & a=a & \rII{}\\
+        1   & (4) & \bot & \rBI{2,3}\\
+        1   & (5) & \neg(a<a) & \rCI{1,4}\\
+	\end{array}
+	\]    
+\end{proof}
+
+\label{InducedStrictOrderaLneqbwbLneqcImpaLneqc}
+\begin{theorem}[Irreflexivität der induzierten Ordnung]
+    Sei \(<\) die aus der Halbordnung \(\leq\) induzierte Ordnung auf \(S\) und \(a,b,c\in S\). Dann gilt:
+    \[
+    a<b,b<c\vdash a < c
+    \]
+\end{theorem}
+\begin{proof}
+	\[
+	\begin{array}{llll}
+		1     & (1) & a<b & \rA\\
+		2     & (2) & b<c & \rA\\
+		1     & (3) & a\leq b & \InducedStrictOrderE{1}\\
+        1     & (4) & a\neq b & \InducedStrictOrderE{1}\\
+        2     & (5) & b\leq c & \InducedStrictOrderE{2}\\
+        2     & (6) & b\neq c & \InducedStrictOrderE{2}\\
+        1,2   & (7) & a\leq c & \rTransitivityOrdRI{3,5}\\
+        8     & (8) & a=c & \rA\\
+        2,8   & (9) & b\leq a & \rIE{8,5}\\
+        1,2,8 & (10) & a=b & \rAntisymmetryOrdRI{3,9}\\
+        1,2,8 & (11) & \bot & \rBI{3,9}\\
+        1,2   & (12) & a\neq b & \rCI{8,11}\\
+	\end{array}
+	\]
+\end{proof}
+
+\label{InducedStrictOrderFromHalfOrder}
+\begin{theorem}[Die aus einer Halbordnung induzierte Ordnung \(<\) ist eine strikte Ordnung.]
+    Sei \(<\) die aus der Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt:
+    \[
+    \vdash \text{ } < \text{ ist eine strikte Ordnung auf }S
+    \]
+\end{theorem}
+\begin{proof}
+	\[
+        \begin{array}{llll}
+          & (1) & \forall a \in S \, \neg (a < a) & \InducedStrictOrderImpnLpaLneqaRp{} \\
+          & (2) & \forall a, b, c \in S ((a < b \land b < c) \rightarrow a < c) & \InducedStrictOrderaLneqbwbLneqcImpaLneqc{} \\
+          & (3) & < \text{ ist eine strikte Ordnung auf } S & \rStrictOrderRelationI{1,2}
+        \end{array}
+	\]
+\end{proof}
+
+\label{ImpLpaLneqbOrbLneqaRpOraEqualsb}
+\begin{theorem}[\(\vdash (a<b\lor b<a)\lor a=b\)]
+    Sei \(<\) die aus der totalen Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt für alle \(a,b\in S\):
+    \[
+    \vdash (a<b\lor b<a)\lor a=b
+    \]
+\end{theorem}
+\begin{proof}
+        Seien \(a,b\in S\), dann gilt:
+	\[
+        \begin{array}{llll}
+            & (1) & a\leq b\lor b\leq a & \rTotalityOrdRI{} \\
+            & (2) & a=b\lor a\neq b & \FormulaRefAuto{P \lor \neg P}{} \\
+          3 & (3) & a=b & \rA \\
+          3 & (4) & (a<b\lor b<a)\lor a=b & \rOIb{3} \\
+          5 & (5) & a\neq b & \rA \\
+          6 & (6) & a\leq b & \rA \\
+          5,6 & (7) & a<b & \InducedStrictOrderI{5,6} \\
+          5,6 & (8) & a<b\lor b<a  & \rOIa{7} \\
+          5,6 & (9) & (a<b\lor b<a)\lor a=b  & \rOIa{8} \\
+          10 & (10) & b\leq a  & \rA \\
+          5,10 & (11) & b<a  & \InducedStrictOrderI{5,10} \\
+          5,10 & (12) & a<b\lor b<a  & \rOIb{11} \\
+          5,10 & (13) & (a<b\lor b<a)\lor a=b  & \rOIa{12} \\
+          5    & (14) & (a<b\lor b<a)\lor a=b  & \rOE{1,6,9,10,13} \\
+               & (15) & (a<b\lor b<a)\lor a=b  & \rOE{2,3,4,5,14} \\
+        \end{array}
+	\]
+\end{proof}
+
+\label{aLneqbOrLpbLneqaOraEqualsbRp}
+\begin{theorem}[\(\vdash a<b\lor (b<a\lor a=b)\)]
+    Sei \(<\) die aus der totalen Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt für alle \(a,b\in S\):
+    \[
+    \vdash a<b\lor (b<a\lor a=b)
+    \]
+\end{theorem}
+\begin{proof}
+        Seien \(a,b\in S\), dann gilt:
+	\[
+        \begin{array}{llll}
+            & (1) & (a<b\lor b<a)\lor a=b & \ImpLpaLneqbOrbLneqaRpOraEqualsb{} \\
+            & (2) & a<b\lor (b<a\lor a=b) & \FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}{} \\
+        \end{array}
+	\]
+\end{proof}
+
+\label{LpaLeqbRpEqvaLneqbOraEqualsb}
+\begin{theorem}[\((a\leq b)\eqvdash a<b\lor a=b\)]
+    Sei \(<\) die aus der Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt für alle \(a,b\in S\):
+    \[
+    (a\leq b)\eqvdash a<b\lor a=b
+    \]
+\end{theorem}
+\begin{proof}
+        Seien \(a,b\in S\), dann gilt:
+\(\vdash\):
+	\[
+        \begin{array}{llll}
+            1   &   (1) &   a\leq b             &   \rA                         \\
+                &   (2) &   a=b\lor a\neq b     &   \FormulaRefAuto{P \lor \neg P}{}                 \\
+            3   &   (3) &   a=b                 &   \rA                         \\
+            3   &   (4) &   a<b\lor a=b         &   \rOIb{3}                    \\
+            5   &   (5) &   a\neq b             &   \rA                         \\
+            1,5 &   (6) &   a<b                 &   \InducedStrictOrderI{1,5}   \\   
+            1,5 &   (7) &   a<b\lor a=b         &   \rOIa{6}                    \\
+            1   &   (8) &   a<b\lor a=b         &   \rOE{2,3,4,5,7}             \\
+        \end{array}
+	\]
+ \(\dashv\):
+ 	\[
+        \begin{array}{llll}
+            1   &   (1) &   a<b\lor a=b         &   \rA                         \\
+            2   &   (2) &   a<b                 &   \rA                         \\
+            3   &   (3) &   a\leq b             &   \InducedStrictOrderE{2}     \\
+            4   &   (4) &   a=b                 &   \rA                         \\
+                &   (5) &   a\leq a             &   \rReflexivityOrdRI{}        \\
+            4   &   (6) &   a\leq b             &   \rIE{4,5}                   \\
+            1   &   (7) &   a\leq b             &   \rOE{1,2,3,4,6}             \\
+        \end{array}
+	\]
+\end{proof}
+
+\label{nLpaLneqbRpEqvbLeqa}
+\begin{theorem}[\(\neg(a<b)\eqvdash b\leq a\)]
+    Sei \(<\) die aus der totalen Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt für alle \(a,b\in S\):
+    \[
+    \neg(a<b)\eqvdash b\leq a
+    \]
+\end{theorem}
+\begin{proof}
+        Seien \(a,b\in S\), dann gilt:
+        
+\(\vdash\):
+	\[
+        \begin{array}{llll}
+          1     &   (1)     &   \neg(a<b)                   & \rA                               \\
+                &   (2)     &   a<b\lor (b<a\lor a=b)       & \aLneqbOrLpbLneqaOraEqualsbRp{}   \\
+          1     &   (3)     &   b<a\lor a=b                 & \FormulaRefAuto{P \lor Q,\neg P \vdash Q}{2,1}                 \\
+          1     &   (4)     &   b\leq a                     & \LpaLeqbRpEqvaLneqbOraEqualsb{3}  \\
+        \end{array}
+	\]
+\(\dashv\):
+ 	\[
+        \begin{array}{llll}
+            1   &   (1) &   b\leq               &   \rA                                \\
+            1   &   (2) &   b<a\lor a=b         &   \LpaLeqbRpEqvaLneqbOraEqualsb{1}   \\
+            3   &   (3) &   b<a                 &   \rA                                \\
+            3   &   (4) &   \neg(a<b)           &   \aLneqbImpnLpbLneqaRp{3}           \\
+            5   &   (5) &   a=b                 &   \rA                                \\
+                &   (6) &   \neg(b<a)           &   \aEqualsbImpnLpbLneqaRp{5}         \\
+            1   &   (7) &   \neg(b<a)           & \rOE{2,3,4,5,6}                      \\
+        \end{array}
+	\]
+\end{proof}
+
+\label{aLneqbEqvnLpbLeqaRp}
+\begin{theorem}[\(a<b\eqvdash \neg(b\leq a)\)]
+    Sei \(<\) die aus der totalen Halbordnung \(\leq\) induzierte Ordnung auf \(S\). Dann gilt für alle \(a,b\in S\):
+    \[
+    a<b\eqvdash \neg(b\leq a)
+    \]
+\end{theorem}
+\begin{proof}
+        Seien \(a,b\in S\), dann gilt:
+        
+\(\vdash\):
+	\[
+        \begin{array}{llll}
+          1 & (1) &   a<b  & \rA\\
+            & (2) &  \neg(a<b)\leftrightarrow b\leq a  & \nLpaLneqbRpEqvbLeqa{}\\
+          1 & (3) &  \neg(b\leq a)  & \FormulaRefAuto{P \leftrightarrow Q, \neg Q \vdash \neg P}{1}\\
+        \end{array}
+	\]
+\(\dashv\):
+ 	\[
+        \begin{array}{llll}
+            1 & (1) &   \neg(b\leq a)  & \rA\\        
+              & (2) &   \neg(a<b)\leftrightarrow b\leq a  &   \nLpaLneqbRpEqvbLeqa{1}   \\
+            1 & (3) &   b<a                 &   \FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{1,2}\\
+        \end{array}
+	\]
+\end{proof}
+
+
+\subsection{Kettennotation für Relationen mit der Eigenschaft der Transititvität}
+
+In mathematischen Beweisen ist es oft hilfreich, Beziehungen, die die Eigenschaft der Transitivität erfüllen, in kompakter Form zu notieren. Dazu führen wir eine Kettennotation ein, die für beliebige Relationen \(\mathrel{R}\) gilt, sofern die Transitivität 
+\[
+a \mathrel{R} b \land b \mathrel{R} c \vdash a \mathrel{R} c
+\]
+erfüllt ist. Beispiele solcher Relationen sind:
+\begin{itemize}
+    \item Äquivalenzrelationen (\(\sim\)),
+    \item Halbordnungen (\(\leq\)),
+    \item strikte Ordnungen (\(<\)),
+    \item totale Ordnungen (\(\leq\) und \(<\)).
+\end{itemize}
+
+\subsubsection*{Definition der Kettennotation}
+
+eine Kettennotation für Relationen mit Transitivität ist eine Darstellung der Form:
+\[
+a \stackrel{\text{Regel}_1}{\mathrel{R}} b \stackrel{\text{Regel}_2}{\mathrel{R}} c \stackrel{\text{Regel}_3}{\mathrel{R}} d,
+\]
+wobei jeder Übergang \(x \stackrel{\text{Regel}}{\mathrel{R}} y\) durch die angegebene Regel \(\text{Regel}\) gerechtfertigt ist.
+
+Sofern die Regelnamen sehr lang oder nicht offensichtlich sind und dies zu einer unübersichtlichen Darstellung in der Kette führen würde, nutzen wir alternativ die tabellarische Notation:
+\[
+\begin{array}{llclll}
+	1 & (1) & a & \mathrel{R} & b & \rA \\
+	1 & (2) &   & \mathrel{R} & c & \text{Regel}_1 \\
+	1 & (3) &   & \mathrel{R} & d & \text{Regel}_2 \\
+        1 & (4) &  a & \mathrel{R} & d & \rTransitivityOrdRI{1,3} \\
+\end{array}
+\]
+
+Diese Notationen vereinfachen Beweise, indem sie die Struktur hervorheben und die Transitivität klar nutzen.
+
+\paragraph{Anmerkung:}  
+In die Kettennotation kann auch die Gleichheit \(=\) integriert werden, da sie im Kalkül des natürlichen Schließens eine fundamentale Rolle spielt und das Resultat der Relation nicht verändert. 
+
+Die Gleichheit wurde als Identitätssymbol mit spezifischen Einführungs- und Eliminierungsregeln eingeführt, die garantieren, dass \(a = b\) bedeutet, dass \(a\) und \(b\) in jedem Kontext austauschbar sind. Darüber hinaus wurde gezeigt, dass die Gleichheit auf jeder beliebigen Menge eine Äquivalenzrelation ist, da sie die Reflexivität, Symmetrie und Transitivität erfüllt. Insbesondere gilt die Transitivität:
+\[
+a = b \land b = c \vdash a = c,
+\]
+wodurch sich die Gleichheit nahtlos in die Kettennotation einfügt.
+
+Zusätzlich ist die Gleichheit mit anderen Relationen wie \(\leq\) oder \(\sim\) kompatibel. Dies erlaubt die Darstellung gemischter Relationen in der Kettennotation, wie etwa:
+\[
+a = b \leq c = d.
+\]
+Hierbei bleibt die logische Konsistenz der Kette erhalten, da die Gleichheit \(=\) keine neuen Einschränkungen einführt und die Ergebnisse der Relation \(\mathrel{R}\) nicht beeinflusst.
+
+Die Integration der Gleichheit in die Kettennotation macht Beweise übersichtlicher und nutzt die Einführungs- und Eliminierungsregeln des Identitätssymbols effizient, um Beweisstrukturen kompakt darzustellen.
+
+\paragraph{Verallgemeinerung durch Symmetrie:}  
+Da die Gleichheit \(=\) im Kalkül des natürlichen Schließens auch die Eigenschaft der Symmetrie erfüllt, können Gleichungen in der Kettennotation beliebig vertauscht werden, ohne die logische Konsistenz der Kette zu beeinflussen. Dies bedeutet, dass in einer Kette wie:
+\[
+a \stackrel{\text{Regel}_1}{=} b \stackrel{\text{Regel}_2}{=} c \stackrel{\text{Regel}_3}{=} d
+\]
+die Reihenfolge der Gleichheitsrelationen verändert werden kann, um beispielsweise:
+\[
+d \stackrel{\text{Regel}_3}{=} c \stackrel{\text{Regel}_2}{=} b \stackrel{\text{Regel}_1}{=} a
+\]
+zu erhalten, wobei die Gültigkeit der Kette erhalten bleibt.
+
+Diese Eigenschaft unterscheidet die Gleichheit von anderen Relationen wie \(\leq\), die keine Symmetrie besitzen. Während in gemischten Relationen wie \(a = b \leq c = d\) die Gleichungen vertauscht werden können, bleibt die Anordnung der nicht-symmetrischen Relationen wie \(\leq\) unverändert. 
+
+Diese Flexibilität macht die Gleichheit in der Kettennotation besonders nützlich und hebt ihre Rolle in mathematischen Beweisen hervor.
+
+\subsubsection*{Bemerkung zur Verallgemeinerung}
+
+Die hier beschriebene Kettennotation ist universell anwendbar auf alle Relationen mit der Eigenschaft der Transitivität. Für spezifische Relationen wie \(\sim\), \(\leq\) oder \(<\) kann das jeweilige Symbol \(\mathrel{R}\) entsprechend ersetzt werden. Dies macht die Notation flexibel und für verschiedenste mathematische Strukturen geeignet.
+
+\subsection{Geschachtelte Ordnungen}
+
+\begin{definition}[Geschachtelte Ordnungen]
+    Sei \(\leq\) eine Halbordnung auf \(S\) und \(<\) die aus \(\leq\) induzierte strikte Ordnung, definiert durch \( a < b \coloneqq (a \leq b) \land (a \neq b) \). Für Elemente \(a, b, c \in S\) definieren wir Ausdrücke der Form \(a \leq b < c\) als Kombination aus \(\leq\)- und \(<\)-Relationen:
+    \[
+    a \leq b < c \coloneqq (a \leq b) \land (b < c).
+    \]
+    Analog gelten:
+    \begin{align*}
+        a < b \leq c &\coloneqq (a < b) \land (b \leq c), \\
+        a < b < c &\coloneqq (a < b) \land (b < c), \\
+        a \leq b \leq c &\coloneqq (a \leq b) \land (b \leq c).
+    \end{align*}
+\end{definition}
+
+\begin{remark}
+    Die Schreibweise geschachtelter Ordnungen wie \(a \leq b < c\) ermöglicht eine kompakte Darstellung kombinierter Ordnungsrelationen und wird häufig in analytischen und algebraischen Strukturen verwendet.
+\end{remark}
+
+\subsubsection{Regeln für geschachtelte Ordnungen}
+\label{rule:rLeqLltE} \label{rule:rLeqLltI}
+\label{rule:rLltLeqE} \label{rule:rLltLeqI}
+\label{rule:rLltLltE} \label{rule:rLltLltI}
+\label{rule:rLeqLeqE} \label{rule:rLeqLeqI}
+
+Die geschachtelten Ordnungen erlauben, kombinierte Ordnungsrelationen wie \(a \leq b < c\) formal abzuleiten. Die folgenden Regeln stellen die Einführungs- und Eliminierungsregeln für die vier möglichen geschachtelten Ordnungen dar.
+
+\paragraph{Einführungsregel für \(a \leq b < c\)}
+Die Einführungsregel für \(a \leq b < c\) besagt, dass wenn sowohl \(a \leq b\) als auch \(b < c\) gilt, dann \(a \leq b < c\) folgt. Dabei sind \(i\) und \(j\) Listen von Annahmen.
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq b & \dots \\
+    j   & (2) & b < c & \dots \\
+    i,j & (3) & a \leq b < c & \rLeqLltI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für \(a \leq b < c\)}
+Die Eliminierungsregel für \(a \leq b < c\) erlaubt es, aus \(a \leq b < c\) die beiden Aussagen \(a \leq b\) und \(b < c\) abzuleiten.
+\[
+\begin{array}{llll}
+    i & (1) & a \leq b < c & \dots \\
+    i & (2) & a \leq b & \rLeqLltE{1} \\
+    i & (3) & b < c & \rLeqLltE{1}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für \(a < b \leq c\)}
+Die Einführungsregel für \(a < b \leq c\) besagt, dass wenn sowohl \(a < b\) als auch \(b \leq c\) gilt, dann \(a < b \leq c\) folgt.
+\[
+\begin{array}{llll}
+    i   & (1) & a < b & \dots \\
+    j   & (2) & b \leq c & \dots \\
+    i,j & (3) & a < b \leq c & \rLltLeqI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für \(a < b \leq c\)}
+Die Eliminierungsregel für \(a < b \leq c\) erlaubt es, aus \(a < b \leq c\) die beiden Aussagen \(a < b\) und \(b \leq c\) abzuleiten.
+\[
+\begin{array}{llll}
+    i & (1) & a < b \leq c & \dots \\
+    i & (2) & a < b & \rLltLeqE{1} \\
+    i & (3) & b \leq c & \rLltLeqE{1}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für \(a < b < c\)}
+Die Einführungsregel für \(a < b < c\) besagt, dass wenn sowohl \(a < b\) als auch \(b < c\) gilt, dann \(a < b < c\) folgt.
+\[
+\begin{array}{llll}
+    i   & (1) & a < b & \dots \\
+    j   & (2) & b < c & \dots \\
+    i,j & (3) & a < b < c & \rLltLltI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für \(a < b < c\)}
+Die Eliminierungsregel für \(a < b < c\) erlaubt es, aus \(a < b < c\) die beiden Aussagen \(a < b\) und \(b < c\) abzuleiten.
+\[
+\begin{array}{llll}
+    i & (1) & a < b < c & \dots \\
+    i & (2) & a < b & \rLltLltE{1} \\
+    i & (3) & b < c & \rLltLltE{1}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für \(a \leq b \leq c\)}
+Die Einführungsregel für \(a \leq b \leq c\) besagt, dass wenn sowohl \(a \leq b\) als auch \(b \leq c\) gilt, dann \(a \leq b \leq c\) folgt.
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq b & \dots \\
+    j   & (2) & b \leq c & \dots \\
+    i,j & (3) & a \leq b \leq c & \rLeqLeqI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminierungsregel für \(a \leq b \leq c\)}
+Die Eliminierungsregel für \(a \leq b \leq c\) erlaubt es, aus \(a \leq b \leq c\) die beiden Aussagen \(a \leq b\) und \(b \leq c\) abzuleiten.
+\[
+\begin{array}{llll}
+    i & (1) & a \leq b \leq c & \dots \\
+    i & (2) & a \leq b & \rLeqLeqE{1} \\
+    i & (3) & b \leq c & \rLeqLeqE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsection{Intervalle}
+
+\begin{definition}[Intervalle]
+    Sei \(S\) eine Menge mit einer Halbordnung \(\leq\) und \(<\) die induzierte strikte Ordnung aus \(\leq\), definiert durch \( a < b \coloneqq (a \leq b) \land (a \neq b) \). Ein \textbf{Intervall} in \(S\) ist eine Teilmenge von \(S\), die alle Elemente zwischen zwei gegebenen Grenzen enthält. Wir definieren die verschiedenen Intervalltypen wie folgt:
+    \begin{align*}
+        [a, b] &\coloneqq \{ x \in S \mid a \leq x \leq b \}, \\
+        (a, b) &\coloneqq \{ x \in S \mid a < x < b \}, \\
+        [a, b) &\coloneqq \{ x \in S \mid a \leq x < b \}, \\
+        (a, b] &\coloneqq \{ x \in S \mid a < x \leq b \}.
+    \end{align*}
+\end{definition}
+
+\begin{remark}
+    Intervalle stellen wichtige Teilmengen einer geordneten Menge dar und erlauben es, Teilbereiche basierend auf den Ordnungsrelationen zu untersuchen.
+\end{remark}
+
+\subsubsection{Einführungsregeln für Intervalle}
+\label{rule:rClosedIntervalI} \label{rule:rOpenIntervalI} \label{rule:rClosedOpenIntervalI} \label{rule:rOpenClosedIntervalI}
+
+Die Einführungsregeln für Intervalle ermöglichen es, die Zugehörigkeit eines Elements zu einem bestimmten Intervall zu zeigen, wenn die jeweiligen Ordnungsrelationen zwischen dem Element und den Intervallgrenzen erfüllt sind.
+
+\paragraph{Einführungsregel für das abgeschlossene Intervall \([a, b]\)}
+Die Einführungsregel für das abgeschlossene Intervall \([a, b]\) besagt, dass ein Element \(x \in S\) in \([a, b]\) liegt, wenn \(a \leq x \leq b\) gilt.
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq x & \dots \\
+    j   & (2) & x \leq b & \dots \\
+    i,j & (3) & x \in [a, b] & \rClosedIntervalI{1,2}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für das offene Intervall \((a, b)\)}
+Die Einführungsregel für das offene Intervall \((a, b)\) besagt, dass ein Element \(x \in S\) in \((a, b)\) liegt, wenn \(a < x < b\) gilt.
+\[
+\begin{array}{llll}
+    i   & (1) & a < x & \dots \\
+    j   & (2) & x < b & \dots \\
+    i,j & (3) & x \in (a, b) & \rOpenIntervalI{1,2}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für das halboffene Intervall \([a, b)\)}
+Die Einführungsregel für das halboffene Intervall \([a, b)\) besagt, dass ein Element \(x \in S\) in \([a, b)\) liegt, wenn \(a \leq x < b\) gilt.
+\[
+\begin{array}{llll}
+    i   & (1) & a \leq x & \dots \\
+    j   & (2) & x < b & \dots \\
+    i,j & (3) & x \in [a, b) & \rClosedOpenIntervalI{1,2}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für das halboffene Intervall \((a, b]\)}
+Die Einführungsregel für das halboffene Intervall \((a, b]\) besagt, dass ein Element \(x \in S\) in \((a, b]\) liegt, wenn \(a < x \leq b\) gilt.
+\[
+\begin{array}{llll}
+    i   & (1) & a < x & \dots \\
+    j   & (2) & x \leq b & \dots \\
+    i,j & (3) & x \in (a, b] & \rOpenClosedIntervalI{1,2}
+\end{array}
+\]
+
+\subsubsection{Eliminationsregeln für Intervalle}
+\label{rule:rClosedIntervalE} \label{rule:rOpenIntervalE} \label{rule:rClosedOpenIntervalE} \label{rule:rOpenClosedIntervalE}
+
+Die Eliminationsregeln für Intervalle ermöglichen es, aus der Tatsache, dass ein Element in einem bestimmten Intervall liegt, die entsprechenden Ordnungsrelationen zwischen dem Element und den Intervallgrenzen abzuleiten.
+
+\paragraph{Eliminationsregel für das abgeschlossene Intervall \([a, b]\)}
+Die Eliminationsregel für das abgeschlossene Intervall \([a, b]\) besagt, dass wenn \(x \in [a, b]\) gilt, dann sowohl \(a \leq x\) als auch \(x \leq b\) folgt.
+\[
+\begin{array}{llll}
+    i & (1) & x \in [a, b] & \dots \\
+    i & (2) & a \leq x & \rClosedIntervalE{1} \\
+    i & (3) & x \leq b & \rClosedIntervalE{1}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das offene Intervall \((a, b)\)}
+Die Eliminationsregel für das offene Intervall \((a, b)\) besagt, dass wenn \(x \in (a, b)\) gilt, dann sowohl \(a < x\) als auch \(x < b\) folgt.
+\[
+\begin{array}{llll}
+    i & (1) & x \in (a, b) & \dots \\
+    i & (2) & a < x & \rOpenIntervalE{1} \\
+    i & (3) & x < b & \rOpenIntervalE{1}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das halboffene Intervall \([a, b)\)}
+Die Eliminationsregel für das halboffene Intervall \([a, b)\) besagt, dass wenn \(x \in [a, b)\) gilt, dann sowohl \(a \leq x\) als auch \(x < b\) folgt.
+\[
+\begin{array}{llll}
+    i & (1) & x \in [a, b) & \dots \\
+    i & (2) & a \leq x & \rClosedOpenIntervalE{1} \\
+    i & (3) & x < b & \rClosedOpenIntervalE{1}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das halboffene Intervall \((a, b]\)}
+Die Eliminationsregel für das halboffene Intervall \((a, b]\) besagt, dass wenn \(x \in (a, b]\) gilt, dann sowohl \(a < x\) als auch \(x \leq b\) folgt.
+\[
+\begin{array}{llll}
+    i & (1) & x \in (a, b] & \dots \\
+    i & (2) & a < x & \rOpenClosedIntervalE{1} \\
+    i & (3) & x \leq b & \rOpenClosedIntervalE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\subsection{Extremale Elemente und Schranken in halbgeordneten Mengen}
+
+
+\label{MInSwNInSwFatInSLptLeqMRpwFatInSLptLeqNRpImpMEqualsN}
+\begin{theorem}[Eindeutigkeit des Maximums]
+    Sei \( S \) eine Halbordnung und seien \( M \) und \( N \) zwei maximale Elemente in \( S \). Dann gilt:
+    \[
+    M\in S, N\in S, \forall t \in S(t \leq M), \forall t \in S(t \leq N) \vdash M = N.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Sei \(S\) eine Halbordnung, dann gilt:
+    \[
+    \begin{array}{lll p{4cm}}
+        1 & (1) & M\in S & \rA \\
+        2 & (2) & N\in S & \rA \\
+        3 & (3) & \forall t \in S(t \leq M) & \rA \\
+        4 & (4) & \forall t \in S(t \leq N) & \rA \\
+        2,3 & (5) & N\leq M & \rSetUEc{2,3}  \\
+        1,4 & (6) & M\leq N & \rSetUEc{1,4} \\
+        1,2,3,4 & (7) & M = N & \rAntisymmetryOrdRI{5,6} \\
+    \end{array}
+    \]
+\end{proof}
+
+\label{PInSwQInSwFatInSLpPLeqtRpwFatInSLpQLeqtRpImpPEqualsQ}
+\begin{theorem}[Eindeutigkeit des Minimums]
+    Sei \( S \) eine Halbordnung und seien \( P \) und \( Q \) zwei minimale Elemente in \( S \). Dann gilt:
+    \[
+    P \in S, Q \in S, \forall t \in S(P \leq t), \forall t \in S(Q \leq t) \vdash P = Q.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Sei \(S\) eine Halbordnung, dann gilt:
+    \[
+    \begin{array}{lll p{4cm}}
+        1 & (1) & P \in S & \rA \\
+        2 & (2) & Q \in S & \rA \\
+        3 & (3) & \forall t \in S (P \leq t) & \rA \\
+        4 & (4) & \forall t \in S (Q \leq t) & \rA \\
+        2,3 & (5) & Q \leq P & \rSetUEc{2,3}  \\
+        1,4 & (6) & P \leq Q & \rSetUEc{1,4} \\
+        1,2,3,4 & (7) & P = Q & \rAntisymmetryOrdRI{5,6} \\
+    \end{array}
+    \]
+\end{proof}
+
+\begin{definition}[Maximum]
+    Sei \( S \) eine halbgeordnete Menge. Das neue Symbol \(\max(S)\) wird durch folgende partielle Definition eingeführt:
+    \[
+    \max(S) \coloneqq \iota M \, \big(M \in S \land \forall t \in S \, (t \leq M)\big).
+    \]
+    Dabei ist \(\max(S)\) das \textbf{Definiendum} und \( M \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\max(S)\) genau dann definiert ist, wenn ein eindeutiges maximales Element in \( S \) existiert.
+\end{definition}
+
+\begin{definition}[Minimum]
+    Sei \( S \) eine halbgeordnete Menge. Das neue Symbol \(\min(S)\) wird durch folgende partielle Definition eingeführt:
+    \[
+    \min(S) \coloneqq \iota N \, \big(N \in S \land \forall t \in S \, (N \leq t)\big).
+    \]
+    Dabei ist \(\min(S)\) das \textbf{Definiendum} und \( N \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\min(S)\) genau dann definiert ist, wenn ein eindeutiges minimales Element in \( S \) existiert.
+\end{definition}
+
+\subsubsection{Einführungs- und Eliminationsregeln für Maximum und Minimum}
+\label{rule:rMaxI} \label{rule:rMaxE} \label{rule:rMinI} \label{rule:rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp}
+
+Die Regeln zur Einführung und Elimination von Maximum und Minimum ermöglichen es, die Existenz und Eigenschaften der maximalen und minimalen Elemente in halbgeordneten Mengen zu formalisieren.
+
+\paragraph{Einführungsregel für das Minimum}
+Die Einführungsregel für das Minimum \(\min(S)\) besagt, dass ein Element \(N\) das Minimum einer halbgeordneten Menge \(S\) ist, wenn \(N \in S\) und für alle \(t \in S\) gilt: \(N \leq t\).
+\[
+\begin{array}{llll}
+    i   & (1) & N \in S & \dots \\
+    j   & (2) & \forall t \in S \, (N \leq t) & \dots \\
+    i,j & (3) & \min(S) = N & \rMinI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das Minimum}
+Die Eliminationsregel für das Minimum \(\min(S)\) besagt, dass, wenn \(N = \min(S)\), dann für jedes \(t \in S\) die Relation \(N \leq t\) gilt. Ebenso ist \(N \in S\).
+\[
+\begin{array}{llll}
+    i & (1) & N = \min(S) & \dots \\
+    i & (2) & \forall t \in S \, (N \leq t) & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1} \\
+    i & (3) & N \in S & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1}\\
+    j & (4) & j \in S & \hdots\\
+    i,j & (5) & N\leq j & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1,4}\\
+\end{array}
+\]
+
+\[
+\begin{array}{llll}
+    i & (1) & \exists N\in S(N = \min(S)) & \dots \\
+    i & (2) & \forall t \in S \, (\min(S) \leq t) & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1} \\
+    i & (3) & \min(S) \in S & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1}\\
+    j & (4) & j \in S & \hdots\\
+    i,j & (5) & \min(S)\leq j & \rMxInLbxInAMidPLpxRpRbEqvxInAAndPLpxRp{1,4}\\
+\end{array}
+\]
+
+\paragraph{Einführungsregel für das Maximum}
+Die Einführungsregel für das Maximum \(\max(S)\) besagt, dass ein Element \(M\) das Maximum einer halbgeordneten Menge \(S\) ist, wenn \(M \in S\) und für alle \(t \in S\) gilt: \(t \leq M\).
+\[
+\begin{array}{llll}
+    i   & (1) & M \in S & \dots \\
+    j   & (2) & \forall t \in S \, (t \leq M) & \dots \\
+    i,j & (3) & \max(S) = M & \rMaxI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das Maximum \(\max(S)\)}
+Die Eliminationsregel für das Maximum \(\max(S)\) besagt, dass, wenn \(M = \max(S)\), dann für jedes \(t \in S\) die Relation \(t \leq M\) gilt. Ebenso ist \(M \in S\).
+\[
+\begin{array}{llll}
+    i & (1) & M = \max(S) & \dots \\
+    i & (2) & \forall t \in S \, (t \leq M) & \rMaxE{1} \\
+    i & (3) & M \in S & \rMaxE{1}
+\end{array}
+\]
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\begin{definition}[Obere Schranke]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Ein Element \( u \in S \) heißt \textbf{obere Schranke} von \( T \), wenn gilt:
+    \[
+    \forall t \in T \, (t \leq u).
+    \]
+    Das Prädikat \(\text{ObereSchranke}(u, T)\) ist wahr genau dann, wenn \( u \) eine obere Schranke von \( T \) ist.
+\end{definition}
+
+\begin{definition}[Untere Schranke]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Ein Element \( l \in S \) heißt \textbf{untere Schranke} von \( T \), wenn gilt:
+    \[
+    \forall t \in T \, (l \leq t).
+    \]
+    Das Prädikat \(\text{UntereSchranke}(l, T)\) ist wahr genau dann, wenn \( l \) eine untere Schranke von \( T \) ist.
+\end{definition}
+
+\begin{definition}[Menge der oberen Schranken]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Die Menge der \textbf{oberen Schranken} von \( T \) in \( S \) wird definiert als:
+    \[
+    \text{UB}_S(T) := \{ u \in S \mid \forall t \in T \, (t \leq u) \}.
+    \]
+    Diese Menge enthält alle Elemente in \( S \), die eine obere Schranke von \( T \) sind.
+\end{definition}
+
+\begin{definition}[Menge der unteren Schranken]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Die Menge der \textbf{unteren Schranken} von \( T \) in \( S \) wird definiert als:
+    \[
+    \text{LB}_S(T) := \{ l \in S \mid \forall t \in T \, (l \leq t) \}.
+    \]
+    Diese Menge enthält alle Elemente in \( S \), die eine untere Schranke von \( T \) sind.
+\end{definition}
+\begin{remark}
+    In diesem Skript wird in der Definition der Mengen der oberen und unteren Schranken die übergeordnete Menge \( S \) in der Notation oft weggelassen, sodass nur \(\text{UB}(T)\) und \(\text{LB}(T)\) geschrieben wird. Diese Konvention dient der Übersichtlichkeit und Kürze der Notation und ist sinnvoll, solange der Kontext klar ist und keine Verwechslungsgefahr besteht. Die Schranken beziehen sich dabei stets auf die Halbordnung der zugrunde liegenden Menge. Falls jedoch mehrere Ordnungen oder verschiedene übergeordnete Mengen betrachtet werden, kann es hilfreich sein, \( S \) explizit anzugeben, indem \(\text{UB}_S(T)\) und \(\text{LB}_S(T)\) verwendet werden.
+\end{remark}
+
+\subsubsection{Einführungs- und Eliminationsregeln für die Menge der oberen und unteren Schranken}
+\label{rule:rUBSI} \label{rule:rUBSE} \label{rule:rLBSI} \label{rule:rLBSE}
+
+Die Regeln zur Einführung und Elimination der Mengen der oberen und unteren Schranken ermöglichen es, die Existenz und Eigenschaften von oberen und unteren Schranken in halbgeordneten Mengen formal zu nutzen.
+
+\paragraph{Einführungsregel für die Menge der oberen Schranken \(\text{UB}_S(T)\)}
+Die Einführungsregel für die Menge der oberen Schranken \(\text{UB}_S(T)\) besagt, dass ein Element \(u\) eine obere Schranke der Teilmenge \(T\) in \( S \) ist, wenn \(u \in S\) und für alle \(t \in T\) gilt: \(t \leq u\).
+\[
+\begin{array}{llll}
+    i   & (1) & u \in S & \dots \\
+    j   & (2) & \forall t \in T \, (t \leq u) & \dots \\
+    i,j & (3) & u \in \text{UB}_S(T) & \rUBSI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für die Menge der oberen Schranken \(\text{UB}_S(T)\)}
+Die Eliminationsregel für die Menge der oberen Schranken \(\text{UB}_S(T)\) besagt, dass, wenn \(u \in \text{UB}_S(T)\), dann für jedes \(t \in T\) die Relation \(t \leq u\) gilt. Ebenso ist \(u \in S\).
+\[
+\begin{array}{llll}
+    i & (1) & u \in \text{UB}_S(T) & \dots \\
+    i & (2) & \forall t \in T \, (t \leq u) & \rUBSE{1} \\
+    i & (3) & u \in S & \rUBSE{1}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\)}
+Die Einführungsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\) besagt, dass ein Element \(l\) eine untere Schranke der Teilmenge \(T\) in \( S \) ist, wenn \(l \in S\) und für alle \(t \in T\) gilt: \(l \leq t\).
+\[
+\begin{array}{llll}
+    i   & (1) & l \in S & \dots \\
+    j   & (2) & \forall t \in T \, (l \leq t) & \dots \\
+    i,j & (3) & l \in \text{LB}_S(T) & \rLBSI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\)}
+Die Eliminationsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\) besagt, dass, wenn \(l \in \text{LB}_S(T)\), dann für jedes \(t \in T\) die Relation \(l \leq t\) gilt. Ebenso ist \(l \in S\).
+\[
+\begin{array}{llll}
+    i & (1) & l \in \text{LB}_S(T) & \dots \\
+    i & (2) & \forall t \in T \, (l \leq t) & \rLBSE{1} \\
+    i & (3) & l \in S & \rLBSE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\label{uInUBwvInUBwFawInUBLpuLeqwRpwFawInUBLpvLeqwRpImpuEqualsv}
+\begin{theorem}[Eindeutigkeit des kleinsten Elements der oberen Schranken]
+    Sei \( S \) eine Halbordnung und \( T \subseteq S \) eine Teilmenge. Seien \( u \) und \( v \) zwei Elemente in \( S \), die beide die folgenden Bedingungen erfüllen:
+    \[
+    u \in \text{UB}_S(T), v \in \text{UB}_S(T), \forall w \in \text{UB}_S(T) (u \leq w), \forall w \in \text{UB}_S(T) (v \leq w) \vdash u = v.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Sei \( S \) eine Halbordnung und seien \( u, v \in S \) zwei Elemente, die die Bedingungen erfüllen. Dann gilt:
+    \[
+    \begin{array}{lll p{4cm}}
+        1 & (1) & u \in \text{UB}_S(T) & \rA \\
+        2 & (2) & v \in \text{UB}_S(T) & \rA \\
+        3 & (3) & \forall w \in \text{UB}_S(T) \, (u \leq w) & \rA \\
+        4 & (4) & \forall w \in \text{UB}_S(T) \, (v \leq w) & \rA \\
+        2,3 & (5) & u \leq v & \rSetUEc{2,3}  \\
+        1,4 & (6) & v \leq u & \rSetUEc{1,4} \\
+        1,2,3,4 & (7) & u = v & \rAntisymmetryOrdRI{5,6} \\
+    \end{array}
+    \]
+    Damit ist gezeigt, dass \( u = v \), und somit ist das kleinste Element der oberen Schranken, falls es existiert, eindeutig.
+\end{proof}
+
+\label{lInLBwmInLBwFanInLBLpnLeqlRpwFanInLBLpnLeqmRpImplEqualsm}
+\begin{theorem}[Eindeutigkeit des größten Elements der unteren Schranken]
+    Sei \( S \) eine Halbordnung und \( T \subseteq S \) eine Teilmenge. Seien \( l \) und \( m \) zwei Elemente in \( S \), die beide die folgenden Bedingungen erfüllen:
+    \[
+    l \in \text{LB}_S(T), m \in \text{LB}_S(T), \forall n \in \text{LB}_S(T) (n \leq l), \forall n \in \text{LB}_S(T) (n \leq m) \vdash l = m.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Sei \( S \) eine Halbordnung und seien \( l, m \in S \) zwei Elemente, die die Bedingungen erfüllen. Dann gilt:
+    \[
+    \begin{array}{lll p{4cm}}
+        1 & (1) & l \in \text{LB}_S(T) & \rA \\
+        2 & (2) & m \in \text{LB}_S(T) & \rA \\
+        3 & (3) & \forall n \in \text{LB}_S(T) \, (n \leq l) & \rA \\
+        4 & (4) & \forall n \in \text{LB}_S(T) \, (n \leq m) & \rA \\
+        2,3 & (5) & m \leq l & \rSetUEc{2,3}  \\
+        1,4 & (6) & l \leq m & \rSetUEc{1,4} \\
+        1,2,3,4 & (7) & l = m & \rAntisymmetryOrdRI{5,6} \\
+    \end{array}
+    \]
+    Damit ist gezeigt, dass \( l = m \), und somit ist das größte Element der unteren Schranken, falls es existiert, eindeutig.
+\end{proof}
+
+
+\begin{definition}[Supremum]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Angenommen, \(\text{UB}_S(T)\), die Menge aller oberen Schranken von \( T \) in \( S \), ist nicht leer. Sei \( C(u) \) die Bedingung, dass \( u \) das kleinste Element von \(\text{UB}_S(T)\) ist, d.\,h.,
+    \[
+    C(u) := u \in \text{UB}_S(T) \land \forall v \in \text{UB}_S(T) \, (u \leq v).
+    \]
+    eine partielle Definition erlaubt es, das neue Symbol \(\sup_S(T)\) einzuführen und es als \( u \) zu definieren, wenn die Bedingung \( C(u) \) erfüllt ist:
+    \[
+    \exists u \in S \, [ C(u) \rightarrow (\sup_S(T) \coloneqq u) ].
+    \]
+    Dabei ist \(\sup_S(T)\) das \textbf{Definiendum} und \( u \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\sup_S(T)\) genau dann definiert ist, wenn eine kleinste obere Schranke von \( T \) in \( S \) existiert.
+\end{definition}
+
+\begin{definition}[Infimum]
+    Sei \( S \) eine halbgeordnete Menge und \( T \subseteq S \) eine Teilmenge. Angenommen, \(\text{LB}_S(T)\), die Menge aller unteren Schranken von \( T \) in \( S \), ist nicht leer. Sei \( D(l) \) die Bedingung, dass \( l \) das größte Element von \(\text{LB}_S(T)\) ist, d.\,h.,
+    \[
+    D(l) := l \in \text{LB}_S(T) \land \forall m \in \text{LB}_S(T) \, (m \leq l).
+    \]
+    eine partielle Definition erlaubt es, das neue Symbol \(\inf_S(T)\) einzuführen und es als \( l \) zu definieren, wenn die Bedingung \( D(l) \) erfüllt ist:
+    \[
+    \exists l \in S \, [ D(l) \rightarrow (\inf_S(T) \coloneqq l) ].
+    \]
+    Dabei ist \(\inf_S(T)\) das \textbf{Definiendum} und \( l \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\inf_S(T)\) genau dann definiert ist, wenn eine größte untere Schranke von \( T \) in \( S \) existiert.
+\end{definition}
+
+\subsubsection{Einführungs- und Eliminationsregeln für Supremum und Infimum}
+\label{rule:rSupSI} \label{rule:rSupSE} \label{rule:rInfSI} \label{rule:rInfSE}
+
+Die Regeln zur Einführung und Elimination von Supremum und Infimum ermöglichen es, die Existenz und Eigenschaften des kleinsten Elements der oberen Schranken und des größten Elements der unteren Schranken in halbgeordneten Mengen formal zu nutzen.
+
+\paragraph{Einführungsregel für das Supremum \(\sup_S(T)\)}
+Die Einführungsregel für das Supremum \(\sup_S(T)\) besagt, dass ein Element \( u \) das Supremum der Teilmenge \( T \) in \( S \) ist, wenn \( u \in \text{UB}_S(T) \) und für alle \( v \in \text{UB}_S(T) \) gilt: \( u \leq v \).
+\[
+\begin{array}{llll}
+    i   & (1) & u \in \text{UB}_S(T) & \dots \\
+    j   & (2) & \forall v \in \text{UB}_S(T) \, (u \leq v) & \dots \\
+    i,j & (3) & u = \sup_S(T) & \rSupSI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das Supremum \(\sup_S(T)\)}
+Die Eliminationsregel für das Supremum \(\sup_S(T)\) besagt, dass, wenn \( u = \sup_S(T) \), dann für jedes \( t \in T \) die Relation \( t \leq u \) gilt. Ebenso ist \( u \in S \).
+\[
+\begin{array}{llll}
+    i & (1) & u = \sup_S(T) & \dots \\
+    i & (2) & \forall t \in \text{UB}_S(T) \, (u \leq t) & \rSupSE{1} \\
+    i & (3) & u \in \text{UB}_S(T) & \rSupSE{1}
+\end{array}
+\]
+
+\paragraph{Einführungsregel für das Infimum \(\inf_S(T)\)}
+Die Einführungsregel für das Infimum \(\inf_S(T)\) besagt, dass ein Element \( l \) das Infimum der Teilmenge \( T \) in \( S \) ist, wenn \( l \in \text{LB}_S(T) \) und für alle \( m \in \text{LB}_S(T) \) gilt: \( m \leq l \).
+\[
+\begin{array}{llll}
+    i   & (1) & l \in \text{LB}_S(T) & \dots \\
+    j   & (2) & \forall m \in \text{LB}_S(T) \, (m \leq l) & \dots \\
+    i,j & (3) & l = \inf_S(T) & \rInfSI{1,2}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für das Infimum \(\inf_S(T)\)}
+Die Eliminationsregel für das Infimum \(\inf_S(T)\) besagt, dass, wenn \( l = \inf_S(T) \), dann für jedes \( t \in T \) die Relation \( l \leq t \) gilt. Ebenso ist \( l \in S \).
+\[
+\begin{array}{llll}
+    i & (1) & l = \inf_S(T) & \dots \\
+    i & (2) & \forall t \in \text{LB}_S(T) \, (t \leq l) & \rInfSE{1} \\
+    i & (3) & l \in \text{LB}_S(T) & \rInfSE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+\begin{definition}[Vollständigkeit einer halbgeordneten Menge]
+    eine halbgeordnete Menge \( S \) heißt \textbf{vollständig}, wenn:
+    \begin{itemize}
+        \item \(\forall T((T\subseteq S\land T \neq \emptyset\land \exists u \in \text{UB}_S(T)) \rightarrow \exists u = \sup_S(T))\)
+        \item \(\forall T((T\subseteq S\land T \neq \emptyset\land \exists l \in \text{LB}_S(T)) \rightarrow \exists l = \inf_S(T))\)
+    \end{itemize}
+    Das Prädikat \(\text{Vollständig}(S)\) ist wahr, wenn \( S \) vollständig ist.
+\end{definition}
+
+\subsubsection{Einführungs- und Eliminationsregeln für die Vollständigkeit einer halbgeordneten Menge}
+\label{rule:rCompleteI} \label{rule:rCompleteE}
+
+\paragraph{Einführungsregel für die Vollständigkeit \(\text{Vollständig}(S)\)}
+Die Einführungsregel für die Vollständigkeit besagt, dass \( S \) eine vollständige halbgeordnete Menge ist, wenn:
+
+\[
+\begin{array}{llll}
+    i   & (1) & \forall T((T\subseteq S\land T \neq \emptyset\land \exists u \in \text{UB}_S(T)) \rightarrow \exists u = \sup_S(T)) & \dots \\
+    j   & (2) & \forall T((T\subseteq S\land T \neq \emptyset\land \exists l \in \text{LB}_S(T)) \rightarrow \exists l = \inf_S(T)) & \dots \\
+    i,j & (3) & S \text{ ist Vollständig} & \rCompleteI{1}
+\end{array}
+\]
+
+\paragraph{Eliminationsregel für die Vollständigkeit \(\text{Vollständig}(S)\)}
+Die Eliminationsregel für die Vollständigkeit besagt, dass, wenn \( S \) vollständig ist:
+
+\[
+\begin{array}{llll}
+    i & (1) & \text{Vollständig}(S) & \dots \\
+    i & (2) & \forall T((T\subseteq S\land T \neq \emptyset\land \exists u \in \text{UB}_S(T)) \rightarrow \exists u = \sup_S(T)) & \rCompleteE{1} \\
+    i & (3) & \forall T((T\subseteq S\land T \neq \emptyset\land \exists l \in \text{LB}_S(T)) \rightarrow \exists l = \inf_S(T)) & \rCompleteE{1}
+\end{array}
+\]
+
+\(i\) und \(j\) sind dabei Listen von Annahmen.
+
+
+
+
+\end{document}

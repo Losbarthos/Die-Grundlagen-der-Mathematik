@@ -1,0 +1,349 @@
+% main.tex
+\documentclass{book}
+
+\usepackage{subfiles}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{enumitem}
+\usepackage{thmtools}
+\usepackage{etoolbox}
+\usepackage{longtable}
+\usepackage{xstring}
+\usepackage{xparse}
+\usepackage{imakeidx}
+\usepackage{bussproofs}
+\usepackage{multirow}
+\usepackage[nameinlink,capitalise]{cleveref}
+\usepackage{xstring}
+
+
+\MakeAutoQuote{„}{“}
+\hypersetup{
+  bookmarksopen=false,
+  bookmarksnumbered=true
+}
+\input{commands.tex}
+
+
+% -------------------------------
+% Datei-Zähler und Theorem-Zähler
+% -------------------------------
+
+\newcounter{file}
+
+% Theorem
+\newcounter{theoremInFile}[file]
+\renewcommand{\thetheoremInFile}{\arabic{file}.\arabic{theoremInFile}}
+\newtheorem{theorem}[theoremInFile]{Theorem}
+
+% Definition
+\newcounter{definitionInFile}[file]
+\renewcommand{\thedefinitionInFile}{\arabic{file}.\arabic{definitionInFile}}
+\newtheorem{definition}[definitionInFile]{Definition}
+
+% Axiom
+\newcounter{axiomInFile}[file]
+\renewcommand{\theaxiomInFile}{\arabic{file}.\arabic{axiomInFile}}
+\newtheorem{axiom}[axiomInFile]{Axiom}
+
+% Weitere Umgebungen, falls benötigt:
+\newtheorem{corollary}[theoremInFile]{Korollar}
+\newtheorem{lemma}[theoremInFile]{Lemma}
+\newtheorem{hilfsdefinition}[theoremInFile]{Hilfsdefinition}
+\newtheorem{tempdefinition}[theoremInFile]{Temporäre Definition}
+
+% Unnummerierte Umgebungen
+\theoremstyle{remark}
+\newtheorem*{remark}{Bemerkung}
+\newtheorem*{bemerkung}{Bemerkung}
+\newtheorem*{example}{Beispiel}
+\newtheorem*{hint}{Hinweis}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{notation*}{Notation}
+
+\makeindex[name=satz,title=Sätze und Definitionen zu diesem Kapitel]
+
+% -------------------------------
+% Label-Sanitizer
+% -------------------------------
+
+\newcommand{\sanitize}[1]{%
+  \edef\temp{\detokenize{#1}}%
+
+  % --- Mathematische Schriftarten ---
+  \StrSubstitute{\temp}{\string\mathcal}{mathcal}[\temp]%
+  \StrSubstitute{\temp}{\string\mathbb}{mathbb}[\temp]%
+  \StrSubstitute{\temp}{\string\mathrm}{mathrm}[\temp]%
+  
+  % --- Logische Verknüpfungen ---
+  \StrSubstitute{\temp}{\string\leftrightarrow}{Equiv}[\temp]%
+  \StrSubstitute{\temp}{\string\rightarrow}{Imp}[\temp]%
+  \StrSubstitute{\temp}{\string\eqvdash}{Eqvboth}[\temp]%
+  \StrSubstitute{\temp}{\string\dashv}{DashV}[\temp]%
+  \StrSubstitute{\temp}{\string\vdash}{Vdash}[\temp]%
+  \StrSubstitute{\temp}{\string\iff}{Iff}[\temp]%
+  \StrSubstitute{\temp}{\string\land}{And}[\temp]%
+  \StrSubstitute{\temp}{\string\lor}{Or}[\temp]%
+  \StrSubstitute{\temp}{\string\neg}{Neg}[\temp]%
+  
+  % --- Quantoren und Mengen ---
+  \StrSubstitute{\temp}{\string\forall}{Forall}[\temp]%
+  \StrSubstitute{\temp}{\string\exists}{Exists}[\temp]%
+  \StrSubstitute{\temp}{\string\iota}{Iota}[\temp]%
+  
+  % --- Relationen und Operatoren ---
+  \StrSubstitute{\temp}{:=}{Defeq}[\temp]%
+  \StrSubstitute{\temp}{=}{Eq}[\temp]%
+  \StrSubstitute{\temp}{\string\neq}{Neq}[\temp]%
+  \StrSubstitute{\temp}{\string\not}{Notin}[\temp]%
+  \StrSubstitute{\temp}{\string\in}{In}[\temp]%
+  \StrSubstitute{\temp}{\string\subseteq}{Subseteq}[\temp]%
+  
+  % --- Mengenoperationen ---
+  \StrSubstitute{\temp}{\string\emptyset}{Emptyset}[\temp]%
+  \StrSubstitute{\temp}{\string\bigcup}{Bigcup}[\temp]%
+  \StrSubstitute{\temp}{\string\cup}{Cup}[\temp]%
+  \StrSubstitute{\temp}{\string\cap}{Cap}[\temp]%
+  
+  % --- Klammern ---
+ % \StrSubstitute{\temp}{\string\{}{Lp}[\temp]%
+  \StrSubstitute{\temp}{\string\bigl}{}[\temp]%
+  \StrSubstitute{\temp}{\string\bigr}{}[\temp]%
+  \StrSubstitute{\temp}{\string\Bigl}{}[\temp]%
+  \StrSubstitute{\temp}{\string\Bigr}{}[\temp]%
+  \StrSubstitute{\temp}{(}{Lp}[\temp]%
+  \StrSubstitute{\temp}{)}{Rp}[\temp]%
+  
+
+  % --- Leerzeichen und Steuerzeichen entfernen ---
+  \StrSubstitute{\temp}{\string\{}{}[\temp]%
+  \StrSubstitute{\temp}{\string\}}{}[\temp]%
+  \StrSubstitute{\temp}{\char'\{}{}[\temp]%
+  \StrSubstitute{\temp}{\char'\}}{}[\temp]%
+  \ExpandArgs{e}\StrSubstitute{\temp}{\string{\iffalse}\fi}{Lp}[\temp]%
+  \ExpandArgs{e}\StrSubstitute{\temp}{\iffalse{\fi\string}}{Rp}[\temp]%
+  \StrSubstitute{\temp}{\string\;}{}[\temp]%
+  \StrSubstitute{\temp}{\string\,}{}[\temp]%
+  \StrSubstitute{\temp}{\string\ }{}[\temp]%
+  \StrSubstitute{\temp}{\string\\}{}[\temp]
+  \StrSubstitute{\temp}{ }{}[\temp]%
+
+    % --- Sonstiges ---
+  \StrSubstitute{\temp}{\string\mid}{Mid}[\temp]%
+  \StrSubstitute{\temp}{,}{Comma}[\temp]%
+}
+
+\makeatletter
+\newcommand{\debugsanitize}[1]{%
+  \def\tempa{#1}%
+  \expandafter\sanitize\expandafter{\tempa}%
+  \typeout{Ergebnis von sanitize: [\temp]}%
+}
+\makeatother
+
+
+% -------------------------------
+% Automatische Theorem/Definition/Axiom-Umgebungen
+% -------------------------------
+
+\NewDocumentCommand{\FormulaThmAuto}{o m o}{%
+  \sanitize{#2}%
+  \edef\lab{\temp}%
+  \edef\labFull{thm\arabic{file}_\lab}%
+  \IfNoValueTF{#1}
+    {\begin{theorem}\label{\labFull}}%
+    {\begin{theorem}[#1]\label{\labFull}}%
+  \IfNoValueF{#3}{#3\par\medskip}%
+  \[
+    #2
+  \]
+  \end{theorem}%
+}
+
+\NewDocumentCommand{\FormulaDefAuto}{o m o}{%
+  \sanitize{#2}%
+  \edef\labD{\temp}%
+  \edef\labFullD{def\arabic{file}_\labD}%
+  \IfNoValueTF{#1}
+    {\begin{definition}\label{\labFullD}}%
+    {\begin{definition}[#1]\label{\labFullD}}%
+  \IfNoValueF{#3}{#3\par\medskip}%
+  \[
+    #2
+  \]
+  \end{definition}%
+}
+
+\NewDocumentCommand{\FormulaAxiomAuto}{o m o}{%
+  \sanitize{#2}%
+  \edef\labA{\temp}%
+  \edef\labFullA{ax\arabic{file}_\labA}%
+  \IfNoValueTF{#1}
+    {\begin{axiom}\label{\labFullA}}%
+    {\begin{axiom}[#1]\label{\labFullA}}%
+  \IfNoValueF{#3}{#3\par\medskip}%
+  \[
+    #2
+  \]
+  \end{axiom}%
+}
+
+% -------------------------------
+% Referenz-Makro
+% -------------------------------
+
+\crefformat{theorem}{Th[#2#1#3]}
+\crefformat{axiom}{Ax[#2#1#3]}
+\crefformat{definition}{Def[#2#1#3]}
+
+\makeatletter
+\newcounter{maxfile}
+\setcounter{maxfile}{4} % <- Anzahl Deiner Dateien (hier B01 und B02)
+
+\NewDocumentCommand{\FormulaRefAuto}{m o g}{%
+  \edef\tempa{\unexpanded{#1}}%
+  \expandafter\sanitize\expandafter{\tempa}%iefert in \temp den gesäuberten String
+  \edef\lab{\temp}%
+  %
+  \IfNoValueTF{#2}{%
+    \newcount\@tempfile \@tempfile=1
+    \def\foundflag{0}%
+    \loop
+      % THEOREM
+      \edef\labFull{thm\the\@tempfile_\lab}%
+      \ifcsname r@\labFull\endcsname
+        \def\foundflag{1}%
+        \IfNoValueTF{#3}
+          {\text{\hyperref[\labFull]{\cref{\labFull}}}}
+          {\text{\hyperref[\labFull]{\cref{\labFull}(#3)}}}%
+      \else
+        % DEFINITION
+        \edef\labFullDef{def\the\@tempfile_\lab}%
+        \ifcsname r@\labFullDef\endcsname
+          \def\foundflag{1}%
+          \IfNoValueTF{#3}
+            {\text{\hyperref[\labFullDef]{\cref{\labFullDef}}}}
+            {\text{\hyperref[\labFullDef]{\cref{\labFullDef}(#3)}}}%
+        \else
+          % AXIOM
+          \edef\labFullAxiom{ax\the\@tempfile_\lab}%
+          \ifcsname r@\labFullAxiom\endcsname
+            \def\foundflag{1}%
+            \IfNoValueTF{#3}
+              {\text{\hyperref[\labFullAxiom]{\cref{\labFullAxiom}}}}
+              {\text{\hyperref[\labFullAxiom]{\cref{\labFullAxiom}(#3)}}}%
+          \fi
+        \fi
+      \fi
+      \ifnum\foundflag=0
+        \advance\@tempfile by 1
+        \ifnum\@tempfile>\value{maxfile} \def\foundflag{2}\fi
+      \fi
+    \ifnum\foundflag=0\repeat
+    \ifnum\foundflag=2 \text{[??]}\fi
+  }{%
+    % explizite Datei-Angabe (#2) – für Deinen Fall hier nicht benutzt
+    \edef\labFull{#2_\lab}%
+    \IfNoValueTF{#3}
+      {\text{\hyperref[\labFull]{\cref{\labFull}}}}
+      {\text{\hyperref[\labFull]{\cref{\labFull}(#3)}}}%
+  }%
+}
+\makeatother
+
+% -------------------------------
+% Beweisumgebungen
+% -------------------------------
+
+\newcounter{proofstepnr}
+
+\newenvironment{tabproof}
+  {\begin{proof}\setcounter{proofstepnr}{0} \[ \begin{array}{llll} }
+  {\end{array} \] \end{proof}}
+
+\newenvironment{tabproofsplit}
+  {\begin{proof}}{\end{proof}}
+
+\newcommand{\proofpart}[1]{%
+  \par\medskip\noindent #1:\par%
+  \setcounter{proofstepnr}{0}%
+  \[\begin{array}{llll}}
+
+\newcommand{\closeproofpart}{%
+  \end{array}\]}
+
+\newcommand{\proofstep}[3]{%
+  \stepcounter{proofstepnr}%
+  #1 & (\arabic{proofstepnr}) & #2 & #3 \\}
+
+\newcommand{\proofstepstar}[3]{%
+  #1 & & #2 & #3 \\}
+
+\newenvironment{tabproofwide}
+  {\begin{proof}\setcounter{proofstepnr}{0} \[ \begin{array}{lllcll} }
+  {\end{array} \] \end{proof}}
+
+\newcommand{\proofstepwide}[4]{%
+  \stepcounter{proofstepnr}%
+  & (\arabic{proofstepnr}) & #1 & #2 & #3 & #4 \\}
+
+\RenewDocumentCommand{\proofstepwide}{o m m m m}{%
+  \stepcounter{proofstepnr}%
+  \IfNoValueTF{#1}
+    { & (\arabic{proofstepnr}) & #2 & #3 & #4 & #5 \\}
+    { #1 & (\arabic{proofstepnr}) & #2 & #3 & #4 & #5 \\}
+}
+
+\RenewDocumentCommand{\proofstepwide}{s o m m m m}{%
+  \IfBooleanTF{#1}{
+    % Sternchen: keine Zählererhöhung, keine Nummer
+    \IfNoValueTF{#2}
+      { & & #3 & #4 & #5 & #6 \\}
+      { #2 & & #3 & #4 & #5 & #6 \\}
+  }{
+    % Normalfall: Zähler erhöhen und anzeigen
+    \stepcounter{proofstepnr}%
+    \IfNoValueTF{#2}
+      { & (\arabic{proofstepnr}) & #3 & #4 & #5 & #6 \\}
+      { #2 & (\arabic{proofstepnr}) & #3 & #4 & #5 & #6 \\}
+  }
+}
+
+% -------------------------------
+% Dokumentstart
+% -------------------------------
+
+\begin{document}
+
+\title{}
+\author{}
+\date{}
+
+
+\setcounter{file}{1}
+%\part{Bd. 01 - Grundlagen der Logik}
+%\subfile{B01}
+
+\FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \notin O)\bigr)}
+
+
+
+\setcounter{file}{2}
+%\part{Bd. 02 - Theoreme der Logik}
+%\subfile{B02}
+
+
+\setcounter{file}{3}
+%\part{Bd. 03 - Mengenlehre}
+%\subfile{B03}
+
+
+
+
+\end{document}

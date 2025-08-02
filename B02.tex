@@ -1,0 +1,1891 @@
+%============================================================
+%  Bd. 02 - Theoreme der Logik: Vertiefte Beweise und Methoden
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\title{Bd. 02 - Theoreme der Logik: Vertiefte Beweise und Methoden}
+\author{Martin Kunze}
+\date{}
+
+\ifSubfilesClassLoaded{
+    \usepackage{xr-hyper}
+  \externaldocument{_B01}
+}{
+   % Code für als Subfile eingebunden
+}
+
+\begin{document}
+\maketitle
+\tableofcontents
+%\listoftheorems
+\setcounter{file}{2}
+
+\chapter{Elimination verschachtelter Konjugationen}
+
+\FormulaThmAuto{(P \land (Q \land R))\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P \land (Q \land R)}{\rA}
+  \proofstep{1}{Q \land R}{\rAEb{1}}
+  \proofstep{1}{Q}{\rAEa{1}}
+\end{tabproof}
+
+\FormulaThmAuto{(P \land (Q \land R))\vdash R}
+\begin{tabproof}
+  \proofstep{1}{P \land (Q \land R)}{\rA}
+  \proofstep{1}{Q \land R}{\rAEb{1}}
+  \proofstep{1}{R}{\rAEb{1}}
+\end{tabproof}
+
+\FormulaThmAuto{(P \land Q) \land R\vdash P}
+\begin{tabproof}
+  \proofstep{1}{(P \land Q) \land R}{\rA}
+  \proofstep{1}{P\land Q}{\rAEa{1}}
+  \proofstep{1}{P}{\rAEa{1}}
+\end{tabproof}
+
+\FormulaThmAuto{(P \land Q) \land R\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{(P \land Q) \land R}{\rA}
+  \proofstep{1}{P \land Q}{\rAEa{1}}
+  \proofstep{1}{Q}{\rAEb{1}}
+\end{tabproof}
+
+\chapter{Selbstbezüglichkeiten}
+
+\FormulaThmAuto[Selbstimplikation]{P \rightarrow P}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{}{P \rightarrow P}{\rRE{1}}
+\end{tabproof}
+
+\FormulaThmAuto[Selbstäquivalenz]{P \leftrightarrow P}
+\begin{tabproof}
+  \proofstep{}{P \rightarrow P}{\FormulaRefAuto{P \rightarrow P}{}}
+  \proofstep{}{P \leftrightarrow P}{\rLRI{1,1}}
+\end{tabproof}
+
+\debugsanitize{P \rightarrow P}
+
+\chapter{Äquivalenz als Folgerung}
+
+\FormulaThmAuto{P \leftrightarrow Q, P \vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+  \proofstep{1,2}{Q}{\rRE{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow Q, Q \vdash P}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+  \proofstep{1,2}{P}{\rRE{2,3}} % korrigiert von Q auf P
+\end{tabproof}
+
+\FormulaThmAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (Q \land R)}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{P \rightarrow R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\rRE{1,3}}
+  \proofstep{2,3}{R}{\rRE{2,3}}
+  \proofstep{1,2,3}{Q \land R}{\rAI{4,5}}
+  \proofstep{1,2}{P \rightarrow (Q \land R)}{\rRI{3,6}}
+\end{tabproof}
+
+\FormulaThmAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (R \land Q)}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{P \rightarrow R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\rRE{1,3}}
+  \proofstep{2,3}{R}{\rRE{2,3}}
+  \proofstep{1,2,3}{R \land Q}{\rAI{5,4}}
+  \proofstep{1,2}{P \rightarrow (R \land Q)}{\rRI{3,6}}
+\end{tabproof}
+
+\FormulaThmAuto{P \rightarrow Q \vdash P \leftrightarrow (P \land Q)}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{}{P \rightarrow P}{\FormulaRefAuto{P \rightarrow P}{}}
+  \proofstep{1}{P \rightarrow (P \land Q)}{\FormulaRefAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (Q \land R)}{2,1}}
+  \proofstep{4}{P \land Q}{\rA}
+  \proofstep{4}{P}{\rAEa{4}}
+  \proofstep{}{(P \land Q) \rightarrow P}{\rRE{4,5}}
+  \proofstep{1}{P \leftrightarrow (P \land Q)}{\rLRI{3,6}}
+\end{tabproof}
+
+\FormulaThmAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{}{P \rightarrow P}{\FormulaRefAuto{P \rightarrow P}{}}
+  \proofstep{1}{P \rightarrow (Q \land P)}{\FormulaRefAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (R \land Q)}{2,1}}
+  \proofstep{2}{Q \land P}{\rA}
+  \proofstep{2}{P}{\rAEb{4}}
+  \proofstep{}{(Q \land P) \rightarrow P}{\rRE{4,5}}
+  \proofstep{1}{P \leftrightarrow (Q \land P)}{\rLRI{3,6}}
+\end{tabproof}
+
+
+
+\chapter{Idempotenzen}
+
+\FormulaThmAuto{P \lor P \eqvdash P}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{P \lor P}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{1}{P}{\rOE{1,2,2,2,2}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{P}{\rA}
+    \proofstep{2}{P \lor P}{\rOIa{1,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{P \land P \eqvdash P}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{P \land P}{\rA}
+    \proofstep{2}{P}{\rAEa{1}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{P}{\rA}
+    \proofstep{2}{P \land P}{\rAI{1,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\chapter{Kommutativgesetze}
+
+\FormulaThmAuto{P \lor Q \vdash Q \lor P}
+\begin{tabproof}
+  \proofstep{1}{P \lor Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{Q \lor P}{\rOIb{2}}
+  \proofstep{4}{Q}{\rA}
+  \proofstep{4}{Q \lor P}{\rOIa{4}}
+  \proofstep{1}{Q \lor P}{\rOE{1,2,3,4,5}}
+\end{tabproof}
+
+\FormulaThmAuto{P \lor Q \eqvdash Q \lor P}
+
+\begin{tabproof}
+  \proofstep{}{P \lor Q \rightarrow Q \lor P}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{}}
+  \proofstep{}{Q \lor P \rightarrow P \lor Q}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{}}
+  \proofstep{}{P \lor Q \leftrightarrow Q \lor P}{\rLRI{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto{P \land Q \vdash Q \land P}
+\begin{tabproof}
+  \proofstep{1}{P \land Q}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{Q}{\rAEb{1}}
+  \proofstep{1}{Q \land P}{\rAI{3,2}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+  \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+  \proofstep{1}{Q \leftrightarrow P}{\rLRI{3,2}}
+\end{tabproof}
+
+
+\section{Kommutativgesetze im prädikatenlogischen Kontext}
+
+\FormulaThmAuto{\forall x(P(x)\leftrightarrow Q(x))\vdash \forall x(Q(x)\leftrightarrow P(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+  \proofstep{1}{P(a)\leftrightarrow Q(a)}{\rUE{1}}
+  \proofstep{1}{Q(a)\leftrightarrow P(a)}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{}}
+  \proofstep{1}{\forall x(Q(x)\leftrightarrow P(x))}{\rUI{3}}
+\end{tabproof}
+
+\chapter{Transitivitäten}
+
+
+\FormulaThmAuto{P\rightarrow Q, Q\rightarrow R, P\vdash R}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{Q \rightarrow R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\rRE{1,3}}
+  \proofstep{1,2,3}{R}{\rRE{2,4}}
+\end{tabproof}
+
+
+\FormulaThmAuto[Implikationstransitivität]{P\rightarrow Q, Q\rightarrow R\vdash P \rightarrow R}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{Q \rightarrow R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{R}{\FormulaRefAuto{P\rightarrow Q, Q\rightarrow R, P\vdash R}{1,2,3}}
+  \proofstep{1,2}{P \rightarrow R}{\rRI{3,4}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash P \rightarrow R}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{Q \leftrightarrow R}{\rA}
+  \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+  \proofstep{2}{Q \rightarrow R}{\rLREa{2}}
+  \proofstep{1,2}{P \rightarrow R}{\FormulaRefAuto{P\rightarrow Q, Q\rightarrow R\vdash P \rightarrow R}{3,4}}
+\end{tabproof}
+
+
+\FormulaThmAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash R \rightarrow P}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{Q \leftrightarrow R}{\rA}
+  \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+  \proofstep{2}{R \rightarrow Q}{\rLREb{2}}
+  \proofstep{1,2}{R \rightarrow P}{\FormulaRefAuto{P\rightarrow Q, Q\rightarrow R\vdash P \rightarrow R}{4,3}}
+\end{tabproof}
+
+\FormulaThmAuto[Äquivalenztransitivität]{P \leftrightarrow Q, Q \leftrightarrow R \vdash P \leftrightarrow R}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{Q \leftrightarrow R}{\rA}
+  \proofstep{1,2}{P \rightarrow R}{\FormulaRefAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash P \rightarrow R}{1,2}}
+  \proofstep{1,2}{R \rightarrow P}{\FormulaRefAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash R \rightarrow P}{1,2}}
+  \proofstep{1,2}{P \leftrightarrow R}{\rLRI{3,4}}
+\end{tabproof}
+
+\FormulaThmAuto[Äquivalenztransitivität]{P \leftrightarrow Q, R \leftrightarrow Q \vdash P \leftrightarrow R}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{2}{R \leftrightarrow Q}{\rA}
+  \proofstep{2}{Q \leftrightarrow R}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{2}}
+  \proofstep{2}{P \leftrightarrow R}{\FormulaRefAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash P \leftrightarrow R}{3}}
+\end{tabproof}
+
+
+\FormulaThmAuto[gemischte Transitivität]{P \rightarrow Q, Q \leftrightarrow R \vdash P \rightarrow R}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{Q \leftrightarrow R}{\rA}
+  \proofstep{2}{Q \rightarrow R}{\rLREa{2}}
+  \proofstep{1,2}{P \rightarrow R}{\FormulaRefAuto{P\rightarrow Q, Q\rightarrow R\vdash P \rightarrow R}{3}}
+\end{tabproof}
+\begin{remark}[Gemischte Kettenregel]
+Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) nun in einer \emph{Kette} \((\rightarrow,\leftrightarrow^{*})\) kombiniert werden,  da sie \emph{rechts-verträglich} sind. Ebenso ist \(\leftrightarrow\) wegen \FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{} ist \(\leftrightarrow\) außerdem Symmetrisch, was mit dem Stern in der Kette illustriert wird.
+\end{remark}
+
+\chapter{Transitivitäten im prädikatenlogischen Kontext}
+
+\FormulaThmAuto[Implikationstransitivität]{\forall x(P(x)\rightarrow Q(x)), \forall x(Q(x)\rightarrow R(x))\vdash \forall x(P(x)\rightarrow R(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rA}
+  \proofstep{2}{\forall x(Q(x)\rightarrow R(x))}{\rA}
+  \proofstep{1}{P(a)\rightarrow Q(a)}{\rUE{1}}
+  \proofstep{2}{Q(a)\rightarrow R(a)}{\rUE{2}}
+  \proofstep{1,2}{P(a)\rightarrow R(a)}{\FormulaRefAuto{P\rightarrow Q, Q\rightarrow R, P\vdash R}{3,4}}
+  \proofstep{1,2}{\forall x(P(x)\rightarrow R(x))}{\rUI{5}}
+\end{tabproof}
+
+\FormulaThmAuto[Äquivalenztransititvität]{\forall x(P(x)\leftrightarrow Q(x)), \forall x(Q(x)\leftrightarrow R(x))\vdash \forall x(P(x)\leftrightarrow R(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{\forall x(Q(x)\leftrightarrow R(x))}{\rA}
+  \proofstep{1}{P(a)\leftrightarrow Q(a)}{\rUE{1}}
+  \proofstep{2}{Q(a)\leftrightarrow R(a)}{\rUE{2}}
+  \proofstep{1,2}{P(a)\leftrightarrow R(a)}{\FormulaRefAuto{P \leftrightarrow Q, Q \leftrightarrow R \vdash P \leftrightarrow R}{3,4}}
+  \proofstep{1,2}{\forall x(P(x)\leftrightarrow R(x))}{\rUI{5}}
+\end{tabproof}
+
+\FormulaThmAuto[Äquivalenztransititvität]{\forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{\forall x(R(x)\leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{\forall x(Q(x)\leftrightarrow R(x))}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x))\vdash \forall x(Q(x)\leftrightarrow P(x))}{2}}
+  \proofstep{1,2}{\forall x(P(x)\leftrightarrow R(x))}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)), \forall x(Q(x)\leftrightarrow R(x))\vdash \forall x(P(x)\leftrightarrow R(x))}{1,2}}
+\end{tabproof}
+
+\chapter{Assoziativgesetze}
+
+
+\FormulaThmAuto[Assoziativgesetz Oder-Verknüpfung]{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lor (Q \lor R)}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{P \lor Q}{\rOIa{2}}
+    \proofstep{2}{(P \lor Q) \lor R}{\rOIa{3}}
+    \proofstep{5}{Q \lor R}{\rA}
+    \proofstep{6}{Q}{\rA}
+    \proofstep{6}{P \lor Q}{\rOIb{6}}
+    \proofstep{6}{(P \lor Q) \lor R}{\rOIa{7}}
+    \proofstep{9}{R}{\rA}
+    \proofstep{9}{(P \lor Q) \lor R}{\rOIb{9}}
+    \proofstep{5}{(P \lor Q) \lor R}{\rOE{5,6,8,9,10}}
+    \proofstep{1}{(P \lor Q) \lor R}{\rOE{1,2,4,5,11}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \lor Q) \lor R}{\rA}
+    \proofstep{2}{P \lor Q}{\rA}
+    \proofstep{3}{P}{\rA}
+    \proofstep{3}{P \lor (Q \lor R)}{\rOIa{3}}
+    \proofstep{5}{Q}{\rA}
+    \proofstep{5}{Q \lor R}{\rOIa{5}}
+    \proofstep{5}{P \lor (Q \lor R)}{\rOIb{6}}
+    \proofstep{2}{P \lor (Q \lor R)}{\rOE{2,3,4,5,7}}
+    \proofstep{9}{R}{\rA}
+    \proofstep{9}{Q \lor R}{\rOIb{9}}
+    \proofstep{9}{P \lor (Q \lor R)}{\rOIb{10}}
+    \proofstep{1}{P \lor (Q \lor R)}{\rOE{1,2,8,9,11}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Assoziativgesetz Und-Verknüpfung]{P \land (Q \land R) \eqvdash (P \land Q) \land R}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \land (Q \land R)}{\rA}
+    \proofstep{1}{P}{\rAEa{1}}
+    \proofstep{1}{Q \land R}{\rAEb{1}}
+    \proofstep{1}{Q}{\rAEa{3}}
+    \proofstep{1}{R}{\rAEb{3}}
+    \proofstep{1}{P \land Q}{\rAI{2,4}}
+    \proofstep{1}{(P \land Q) \land R}{\rAI{6,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \land Q) \land R}{\rA}
+    \proofstep{1}{P \land Q}{\rAEa{1}}
+    \proofstep{1}{R}{\rAEb{1}}
+    \proofstep{1}{P}{\rAEa{2}}
+    \proofstep{1}{Q}{\rAEb{2}}
+    \proofstep{1}{Q \land R}{\rAI{5,3}}
+    \proofstep{1}{P \land (Q \land R)}{\rAI{4,6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\chapter{Modus Tollens}
+
+\FormulaThmAuto[Modus Tollens]{P \rightarrow Q, \neg Q \vdash \neg P}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\rRE{1,3}}
+  \proofstep{1,2,3}{\bot}{\rBI{2,4}}
+  \proofstep{1,2}{\neg P}{\rCI{3,5}}
+\end{tabproof}
+
+
+\FormulaThmAuto{\neg P \rightarrow \neg Q, Q \vdash P}
+\begin{tabproof}
+  \proofstep{1}{\neg P \rightarrow \neg Q}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{\neg P}{\rA}
+  \proofstep{1,3}{\neg Q}{\rRE{1,3}}
+  \proofstep{1,2,3}{\bot}{\rBI{2,4}}
+  \proofstep{1,2}{P}{\rCE{3,5}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow Q, \neg Q \vdash \neg P}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+  \proofstep{3}{\neg Q}{\rA}
+  \proofstep{1,3}{\neg P}{\FormulaRefAuto{P \rightarrow Q, \neg Q \vdash \neg P}{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow Q}{\rA}
+  \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+  \proofstep{3}{\neg P}{\rA}
+  \proofstep{1,3}{\neg Q}{\FormulaRefAuto{P \rightarrow Q, \neg Q \vdash \neg P}{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{\neg P \leftrightarrow \neg Q, Q \vdash P}
+\begin{tabproof}
+  \proofstep{1}{\neg P \leftrightarrow \neg Q}{\rA}
+  \proofstep{1}{\neg P \rightarrow \neg Q}{\rLREa{1}}
+  \proofstep{3}{Q}{\rA}
+  \proofstep{1,3}{P}{\FormulaRefAuto{\neg P \rightarrow \neg Q, Q \vdash P}{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{\neg P \leftrightarrow \neg Q, P \vdash Q}
+\begin{tabproof}
+  \proofstep{1}{\neg P \leftrightarrow \neg Q}{\rA}
+  \proofstep{1}{\neg Q \rightarrow \neg P}{\rLREb{1}}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\FormulaRefAuto{\neg P \rightarrow \neg Q, Q \vdash P}{2,3}}
+\end{tabproof}
+
+\chapter{Vertauschungen der Implikation}
+
+\FormulaThmAuto[Kontraposition]{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \rightarrow Q}{\rA}
+    \proofstep{2}{\neg Q}{\rA}
+    \proofstep{1,2}{\neg P}{\FormulaRefAuto{P \rightarrow Q, \neg Q \vdash \neg P}{1,2}}
+    \proofstep{1}{\neg Q \rightarrow \neg P}{\rRI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \rightarrow \neg Q}{\rA}
+    \proofstep{2}{Q}{\rA}
+    \proofstep{1,2}{P}{\FormulaRefAuto{\neg P \rightarrow \neg Q, Q \vdash P}{1,2}}
+    \proofstep{1}{Q \rightarrow P}{\rRI{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto[Exportation]{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{3}{Q}{\rA}
+    \proofstep{2,3}{P \land Q}{\rAI{2,3}}
+    \proofstep{1,2,3}{R}{\rRE{1,4}}
+    \proofstep{1,2}{Q \rightarrow R}{\rRI{3,5}}
+    \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rRI{2,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rA}
+    \proofstep{2}{P \land Q}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{Q}{\rAEb{2}}
+    \proofstep{1,2}{Q \rightarrow R}{\rRE{1,3}}
+    \proofstep{1,2}{R}{\rRE{5,4}}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\rRI{2,6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto[Exportation]{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{3}{Q}{\rA}
+    \proofstep{2,3}{P \land Q}{\rAI{2,3}}
+    \proofstep{1,2,3}{R}{\rRE{1,4}}
+    \proofstep{1,3}{P \rightarrow R}{\rRI{2,5}}
+    \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\rRI{3,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\rA}
+    \proofstep{2}{P \land Q}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{Q}{\rAEb{2}}
+    \proofstep{1,2}{P \rightarrow R}{\rRE{1,4}}
+    \proofstep{1,2}{R}{\rRE{5,3}}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\rRI{2,6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{P \rightarrow (Q \rightarrow R) \vdash Q \rightarrow (P \rightarrow R)}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rA}
+  \proofstep{1}{(P \land Q) \rightarrow R}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}{1}}
+  \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{P \leftrightarrow (Q \land R), Q \rightarrow R \vdash P \leftrightarrow Q}
+\begin{tabproof}
+  \proofstep{1}{P \leftrightarrow (Q \land R)}{\rA}
+  \proofstep{2}{Q \rightarrow R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q \land R}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,3}}
+  \proofstep{1,3}{Q}{\rAEa{4}}
+  \proofstep{1}{P \rightarrow Q}{\rRI{3,5}}
+  \proofstep{7}{Q}{\rA}
+  \proofstep{2,7}{R}{\rRE{2,7}}
+  \proofstep{2,7}{Q \land R}{\rAI{7,8}}
+  \proofstep{1,2,7}{P}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,9}}
+  \proofstep{1,2}{Q \rightarrow P}{\rRI{7,10}}
+  \proofstep{1,2}{P \leftrightarrow Q}{\rLRI{11,6}}
+\end{tabproof}
+
+\chapter{Doppelte Negation}
+
+\FormulaThmAuto[Regel der doppelten Negation]{P \eqvdash \neg\neg P}
+\label{rule:DN}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P}{\rA}
+    \proofstep{2}{\neg P}{\rA}
+    \proofstep{1,2}{\bot}{\rBI{1,2}}
+    \proofstep{1}{\neg\neg P}{\rCI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\neg P}{\rA}
+    \proofstep{2}{\neg P}{\rA}
+    \proofstep{1,2}{\bot}{\rBI{2,1}}
+    \proofstep{1}{P}{\rCE{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{P \lor Q \eqvdash \neg\neg P \lor \neg\neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lor Q}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{\neg\neg P}{\rDN{2}}
+    \proofstep{2}{\neg\neg P \lor \neg\neg Q}{\rOIa{3}}
+    \proofstep{5}{Q}{\rA}
+    \proofstep{5}{\neg\neg Q}{\rDN{5}}
+    \proofstep{5}{\neg\neg P \lor \neg\neg Q}{\rOIb{6}}
+    \proofstep{1}{\neg\neg P \lor \neg\neg Q}{\rOE{1,2,4,5,7}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\neg P \lor \neg\neg Q}{\rA}
+    \proofstep{2}{\neg\neg P}{\rA}
+    \proofstep{2}{P}{\rDN{2}}
+    \proofstep{2}{P \lor Q}{\rOIa{3}}
+    \proofstep{5}{\neg\neg Q}{\rA}
+    \proofstep{5}{Q}{\rDN{5}}
+    \proofstep{5}{P \lor Q}{\rOIb{6}}
+    \proofstep{1}{P \lor Q}{\rOE{1,2,4,5,7}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{P \land Q \eqvdash \neg\neg P \land \neg\neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \land Q}{\rA}
+    \proofstep{1}{P}{\rAEa{1}}
+    \proofstep{1}{Q}{\rAEb{1}}
+    \proofstep{1}{\neg\neg P}{\rDN{2}}
+    \proofstep{1}{\neg\neg Q}{\rDN{3}}
+    \proofstep{1}{\neg\neg P \land \neg\neg Q}{\rAI{4,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\neg P \land \neg\neg Q}{\rA}
+    \proofstep{1}{\neg\neg P}{\rAEa{1}}
+    \proofstep{1}{\neg\neg Q}{\rAEb{1}}
+    \proofstep{1}{P}{\rDN{2}}
+    \proofstep{1}{Q}{\rDN{3}}
+    \proofstep{1}{P \land Q}{\rAI{4,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto[Gesetz vom ausgeschlossenen dritten]{P \lor \neg P}
+\begin{tabproof}
+  \proofstep{1}{\neg(P \lor \neg P)}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor \neg P}{\rOIa{2}}
+  \proofstep{1,2}{\bot}{\rBI{1,3}}
+  \proofstep{1}{\neg P}{\rCI{2,4}}
+  \proofstep{5}{P \lor \neg P}{\rOIb{5}}
+  \proofstep{1,5}{\bot}{\rBI{1,6}}
+  \proofstep{}{P \lor \neg P}{\rCE{1,7}}
+\end{tabproof}
+
+\chapter{De-morgansche Gesetze}
+
+
+\FormulaThmAuto[De Morgan]{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P \lor Q)}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{P \lor Q}{\rOIa{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg P}{\rCI{2,4}}
+    \proofstep{6}{Q}{\rA}
+    \proofstep{6}{P \lor Q}{\rOIb{6}}
+    \proofstep{1,6}{\bot}{\rBI{1,7}}
+    \proofstep{1}{\neg Q}{\rCI{6,8}}
+    \proofstep{1}{\neg P \land \neg Q}{\rAI{5,9}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \land \neg Q}{\rA}
+    \proofstep{1}{\neg P}{\rAEa{1}}
+    \proofstep{1}{\neg Q}{\rAEb{1}}
+    \proofstep{4}{P \lor Q}{\rA}
+    \proofstep{5}{P}{\rA}
+    \proofstep{1,5}{\bot}{\rBI{2,5}}
+    \proofstep{1}{\neg (P \lor Q)}{\rCI{4,6}}
+    \proofstep{8}{Q}{\rA}
+    \proofstep{1,8}{\bot}{\rBI{3,8}}
+    \proofstep{1}{\neg (P \lor Q)}{\rCI{4,9}}
+    \proofstep{1}{\neg (P \lor Q)}{\rOE{4,5,7,8,10}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[De Morgan 2]{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P \land Q)}{\rA}
+    \proofstep{ }{P \lor \neg P}{\FormulaRefAuto{P \lor \neg P}}
+    \proofstep{3}{P}{\rA}
+    \proofstep{4}{Q}{\rA}
+    \proofstep{3,4}{P \land Q}{\rAI{3,4}}
+    \proofstep{1,3,4}{\bot}{\rBI{1,5}}
+    \proofstep{1,3}{\neg Q}{\rCI{4,6}}
+    \proofstep{1,3}{\neg P \lor \neg Q}{\rOIb{7}}
+    \proofstep{9}{\neg P}{\rA}
+    \proofstep{9}{\neg P \lor \neg Q}{\rOIa{9}}
+    \proofstep{1}{\neg P \lor \neg Q}{\rOE{2,3,8,9,10}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \lor \neg Q}{\rA}
+    \proofstep{2}{P \land Q}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{Q}{\rAEb{2}}
+    \proofstep{5}{\neg P}{\rA}
+    \proofstep{2,5}{\bot}{\rBI{3,5}}
+    \proofstep{5}{\neg(P \land Q)}{\rCI{2,6}}
+    \proofstep{8}{\neg Q}{\rA}
+    \proofstep{2,8}{\bot}{\rBI{4,8}}
+    \proofstep{8}{\neg(P \land Q)}{\rCI{2,9}}
+    \proofstep{1}{\neg(P \land Q)}{\rOE{1,5,7,8,10}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg(\neg P \land \neg Q) \eqvdash P \lor Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(\neg P \land \neg Q)}{\rA}
+    \proofstep{1}{\neg\neg P \lor \neg\neg Q}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}} % angewendet auf \neg P, \neg Q
+    \proofstep{1}{P \lor Q}{\FormulaRefAuto{P \lor Q \eqvdash \neg\neg P \lor \neg\neg Q}{2}} % doppelte Negation rückwärts
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P \lor Q}{\rA}
+    \proofstep{1}{\neg\neg P \lor \neg\neg Q}{\FormulaRefAuto{P \lor Q \eqvdash \neg\neg P \lor \neg\neg Q}{1}}
+    \proofstep{1}{\neg(\neg P \land \neg Q)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{2}} % erneut auf \neg P, \neg Q
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\neg(\neg P \lor \neg Q) \eqvdash P \land Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(\neg P \lor \neg Q)}{\rA}
+    \proofstep{1}{\neg\neg P \land \neg\neg Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{1}} % angewendet auf \neg P, \neg Q
+    \proofstep{1}{P \land Q}{\FormulaRefAuto{P \land Q \eqvdash \neg\neg P \land \neg\neg Q}{2}} % doppelte Negation rückwärts
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P \land Q}{\rA}
+    \proofstep{1}{\neg\neg P \land \neg\neg Q}{\FormulaRefAuto{P \land Q \eqvdash \neg\neg P \land \neg\neg Q}{1}}
+    \proofstep{1}{\neg(\neg P \lor \neg Q)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{2}} % erneut auf \neg P, \neg Q
+  \closeproofpart
+\end{tabproofsplit}
+
+\chapter{Distributivgesetze}
+
+\FormulaThmAuto[Distributivgesetz]{P \land (Q\lor R) \dashv \vdash  (P \land Q) \lor (P\land R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \land (Q \lor R)}{\rA}
+    \proofstep{1}{P}{\rAEa{1}}
+    \proofstep{1}{Q \lor R}{\rAEb{1}}
+    \proofstep{4}{Q}{\rA}
+    \proofstep{1,4}{P \land Q}{\rAI{2,4}}
+    \proofstep{1,4}{(P \land Q) \lor (P \land R)}{\rOIa{5}}
+    \proofstep{7}{R}{\rA}
+    \proofstep{1,7}{P \land R}{\rAI{2,7}}
+    \proofstep{1,7}{(P \land Q) \lor (P \land R)}{\rOIb{8}}
+    \proofstep{1}{(P \land Q) \lor (P \land R)}{\rOE{3,4,6,7,9}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \land Q) \lor (P \land R)}{\rA}
+    \proofstep{2}{P \land Q}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{Q}{\rAEb{2}}
+    \proofstep{2}{Q \lor R}{\rOIa{4}}
+    \proofstep{2}{P \land (Q \lor R)}{\rAI{3,5}}
+    \proofstep{7}{P \land R}{\rA}
+    \proofstep{7}{P}{\rAEa{7}}
+    \proofstep{7}{R}{\rAEb{7}}
+    \proofstep{7}{Q \lor R}{\rOIb{9}}
+    \proofstep{7}{P \land (Q \lor R)}{\rAI{8,10}}
+    \proofstep{1}{P \land (Q \lor R)}{\rOE{1,2,6,7,11}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Distributivgesetz]{(P\lor Q)\land R \dashv \vdash  (P \land R) \lor (Q\land R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{(P \lor Q) \land R}{\rA}
+    \proofstep{1}{R}{\rAEb{1}}
+    \proofstep{1}{P \lor Q}{\rAEa{1}}
+    \proofstep{4}{P}{\rA}
+    \proofstep{1,4}{P \land R}{\rAI{4,2}}
+    \proofstep{1,4}{(P \land R) \lor (Q \land R)}{\rOIa{5}}
+    \proofstep{7}{Q}{\rA}
+    \proofstep{1,7}{Q \land R}{\rAI{7,2}}
+    \proofstep{1,7}{(P \land R) \lor (Q \land R)}{\rOIb{8}}
+    \proofstep{1}{(P \land R) \lor (Q \land R)}{\rOE{3,4,6,7,9}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \land R) \lor (Q \land R)}{\rA}
+    \proofstep{2}{P \land R}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{R}{\rAEb{2}}
+    \proofstep{2}{P \lor Q}{\rOIa{3}}
+    \proofstep{2}{(P \lor Q) \land R}{\rAI{5,4}}
+    \proofstep{7}{Q \land R}{\rA}
+    \proofstep{7}{Q}{\rAEa{7}}
+    \proofstep{7}{R}{\rAEb{7}}
+    \proofstep{7}{P \lor Q}{\rOIb{8}}
+    \proofstep{7}{(P \lor Q) \land R}{\rAI{10,9}}
+    \proofstep{1}{(P \lor Q) \land R}{\rOE{1,2,6,7,11}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Distributivgesetz]{P \lor (Q \land R) \dashv \vdash  (P \lor Q) \land (P\lor R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lor (Q \land R)}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{P \lor Q}{\rOIa{2}}
+    \proofstep{2}{P \lor R}{\rOIa{2}}
+    \proofstep{2}{(P \lor Q) \land (P \lor R)}{\rAI{3,4}}
+    \proofstep{6}{Q \land R}{\rA}
+    \proofstep{6}{Q}{\rAEa{6}}
+    \proofstep{6}{R}{\rAEb{6}}
+    \proofstep{6}{P \lor Q}{\rOIb{7}}
+    \proofstep{6}{P \lor R}{\rOIb{8}}
+    \proofstep{6}{(P \lor Q) \land (P \lor R)}{\rAI{9,10}}
+    \proofstep{1}{(P \lor Q) \land (P \lor R)}{\rOE{1,2,5,6,11}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \lor Q) \land (P \lor R)}{\rA}
+    \proofstep{1}{P \lor Q}{\rAEa{1}}
+    \proofstep{1}{P \lor R}{\rAEb{1}}
+    \proofstep{4}{P}{\rA}
+    \proofstep{4}{P \lor (Q \land R)}{\rOIa{4}}
+    \proofstep{5}{Q}{\rA}
+    \proofstep{6}{R}{\rA}
+    \proofstep{5,6}{Q \land R}{\rAI{5,6}}
+    \proofstep{5,6}{P \lor (Q \land R)}{\rOIb{7}}
+    \proofstep{1}{P \lor (Q \land R)}{\rOE{2,4,5,9,3,6,10}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto[Distributivgesetz]{(P\land Q)\lor R \dashv \vdash (P \lor R) \land (Q\lor R)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{(P \land Q)\lor R}{\rA}
+    \proofstep{2}{R}{\rA}
+    \proofstep{2}{P \lor R}{\rOIb{2}}
+    \proofstep{2}{Q \lor R}{\rOIb{2}}
+    \proofstep{2}{(P \lor R) \land (Q \lor R)}{\rAI{3,4}}
+    \proofstep{6}{P \land Q}{\rA}
+    \proofstep{6}{P}{\rAEa{6}}
+    \proofstep{6}{Q}{\rAEb{6}}
+    \proofstep{6}{P \lor R}{\rOIa{7}}
+    \proofstep{6}{Q \lor R}{\rOIa{8}}
+    \proofstep{6}{(P \lor R) \land (Q \lor R)}{\rAI{9,10}}
+    \proofstep{1}{(P \lor R) \land (Q \lor R)}{\rOE{1,2,5,6,11}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \lor R) \land (Q \lor R)}{\rA}
+    \proofstep{1}{P \lor R}{\rAEa{1}}
+    \proofstep{1}{Q \lor R}{\rAEb{1}}
+    \proofstep{4}{R}{\rA}
+    \proofstep{4}{(P \land Q)\lor R}{\rOIb{4}}
+    \proofstep{6}{P}{\rA}
+    \proofstep{7}{Q}{\rA}
+    \proofstep{6,7}{P \land Q}{\rAI{6,7}}
+    \proofstep{6,7}{(P \land Q)\lor R}{\rOIa{8}}
+    \proofstep{1,7}{(P \land Q)\lor R}{\rOE{2,4,5,6,9}}
+    \proofstep{1}{(P \land Q)\lor R}{\rOE{3,4,5,7,10}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\chapter{Aussagenlogische Implikationen}
+
+\FormulaThmAuto{P \rightarrow P \lor Q}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{1}{P \lor Q}{\rOIa{1}}
+  \proofstep{}{P \rightarrow P \lor Q}{\rRI{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto{P \rightarrow Q \lor P}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{1}{Q \lor P}{\rOIb{1}}
+  \proofstep{}{P \rightarrow Q \lor P}{\rRI{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto[Materielle Implikation]{P \rightarrow Q \dashv \vdash \neg P \lor Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \rightarrow Q}{\rA}
+    \proofstep{}{ \neg P \lor P }{\FormulaRefAuto{P \lor \neg P}}
+    \proofstep{3}{\neg P}{\rA}
+    \proofstep{3}{\neg P \lor Q}{\rOIa{3}}
+    \proofstep{5}{P}{\rA}
+    \proofstep{1,5}{Q}{\rRE{1,5}}
+    \proofstep{1,5}{\neg P \lor Q}{\rOIb{6}}
+    \proofstep{1}{\neg P \lor Q}{\rOE{2,3,4,5,7}}
+
+  \closeproofpart
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \lor Q}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{3}{\neg Q}{\rA}
+    \proofstep{2}{\neg\neg P}{\rDN{2}}  % Nur wenn vorher eingeführt
+    \proofstep{2,3}{\neg\neg P \land \neg Q}{\rAI{4,3}}
+    \proofstep{2,3}{\neg(\neg P \lor Q)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{5}}
+    \proofstep{1,2,3}{\bot}{\rBI{1,6}}
+    \proofstep{1,2}{Q}{\rCE{3,7}}
+    \proofstep{1}{P \rightarrow Q}{\rRI{2,8}}
+
+  \closeproofpart
+\end{tabproofsplit}
+
+
+
+\FormulaThmAuto{\neg P \rightarrow Q \dashv \vdash P \lor Q}
+\begin{tabproofwide}
+  \proofstepwide{\neg P \rightarrow Q}{\leftrightarrow}{\neg\neg P \lor Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}}
+  \proofstepwide{}{ \leftrightarrow }{P \lor Q}{\rLRS{1,\rDN}}
+\end{tabproofwide}
+
+
+\FormulaThmAuto{\neg Q \rightarrow P \dashv \vdash P \lor Q}
+\begin{tabproofwide}
+  \proofstepwide{\neg Q \rightarrow P}{\leftrightarrow}{Q \lor P}{\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}}
+  \proofstepwide{}{ \leftrightarrow }{P \lor Q}{\FormulaRefAuto{P \lor Q \dashv \vdash Q \lor P}{1}}
+\end{tabproofwide}
+
+
+\FormulaThmAuto{P \lor Q,\neg P \vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P \lor Q}{\rA}
+  \proofstep{2}{\neg P}{\rA}
+  \proofstep{1}{\neg\neg P \lor \neg\neg Q}{\FormulaRefAuto{P \lor Q \eqvdash \neg\neg P \lor \neg\neg Q}}
+  \proofstep{1}{\neg P \rightarrow \neg\neg Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{3}}
+  \proofstep{1,2}{\neg\neg Q}{\rRE{2,4}}
+  \proofstep{1,2}{Q}{\rDN{5}}
+\end{tabproof}
+
+
+\FormulaThmAuto{P \lor Q,\neg Q \vdash P}
+\begin{tabproof}
+  \proofstep{1}{P \lor Q}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1}{Q \lor P}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{1}}
+  \proofstep{1,2}{P}{\FormulaRefAuto{P \lor Q,\neg P \vdash Q}{3,2}}
+\end{tabproof}
+
+
+\FormulaThmAuto[Implikation-Negations-Regel]{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P \rightarrow Q)}{\rA}
+    \proofstep{}{P \rightarrow Q \leftrightarrow \neg P \lor Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{}}
+    \proofstep{1}{\neg(\neg P \lor Q)}{\FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{1,2}}
+    \proofstep{1}{\neg\neg P \land \neg Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{3}}
+    \proofstep{1}{\neg\neg P}{\rAEa{4}}
+    \proofstep{1}{P}{\rDN{5}}
+    \proofstep{1}{\neg Q}{\rAEb{4}}
+    \proofstep{1}{P \land \neg Q}{\rAI{6,7}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P \land \neg Q}{\rA}
+    \proofstep{1}{P}{\rAEa{1}}
+    \proofstep{1}{\neg Q}{\rAEb{1}}
+    \proofstep{1}{\neg\neg P}{\rDN{2}}
+    \proofstep{1}{\neg\neg P \land \neg Q}{\rAI{4,3}}
+    \proofstep{1}{\neg(\neg P \lor Q)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{5}}
+    \proofstep{}{P \rightarrow Q \leftrightarrow \neg P \lor Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{}}
+    \proofstep{1}{\neg(P \rightarrow Q)}{\FormulaRefAuto{P \leftrightarrow Q, \neg Q \vdash \neg P}{7,6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{Q \vdash P \rightarrow Q}
+\begin{tabproof}
+  \proofstep{1}{Q}{\rA}
+  \proofstep{1}{\neg P \lor Q}{\rOIb{1}}
+  \proofstep{1}{P \rightarrow Q}{\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{\neg P \vdash P \rightarrow Q}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{1}{\neg P \lor Q}{\rOIa{1}}
+  \proofstep{1}{P \rightarrow Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{P\rightarrow Q, R\rightarrow Q, P\lor R\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{R \rightarrow Q}{\rA}
+  \proofstep{3}{P \lor R}{\rA}
+  \proofstep{4}{P}{\rA}
+  \proofstep{1,4}{Q}{\rRE{1,4}}
+  \proofstep{6}{R}{\rA}
+  \proofstep{2,6}{Q}{\rRE{2,6}}
+  \proofstep{1,2,3}{Q}{\rOE{3,4,5,6,7}}
+\end{tabproof}
+
+
+\FormulaThmAuto{P\rightarrow Q, P\lor R\vdash Q\lor R}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow Q}{\rA}
+  \proofstep{2}{P \lor R}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q}{\rRE{1,3}}
+  \proofstep{1,3}{Q \lor R}{\rOIa{4}}
+  \proofstep{6}{R}{\rA}
+  \proofstep{6}{Q \lor R}{\rOIb{6}}
+  \proofstep{1,2}{Q \lor R}{\rOE{2,3,5,6,7}}
+\end{tabproof}
+
+\FormulaThmAuto{P\rightarrow Q, P\land R\vdash Q\land R}
+\begin{tabproof}
+  \proofstep{1}{P\rightarrow Q}{\rA}
+  \proofstep{2}{P\land R}{\rA}
+  \proofstep{2}{P}{\rAEa{2}}
+  \proofstep{2}{R}{\rAEb{2}}
+  \proofstep{1,2}{Q}{\rRE{1,3}}
+  \proofstep{1,2}{Q\land R}{\rAI{5,4}}
+\end{tabproof}
+
+\FormulaThmAuto{P\rightarrow Q, R\land P\vdash R\land Q}
+\begin{tabproof}
+  \proofstep{1}{P\rightarrow Q}{\rA}
+  \proofstep{2}{R\land P}{\rA}
+  \proofstep{2}{R}{\rAEa{2}}
+  \proofstep{2}{P}{\rAEb{2}}
+  \proofstep{1,2}{Q}{\rRE{1,4}}
+  \proofstep{1,2}{R\land Q}{\rAI{3,5}}
+\end{tabproof}
+
+\FormulaThmAuto{P\rightarrow Q\vdash (P\land Q)\leftrightarrow P}
+\begin{tabproof}
+  \proofstep{1}{P\rightarrow Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{Q}{\rRE{1,2}}
+  \proofstep{1,2}{P\land Q}{\rAI{2,3}}
+  \proofstep{1}{P\rightarrow (P\land Q)}{\rRI{2,4}}
+  \proofstep{6}{P\land Q}{\rA}
+  \proofstep{6}{P}{\rAEa{6}}
+  \proofstep{}{(P\land Q)\rightarrow P}{\rRI{6,7}}
+  \proofstep{1}{(P\land Q)\leftrightarrow P}{\rLRI{8,5}}
+\end{tabproof}
+
+\FormulaThmAuto{P\rightarrow Q\vdash (Q\land P)\leftrightarrow P}
+\begin{tabproof}
+  \proofstep{1}{P\rightarrow Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{Q}{\rRE{1,2}}
+  \proofstep{1,2}{Q\land P}{\rAI{3,2}}
+  \proofstep{1}{P\rightarrow (Q\land P)}{\rRI{2,4}}
+  \proofstep{6}{Q\land P}{\rA}
+  \proofstep{6}{P}{\rAEb{6}}
+  \proofstep{}{(Q\land P)\rightarrow P}{\rRI{6,7}}
+  \proofstep{1}{(Q\land P)\leftrightarrow P}{\rLRI{8,5}}
+\end{tabproof}
+
+\chapter{Bikonditional und seine Varianten}
+
+\FormulaThmAuto[Negationsäquivalenz]{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \leftrightarrow Q}{\rA}
+    \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+    \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+    \proofstep{1}{\neg Q \rightarrow \neg P}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{2}}
+    \proofstep{1}{\neg P \rightarrow \neg Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{3}}
+    \proofstep{1}{\neg P \leftrightarrow \neg Q}{\rLRI{4,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \leftrightarrow \neg Q}{\rA}
+    \proofstep{1}{\neg P \rightarrow \neg Q}{\rLREa{1}}
+    \proofstep{1}{\neg Q \rightarrow \neg P}{\rLREb{1}}
+    \proofstep{1}{Q \rightarrow P}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{2}}
+    \proofstep{1}{P \rightarrow Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{3}}
+    \proofstep{1}{P \leftrightarrow Q}{\rLRI{4,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negationsäquivalenz]{P \leftrightarrow \neg Q \dashv \vdash \neg P \leftrightarrow  Q}
+\begin{tabproof}
+    \proofstep{}{(P \leftrightarrow \neg Q)\leftrightarrow (\neg P\leftrightarrow \neg\neg Q)}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}}
+    \proofstep{}{(\neg\neg Q \leftrightarrow Q)}{\FormulaRefAuto{P \eqvdash \neg\neg P}}
+    \proofstep{}{(P \leftrightarrow \neg Q)\leftrightarrow (\neg P\leftrightarrow Q)}{\rLRS{2,1}}
+\end{tabproof}
+
+
+\FormulaThmAuto{P \leftrightarrow Q \dashv \vdash (P \land Q) \lor (\neg P \land \neg Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \leftrightarrow Q}{\rA}
+    \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+    \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+    \proofstep{}{P \lor \neg P}{\FormulaRefAuto{P \lor \neg P}}
+    \proofstep{5}{P}{\rA}
+    \proofstep{1,5}{Q}{\rRE{2,5}}
+    \proofstep{1,5}{P \land Q}{\rAI{5,6}}
+    \proofstep{1,5}{(P \land Q) \lor (\neg P \land \neg Q)}{\rOIa{7}}
+    \proofstep{9}{\neg P}{\rA}
+    \proofstep{1,9}{\neg Q}{\FormulaRefAuto{P \rightarrow Q, \neg Q \vdash \neg P}{3,9}}
+    \proofstep{1,9}{\neg P \land \neg Q}{\rAI{9,10}}
+    \proofstep{1,9}{(P \land Q) \lor (\neg P \land \neg Q)}{\rOIb{11}}
+    \proofstep{1}{(P \land Q) \lor (\neg P \land \neg Q)}{\rOE{4,5,8,9,12}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \land Q) \lor (\neg P \land \neg Q)}{\rA}
+    \proofstep{2}{P \land Q}{\rA}
+    \proofstep{2}{P}{\rAEa{2}}
+    \proofstep{2}{Q}{\rAEb{2}}
+    \proofstep{2}{P \rightarrow Q}{\rRI{4}}
+    \proofstep{2}{Q \rightarrow P}{\rRI{3}}
+    \proofstep{2}{P \leftrightarrow Q}{\rLRI{5,6}}
+    \proofstep{8}{\neg P \land \neg Q}{\rA}
+    \proofstep{8}{\neg P}{\rAEa{8}}
+    \proofstep{8}{\neg Q}{\rAEb{8}}
+    \proofstep{8}{P \rightarrow Q}{\rRI{9}}
+    \proofstep{8}{Q \rightarrow P}{\rRI{10}}
+    \proofstep{8}{P \leftrightarrow Q}{\rLRI{11,12}}
+    \proofstep{1}{P \leftrightarrow Q}{\rOE{1,2,7,8,13}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{P \leftrightarrow Q \dashv \vdash (P \rightarrow Q)\land (Q\rightarrow P)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \leftrightarrow Q}{\rA}
+    \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+    \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+    \proofstep{1}{(P \rightarrow Q)\land (Q \rightarrow P)}{\rAI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \rightarrow Q)\land (Q \rightarrow P)}{\rA}
+    \proofstep{1}{P \rightarrow Q}{\rAEa{1}}
+    \proofstep{1}{Q \rightarrow P}{\rAEb{1}}
+    \proofstep{1}{P \leftrightarrow Q}{\rLRI{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{P \leftrightarrow Q \dashv \vdash (\neg P\lor Q)\land (\neg Q\lor P)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \leftrightarrow Q}{\rA}
+    \proofstep{1}{P \rightarrow Q}{\rLREa{1}}
+    \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
+    \proofstep{1}{\neg P \lor Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{2}}
+    \proofstep{1}{\neg Q \lor P}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{3}}
+    \proofstep{1}{(\neg P \lor Q) \land (\neg Q \lor P)}{\rAI{4,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(\neg P \lor Q) \land (\neg Q \lor P)}{\rA}
+    \proofstep{1}{\neg P \lor Q}{\rAEa{1}}
+    \proofstep{1}{\neg Q \lor P}{\rAEb{1}}
+    \proofstep{1}{P \rightarrow Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{2}}
+    \proofstep{1}{Q \rightarrow P}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{3}}
+    \proofstep{1}{P \leftrightarrow Q}{\rLRI{4,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg (P\leftrightarrow Q)\eqvdash (\neg P\land Q)\lor (P\land \neg Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\rA}
+    \proofstep{}{(P\leftrightarrow Q)\leftrightarrow ((P\rightarrow Q)\land (Q\rightarrow P))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash (P \rightarrow Q)\land (Q\rightarrow P)}}
+    \proofstep{1}{\neg((P\rightarrow Q)\land (Q\rightarrow P))}{\FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{1,2}}
+    \proofstep{1}{\neg(P\rightarrow Q)\lor \neg(Q\rightarrow P)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{3}}
+    \proofstep{2}{\neg(P\rightarrow Q)}{\rA}
+    \proofstep{2}{P\land \neg Q}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{5}}
+    \proofstep{2}{(\neg P\land Q)\lor (P\land \neg Q)}{\rOIb{6}}
+    \proofstep{3}{\neg(Q\rightarrow P)}{\rA}
+    \proofstep{3}{Q\land \neg P}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{8}}
+    \proofstep{3}{\neg P \land Q}{\FormulaRefAuto{P \land Q \vdash Q \land P}{9}}
+    \proofstep{3}{(\neg P\land Q)\lor (P\land \neg Q)}{\rOIa{10}}
+    \proofstep{1}{(\neg P\land Q)\lor (P\land \neg Q)}{\rOE{4,5,7,8,11}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(\neg P\land Q)\lor (P\land \neg Q)}{\rA}
+    \proofstep{2}{\neg P\land Q}{\rA}
+    \proofstep{2}{Q\land \neg P}{\FormulaRefAuto{P \land Q \vdash Q \land P}{2}}
+    \proofstep{2}{\neg(Q\rightarrow P)}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{3}}
+    \proofstep{2}{\neg(P\rightarrow Q)\lor \neg(Q\rightarrow P)}{\rOIb{4}}
+    \proofstep{6}{P\land \neg Q}{\rA}
+    \proofstep{6}{\neg(P\rightarrow Q)}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{6}}
+    \proofstep{6}{\neg(P\rightarrow Q)\lor \neg(Q\rightarrow P)}{\rOIa{7}}
+    \proofstep{1}{\neg(P\rightarrow Q)\lor \neg(Q\rightarrow P)}{\rOE{1,2,5,6,8}}
+    \proofstep{1}{\neg((P\rightarrow Q)\land (Q\rightarrow P))}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{9}}
+    \proofstep{}{(P\leftrightarrow Q)\leftrightarrow ((P\rightarrow Q)\land (Q\rightarrow P))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash (P \rightarrow Q)\land (Q\rightarrow P)}}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash (P \rightarrow Q)\land (Q\rightarrow P)}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg (P\leftrightarrow \neg P)}
+\begin{tabproof}
+  \proofstep{1}{P\leftrightarrow \neg P}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{\neg P}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,2}}
+  \proofstep{1,2}{\bot}{\rBI{2,3}}
+  \proofstep{1}{\neg P}{\rCI{2,4}}
+  \proofstep{1}{P}{\FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{1,5}}
+  \proofstep{1}{\bot}{\rBI{6,5}}
+  \proofstep{}{\neg(P\leftrightarrow \neg P)}{\rCI{1,7}}
+\end{tabproof}
+
+\chapter{Quantorenlogische Implikationen}
+
+\FormulaThmAuto{\forall x(P(x)\rightarrow Q(x))\vdash \forall x((P(x)\land Q(x))\leftrightarrow P(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rA}
+  \proofstep{1}{P(a)\rightarrow Q(a)}{\rUE{1}}
+  \proofstep{1}{(P(a)\land Q(a))\leftrightarrow P(a)}{\FormulaRefAuto{P\rightarrow Q\vdash (P\land Q)\leftrightarrow P}{2}}
+  \proofstep{1}{\forall x((P(x)\land Q(x))\leftrightarrow P(x))}{\rUI{3}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rA}
+  \proofstep{1}{P(a)\rightarrow Q(a)}{\rUE{1}}
+  \proofstep{1}{(Q(a)\land P(a))\leftrightarrow P(a)}{\FormulaRefAuto{P\rightarrow Q\vdash (Q\land P)\leftrightarrow P}{2}}
+  \proofstep{1}{\forall x((Q(x)\land P(x))\leftrightarrow P(x))}{\rUI{3}}
+\end{tabproof}
+
+
+\chapter{Quantoren und logische Äquivalenzen}
+
+\section{Bikonditional mit Quantoren}
+
+\FormulaThmAuto{\forall x(P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x(\neg P(x) \leftrightarrow \neg Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\rA}
+    \proofstep{1}{P(a) \leftrightarrow Q(a)}{\rUE{1}}
+    \proofstep{1}{\neg P(a) \leftrightarrow \neg Q(a)}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{2}}
+    \proofstep{1}{\forall x (\neg P(x) \leftrightarrow \neg Q(x))}{\rUI{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\forall x (\neg P(x) \leftrightarrow \neg Q(x))}{\rA}
+    \proofstep{1}{\neg P(a) \leftrightarrow \neg Q(a)}{\rUE{1}}
+    \proofstep{1}{P(a) \leftrightarrow Q(a)}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{2}}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\rUI{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\rA}
+    \proofstep{1}{P(a) \leftrightarrow Q(a)}{\rUE{1}}
+    \proofstep{1}{P(a) \rightarrow Q(a)}{\rLREa{2}}
+    \proofstep{1}{Q(a) \rightarrow P(a)}{\rLREb{2}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\rUI{3}}
+    \proofstep{1}{\forall x (Q(x) \rightarrow P(x))}{\rUI{4}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{\rAI{5,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{\rA}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\rAEa{1}}
+    \proofstep{1}{\forall x (Q(x) \rightarrow P(x))}{\rAEb{1}}
+    \proofstep{1}{P(a) \rightarrow Q(a)}{\rUE{2}}
+    \proofstep{1}{Q(a) \rightarrow P(a)}{\rUE{3}}
+    \proofstep{1}{P(a) \leftrightarrow Q(a)}{\rLRI{4,5}}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\rUI{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x (P(x) \rightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\rA}
+    \proofstep{1}{P(a) \rightarrow Q(a)}{\rUE{1}}
+    \proofstep{1}{\neg P(a) \lor Q(a)}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x))}{\rUI{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x))}{\rA}
+    \proofstep{1}{\neg P(a) \lor Q(a)}{\rUE{1}}
+    \proofstep{1}{P(a) \rightarrow Q(a)}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\rUI{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\rA}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\rAEa{2}}
+    \proofstep{1}{\forall x (Q(x) \rightarrow P(x))}{\rAEb{2}}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x))}{\FormulaRefAuto{\forall x (P(x) \rightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x))}{3}}
+    \proofstep{1}{\forall x (\neg Q(x) \lor P(x))}{\FormulaRefAuto{\forall x (P(x) \rightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x))}{4}}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x))}{\rAI{5,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x))}{\rA}
+    \proofstep{1}{\forall x (\neg P(x) \lor Q(x))}{\rAEa{1}}
+    \proofstep{1}{\forall x (\neg Q(x) \lor P(x))}{\rAEb{1}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x))}{\FormulaRefAuto{\forall x (P(x) \rightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x))}{2}}
+    \proofstep{1}{\forall x (Q(x) \rightarrow P(x))}{\FormulaRefAuto{\forall x (P(x) \rightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x))}{3}}
+    \proofstep{1}{\forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{\rAI{4,5}}
+    \proofstep{1}{\forall x (P(x) \leftrightarrow Q(x))}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\exists x(P(x)) \dashv \vdash \neg\forall x (\neg P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\exists x(P(x))}{\rA}
+    \proofstep{2}{P(a)}{\rA}
+    \proofstep{3}{\forall x(\neg P(x))}{\rA}
+    \proofstep{3}{\neg P(a)}{\rUE{3}}
+    \proofstep{2,3}{\bot}{\rBI{2,4}}
+    \proofstep{2}{\neg\forall x(\neg P(x))}{\rCI{3,5}}
+    \proofstep{1}{\neg\forall x(\neg P(x))}{\rEE{1,2,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\forall x(\neg P(x))}{\rA}
+    \proofstep{2}{\neg\exists x(P(x))}{\rA}
+    \proofstep{3}{P(a)}{\rA}
+    \proofstep{3}{\exists x(P(x))}{\rEI{3}}
+    \proofstep{2,3}{\bot}{\rBI{2,4}}
+    \proofstep{2}{\neg P(a)}{\rCI{3,5}}
+    \proofstep{2}{\forall x(\neg P(x))}{\rUI{6}}
+    \proofstep{1,2}{\bot}{\rBI{1,7}}
+    \proofstep{1}{\exists x(P(x))}{\rCE{2,8}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Invarianzen gegenüber universellen Aussagen}
+
+\FormulaThmAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}
+\begin{tabproof}
+  \proofstep{1}{\forall x(\neg Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor P}{\rOIa{2}}
+  \proofstep{4}{P \lor Q(a)}{\rA}
+  \proofstep{1}{\neg Q(a)}{\rUE{1}}
+  \proofstep{1,4}{P}{\FormulaRefAuto{P \lor Q,\neg Q \vdash P}{4,5}}
+  \proofstep{1,4}{P \leftrightarrow P \lor Q(a)}{\rLRI{2,3,4,6}}
+\end{tabproof}
+
+
+\section{Negation von Existenz und Allquantor}
+
+\FormulaThmAuto{\exists x(\neg P(x)) \eqvdash \neg\forall x(P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\exists x(\neg P(x))}{\rA}
+    \proofstep{2}{\neg P(a)}{\rA}
+    \proofstep{3}{\forall x(P(x))}{\rA}
+    \proofstep{3}{P(a)}{\rUE{3}}
+    \proofstep{2,3}{\bot}{\rBI{2,4}}
+    \proofstep{2}{\neg\forall x(P(x))}{\rCI{3,5}}
+    \proofstep{1}{\neg\forall x(P(x))}{\rEE{1,2,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\forall x(P(x))}{\rA}
+    \proofstep{2}{\neg\exists x(\neg P(x))}{\rA}
+    \proofstep{3}{\neg P(a)}{\rA}
+    \proofstep{3}{\exists x(\neg P(x))}{\rEI{3}}
+    \proofstep{2,3}{\bot}{\rBI{2,4}}
+    \proofstep{2}{P(a)}{\rCE{3,5}}
+    \proofstep{3}{\forall x(P(x))}{\rUI{6}}
+    \proofstep{1,3}{\bot}{\rBI{1,7}}
+    \proofstep{1}{\exists x(P(x))}{\rCE{2,8}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg\forall x(P(x)\rightarrow \neg Q(x)) \eqvdash \exists x (P(x)\land  Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\forall x(P(x)\rightarrow \neg Q(x))}{\rA}
+    \proofstep{1}{\exists x \neg (P(x)\rightarrow \neg Q(x))}{\FormulaRefAuto{\exists x(\neg P(x)) \eqvdash \neg\forall x(P(x))}{1}}
+    \proofstep{3}{\neg (P(a)\rightarrow \neg Q(a))}{\rA}
+    \proofstep{3}{P(a)\land \neg\neg Q(a)}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{3}}
+    \proofstep{3}{P(a)}{\rAEa{4}}
+    \proofstep{3}{\neg\neg Q(a)}{\rAEb{4}}
+    \proofstep{3}{Q(a)}{\rDN{6}}
+    \proofstep{3}{P(a)\land Q(a)}{\rAI{5,7}}
+    \proofstep{3}{\exists x(P(x)\land Q(x))}{\rEI{8}}
+    \proofstep{1}{\exists x(P(x)\land Q(x))}{\rEE{2,3,9}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\exists x (P(x)\wedge Q(x))}{\rA}
+    \proofstep{2}{P(a)\wedge Q(a)}{\rA}
+    \proofstep{2}{P(a)}{\rAEa{2}}
+    \proofstep{2}{Q(a)}{\rAEb{2}}
+    \proofstep{2}{\neg\neg Q(a)}{\rDN{4}}
+    \proofstep{2}{P(a)\land \neg\neg Q(a)}{\rAI{3,5}}
+    \proofstep{2}{\neg(P(a)\rightarrow \neg Q(a))}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{6}}
+    \proofstep{2}{\exists x(\neg(P(x)\rightarrow \neg Q(x)))}{\rEI{7}}
+    \proofstep{2}{\neg\forall x(P(x)\rightarrow \neg Q(x))}{\FormulaRefAuto{\exists x(\neg P(x)) \eqvdash \neg\forall x(P(x))}{8}}
+    \proofstep{1}{\neg\forall x(P(x)\rightarrow \neg Q(x))}{\rEE{1,2,9}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\neg\forall x(P(x)\rightarrow Q(x)) \eqvdash \exists x (P(x)\land  \neg Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\forall x(P(x)\rightarrow Q(x))}{\rA}
+    \proofstep{1}{\exists x \neg (P(x)\rightarrow Q(x))}{\FormulaRefAuto{\exists x(\neg P(x)) \eqvdash \neg\forall x(P(x))}{1}}
+    \proofstep{3}{\neg (P(a)\rightarrow Q(a))}{\rA}
+    \proofstep{3}{P(a)\land \neg Q(a)}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{3}}
+    \proofstep{3}{\exists x(P(x)\land \neg Q(x))}{\rEI{4}}
+    \proofstep{1}{\exists x(P(x)\land \neg Q(x))}{\rEE{2,3,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\exists x (P(x)\wedge \neg Q(x))}{\rA}
+    \proofstep{2}{P(a)\wedge \neg Q(a)}{\rA}
+    \proofstep{2}{\neg(P(a)\rightarrow Q(a))}{\FormulaRefAuto{\neg(P \rightarrow Q) \dashv \vdash P \land \neg Q}{2}}
+    \proofstep{2}{\exists x(\neg(P(x)\rightarrow Q(x)))}{\rEI{3}}
+    \proofstep{2}{\neg\forall x(P(x)\rightarrow Q(x))}{\FormulaRefAuto{\exists x(\neg P(x)) \eqvdash \neg\forall x(P(x))}{4}}
+    \proofstep{1}{\neg\forall x(P(x)\rightarrow Q(x))}{\rEE{1,2,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(P(x)) \eqvdash \neg\exists x \neg(P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x(P(x))}{\rA}
+    \proofstep{2}{\exists x(\neg P(x))}{\rA}
+    \proofstep{3}{\neg P(a)}{\rA}
+    \proofstep{1}{P(a)}{\rUE{1}}
+    \proofstep{1,3}{\bot}{\rBI{3,4}}
+    \proofstep{3}{\neg\forall x(P(x))}{\rCI{1,5}}
+    \proofstep{2}{\neg\forall x(P(x))}{\rEE{2,3,6}}
+    \proofstep{1,2}{\bot}{\rBI{1,7}}
+    \proofstep{1}{\neg\exists x(\neg P(x))}{\rCI{2,8}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\exists x(\neg P(x))}{\rA}
+    \proofstep{2}{\neg P(a)}{\rA}
+    \proofstep{2}{\exists x(\neg P(x))}{\rEI{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{P(a)}{\rCE{2,4}}
+    \proofstep{1}{\forall x(P(x))}{\rUI{5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg\forall x(P(x)) \eqvdash \exists x (\neg P(x))}
+\begin{tabproof}
+    \proofstep{}{\forall x(P(x)) \leftrightarrow \neg\exists x \neg(P(x))}{\FormulaRefAuto{\forall x(P(x)) \eqvdash \neg\exists x \neg(P(x))}}
+    \proofstep{}{\neg\forall x(P(x)) \leftrightarrow \exists x \neg(P(x))}{\FormulaRefAuto{P\leftrightarrow \neg Q \eqvdash \neg P\leftrightarrow Q}{1}}
+\end{tabproof}
+
+
+\FormulaThmAuto{\forall x(\neg P(x)) \eqvdash \neg\exists x (P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x(\neg P(x))}{\rA}
+    \proofstep{2}{\exists x(P(x))}{\rA}
+    \proofstep{3}{P(a)}{\rA}
+    \proofstep{1}{\neg P(a)}{\rUE{1}}
+    \proofstep{1,3}{\bot}{\rBI{3,4}}
+    \proofstep{1,2}{\bot}{\rEE{2,3,5}}
+    \proofstep{1}{\neg\exists x(P(x))}{\rCI{2,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\exists x(P(x))}{\rA}
+    \proofstep{2}{P(a)}{\rA}
+    \proofstep{2}{\exists x(P(x))}{\rEI{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg P(a)}{\rCE{2,4}}
+    \proofstep{1}{\forall x(\neg P(x))}{\rUI{5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rA}
+    \proofstep{2}{\exists x(P(x)\wedge \neg Q(x))}{\rA}
+    \proofstep{2}{P(a)\wedge \neg Q(a)}{\rEE{2}}
+    \proofstep{2}{P(a)}{\rAEa{3}}
+    \proofstep{2}{\neg Q(a)}{\rAEb{3}}
+    \proofstep{1}{P(a)\rightarrow Q(a)}{\rUE{1}}
+    \proofstep{1,2}{Q(a)}{\rRE{4,6}}
+    \proofstep{1,2}{\bot}{\rBI{5,7}}
+    \proofstep{1}{\neg\exists x(P(x)\wedge \neg Q(x))}{\rCI{2,8}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\exists x(P(x)\wedge \neg Q(x))}{\rA}
+    \proofstep{1}{\forall x(\neg(P(x)\wedge \neg Q(x)))}{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg\exists x (P(x))}{1}}
+    \proofstep{1}{\neg(P(a)\wedge \neg Q(a))}{\rUE{2}}
+    \proofstep{1}{\neg P(a)\vee \neg \neg Q(a)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{3}}
+    \proofstep{5}{\neg P(a)}{\rA}
+    \proofstep{5}{\neg P(a)\vee Q(a)}{\rOIa{5}}
+    \proofstep{7}{\neg\neg Q(a)}{\rA}
+    \proofstep{7}{Q(a)}{\rDN{7}}
+    \proofstep{7}{\neg P(a)\vee Q(a)}{\rOIb{7}}
+    \proofstep{1}{\neg P(a)\vee Q(a)}{\rOE{4,5,6,7,9}}
+    \proofstep{1}{P(a)\rightarrow Q(a)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{10}}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rUI{11}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(P(x)\rightarrow \neg Q(x)) \eqvdash \neg\exists x (P(x)\land Q(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x(P(x)\rightarrow \neg Q(x))}{\rA}
+    \proofstep{2}{\exists x(P(x)\wedge Q(x))}{\rA}
+    \proofstep{2}{P(a)\wedge Q(a)}{\rEE{2}}
+    \proofstep{2}{P(a)}{\rAEa{3}}
+    \proofstep{2}{Q(a)}{\rAEb{3}}
+    \proofstep{1}{P(a)\rightarrow \neg Q(a)}{\rUE{1}}
+    \proofstep{1,2}{\neg Q(a)}{\rRE{4,6}}
+    \proofstep{1,2}{\bot}{\rBI{5,7}}
+    \proofstep{1}{\neg\exists x(P(x)\wedge Q(x))}{\rCI{2,8}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\exists x(P(x)\wedge Q(x))}{\rA}
+    \proofstep{1}{\forall x(\neg(P(x)\wedge Q(x)))}{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg\exists x (P(x))}{1}}
+    \proofstep{1}{\neg(P(a)\wedge Q(a))}{\rUE{2}}
+    \proofstep{1}{\neg P(a)\vee \neg Q(a)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{3}}
+    \proofstep{1}{P(a)\rightarrow \neg Q(a)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{4}}
+    \proofstep{1}{\forall x(P(x)\rightarrow \neg Q(x))}{\rUI{5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))\land \forall x(Q(x)\rightarrow P(x))}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rAEa{2}}
+    \proofstep{1}{\forall x(Q(x)\rightarrow P(x))}{\rAEb{2}}
+    \proofstep{1}{\neg\exists x (P(x)\land \neg Q(x))}{\FormulaRefAuto{\forall x(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))}{3}}
+    \proofstep{1}{\neg\exists x (Q(x)\land \neg P(x))}{\FormulaRefAuto{\forall x(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))}{4}}
+    \proofstep{1}{\neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}{\rAI{5,6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}{\rA}
+    \proofstep{1}{\neg\exists x (P(x)\land \neg Q(x))}{\rAEa{1}}
+    \proofstep{1}{\neg\exists x (Q(x)\land \neg P(x))}{\rAEb{1}}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\FormulaRefAuto{\forall x(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))}{2}}
+    \proofstep{1}{\forall x(Q(x)\rightarrow P(x))}{\FormulaRefAuto{\forall x(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))}{3}}
+    \proofstep{1}{\forall x(P(x)\rightarrow Q(x))\land \forall x(Q(x)\rightarrow P(x))}{\rAI{4,5}}
+    \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x))}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+    \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x)) \leftrightarrow \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}
+    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x)))}{\FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{1,2}}
+    \proofstep{1}{\exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{\rA}
+    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x)))}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x)) \leftrightarrow \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}
+    \proofstep{1}{\neg\forall x(P(x)\leftrightarrow Q(x))}{\FormulaRefAuto{P \leftrightarrow Q, \neg Q \vdash \neg P}{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\neg\forall P(x)\exists Q(y)(R(x,y)) \eqvdash \exists P(x)\forall Q(y)(\neg R(x,y))}
+\begin{tabproofwide}
+  \proofstepwide{\neg\forall x(P(x)\rightarrow Q(x))}{\leftrightarrow}{\exists x (P(x)\land \neg Q(x))}{\FormulaRefAuto{\neg\forall x(P(x)\rightarrow Q(x))\eqvdash\exists x (P(x)\land \neg Q(x))}}
+  \proofstepwide{\forall x(P(x)\rightarrow \neg Q(x))}{\leftrightarrow}{\neg\exists x (P(x)\land Q(x))}{\FormulaRefAuto{\forall x(P(x)\rightarrow \neg Q(x)) \eqvdash \neg\exists x (P(x)\land Q(x))}}
+  \proofstepwide{\neg\forall P(x)\exists Q(y)(R(x,y))}{\leftrightarrow}{\exists P(x)\neg\exists Q(y)(R(x,y))}{\rLRS{1}}
+  \proofstepwide{}{ \leftrightarrow }{\exists P(x)\forall Q(y)(\neg R(x,y))}{\rLRS{2,3}}
+  \proofstepwide{\neg\forall P(x)\exists Q(y)(R(x,y))}{\leftrightarrow}{\exists P(x)\forall Q(y)(\neg R(x,y))}{\rChain{3,4}}
+\end{tabproofwide}
+
+\chapter{Theoreme zur Quantorendistribution}
+
+\FormulaThmAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}
+\begin{tabproof}
+  \proofstep{1}{P(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \rightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \rightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{Q(a)}{\rRE{1,3}}
+\end{tabproof}
+
+\FormulaThmAuto{P(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash Q(a)}
+\begin{tabproof}
+  \proofstep{1}{P(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{Q(a)}{\FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{3,1}}
+\end{tabproof}
+
+\FormulaThmAuto{Q(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash P(a)}
+\begin{tabproof}
+  \proofstep{1}{Q(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{P(a)}{\FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{3,1}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x(P \rightarrow Q(x)) \dashv \vdash P \rightarrow \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{P \rightarrow Q(x)}{\rUE{1}}
+  \proofstep{1,2}{Q(x)}{\rRE{2,3}}
+  \proofstep{2}{\forall x(Q(x))}{\rUI{4}}
+  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rRI{2,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1}{\forall x(Q(x))}{\rRE{1,2}}
+  \proofstep{1,2}{Q(x)}{\rUE{3}}
+  \proofstep{2}{P \rightarrow Q(x)}{\rRI{2,4}}
+  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rUI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(P \land Q(x)) \dashv \vdash P \land \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \land Q(x))}{\rA}
+  \proofstep{1}{P \land Q(x)}{\rUE{1}}
+  \proofstep{1}{P}{\rAEa{2}}
+  \proofstep{1}{Q(x)}{\rAEb{2}}
+  \proofstep{1}{\forall x(Q(x))}{\rUI{4}}
+  \proofstep{1}{P \land \forall x(Q(x))}{\rAI{3,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \land \forall x(Q(x))}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{\forall x(Q(x))}{\rAEb{1}}
+  \proofstep{1}{Q(x)}{\rUE{3}}
+  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
+  \proofstep{1}{\forall x(P \land Q(x))}{\rUI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(P \land Q(x)) \dashv \vdash P \land \exists x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(P \land Q(x))}{\rA}
+  \proofstep{1}{P \land Q(x)}{\rEE{1}}
+  \proofstep{1}{P}{\rAEa{2}}
+  \proofstep{1}{Q(x)}{\rAEb{2}}
+  \proofstep{1}{\exists x(Q(x))}{\rEI{4}}
+  \proofstep{1}{P \land \exists x(Q(x))}{\rAI{3,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \land \exists x(Q(x))}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{\exists x(Q(x))}{\rAEb{1}}
+  \proofstep{1}{Q(x)}{\rEE{3}}
+  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
+  \proofstep{1}{\exists x(P \land Q(x))}{\rEI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x(P \lor Q(x)) \eqvdash P \lor \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \lor Q(x))}{\rA}
+  \proofstep{2}{\neg(P \lor \forall x(Q(x)))}{\rA}
+  \proofstep{2}{\neg P \land \neg \forall x(Q(x))}{\FormulaRefAuto{\neg(P \lor Q) \dashv\vdash \neg P \land \neg Q}}
+  \proofstep{2}{\neg P}{\rAEa{3}}
+  \proofstep{2}{\neg \forall x(Q(x))}{\rAEb{3}}
+  \proofstep{2}{\exists x(\neg Q(x))}{\FormulaRefAuto{\neg\forall x(P(x))\eqvdash \exists x(\neg P(x))}{5}}
+  \proofstep{2}{\neg F(a)}{\rEE{6}}
+  \proofstep{1}{P \lor F(a)}{\rUE{1}}
+  \proofstep{9}{P}{\rA}
+  \proofstep{2,9}{\bot}{\rBI{4,9}}
+  \proofstep{9}{P \lor \forall x(Q(x))}{\rCE{2,10}}
+  \proofstep{12}{F(a)}{\rA}
+  \proofstep{2,12}{\bot}{\rBI{12,7}}
+  \proofstep{12}{P \lor \forall x(Q(x))}{\rCE{2,13}}
+  \proofstep{1}{P \lor \forall x(Q(x))}{\rOE{8,9,11,12,14}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \lor \forall x(Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor Q(x)}{\rOIa{2}}
+  \proofstep{2}{\forall x(P \lor Q(x))}{\rUI{3}}
+  \proofstep{5}{\forall x(Q(x))}{\rA}
+  \proofstep{5}{Q(x)}{\rUE{5}}
+  \proofstep{5}{P \lor Q(x)}{\rOIb{6}}
+  \proofstep{5}{\forall x(P \lor Q(x))}{\rUI{7}}
+  \proofstep{1}{\forall x(P \lor Q(x))}{\rOE{1,2,4,5,8}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(P \lor F(x)) \dashv \vdash P \lor \exists x(F(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(P \lor F(x))}{\rA}
+  \proofstep{2}{P \lor F(a)}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{P \lor \exists x(F(x))}{\rOIa{3}}
+  \proofstep{5}{F(a)}{\rA}
+  \proofstep{1,5}{\exists x(F(x))}{\rEI{5}}
+  \proofstep{1,5}{P \lor \exists x(F(x))}{\rOIb{6}}
+  \proofstep{2}{P \lor \exists x(F(x))}{\rOE{2,3,4,5,7}}
+  \proofstep{1}{P \lor \exists x(F(x))}{\rEE{1,2,8}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \lor \exists x(F(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor F(x)}{\rOIa{2}}
+  \proofstep{2}{\exists x(P \lor F(x))}{\rEI{3}}
+  \proofstep{5}{\exists x(F(x))}{\rA}
+  \proofstep{5}{F(a)}{\rEE{5}}
+  \proofstep{5}{P \lor F(a)}{\rOIb{6}}
+  \proofstep{5}{\exists x(P \lor F(x))}{\rEI{7}}
+  \proofstep{1}{\exists x(P \lor F(x))}{\rOE{1,2,4,5,8}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(F(x) \rightarrow P) \dashv \vdash \forall x(F(x)) \rightarrow P}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rA}
+  \proofstep{2}{F(a) \rightarrow P}{\rA}
+  \proofstep{3}{\forall x(F(x))}{\rA}
+  \proofstep{3}{F(a)}{\rUE{3}}
+  \proofstep{2,3}{P}{\rRE{2,4}}
+  \proofstep{2}{\forall x(F(x)) \rightarrow P}{\rRI{3,5}}
+  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rEE{1,2,6}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rA}
+  \proofstep{2}{\forall x(F(x))}{\rA}
+  \proofstep{1}{P}{\rRE{1,2}}
+  \proofstep{1}{F(a) \rightarrow P}{\rRI{3}}
+  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rEI{4}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x(F(x)\land G(x))\eqvdash \forall x(F(x))\land \forall x(G(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(F(x)\land G(x))}{\rA}
+  \proofstep{1}{F(x)\land G(x)}{\rUE{1}}	
+  \proofstep{1}{F(x)}{\rAEa{2}}
+  \proofstep{1}{\forall x(F(x))}{\rUI{3}}	
+  \proofstep{1}{G(x)}{\rAEb{2}}
+  \proofstep{1}{\forall x(G(x))}{\rUI{5}}
+  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rAI{4,6}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rA}
+  \proofstep{1}{\forall x(F(x))}{\rAEa{1}}
+  \proofstep{1}{F(x)}{\rUE{2}}
+  \proofstep{1}{\forall x(G(x))}{\rAEb{1}}
+  \proofstep{1}{G(x)}{\rUE{4}}
+  \proofstep{1}{F(x)\land G(x)}{\rAI{3,5}}
+  \proofstep{1}{\forall x(F(x)\land G(x))}{\rUI{6}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(F(x))\lor\forall x(G(x))}{\rA}
+  \proofstep{2}{\forall x(F(x))}{\rA}
+  \proofstep{2}{F(a)}{\rUE{2}}
+  \proofstep{2}{F(a)\lor G(a)}{\rOIa{3}}
+  \proofstep{2}{\forall x(F(x)\lor G(x))}{\rUI{4}}
+  \proofstep{6}{\forall x(G(x))}{\rA}
+  \proofstep{6}{G(a)}{\rUE{6}}
+  \proofstep{6}{F(a)\lor G(a)}{\rOIb{7}}
+  \proofstep{6}{\forall x(F(x)\lor G(x))}{\rUI{8}}
+  \proofstep{1}{\forall x(F(x)\lor G(x))}{\rOE{1,2,5,6,9}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists x(F(x)\lor G(x))\eqvdash \exists x(F(x))\lor \exists x(G(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rA}
+  \proofstep{2}{F(a)\lor G(a)}{\rA}
+  \proofstep{3}{F(a)}{\rA}
+  \proofstep{3}{\exists x(F(x))}{\rEI{3}}
+  \proofstep{3}{\exists x(F(x))\lor \exists x(G(x))}{\rOIa{4}}
+  \proofstep{6}{G(a)}{\rA}
+  \proofstep{6}{\exists x(G(x))}{\rEI{6}}
+  \proofstep{6}{\exists x(F(x))\lor \exists x(G(x))}{\rOIb{7}}
+  \proofstep{2}{\exists x(F(x))\lor \exists x(G(x))}{\rOE{2,3,5,6,8}}
+  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rEE{1,2,9}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rA}
+  \proofstep{2}{\exists x(F(x))}{\rA}
+  \proofstep{3}{F(a)}{\rA}
+  \proofstep{3}{F(a)\lor G(a)}{\rOIa{3}}
+  \proofstep{3}{\exists x(F(x)\lor G(x))}{\rEI{4}}
+  \proofstep{2}{\exists x(F(x)\lor G(x))}{\rEE{2,3,5}}
+  \proofstep{7}{\exists x(G(x))}{\rA}
+  \proofstep{8}{G(a)}{\rA}
+  \proofstep{8}{F(a)\lor G(a)}{\rOIb{8}}
+  \proofstep{8}{\exists x(F(x)\lor G(x))}{\rEI{9}}
+  \proofstep{7}{\exists x(F(x)\lor G(x))}{\rEE{7,8,10}}
+  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rOE{1,2,6,7,11}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\exists x\exists yF(x,y)\vdash \exists y\exists x F(x,y)}
+\begin{tabproof}
+  \proofstep{1}{\exists x\exists y F(x,y)}{\rA}
+  \proofstep{2}{\exists y F(a,y)}{\rA}
+  \proofstep{3}{F(a,b)}{\rA}
+  \proofstep{3}{\exists x F(x,b)}{\rEI{3}}
+  \proofstep{3}{\exists y\exists x F(x,y)}{\rEI{4}}
+  \proofstep{2}{\exists y\exists x F(x,y)}{\rEE{2,3,5}}
+  \proofstep{1}{\exists y\exists x F(x,y)}{\rEE{1,2,6}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x\forall yF(x,y)\vdash \forall y\forall x F(x,y)}
+\begin{tabproof}
+  \proofstep{1}{\forall x\forall y F(x,y)}{\rA}
+  \proofstep{1}{\forall y F(a,y)}{\rUE{1}}
+  \proofstep{1}{F(a,b)}{\rUE{2}}
+  \proofstep{1}{\forall x F(x,b)}{\rUI{3}}
+  \proofstep{1}{\forall y\forall x F(x,y)}{\rUI{4}}
+\end{tabproof}
+
+
+\chapter{Theoreme mit dem Identitätssymbol}
+
+
+\FormulaThmAuto{Fa \eqvdash \exists x(x=a \land Fx)}
+\begin{tabproof}
+  \proofstep{1}{Fa}{\rA}
+  \proofstep{}{a = a}{\rII}
+  \proofstep{1}{a = a \land Fa}{\rAI{2,1}}
+  \proofstep{1}{\exists x(x = a \land Fx)}{\rEI{3}}
+\end{tabproof}
+
+\begin{tabproof}
+  \proofstep{1}{\exists x(x = a \land Fx)}{\rA}
+  \proofstep{2}{b = a \land Fb}{\rA}
+  \proofstep{2}{b = a}{\rAEa{2}}
+  \proofstep{2}{Fb}{\rAEb{2}}
+  \proofstep{2}{Fa}{\rIE{3,4}}
+  \proofstep{1}{Fa}{\rEE{1,2,5}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists c((c=a\lor c=b)\land P(c))\dashv \vdash P(a)\lor P(b)}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists c((c=a\lor c=b)\land P(c))}{\rA}
+  \proofstep{2}{(c=a\lor c=b)\land P(c)}{\rA}
+  \proofstep{2}{c=a\lor c=b}{\rAEa{2}}
+  \proofstep{2}{P(c)}{\rAEb{2}}
+  \proofstep{5}{c=a}{\rA}
+  \proofstep{2,5}{P(a)}{\rIE{5,4}}
+  \proofstep{2,5}{P(a)\lor P(b)}{\rOIa{6}}
+  \proofstep{8}{c=b}{\rA}
+  \proofstep{2,8}{P(b)}{\rIE{8,4}}
+  \proofstep{2,8}{P(a)\lor P(b)}{\rOIb{9}}
+  \proofstep{2}{P(a)\lor P(b)}{\rOE{3,5,7,8,10}}
+  \proofstep{1}{P(a)\lor P(b)}{\rEE{1,2,11}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P(a)\lor P(b)}{\rA}
+  \proofstep{2}{P(a)}{\rA}
+  \proofstep{}{a = a}{\rII}
+  \proofstep{}{a = a \lor a = b}{\rOIa{3}}
+  \proofstep{2}{(a = a \lor a = b) \land P(a)}{\rAI{4,2}}
+  \proofstep{2}{\exists c((c=a\lor c=b)\land P(c))}{\rEI{5}}
+  \proofstep{7}{P(b)}{\rA}
+  \proofstep{}{b = b}{\rII}
+  \proofstep{}{b = a \lor b = b}{\rOIb{8}}
+  \proofstep{7}{(b = a \lor b = b) \land P(b)}{\rAI{9,7}}
+  \proofstep{7}{\exists c((c=a\lor c=b)\land P(c))}{\rEI{10}}
+  \proofstep{1}{\exists c((c=a\lor c=b)\land P(c))}{\rOE{1,2,6,7,11}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{a = b \vdash b = a}
+\begin{tabproof}
+  \proofstep{1}{a = b}{\rA}
+  \proofstep{}{a = a}{\rII}
+  \proofstep{1}{b = a}{\rIE{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto[Transitivität]{a = b,\, b = c \vdash a = c}
+\begin{tabproof}
+  \proofstep{1}{a = b}{\rA}
+  \proofstep{2}{b = c}{\rA}
+  \proofstep{1,2}{a = c}{\rIE{1,2}}
+\end{tabproof}
+
+
+\FormulaThmAuto{a = b,\, c = b \vdash a = c}
+\begin{tabproof}
+  \proofstep{1}{a = b}{\rA}
+  \proofstep{2}{c = b}{\rA}
+  \proofstep{1,2}{a = c}{\rIE{1,2}}
+\end{tabproof}
+
+
+
+
+\chapter{Theoreme mit dem Nicht-Gleichheitszeichen}
+
+
+\FormulaThmAuto{a \neq b \vdash b \neq a}
+\begin{tabproof}
+  \proofstep{1}{a \neq b}{\rA}
+  \proofstep{2}{b = a}{\rA}
+  \proofstep{2}{a = b}{\FormulaRefAuto{a = b \vdash b = a}{3}}
+  \proofstep{1,2}{\bot}{\rBI{4,2}}
+  \proofstep{1}{b \neq a}{\rCI{3,5}}
+\end{tabproof}
+
+\end{document}
