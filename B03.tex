@@ -365,6 +365,46 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \closeproofpart
 \end{tabproofsplit}
 
+\section{Russel Paradoxon und die universelle Menge}
+
+\FormulaThmAuto[Russells Paradoxon in der ZF-Mengenlehre]{\neg \exists U \forall A (A \in U \leftrightarrow A \not\in A)}
+\begin{tabproof}
+\proofstep{1}{\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rA}
+\proofstep{2}{\forall A (A \in U \leftrightarrow A \notin A)}{\rA}
+\proofstep{2}{U \in U \leftrightarrow U \notin U}{\rUE{2}}
+\proofstep{}{\neg(U \in U \leftrightarrow U \notin U)}{\FormulaRefAuto{\neg (P\leftrightarrow \neg P)}}
+\proofstep{2}{\bot}{\rBI{3,4}}
+\proofstep{1}{\bot}{\rEE{1,2,5}}
+\proofstep{}{\neg\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rCI{1,6}}
+\end{tabproof}
+
+
+
+Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann führt dies aufgrund des nachstehenden Satzes zu einem Widerspruch. 
+
+
+\FormulaThmAuto{\exists U \forall A (A \in U)\vdash \forall A(A\not\in A\leftrightarrow A\in U\land A\not\in A)}
+\begin{tabproof}
+\proofstep{1}{\exists U \forall A (A \in U)}{\rA}
+\proofstep{2}{\forall A (A \in U)}{\rA}
+\proofstep{2}{\forall A (A \not\in A\leftrightarrow A\in U\land A\notin A)}{\FormulaRefAuto{\forall x(P(x)) \vdash \forall x(Q(x)\leftrightarrow P(x)\land Q(x))}{2}}
+\proofstep{1}{\forall A (A \not\in A\leftrightarrow A\in U\land A\notin A)}{\rEE{1,2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{\neg \exists U \forall A (A \in U)}
+\begin{tabproof}
+\proofstep{1}{\exists U \forall A (A \in U)}{\rA}
+\proofstep{1}{\forall A(A\not\in A\leftrightarrow A\in U\land A\not\in A)}{\FormulaRefAuto{\exists U \forall A (A \in U)\vdash \forall A(A\not\in A\leftrightarrow A\in U\land A\not\in A)}{1}}
+\proofstep{1}{\exists B\forall A(A\in B\leftrightarrow A\in U\land A\notin A)}{\FormulaRefAuto{\forall A\;\forall P\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)\Bigr)}{2}}
+\proofstep{4}{\forall A(A\in B\leftrightarrow A\in U\land A\notin A)}{\rA}
+\proofstep{1,4}{\forall A(A\in B\leftrightarrow A\notin A)}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x))}{4,2}}
+\proofstep{1,4}{\exists B\forall A(A\in B\leftrightarrow A\notin A)}{\rEI{5}}
+\proofstep{}{\neg\exists B\forall A(A\in B\leftrightarrow A\notin A)}{\FormulaRefAuto{\neg \exists U \forall A (A \in U \leftrightarrow A \not\in A)}}
+\proofstep{1,4}{\bot}{\rBI{6,7}}
+\proofstep{1}{\bot}{\rEE{3,4,8}}
+\proofstep{}{\neg \exists U \forall A (A \in U)}{\rCI{1,9}}
+\end{tabproof}
+
 \section{Schnittmengen}
 
 \FormulaThmAuto{x \in A \cap B \vdash x \in A}
@@ -426,52 +466,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
   \proofstepwide{(A \cap B) \cap C}{=}{A \cap (B \cap C)}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}}}
 \end{tabproofwide}
 
-\section{Russel Paradoxon und die universelle Menge}
 
-\FormulaThmAuto[Russells Paradoxon in der ZF-Mengenlehre]{\neg \exists U \forall A (A \in U \leftrightarrow A \not\in A)}
-\begin{tabproof}
-\proofstep{1}{\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rA}
-\proofstep{2}{\forall A (A \in U \leftrightarrow A \notin A)}{\rA}
-\proofstep{2}{U \in U \leftrightarrow U \notin U}{\rUE{2}}
-\proofstep{}{\neg(U \in U \leftrightarrow U \notin U)}{\FormulaRefAuto{\neg (P\leftrightarrow \neg P)}}
-\proofstep{2}{\bot}{\rBI{3,4}}
-\proofstep{1}{\bot}{\rEE{1,2,5}}
-\proofstep{}{\neg\exists U \forall A (A \in U \leftrightarrow A \notin A)}{\rCI{1,6}}
-\end{tabproof}
-
-
-
-Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann führt dies aufgrund des nachstehenden Satzes zu einem Widerspruch. 
-
-
-
-\begin{theorem}[Nichtexistenz einer universellen Menge]
-\label{nExUFaALpAInURp}
-\[\neg \exists U \forall A (A \in U)\] 
-\end{theorem}
-
-\begin{proof}
-        \begin{tempdefinition}
-            \[\forall C(R_C\coloneqq \{x\in C\mid x\not\in x\})\]
-        \end{tempdefinition}
-	\[
-	\begin{array}{llll}
-		1 & (1) & \exists U \forall A (A \in U) & \rA \\
-		2 & (2) & \forall A (A \in U) & \rA \\
-            3 & (3) & R_U\in R_U & \rA \\
-		3 & (4) & R_U\not\in R_U & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rUE{\RDefineEqualsLbxInUMidxNotinxRb{3}}}} \\ 
-            3 & (5) & \bot & \rBI{3,4} \\   
-              & (6) & R_U\not\in R_U & \rCI{3,5} \\   
-		   & (7) & R_U\not\in U\lor R_U\in R_U & \FormulaRefAuto{x \not\in \{x \in A \mid P(x)\}\eqvdash (x \not\in A \lor \neg P(x))}{\RDefineEqualsLbxInUMidxNotinxRb{6}}  \\
-		   & (8) & R_U\not\in R_U\rightarrow R_U\not\in U &  \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{7}} \\
-		   & (9) & R_U\not\in U & \rRE{6,8} \\
-		2 & (10) & R_U\in U & \rUE{2} \\
-		2 & (11) & \bot & \rBI{9,10} \\	
-		1 & (12) & \bot & \rEE{1,2,11} \\	
-		   & (13) & \neg\exists U \forall A (A \in U) & \rCI{1,12} \\									  			  
-	\end{array}
-	\]
-\end{proof}
 
 
 \begin{theorem}[ ]
