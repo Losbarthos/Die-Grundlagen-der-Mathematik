@@ -1,0 +1,648 @@
+% =============================================================
+
+% Einführung in expl3 – Ein Mini‑Buch mit Praxisbeispielen
+
+% (mit ausführlich erklärtem TODO‑Miniprojekt)
+
+% =============================================================
+
+\documentclass[11pt,a4paper]{book}
+
+
+
+% --- Sprache & Schrift ---
+
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[ngerman]{babel}
+
+\usepackage{lmodern}
+
+\usepackage{microtype}
+
+
+
+% --- Mathe ---
+
+\usepackage{amsmath,amssymb}
+
+
+
+% --- Hyperlinks ---
+
+\usepackage{hyperref}
+
+
+
+% --- Zitate (für \enquote)
+
+\usepackage{csquotes}
+
+
+
+% --- expl3-Kern ---
+
+\usepackage{expl3}
+
+
+
+% =============================================================
+
+%  Live-Makros für das TODO‑Miniprojekt
+
+%  (Diese Makros sind in DIESEM Buch direkt verwendbar und zugleich
+
+%   genau das Snippet, das du in deine eigene Präambel kopierst.)
+
+% =============================================================
+
+\ExplSyntaxOn
+
+% 1) Datenspeicher: globale Sequenz (Liste) für TODO-Einträge
+
+\seq_new:N \g_demo_todo_seq
+
+
+
+% 2) Hilfsfunktion: einen Eintrag rechts anhängen
+
+\cs_new_protected:Npn \demo_todo_add:n #1 {
+
+  \seq_gput_right:Nn \g_demo_todo_seq {#1}
+
+}
+
+
+
+% 3) Öffentliche Befehle für Nutzer
+
+%    \todo{<Text>}  – zeigt TODO inline und sammelt ihn
+
+%    \printtodos     – druckt alle gesammelten TODOs, getrennt durch Semikola
+
+%    \cleartodos     – leert die Liste (praktisch für unabhängige Beispiele)
+
+\newcommand{\todo}[1]{\textbf{TODO:}~#1\ExplSyntaxOn\demo_todo_add:n{#1}\ExplSyntaxOff}
+
+\newcommand{\printtodos}{\par\medskip\textbf{Gesammelte TODOs: }\ExplSyntaxOn\seq_use:Nn \g_demo_todo_seq {; }\ExplSyntaxOff\par}
+
+\newcommand{\cleartodos}{\ExplSyntaxOn\seq_gclear:N \g_demo_todo_seq\ExplSyntaxOff}
+
+\ExplSyntaxOff
+
+
+
+% =============================================================
+
+%  Dokument
+
+% =============================================================
+
+\begin{document}
+
+
+
+\title{Einführung in \texttt{expl3}\\\large Ein Mini‑Buch mit Praxisbeispielen}
+
+\author{erstellt mit ChatGPT für Martin}
+
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+
+
+\chapter{Warum \texttt{expl3}?}
+
+\noindent
+
+\texttt{expl3} ist die moderne und zukunftsorientierte Programmierschnittstelle von~LaTeX. Statt wie bei klassischem LaTeX2e vor allem fertige Befehle zur Dokumentgestaltung zu nutzen, bietet \texttt{expl3} eine strukturierte, klar definierte „Programmierumgebung“ innerhalb von LaTeX. Sie richtet sich an alle, die eigene Makros, Befehle oder komplette Pakete entwickeln möchten.
+
+\medskip
+
+Der große Unterschied: \texttt{expl3} arbeitet mit wohldefinierten Datentypen, einer konsistenten Benennungskonvention und vorhersehbaren Expansionsregeln. Statt wilder Ad-hoc-Lösungen kann man so systematisch und modular arbeiten. Das führt zu Code, der
+\begin{itemize}
+\item \textbf{robust} ist (kaum überraschendes Verhalten bei komplexen Projekten),
+\item \textbf{wartbar} bleibt (auch nach Monaten noch verständlich),
+\item \textbf{erweiterbar} ist (neue Features lassen sich einfach ergänzen) und
+\item \textbf{testbar} wird (Fehler lassen sich gezielt finden und beheben).
+\end{itemize}
+
+\medskip
+
+Kurz gesagt: \texttt{expl3} gibt LaTeX eine saubere „Programmiersprache im Inneren“, mit der man Ideen stabil umsetzen kann – von kleinen Hilfsbefehlen bis zu umfangreichen Paketen. Dieses Buch zeigt dir Schritt für Schritt, wie du \texttt{expl3} in der Praxis nutzen kannst, und führt dich dabei von einfachen Beispielen bis zu einem kleinen, voll funktionsfähigen Miniprojekt.
+
+
+
+\chapter{Miniprojekt: TODOs sammeln und ausgeben}
+\label{chap:todo}
+Bevor wir direkt in die technischen Details einsteigen, lohnt sich ein Blick auf die Motivation: Viele LaTeX-Projekte wachsen mit der Zeit und enthalten verstreute Anmerkungen, offene Punkte oder kleine Erinnerungen – zum Beispiel „Abbildung beschriften“, „Formel prüfen“ oder „Literatur ergänzen“. Wer solche TODOs nur als Kommentar im Code hinterlässt, läuft Gefahr, dass sie im Enddokument nicht auffallen oder später nur mühsam gesucht werden können.
+
+Mit \texttt{expl3} lässt sich dieses Problem elegant lösen: Wir kombinieren eine klare Syntax für Benutzereingaben mit einer robusten internen Datenstruktur, die alle TODOs im Hintergrund sammelt. So können wir jederzeit eine vollständige Liste generieren, sie formatieren und sogar gezielt zurücksetzen. Dieses Miniprojekt ist damit nicht nur ein praktisches Werkzeug, sondern auch ein idealer Einstieg in zentrale Konzepte von \texttt{expl3} wie Sequenzen, Funktionsdefinitionen und saubere Trennung zwischen internem und öffentlichem Code.
+
+In den folgenden Abschnitten erfährst du Schritt für Schritt, wie das funktioniert: von der Definition der Befehle über die Datenspeicherung bis hin zur flexiblen Ausgabe im Dokument.
+
+\section*{1) Präambel vorbereiten}
+Kopiere den folgenden Code in die Präambel (vor \verb|\begin{document}|). Der Block nutzt nur die Standard-\verb|verbatim|-Umgebung, damit er ohne Zusatzpakete kompiliert. Die Zeilen sind so umbrochen, dass nichts über den Rand läuft.
+
+\begin{verbatim}
+% --- expl3 aktivieren ---
+\usepackage{expl3}
+
+% --- TODO-Miniprojekt (expl3) ---
+\ExplSyntaxOn
+
+% 1) Globale Sequenz für Einträge
+\seq_new:N \g_demo_todo_seq
+
+% 2) Hilfsfunktion: rechts anhängen
+\cs_new_protected:Npn \demo_todo_add:n #1
+{ \seq_gput_right:Nn \g_demo_todo_seq {#1} }
+
+% 3) Nutzerbefehle
+\newcommand{\todo}[1]
+{ \textbf{TODO:}~#1
+\ExplSyntaxOn\demo_todo_add:n\ExplSyntaxOff }
+
+\newcommand{\printtodos}
+{ \par\medskip\textbf{Gesammelte TODOs: }%
+\ExplSyntaxOn\seq_use:Nn \g_demo_todo_seq {; }\ExplSyntaxOff\par }
+
+\newcommand{\cleartodos}
+{ \ExplSyntaxOn\seq_gclear:N \g_demo_todo_seq\ExplSyntaxOff }
+
+\ExplSyntaxOff
+\end{verbatim}
+
+
+\section{Was wir bauen}
+\begin{itemize}
+\item \textbf{\texttt{\todo{...}}} – zeigt einen TODO-Hinweis direkt im Text und sammelt den Eintrag unsichtbar in einer Liste.
+\item \textbf{\texttt{\printtodos}} – druckt am Ende alle gesammelten TODOs in einer Zeile (durch Semikola getrennt).
+\item \textbf{\texttt{\cleartodos}} – leert die Liste (z.,B. zwischen zwei Beispielen).
+\end{itemize}
+
+\section{Schnellstart: \texttt{todo} in 3 Schritten}
+\textbf{1) Präambel vorbereiten.} (siehe oben Codeblock)
+
+\textbf{2) Im Text TODOs setzen.}
+\begin{verbatim}
+\todo{}
+\end{verbatim}
+
+Das bewirkt \emph{zwei Dinge}: (a) der Text \enquote{\textbf{TODO:} <dein Text>} wird \emph{hier} im Dokument ausgegeben; (b) der reine Eintrag \enquote{<dein Text>} wird \emph{unsichtbar} in einer Liste gespeichert.
+
+
+
+\textbf{3) Später gesammelt ausgeben.} Schreibe an die gewünschte Stelle (z.\,B. am Kapitelende):
+
+\begin{verbatim}
+
+\printtodos
+
+\end{verbatim}
+
+Dann wird eine Zeile \enquote{\textbf{Gesammelte TODOs:} ...} mit allen Einträgen (durch \enquote{; } getrennt) ausgegeben. Mit
+
+\begin{verbatim}
+
+\cleartodos
+
+\end{verbatim}
+
+setzt du die Liste zurück (praktisch für unabhängige Abschnitte).
+
+
+
+\section{So benutzt du es (mit Beispielausgaben)}
+
+\subsection*{Beispiel A: Zwei TODOs sammeln und drucken}
+\noindent (Wir leeren zuerst die Liste, damit das Beispiel sauber ist.)
+
+\begin{verbatim}
+\cleartodos
+\todo{Notation in §2 angleichen}
+\todo{Beweis von Lemma 3 überarbeiten}
+\printtodos
+\end{verbatim}
+
+\medskip
+\noindent \textbf{Was passiert?}
+\begin{itemize}
+\item Jede Zeile mit \verb|\todo{...}| druckt \enquote{\textbf{TODO:} ...} und legt den Text zusätzlich in der Sammelliste ab.
+\item \verb|\printtodos| druckt \enquote{\textbf{Gesammelte TODOs:} Notation in §2 angleichen; Beweis von Lemma 3 überarbeiten}.
+\end{itemize}
+
+\subsection*{Beispiel B: Liste zurücksetzen und neues Set sammeln}
+\begin{verbatim}
+\cleartodos
+\todo{Abbildungen konsistent beschriften}
+\todo{Literatur zu Kapitel 4 ergänzen}
+Aktuelle Anzahl gesammelter TODOs:
+\ExplSyntaxOn\int_eval:n{\seq_count:N \g_demo_todo_seq}\ExplSyntaxOff
+\printtodos
+\end{verbatim}
+
+\medskip
+\noindent \textbf{Was passiert?}
+\begin{itemize}
+\item Nach \verb|\cleartodos| ist die Liste leer (Zähler ergibt 0, danach 2).
+\item \verb|\printtodos| gibt die zwei neuen Einträge aus, getrennt durch Semikola.
+\end{itemize}
+
+\section{Befehlsreferenz (kurz und konkret)}
+\begin{itemize}
+\item \verb|\todo{}| – druckt \enquote{\textbf{TODO:} } an Ort und Stelle \emph{und} speichert \enquote{} intern in einer Liste.
+\item \verb|\printtodos| – druckt alle bisher gespeicherten Einträge in einer Zeile, getrennt durch \enquote{; }.
+\item \verb|\cleartodos| – leert die Liste vollständig.
+\end{itemize}
+\textit{Wichtig:} Innerhalb von \verb|\todo{...}| bitte \verb|\verb| nicht verwenden (\verb|\verb| ist in Makroargumenten verboten). Für Backslashes nutze z.,B. \verb|\texttt{\string\symbol}|.
+
+
+\textit{Wichtig:} Innerhalb von \texttt{\\todo\{...\}} bitte \verb|\verb| nicht verwenden (\verb|\verb| ist in Makroargumenten verboten). Für Backslashes nutze z.\,B. \texttt{\textbackslash symbol} oder \verb|\texttt{\string\symbol}|.
+
+
+
+\section{Anpassungen (optional)}
+
+Wenn du statt einer Zeile eine Liste mit Zeilenumbrüchen möchtest, füge in der Präambel hinzu:
+
+\begin{verbatim}
+
+\newcommand{\printtodoslist}{% jede TODO in neuer Zeile
+
+  \par\medskip\textbf{Gesammelte TODOs: }% 
+
+  \ExplSyntaxOn\seq_use:Nn \g_demo_todo_seq {\par}\ExplSyntaxOff\par}
+
+\end{verbatim}
+
+Dann verwendest du im Text \texttt{\\printtodoslist} statt \texttt{\\printtodos}.
+\section{Zeile-für-Zeile erklärt (internes Funktionsprinzip)}
+Im Folgenden erläutern wir jede Zeile des Präambel-Codes aus Abschnitt~\ref{chap:todo} im Detail. In den \emph{Labels} stehen nur beschreibende Stichworte; der tatsächliche Code steht jeweils im Fließtext, um Probleme mit beweglichen Argumenten zu vermeiden.
+
+\begin{description}
+
+  \item[Kommentar: expl3 aktivieren]
+  Code:
+  \[
+    \texttt{\string\usepackage\{expl3\}}
+  \]
+  \textbf{Erklärung:} Lädt die LaTeX3-Programmierschnittstelle. Ohne dieses Paket stehen Befehle wie \texttt{\string\seq\_new:N} oder \texttt{\string\cs\_new\_protected:Npn} nicht zur Verfügung.
+
+  \item[expl3-Syntax einschalten]
+  Code:
+  \[
+    \texttt{\string\ExplSyntaxOn}
+  \]
+  \textbf{Erklärung:} Schaltet in den \texttt{expl3}-Modus. Dadurch sind Unterstriche in Befehlsnamen erlaubt und die LaTeX3-Namenskonventionen (Datentyppräfixe, Suffixe wie \texttt{:N}, \texttt{:n} usw.) aktiv.
+
+  \item[Globale Sequenz anlegen]
+  Code:
+  \[
+    \texttt{\string\seq\_new:N \string\g\_demo\_todo\_seq}
+  \]
+  \textbf{Erklärung:}
+  \begin{itemize}
+    \item \texttt{seq} bezeichnet den Datentyp \emph{Sequenz} (geordnete Liste).
+    \item Präfix \texttt{g\_} bedeutet \emph{global} (über Gruppen/Umgebungen hinweg haltbar).
+    \item Suffix \texttt{:N} am Funktionsnamen zeigt: Das Argument ist der \emph{Name einer Steuersequenz} (hier \texttt{\string\g\_demo\_todo\_seq}).
+  \end{itemize}
+
+  \item[Hilfsfunktion deklarieren]
+  
+Code (gesamte Definition):
+\begin{verbatim}
+\cs_new_protected:Npn \demo_todo_add:n #1
+  { \seq_gput_right:Nn \g_demo_todo_seq {#1} }
+\end{verbatim}
+
+\textbf{Erklärung (Kopf):}
+\begin{itemize}
+  \item \verb|\cs_new_protected:| legt eine neue \emph{geschützte} (robuste) Funktion an.  
+        Geschützt bedeutet: Der Befehl wird in \enquote{beweglichen Argumenten} (z.\,B. in \verb|\section{...}|, \verb|\caption{...}| oder \verb|\item[...]|) nicht ungewollt expandiert.  
+        Das reduziert Fehler wie \enquote{Runaway argument} und sorgt dafür, dass der Befehl auch beim Schreiben in Hilfsdateien (\texttt{.aux}) korrekt behandelt wird.  
+        Technisch ist das vergleichbar mit einem \verb|\protected\def| in klassischem \LaTeX2e.
+  \item Die Suffixfolge \verb|:Npn| beschreibt die Art der Definition:
+    \begin{itemize}
+      \item \texttt{N}: erwartet den \emph{Namen} der neu anzulegenden Steuersequenz (\verb|\demo_todo_add:n|),
+      \item \texttt{p}: ein \emph{Parametertext} folgt (hier \verb|#1|),
+      \item \texttt{n}: der \emph{Funktionsrumpf} wird als unverarbeitetes Argument übernommen.
+    \end{itemize}
+  \item Der Funktionsname \verb|\demo_todo_add:n| enthält das Signatur-Suffix \texttt{:n}.  
+        Dieses gibt an, dass die Funktion genau ein Argument erwartet, das unverarbeitet (\enquote{n-Argument}) übernommen wird.
+  \item \verb|#1| ist das erste formale Argument im Parametertext, das an den Rumpf übergeben wird.
+\end{itemize}
+
+\textbf{Erklärung (Rumpf):}
+\begin{itemize}
+  \item \verb|\seq_gput_right:Nn| hängt ein Element \emph{global} (\texttt{g}) \emph{rechts} (am Ende) an eine Sequenz an.
+  \item \texttt{:Nn} bedeutet: Erstens der \emph{Name} der Sequenzvariable (\texttt{N}), zweitens der \emph{unverarbeitete} Inhalt (\texttt{n}), der angefügt wird.
+  \item \verb|\g_demo_todo_seq| ist die globale Sequenz, in der die TODO-Einträge gespeichert werden.
+\end{itemize}
+
+\textbf{Alternativen zu \texttt{\textbackslash cs\_new\_protected:} -- Überblick}
+
+\begin{itemize}
+  \item \verb|\cs_new:Npn| – ungeschützt (nicht robust), für interne Helfer gedacht.
+  \item \verb|\cs_new_protected:Npx| – geschützt, Body wird bei der Definition expandiert.
+  \item \verb|\cs_new:Nn| oder \verb|\cs_new_protected:Nn| – ohne expliziten Parametertext.
+  \item \verb|\cs_new_eq:NN| – Alias auf bestehende Funktion.
+  \item \verb|\cs_set...| – wie oben, überschreibt bestehende Funktion.
+\end{itemize}
+
+% ---- Detailerklärungen ----
+\paragraph{\texttt{\textbackslash cs\_new:Npn} – ungeschützt}
+\begin{itemize}
+  \item Legt eine neue Funktion ohne Robustheitsmantel an.
+  \item Vorteil: minimale Ausführungskosten.
+  \item Nachteil: in beweglichen Argumenten (z.\,B. \verb|\section{...}|) kann die Funktion expandieren und Fehler verursachen.
+\end{itemize}
+
+\paragraph{\texttt{\textbackslash cs\_new\_protected:Npx} – expandierter Body bei Definition}
+\begin{itemize}
+  \item Wie \verb|Npn|, aber der Body wird bei der Definition \emph{einmal expandiert}.
+  \item Nützlich, um Platzhalter oder Variablen gleich beim Anlegen zu ersetzen.
+\end{itemize}
+
+\begin{verbatim}
+\ExplSyntaxOn
+\tl_new:N \l_tmpa_tl
+\tl_set:Nn \l_tmpa_tl {ABC}
+
+\cs_new_protected:Npn \foo:n { \l_tmpa_tl } % Body unverändert
+\cs_new_protected:Npx \bar:n { \l_tmpa_tl } % Body expandiert
+
+\tl_set:Nn \l_tmpa_tl {XYZ}
+
+\foo:n {} % -> XYZ (aktueller Wert)
+\bar:n {} % -> ABC (Wert bei Definition)
+\ExplSyntaxOff
+\end{verbatim}
+
+\paragraph{\texttt{\textbackslash cs\_new:Nn} und \texttt{\textbackslash cs\_new\_protected:Nn}}
+\begin{itemize}
+  \item Wie die Varianten mit \texttt{p}, nur ohne expliziten Parametertext im Kopf.
+  \item Die Signatur (\texttt{:n}, \texttt{:nn}, …) im Funktionsnamen bestimmt Anzahl und Typ der Argumente.
+\end{itemize}
+
+\paragraph{\texttt{\textbackslash cs\_new\_eq:NN} – Alias erstellen}
+\begin{itemize}
+  \item Legt einen neuen Namen an, der exakt auf eine bestehende Funktion verweist.
+\end{itemize}
+
+\paragraph{\texttt{\textbackslash cs\_set...} – bestehende Definition überschreiben}
+\begin{itemize}
+  \item Entspricht den \texttt{\string\cs\_new...} Varianten, überschreibt aber vorhandene Funktionen.
+\end{itemize}
+
+  \item[Nutzerbefehl \texttt{\string\todo\{...\}}]
+  Code:
+  \[
+    \texttt{\string\newcommand\{\string\todo\}[1]\{ \string\textbf\{TODO:\}\string~\#1\string\ExplSyntaxOn\string\demo\_todo\_add:n\{\#1\}\string\ExplSyntaxOff \}}
+  \]
+  \textbf{Erklärung:}
+  \begin{itemize}
+    \item Klassischer LaTeX2e-Befehl mit einem Argument.
+    \item Gibt \enquote{\textbf{TODO:} <dein Text>} im Dokument aus.
+    \item Aktiviert kurz \texttt{expl3} im Inneren, ruft \texttt{\string\demo\_todo\_add:n\{\#1\}} auf und speichert so den Eintrag zusätzlich in der globalen Sequenz.
+  \end{itemize}
+
+  \item[Nutzerbefehl \texttt{\string\printtodos}]
+  Code:
+\begin{verbatim}
+\newcommand{\printtodos}{%
+  \par\medskip\textbf{Gesammelte TODOs: }%
+  \ExplSyntaxOn\seq_use:Nn \g_demo_todo_seq {; }\ExplSyntaxOff\par
+}
+\end{verbatim}
+  \textbf{Erklärung:}
+  \begin{itemize}
+    \item \texttt{\string\seq\_use:Nn \string\g\_demo\_todo\_seq \{; \}} gibt alle Elemente der Sequenz aus und trennt sie mit \enquote{; }.
+    \item \verb|\par| und \verb|\medskip| sorgen für sauberes Layout.
+
+  \end{itemize}
+
+  \item[Nutzerbefehl \texttt{\string\cleartodos}]
+  Code:
+  \[
+    \texttt{\string\newcommand\{\string\cleartodos\}\{\string\ExplSyntaxOn\string\seq\_gclear:N \string\g\_demo\_todo\_seq\string\ExplSyntaxOff\}}
+  \]
+  \textbf{Erklärung:} Leert die Sequenz vollständig mittels \texttt{\string\seq\_gclear:N}.
+
+  \item[expl3-Syntax ausschalten]
+  Code:
+  \[
+    \texttt{\string\ExplSyntaxOff}
+  \]
+  \textbf{Erklärung:} Beendet den \texttt{expl3}-Modus; ab hier gelten wieder die LaTeX2e-Namensregeln.
+
+\end{description}
+
+\medskip
+\noindent\textbf{Zusammenspiel:} \texttt{expl3} übernimmt die interne Datenhaltung (Sequenz, Hilfsfunktion), während LaTeX2e-Makros (\texttt{\string\todo}, \texttt{\string\printtodos}, \texttt{\string\cleartodos}) eine einfache Oberfläche für den Anwender bereitstellen.
+
+
+\section{Zeile‑für‑Zeile erklärt (internes Funktionsprinzip)}
+\begin{description}
+\item[Datenspeicher] \verb|\seq_new:N \g_demo_todo_seq| legt eine \emph{globale Sequenz} (Liste) an. Sequenzen sind in \texttt{expl3} geordnete Sammlungen von Elementen, vergleichbar mit Arrays in anderen Sprachen. Das Präfix \texttt{g\_} markiert die Variable als global: Sie behält ihren Inhalt auch außerhalb von Gruppen oder Umgebungen.
+
+\item[Hilfsfunktion] \verb|\demo_todo_add:n| ist eine selbst definierte Funktion, die intern \verb|\seq_gput_right:Nn| aufruft. Diese Funktion hängt einen neuen Wert rechts (am Ende) an die Sequenz an. Der Doppelpunkt in \texttt{:n} gibt den Argumenttyp an: \emph{n} = unverarbeitet übernehmen.
+
+\item[Nutzerbefehl \texttt{\string\todo\{...\}}] ist mit klassischem \verb|\newcommand| definiert. Er schreibt fett \enquote{TODO:} plus den Text in das Dokument und ruft innerhalb von \verb|\ExplSyntaxOn ... \ExplSyntaxOff| die Hilfsfunktion auf, um den Text zusätzlich in der Sequenz zu speichern.
+
+\item[Ausgabe \texttt{\string\printtodos}] nutzt \verb|\seq_use:Nn|, um alle Elemente der Sequenz auszugeben. Das zweite Argument \verb|{; }| ist der Trenner zwischen den Elementen (hier Semikolon und Leerzeichen).
+
+\item[Zurücksetzen \texttt{\string\cleartodos}] ruft \verb|\seq_gclear:N| auf, um alle Elemente aus der globalen Sequenz zu löschen. Danach ist die Liste wieder leer.
+\end{description}
+
+Jede dieser Zeilen zeigt typische \texttt{expl3}-Konzepte: Namenskonventionen (\texttt{g\_}, \texttt{l\_}), Datentyp-Präfixe (\texttt{seq}), Funktionssignaturen mit Argument-Spezifizierern (z.,B. \texttt{:n}) und den klaren Wechsel zwischen klassischem LaTeX2e- und \texttt{expl3}-Code mithilfe von \verb|\ExplSyntaxOn| und \verb|\ExplSyntaxOff|.
+
+
+
+
+\chapter{Was sind \enquote{Regex}? – Kurze Motivation}
+
+\enquote{Regex} (\emph{reguläre Ausdrücke}) sind Muster, mit denen man Textstellen findet/ersetzt. In \texttt{expl3} heißen die passenden Funktionen z.\,B. \verb|\regex_replace_all:nnN| (\enquote{ersetze alle Treffer}). Beispiel: ASCII‑Pfeile \verb|->| zu einem typografischen Pfeil normalisieren (als Idee, hier nur in \verb|verbatim| gezeigt):
+
+\begin{verbatim}
+
+\ExplSyntaxOn
+
+\tl_set:Nn \l_demo_tl { if x->y then y->z }
+
+\regex_replace_all:nnN { -> } { \textrightarrow{} } \l_demo_tl
+
+% \l_demo_tl enthält danach: "if x\textrightarrow{}y then y\textrightarrow{}z"
+
+\ExplSyntaxOff
+
+\end{verbatim}
+
+Solche Transformationen nutzt man z.\,B. zum \emph{Sanitizen} von Formeln, zum Erzeugen stabiler Labels oder zur Normalisierung von Eingaben.
+
+
+
+\chapter{Syntaxgrundlagen in \texttt{expl3}}
+
+\section{Namenskonventionen}
+
+\begin{itemize}
+
+  \item \verb|\l__name_tl|: lokale Variable; \verb|\g__name_tl|: globale Variable.
+
+  \item \verb|\prop_new:N \l__map_prop| legt eine Property‑Liste an; \verb|\tl_new:N| analog für Tokenlisten.
+
+  \item Funktionsdeklaration (Beispiel): \verb|\cs_new_protected:Npn \foo:nn #1#2 { ... }| (geschützt; erwartet zwei \texttt{:n}‑Argumente).
+
+\end{itemize}
+
+
+
+\section{Argument‑Spezifizierer (Auswahl)}
+
+\begin{description}
+
+  \item[\texttt{:n}] nimmt das Argument \emph{wörtlich} (keine Expansion).
+
+  \item[\texttt{:N}] erwartet einen \emph{Steuersequenznamen} (Variable/Funktionssteuersequenz).
+
+  \item[\texttt{:V}] nimmt den \emph{Wert} einer Variablen (z.\,B. Tokenliste) als Argument.
+
+  \item[\texttt{:x}] expandiert das Argument zuerst vollständig, dann wird das Ergebnis verwendet.
+
+  \item[\texttt{:c}] baut einen Steuersequenznamen \emph{aus Zeichen} (\enquote{csname}‑artig).
+
+\end{description}
+
+
+
+\section{Beispiel: Tokenlisten}
+
+\begin{verbatim}
+
+\ExplSyntaxOn
+
+\tl_new:N \l_demo_tl
+
+\tl_set:Nn \l_demo_tl { A + B }
+
+\tl_put_right:Nn \l_demo_tl { = C }
+
+% Ergebnis: "A + B = C"
+
+\ExplSyntaxOff
+
+\end{verbatim}
+
+
+
+\subsection*{Kurz erklärt}
+
+\begin{itemize}
+
+  \item \verb|\tl_new:N| legt eine Tokenliste an; \verb|\tl_set:Nn| weist Inhalt zu; \verb|\tl_put_right:Nn| hängt rechts an.
+
+  \item Ausgabe im Text: \verb|\tl_use:N \l_demo_tl| (in einem \verb|\ExplSyntaxOn|/\verb|Off|‑Block oder in einem Makro).
+
+\end{itemize}
+
+
+
+\section{Property‑Listen (assoziative Arrays)}
+
+\begin{verbatim}
+
+\ExplSyntaxOn
+
+\prop_new:N \l_demo_prop
+
+\prop_put:Nnn \l_demo_prop {Schluessel} {Wert}
+
+\prop_get:NnN \l_demo_prop {Schluessel} \l_tmpa_tl % -> \l_tmpa_tl = "Wert"
+
+\ExplSyntaxOff
+
+\end{verbatim}
+
+
+
+\section{Regex‑Ersetzungen}
+
+\begin{verbatim}
+
+\ExplSyntaxOn
+
+\tl_set:Nn \l_demo_tl { x + x + x }
+
+\regex_replace_all:nnN { x } { y } \l_demo_tl % -> "y + y + y"
+
+\ExplSyntaxOff
+
+\end{verbatim}
+
+
+
+\chapter{Expansion gezielt steuern}
+
+\section{\texorpdfstring{\texttt{\textbackslash exp\_args:Nx}}{\\exp\_args:Nx} in der Praxis}
+
+\begin{verbatim}
+
+\ExplSyntaxOn
+
+\cs_new:Npn \demo_add_prefix:n #1 { prefix_#1 }
+
+% dynamischen Namen bauen
+
+\exp_args:Nx \cs_if_exist:cTF { r@\demo_add_prefix:n {abc} }
+
+  { ... true ... }
+
+  { ... false ... }
+
+\ExplSyntaxOff
+
+\end{verbatim}
+
+Die \texttt{:x}‑Variante expandiert den Namensteil vor der Prüfung.
+
+
+
+\chapter{Vom Konzept zur Praxis}
+
+\section{Ziele eines Sanitizers (Konzeptuell)}
+
+\begin{itemize}
+
+  \item Mathe‑Formeln in robuste, nur‑ASCII‑Labels überführen (\enquote{sanitizen}).
+
+  \item Störzeichen (Leerzeichen, Größenkommandos, Ausrichtung) entfernen.
+
+  \item Ergebnis cachen, um Wiederholungen zu beschleunigen.
+
+\end{itemize}
+
+\noindent\textit{Hinweis:} Der komplette Sanitizer‑Code ist hier nicht geladen, um die Präambel schlank zu halten; die Regex‑Grundlagen oben sind jedoch die Bausteine dafür.
+
+
+
+\chapter{Kompilationshinweise}
+
+\begin{itemize}
+
+  \item Erfordert ein aktuelles LaTeX mit \texttt{expl3} (heute Standard in modernen TeX‑Distributionen).
+
+  \item Genutzte Pakete: \texttt{amsmath}, \texttt{amssymb}, \texttt{hyperref}, \texttt{csquotes}, \texttt{expl3}.
+
+  \item \verb|\verb| nicht in beweglichen Argumenten verwenden (z.\,B. \verb|\item[...]|); alternativ \verb|\texttt{...}|.
+
+\end{itemize}
+
+
+
+\end{document}

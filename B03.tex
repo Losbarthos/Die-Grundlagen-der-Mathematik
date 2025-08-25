@@ -71,12 +71,9 @@ Das Symbol \(\emptyset\) wird oft verwendet, um die leere Menge zu repräsentier
 
 
 \FormulaDefAuto[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}[Sei \(A\) eine Menge und \(P\) ein einstelliges Prädikat. Wir definieren:]
-\begin{remark}
+
 Hieraus gewinnen wir für alle \(x\) das Axiom:
-\[
-x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x).
-\]    
-\end{remark}
+\FormulaAxiomAuto[Aussonderung]{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}
 
 \FormulaThmAuto[Zur Eindeutigkeit]{ \forall x (x \in B \leftrightarrow P(x)), \forall x (x \in C \leftrightarrow P(x)) \vdash B = C }
 \begin{tabproof}
@@ -108,14 +105,11 @@ x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x).
 \FormulaAxiomAuto[Paarmenge]{ \forall A,B\;\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }
 
 \FormulaDefAuto[Paarmenge]{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}[Wir definieren für gegebene Mengen \(A\) und \(B\):]
-\begin{remark}
+
 Hieraus gewinnen wir für alle \(x\):
-\[
-x \in \{A,B\}
-\;\eqvdash\;
-(x = A \lor x = B).
-\]
-\end{remark}
+\FormulaAxiomAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}
+
+
 
 \FormulaDefAuto[Geordnetes Paar]{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}
 \begin{remark}
@@ -140,11 +134,11 @@ In Worten: \(A\) ist Teilmenge von \(B\).
 
 \FormulaAxiomAuto[Potenzmenge]{ \forall A\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }
 
-\FormulaDefAuto[Potenzmenge]{ \mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }[Für eine Menge \(A\) definieren wir:]
+\FormulaDefAuto[Potenzmenge]{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}[Für eine Menge \(A\) definieren wir:]
 \begin{remark}
 Hieraus ergibt sich für alle \(x\):
 \[
-x \in \powerset(A) 
+x \in \mathcal{P}(A) 
 \;\eqvdash\; 
 x \subseteq A.
 \]
@@ -228,6 +222,20 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstep{1,2}{ a \neq b }{ \rCI{3,5} }
 \end{tabproof}
 
+\FormulaThmAuto{A\subseteq C,\, B\subseteq C,\, z\in A\lor z\in B \vdash z\in C}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq C}{\rA}
+  \proofstepwidestar[2]{B \subseteq C}{\rA}
+  \proofstepwidestar[3]{z \in A \lor z \in B}{\rA}
+
+  \proofstepwide[1]{z \in A}{\rightarrow}{z \in C}%
+    {\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{1}}}
+  \proofstepwide[2]{z \in B}{\rightarrow}{z \in C}%
+    {\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{2}}}
+
+  \proofstepwidestar[1,2,3]{z \in C}%
+    {\FormulaRefAuto{P \rightarrow Q,\, R \rightarrow Q,\, P \lor R \vdash Q}{4,5,3}}
+\end{tabproofwide}
 \subsection{Ordnungsrelation}
 
 \FormulaThmAuto[Reflexivität von Teilmengen]{ A \subseteq A }
@@ -424,6 +432,14 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 \proofstepstar{}{x \in A \cap B \leftrightarrow x \in A \land x \in B}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}}}
 \end{tabproof}
 
+\FormulaThmAuto{x \in A, x\in B \vdash x \in A\cap B}
+\begin{tabproof}
+\proofstep{1}{x \in A}{\rA}
+\proofstep{2}{x \in B}{\rA}
+\proofstep{1,2}{x \in A\land x\in B}{\rAI{1,2}}
+\proofstep{1,2}{x \in A\cap B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{3}}
+\end{tabproof}
+
 \FormulaThmAuto{x \in (A \cap B) \cap C \eqvdash (x \in A \land x \in B) \land x \in C}
 \begin{tabproofwide}
   \proofstepwide{x \in (A \cap B)}{\leftrightarrow}{x \in A \land x \in B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
@@ -467,681 +483,1199 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 \end{tabproofwide}
 
 
+\FormulaThmAuto{A \cap B \subseteq A}
+\begin{tabproof}
+  \proofstep{1}{x \in A \cap B}{\rA}
+  \proofstep{1}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}}}
+  \proofstep{}{A \cap B \subseteq A}{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}}}
+\end{tabproof}
+
+\FormulaThmAuto{A \cap B \subseteq B}
+\begin{tabproof}
+  \proofstep{1}{x \in A \cap B}{\rA}
+  \proofstep{1}{x \in B}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}}}
+  \proofstep{}{A \cap B \subseteq B}{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}}}
+\end{tabproof}
+
+\FormulaThmAuto{A \subseteq B \vdash A \cap C \subseteq B \cap C}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{x \in A \cap C}{\rA}
+  \proofstep{2}{x \in A}{\FormulaRefAuto{x \in A \cap B \vdash x \in A}{2}}
+  \proofstep{2}{x \in C}{\FormulaRefAuto{x \in A \cap B \vdash x \in B}{2}}
+  \proofstep{1,2}{x \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{1,3}}
+  \proofstep{1,2}{x \in B \cap C}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{5,4}}}
+  \proofstep{1}{A \cap C \subseteq B \cap C}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,6}}}}
+\end{tabproof}
 
 
-\begin{theorem}[ ]
-\label{AcaBSubseteqA}
-\[A \cap B \subseteq A\]
-\end{theorem}
-\begin{proof}
-    \[
-        \begin{array}{llll}
-		1 & (1) & x \in A \cap B & \rA \\
-		1 & (2) & x \in A & \rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}} \\
-		& (3) & A \cap B \subseteq A & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaThmAuto{A \subseteq B \eqvdash A \cap B = A}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{A \subseteq B}{\rA}
+    \proofstepwidestar[]{A \cap B \subseteq A}{\FormulaRefAuto{A \cap B \subseteq A}}
+    \proofstepwide{A}{=}{A \cap A}{\FormulaRefAuto{A = A \cap A}}
+    \proofstepwide[1]{}{\subseteq}{A \cap B}{\FormulaRefAuto{A \subseteq B \vdash A \cap C \subseteq B \cap C}{1}}
+    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rChain{3,4}}
+    \proofstepwide[1]{A \cap B}{=}{A}{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{\rAI{2,5}}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{A \cap B = A}{\rA}
+    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rAEb{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{1}}}
+    \proofstepwide[1]{A \cap B}{\subseteq}{B}{\FormulaRefAuto{A \cap B \subseteq B}}
+    \proofstepwide[1]{A}{\subseteq}{B}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{2,3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmAuto{B \subseteq A \eqvdash A \cap B = B}
+\begin{tabproof}
+  \proofstep{}{B \subseteq A \leftrightarrow B \cap A = B}{\FormulaRefAuto{A \subseteq B \eqvdash A \cap B = A}}
+  \proofstep{}{B \cap A = A \cap B}{\FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{B \subseteq A \leftrightarrow A \cap B = B}{\rLRS{2,1}}
+\end{tabproof}
+
+\FormulaThmAuto{\emptyset \cap A = \emptyset}
+\begin{tabproof}
+  \proofstep{}{ \emptyset \subseteq A }{ \rUE{\FormulaRefAuto{\forall A\,(\emptyset \subseteq A)} } }
+  \proofstep{}{ \emptyset \cap A = \emptyset }{ \FormulaRefAuto{ A \subseteq B \eqvdash A \cap B = A }{1} }
+\end{tabproof}
 
 
-\begin{theorem}[ ]
-\label{AcaBSubseteqB}
-\[A \cap B \subseteq B\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-	   1 & (1) & x \in A \cap B & \rA \\
-	   1 & (2) & x \in B & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B := \{ x \in A \mid x \in B \}}{1}}} \\
-	    & (3) & A \cap B \subseteq B & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaThmAuto{A \cap \emptyset = \emptyset}
+\begin{tabproof}
+  \proofstep{}{ \emptyset \subseteq A }{ \rUE{\FormulaRefAuto{\forall A\,(\emptyset \subseteq A)} } }
+  \proofstep{}{ A \cap \emptyset = \emptyset }{ \FormulaRefAuto{ B \subseteq A \eqvdash A \cap B = B }{1} }
+\end{tabproof}
 
 
+\FormulaThmAuto{A \cap B = \emptyset,\ x \in A \vdash x \notin B}
+\begin{tabproof}
+  \proofstep{1}{A \cap B = \emptyset}{\rA}
+  \proofstep{2}{x \in A}{\rA}
+  \proofstep{3}{x \in B}{\rA}
+  \proofstep{2,3}{x \in A \cap B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,3}}}
+  \proofstep{1,2,3}{x \in \emptyset}{\rIE{1,4}}
+  \proofstep{}{x \notin \emptyset}{\rUE{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}}}
+  \proofstep{}{ \bot }{\rBI{5,6}}
+  \proofstep{1,2}{x \notin B}{\rCE{1,2}}
+\end{tabproof}
 
-\begin{theorem}[ ]
-\label{ASubseteqBImpAcaCSubseteqBcaC}
-\[A \subseteq B \vdash A \cap C \subseteq B\cap C\]
-\end{theorem}
-\begin{proof}
-    \[
-        \begin{array}{llll}
-	   1 & (1) & A \subseteq B & \rA \\
-          2 & (2) & x\in A\cap C & \rA \\
-          2 & (3) & x\in A & \FormulaRefAuto{x \in A \cap B \vdash x \in A}{2}  \\
-          2 & (4) & x\in C & \FormulaRefAuto{x \in A \cap B \vdash x \in B}{2} \\
-          1,2 & (5) & x\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{1,3} \\
-          1,2 & (6) & x\in B\cap C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{5,4}}  \\
-          1 & (7) & A\cap C\subseteq B\cap C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{2,6}}} \\
-        \end{array}
-    \]
-\end{proof}
+\FormulaThmAuto{A \cap B = \emptyset,\ x \in B \vdash x \notin A}
+\begin{tabproof}
+  \proofstep{1}{A \cap B = \emptyset}{\rA}
+  \proofstep{2}{x \in B}{\rA}
+  \proofstep{}{B \cap A = A \cap B}{\FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{1}{B \cap A = \emptyset}{\rIE{1,3}}
+  \proofstep{1,2}{x \notin A}{\FormulaRefAuto{A \cap B = \emptyset,\ x \in A \vdash x \notin B}{4,2}}
+\end{tabproof}
 
-
-
-\begin{theorem}[ ]
-\label{ASubseteqBEqvAcaBEqualsA}
-\[A \subseteq B \eqvdash A \cap B = A\]
-\end{theorem}
-\begin{proof}
-    \(\vdash:\)
-    \[
-        \begin{array}{lllcll}
-	   1 & (1) & \multicolumn{3}{l}{A \subseteq B} & \rA \\
-	    & (2) & \multicolumn{3}{l}{A\cap B\subseteq A} & \AcaBSubseteqA{} \\
-	      & (3) & A&=&A\cap A & \FormulaRefAuto{A = A \cap A}{} \\		
-	   1 & (4) & &\subseteq &A\cap B & \ASubseteqBImpAcaCSubseteqBcaC{1} \\	
-          1 & (5) & A&\subseteq &A\cap B & \rChain{3,4} \\	
-          1 & (6) & A\cap B&=&A & \FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{\rAI{2,5}} \\	
-        \end{array}
-    \]
-    \(\dashv:\)
-    \[
-        \begin{array}{llll}
-	   1 & (1) & A\cap B = A & \rA \\
-	   1 & (2) & A\subseteq A\cap B & \rAEb{\FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{1}} \\			
-	   1 & (3) & A\cap B\subseteq B & \AcaBSubseteqB{} \\	
-	   1 & (4) & A\subseteq B & \FormulaRefAuto{ A \subseteq B, B \subseteq C \vdash A \subseteq C }{2,3} \\
-	\end{array}
-    \]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{BSubseteqAEqvAcaBEqualsB}
-\[B \subseteq A \eqvdash A \cap B = B\]
-\end{theorem}
-\begin{proof}
-    \[
-        \begin{array}{llll}
-	      & (1) & B \subseteq A\leftrightarrow B\cap A = B & \ASubseteqBEqvAcaBEqualsA{} \\
-	    & (2) & B\cap A=A\cap B & \FormulaRefAuto{A \cap B = B \cap A}{} \\
-            & (3) & B \subseteq A\leftrightarrow A\cap B = B & \rLRS{2,1} \\
-        \end{array}
-    \]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{EmptysetcaAEqualsEmptyset}
-\[\emptyset\cap A = \emptyset\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-	   & (1) & \emptyset\subseteq A & \rUE{\FormulaRefAuto{\forall A\,(\emptyset\subseteq A)}{}} \\
-	   & (2) & \emptyset\cap A  = \emptyset & \ASubseteqBEqvAcaBEqualsA{1} \\
-	\end{array}
-    \]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{AcaEmptysetEqualsEmptyset}
-\[A\cap\emptyset = \emptyset\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-	   & (1) & \emptyset\subseteq A & \rUE{\FormulaRefAuto{\forall A\,(\emptyset\subseteq A)}{}} \\
-	   & (2) & A\cap\emptyset = \emptyset & \BSubseteqAEqvAcaBEqualsB{1} \\
-	\end{array}
-    \]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{AcaBEqualsEmptysetwxInAImpxNotinB}
-\[A\cap B = \emptyset, x\in A\vdash x\not\in B\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-            1       & (1) & A\cap B = \emptyset & \rA \\
-	    2       & (2) & x\in A & \rA \\
-            3       & (3) & x\in B & \rA \\
-            2,3     & (4) & x\in A\cap B & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,3}} \\
-            1,2,3   & (5) & x\in \emptyset & \rIE{1,4} \\
-                    & (6) & x\not\in \emptyset & \rUE{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}} \\
-                    & (7) & \bot & \rBI{5,6} \\           
-            1,2     & (8) & x\not\in B & \rCE{1,2} \\  
-	\end{array}
-    \]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{AcaBEqualsEmptysetwxInBImpxNotinA}
-\[A\cap B = \emptyset, x\in B\vdash x\not\in A\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-            1 & (1) & A\cap B = \emptyset & \rA \\
-	    2 & (2) & x\in B & \rA \\
-              & (3) & B \cap A = A \cap B & \FormulaRefAuto{A \cap B = B \cap A}{} \\
-            1 & (4) & B \cap A = \emptyset & \rIE{1,3} \\
-            1,2 & (5) & x\not\in B & \AcaBEqualsEmptysetwxInAImpxNotinB{5,2} \\
-	\end{array}
-    \]
-\end{proof}
 
 \subsection{Der unendliche Schnitt}
 
 In diesem Abschnitt sei \( P \) ein Prädikat, das einer Menge \( A \) eine Eigenschaft zuweist.
 
-\begin{tempdefinition}[Universelle Schnittmenge mit Einschränkung auf \( B \)]
-\label{DefBigcapLbAMidPLpARpRbMidSubB}
-\[
-\forall B\Bigl(I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)
-\]    
-\end{tempdefinition}
+\FormulaThmAuto{P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \subseteq \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}
+\begin{notation*}
+Wir bezeichnen mit \( I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \) und entsprechend \( I_C := \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+  \proofstep{1}{P(C)}{\rA}
+  \proofstep{2}{x \in I_B}{\rA}
+  \proofstep{2}{\forall A (P(A) \rightarrow x \in A)}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{2}}}
+  \proofstep{2}{P(C) \rightarrow x \in C}{\rUE{4}}
+  \proofstep{1,2}{x \in C}{\rRE{1,4}}
+  \proofstep{1,2}{x \in I_C}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rAI{5,3}}}
+  \proofstep{1}{I_B \subseteq I_C}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,6}}}}
+\end{tabproof}
+
+\FormulaThmAuto{P(B),\, P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} = \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}
+\begin{notation*}
+Wir bezeichnen mit \( I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \) und entsprechend \( I_C := \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+  \proofstep{1}{P(B)}{\rA}
+  \proofstep{2}{P(C)}{\rA}
+  \proofstep{2}{I_B \subseteq I_C}{\FormulaRefAuto{P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \subseteq \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}{2}}
+  \proofstep{1}{I_C \subseteq I_B}{\FormulaRefAuto{P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \subseteq \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}{1}}
+  \proofstep{1,2}{I_B = I_C}{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{3,4}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists C\forall B\Bigl(P(B)\rightarrow C = \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)}
+\begin{notation*}
+Wir bezeichnen mit \( I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \) und entsprechend \( I_D := \{ x \in D \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproofsplit}
+  \proofpart{Fall 1: \( \exists D(P(D)) \vdash \exists C\forall B\bigl(P(B)\rightarrow C = I_B\bigr) \)}
+    \proofstep{1}{\exists D(P(D))}{\rA}
+    \proofstep{2}{P(D)}{\rA}
+    \proofstep{3}{P(B)}{\rA}
+    \proofstep{2,3}{I_D = I_B}{\FormulaRefAuto{P(B),\, P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} = \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}}
+    \proofstep{2}{\exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rEI{\rUI{\rRI{3,4}}}}
+  \closeproofpart
+
+  \proofpart{Fall 2: \( \forall D(\neg P(D)) \vdash \exists C\forall B\bigl(P(B)\rightarrow C = I_B\bigr) \)}
+    \proofstep{1}{\forall D(\neg P(D))}{\rA}
+    \proofstep{1}{\forall B\,\bigl(\neg P(B) \lor C = I_B\bigr)}{\FormulaRefAuto{\forall x(F(x)) \lor \forall x(G(x)) \vdash \forall x(F(x) \lor G(x))}}
+    \proofstep{1}{\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rLRS{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{}, 2}}
+    \proofstep{1}{\exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rEI{3}}
+  \closeproofpart
+
+  \proofpart{Fallunterscheidung über das klassische Prinzip \( P \lor \neg P \)}
+    \proofstep{}{ \exists D(P(D)) \lor \forall D(\neg P(D)) }{\rLRS{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg \exists x(P(x))}{}, \FormulaRefAuto{P \lor \neg P}}}
+    \proofstep{}{ \exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr) }{\rOE{1,1,5,1,4}}
+  \closeproofpart
+\end{tabproofsplit}
 
 
-\begin{lemma}[ ]
-\label{PLpCRpImpISubBSubseteqISubC}
-\[P(C)\vdash I_B \subseteq I_C\]
-\end{lemma}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & P(C) & \rA \\				
-		2 & (2) & x\in I_B & \rA \\
-		2 & (3) & \forall P(A)(x\in A) & \rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\DefBigcapLbAMidPLpARpRbMidSubB{2}}} \\	
-		2 & (4) & P(C)\rightarrow x\in C & \rUE{3} \\
-		1, 2 & (5) & x\in C & \rRE{1,4} \\
-		1, 2 & (6) & x\in I_C & \DefBigcapLbAMidPLpARpRbMidSubB{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rAI{5,3}}} \\	
-		2 & (7) &  I_B\subseteq I_C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{2,6}}} \\			   
-	\end{array}
-	\]
-\end{proof}
+\FormulaThmAuto{
+  \begin{aligned}
+    &P(B_0),\;
+    \forall B\Bigl(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr),\\
+    &\forall B\Bigl(P(B)\rightarrow D= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)
+    \vdash C=D
+  \end{aligned}
+}
+\begin{notation*}
+Wir bezeichnen mit \( I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+    \proofstep{1}{\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\rA}
+    \proofstep{2}{\forall B\bigl(P(B)\rightarrow D=I_B\bigr)}{\rA}
+    \proofstep{3}{P(B_0)}{\rA}
+    \proofstep{1}{P(B_0) \rightarrow C=I_{B_0}}{\rUE{1}}
+    \proofstep{1,3}{C = I_{B_0}}{\rRE{3,4}}
+    \proofstep{2}{P(B_0) \rightarrow D=I_{B_0}}{\rUE{2}}
+    \proofstep{2,3}{D = I_{B_0}}{\rRE{3,6}}
+    \proofstep{1,2,3}{C = D}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{5,7}}
+\end{tabproof}
 
 
-\begin{lemma}[ ]
-\label{PLpBRpwPLpCRpImpISubBEqualsISubC}
-\[P(B),P(C)\vdash I_B = I_C\]
-\end{lemma}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) &  P(B) & \rA \\	
-		2 & (2) &  P(C) & \rA \\		
-            2 & (3) & I_B\subseteq I_C & \PLpCRpImpISubBSubseteqISubC{2} \\			
-            1 & (4) & I_C\subseteq I_C & \PLpCRpImpISubBSubseteqISubC{1} \\			
-            1,2 & (5) & I_B=I_C & \FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{3,4} \\				
-	\end{array}
-	\]
-\end{proof}
+\FormulaThmAuto{P(D)\vdash \exists! C\forall B(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \})}
+\begin{notation*}
+Es sei \( I_B := \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+  \proofstep{}{ \exists C\forall B\bigl(P(B)\rightarrow C=I_B\bigr) }{ \FormulaRefAuto{\exists C\forall B\Bigl(P(B)\rightarrow C = \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)} }
+  \proofstep{2}{\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\rA}
+  \proofstep{3}{\forall B\bigl(P(B)\rightarrow D=I_B\bigr)}{\rA}
+  \proofstep{4}{P(D)}{\rA}
+  \proofstep{2,3,4}{C = D}{\FormulaRefAuto{P(B_0),\forall B\bigl(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\bigr),\, \forall B\bigl(P(B)\rightarrow D= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\bigr) \vdash C=D}{4,2,3}}
+  \proofstep{4}{\exists! C\,\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\UEI{1,2,3,5}}
+\end{tabproof}
 
-\begin{lemma}[ ]
-\label{ExDLpPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp}
-\[
-\exists D(P(D)) \vdash \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-\]
-\begin{proof}
-\[
-\begin{array}{lllll}
-1   & (1)  & P(B) & \rA \\
-2   & (2)  & \exists D\,P(D) & \rA \\
-3   & (3)  & P(D) & \rA \\
-1,3  & (4)  & I_D = I_B & \PLpBRpwPLpCRpImpISubBEqualsISubC{1,3} \\
-3   & (5)  & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \rEI{\rUI{\rRI{1,4}}} \\
-2   & (6)  & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \rEE{2,3,5} \\
-\end{array}
-\]
-\end{proof}
-\end{lemma}
-
-\begin{lemma}[ ]
-\label{FaDLpnPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp}
-\[
-\forall D(\neg P(D)) \vdash \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-\]
-\begin{proof}
-\[
-\begin{array}{lllll}
-1   & (1)  & \forall D(\neg P(D)) & \rA \\
-1   & (2)  & \forall B \Bigl(\neg P(B)\lor C=I_B\Bigr)
-          & \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))}         ChatGPT fragen{1} \\
-1   & (3)  & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \rLRS{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{},2} \\
-1   & (4) & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \rEI{3} \\
-\end{array}
-\]
-\end{proof}
-\end{lemma}
+\FormulaDefAuto[Der unendliche Schnitt]{\exists A\,P(A)\rightarrow \bigcap_{P(B)} B := \iota C\,\forall D\Bigl(P(D)\rightarrow C = \{ x \in D \mid \forall A (P(A)\rightarrow x \in A) \}\Bigr)}
 
 
-\begin{lemma}[ ]
-\label{PLpDRpImpExCFaBLpPLpBRpToCEqualsLbxInBMidFaALpPLpARpToxInARpRb}
-\[
-\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-\]
-\end{lemma}
+\FormulaThmAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D (P(D) \rightarrow x \in D) \}}
+\begin{notation*}
+Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A) \} \) und entsprechend \( I_D := \{ x \in D \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+  \proofstep{1}{P(A)}{\rA}
+  \proofstep{1}{\exists M(P(M))}{\rEI{1}}
+  \proofstep{1}{\forall D\Bigl(P(D) \rightarrow \bigcap_{P(B)} B = I_D\Bigr)}{\FormulaRefAuto{\exists A\,P(A)\rightarrow \bigcap_{P(B)} B := \iota C\,\forall D\bigl(P(D)\rightarrow C = \{ x \in D \mid \forall A (P(A)\rightarrow x \in A) \}\bigr)}{2}}
+  \proofstep{1}{P(A)\rightarrow \bigcap_{P(B)} B = I_A}{\rUE{3}}
+  \proofstep{1}{\bigcap_{P(B)} B = I_A}{\rRE{4,1}}
+\end{tabproof}
 
-\begin{proof}
-\[
-\begin{array}{llll}
-        & (1)  & \exists D(P(D))\lor\forall D(\neg P(D)) 
-          & \rLRS{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg\exists x (P(x))}{},\FormulaRefAuto{P \lor \neg P}} \\
-    \multicolumn{4}{l}{\quad \textbf{Fall 1:} \quad \exists D(P(D))\vdash\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)} \\[1ex]
-    \quad 2   & (2)  & \exists D(P(D)) 
-          & \rA \\
-    \quad 2   & (3)  & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) 
-          & \ExDLpPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp{2} \\
-    \multicolumn{4}{l}{\quad \textbf{Fall 2:} \quad \forall D(\neg P(D))\vdash\exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)} \\
-    \quad 4   & (4)  & \forall D(\neg P(D))
-          & \rA \\
-    \quad 4   & (5)  & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \FaDLpnPLpDRpRpImpExCFaBLpPLpBRpToCEqualsISubBRp{4} \\
-        & (6) & \exists C\,\forall B\,\Bigl(P(B)\rightarrow C=I_B\Bigr)
-          & \rOE{1,2,3,4,5} \\
-\end{array}
-\]
-\end{proof}
+\FormulaThmAuto{P(A) \vdash x \in \bigcap_{P(B)} B\leftrightarrow x \in \{\,x \in A \mid \forall D\,(P(D) \rightarrow x \in D)\,\}}
+\begin{notation*}
+Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A) \} \).
+\end{notation*}
+\begin{tabproof}
+  \proofstep{1}{P(A)}{\rA}
+  \proofstep{1}{x\in \bigcap_{P(B)} B\leftrightarrow x\in I_A}{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D\, (P(D) \rightarrow x \in D) \}}{1}}}}
+\end{tabproof}
 
-\begin{lemma}[ ]
-\label{PLpBSubZeroRpwFaBLpPLpBRpToCEqualsISubBRpwFaBLpPLpBRpToDEqualsISubBRpImpCEqualsD}
-\[
-P(B_0),\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr),\; \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr)\vdash C=D
-\]
-\end{lemma}
-\begin{proof}
-% Wir führen ein beliebiges Element B_0 ein, für das P(B_0) gilt.
-\[
-\begin{array}{llll}
-1 & (1) & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \rA \\
-2 & (2) & \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr) & \rA \\
-3 & (3) & P(B_0) & \rA \\
-1 & (4) & P(B_0)\rightarrow C=I_{B_0} & \rUE{1} \\
-1,3 & (5) & C=I_{B_0} & \rRE{3,4} \\
-2 & (6) & P(B_0)\rightarrow D=I_{B_0} & \rUE{2} \\
-2,3 & (7) & D=I_{B_0} & \rRE{3,6} \\
-1,2,3 & (8) & C=D & \FormulaRefAuto{a = b,\, c = b \vdash a = c}{5,7} \\
-\end{array}
-\]
-\end{proof}
+\FormulaThmAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}
+\begin{notation*}
+Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A) \} \).    
+\end{notation*}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{P(A)}{\rA}
+  \proofstepwidestar[2]{\forall C\, (P(C)\rightarrow x\in C)}{\rA}
+  \proofstepwidestar[]{\forall C\, (P(C)\rightarrow x\in C) \rightarrow x\in A}{\rRI{2,\FormulaRefAuto{P(a), \forall x\, (P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}}}
+  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{x\in I_A}{\FormulaRefAuto{P(A) \vdash x \in \bigcap_{P(B)} B\leftrightarrow x \in \{\,x \in A \mid \forall D\,(P(D) \rightarrow x \in D)\,\}}{1}}
 
+  % ---- hier die aufgesplittete Zeile (2 Zeilen) ----
+  \proofstepwide[1]{}{\leftrightarrow}{x\in A}{\multirow{2}{*}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{4}}}
+  \proofstepwide*{}{\land}{\forall C\, (P(C)\rightarrow x\in C)}{}
+  % --------------------------------------------------
 
-\begin{theorem}[ ]
-\label{PLpDRpImpExonlyoneCFaBLpPLpBRpToCEqualsISubBRp}
-\[P(D)\vdash \exists! C\forall B(P(B)\rightarrow C=I_B)\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
- & (1) & \exists C\forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \PLpDRpImpExCFaBLpPLpBRpToCEqualsLbxInBMidFaALpPLpARpToxInARpRb{} \\	
-2 & (2) & \forall B\Bigl(P(B)\rightarrow C=I_B\Bigr) & \rA \\
-3 & (3) & \forall B\Bigl(P(B)\rightarrow D=I_B\Bigr) & \rA \\
-4 & (4) & P(D) & \rA \\
-2,3,4 & (5) & C=D & \PLpBSubZeroRpwFaBLpPLpBRpToCEqualsISubBRpwFaBLpPLpBRpToDEqualsISubBRpImpCEqualsD{4,2,3} \\
-4 & (6) & \exists! C\forall B(P(B)\rightarrow C=I_B) & \UEI{1,2,3,5} \\
-\end{array}
-\]
-\end{proof}
+  \proofstepwide[1]{}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{3}}
+  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\rChain{4,6}}
+\end{tabproofwide}
 
-
-\begin{definition}[Der unendliche Schnitt]
-\label{DefBigcapSubLbPLpARpRbA}
-\[\exists A P(A)\rightarrow \bigcap_{P(B)} B:= \iota C\forall D(P(D)\rightarrow C=I_D)\]
-\end{definition}
-
-
-\begin{theorem}[ ]
-\label{PLpARpImpBigcapSubLbPLpBRpRbBEqualsISubA}
-\[P(A)\vdash \bigcap_{P(B)} B = I_A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
-1 & (1) & P(A)  & \rA \\	
-1 & (2) & \exists M(P(M)) & \rEI{1}  \\	
-1 & (3) & \forall D\Bigr(P(D)\rightarrow \bigcap_{P(B)} B=I_D\Bigl)  & \DefBigcapSubLbPLpARpRbA{2}  \\	
-1 & (4) & P(A)\rightarrow \bigcap_{P(B)} B=I_A  & \rUE{3}  \\
-1 & (5) & \bigcap_{P(B)} B=I_A  & \rRE{4,1}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{PLpARpImpxInBigcapSubLbPLpBRpRbBLrFaCLpPLpCRpToxInCRp}
-\[P(A)\vdash x\in \bigcap_{P(B)} B \leftrightarrow \forall C(P(C)\rightarrow x\in C)\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
-1 & (1) & \multicolumn{3}{l}{P(A)}  & \rA \\
-2 & (2) & \multicolumn{3}{l}{\forall C(P(C)\rightarrow x\in C)}  & \rA \\
- & (3) & \multicolumn{3}{l}{\forall C(P(C)\rightarrow x\in C)\rightarrow x\in A}  & \rRI{2,\FormulaRefAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}} \\
-1 & (4) & x\in \bigcap_{P(B)} B &\leftrightarrow& x\in I_A  & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\PLpARpImpBigcapSubLbPLpBRpRbBEqualsISubA{1}}} \\
-1 & (5) &  &\leftrightarrow& x\in A\land \forall C(P(C)\rightarrow x\in C)  & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rIE{\rUE{\DefBigcapLbAMidPLpARpRbMidSubB{}},4}}  \\
-1 & (6) &  &\leftrightarrow& \forall C(P(C)\rightarrow x\in C)  & \FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{3} \\
-1 & (7) & x\in \bigcap_{P(B)} B &\leftrightarrow& \forall C(P(C)\rightarrow x\in C)  & \rChain{4,6} \\
-\end{array}
-\]
-\end{proof}
-
-
-
-
-\label{PLpCRpImpBigcapSubLbPLpARpRbASubseteqC}
-\begin{theorem}[\(P(C)\vdash \bigcap_{P(A)} A\subseteq C\)]
-\end{theorem}
-
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & P(C) & \rA \\
-		2 & (2) & x\in\bigcap_{P(A)} A & \rA \\
-		2 & (3) & \forall A(P(A)\rightarrow x\in A) & \PLpARpImpxInBigcapSubLbPLpBRpRbBLrFaCLpPLpCRpToxInCRp{2} \\
-		1,2 & (4) & x\in C & \FormulaRefAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}{1,3} \\		
-		1 & (5) & \forall x(x\in\bigcap_{P(A)} A\rightarrow x\in C) & \rUI{\rRI{2,4}} \\	
-		1 & (6) & \bigcap_{P(A)} A\subseteq  C & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{5} \\
-	\end{array}
-	\]
-\end{proof}
-
+\FormulaThmAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}
+\begin{tabproof}
+  \proofstep{1}{P(C)}{\rA}
+  \proofstep{2}{x \in \bigcap_{P(A)} A}{\rA}
+  \proofstep{1,2}{\forall A\,\bigl(P(A)\rightarrow x\in A\bigr)}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{\FormulaRefAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{1},\,2}}
+  \proofstep{1,2}{x \in C}{\FormulaRefAuto{P(a), \forall x\,\bigl(P(x) \rightarrow Q(x)\bigr) \vdash Q(a)}{1,3}}
+  \proofstep{1}{\forall x\,\bigl(x\in \bigcap_{P(A)} A \rightarrow x\in C\bigr)}{\rUI{\rRI{2,4}}}
+  \proofstep{1}{\bigcap_{P(A)} A \subseteq C}{\FormulaRefAuto{A \subseteq B := \forall x\,\bigl(x\in A \rightarrow x\in B\bigr)}{5}}
+\end{tabproof}
 
 
 \section{Eigenschaften der Paarmenge}
 
-\begin{theorem}[ ]
-\label{xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb}
-\[x\not\in \{a,b\}\eqvdash x\neq a\land x\neq b\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		& (1) & x\not\in \{a,b\}&\leftrightarrow& \neg(x=a\lor x=b) & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)} \\
-        & (2) & &\leftrightarrow& x\neq a\land x\neq b & \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{1} \\
-	\end{array}
-	\]	
-\end{proof}
+\FormulaThmAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}
+\begin{tabproofwide}
+  \proofstepwide{x \notin \{a,b\}}{\leftrightarrow}{\neg(x = a \lor x = b)}%
+    {\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}}
+  \proofstepwide{}{\leftrightarrow}{x \neq a \land x \neq b}%
+    {\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{1}}
+  \proofstepwide{x \notin \{a,b\}}{\leftrightarrow}{x \neq a \land x \neq b}%
+    {\rChain{1,2}}
+\end{tabproofwide}
+
+\FormulaThmAuto{a \in \{a,b\}}
+\begin{tabproof}
+  \proofstep{}{a = a}{\rIE{}}
+  \proofstep{}{a = a \lor a = b}{\rOIa{1}}
+  \proofstep{}{a \in \{a,b\}}{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{b \in \{a,b\}}
+\begin{tabproof}
+  \proofstep{}{b = b}{\rIE{}}
+  \proofstep{}{b = a \lor b = b}{\rOIb{1}}
+  \proofstep{}{b \in \{a,b\}}{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{\{a,b\} = \{b,a\}}
+\begin{tabproofwide}
+  \proofstepwide{x \in \{a,b\}}{\leftrightarrow}{x = a \lor x = b}%
+    {\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{}}
+  \proofstepwide{}{\leftrightarrow}{x = b \lor x = a}%
+    {\FormulaRefAuto{P \lor Q \vdash Q \lor P}{1}}
+  \proofstepwide{}{\leftrightarrow}{x \in \{b,a\}}%
+    {\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{2}}
+  \proofstepwide{x \in \{a,b\}}{\leftrightarrow}{x \in \{b,a\}}%
+    {\rChain{1,3}}
+  \proofstepwide{\{a,b\}}{=}{\{b,a\}}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{\{a,b\} \neq \emptyset}
+\begin{tabproof}
+  \proofstep{}{a \in \{a,b\}}{\FormulaRefAuto{a \in \{a,b\}}{}}
+  \proofstep{}{\{a,b\} \neq \emptyset}{\FormulaRefAuto{\exists x\,(x \in S) \vdash S \neq \emptyset}{1}}
+\end{tabproof}
+
+\FormulaDefAuto[Einermenge]{\{a\} := \{a,a\}}
+
+\FormulaThmAuto{a \in \{a\}}
+\begin{tabproof}
+  \proofstep{}{a \in \{a,a\}}{\FormulaRefAuto{a \in \{a,b\}}{}}
+  \proofstep{}{a \in \{a\}}{\FormulaRefAuto{\{a\} := \{a,a\}}{1}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in \{a\} \eqvdash x = a}
+\begin{tabproofwide}
+  \proofstepwide{x \in \{a\}}{\leftrightarrow}{x \in \{a,a\}}%
+    {\rIE{\FormulaRefAuto{\{a\} := \{a,a\}}{}, 1}}
+  \proofstepwide{}{\leftrightarrow}{x = a \lor x = a}%
+    {\rIE{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{}, 1}}
+  \proofstepwide{}{\leftrightarrow}{x = a}%
+    {\FormulaRefAuto{P \lor P \eqvdash P}{2}}
+  \proofstepwide{x \in \{a\}}{\leftrightarrow}{x = a}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{x \notin \{a\} \eqvdash x \neq a}
+\begin{tabproof}
+  \proofstep{}{x \notin \{a\} \leftrightarrow x \neq a}%
+    {\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists x\in \{a,b\} P(x)\vdash P(a)\lor P(b)}
+\begin{tabproof}
+  \proofstep{1}{\exists x\in \{a,b\} P(x)}{\rA}
+  \proofstep{2}{x\in \{a,b\}\land P(x)}{\rA}
+  \proofstep{2}{x\in \{a,b\}}{\rAEa{2}}
+  \proofstep{2}{P(x)}{\rAEb{2}}
+  \proofstep{2}{x=a\lor x=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
+  \proofstep{6}{x=a}{\rA}
+  \proofstep{2,6}{P(a)}{\rIE{6,4}}
+  \proofstep{2,6}{P(a)\lor P(b)}{\rOIa{7}}
+  \proofstep{9}{x=b}{\rA}
+  \proofstep{2,9}{P(b)}{\rIE{9,4}}
+  \proofstep{2,9}{P(a)\lor P(b)}{\rOIb{10}}
+  \proofstep{2}{P(a)\lor P(b)}{\rOE{5,6,8,9,11}}
+  \proofstep{1}{P(a)\lor P(b)}{\rEE{1,2,12}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in A \vdash \{a\} \subseteq A}
+\begin{tabproof}
+  \proofstep{1}{x \in \{a\}}{\rA}
+  \proofstep{2}{a \in A}{\rA}
+  \proofstep{1}{x = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{1}}
+  \proofstep{1,2}{x \in A}{\rIE{3,2}}
+  \proofstep{2}{\{a\} \subseteq A}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,4}}}}
+\end{tabproof}
+
+\FormulaThmAuto{a\in A\vdash A\cap \{A,a\}\neq\emptyset}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{}{a \in \{A,a\}}{\FormulaRefAuto{b \in \{a,b\}}}
+  \proofstep{1}{a \in A\cap \{A,a\}}{\FormulaRefAuto{x \in A, x\in B \vdash x \in A\cap B}{1,2}}
+  \proofstep{1}{A\cap \{A,a\}\neq\emptyset}{\FormulaRefAuto{a \in S \vdash S \neq \emptyset}{3}}
+\end{tabproof}
+
+\FormulaThmAuto{a\in A\vdash A\cap \{a,A\}\neq\emptyset}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{}{a \in \{a,A\}}{\FormulaRefAuto{a \in \{a,b\}}}
+  \proofstep{1}{a \in A\cap \{a,A\}}{\FormulaRefAuto{x \in A, x\in B \vdash x \in A\cap B}{1,2}}
+  \proofstep{1}{A\cap \{a,A\}\neq\emptyset}{\FormulaRefAuto{a \in S \vdash S \neq \emptyset}{3}}
+\end{tabproof}
 
 
-\begin{theorem}[ ]
-\label{aInLbawbRb}
-\[a\in \{a,b\}\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		& (1) & a=a & \rIE{} \\
-		& (2) & a=a\lor a=b & \rOIa{1}  \\
-		& (3) & a\in \{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2}  \\
-	\end{array}
-	\]	
-\end{proof}
-
-\begin{theorem}[ ]
-\label{bInLbawbRb}
-\[b\in \{a,b\}\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		& (1) & b=b & \rIE{} \\
-		& (2) & b=a\lor b=b & \rOIb{1}  \\
-		& (3) & b\in \{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2}  \\
-	\end{array}
-	\]	
-\end{proof}
-
-\begin{theorem}[ ]
-\label{LbawbRbEqualsLbbwaRb}
-\[\{a,b\}=\{b,a\}\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		& (1) & x\in\{a,b\} &\leftrightarrow& x=a\lor x=b & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{} \\
-        & (2) &  &\leftrightarrow& x=b\lor x=a & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{1} \\
-        & (3) &  &\leftrightarrow& \in\{a,b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{2} \\
-        & (4) & x\in\{a,b\} &\leftrightarrow& x\in\{b,a\} & \rChain{1,3} \\
-        & (5) & \{a,b\} &=& \{b,a\} & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{4}} \\
-	\end{array}
-	\]	
-\end{proof}
 
 
 
-\begin{theorem}[ ]
-\label{LbawbRbNotEqualsEmptyset}
-\[\{a,b\}\neq\emptyset\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		& (1) & a\in \{a,b\} & \aInLbawbRb{} \\
-		& (2) & \{a,b\}\neq\emptyset & \FormulaRefAuto{\exists x\,(x \in S) \vdash S \neq \emptyset}{1}  \\
-	\end{array}
-	\]	
-\end{proof}
 
-\begin{definition}[Einermenge]
-\label{DefLbaRb}
-\[
-\{a\} := \{a,a\}
-\]
-\end{definition}
-
-\begin{theorem}[ ]
-\label{aInLbaRb}
-\[a\in \{a\}\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a\in \{a,a\} & \aInLbawbRb{} \\
-		   & (2) & a\in \{a\} & \DefLbaRb{1} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{xInLbaRbEqvxEqualsa}
-\[x\in \{a\}\eqvdash x=a\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		   & (1) & x\in \{a\}&\leftrightarrow& x\in \{a,a\} & \rIE{\DefLbaRb{}, 1} \\
-          & (2) & &\leftrightarrow& x=a\lor x=a & \rIE{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}, 1} \\
-          & (3) & &\leftrightarrow& x=a & \FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{2} \\
-          & (4) & x\in \{a\} &\leftrightarrow& x=a & \rChain{1,3} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}
-\label{xNotinLbaRbEqvxNotEqualsa}
-\[x\not\in \{a\}\eqvdash x\neq a\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		   & (1) & x\not\in \{a\}\leftrightarrow x\neq a & \FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\xInLbaRbEqvxEqualsa{}} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}
-\label{aInAImpLbaRbSubseteqA}
-\[a\in A\vdash \{a\}\subseteq A\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & x\in \{a\} & \rA \\
-		2 & (2) & a\in A & \rA \\
-		1 & (3) & x=a & \xInLbaRbEqvxEqualsa{1} \\		
-		1,2 & (4) & x\in A & \rIE{3,2} \\	
-		2 & (5) & \{a\}\subseteq A & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,4}}} \\	
-	\end{array}
-	\]
-\end{proof}
 
 \section{Definition und Eigenschaften der Differenz}
 
-\begin{definition}[ ]
-\label{DefASetminusB}
-\[A \setminus B := \{ x \in A \mid x \not\in B \}\]
+\FormulaDefAuto{A \setminus B := \{ x \in A \mid x \notin B \}}
+
+\FormulaThmAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}
+\begin{tabproofwide}
+  \proofstepwide{x \in A \setminus B}{\leftrightarrow}{x \in \{x \in A \mid x \notin B\}}%
+    {\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{A \setminus B := \{ x \in A \mid x \notin B \}}{}}}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \land x \notin B}%
+    {\FormulaRefAuto{\{x \in A \mid P(x)\} := \iota B\bigl(\forall x\,(x \in B \leftrightarrow (x \in A \land P(x)))\bigr)}{1}}
+\end{tabproofwide}
+
+\FormulaThmAuto{c \in A \setminus \{a\} \vdash c \neq a}
+\begin{tabproof}
+  \proofstep{1}{c \in A \setminus \{a\}}{\rA}
+  \proofstep{1}{c \notin \{a\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \neq a}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq a}
+\begin{tabproof}
+  \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \neq a}{\rAEa{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
+\end{tabproof}
+
+\FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq b}
+\begin{tabproof}
+  \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \neq b}{\rAEb{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
+\end{tabproof}
+
+\FormulaThmAuto{c \in A \setminus B,\, b \in B \vdash c \neq b}
+\begin{tabproof}
+  \proofstep{1}{c \in A \setminus B}{\rA}
+  \proofstep{2}{b \in B}{\rA}
+  \proofstep{1}{c \notin B}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1,2}{c \neq b}{\FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{a \notin A \setminus \{a\}}
+\begin{tabproof}
+  \proofstep{1}{a \in A \setminus \{a\}}{\rA}
+  \proofstep{}{a = a}{\rII}
+  \proofstep{1}{a \neq a}{\FormulaRefAuto{c \in A \setminus \{a\} \vdash c \neq a}{1}}
+  \proofstep{1}{\bot}{\rBI{2,3}}
+  \proofstep{}{a \notin A \setminus \{a\}}{\rCI{1,4}}
+\end{tabproof}
+
+\FormulaThmAuto{a \notin A \setminus \{a,b\}}
+\begin{tabproof}
+  \proofstep{1}{a \in A \setminus \{a,b\}}{\rA}
+  \proofstep{}{a = a}{\rII}
+  \proofstep{1}{a \neq a}{\FormulaRefAuto{c \in A \setminus \{a,b\} \vdash c \neq a}{1}}
+  \proofstep{1}{\bot}{\rBI{2,3}}
+  \proofstep{}{a \notin A \setminus \{a,b\}}{\rCI{1,4}}
+\end{tabproof}
+
+\FormulaThmAuto{b \notin A \setminus \{a,b\}}
+\begin{tabproof}
+  \proofstep{1}{b \in A \setminus \{a,b\}}{\rA}
+  \proofstep{}{b = b}{\rII}
+  \proofstep{1}{b \neq b}{\FormulaRefAuto{c \in A \setminus \{a,b\} \vdash c \neq b}{1}}
+  \proofstep{1}{\bot}{\rBI{2,3}}
+  \proofstep{}{b \notin A \setminus \{a,b\}}{\rCI{1,4}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{2}{a \neq b}{\rA}
+  \proofstep{2}{a \notin \{b\}}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{2}}
+  \proofstep{1,2}{a \in A \setminus \{b\}}{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{\rAI{1,3}}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in A,\, b \neq a \vdash a \in A \setminus \{b\}}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{2}{b \neq a}{\rA}
+  \proofstep{2}{a \neq b}{\FormulaRefAuto{a \neq b \vdash b \neq a}{2}}
+  \proofstep{1,2}{a \in A \setminus \{b\}}{\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{1,3}}
+\end{tabproof}
+
+
+\section{Definition und Eigenschaften der Vereinigung}
+
+\FormulaDefAuto[Vereinigung zweier Mengen]{A \cup B := \bigcup \{A, B\}}
+
+\FormulaThmAuto{x\in A \cup B \eqvdash x\in \bigcup \{A, B\}}
+\begin{tabproof}
+\proofstep{}{z \in A \cup B\leftrightarrow z \in \bigcup \{A, B\}}{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{A \cup B := \bigcup \{A, B\}}}}}
+\end{tabproof}
+
+\FormulaThmAuto{A \subseteq B \vdash \bigcup A \subseteq \bigcup B}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{x \in \bigcup A}{\rA}
+  \proofstep{2}{\exists X\,(X \in A \land x \in X)}{\FormulaRefAuto{\bigcup A := \iota C\bigl(\forall x\,(x \in C \leftrightarrow \exists B\,(B \in A \land x \in B))\bigr)}{2}}
+  \proofstep{4}{C \in A \land x \in C}{\rA}
+  \proofstep{4}{C \in A}{\rAEa{4}}
+  \proofstep{4}{x \in C}{\rAEb{4}}
+  \proofstep{1,4}{C \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{5,1}}
+  \proofstep{1,4}{x \in \bigcup B}{\FormulaRefAuto{\bigcup A := \iota C\bigl(\forall x\,(x \in C \leftrightarrow \exists B\,(B \in A \land x \in B))\bigr)}{\rEI{\rAI{7,6}}}}
+  \proofstep{1,2}{x \in \bigcup B}{\rEE{3,4,8}}
+  \proofstep{1}{\bigcup A \subseteq \bigcup B}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRE{2,9}}}}
+\end{tabproof}
+
+\FormulaThmAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}
+\begin{tabproofwide}
+  \proofstepwide{z \in A \cup B}{\leftrightarrow}{z \in \bigcup \{A, B\}}%
+    {\FormulaRefAuto{x\in A \cup B \eqvdash x\in \bigcup \{A, B\}}}
+  \proofstepwide{}{\leftrightarrow}{\exists C\,(C \in \{A, B\} \land z \in C)}%
+    {\FormulaRefAuto{\bigcup A := \iota C\bigl(\forall x\,(x \in C \leftrightarrow \exists B\,(B \in A \land x \in B))\bigr)}{1}}
+  \proofstepwide{}{\leftrightarrow}{\exists C\,((C = A \lor C = B) \land z \in C)}%
+    {\rLRS{\FormulaRefAuto{\{A,B\} := \iota C\bigl(\forall x\,(x \in C \leftrightarrow x = A \lor x = B)\bigr)}{}}}
+  \proofstepwide{}{\leftrightarrow}{z \in A \lor z \in B}%
+    {\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \dashv \vdash P(a) \lor P(b)}{3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \vdash z \in A \cup B}
+\begin{tabproof}
+  \proofstep{1}{z \in A}{\rA}
+  \proofstep{1}{z \in A \lor z \in B}{\rOIa{1}}
+  \proofstep{1}{z \in A \cup B}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{z \in B \vdash z \in A \cup B}
+\begin{tabproof}
+  \proofstep{1}{z \in B}{\rA}
+  \proofstep{1}{z \in A \lor z \in B}{\rOIb{1}}
+  \proofstep{1}{z \in A \cup B}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in \{a,b\} \eqvdash x \in \{a\} \cup \{b\}}
+\begin{tabproofwide}
+  \proofstepwide{x \in \{a\}}{\leftrightarrow}{x = a}%
+    {\FormulaRefAuto{x \in \{a\} \eqvdash x = a}}
+  \proofstepwide{x \in \{b\}}{\leftrightarrow}{x = b}%
+    {\FormulaRefAuto{x \in \{a\} \eqvdash x = a}}
+  \proofstepwide{B \in \{\{a\},\{b\}\}}{\leftrightarrow}{B = \{a\} \lor B = \{b\}}%
+    {\FormulaRefAuto{\{A,B\} := \iota C\bigl(\forall x\,(x \in C \leftrightarrow x = A \lor x = B)\bigr)}}
+  \proofstepwide{x \in \{a,b\}}{\leftrightarrow}{x = a \lor x = b}%
+    {\FormulaRefAuto{\{A,B\} := \iota C\bigl(\forall x\,(x \in C \leftrightarrow x = A \lor x = B)\bigr)}}
+  \proofstepwide{}{\leftrightarrow}{x \in \{a\} \lor x = b}{\rLRS{1}}
+  \proofstepwide{}{\leftrightarrow}{x \in \{a\} \lor x \in \{b\}}{\rLRS{2}}
+
+  % --- Zeile 7: auf zwei Zeilen gesplittet ---
+  \proofstepwide{}{\leftrightarrow}{\exists B\,\bigl(B = \{a\} \lor B = \{b\}\bigr)}%
+    {\multirow{2}{*}{\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \dashv \vdash P(a) \lor P(b)}{6}}}
+  \proofstepwide*{}{\land}{x \in B}{}
+  % -------------------------------------------
+
+  \proofstepwide{}{\leftrightarrow}{\exists B\,(B \in \{\{a\},\{b\}\} \land x \in B)}{\rLRS{3}}
+  \proofstepwide{}{\leftrightarrow}{x \in \bigcup \{\{a\},\{b\}\}}%
+    {\FormulaRefAuto{\bigcup A := \iota C\bigl(\forall x\,(x \in C \leftrightarrow \exists B\,(B \in A \land x \in B))\bigr)}{8}}
+  \proofstepwide{}{\leftrightarrow}{x \in \{a\} \cup \{b\}}%
+    {\FormulaRefAuto{A \cup B := \bigcup \{A, B\}}{8}}
+  \proofstepwide{x \in \{a,b\}}{\leftrightarrow}{x \in \{a\} \cup \{b\}}{\rChain{4,10}}
+\end{tabproofwide}
+
+\FormulaThmAuto{\{a,b\} = \{a\} \cup \{b\}}
+\begin{tabproof}
+  \proofstep{}{x \in \{a,b\} \leftrightarrow x \in \{a\} \cup \{b\}}{\FormulaRefAuto{x \in \{a,b\} \eqvdash x \in \{a\} \cup \{b\}}}
+  \proofstep{}{\{a,b\} = \{a\} \cup \{b\}}{\FormulaRefAuto{\forall x\,(x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in A \cup \{a\}}
+\begin{tabproof}
+  \proofstep{}{a \in \{a\}}{\FormulaRefAuto{a \in \{a\}}}
+  \proofstep{}{a \in A \cup \{a\}}{\FormulaRefAuto{z \in B \vdash z \in A \cup B}{1}}
+\end{tabproof}
+
+\FormulaThmAuto{a \in \{a\} \cup A}
+\begin{tabproof}
+  \proofstep{}{a \in \{a\}}{\FormulaRefAuto{a \in \{a\}}}
+  \proofstep{}{a \in \{a\} \cup A}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{1}}
+\end{tabproof}
+
+\FormulaThmAuto{a \notin B,\, A = B \cup \{a\} \vdash A \not\subseteq B}
+\begin{tabproof}
+  \proofstep{1}{a \notin B}{\rA}
+  \proofstep{2}{A = B \cup \{a\}}{\rA}
+  \proofstep{3}{A \subseteq B}{\rA}
+  \proofstep{}{a \in B \cup \{a\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
+  \proofstep{2}{a \in A}{\rIE{2,4}}
+  \proofstep{2,3}{a \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{5,3}}
+  \proofstep{1,2,3}{\bot}{\rBI{1,6}}
+  \proofstep{1,2}{A \not\subseteq B}{\rCI{3,7}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in A \eqvdash x \in A \cup A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \lor x \in A}%
+    {\FormulaRefAuto{P \lor P \eqvdash P}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \cup A}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup A}%
+    {\rChain{1,2}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A = A \cup A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup A}%
+    {\FormulaRefAuto{x \in A \eqvdash x \in A \cup A}}
+  \proofstepwide{A}{=}{A \cup A}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{x \in A \cup B \eqvdash x \in B \cup A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A \cup B}{\leftrightarrow}{x \in A \lor x \in B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide{}{\leftrightarrow}{x \in B \lor x \in A}%
+    {\FormulaRefAuto{P \lor Q \vdash Q \lor P}{1}}
+  \proofstepwide{}{\leftrightarrow}{x \in B \cup A}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{2}}
+  \proofstepwide{x \in A \cup B}{\leftrightarrow}{x \in B \cup A}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \cup B = B \cup A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A \cup B}{\leftrightarrow}{x \in B \cup A}%
+    {\FormulaRefAuto{x \in A \cup B \eqvdash x \in B \cup A}}
+  \proofstepwide{A \cup B}{=}{B \cup A}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{x \in A \eqvdash x \in A \cup \emptyset}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \lor x \in \emptyset}%
+    {\FormulaRefAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}}}
+  \proofstepwide{}{\leftrightarrow}{x \in A \cup \emptyset}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup \emptyset}%
+    {\rChain{1,2}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A = A \cup \emptyset}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup \emptyset}%
+    {\FormulaRefAuto{x \in A \eqvdash x \in A \cup \emptyset}}
+  \proofstepwide{A}{=}{A \cup \emptyset}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A = \emptyset \cup A}
+\begin{tabproofwide}
+  \proofstepwide{A}{=}{A \cup \emptyset}%
+    {\FormulaRefAuto{A = A \cup \emptyset}}
+  \proofstepwide{A \cup \emptyset}{=}{\emptyset \cup A}%
+    {\FormulaRefAuto{A \cup B = B \cup A}}
+  \proofstepwide{A}{=}{\emptyset \cup A}%
+    {\rIE{2,1}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \cup \{A\} = \{\emptyset\} \eqvdash A = \emptyset}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\{\emptyset\} = A \cup \{A\}}{\rA}
+  \proofstep{}{A \in A \cup \{A\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
+  \proofstep{1}{A \in \{\emptyset\}}{\FormulaRefAuto{A = B,\, x \in A \vdash x \in B}{1,2}}
+  \proofstep{1}{A = \emptyset}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{3}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{A = \emptyset}{\rA}
+  \proofstep{}{\{\emptyset\} = \emptyset \cup \{\emptyset\}}{\FormulaRefAuto{A = \emptyset \cup A}}
+  \proofstep{1}{A \cup \{A\} = \{\emptyset\}}{\rIE{1,\FormulaRefAuto{a = b \vdash b = a}{2}}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{z \in A \cup B \eqvdash z \not\in A \rightarrow z \in B}
+\begin{tabproofwide}
+  \proofstepwide{z \in A \cup B}{\leftrightarrow}{z \in A \lor z \in B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide{}{ \leftrightarrow }{z \not\in A \rightarrow z \in B}%
+    {\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cup B \eqvdash z \not\in B \rightarrow z \in A}
+\begin{tabproofwide}
+  \proofstepwide{z \in A \cup B}{\leftrightarrow}{z \in A \lor z \in B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide{}{\leftrightarrow}{z \not\in B \rightarrow z \in A}%
+    {\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cup B) \cup C \eqvdash (z \in A \lor z \in B) \lor z \in C}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cup B) \cup C}{\leftrightarrow}{z \in (A \cup B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+  \proofstepwide*{}{\lor}{z \in C}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+  \proofstepwide*{}{\lor}{z \in C}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cup (B \cup C) \eqvdash z \in A \lor (z \in B \lor z \in C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in A \cup (B \cup C)}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+  \proofstepwide*{}{\lor}{z \in (B \cup C)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+  \proofstepwide*{}{\lor}{(z \in B \lor z \in C)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cup B) \cup C \eqvdash z \in A \cup (B \cup C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in (A \cup B) \cup C}{\leftrightarrow}{(z \in A \lor z \in B) \lor z \in C}%
+    {\FormulaRefAuto{z \in (A \cup B) \cup C \eqvdash (z \in A \lor z \in B) \lor z \in C}}
+  \proofstepwide{}{\leftrightarrow}{z \in A \lor (z \in B \lor z \in C)}%
+    {\FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}{1}}
+  \proofstepwide{}{\leftrightarrow}{z \in A \cup (B \cup C)}%
+    {\FormulaRefAuto{z \in A \cup (B \cup C) \eqvdash z \in A \lor (z \in B \lor z \in C)}{2}}
+\end{tabproofwide}
+
+\FormulaThmAuto[Assoziativität der Vereinigung]{(A \cup B) \cup C = A \cup (B \cup C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in (A \cup B) \cup C}{\leftrightarrow}{z \in A \cup (B \cup C)}%
+    {\FormulaRefAuto{z \in (A \cup B) \cup C \eqvdash z \in A \cup (B \cup C)}}
+  \proofstepwide{(A \cup B) \cup C}{=}{A \cup (B \cup C)}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cup (B \cap C) \eqvdash z \in A \lor (z \in B \land z \in C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+  \proofstepwide*{}{\lor}{z \in (B \cap C)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+  \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cap B) \cup C \eqvdash (z \in A \land z \in B) \lor z \in C}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{z \in (A \cap B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+  \proofstepwide*{}{\lor}{z \in C}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+  \proofstepwide*{}{\lor}{z \in C}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cap (B \cup C) \eqvdash z \in A \land (z \in B \lor z \in C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+  \proofstepwide*{}{\land}{z \in (B \cup C)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+  \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cup B) \cap C \eqvdash (z \in A \lor z \in B) \land z \in C}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{z \in (A \cup B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+  \proofstepwide*{}{\land}{z \in C}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+  \proofstepwide*{}{\land}{z \in C}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cup B) \cap (C \cup D)}{\leftrightarrow}{z \in (A \cup B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+  \proofstepwide*{}{\land}{z \in (C \cup D)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+  \proofstepwide*{}{\land}{(z \in C \lor z \in D)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cap B) \cup (C \cap D)}{\leftrightarrow}{z \in (A \cap B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+  \proofstepwide*{}{\lor}{z \in (C \cap D)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+  \proofstepwide*{}{\lor}{(z \in C \land z \in D)}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cap (B \cup C) \eqvdash z \in (A \cap B) \cup (A \cap C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cap (B \cup C) \eqvdash z \in A \land (z \in B \lor z \in C)}}}
+  \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{P \land (Q \lor R) \dashv \vdash (P \land Q) \lor (P \land R)}{1}}}
+  \proofstepwide*{}{\lor}{(z \in A \land z \in C)}{}
+
+  % Zeile 3 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in (A \cap B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}}
+  \proofstepwide*{}{\cup}{z \in (A \cap C)}{}
+
+  % Abschluss (unverändert)
+  \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in (A \cap B) \cup (A \cap C)}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cup B) \cap C \eqvdash z \in (A \cap C) \cup (B \cap C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{(z \in A \lor z \in B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap C \eqvdash (z \in A \lor z \in B) \land z \in C}}}
+  \proofstepwide*{}{\land}{z \in C}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in C)}%
+    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q) \land R \dashv \vdash (P \land R) \lor (Q \land R)}{1}}}
+  \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
+
+  % Zeile 3 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in (A \cap C)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}}
+  \proofstepwide*{}{\cup}{z \in (B \cap C)}{}
+
+  % Abschluss
+  \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{z \in (A \cap C) \cup (B \cap C)}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in (A \cap B) \cup C \eqvdash z \in (A \cup C) \cap (B \cup C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{(z \in A \land z \in B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup C \eqvdash (z \in A \land z \in B) \lor z \in C}}}
+  \proofstepwide*{}{\lor}{z \in C}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in C)}%
+    {\multirow{2}{*}{\FormulaRefAuto{(P \land Q) \lor R \dashv \vdash (P \lor R) \land (Q \lor R)}{1}}}
+  \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
+
+  % Zeile 3 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in (A \cup C)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}}
+  \proofstepwide*{}{\cap}{z \in (B \cup C)}{}
+
+  % Abschluss
+  \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{z \in (A \cup C) \cap (B \cup C)}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{z \in A \cup (B \cap C) \eqvdash z \in (A \cup B) \cap (A \cup C)}
+\begin{tabproofwide}
+  % Zeile 1 -> zwei Zeilen
+  \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in A}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup (B \cap C) \eqvdash z \in A \lor (z \in B \land z \in C)}}}
+  \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
+
+  % Zeile 2 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \dashv \vdash (P \lor Q) \land (P \lor R)}{1}}}
+  \proofstepwide*{}{\land}{(z \in A \lor z \in C)}{}
+
+  % Zeile 3 -> zwei Zeilen
+  \proofstepwide{}{\leftrightarrow}{z \in (A \cup B)}%
+    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}}
+  \proofstepwide*{}{\cap}{z \in (A \cup C)}{}
+
+  % Abschluss
+  \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in (A \cup B) \cap (A \cup C)}%
+    {\rChain{1,3}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \cup (B \cap C) = (A \cup B) \cap (A \cup C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in (A \cup B) \cap (A \cup C)}%
+    {\FormulaRefAuto{z \in A \cup (B \cap C) \eqvdash z \in (A \cup B) \cap (A \cup C)}}
+  \proofstepwide{A \cup (B \cap C)}{=}{(A \cup B) \cap (A \cup C)}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{(A \cap B) \cup C = (A \cup C) \cap (B \cup C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{z \in (A \cup C) \cap (B \cup C)}%
+    {\FormulaRefAuto{z \in (A \cap B) \cup C \eqvdash z \in (A \cup C) \cap (B \cup C)}}
+  \proofstepwide{(A \cap B) \cup C}{=}{(A \cup C) \cap (B \cup C)}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \cap (B \cup C) = (A \cap B) \cup (A \cap C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in (A \cap B) \cup (A \cap C)}%
+    {\FormulaRefAuto{z \in A \cap (B \cup C) \eqvdash z \in (A \cap B) \cup (A \cap C)}}
+  \proofstepwide{A \cap (B \cup C)}{=}{(A \cap B) \cup (A \cap C)}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{(A \cup B) \cap C = (A \cap C) \cup (B \cap C)}
+\begin{tabproofwide}
+  \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{z \in (A \cap C) \cup (B \cap C)}%
+    {\FormulaRefAuto{z \in (A \cup B) \cap C \eqvdash z \in (A \cap C) \cup (B \cap C)}}
+  \proofstepwide{(A \cup B) \cap C}{=}{(A \cap C) \cup (B \cap C)}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+\section[Eigenschaften von Teilmengen]{Eigenschaften von Teilmengen in Bezug auf Vereinigung und Durchschnitt}
+
+
+\FormulaThmAuto{A \subseteq A \cup B}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\rightarrow}{x \in A \lor x \in B}%
+    {\FormulaRefAuto{P \rightarrow P \lor Q}}
+  \proofstepwide{}{ \rightarrow}{x \in A \cup B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
+  \proofstepwide{x \in A}{\rightarrow}{x \in A \cup B}%
+    {\rChain{1,2}}
+  \proofstepwidestar{A \subseteq A \cup B}%
+    {\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{3}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq B \cup A}
+\begin{tabproofwide}
+  \proofstepwide{x \in A}{\rightarrow}{x \in B \lor x \in A}%
+    {\FormulaRefAuto{P \rightarrow Q \lor P}}
+  \proofstepwide{}{\rightarrow}{x \in B \cup A}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
+  \proofstepwide{x \in A}{\rightarrow}{x \in B \cup A}%
+    {\rChain{1,2}}
+  \proofstepwidestar{A \subseteq B \cup A}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{3}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq C,\, B \subseteq C \vdash A \cup B \subseteq C}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq C}{\rA}
+  \proofstepwidestar[2]{B \subseteq C}{\rA}
+  \proofstepwide{z \in A \cup B}{\rightarrow}{z \in A \lor z \in B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide[1,2]{}{ \rightarrow}{z \in C}%
+    {\FormulaRefAuto{A\subseteq C,\, B\subseteq C,\, z\in A\lor z\in B \vdash z\in C}{1,2,3}}
+  \proofstepwide[1,2]{z \in A \cup B}{\rightarrow}{z \in C}%
+    {\rChain{3,4}}
+  \proofstepwidestar[1,2]{A \cup B \subseteq C}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
+\end{tabproofwide}
+
+
+\FormulaThmAuto{A \subseteq B \vdash A \cup C \subseteq B \cup C}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq B}{\rA}
+  \proofstepwide{z \in A \cup C}{\rightarrow}{z \in A \lor z \in C}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide[1]{}{ \rightarrow}{z \in B \lor z \in C}%
+    {\FormulaRefAuto{P \rightarrow Q,\, P \lor R \vdash Q \lor R}%
+      {\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{1}},2}}
+  \proofstepwide[1]{}{ \rightarrow}{z \in B \cup C}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{3}}
+  \proofstepwide[1]{z \in A \cup C}{\rightarrow}{z \in B \cup C}%
+    {\rChain{2,4}}
+  \proofstepwidestar[1]{A \cup C \subseteq B \cup C}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq B \vdash C \cup A \subseteq C \cup B}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq B}{\rA}
+  \proofstepwide{C \cup A}{=}{A \cup C}%
+    {\FormulaRefAuto{A \cup B = B \cup A}}
+  \proofstepwide[1]{}{ \subseteq}{B \cup C}%
+    {\FormulaRefAuto{A \subseteq B \vdash A \cup C \subseteq B \cup C}{1}}
+  \proofstepwide[1]{}{=}{C \cup B}%
+    {\FormulaRefAuto{A \cup B = B \cup A}{3}}
+  \proofstepwide[1]{C \cup A}{\subseteq}{C \cup B}%
+    {\rChain{2,4}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq B,\, C \subseteq D \vdash A \cup C \subseteq B \cup D}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq B}{\rA}
+  \proofstepwidestar[2]{C \subseteq D}{\rA}
+  \proofstepwide[1]{A \cup C}{\subseteq}{B \cup C}%
+    {\FormulaRefAuto{A \subseteq B \vdash A \cup C \subseteq B \cup C}{1}}
+  \proofstepwide[2]{}{ \subseteq}{B \cup D}%
+    {\FormulaRefAuto{A \subseteq B \vdash C \cup A \subseteq C \cup B}{2}}
+  \proofstepwide[1,2]{A \cup C}{\subseteq}{B \cup D}%
+    {\rChain{3,4}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq B,\, C \subseteq D \vdash A \cap C \subseteq B \cap D}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq B}{\rA}
+  \proofstepwidestar[2]{C \subseteq D}{\rA}
+  \proofstepwide{x \in A \cap C}{\rightarrow}{x \in A \land x \in C}%
+    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
+  \proofstepwide[1]{}{ \rightarrow}{x \in B \land x \in C}%
+    {\FormulaRefAuto{P \rightarrow Q,\, P \land R \vdash Q \land R}{\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{1}},3}}
+  \proofstepwide[1,2]{}{ \rightarrow}{x \in B \land x \in D}%
+    {\FormulaRefAuto{P \rightarrow Q,\, R \land P \vdash R \land Q}{\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{2}},4}}
+  \proofstepwide[1,2]{}{ \rightarrow}{x \in B \cap D}%
+    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{5}}
+  \proofstepwide[1,2]{x \in A \cap C}{\rightarrow}{x \in B \cap D}%
+    {\rChain{3,6}}
+  \proofstepwidestar[1,2]{A \cap C \subseteq B \cap D}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{7}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a \in A}{\rA}
+  \proofstepwidestar[2]{b \in B}{\rA}
+  \proofstepwide[1]{\{a\}}{\subseteq}{A}%
+    {\FormulaRefAuto{a \in A \vdash \{a\} \subseteq A}{1}}
+  \proofstepwide[2]{\{b\}}{\subseteq}{B}%
+    {\FormulaRefAuto{a \in A \vdash \{a\} \subseteq A}{2}}
+  \proofstepwide[1,2]{\{a\} \cup \{b\}}{\subseteq}{A \cup B}%
+    {\FormulaRefAuto{A \subseteq B,\, C \subseteq D \vdash A \cup C \subseteq B \cup D}{3,4}}
+  \proofstepwide{\{a,b\}}{=}{\{a\} \cup \{b\}}%
+    {\FormulaRefAuto{\{a,b\} = \{a\} \cup \{b\}}}
+  \proofstepwidestar{\{a,b\} \subseteq A \cup B}%
+    {\rIE{6,5}}
+\end{tabproofwide}
+
+\FormulaThmAuto{a \in A,\, b \in A \vdash \{a,b\} \subseteq A}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a \in A}{\rA}
+  \proofstepwidestar[2]{b \in A}{\rA}
+  \proofstepwide[1,2]{\{a,b\}}{\subseteq}{A \cup A}%
+    {\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{1,2}}
+  \proofstepwide[1,2]{}{=}{A}%
+    {\FormulaRefAuto{A = A \cup A}{3}}
+  \proofstepwidestar[1,2]{\{a,b\} \subseteq A}%
+    {\rChain{3,4}}
+\end{tabproofwide}
+
+\section{Ausschluss gegenseitiger Mitgliedschaft}
+
+\FormulaThmAuto{a\in b\vdash b\not\in a}
+\begin{tabproof}
+  \proofstep{1}{a \in b}{\rA}
+  \proofstep{2}{b \in a}{\rA}
+  \proofstep{ }{\{a, b\} \neq \emptyset}{\FormulaRefAuto{\{a,b\} \neq \emptyset}}
+  \proofstep{ }{\exists x \in \{a, b\}\,(x \cap \{a, b\} = \emptyset)}{\FormulaRefAuto{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{3}}
+  \proofstep{ }{a \cap \{a, b\} = \emptyset \;\lor\; b \cap \{a, b\} = \emptyset}{\FormulaRefAuto{\exists x\in \{a,b\} P(x)\vdash P(a)\lor P(b)}{4}}
+  \proofstep{6}{a \cap \{a, b\} = \emptyset}{\rA}
+  \proofstep{2}{a \cap \{a, b\} \neq \emptyset}{\FormulaRefAuto{a\in A\vdash A\cap \{A,a\}\neq\emptyset}{2}}
+  \proofstep{2,6}{\bot}{\rBI{6,7}}
+  \proofstep{9}{b \cap \{a, b\} = \emptyset}{\rA}
+  \proofstep{1}{b \cap \{a, b\} \neq \emptyset}{\FormulaRefAuto{a\in A\vdash A\cap \{A,a\}\neq\emptyset}{1}}
+  \proofstep{1,9}{\bot}{\rBI{9,10}}
+  \proofstep{1,2}{\bot}{\rOE{5,6,8,9,11}}
+  \proofstep{1}{b\notin a}{\rCI{2,12}}
+\end{tabproof}
+
+
+\chapter{Die Potenzmenge}
+
+\section{Eigenschaften der Potenzmenge}
+
+\FormulaThmAuto{A \subseteq B \vdash \mathcal{P}(A) \subseteq \mathcal{P}(B)}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq B}{\rA}
+  \proofstepwide{x \in \mathcal{P}(A)}{\rightarrow}{x \subseteq A}%
+    {\FormulaRefAuto{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}}
+  \proofstepwide[1]{}{ \rightarrow}{x \subseteq B}%
+    {\FormulaRefAuto{A \subseteq B,\, B \subseteq C \vdash A \subseteq C}{2,1}}
+  \proofstepwide[1]{}{ \rightarrow}{x \in \mathcal{P}(B)}%
+    {\FormulaRefAuto{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}{3}}
+  \proofstepwide[1]{x \in \mathcal{P}(A)}{\rightarrow}{x \in \mathcal{P}(B)}%
+    {\rChain{2,4}}
+  \proofstepwidestar[1]{\mathcal{P}(A) \subseteq \mathcal{P}(B)}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
+\end{tabproofwide}
+
+\FormulaThmAuto{a \in A \vdash \{a\} \in \mathcal{P}(A)}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{1}{\{a\} \subseteq A}{\FormulaRefAuto{a \in A \vdash \{a\} \subseteq A}{1}}
+  \proofstep{1}{\{a\} \in \mathcal{P}(A)}{\FormulaRefAuto{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{A \subseteq B,\, a \in \mathcal{P}(A) \vdash a \in \mathcal{P}(B)}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{a \in \mathcal{P}(A)}{\rA}
+  \proofstep{1}{\mathcal{P}(A) \subseteq \mathcal{P}(B)}{\FormulaRefAuto{A \subseteq B \vdash \mathcal{P}(A) \subseteq \mathcal{P}(B)}{1}}
+  \proofstep{1,2}{a \in \mathcal{P}(B)}{\rRE{\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{3}},2}}
+\end{tabproof}
+
+
+\FormulaThmAuto{a \in \mathcal{P}(A) \vdash \forall B\,(a \in \mathcal{P}(A \cup B))}
+\begin{tabproof}
+  \proofstep{1}{a \in \mathcal{P}(A)}{\rA}
+  \proofstep{}{A \subseteq A \cup B}{\FormulaRefAuto{A \subseteq A \cup B}{}}
+  \proofstep{1}{a \in \mathcal{P}(A \cup B)}%
+    {\FormulaRefAuto{A \subseteq B,\, a \in \mathcal{P}(A) \vdash a \in \mathcal{P}(B)}{2,1}}
+  \proofstep{1}{\forall B\,(a \in \mathcal{P}(A \cup B))}{\rUI{3}}
+\end{tabproof}
+
+
+\chapter{Das kartesische Produkt}
+
+
+\section{Existenz des karthesischen Produktes}
+
+\FormulaThmAuto{a \in A,\, b \in B \vdash (a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}
+\begin{tabproof}
+  \proofstep{1}{a \in A}{\rA}
+  \proofstep{2}{b \in B}{\rA}
+  \proofstep{1,2}{\{a,b\} \subseteq A \cup B}{\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{1,2}}
+  \proofstep{1,2}{\{a,b\} \in \mathcal{P}(A \cup B)}{\FormulaRefAuto{\mathcal{P}(A) := \iota B\bigl(\forall x\,(x \in B \leftrightarrow x \subseteq A)\bigr)}{3}}
+  \proofstep{1}{a \in A \cup B}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{1}}
+  \proofstep{1}{\{a\} \in \mathcal{P}(A \cup B)}{\FormulaRefAuto{a \in A \vdash \{a\} \in \mathcal{P}(A)}{5}}
+  \proofstep{1,2}{\{\{a\},\{a,b\}\} \subseteq \mathcal{P}(A \cup B)}{\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{6,4}}
+  \proofstep{1,2}{\{\{a\},\{a,b\}\} \in \mathcal{P}(\mathcal{P}(A \cup B))}{\FormulaRefAuto{\mathcal{P}(A) := \iota B\bigl(\forall x\,(x \in B \leftrightarrow x \subseteq A)\bigr)}{7}}
+  \proofstep{1,2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}},8}}
+\end{tabproof}
+
+\FormulaThmAuto[Eindeutige Existenz des kartesischen Produkts]{\exists! C\, \forall (a,b) \big((a,b) \in C \leftrightarrow (a \in A \land b \in B)\big)}
+\begin{tabproof}
+  \proofstep{}{ \exists! C\, \forall (a,b) \big((a,b) \in C \leftrightarrow (a \in A \land b \in B)\big)}%
+    {\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{a \in A,\, b \in B \vdash (a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}}}}} 
+\end{tabproof}
+
+\FormulaDefAuto[Kartesisches Produkt ($A \times B$)]{A \times B := \iota C\, \forall (a,b)\, \bigl((a,b) \in C \leftrightarrow (a = A \land b \in B)\bigr)}
+
+\chapter{Funktionen}
+Nachdem wir die grundlegenden Begriffe der Mengenlehre eingeführt haben, wenden wir uns nun den 
+\textbf{Funktionen} zu. Diese sind zentrale Objekte der Mathematik und können als spezielle Mengen 
+von geordneten Paaren aufgefasst werden.
+
+\begin{definition}[Begriff der Funktion]
+Der \textbf{Begriff der Funktion} wird durch das Symbol
+\[
+F\colon A \to B
+\]
+\textbf{implizit definiert}. 
+Das Symbol \(F\colon A\to B\) bedeutet, dass \(F\) eine Teilmenge des kartesischen Produkts \(A\times B\) ist,
+die die folgenden Eigenschaften erfüllt. Wir fassen diese Eigenschaften als Menge von Aussagen 
+\(\Phi(F,A,B)\) zusammen:
 \end{definition}
 
-\begin{theorem}[ ]
-\label{xInASetminusBLrxInAAndxNotinB}
-\[x\in A\setminus B\leftrightarrow x\in A\land x\not\in B \]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{lllcll}
-	      & (1) & x\in A\setminus B&\leftrightarrow& x\in \{x\in A\mid x\not\in B\} & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\DefASetminusB{}}} \\
-        & (2) & &\leftrightarrow& x\in A\land x\not\in B & \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{1} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaAxiomAuto[Existenz als Menge geordneter Paare]{F \subseteq A \times B}
 
-\begin{theorem}[ ]
-\label{cInASetminusLbaRbImpcNotEqualsa}
-\[ c\in A\setminus\{a\}\vdash c\neq a \]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-	    1 & (1) & c\in A\setminus\{a\} & \rA \\
-        1 & (2) & c\not\in \{a\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
-		1 & (3) & c\neq a & \cInASetminusLbaRbImpcNotEqualsa{2} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaAxiomAuto[Funktionale Eindeutigkeit]{\forall x \in A\,\forall y,z \in B\;\bigl((x,y)\in F \land (x,z)\in F \rightarrow y=z\bigr)}
 
-\begin{theorem}[ ]
-\label{cInASetminusLbawbRbImpcNotEqualsa}
-\[ c\in A\setminus\{a,b\}\vdash c\neq a \]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & c\in A\setminus\{a,b\} & \rA \\
-		1 & (2) & c\not\in \{a,b\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
-		1 & (3) & c\neq a & \rAEa{\xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb{2}} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaAxiomAuto[Totale Definition auf der Domäne]{\forall x \in A\,\exists y \in B\;(x,y)\in F}
 
-\begin{theorem}[ ]
-\label{cInASetminusLbawbRbImpcNotEqualsb}
-\[ c\in A\setminus\{a,b\}\vdash c\neq b \]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & c\in A\setminus\{a,b\} & \rA \\
-		1 & (2) & c\not\in \{a,b\} & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
-		1 & (3) & c\neq b & \rAEb{\xNotinLbawbRbEqvxNotEqualsaAndxNotEqualsb{2}} \\
-	\end{array}
-    \]
-\end{proof}
+\begin{remark}
+Die Bedingung (1) sagt aus, dass eine Funktion nichts anderes als eine Teilmenge des kartesischen Produkts ist.  
+Bedingung (2) fordert die Eindeutigkeit des Funktionswerts.  
+Bedingung (3) garantiert, dass jedes \(x\in A\) tatsächlich ein Bild in \(B\) hat.  
+\end{remark}
 
-\begin{theorem}[ ]
-\label{cInASetminusBwbInBImpcNotEqualsb}
-\[ c\in A\setminus B, b\in B\vdash c\neq b \]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & c\in A\setminus B & \rA \\
-		2 & (2) & b\in B & \rA \\
-		1 & (3) & c\not\in B & \rAEb{\xInASetminusBLrxInAAndxNotinB{1}} \\
-		1,2 & (4) & c\neq b & \FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,3} \\
-	\end{array}
-    \]
-\end{proof}
+\begin{definition}[Domäne und Kodomäne]
+Sei \(F\colon A\to B\) eine Funktion. Dann heißt
+\begin{itemize}
+  \item \(A\) der \textbf{Definitionsbereich (Domäne)} von \(F\), notiert als \(\mathrm{dom}(F)\),
+  \item \(B\) der \textbf{Wertebereich (Kodomain)} von \(F\).
+\end{itemize}
+\end{definition}
 
 
-\begin{theorem}[ ]
-\label{aNotinASetminusLbaRb}
-\[a\not\in A\setminus\{a\}\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & a\in A\setminus\{a\} & \rA \\
-		& (2) & a=a & \rII \\
-		1 & (3) & a\neq a & \cInASetminusLbaRbImpcNotEqualsa{1} \\
-		1 & (4) & \bot & \rBI{2,3} \\
-		& (5) & a\not\in A\setminus\{a\} & \rCI{1,4} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaThmAuto[Eindeutigkeit des Funktionswertes]{\forall x \in A\,\exists! y \in B\;(x,y)\in F}[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
+\begin{tabproof}
+  \proofstep{}{(x,y)\in F \land (x,z)\in F \rightarrow y=z}{\rUE{\FormulaRefAuto{\forall x \in A\,\forall y,z \in B\;\bigl((x,y)\in F \land (x,z)\in F \rightarrow y=z\bigr)}}}
+  \proofstep{}{\exists y\in B(x,y)\in F}{\rUE{\FormulaRefAuto{\forall x \in A\,\exists y \in B\;(x,y)\in F}}}
+  \proofstep{3}{(x,y)\in F}{\rA}
+  \proofstep{4}{(x,z)\in F}{\rA}
+  \proofstep{3,4}{(x,y)\in F \land (x,z)\in F}{\rAI{3,4}}
+  \proofstep{3,4}{y=z}{\rRE{1,5}}
+  \proofstep{}{\forall x\in A\exists! y\in B(x,y)\in F}{\rUI{\UEI{2,3,4,6}}}
+\end{tabproof}
 
-\begin{theorem}[ ]
-\label{aNotinASetminusLbawbRb}
-\[a\not\in A\setminus\{a,b\}\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & a\in A\setminus\{a,b\} & \rA \\
-		& (2) & a=a & \rII \\
-		1 & (3) & a\neq a & \cInASetminusLbawbRbImpcNotEqualsa{1} \\
-		1 & (4) & \bot & \rBI{2,3} \\
-		& (5) & a\not\in A\setminus\{a,b\} & \rCI{1,4} \\
-	\end{array}
-    \]
-\end{proof}
+\begin{remark}
+Im Folgenden verwenden wir für \(x \in A\) die Notation
+\[
+F(x) := y \quad\text{genau dann, wenn}\quad (x,y)\in F.
+\]
+Dies ist wohldefiniert aufgrund des obigen Theorems.
+\end{remark}
 
-\begin{theorem}[ ]
-\label{bNotinASetminusLbawbRb}
-\[b\not\in A\setminus\{a,b\}\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & b\in A\setminus\{a,b\} & \rA \\
-		& (2) & b=b & \rII \\
-		1 & (3) & b\neq b & \cInASetminusLbawbRbImpcNotEqualsb{1} \\
-		1 & (4) & \bot & \rBI{2,3} \\
-		& (5) & b\not\in A\setminus\{a,b\} & \rCI{1,4} \\
-	\end{array}
-    \]
-\end{proof}
+\FormulaThmAuto[Ersetzung über Funktionen]{
+  \exists! C\forall y(y\in C\leftrightarrow \exists x\in A (F(x)=y)
+}[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
+
+\begin{tabproof}
+  \proofstep{}{\forall x \in A\,\exists! y \in B\;(x,y)\in F}{\FormulaRefAuto{\forall x \in A\,\exists! y \in B\;(x,y)\in F}}
+  \proofstep{}{\exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;F(x)=y\bigr)}{\rRE{\rUE{\FormulaRefAuto{
+\forall A\;\forall R\;\Bigl( \forall x\in A\;\exists! y\;R(x,y)\in R\;\rightarrow\; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr) \Bigr)}
+},1}}
+  \proofstep{}{\exists! C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;F(x)=y\bigr)}{\FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{2}}
+\end{tabproof}
+
+\FormulaDefAuto[Funktionsbild]{F(A) := \{y \mid \exists x \in A\,(F(x)=y)\}}%
+[Für eine Funktion \(F:A\to B\) definieren wir das Bild von \(A\) als die Menge aller Werte, 
+die \(F\) für Elemente aus \(A\) annimmt:]
+
+\begin{remark}
+Da die Existenz und Eindeutigkeit der Menge 
+\(\{y \mid \exists x \in A(F(x)=y)\}\) durch das 
+Ersetzungsaxiom (in der Formulierung über Funktionen) gesichert ist, 
+kann das Bild \(F(A)\) unabhängig vom Codomain \(B\) definiert werden. 
+Das \(B\) spielt nur noch die Rolle einer Schranke, nicht aber der eigentlichen Definition.
+\end{remark}
 
 
-\begin{theorem}[ ]
-\label{aInAwaNotEqualsbImpaInASetminusLbbRb}
-\[a\in A, a\neq b\vdash a\in A\setminus\{b\}\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & a\in A & \rA \\
-		2 & (2) & a\neq b & \rA \\
-		2 & (3) & a\not\in \{b\} & \xNotinLbaRbEqvxNotEqualsa{2} \\
-		1,2 & (4) & a\in A\setminus \{b\} & \xInASetminusBLrxInAAndxNotinB{\rAI{1,3}} \\
-	\end{array}
-    \]
-\end{proof}
 
-\begin{theorem}[ ]
-\label{aInAwbNotEqualsaImpaInASetminusLbbRb}
-\[a\in A, b\neq a\vdash a\in A\setminus\{b\}\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		1 & (1) & a\in A & \rA \\
-		2 & (2) & b\neq a & \rII \\
-            2 & (3) & a\neq b & \FormulaRefAuto{a \neq b \vdash b \neq a}{2} \\
-		1,2 & (4) & a\in A\setminus \{b\} & \aInAwaNotEqualsbImpaInASetminusLbbRb{1,3} \\
-	\end{array}
-    \]
-\end{proof}
+
+\end{document}
+
+/*
+
 
 \section{Folgen über Indexmengen}
 
@@ -1150,7 +1684,7 @@ Sei $I$ eine Menge, genannt \textbf{Indexmenge}, und sei $F\colon I\to A$ eine F
 
 Dann definieren wir die \textbf{Folge} $(a_i)_{i\in I}$ durch:
 \[
-(a_i)_{i\in I} \coloneqq \{F(i)\mid i\in I\}.
+(a_i)_{i\in I} := \{F(i)\mid i\in I\}.
 \]
 
 Dabei setzen wir für jedes $i\in I$ fest:
@@ -1160,991 +1694,6 @@ a_i := F(i).
 
 Die Menge $\{F(i)\mid i\in I\}$ existiert nach dem Ersetzungsaxiom eindeutig, da $F$ eine Funktion mit Definitionsbereich $I$ ist.
 \end{definition}
-
-
-
-\section{Definition und Eigenschaften der Vereinigung}
-
-\begin{definition}[Vereinigung zweier Mengen]
-\label{DefAcuB}
-    \[
-	A \cup B \coloneqq \bigcup \{ A, B \}
-	\]
-\end{definition}
-
-
-
-\begin{theorem}[ ]
-\label{ASubseteqBImpBigcupASubseteqBigcupB}
-\[A \subseteq B \vdash \bigcup A \subseteq \bigcup B\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & A \subseteq B & \rA \\
-		2 & (2) & x\in\bigcup A & \rA \\
-		2 & (3) & \exists X(X\in A\land x\in X) & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{2} \\
-		4 & (4) & C\in A\land x\in C & \rA \\
-		4 & (5) & C\in A & \rAEa{4} \\
-		4 & (6) & x\in C & \rAEb{4} \\
-		1,4 & (7) & C\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,1} \\
-		1,4 & (8) & x\in\bigcup B & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{\rEI{\rAI{7,6}}} \\
-		1,2 & (9) & x\in\bigcup B & \rEE{3,4,8} \\
-		1 & (10) & \bigcup A\subseteq \bigcup B & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRE{2,9}}} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{zInAcuBEqvLpzInAOrzInBRp}
-\[z \in A \cup B \eqvdash (z \in A \lor z \in B)\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
-& (1) & z\in A \cup B &\leftrightarrow & z\in \bigcup \{ A, B \} & \rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\DefAcuB{}}} \\	
-& (2) &  &\leftrightarrow & \exists C(C\in \{A, B\}\land x\in C) & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{1} \\	
-& (3) &  &\leftrightarrow & \exists C((C=A\lor C=B)\land x\in C) & \rLRS{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}} \\
-& (4) &  &\leftrightarrow & x\in A\lor x\in B & \FormulaRefAuto{\exists c((c=a\lor c=b)\land P(c))\dashv \vdash P(a)\lor P(b)}{3}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInAImpzInAcuB}
-\[z\in A\vdash z \in A \cup B\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
-1 & (1) & z\in A  & \rA  \\	
-1 & (2) & z\in A\lor z\in B  & \rOIa{1}  \\	
-1 & (3) & z\in A\cup B  & \zInAcuBEqvLpzInAOrzInBRp{2}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInBImpzInAcuB}
-\[z\in B\vdash z \in A \cup B\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
-1 & (1) & z\in B  & \rA  \\	
-1 & (2) & z\in A\lor z\in B  & \rOIb{1}  \\	
-1 & (3) & z\in A\cup B  & \zInAcuBEqvLpzInAOrzInBRp{2}  \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{xInLbawbRbEqvxInLbaRbcuLbbRb}
-\[x\in \{a,b\}\eqvdash x\in \{a\}\cup \{b\}\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-  & (1) & x\in \{a\}&\leftrightarrow& x=a & \xInLbaRbEqvxEqualsa{} \\
-  & (2) & x\in \{b\}&\leftrightarrow& x=b & \xInLbaRbEqvxEqualsa{} \\
-  & (3) & B\in\{\{a\},\{b\}\}&\leftrightarrow& B=\{a\}\lor B=\{b\} & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{}  \\
-  & (4) & x\in \{a,b\}&\leftrightarrow& x=a\lor x=b & \FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{} \\
-  & (5) & &\leftrightarrow& x\in\{a\}\lor x=b & \rLRS{1}\\
-  & (6) & &\leftrightarrow& x\in\{a\}\lor x\in\{b\} & \rLRS{2}\\
-  & (7) & &\leftrightarrow& \exists B((B=\{a\}\lor B=\{b\})\land x\in B) & \FormulaRefAuto{\exists c((c=a\lor c=b)\land P(c))\dashv \vdash P(a)\lor P(b)}{6}\\
-  & (8) & &\leftrightarrow& \exists B(B\in\{\{a\},\{b\}\}\land x\in B) & \rLRS{3}\\
-  & (9) & &\leftrightarrow& x\in\bigcup \{\{a\},\{b\}\} & \FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{8}\\
-  & (10) & &\leftrightarrow& x\in\{a\}\cup\{b\} & \DefAcuB{8}\\
-  & (11) & x\in \{a,b\}&\leftrightarrow& x\in\{a\}\cup\{b\} & \rChain{4,10}\\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{LbawbRbEqualsLbaRbcuLbbRb}
-\[\{a,b\}=\{a\}\cup \{b\}\]
-\end{theorem}
-
-\begin{proof}
-\[
-\begin{array}{llll}
- & (1) & x\in \{a,b\}\leftrightarrow x\in \{a\}\cup \{b\} & \xInLbawbRbEqvxInLbaRbcuLbbRb{} \\
- & (2) & \{a,b\}=\{a\}\cup \{b\} & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{aInAcuLbaRb}
-\[a\in A\cup\{a\}\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
- & (1) & a\in\{a\} & \aInLbaRb{} \\
- & (2) & a\in A\cup\{a\} & \zInBImpzInAcuB{1} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{aInLbaRbcuA}
-\[a\in \{a\}\cup A\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{llll}
-		& (1) & a\in\{a\} & \aInLbaRb{} \\
-		& (1) & a\in\{a\}\cup A & \zInAImpzInAcuB{1} \\
-	\end{array}
-    \]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{aNotinBwAEqualsBcuLbaRbImpANsubseteqB}
-\[a\not\in B, A=B\cup \{a\}\vdash A\nsubseteq B\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a\not\in B & \rA \\
-		2 & (2) & A=B\cup \{a\} & \rA \\
-		3 & (3) & A\subseteq B & \rA \\
-		& (4) & a\in B\cup \{a\} & \aInAcuLbaRb{} \\
-		2 & (5) & a\in A & \rIE{2,4} \\
-		2,3 & (6) & a\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,3} \\
-		2,3 & (7) & a\in B & \FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{5,3} \\
-		1,2,3 & (8) & \bot & \rBI{1,7} \\
-		1,2 & (9) & A\nsubseteq B & \rBI{1,7} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{xInAEqvxInAcuA}
-\[x\in A \eqvdash x\in A \cup A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & x \in A &\leftrightarrow& x\in A\lor x\in A & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{} \\
- & (2) & &\leftrightarrow& x\in A\cup A & \zInAcuBEqvLpzInAOrzInBRp{} \\
-  & (3) & x \in A&\leftrightarrow& x\in A\cup A & \rChain{1,2} \\
-\end{array}
-\]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{AEqualsAcuA}
-\[A = A \cup A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) &x \in A&\leftrightarrow& x\in A\cup A & \xInAEqvxInAcuA{} \\
- & (2) & A&=& A\cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{xInAcuBEqualsxInBcuA}
-\[x\in A \cup B \eqvdash x\in B \cup A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & x \in A\cup B &\leftrightarrow& x\in A\lor x\in B & \zInAcuBEqvLpzInAOrzInBRp{} \\
- & (2) &  &\leftrightarrow& x\in B\lor x\in A & \FormulaRefAuto{P \lor Q \vdash Q \lor P}{1} \\
- & (3) &  &\leftrightarrow& x\in B\cup A & \zInAcuBEqvLpzInAOrzInBRp{2} \\
- & (4) & x \in A\cup B&\leftrightarrow& x\in B\cup A & \rChain{1,3} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{AcuBEqualsBcuA}
-\[A \cup B = B \cup A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) &  x \in A\cup B&\leftrightarrow& x\in B\cup A & \xInAcuBEqualsxInBcuA{} \\
- & (2) & A \cup B &=& B \cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{xInAEqvxInAcuEmptyset}
-\[x\in A\eqvdash x\in A\cup\emptyset\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & x\in A &\leftrightarrow & x\in A\lor x\in\emptyset & \FormulaRefAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}} \\
- & (2) &  &\leftrightarrow & x\in A\cup\emptyset & \zInAcuBEqvLpzInAOrzInBRp{1} \\
-  & (3) &  x\in A &\leftrightarrow & x\in A\cup\emptyset & \rChain{1,2} \\
-\end{array}
-\]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{AEqualsAcuEmptyset}
-\[A=A\cup\emptyset\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    1 & (1) & x\in A &\leftrightarrow & x\in A\cup\emptyset & \xInAEqvxInAcuEmptyset{} \\  
-    1 & (2) & A &=& A\cup\emptyset & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{AEqualsEmptysetcuA}
-\[A=\emptyset\cup A\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		   & (1) & A=A\cup\emptyset & \AEqualsAcuEmptyset{} \\
-          & (2) & A\cup\emptyset = \emptyset\cup A & \AcuBEqualsBcuA{} \\
-          & (3) & A = \emptyset\cup A & \rIE{2,1} \\
-  
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{AcuLbARbEqualsLbEmptysetRbEqualsEqvAEqualsEmptyset}
-\[ A \cup \{A\} = \{\emptyset\} = \eqvdash A = \emptyset\]
-\end{theorem}
-\begin{proof}
-\(\vdash:\)
-\[
-\begin{array}{llll}
-    1       & (1) & \{\emptyset\} = A \cup \{A\} & \rA \\
-            & (2) & A\in A \cup \{A\} & \aInAcuLbaRb{} \\
-    1       & (3) & A\in\{\emptyset\} & \FormulaRefAuto{ A = B,\, x \in A \vdash x \in B }{1,2} \\
-    1       & (4) & A=\emptyset & \xInLbaRbEqvxEqualsa{3} \\
-\end{array}
-\]
-\(\dashv:\)
-\[
-\begin{array}{llll}
-    1 & (1) & A = \emptyset & \rA \\
-      & (2) & \{\emptyset\} = \emptyset\cup\{\emptyset\} & \AEqualsEmptysetcuA{} \\
-    1 & (3) &  A\cup\{A\} = \{\emptyset\} & \rIE{1,\FormulaRefAuto{a = b \vdash b = a}{2}} \\
-\end{array}
-\]
-
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInAcuBEqvzNotinATozInB}
-\[z\in A \cup B \eqvdash z\not\in A \rightarrow z\in B\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{lllcll}
-	   & (1) & z \in A \cup B&\leftrightarrow & z\in A\lor z\in B & \zInAcuBEqvLpzInAOrzInBRp{}  \\
-          & (2) & &\leftrightarrow & z\not\in A\rightarrow z\in B & \FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1} \\
-	\end{array}
-	\]		
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInAcuBEqvzNotinBTozInA}
-\[z\in A \cup B \eqvdash z\not\in B \rightarrow z\in A\]
-\end{theorem}
-\begin{proof}
-    \[
-	\begin{array}{lllcll}
-	   & (1) & z \in A \cup B&\leftrightarrow & z\in A\lor z\in B & \zInAcuBEqvLpzInAOrzInBRp{}  \\
-          & (2) & &\leftrightarrow & z\not\in B\rightarrow z\in A & \FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1} \\
-	\end{array}
-	\]		
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInLpAcuBRpcuCEqvLpzInAOrzInBRpOrzInC}
-\[z \in (A \cup B)\cup C \eqvdash (z \in A \lor z \in B)\lor z\in C\]
-\end{theorem}	
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-    & (1) & z\in (A \cup B)\cup C&\leftrightarrow& z\in (A \cup B)\lor z\in C & \zInAcuBEqvLpzInAOrzInBRp{} \\	
-    & (2) & &\leftrightarrow&  (z\in A \lor z\in B)\lor z\in C & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInAcuLpBcuCRpEqvzInAOrLpzInBOrzInCRp}
-\[z \in A \cup (B\cup C) \eqvdash z \in A \lor (z \in B\lor z\in C)\]
-\end{theorem}	
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-    & (1) & z \in A \cup (B\cup C)&\leftrightarrow& z\in A\lor z\in ( B\cup C) & \zInAcuBEqvLpzInAOrzInBRp{} \\	
-    & (2) & &\leftrightarrow&  z \in A \lor (z \in B\lor z\in C) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInLpAcuBRpcuCEqvzInAcuLpBcuCRp}
-\[z \in (A \cup B)\cup C \eqvdash z \in  A \cup (B\cup C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-    & (1) & z \in (A \cup B)\cup C&\leftrightarrow& (z \in A \lor z \in B)\lor z\in C & \zInLpAcuBRpcuCEqvLpzInAOrzInBRpOrzInC{} \\	
-    & (2) & &\leftrightarrow&  z \in A \lor (z \in B\lor z\in C) & \FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}{1} \\
-    & (3) & &\leftrightarrow&  z \in A \cup (B\cup C) & \zInAcuLpBcuCRpEqvzInAOrLpzInBOrzInCRp{2} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[Assoziativität der Vereinigung]
-\label{LpAcuBRpcuCEqualsAcuLpBcuCRp}
-\[(A \cup B) \cup C = A \cup (B \cup C)\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in (A \cup B)\cup C &\leftrightarrow& z \in  A \cup (B\cup C) & \zInLpAcuBRpcuCEqvzInAcuLpBcuCRp{} \\
-    & (2) & (A \cup B)\cup C &=& A \cup (B\cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInAcuLpBcaCRpEqvzInAOrLpzInBAndzInCRp}
-\[z \in A \cup (B\cap C) \eqvdash z \in A \lor (z \in B\land z\in C)\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in A \cup (B\cap C) &\leftrightarrow& z \in A \lor z\in (B\cap C) & \zInAcuBEqvLpzInAOrzInBRp{}  \\
-    & (2) & &\leftrightarrow& z \in A \lor (z\in B\land z\in C) & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInLpAcaBRpcuCEqvLpzInAAndzInBRpOrzInC}
-\[z \in (A\cap B)\cup C \eqvdash (z \in A\land z\in B)\lor z\in C\]
-\end{theorem}	
-
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in (A\cap B)\cup C &\leftrightarrow& z \in (A\cap B)\cup z\in C & \zInAcuBEqvLpzInAOrzInBRp{}  \\
-    & (2) & &\leftrightarrow& (z \in A\land z\in B)\lor z\in C & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInAcaLpBcuCRpEqvzInAAndLpzInBOrzInCRp}
-\[z \in A\cap (B\cup C) \eqvdash z \in A\land (z\in B\lor z\in C)\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in A\cap (B\cup C) &\leftrightarrow& z \in A\land z\in (B\cup C) & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
-    & (2) & &\leftrightarrow& z \in A\land (z\in B\lor z\in C) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInLpAcuBRpcaCEqvzInLpzInAOrzInCRpAndzInC}
-\[z \in (A\cup B)\cap C \eqvdash z \in (z\in A\lor z\in C)\land z\in C\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in (A\cup B)\cap C &\leftrightarrow& z \in (A\cup B)\land z\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
-    & (2) & &\leftrightarrow& (z\in A\lor z\in B)\land z\in C & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp}
-\[z \in (A\cup B)\cap (C\cup D) \eqvdash (z \in A\lor z\in B)\land (z\in C\lor z\in D)\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in (A\cup B)\cap (C\cup D) &\leftrightarrow& z \in (A\cup B)\land z\in (C\cup D) & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{}  \\
-    & (2) & &\leftrightarrow&  (z \in A\lor z\in B)\land (z\in C\lor z\in D) & \rLRS{\zInAcuBEqvLpzInAOrzInBRp{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp}
-\[z \in (A\cap B)\cup (C\cap D) \eqvdash (z \in A\land z\in B)\lor (z\in C\land z\in D)\]
-\end{theorem}	
-\begin{proof}
-\[
-\begin{array}{lllcll}
-    & (1) & z \in (A\cap B)\cup (C\cap D) &\leftrightarrow& z \in (A\cap B)\lor z\in (C\cap D) & \zInAcuBEqvLpzInAOrzInBRp{}  \\
-    & (2) & &\leftrightarrow&   (z \in A\land z\in B)\lor (z\in C\land z\in D) & \rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}  \\
-\end{array}
-\]
-\end{proof}
-
-
-
-
-\begin{theorem}[ ]
-\label{zInAcaLpBcuCRpEqvzInLpAcaBRpcuLpAcaCRp}
-\[z\in A \cap (B \cup C) \eqvdash z\in (A \cap B) \cup (A \cap C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in A \cap (B \cup C)&\leftrightarrow& z \in A\land (z\in B\lor z\in C)  & \zInAcaLpBcuCRpEqvzInAAndLpzInBOrzInCRp{} \\
-& (2) & &\leftrightarrow& (z \in A\land z\in B)\lor (z\in A\land z\in C)  & \FormulaRefAuto{P \land (Q\lor R) \dashv \vdash  (P \land Q) \lor (P\land R)}{1} \\
-& (3) & &\leftrightarrow& z \in (A\cap B)\cup (A\cap C)  & \zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp{2} \\
-& (4) &  z\in A \cap (B \cup C) &\leftrightarrow& z \in (A\cap B)\cup (A\cap C)  & \rChain{1,3}{2} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInLpAcuBRpcaCEqvzInLpAcaCRpcuLpBcaCRp}
-\[z\in (A \cup B)\cap C \eqvdash z\in (A \cap C) \cup (B \cap C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in (A \cup B)\cap C &\leftrightarrow& (z\in A\lor z\in B)\land z\in C  & \zInLpAcuBRpcaCEqvzInLpzInAOrzInCRpAndzInC{} \\
-& (2) & &\leftrightarrow& (z\in A\land z\in C)\lor (z\in B\land z\in C)  & \FormulaRefAuto{(P\lor Q)\land R \dashv \vdash  (P \land R) \lor (Q\land R)}{1} \\
-& (3) & &\leftrightarrow& z\in (A \cap C)\cup (B \cap C)  & \zInLpAcaBRpcuLpCcaDRpEqvLpzInAAndzInBRpOrLpzInCAndzInDRp{2} \\
-& (4) & z\in (A \cup B)\cap C &\leftrightarrow& z\in (A \cap C)\cup (B \cap C)  & \rChain{1,3} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{zInLpAcaBRpcuCEqvzInLpAcuCRpcaLpBcuCRp}
-\[z\in (A \cap B)\cup C \eqvdash z\in (A \cup C) \cap (B \cup C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in (A \cap B)\cup C &\leftrightarrow& (z \in A\land z\in B)\lor z\in C  & \zInLpAcaBRpcuCEqvLpzInAAndzInBRpOrzInC{} \\
-& (2) & &\leftrightarrow& (z \in A\lor z\in C)\land (z\in B\land z\in C)  & \FormulaRefAuto{(P\land Q)\lor R \dashv \vdash (P \lor R) \land (Q\lor R)}{1} \\
-& (3) & &\leftrightarrow& z\in (A \cup C) \cap (B \cup C)  & \zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp{2} \\
-& (4) &  z\in (A \cap B)\cup C &\leftrightarrow& z\in (A \cup C) \cap (B \cup C)  & \rChain{1,3} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{zInAcuLpBcaCRpEqvzInLpAcuBRpcaLpAcuCRp}
-\[z\in A\cup (B \cap C) \eqvdash z\in (A \cup B) \cap (A \cup C)\]
-\end{theorem}
-
-\begin{proof}
-\[
-\begin{array}{lllcll}
-& (1) & z\in A \cup (B \cap C) &\leftrightarrow& z \in A \lor (z\in B \land z\in C)  & \zInAcuLpBcaCRpEqvzInAOrLpzInBAndzInCRp{} \\
-& (2) & &\leftrightarrow& (z \in A\lor z\in B) \land (z \in A \lor z\in C)  & \FormulaRefAuto{P \lor (Q \land R) \dashv \vdash (P \lor Q) \land (P \lor R)}{1} \\
-& (3) & &\leftrightarrow& z\in (A \cup B) \cap (A \cup C)  & \zInLpAcuBRpcaLpCcuDRpEqvLpzInAOrzInBRpAndLpzInCOrzInDRp{2} \\
-& (4) &  z\in A \cup (B \cap C) &\leftrightarrow& z\in (A \cup B) \cap (A \cup C)  & \rChain{1,3} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{AcuLpBcaCRpEqualsLpAcuBRpcaLpAcuCRp}
-\[A \cup (B \cap C) = (A \cup B) \cap (A \cup C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) &  z\in A \cup (B \cap C) &\leftrightarrow& z \in (A\cup B)\cap (A\cup C)  & \zInAcuLpBcaCRpEqvzInLpAcuBRpcaLpAcuCRp{} \\
-& (2) & A \cup (B \cap C) &=& (A \cup B) \cap (A \cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{LpAcaBRpcuCEqualsLpAcuCRpcaLpBcuCRp}
-\[(A \cap B)\cup C = (A \cup C) \cap (B \cup C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in (A \cap B)\cup C &\leftrightarrow& z \in (A \cup C) \cap (B \cup C) & \zInLpAcaBRpcuCEqvzInLpAcuCRpcaLpBcuCRp{} \\
-& (2) & (A \cap B)\cup C &=& (A \cup C) \cap (B \cup C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{AcaLpBcuCRpEqualsLpAcaBRpcuLpAcaCRp}
-\[A \cap (B \cup C) = (A \cap B) \cup (A \cap C)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in A \cap (B \cup C) &\leftrightarrow& z \in (A \cap B) \cup (A \cap C) & \zInAcaLpBcuCRpEqvzInLpAcaBRpcuLpAcaCRp{} \\
-& (2) & A \cap (B \cup C) &=& (A \cap B) \cup (A \cap C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{LpAcuBRpcaCEqualsLpAcaCRpcuLpBcaCRp}
-\[(A \cup B)\cap C = (A \cap C) \cup (B \cap C)\]
-\end{theorem}
-
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-& (1) & z\in (A \cup B)\cap C &\leftrightarrow& z \in (A \cap C) \cup (B \cap C) & \zInLpAcuBRpcaCEqvzInLpAcaCRpcuLpBcaCRp{} \\
-& (2) & (A \cup B)\cap C &=& (A \cap C) \cup (B \cap C) & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}} \\
-	\end{array}
-	\]
-\end{proof}
-
-\section{Eigenschaften von Teilmengen in Bezug auf Vereinigung und Durchschnitt}
-
-\begin{theorem}[ ]
-\label{ASubseteqAcuB}
-\[A\subseteq A\cup B\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & x\in A &\rightarrow& x\in A\lor x\in B & \FormulaRefAuto{P \rightarrow P \lor Q}{} \\
- & (2) &        &\rightarrow& x\in A\cup B & \zInAcuBEqvLpzInAOrzInBRp{1} \\
- & (3) & x\in A  &\rightarrow& x\in A\cup B & \rChain{1,2} \\
- & (4) &  A\subseteq A\cup B & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{3}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{ASubseteqBcuA}
-\[A\subseteq B\cup A\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & x\in A &\rightarrow& x\in B\lor x\in A & \FormulaRefAuto{P \rightarrow Q \lor P}{} \\
- & (2) &        &\rightarrow& x\in A\cup B & \zInAcuBEqvLpzInAOrzInBRp{1} \\
- & (3) & x\in A  &\rightarrow& x\in B\cup A & \rChain{1,2} \\
- & (4) &  A\subseteq B\cup A & \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{3}} \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{ASubseteqCwBSubseteqCImpAcuBSubseteqC}
-\[A \subseteq C, B \subseteq C \vdash A \cup B \subseteq C\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & A \subseteq C & & & \rA \\
- & (2) & B \subseteq C & & & \rA \\
- & (3) & z \in A \cup B & \rightarrow & z\in A \lor z \in B & \zInAcuBEqvLpzInAOrzInBRp{} \\
-1,2 & (4) & & \rightarrow & z \in C & \FormulaRefAuto{P\rightarrow Q, R\rightarrow Q, P\lor R\vdash Q}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{2}},3}  \\
-1,2 & (5) & z \in A \cup B&\rightarrow& z \in C & \rChain{3,4} \\
-1,2 & (6) & A \cup B \subseteq C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{ASubseteqBImpAcuCSubseteqBcuC}
-\[A \subseteq B \vdash A \cup C \subseteq B \cup C\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & A \subseteq B & & & \rA \\
- & (2) & z\in A\cup C &\rightarrow & z\in A\lor z\in C & \zInAcuBEqvLpzInAOrzInBRp{} \\
-1 & (3) &   &\rightarrow & z\in B\lor z\in C & \FormulaRefAuto{P\rightarrow Q, P\lor R\vdash Q\lor R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},2} \\
-1 & (4) &   &\rightarrow & z\in B\cup C & \zInAcuBEqvLpzInAOrzInBRp{3} \\
-1 & (5) &  z\in A\cup C &\rightarrow & z\in B\cup C & \rChain{2,4} \\
-1 & (6) &  A\cup C\subseteq B\cup C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{ASubseteqBImpCcuASubseteqCcuB}
-\[A \subseteq B \vdash C\cup A \subseteq C\cup B\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & A \subseteq B & & & \rA \\
- & (2) & C\cup A &=& A\cup C & \AcuBEqualsBcuA{} \\
-1 & (3) &   &\subseteq & B\cup C & \ASubseteqBImpAcuCSubseteqBcuC{1} \\
-1 & (4) &   &=& C\cup B & \AcuBEqualsBcuA{3} \\
-1 & (5) &  C\cup A &\subseteq & C\cup B & \rChain{2,4} \\
-\end{array}
-\]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{ASubseteqBwCSubseteqDImpAcuCSubseteqBcuD}
-\[A \subseteq B, C \subseteq D \vdash A \cup C \subseteq B \cup D\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & A \subseteq B & & & \rA \\
- & (2) & C \subseteq D & & & \rA \\
-1 & (3) & A\cup C &\subseteq & B\cup C & \ASubseteqBImpAcuCSubseteqBcuC{1} \\
-1,2 & (4) &  &\subseteq & B\cup D & \ASubseteqBImpCcuASubseteqCcuB{2} \\
-1,2 & (5) &  A\cup C &\subseteq & B\cup D & \rChain{3,4} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{theorem}[ ]
-\[A \subseteq B\vdash A \cap C \subseteq B \cap C\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{lllcll}
- & (1) & A \subseteq B & & & \rA \\
- & (2) & z\in A\cap C &\rightarrow & z\in A\land z\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{} \\
-1 & (3) &   &\rightarrow & z\in B\lor z\in C & \FormulaRefAuto{P\rightarrow Q, P\lor R\vdash Q\lor R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},2} \\
-1 & (4) &   &\rightarrow & z\in B\cup C & \zInAcuBEqvLpzInAOrzInBRp{3} \\
-1 & (5) &  z\in A\cup C &\rightarrow & z\in B\cup C & \rChain{2,4} \\
-1 & (6) &  A\cup C\subseteq B\cup C & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{ASubseteqBwCSubseteqDImpAcaCSubseteqBcaD}
-\[A \subseteq B, C \subseteq D \vdash A \cap C \subseteq B \cap D\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		1 & (1) & A \subseteq B & & & \rA \\
-		2 & (2) & C \subseteq D & & & \rA \\
-		   & (3) & x \in A \cap C &\rightarrow &x\in A\land x\in C & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{} \\
-        1 & (4) & &\rightarrow &x\in B\land x\in C & \FormulaRefAuto{P\rightarrow Q, P\land R\vdash Q\land R}{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{1}},3} \\
-        1,2 & (5) & &\rightarrow &x\in B\land x\in D & \FormulaRefAuto{P\rightarrow Q, R\land P\vdash R\land Q}         ChatGPT fragen{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{2}},4} \\
-        1,2 & (6) & &\rightarrow &x\in B\cap D & \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{5} \\
-        1,2 & (7) & x\in A\cap C &\rightarrow &x\in B\cap D & \rChain{3,6} \\
-        1,2 & (8) & A\cap C\subseteq B\cap D & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{7}} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{aInAwbInBImpLbawbRbSubseteqAcuB}
-\[a\in A, b\in B\vdash \{a,b\}\subseteq A\cup B\]
-\end{theorem}	
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a\in A & \rA \\
-		2 & (2) & b\in B & \rA \\
-		1 & (3) & \{a\}\subseteq A & \aInAImpLbaRbSubseteqA{1} \\
-		2 & (4) & \{b\}\subseteq B & \aInAImpLbaRbSubseteqA{2} \\
-		1,2 & (5) & \{a\}\cup \{b\}\subseteq A\cup B & \ASubseteqBwCSubseteqDImpAcuCSubseteqBcuD{3,4} \\
-		& (6) & \{a,b\} = \{a\}\cup \{b\}  & \LbawbRbEqualsLbaRbcuLbbRb{} \\
-		& (7) & \{a,b\}\subseteq A\cup B & \rIE{6,5} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{aInAwbInAImpLbawbRbSubseteqA}
-\[a\in A, b\in A\vdash \{a,b\}\subseteq A\]
-\end{theorem}	
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		1 & (1) & a\in A & & & \rA \\
-		2 & (2) & b\in A & & & \rA \\
-        1,2 & (3) & \{a,b\}&\subseteq& A\cup A & \aInAwbInBImpLbawbRbSubseteqAcuB{1,2} \\
-        1,2 & (4) & &=& A & \AEqualsAcuA{3} \\
-        1,2 & (5) & \{a,b\} &\subseteq & A & \rChain{3,4} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\chapter{Die Potenzmenge}
-
-\section{Eigenschaften der Potenzmenge}
-
-\begin{theorem}[ ]
-\label{ASubseteqBImpPowersetLpARpSubseteqPowersetLpBRp}
-\[A \subseteq B \vdash \powerset(A) \subseteq \powerset(B)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{lllcll}
-		1 & (1) & A \subseteq B & & &\rA \\
-		   & (2) & x\in\powerset(A) &\rightarrow &x\subseteq A & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{} \\
-        1 & (3) &  &\rightarrow & x\subseteq B & \FormulaRefAuto{ A \subseteq B, B \subseteq C \vdash A \subseteq C }{2,1} \\
-		  1 & (4) & &\rightarrow&x\in\powerset(B) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{3} \\
-		   & (5) & x\in\powerset(A)&\rightarrow&x\in\powerset(B) & \rChain{2,4} \\
-        1 & (6) & \powerset(A)\subseteq \powerset(B) & & & \FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{\rUI{5}} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[ ]
-\label{aInAImpLbaRbInPowersetLpARp}
-\[a\in A \vdash \{a\}\in\powerset(A)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a \in A & \rA \\
-		1 & (2) & \{a\}\subseteq A & \aInAImpLbaRbSubseteqA{1} \\
-		1 & (3) & a\in\powerset(A) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{2} \\
-	\end{array}
-	\]
-\end{proof}
-
-\begin{theorem}[ ]
-\label{ASubseteqBwaInPowersetLpARpImpaInPowersetLpBRp}
-\[A\subseteq B, a\in \powerset(A)\vdash a\in\powerset(B)\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & A\subseteq B & \rA \\
-		2 & (2) & a\in\powerset(A) & \rA{} \\
-		1 & (3) & \powerset(A) \subseteq \powerset(B) & \ASubseteqBImpPowersetLpARpSubseteqPowersetLpBRp{1} \\
-        1,2 & (4) & a\in \powerset(B) & \rRE{\rUE{\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }{3}},2} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-
-\begin{theorem}[ ]
-\label{aInPowersetLpARpImpFaBLpaInPowersetLpAcuBRpRp}
-\[a\in \powerset(A) \vdash \forall B(a\in\powerset(A\cup B))\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a\in \powerset(A) & \rA \\
-        1 & (2) & A\subseteq A\cup B & \FormulaRefAuto{ A \subseteq A }cuB{} \\
-        1 & (3) & a\in\powerset(A\cup B) & \ASubseteqBwaInPowersetLpARpImpaInPowersetLpBRp{2,1} \\
-        1 & (4) & \forall B(a\in\powerset(A\cup B)) & \rUI{3} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-
-\chapter{Das kartesische Produkt}
-
-
-\subsection{Existenz des karthesischen Produktes}
-
-
-
-\begin{theorem}[ ]
-\label{aInAwbInBImpLpawbRpInPowersetLpPowersetLpAcuBRpRp}
-\[a\in A, b\in B \vdash (a,b)\in \powerset(\powerset(A \cup B))\]
-\end{theorem}
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 & (1) & a\in A & \rA \\
-		2 & (2) & b\in B & \rA \\
-		1,2 & (3) & \{a,b\}\subseteq A\cup B & \aInAwbInBImpLbawbRbSubseteqAcuB{1,2} \\
-		1,2 & (4) & \{a,b\}\in \powerset(A\cup B) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{3} \\
-		1 & (5) & a\in A\cup B & \zInAImpzInAcuB{1} \\
-		1 & (6) & \{a\}\in \powerset(A\cup B) & \aInAImpLbaRbInPowersetLpARp{5} \\
-		1,2 & (7) & \{\{a\},\{a,b\}\}\subseteq \powerset(A\cup B) & \aInAwbInAImpLbawbRbSubseteqA{6,4} \\
-		1,2 & (8) & \{\{a\},\{a,b\}\}\in \powerset(\powerset(A\cup B)) & \FormulaRefAuto{ \powerset(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }{7} \\
-		1,2 & (9) & (a,b)\in \powerset(\powerset(A\cup B)) & \DefLpawbRp{8} \\
-	\end{array}
-	\]
-\end{proof}
-
-
-\begin{theorem}[Eindeutige Existenz des kartesischen Produkts]
-\label{ExonlyoneCFaLpawbRpLpLpawbRpInCLrLpaEqualsAAndbInBRpRp}
-\[\exists! C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B))\]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
-  & (1) & \exists C\forall (a,b)(a\in A\land b\in B \rightarrow (a,b)\in C) & \rEI{\aInAwbInBImpLpawbRpInPowersetLpPowersetLpAcuBRpRp{}} \\
-  & (2) & \exists! C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B)) & \FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{1} \\
-\end{array}
-\]
-\end{proof}
-
-
-\begin{definition}[Kartesisches Produkt ($A\times B$)]
-\label{DefAtiB}
-\[
-A\times B := \iota C\forall (a,b) ((a,b) \in C \leftrightarrow (a=A\land b\in B))
-\]
-\end{definition}
-
-\chapter{Funktionen}
-\begin{definition}[Implizite Definition des Funktionssymbols]
-Seien \(A,B\) Mengen. Wir führen die Notation
-\[
-F\colon A \to B
-\]
-als neues Symbol \textbf{implizit} ein, indem wir folgende axiomatische Eigenschaften festlegen:
-
-\begin{enumerate}
-    \item \textbf{Existenz als Menge geordneter Paare:}
-    \[
-    F \subseteq A\times B.
-    \]
-
-    \item \textbf{Funktionale Eindeutigkeit:}
-    \[
-    \forall x\in A\,\forall y,z\in B\;\bigl((x,y)\in F\wedge(x,z)\in F\rightarrow y=z\bigr).
-    \]
-
-    \item \textbf{Totale Definition auf der Domäne:}
-    \[
-    \forall x\in A\,\exists y\in B\;(x,y)\in F.
-    \]
-\end{enumerate}
-Die Schreibweise \(F\colon A\to B\) bedeutet somit genau, dass die Eigenschaften (1), (2) und (3) gelten. Dabei heißt:
-\begin{itemize}
-    \item \(A\) der \textbf{Definitionsbereich (Domäne)} von \(F\), notiert als \(\mathrm{dom}(F)\),
-    \item \(B\) der \textbf{Wertebereich (Kodomain)} von \(F\),
-\end{itemize}
-\end{definition}
-\begin{remark}
-Aufgrund des Ersetzungsaxioms ist das Bild \(F(A)\) unter einer Funktion \(F:A\to B\) eine Menge.
-\end{remark}
-
-\FormulaAxiomAuto[Ersetzung]{ \forall A\;\forall F\;\exists C\;\Bigl(\forall y\;\bigl(y \in C \;\leftrightarrow\; \exists x\,(x \in A \land y = F(x))\bigr)\Bigr) }
-
-
-
-\begin{definition}[Bild einer Menge unter einer Funktion]
-Seien \(A\) eine Menge und \(F\) ein Funktionensymbol, welches auf der Domäne \(A\) 
-definiert ist. Dann definieren wir:
-\[
-\{F(x)\mid x\in A \}:= F(A) := \iota C\bigl(\forall y\,(y\in C \leftrightarrow \exists x\,(x\in A \land y=F(x)))\bigr).
-\]
-Daraus ergibt sich für alle \(y\):
-\[
-y \in F(A)\;\eqvdash\; \exists x\,(x\in A\land y=F(x)).
-\]
-Die Eindeutigkeit der \textbf{Bildmenge} \(F(A)\) wird in Theorem \(\FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{}\) gezeigt.
-\end{definition}
-
-
-\FormulaAxiomAuto[Ersetzung]{ \forall A\;\forall F\;\exists C\;\Bigl(\forall y\;\bigl(y \in C \;\leftrightarrow\; \exists x\,(x \in A \land y = F(x))\bigr)\Bigr) }
-
-
-
-\label{aInbImpbNotina}
-\begin{theorem}[\(a\in b \vdash b\not\in a\)]
-\end{theorem}
-\begin{proof}
-\[
-\begin{array}{llll}
-    1 & (1) & a \in b & \rA \\
-    2 & (2) & b \in a & \rA \\
-      & (3) & \{a, b\} \neq \emptyset & \LbawbRbNotEqualsEmptyset{} \\
-      & (4) & \exists x \in \{a, b\}(x \cap \{a, b\} = \emptyset) & \Regularitaet{} \\
-    5 & (5) & a \cap \{a,b\} = \emptyset & \rA \\
-      & (6) & b \in \{a,b\} & \bInLbawbRb{} \\
-    1 & (7) & a \in b & \rA \\
-    1,2 & (8) & b \in a \land a \in b & \rAI{2,1} \\
-    1,2 & (9) & a \in b \Rightarrow b \in a \Rightarrow a \in b \Rightarrow b \in a \Rightarrow \dots & \text{(zyklisch)} \\
-    1,2 & (10) & b \in a, a \in b \Rightarrow a \cap \{a,b\} \neq \emptyset & \text{(da \(b \in a\) und \(b \in \{a,b\}\))} \\
-    1,2,5 & (11) & \bot & \rBI{5,10} \\
-    1 & (12) & b \not\in a & \rCI{2,11} \\
-\end{array}
-\]
-\end{proof}
-
-\begin{proof}
-	\[
-	\begin{array}{llll}
-		1 &  (1) & a\in b & \rA \\
-		2 &  (2) & b\in a & \rA \\
-		&  (3) & \{a,b\}\neq\emptyset & \LbawbRbNotEqualsEmptyset{} \\
-		&  (4) & \exists x\in\{a,b\}(x\cap \{a,b\} = \emptyset) & \FormulaRefAuto[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{3} \\
-		&  (5) & c\in\{a,b\}\land c\cap \{a,b\} = \emptyset & \rEE{4} \\
-		&  (6) & c\in\{a,b\} & \rAEa{5} \\
-		&  (7) & c\cap \{a,b\} = \emptyset & \rAEb{5} \\		
-		&  (8) & c=a\lor c=b & \pairE{6}  \\
-		9 & (9) & c=a & \rA \\
-		9 & (10) & a\cap \{a,b\} = \emptyset & \rIE{9,7} \\
-		& (11) & a\in \{a,b\}  &  \pairIb \\
-		& (12) & b\in \{a,b\}  &  \pairIb \\
-		2 & (13) & b\in a\land b\in \{a,b\}  &  \rAI{2,11} \\
-		2 & (14) & b\in a\cap \{a,b\}  &  \capI{13} \\
-		2 & (15) & \exists x(x\in a\cap \{a,b\})  &  \rEI{14} \\
-		2 & (16) & a\cap \{a,b\}\neq\emptyset  &  \ExxInSImpSNotEqualsEmptyset{15} \\
-		2,9 & (17) & \bot  &  \rBI{10,16} \\
-		9 & (18) & b\not\in a  &  \rCI{2,17} \\
-		9 & (19) & a\not\in b\lor b\not\in a  &  \rOIa{18} \\		
-		20 & (20) & c=b & \rA \\
-		20 & (21) & b\cap \{a,b\} = \emptyset & \rIE{20,7} \\
-		1 & (22) & a\in b\land a\in \{a,b\}  &  \rAI{1,12} \\
-		1 & (23) & a\in b\cap \{a,b\}  &  \capI{22} \\
-		1 & (24) & \exists x(x\in b\cap \{a,b\})  &  \rEI{23} \\
-		1 & (25) & b\cap \{a,b\}\neq\emptyset  &  \ExxInSImpSNotEqualsEmptyset{24} \\
-		1,20 & (26) & \bot  &  \rBI{21,25} \\
-		20 & (27) & a\not\in b  &  \rCI{1,26} \\
-		20 & (28) & a\not\in b\lor b\not\in a  &  \rOIb{27} \\
-		& (29) & a\not\in b\lor b\not\in a  &  \rOIb{27} \\
-		& (30) & a\in b\rightarrow b\not\in a  & \FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{29} \\
-		1 & (31) & b\not\in a  & \rRE{1,29} \\			
-	\end{array}
-	\]
-\end{proof}
-
-
 
 
 \chapter{Das Unendlichkeit}
@@ -2326,7 +1875,7 @@ Hierbei ist \(i\) eine Liste von Annahmen.
 		      & (1) & 1=0\cup\{0\} & \oneSetDefinition{}\\
 		    & (2) & 0=\emptyset  & \zeroSetDefinition{}\\
 		    & (3) & 1=\emptyset\cup\{\emptyset\} & \rIE{2,1} \\		
-            & (4) & 1=\{\emptyset\} & \AEqualsEmptysetcuA{3} \\		
+            & (4) & 1=\{\emptyset\} & \FormulaRefAuto{A = \emptyset \cup A}{3} \\		
 	\end{array}
 	\]
 \end{proof}
@@ -2339,7 +1888,7 @@ Hierbei ist \(i\) eine Liste von Annahmen.
 	\begin{array}{llll}
 		  1   & (1) & n\in\mathbb{N} & \rA\\
 		1   & (2) & n+1=n\cup\{n\}  & \successorSetDefinition{1}\\
-            & (3) & n\in n\cup\{n\}  & \aInAcuLbaRb{}\\
+            & (3) & n\in n\cup\{n\}  & \FormulaRefAuto{a \in A \cup \{a\}}{}\\
         1   & (4) & n\in n+1  & \rIE{2,3}
 	\end{array}
 	\]
@@ -2420,14 +1969,14 @@ Diese Regeln und Definitionen bilden die Grundlage für das Verständnis der Kon
 		1  & (1) & m\in\mathbb{N} & \rA\\
 		2  & (2) & m\neq 0 & \rA\\
 		3  & (3) & \forall x\in\mathbb{N}(x+1\neq m) & \rA \\		
-		& (4) & m\not\in \mathbb{N}\setminus\{m\} & \aNotinASetminusLbaRb{} \\
+		& (4) & m\not\in \mathbb{N}\setminus\{m\} & \FormulaRefAuto{a \notin A \setminus \{a\}}{} \\
 		& (5) & 0\in\mathbb{N} & \zeroIsNaturalNumber \\
-		2  & (6) & 0\in\mathbb{N}\setminus\{m\} & \aInAwbNotEqualsaImpaInASetminusLbbRb{5,2} \\
+		2  & (6) & 0\in\mathbb{N}\setminus\{m\} & \FormulaRefAuto{a \in A,\, b \neq a \vdash a \in A \setminus \{b\}}{5,2} \\
 		7 & (7) & y\in\mathbb{N}\setminus\{m\} & \rA \\
 		7 & (8) & y\in\mathbb{N} & \diffEa{7} \\
   		3,7 & (9) & y+1\neq m & \FormulaRefAuto{\forall x \in A\,(P(x)),\, y \in A \vdash P(y)}{3,8} \\
 		7  & (10) & y+1\in\mathbb{N} & \successorIsNaturalNumber{8}  \\
-		3,7 & (11) & y+1\in\mathbb{N}\setminus\{m\} & \aInAwaNotEqualsbImpaInASetminusLbbRb{10,9}  \\
+		3,7 & (11) & y+1\in\mathbb{N}\setminus\{m\} & \FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{10,9}  \\
 		3 & (12) & \forall y\in\mathbb{N}\setminus\{m\}(y+1\in\mathbb{N}\setminus\{m\})  & \rSetUIa{7,11}  \\
            2,3 & (13) & m\not\in\mathbb{N}  & \NotNaturalI{6,12,4}  \\ 
 		1,2,3 & (14) & \bot  & \rBI{1,13} \\	
@@ -2456,18 +2005,18 @@ Diese Regeln und Definitionen bilden die Grundlage für das Verständnis der Kon
 		4  & (8) & a\cup \{a\}=m & \successorSetDefinition{6} \\
 		5  & (9) & b\cup \{b\}=m & \successorSetDefinition{7} \\	
 		4,5 & (10) & a\cup\{a\}=b\cup \{b\} & \FormulaRefAuto{a = b,\, c = b \vdash a = c}{8,9} \\
-		& (11) & b\in b\cup\{b\} & \aInAcuLbaRb{} \\
-		& (12) & a\in a\cup\{a\} & \aInAcuLbaRb{} \\
+		& (11) & b\in b\cup\{b\} & \FormulaRefAuto{a \in A \cup \{a\}}{} \\
+		& (12) & a\in a\cup\{a\} & \FormulaRefAuto{a \in A \cup \{a\}}{} \\
 		4,5 & (13) & b\in a\cup\{a\} & \rIE{10,11} \\
 		4,5 & (14) & a\in b\cup\{b\} & \rIE{10,12} \\
-		4,5 & (15) & b\not\in \{a\}\rightarrow b\in a & \zInAcuBEqvzNotinBTozInA{13} \\
-		4,5 & (16) & a\not\in \{b\}\rightarrow a\in b & \zInAcuBEqvzNotinBTozInA{14} \\
+		4,5 & (15) & b\not\in \{a\}\rightarrow b\in a & \FormulaRefAuto{z \in A \cup B \eqvdash z \not\in B \rightarrow z \in A}{13} \\
+		4,5 & (16) & a\not\in \{b\}\rightarrow a\in b & \FormulaRefAuto{z \in A \cup B \eqvdash z \not\in B \rightarrow z \in A}{14} \\
 		17 & (17) & a\neq b & \rA \\
 		17 & (18) & a\not\in \{b\} & \nUnitSetE{17} \\
 		17 & (19) & b\not\in \{a\} & \nUnitSetE{17} \\
 		4,5,17 & (20) & b\in a & \rIE{19,15} \\
 		4,5,17 & (21) & a\in b & \rIE{18,16} \\
-		4,5,17 & (22) & b\not\in a & \aInbImpbNotina{21} \\
+		4,5,17 & (22) & b\not\in a & \FormulaRefAuto{a\in b\vdash b\not\in a}{21} \\
 		4,5,17 & (23) & \bot & \rBI{20,22} \\		
 		4,5 & (23) & a=b & \rCE{17,23} \\	
 		1,2 & (24) & \exists!x(x\in \mathbb{N}\land x+1=m) & \UEI{3,4,5,23} \\	
@@ -2564,7 +2113,7 @@ i,j,k,l & (2) & m - 1 = n - 1 & \rPredecessorUniqueness{1,2,3,4}
             1,2 & (4) & (n-1)+1 = (n-1)\cup \{n-1\} & \successorSetDefinition{3} \\
             1,2 & (5) & n = (n-1)+1 & \rPredecessorEa{3} \\
             1,2 & (6) & n = (n-1)\cup \{n-1\} & \rIE{5,4} \\
-                & (7) & n-1\in (n-1)\cup \{n-1\} & \aInAcuLbaRb{} \\
+                & (7) & n-1\in (n-1)\cup \{n-1\} & \FormulaRefAuto{a \in A \cup \{a\}}{} \\
             1,2 & (8) & n-1\in n & \rIE{6,7} \\
 	\end{array}
 	\]
@@ -2659,7 +2208,7 @@ i,j,k,l & (2) & m - 1 = n - 1 & \rPredecessorUniqueness{1,2,3,4}
 		1,2,9 & (11) & \bot & \rBI{2,10} \\
 		1,2 & (12) & s\neq 0 & \rCI{9,11} \\
             1,2 & (13) & s-1\in s & \nInNaturalwnNotEqualsZeroImpnMinusOneInn{7,12}  \\
-            1,2 & (14) & s-1\not\in S & \AcaBEqualsEmptysetwxInAImpxNotinB{6,13}  \\
+            1,2 & (14) & s-1\not\in S & \FormulaRefAuto{A \cap B = \emptyset,\ x \in A \vdash x \notin B}{6,13}  \\
             1,2 & (15) & s-1\in \mathbb{N} & \rPredecessorI{7,12}  \\
             1,2 & (16) & P(s-1)& \PLpZeroRpwFanInNaturalLpPLpnRpToPLpnPlusOneRpRpImpFanInNaturalPLpnRpLooo{14,15}  \\
             1,2 & (16) & P(s-1)\land \neg P(s)& \rAI{16,8}  \\
@@ -2779,7 +2328,7 @@ Die Existenzregel stellt sicher, dass für alle Mengen \(A\) und alle \(n\in\mat
 \begin{array}{llll}
 	i & (1) & A \text{ ist eine Menge} & \dots  \\
         j & (2) & n\in\mathbb{N} & \dots  \\
-	i,j & (3) & A^n\text{ ist eine Menge} & \PowerSetExists{1,2} \\
+	i,j & (3) & A^n\text{ ist eine Menge} & \mathcal{P}Exists{1,2} \\
 \end{array}
 \]
 
@@ -3164,9 +2713,9 @@ eine \textbf{Folge} ist eine systematische Anordnung von Elementen in einer best
 	\begin{array}{ll  p{4.7cm} p{4cm}}
 		1 & (1) & \ensuremath{f: \{0, 1, \dots, n-1\} \to A} & \rA \\
 		1 & (2) & \ensuremath{f\subseteq \{0, 1, \dots, n-1\}\times A} & \toE{1} \\
-		1 & (3) & \ensuremath{f \in \powerset(\{0, 1, \dots, n-1\} \times A)} &  \powersetI{1} \\
-          & (4) & \ensuremath{f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \powerset(\{0, 1, \dots, n-1\} \times A)} &  \rRI{1,3} \\
-          & (5) & \ensuremath{\forall f(f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \powerset(\{0, 1, \dots, n-1\} \times A))} &  \rUI{5} \\
+		1 & (3) & \ensuremath{f \in \mathcal{P}(\{0, 1, \dots, n-1\} \times A)} &  \mathcal{P}I{1} \\
+          & (4) & \ensuremath{f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \mathcal{P}(\{0, 1, \dots, n-1\} \times A)} &  \rRI{1,3} \\
+          & (5) & \ensuremath{\forall f(f: \{0, 1, \dots, n-1\} \to A\rightarrow f \in \mathcal{P}(\{0, 1, \dots, n-1\} \times A))} &  \rUI{5} \\
           & (6) & \ensuremath{\exists C\forall f(f\in C\leftrightarrow f: \{0, 1, \dots, n-1\} \to A)} &  \ExALpFaxLpPLpxRpToxInARpRpImpExBFaxLpxInBLrPLpxRpRp{5} \\
 	\end{array}
 	\]
@@ -3202,9 +2751,9 @@ eine \textbf{Folge} ist eine systematische Anordnung von Elementen in einer best
 	\begin{array}{ll  p{4.7cm} p{4cm}}
 		1 & (1) & \ensuremath{f: \mathbb{N} \to A} & \rA \\
 		1 & (2) & \ensuremath{f\subseteq \mathbb{N}\times A} & \toE{1} \\
-		1 & (3) & \ensuremath{f \in \powerset(\mathbb{N} \times A)} &  \powersetI{1} \\
-          & (4) & \ensuremath{f:\mathbb{N} \to A\rightarrow f \in \powerset(\mathbb{N} \times A)} &  \rRI{1,3} \\
-          & (5) & \ensuremath{\forall f(f: \mathbb{N} \to A\rightarrow f \in \powerset(\mathbb{N} \times A))} &  \rUI{5} \\
+		1 & (3) & \ensuremath{f \in \mathcal{P}(\mathbb{N} \times A)} &  \mathcal{P}I{1} \\
+          & (4) & \ensuremath{f:\mathbb{N} \to A\rightarrow f \in \mathcal{P}(\mathbb{N} \times A)} &  \rRI{1,3} \\
+          & (5) & \ensuremath{\forall f(f: \mathbb{N} \to A\rightarrow f \in \mathcal{P}(\mathbb{N} \times A))} &  \rUI{5} \\
           & (6) & \ensuremath{\exists C\forall f(f\in C\leftrightarrow f: \mathbb{N} \to A)} &  \ExALpFaxLpPLpxRpToxInARpRpImpExBFaxLpxInBLrPLpxRpRp{5} \\
 	\end{array}
 	\]
@@ -3468,7 +3017,7 @@ Aufgrund \(\rSymmetryEqRI{}\) können wir auch eine tabellarische Notation der f
 
     \(\geq\) wird als durch \(\leq\) wie folgt definiert:
     \[
-    a \geq b \coloneqq b \leq a.
+    a \geq b := b \leq a.
     \]
 \end{definition}
 
@@ -3642,7 +3191,7 @@ Die Einführungsregel für Totalität ermöglicht es, die Totalität einer Ordnu
 
     Die \textbf{geordnete Relation} \(>\) wird als die \textbf{duale Relation} zu \(<\) definiert durch:
     \[
-    a > b \coloneqq b < a.
+    a > b := b < a.
     \]
 \end{definition}
 
@@ -3859,7 +3408,7 @@ Die Einführungsregel für Totalität ermöglicht es, die Totalität einer total
 \begin{definition}[Induzierte Ordnung aus totaler Ordnung]
     Sei \(\leq\) eine Halbordnung auf einer Menge \(S\). Dann definieren wir die zugehörige Ordnung \(<\) auf \(S\) durch:
     \[
-    \forall a, b \in S \, (a < b \coloneqq a \leq b \land a \neq b).
+    \forall a, b \in S \, (a < b := a \leq b \land a \neq b).
     \]
 \end{definition}
 
@@ -4186,15 +3735,15 @@ Die hier beschriebene Kettennotation ist universell anwendbar auf alle Relatione
 \subsection{Geschachtelte Ordnungen}
 
 \begin{definition}[Geschachtelte Ordnungen]
-    Sei \(\leq\) eine Halbordnung auf \(S\) und \(<\) die aus \(\leq\) induzierte strikte Ordnung, definiert durch \( a < b \coloneqq (a \leq b) \land (a \neq b) \). Für Elemente \(a, b, c \in S\) definieren wir Ausdrücke der Form \(a \leq b < c\) als Kombination aus \(\leq\)- und \(<\)-Relationen:
+    Sei \(\leq\) eine Halbordnung auf \(S\) und \(<\) die aus \(\leq\) induzierte strikte Ordnung, definiert durch \( a < b := (a \leq b) \land (a \neq b) \). Für Elemente \(a, b, c \in S\) definieren wir Ausdrücke der Form \(a \leq b < c\) als Kombination aus \(\leq\)- und \(<\)-Relationen:
     \[
-    a \leq b < c \coloneqq (a \leq b) \land (b < c).
+    a \leq b < c := (a \leq b) \land (b < c).
     \]
     Analog gelten:
     \begin{align*}
-        a < b \leq c &\coloneqq (a < b) \land (b \leq c), \\
-        a < b < c &\coloneqq (a < b) \land (b < c), \\
-        a \leq b \leq c &\coloneqq (a \leq b) \land (b \leq c).
+        a < b \leq c &:= (a < b) \land (b \leq c), \\
+        a < b < c &:= (a < b) \land (b < c), \\
+        a \leq b \leq c &:= (a \leq b) \land (b \leq c).
     \end{align*}
 \end{definition}
 
@@ -4295,12 +3844,12 @@ Die Eliminierungsregel für \(a \leq b \leq c\) erlaubt es, aus \(a \leq b \leq 
 \subsection{Intervalle}
 
 \begin{definition}[Intervalle]
-    Sei \(S\) eine Menge mit einer Halbordnung \(\leq\) und \(<\) die induzierte strikte Ordnung aus \(\leq\), definiert durch \( a < b \coloneqq (a \leq b) \land (a \neq b) \). Ein \textbf{Intervall} in \(S\) ist eine Teilmenge von \(S\), die alle Elemente zwischen zwei gegebenen Grenzen enthält. Wir definieren die verschiedenen Intervalltypen wie folgt:
+    Sei \(S\) eine Menge mit einer Halbordnung \(\leq\) und \(<\) die induzierte strikte Ordnung aus \(\leq\), definiert durch \( a < b := (a \leq b) \land (a \neq b) \). Ein \textbf{Intervall} in \(S\) ist eine Teilmenge von \(S\), die alle Elemente zwischen zwei gegebenen Grenzen enthält. Wir definieren die verschiedenen Intervalltypen wie folgt:
     \begin{align*}
-        [a, b] &\coloneqq \{ x \in S \mid a \leq x \leq b \}, \\
-        (a, b) &\coloneqq \{ x \in S \mid a < x < b \}, \\
-        [a, b) &\coloneqq \{ x \in S \mid a \leq x < b \}, \\
-        (a, b] &\coloneqq \{ x \in S \mid a < x \leq b \}.
+        [a, b] &:= \{ x \in S \mid a \leq x \leq b \}, \\
+        (a, b) &:= \{ x \in S \mid a < x < b \}, \\
+        [a, b) &:= \{ x \in S \mid a \leq x < b \}, \\
+        (a, b] &:= \{ x \in S \mid a < x \leq b \}.
     \end{align*}
 \end{definition}
 
@@ -4452,7 +4001,7 @@ Die Eliminationsregel für das halboffene Intervall \((a, b]\) besagt, dass wenn
 \begin{definition}[Maximum]
     Sei \( S \) eine halbgeordnete Menge. Das neue Symbol \(\max(S)\) wird durch folgende partielle Definition eingeführt:
     \[
-    \max(S) \coloneqq \iota M \, \big(M \in S \land \forall t \in S \, (t \leq M)\big).
+    \max(S) := \iota M \, \big(M \in S \land \forall t \in S \, (t \leq M)\big).
     \]
     Dabei ist \(\max(S)\) das \textbf{Definiendum} und \( M \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\max(S)\) genau dann definiert ist, wenn ein eindeutiges maximales Element in \( S \) existiert.
 \end{definition}
@@ -4460,7 +4009,7 @@ Die Eliminationsregel für das halboffene Intervall \((a, b]\) besagt, dass wenn
 \begin{definition}[Minimum]
     Sei \( S \) eine halbgeordnete Menge. Das neue Symbol \(\min(S)\) wird durch folgende partielle Definition eingeführt:
     \[
-    \min(S) \coloneqq \iota N \, \big(N \in S \land \forall t \in S \, (N \leq t)\big).
+    \min(S) := \iota N \, \big(N \in S \land \forall t \in S \, (N \leq t)\big).
     \]
     Dabei ist \(\min(S)\) das \textbf{Definiendum} und \( N \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\min(S)\) genau dann definiert ist, wenn ein eindeutiges minimales Element in \( S \) existiert.
 \end{definition}
@@ -4661,7 +4210,7 @@ Die Eliminationsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\) be
     \]
     eine partielle Definition erlaubt es, das neue Symbol \(\sup_S(T)\) einzuführen und es als \( u \) zu definieren, wenn die Bedingung \( C(u) \) erfüllt ist:
     \[
-    \exists u \in S \, [ C(u) \rightarrow (\sup_S(T) \coloneqq u) ].
+    \exists u \in S \, [ C(u) \rightarrow (\sup_S(T) := u) ].
     \]
     Dabei ist \(\sup_S(T)\) das \textbf{Definiendum} und \( u \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\sup_S(T)\) genau dann definiert ist, wenn eine kleinste obere Schranke von \( T \) in \( S \) existiert.
 \end{definition}
@@ -4673,7 +4222,7 @@ Die Eliminationsregel für die Menge der unteren Schranken \(\text{LB}_S(T)\) be
     \]
     eine partielle Definition erlaubt es, das neue Symbol \(\inf_S(T)\) einzuführen und es als \( l \) zu definieren, wenn die Bedingung \( D(l) \) erfüllt ist:
     \[
-    \exists l \in S \, [ D(l) \rightarrow (\inf_S(T) \coloneqq l) ].
+    \exists l \in S \, [ D(l) \rightarrow (\inf_S(T) := l) ].
     \]
     Dabei ist \(\inf_S(T)\) das \textbf{Definiendum} und \( l \) das \textbf{Definiens}. Diese Definition stellt sicher, dass \(\inf_S(T)\) genau dann definiert ist, wenn eine größte untere Schranke von \( T \) in \( S \) existiert.
 \end{definition}

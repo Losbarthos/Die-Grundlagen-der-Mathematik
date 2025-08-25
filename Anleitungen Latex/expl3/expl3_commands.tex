@@ -1,0 +1,162 @@
+% expl3-Spickzettel.tex
+% Kurzübersicht über wichtige Datentypen, Variablen- und Funktionsmuster in expl3
+
+\documentclass[a4paper,11pt]{article}
+
+% --- Pakete für Darstellung ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{geometry}
+\geometry{margin=2.4cm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{amsmath} % für \text in \meta
+\usepackage{csquotes} % für \enquote
+\usepackage{xltabular}
+% --- expl3 laden, aber NICHT dauerhaft \ExplSyntaxOn setzen ---
+\usepackage{expl3}
+
+% flexible Spaltentypen für xltabular
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X} % normaler Text, umbruchfähig
+\newcolumntype{K}{>{\ttfamily\footnotesize\raggedright\arraybackslash}X} % Code-Spalte
+
+% Fallback für \meta (nutzt amsmath's \text)
+\providecommand\meta[1]{\ensuremath{\langle\text{#1}\rangle}}
+
+% Robustes Inline-Code-Makro: untrennbar, sodass vor "_" keine Lücke entsteht
+\DeclareRobustCommand{\code}[1]{\texttt{\mbox{\detokenize{#1}}}}
+
+\title{expl3\,–\,Spickzettel: Datentypen, Objekte und typische Befehle}
+\author{(Kurzreferenz für den eigenen Gebrauch)}
+\date{\today}
+
+% Spaltentypen
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Tabellen-Header
+\newcommand\Header{\toprule
+  \textbf{Kategorie} & \textbf{Objekt / Befehl} & \textbf{Kurzbeschreibung} & \textbf{Minimalbeispiel}\\
+  \midrule\endfirsthead
+  \toprule
+  \textbf{Kategorie} & \textbf{Objekt / Befehl} & \textbf{Kurzbeschreibung} & \textbf{Minimalbeispiel}\\
+  \midrule\endhead
+}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+\section{Konventionen in \texttt{expl3}}
+\begin{itemize}
+  \item \textbf{Benennung:} \texttt{\meta{modul}\_\meta{name}:\meta{arg\_sig} } (z.\,B. \code{\seq_new:N}, \code{\tl_set:Nn}).
+  \item \textbf{Variablen-Endungen:} \code{\_tl}, \code{\_seq}, \code{\_clist}, \code{\_prop}, \code{\_int}, \code{\_dim}, \code{\_skip}, \code{\_muskip}, \code{\_bool}, \code{\_fp}, \code{\_str}, \code{\_box}, \dots
+  \item \textbf{Global vs. lokal:} Globale Variante mit \code{\_g} (z.\,B. \code{\seq_gput_right:Nn}).
+\end{itemize}
+
+\section{Datentypen und Kernoperationen}
+\small
+\begin{xltabular}{\linewidth}{L{2.6cm} L{3.6cm} Y K}
+\Header
+\textbf{Tokenliste (tl)} & \code{\tl_new:N} / \code{\tl_set:Nn} & Neue tl-Variable; setzen auf Inhalt. & \code{\tl_new:N \l_demo_tl}\\
+ &  &  & \code{\tl_set:Nn \l_demo_tl {Hallo}} \\
+ & \code{\tl_put_right:Nn} / \code{\tl_put_left:Nn} & Anfügen (rechts/links). & \code{\tl_put_right:Nn \l_demo_tl { Welt}} \\
+\midrule
+\textbf{Sequenz (seq)} & \code{\seq_new:N} & Neue Sequenz (stapel-/listenartig). & \code{\seq_new:N \l_demo_seq} \\
+ & \code{\seq_set_split:Nnn} & Teilt Tokenliste an Trennzeichen in Elemente. & \code{\seq_set_split:Nnn \l_demo_seq { , } {a,b,c}} \\
+ & \code{\seq_pop_left:NN} / \code{\seq_pop_right:NN} & Entnehmen eines Elements (liefert in Var). & \code{\seq_pop_left:NN \l_demo_seq \l_tmpa_tl} \\
+ & \code{\seq_map_inline:Nn} & Über alle Elemente iterieren. & \code{\seq_map_inline:Nn \l_demo_seq {\tl_show:n{#1}}} \\
+\midrule
+\textbf{Kommaliste (clist)} & \code{\clist_new:N} / \code{\clist_set:Nn} & Neue Kommaliste; setzen. & \code{\clist_set:Nn \l_demo_clist {a,b,c}} \\
+ & \code{\clist_map_inline:Nn} & Iteration über Elemente. & \code{\clist_map_inline:Nn \l_demo_clist { (#1) }} \\
+\midrule
+\textbf{Property-Liste (prop)} & \code{\prop_new:N} / \code{\prop_put:Nnn} & Schlüssel\,→\,Wert ablegen. & \code{\prop_put:Nnn \l_demo_prop {key} {val}} \\
+ & \code{\prop_item:Nn} & Wert zu Schlüssel abrufen. & \code{\prop_item:Nn \l_demo_prop {key}} \\
+ & \code{\prop_map_inline:Nn} & Über Paare iterieren. & \code{\prop_map_inline:Nn \l_demo_prop {#1 = #2 }} \\
+\midrule
+\textbf{Ganzzahl (int)} & \code{\int_new:N} / \code{\int_set:Nn} & Ganze Zahl setzen (\TeX{}-Integer). & \code{\int_set:Nn \l_demo_int { 1 + 2*3 }} \\
+ & \code{\int_eval:n} & Ausdruck auswerten (expandierbar). & \code{\int_eval:n { \l_demo_int + 5 }} \\
+\midrule
+\textbf{Länge (dim)} & \code{\dim_new:N} / \code{\dim_set:Nn} & Länge (z.\,B. \code{pt}, \code{mm}). & \code{\dim_set:Nn \l_demo_dim {2em}} \\
+ & \code{\dim_eval:n} & expandierbare Auswertung. & \code{\dim_eval:n { \l_demo_dim + 3pt }} \\
+\midrule
+\textbf{Kleber (skip)} & \code{\skip_new:N} / \code{\skip_set:Nn} & Kleber (elastische Länge). & \code{\skip_set:Nn \l_demo_skip {1ex plus 1fil}} \\
+\midrule
+\textbf{Mathe-Kleber (muskip)} & \code{\muskip_new:N} / \code{\muskip_set:Nn} & Mathe-Kleber. & \code{\muskip_set:Nn \l_demo_muskip {3mu plus 2mu}} \\
+\midrule
+\textbf{Boolean (bool)} & \code{\bool_new:N} / \code{\bool_set_true:N} & Wahrheitswert speichern. & \code{\bool_set_true:N \l_demo_bool} \\
+ & \code{\bool_if:NTF} & Verzweigung nach Bool. & \code{\bool_if:NTF \l_demo_bool {A}{B}} \\
+\midrule
+\textbf{Gleitkomma (fp)} & \code{\fp_new:N} / \code{\fp_set:Nn} & Dezimalrechnung (l3fp). & \code{\fp_set:Nn \l_demo_fp { 3.1415 }} \\
+ & \code{\fp_eval:n} & expandierbare Auswertung. & \code{\fp_eval:n { sqrt(2) }} \\
+\midrule
+\textbf{String (str)} & \code{\str_new:N} / \code{\str_set:Nn} & String \& Operationen (l3str). & \code{\str_set:Nn \l_demo_str {Hallo}} \\
+ & \code{\str_if_eq:nnT} & Stringvergleich. & \code{\str_if_eq:nnT {a}{a}{gleich!}} \\
+\midrule
+\textbf{Box (box)} & \code{\box_new:N} / \code{\box_set_eq:NN} & Boxen anlegen/zuweisen. & \code{\box_new:N \l_demo_box} \\
+ &  &  & \code{\box_set_eq:NN \l_demo_box \c_empty_box} \\
+\midrule
+\textbf{Regex} & \code{\regex_replace_all:nnN {|a|}{b}{\l_demo_tl}} & Reguläre Ausdrücke auf tl anwenden. & \code{\regex_replace_all:nnN {|a|}{b}{\l_demo_tl}} \\
+\midrule
+\textbf{IO-Streams} & \code{\iow_new:N} / \code{\iow_open:Nn} & Schreiben in Datei/Stream. & \code{\iow_open:Nn \l_demo_iow {demo.txt}} \\
+ & \code{\iow_now:} & Sofort schreiben. & \code{\iow_now: {Hallo Welt!}} \\
+\bottomrule
+\end{xltabular}
+\normalsize
+
+\section{Typische Muster}
+\subsection{Lokale vs. globale Änderungen}
+\begin{tabularx}{\linewidth}{L{4cm} X}
+\toprule
+\textbf{Lokal} & \code{\seq_put_right:Nn \l_demo_seq {x}} (gilt in aktueller Gruppe) \\
+\textbf{Global} & \code{\seq_gput_right:Nn \l_demo_seq {x}} (wirkt über Gruppen hinaus) \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Mapping/Iteration}
+\begin{verbatim}
+\seq_map_inline:Nn \l_demo_seq { \tl_show:n {Element:~#1} }
+\prop_map_inline:Nn \l_demo_prop { \iow_term:x {#1 = #2} }
+\end{verbatim}
+
+\section{Argument-Signaturen (Kurzüberblick)}
+Die Suffixe hinter Doppelpunkten geben an, wie Argumente übernommen/expandiert werden. Eine Minimalübersicht (ohne Vollständigkeitsanspruch):
+\begin{description}
+  \item[\texttt{N}] erwartet eine einzelne Kontrollsequenz (Variablen-/Funktionsname).
+  \item[\texttt{n}] übernimmt die übergebene Tokenliste unverändert (keine Expansion).
+  \item[\texttt{V}/\texttt{v}] Wert einer Variablen (\texttt{V:} Name direkt; \texttt{v:} Name wird zuerst aus Tokenliste gebildet).
+  \item[\texttt{c}] bildet eine Kontrollsequenz aus Zeichen (\enquote{csname}-Art).
+  \item[\texttt{o}/\texttt{x}/\texttt{f}] unterschiedliche Stufen der Expansion (einmal / voll / funktionsorientiert).\footnote{Details siehe \texttt{interface3.pdf} bzw. \texttt{source3} – hier nur als Merkhilfe aufgeführt.}
+\end{description}
+
+\section{Kleine Beispiele}
+\subsection{Kommaliste in Sequenz umwandeln}
+\begin{verbatim}
+\clist_set:Nn \l_demo_clist {a,b,c}
+\seq_set_from_clist:NN \l_demo_seq \l_demo_clist
+\seq_use:Nn \l_demo_seq {,~}  % -> "a, b, c"
+\end{verbatim}
+
+\subsection{Property-Liste als Tabelle ausgeben}
+\begin{verbatim}
+\prop_clear:N \l_demo_prop
+\prop_put:Nnn \l_demo_prop {name}{Ada}
+\prop_put:Nnn \l_demo_prop {lang}{TeX}
+\prop_map_inline:Nn \l_demo_prop { (#1 = #2) }
+\end{verbatim}
+
+\section{Eigene Ergänzungen}
+Diese Datei ist als lebender Spickzettel gedacht. Weitere Module (\texttt{l3keys}, \texttt{l3tl-build}, \texttt{l3str}, \texttt{l3fp}, usw.) können in denselben Tabellenstil ergänzt werden.
+
+\bigskip
+\noindent\textit{Hinweis:} Diese Übersicht erhebt keinen Anspruch auf Vollständigkeit, sondern dient als kompakter Merkzettel der im Alltag häufig genutzten Konstrukte.
+
+\end{document}
