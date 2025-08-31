@@ -857,7 +857,24 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{A\cap \{a,A\}\neq\emptyset}{\FormulaRefAuto{a \in S \vdash S \neq \emptyset}{3}}
 \end{tabproof}
 
+\FormulaThmAuto{\{a\}=\{b\}\eqvdash a=b}
+\begin{tabproofsplit}
+    \proofpart{\(\vdash\)}
+    \proofstep{1}{\{a\}=\{b\}}{\rA}
+    \proofstep{1}{\forall x(x\in\{a\}\leftrightarrow x\in\{b\})}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}
+    \closeproofpart
+    \proofpart{\(\dashv\)}
+    \closeproofpart
+\end{tabproofsplit}
 
+
+\section{Eigenschaften geordneter Paare}
+
+\FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}
+\begin{tabproofwide}
+  \proofstepwide{(a,b) = (c,d)}{\leftrightarrow}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}}
+  \proofstepwide{}{\leftrightarrow}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}}
+\end{tabproofwide}
 
 
 
@@ -1717,13 +1734,39 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}},8}}
 \end{tabproof}
 
-\FormulaThmAuto[Eindeutige Existenz des kartesischen Produkts]{\exists! C\, \forall (a,b) \big((a,b) \in C \leftrightarrow (a \in A \land b \in B)\big)}
+\FormulaThmAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}
 \begin{tabproof}
-  \proofstep{}{ \exists! C\, \forall (a,b) \big((a,b) \in C \leftrightarrow (a \in A \land b \in B)\big)}%
-    {\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{a \in A,\, b \in B \vdash (a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}}}}} 
+  \proofstep{1}{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)}{\rA}
+  \proofstep{2}{(a \in A\land b \in B)\land x=(a,b)}{\rA}
+  \proofstep{2}{a \in A}{\FormulaRefAuto{(P\land Q)\land R\vdash P}{2}}
+  \proofstep{2}{b \in B}{\FormulaRefAuto{(P\land Q)\land R\vdash Q}{2}}
+  \proofstep{2}{x=(a,b)}{\rAEb{2}}
+  \proofstep{2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\FormulaRefAuto{a \in A,\, b \in B \vdash (a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{3,4}}
+  \proofstep{2}{x \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{5,6}}  
+  \proofstep{1}{x \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rEE{1,2,7}}  
 \end{tabproof}
 
-\FormulaDefAuto[Kartesisches Produkt ($A \times B$)]{A \times B := \iota C\, \forall (a,b)\, \bigl((a,b) \in C \leftrightarrow (a = A \land b \in B)\bigr)}
+\FormulaThmAuto[Eindeutige Existenz des kartesischen Produkts]{\exists! C\, \forall (a,b) \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}
+\begin{tabproof}
+  \proofstep{}{ \exists! C\, \forall (a,b) \bigl((a,b) \in C \leftrightarrow \exists a \in A\, \exists b \in B}{\multirow{2}{*}{\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{\exists a \in A,\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}}}}}}
+  \proofstepstar{}{ \big(x=(a,b)\big)\bigr)}{}
+\end{tabproof}
+
+\FormulaDefAuto[Kartesisches Produkt ($A \times B$)]{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}
+\begin{remark}
+    Hieraus ergibt sich folgendes:
+\[
+    x \in A \times B \eqvdash \exists a \in A\, \exists b \in B \big(x=(a,b)\big)
+\]
+\end{remark}
+
+\FormulaThmAuto[Kartesisches Produkt ($A \times B$)]{(a,b)\in A\times B\eqvdash a\in A\land b\in B}
+\begin{tabproof}
+  \proofstep{}{ \exists! C\, \forall (a,b) \bigl((a,b) \in C \leftrightarrow \exists a \in A\, \exists b \in B}{\multirow{2}{*}{\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{\exists a \in A,\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}}}}}}
+  \proofstepstar{}{ \big(x=(a,b)\big)\bigr)}{}
+\end{tabproof}
+
+
 
 \chapter{Funktionen}
 Nachdem wir die grundlegenden Begriffe der Mengenlehre eingeführt haben, wenden wir uns nun den 
@@ -1781,6 +1824,10 @@ F(x) := y \quad\text{genau dann, wenn}\quad (x,y)\in F.
 Dies ist wohldefiniert aufgrund des obigen Theorems.
 \end{remark}
 
+\FormulaDefAuto[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
+[Sei \(F\colon A\to B\) eine Funktion. Wir definieren den \textbf{Graphen} von \(F\) als die Menge aller Paare aus \(A\times B\), die zu \(F\) gehören:]
+
+
 \FormulaThmAuto[Ersetzung über Funktionen]{
   \exists! C\forall y(y\in C\leftrightarrow \exists x\in A (F(x)=y)
 }[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
@@ -1797,23 +1844,137 @@ Dies ist wohldefiniert aufgrund des obigen Theorems.
 [Für eine Funktion \(F:A\to B\) definieren wir das Bild von \(A\) als die Menge aller Werte, 
 die \(F\) für Elemente aus \(A\) annimmt:]
 
-\begin{remark}
-Da die Existenz und Eindeutigkeit der Menge 
-\(\{y \mid \exists x \in A(F(x)=y)\}\) durch das 
-Ersetzungsaxiom (in der Formulierung über Funktionen) gesichert ist, 
-kann das Bild \(F(A)\) unabhängig vom Codomain \(B\) definiert werden. 
-Das \(B\) spielt nur noch die Rolle einer Schranke, nicht aber der eigentlichen Definition.
-\end{remark}
-
 \chapter{Konstruktion der natürlichen Zahlen}
 
 Wir konstruieren die Menge der natürlichen Zahlen allein aus den Axiomen der Mengenlehre, insbesondere dem Unendlichkeitsaxiom.  Dieser Ansatz kommt ohne eine explizite Nachfolgerfunktion als primitives Symbol aus; diese wird vielmehr aus der Mengenoperation \(x \cup \{x\}\) gewonnen.
 
-\section{Nachfolgerfunktion und induktive Mengen}
+% === Kapitel: Konstruktion der natürlichen Zahlen (umformuliert – Fokus: Funktion erster Ordnung auf A) ===
 
-\subsection{Definition der Nachfolgerfunktion}
+\section{Nachfolger und induktive Mengen}
 
-Die Nachfolgerfunktion lässt sich mengentheoretisch wie folgt definieren.  
+\subsection{Induktive Mengen}
+
+\FormulaDefAuto[induktive Menge]{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)}[Für eine Menge \(A\) definieren wir:]
+
+% Existenz einer induktiven Menge (aus dem Unendlichkeitsaxiom)
+\FormulaThmAuto{\exists A(\mathrm{Induktiv}(A))}
+\begin{tabproof}
+  \proofstep{}{ \exists A\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr) }{\FormulaRefAuto{\exists A\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr)}}
+  \proofstep{}{\exists A(\mathrm{Induktiv}(A)) }{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)},1}}
+\end{tabproof}
+
+% Sofortige Konsequenzen aus der Definition
+\FormulaThmAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}
+\begin{tabproof}
+  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
+  \proofstep{1}{\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)}{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)},1}}
+  \proofstep{1}{\emptyset \in A}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(x \cup \{x\} \in A)}
+\begin{tabproof}
+  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
+  \proofstep{1}{\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)}{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)},1}}
+  \proofstep{1}{\forall x \in A\,(x \cup \{x\} \in A)}{\rAEb{2}}
+\end{tabproof}
+
+\FormulaThmAuto{\mathrm{Induktiv}(A),\,x\in A\vdash x \cup \{x\} \in A}
+\begin{tabproof}
+  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1}{\forall u \in A\,(u \cup \{u\} \in A)}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(x \cup \{x\} \in A)}{1}}
+  \proofstep{1,2}{x \cup \{x\} \in A}{\rRE{\rUE{3},2}}
+\end{tabproof}
+
+% Schnitt induktiver Mengen ist induktiv
+\FormulaThmAuto{\mathrm{Induktiv}(A),\, \mathrm{Induktiv}(B)\vdash \mathrm{Induktiv}(A\cap B)}
+\begin{tabproof}
+  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
+  \proofstep{2}{\mathrm{Induktiv}(B)}{\rA}
+
+  % Null in A∩B
+  \proofstep{1}{\,\emptyset\in A}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}{1}}
+  \proofstep{2}{\,\emptyset\in B}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}{2}}
+  \proofstep{1,2}{\,\emptyset\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{3,4}}
+
+  % Abschluss unter Nachfolger-Operation für A∩B
+  \proofstep{1}{\forall x\in A\,(x\cup\{x\}\in A)}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(x \cup \{x\} \in A)}{1}}
+  \proofstep{2}{\forall x\in B\,(x\cup\{x\}\in B)}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(x \cup \{x\} \in A)}{2}}
+  \proofstep{8}{x\in A\cap B}{\rA}
+  \proofstep{8}{x\in A}{\FormulaRefAuto{x\in A\cap B \vdash x\in A}{9}}
+  \proofstep{8}{x\in B}{\FormulaRefAuto{x\in A\cap B \vdash x\in B}{9}}
+  \proofstep{1,8}{x\cup\{x\}\in A}{\rRE{\rUE{6},9}}
+  \proofstep{2,8}{x\cup\{x\}\in B}{\rRE{\rUE{7},10}}
+  \proofstep{1,2,8}{x\cup\{x\}\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{11,12}}
+  \proofstep{1,2}{\,\forall x\in A\cap B\,(x\cup\{x\}\in A\cap B)}{\rUI{\rRI{8,13}}}
+
+  % Schluss: Induktivität von A∩B
+  \proofstep{1,2}{\,\emptyset\in A\cap B \;\land\; \forall x\in A\cap B\,(x\cup\{x\}\in A\cap B)}{\rAI{5,14}}
+  \proofstep{1,2}{\,\mathrm{Induktiv}(A\cap B)}%
+    {\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)},15}}
+\end{tabproof}
+
+\subsection{Nachfolger-Graph auf einer Menge \(A\)}
+
+
+\FormulaDefAuto
+{\mathrm{succ}_A := \{\, (x,y) \in A \times A \mid y = x \cup \{x\} \,\}}%
+[Sei \(A\) eine Menge. Dann definieren wir:]
+
+\FormulaThmAuto{\mathrm{succ}_A \subseteq A \times A}
+\begin{tabproof}
+  \proofstep{}{\mathrm{succ}_A\subseteq A\times A}{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}{\FormulaRefAuto
+{\mathrm{succ}_A := \{\, (x,y) \in A \times A \mid y = x \cup \{x\} \,\}}}}
+\end{tabproof}
+
+\FormulaThmAuto[Funktionale Eindeutigkeit von \(\mathrm{succ}_A\)]%
+{(x,y)\in \mathrm{succ}_A,\,(x,z)\in \mathrm{succ}_A \vdash y=z}{Seien \(x,y,z\in A\), dann gilt:}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in \mathrm{succ}_A}{\rA}
+  \proofstep{2}{(x,z)\in \mathrm{succ}_A}{\rA}
+  \proofstep{1}{y = x\cup\{x\}}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{\FormulaRefAuto
+{\mathrm{succ}_A := \{\, (x,y) \in A \times A \mid y = x \cup \{x\} \,\}}{1}}}
+  \proofstep{2}{z = x\cup\{x\}}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{\FormulaRefAuto
+{\mathrm{succ}_A := \{\, (x,y) \in A \times A \mid y = x \cup \{x\} \,\}}{2}}}
+  \proofstep{1,2}{y=z}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmAuto[Totalität von \(\mathrm{succ}_A\) auf induktiven Mengen]%
+{\mathrm{Induktiv}(A) \vdash \forall x\in A\,\exists y\in A\;((x,y)\in \mathrm{succ}_A)}
+\begin{tabproof}
+  \proofstep{1}{ \mathrm{Induktiv}(A) }{\rA}
+  \proofstep{2}{ x\in A }{\rA}
+  \proofstep{1,2}{ x\cup\{x\} \in A }{\FormulaRefAuto{\mathrm{Induktiv}(A),\,x\in A\vdash x \cup \{x\} \in A}{1,2}}
+  \proofstep{2,3}{ \exists y\in A\; \bigl( y = x\cup\{x\} \land (x,y)\in \mathrm{succ}_A \bigr) }%
+    {\rEI{ \text{mit } y := x\cup\{x\},~ \rAI{3,\,\rUE{\FormulaRefAuto{\mathrm{succ}_A := \{\, (u,v) \in A \times A \mid v = u \cup \{u\} \,\}}{}} } }}
+  \proofstep{}{\forall x\in A\,\exists y\in A\; (x,y)\in \mathrm{succ}_A}{\rUI{\UEI{2,4}}}
+\end{tabproof}
+
+\begin{remark}
+Die letzten beiden Sätze zeigen genau die beiden Funktions\-eigenschaften \enquote{Eindeutigkeit} und 
+\enquote{Totalität} für \(\mathrm{succ}_A\). Zusammen mit \(\mathrm{succ}_A \subseteq A\times A\) 
+erfüllt der Graph \(\mathrm{succ}_A\) damit die Axiome \(\Phi(F,A,A)\) aus dem Funktionskapitel; 
+insbesondere ist \(\mathrm{succ}_A\) eine Funktion \(A\to A\), \emph{sofern \(A\) induktiv ist}.
+\end{remark}
+
+\subsection{Nachgeschaltete Kurzschreibweise (Klassenvorschrift)}
+
+\FormulaDefAuto[Nachfolger-Vorschrift]{\mathrm{succ}(x) := x \cup \{x\}}[Klassenvorschrift: gilt für jede Menge \(x\).]
+\begin{remark}
+Diese Vorschrift ist eine \textbf{Klassenfunktion}. 
+Beschränkt man sie auf eine induktive Menge \(A\), so ist der Graph der so entstehenden Abbildung genau
+\(\mathrm{succ}_A\) aus der obigen Definition:
+\[
+(x,y)\in \mathrm{succ}_A \quad\leftrightarrow\quad x\in A \land y\in A \land \bigl(y=\mathrm{succ}(x)\bigr).
+\]
+Insbesondere erhält man für die in Band~03 konstruierte kleinste induktive Menge \(\mathbb{N}\) 
+eine echte Funktion \(\mathrm{succ}_{\mathbb{N}}\colon \mathbb{N}\to \mathbb{N}\). 
+Im Peano-Kapitel wird deren Interpretation als \(S\) verwendet.
+\end{remark}
+
+\subsection{Definition des Nachfolgers}
+
+Der Nachfolger lässt sich mengentheoretisch wie folgt definieren.  
 \FormulaDefAuto[Nachfolger]{\mathrm{succ}(x) := x \cup \{x\}}[Für jede Menge \(x\) definieren wir:]
 \begin{remark}
 Diese Definition stimmt im späteren Bereich der natürlichen Zahlen mit der üblichen Interpretation \(S(x) = x+1\) überein. 
