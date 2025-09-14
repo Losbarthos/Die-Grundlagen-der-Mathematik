@@ -190,6 +190,19 @@
   \proofstep{1}{Q \land P}{\rAI{3,2}}
 \end{tabproof}
 
+% Kleine Hilfsäquivalenz (nur ∧-Kommutativität; Beweis kurz & standard)
+\FormulaThmAuto[Kommutativität von $\land$]{P \land Q \eqvdash Q \land P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \land Q}{\rA}
+    \proofstep{1}{Q \land P}{\FormulaRefAuto{P \land Q \vdash Q \land P}{1}}
+  \closeproofpart
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q \land P}{\rA}
+    \proofstep{1}{P \land Q}{\FormulaRefAuto{P \land Q \vdash Q \land P}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
 \FormulaThmAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}
 \begin{tabproof}
   \proofstep{1}{P \leftrightarrow Q}{\rA}
@@ -199,7 +212,7 @@
 \end{tabproof}
 
 
-\section{Kommutativgesetze im prädikatenlogischen Kontext}
+\section{Kommutativgesetze in der Prädikatenlogik}
 
 \FormulaThmAuto{\forall x(P(x)\leftrightarrow Q(x))\vdash \forall x(Q(x)\leftrightarrow P(x))}
 \begin{tabproof}
@@ -367,6 +380,75 @@ Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) n
     \proofstep{1}{P \land (Q \land R)}{\rAI{4,6}}
   \closeproofpart
 \end{tabproofsplit}
+
+% Meta-Notation (motiviert durch die Assoziativsätze)
+\begin{remark}
+Da \(\lor\) und \(\land\) assoziativ sind, ist jede Klammerung einer endlichen Kette
+gleichartiger Verknüpfungen äquivalent. Wir vereinbaren die \emph{rechte}
+Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit entsteht.
+\end{remark}
+
+% Definitorische Abkürzungen (rechte Assoziation als Konvention)
+\FormulaDefAuto[Meta-Notation für dreifache Konjunktion]{P \land Q \land R \coloneqq P \land (Q \land R)}
+\FormulaDefAuto[Meta-Notation für dreifache Disjunktion]{P \lor Q \lor R \coloneqq P \lor (Q \lor R)}
+
+
+\subsubsection{Eliminierung der $n$-fachen Disjunktion (Block-Variante, ohne Mengenlehre)}
+\label{rule:OEn}
+
+\begin{remark}
+Wir verwenden weiterhin die rechte Klammerkonvention
+\[
+P_1 \lor \cdots \lor P_n \;:=\; P_1 \lor \bigl(P_2 \lor (\cdots \lor P_n)\bigr).
+\]
+Durch das Assoziativgesetz ist jede Umklammerung äquivalent. Insbesondere dürfen wir benachbarte Disjunkte zu einem \enquote{Block}
+\[
+P_i \lor \cdots \lor P_j
+\]
+zusammenfassen (ohne die Reihenfolge zu ändern).
+\end{remark}
+
+\begin{definition}[Block-$\lor$E]
+Sei \(n\ge 2\) und in Zeile \(m\) gegeben:
+\[
+\begin{array}{l l l l}
+  i & (m) & P_1 \lor \cdots \lor P_n & \dots
+\end{array}
+\]
+Wähle Indizes
+\[
+1 = t_1 < t_2 < \cdots < t_{r} < t_{r+1} = n+1
+\]
+und definiere für \(u=1,\dots,r\) den \emph{Block}
+\[
+B_u \;:=\; P_{t_u} \lor P_{t_u+1} \lor \cdots \lor P_{t_{u+1}-1}.
+\]
+Angenommen, es gibt für jedes \(u\) einen Unterbeweis
+\[
+\begin{array}{l l l l}
+  m_u & (m_u) & B_u & \rA \\
+  j_u,m_u & (l_u) & R & \dots
+\end{array}
+\]
+Dann darf in einer neuen Zeile \(l\) geschlossen werden:
+\[
+\begin{array}{l l l l}
+  i,j_1,\dots,j_r & (l) & R & \rOEn{\,m,\;m_1,l_1,\;\dots,\;m_r,l_r\,}
+\end{array}
+\]
+\textbf{Nebenbedingungen:}
+\begin{itemize}
+  \item \(m < m_u \le l_u < l\) für alle \(u\).
+  \item Falls \(m_u = l_u\), dann steht in Zeile \(m_u\) bereits genau \(R\)
+        (z.\,B. wenn der gewählte Block \(B_u\) syntaktisch \(R\) ist).
+        Andernfalls ist eine (ggf. 1-zeilige) Herleitung \(B_u \vdash R\) nötig,
+        also \(m_u < l_u\).
+  \item Die Blockannahmen \(m_u\) dürfen nur innerhalb des jeweiligen
+        Unterbeweises verwendet werden; in Zeile \(l\) sind alle \(m_u\) getilgt.
+\end{itemize}
+\end{definition}
+
+
 
 \chapter{Modus Tollens}
 
@@ -751,6 +833,49 @@ Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) n
   \closeproofpart
 \end{tabproofsplit}
 
+
+
+% Erweitertes Distributivgesetz (Ausklammern)
+\FormulaThmAuto[Erweitertes Distributivgesetz]{(P \lor Q) \land (R \lor S) \dashv \vdash
+ (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}
+\begin{tabproofwide}
+  % 1) Distributiv
+  \proofstepwide{(P \lor Q) \land (R \lor S)}{\leftrightarrow}{(P \land (R \lor S))}%
+    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q)\land R \dashv \vdash (P \land R) \lor (Q \land R)}}}
+  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
+
+  % 2) ∧-Kommutativität im linken Disjunkt
+  \proofstepwide{}{\leftrightarrow}{((R \lor S) \land P)}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},1}}}
+  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
+
+  % 3) Distributiv auf (R∨S)∧P
+  \proofstepwide{}{\leftrightarrow}{((R \land P) \lor (S \land P))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \lor Q)\land R \dashv \vdash (P \land R) \lor (Q \land R)},2}}}
+  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
+
+  % 4) ∧-Kommutativität in den Konjunkten
+  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},3}}}
+  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
+
+  % 5) ∧-Kommutativität im rechten Disjunkt
+  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},4}}}
+  \proofstepwide*{}{\lor}{((R \lor S) \land Q)}{}
+
+  % 6) Distributiv auf (R∨S)∧Q
+  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \lor Q)\land R \dashv \vdash (P \land R) \lor (Q \land R)},5}}}
+  \proofstepwide*{}{\lor}{((R \land Q) \lor (S \land Q))}{}
+
+  % 7) ∧-Kommutativität in den Konjunkten rechts
+  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},6}}}
+  \proofstepwide*{}{\lor}{((Q \land R) \lor (Q \land S))}{}
+\end{tabproofwide}
+
+
 \FormulaThmAuto[Distributivgesetz]{P \lor (Q \land R) \dashv \vdash  (P \lor Q) \land (P\lor R)}
 \begin{tabproofsplit}
   \proofpart{$\vdash$}
@@ -814,6 +939,37 @@ Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) n
     \proofstep{1}{(P \land Q)\lor R}{\rOE{3,4,5,7,10}}
   \closeproofpart
 \end{tabproofsplit}
+
+% Erweitertes Distributivgesetz (dual, Einklammern)
+\FormulaThmAuto[Erweitertes Distributivgesetz]{(P \land Q) \lor (R \land S) \dashv \vdash
+ (P \lor R) \land (P \lor S) \land (Q \lor R) \land (Q \lor S)}
+\begin{tabproofwide}
+  % 1) ∨ über ∧ verteilen (mit X=(P∧Q), Y=R, Z=S)
+  \proofstepwide{(P \land Q) \lor (R \land S)}{\leftrightarrow}{((P \land Q) \lor R)}%
+    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \dashv \vdash (P \lor Q) \land (P \lor R)}}}
+  \proofstepwide*{}{\land}{((P \land Q) \lor S)}{}
+
+  % 2) Linken Konjunkt weiter distribuieren: (P∧Q)∨R
+  \proofstepwide{}{\leftrightarrow}{((P \lor R) \land (Q \lor R))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \land Q)\lor R \dashv \vdash (P \lor R) \land (Q \lor R)},1}}}
+  \proofstepwide*{}{\land}{((P \land Q) \lor S)}{}
+
+  % 3) Rechten Konjunkt weiter distribuieren: (P∧Q)∨S
+  \proofstepwide{}{\leftrightarrow}{((P \lor R) \land (Q \lor R))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \land Q)\lor R \dashv \vdash (P \lor R) \land (Q \lor R)},2}}}
+  \proofstepwide*{}{\land}{((P \lor S) \land (Q \lor S))}{}
+
+  % 4) Umordnen/umklammern (Meta: Assoziativität/Kommutativität von ∧)
+  \proofstepwide{}{\leftrightarrow}{((P \lor R) \land (P \lor S))}%
+    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},3}}}
+  \proofstepwide*{}{\land}{((Q \lor R) \land (Q \lor S))}{}
+
+  % 5) Glätten zur vierfachen Konjunktion (rechte Assoziation)
+  \proofstepwide{}{\leftrightarrow}{(P \lor R) \land (P \lor S)}%
+    {\multirow{3}{*}{\rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},4}}}
+  \proofstepwide*{}{\land}{(Q \lor R)}{}
+  \proofstepwide*{}{\land}{(Q \lor S)}{}
+\end{tabproofwide}
 
 \chapter{Aussagenlogische Implikationen}
 
@@ -1908,6 +2064,20 @@ Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) n
   \proofstep{1}{a = b}{\rA}
   \proofstep{2}{c = b}{\rA}
   \proofstep{1,2}{a = c}{\rIE{1,2}}
+\end{tabproof}
+
+
+
+\FormulaThmAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}
+\begin{tabproof}
+  \proofstep{1}{a = c}{\rA}
+  \proofstep{2}{b = c}{\rA}
+  \proofstep{3}{d=a\lor d=b}{\rA}
+  \proofstep{4}{d=a}{\rA}
+  \proofstep{1,4}{d=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,1}}
+  \proofstep{6}{d=b}{\rA}
+  \proofstep{2,6}{d=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,2}}
+  \proofstep{1,2}{d=c}{\rOE{3,4,5,6,7}}
 \end{tabproof}
 
 

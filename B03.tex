@@ -815,6 +815,16 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}}
 \end{tabproof}
 
+\FormulaThmAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}
+\begin{tabproof}
+  \proofstep{1}{\{a\}=\{b,c\}}{\rA}
+  \proofstep{1}{b\in\{a\}}{\rIE{1,\FormulaRefAuto{a\in\{a,b\}}}}
+  \proofstep{1}{a=b}{\FormulaRefAuto{a = b \vdash b = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{2}}}
+  \proofstep{1}{c\in\{a\}}{\rIE{1,\FormulaRefAuto{b\in\{a,b\}}}}
+  \proofstep{1}{a=c}{\FormulaRefAuto{a = b \vdash b = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{2}}}
+  \proofstep{1}{a=b\land a=c}{\rAI{3,5}}
+\end{tabproof}
+
 \FormulaThmAuto{\exists x\in \{a,b\} P(x)\vdash P(a)\lor P(b)}
 \begin{tabproof}
   \proofstep{1}{\exists x\in \{a,b\} P(x)}{\rA}
@@ -860,11 +870,127 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \FormulaThmAuto{\{a\}=\{b\}\eqvdash a=b}
 \begin{tabproofsplit}
     \proofpart{\(\vdash\)}
-    \proofstep{1}{\{a\}=\{b\}}{\rA}
+    \proofstep{1}{\{a\}=\{b\}}{ \rA}
     \proofstep{1}{\forall x(x\in\{a\}\leftrightarrow x\in\{b\})}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}
+    \proofstep{}{a\in\{a\}}{\FormulaRefAuto{a \in \{a\}}}
+    \proofstep{1}{a\in\{b\}}{\FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{\rUE{2},3}}
+    \proofstep{1}{a=b}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{4}}
     \closeproofpart
     \proofpart{\(\dashv\)}
+    \proofstep{1}{a=b}{ \rA}
+    \proofstep{}{\{a\}=\{a\}}{ \rII}
+    \proofstep{1}{\{a\}=\{b\}}{ \rIE{1,2}}
     \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}
+% --- Beweis ---
+\begin{tabproof}
+  \proofstep{1}{a=c}{\rA}
+  \proofstep{2}{b=d}{\rA}
+
+  \proofcase[1]{\{a,b\}\subseteq\{c,d\}}
+  \proofstep{3}{x\in\{a,b\}}{\rA}
+  \proofstep{3}{x=a\lor x=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
+
+  \proofcase[1.1]{x=a \vdash x\in\{c,d\}}
+  \proofstep{5}{x=a}{\rA}
+  \proofstep{1,5}{x=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,1}}
+  \proofstep{1,5}{x=c\lor x=d}{\rOIa{6}}
+  \proofstep{1,5}{x\in \{c,d\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{7}}
+
+  \proofcase[1.2]{x=b \vdash x\in\{c,d\}}
+  \proofstep{9}{x=b}{\rA}
+  \proofstep{2,9}{x=d}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,2}}
+  \proofstep{2,9}{x=c\lor x=d}{\rOIb{10}}
+  \proofstep{2,9}{x\in \{c,d\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{11}}
+  
+  \proofcasesummary[1]{\{a,b\}\subseteq\{c,d\}}
+  \proofstep{1,2,3}{x\in \{c,d\}}{\rOE{4,5,8,9,12}}
+  \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}%
+    {\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,13}}}}
+
+  \proofcase[2]{\{c,d\}\subseteq\{a,b\}}
+  \proofstep{15}{x\in\{c,d\}}{\rA}
+  \proofstep{15}{x=c\lor x=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{15}}
+
+  \proofcase[2.1]{x=c \vdash x\in\{a,b\}}
+  \proofstep{17}{x=c}{\rA}
+  \proofstep{1,17}{x=a}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{17,1}}
+  \proofstep{1,17}{x=a\lor x=b}{\rOIa{18}}
+  \proofstep{1,17}{x\in \{a,b\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{19}}
+
+  \proofcase[2.2]{x=d \vdash x\in\{a,b\}}
+  \proofstep{21}{x=d}{\rA}
+  \proofstep{2,21}{x=b}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{21,2}}
+  \proofstep{2,21}{x=a\lor x=b}{\rOIb{22}}
+  \proofstep{2,21}{x\in \{a,b\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{23}}
+
+  \proofcasesummary[2]{\{c,d\}\subseteq\{a,b\}}
+  \proofstep{1,2,15}{x\in \{a,b\}}{\rOE{16,17,20,21,24}}
+  \proofstep{1,2}{\{c,d\}\subseteq \{a,b\}}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{15,25}}}}
+
+  \proofcasesummary{\{a,b\}=\{c,d\}} % (optional hübsch)
+
+  \proofstep{1,2}{\{a,b\}=\{c,d\}}%
+    {\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{\rAI{14,26}}}
+\end{tabproof}
+
+\FormulaThmAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}
+\begin{tabproof}
+    \proofstep{1}{\{a,b\}=\{c,d\}}{ \rA}
+    \proofstep{}{a\in \{a,b\}}{\FormulaRefAuto{a\in \{a,b\}}}
+    \proofstep{1}{a\in \{c,d\}}{\FormulaRefAuto{A=B, x\in A\vdash x\in B}{1,2}}
+    \proofstep{1}{a=c\lor a=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
+    \proofstep{}{b\in \{a,b\}}{\FormulaRefAuto{b\in \{a,b\}}}
+    \proofstep{1}{b\in \{c,d\}}{\FormulaRefAuto{A=B, x\in A\vdash x\in B}{1,5}}
+    \proofstep{1}{b=c\lor b=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
+    \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}{\rAI{4,7}}
+\end{tabproof}
+
+\FormulaThmAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}
+\begin{tabproofsplit}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \proofpart{\(\vdash\)}
+  \proofstep{1}{\{a,b\}=\{c,d\}}{\rA}
+  \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}%
+    {\FormulaRefAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}{1}}
+    \proofstep{1}{(a=c\land b=c)\lor (a=c\land b=d)\lor}%
+  {\multirow{2}{*}{$\FormulaRefAuto{(P \lor Q) \land (R \lor S) \dashv \vdash
+   (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}{2}$}}
+\proofstepstar{}{(a=d\land b=c)\lor (a=d\land b=d)}{}
+  \proofstep{4}{a=c\land b=c}{\rA}
+  \proofstep{4}{a=c}{\rAEa{4}}
+  \proofstep{4}{b=c}{\rAEb{4}}
+  \proofstep{1}{d=a\lor d=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{\rIE{1,\FormulaRefAuto{b\in\{a,b\}}}}}
+  \proofstep{1}{d=c}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{5,6,7}}
+  \proofstep{1,4}{b=d}{\FormulaRefAuto{a = b, c = b\vdash a = c}{6,8}}
+  \proofstep{1,4}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIa{\rAI{5,9}}}
+  \proofstep{11}{(a=c\land b=d) \lor (a=d\land b=c)}{\rA}
+  \proofstep{12}{a=d\land b=d}{\rA}
+  \proofstep{12}{a=d}{\rAEa{12}}
+  \proofstep{12}{b=d}{\rAEb{12}}
+  \proofstep{1}{c=a\lor c=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{\rIE{1,\FormulaRefAuto{a\in\{a,b\}}}}}
+  \proofstep{1,12}{c=d}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{13,14,15}}
+  \proofstep{1,12}{b=c}{\FormulaRefAuto{a = b, c = b\vdash a = c}{14,16}}
+  \proofstep{1,12}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIb{\rAI{13,17}}}
+  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\rOEn{3,4,10,11,11,12,18}}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \closeproofpart
+  \proofpart{\(\dashv\)}
+  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\rA}
+  \proofstep{2}{a=c\land b=d}{\rA}
+  \proofstep{2}{a=c}{\rAEa{2}}
+  \proofstep{2}{b=d}{\rAEb{2}}
+  \proofstep{2}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}{3,4}}
+  \proofstep{6}{a=d\land b=d}{\rA}
+  \proofstep{6}{a=d}{\rAEa{2}}
+  \proofstep{6}{b=c}{\rAEb{2}}
+  \proofstep{6}{\{a,b\}=\{d,c\}}{\FormulaRefAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}{7,8}}
+  \proofstep{6}{\{a,b\}=\{c,d\}}{\rIE{\FormulaRefAuto{\{a,b\} = \{b,a\}},9}}
+  \proofstep{1}{\{a,b\}=\{c,d\}}{\rOE{1,2,5,6,10}}
+  \closeproofpart
 \end{tabproofsplit}
 
 
