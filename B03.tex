@@ -257,6 +257,14 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstepwide*{A \subseteq B \land B \subseteq A}{ \leftrightarrow }{A = B}{\rChain{1,3}}
 \end{tabproofwide}
 
+\FormulaThmAuto{ A \subseteq B, B \subseteq A \vdash A = B }
+\begin{tabproof}
+    \proofstep{1}{A\subseteq B}{\rA}
+    \proofstep{2}{B\subseteq A}{\rA}
+    \proofstep{1,2}{A\subseteq B\land B\subseteq A}{\rAI{1,2}}
+    \proofstep{1,2}{A\subseteq B\land B\subseteq A}{\FormulaRefAuto{ A \subseteq B \land B \subseteq A \eqvdash A = B }{3}}
+\end{tabproof}
+
 \FormulaThmAuto[Transitivität von Teilmengen]{
 A \subseteq B, B \subseteq C \vdash A \subseteq C
 }
@@ -883,23 +891,20 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     \closeproofpart
 \end{tabproofsplit}
 
-\FormulaThmAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}
-% --- Beweis ---
+\FormulaThmAuto{a=c,b=d\vdash \{a,b\}\subseteq \{c,d\}}
 \begin{tabproof}
   \proofstep{1}{a=c}{\rA}
   \proofstep{2}{b=d}{\rA}
-
-  \proofcase[1]{\{a,b\}\subseteq\{c,d\}}
   \proofstep{3}{x\in\{a,b\}}{\rA}
   \proofstep{3}{x=a\lor x=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
 
-  \proofcase[1.1]{x=a \vdash x\in\{c,d\}}
+  \proofcase[1]{x=a \vdash x\in\{c,d\}}
   \proofstep{5}{x=a}{\rA}
   \proofstep{1,5}{x=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,1}}
   \proofstep{1,5}{x=c\lor x=d}{\rOIa{6}}
   \proofstep{1,5}{x\in \{c,d\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{7}}
 
-  \proofcase[1.2]{x=b \vdash x\in\{c,d\}}
+  \proofcase[2]{x=b \vdash x\in\{c,d\}}
   \proofstep{9}{x=b}{\rA}
   \proofstep{2,9}{x=d}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,2}}
   \proofstep{2,9}{x=c\lor x=d}{\rOIb{10}}
@@ -909,32 +914,84 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,2,3}{x\in \{c,d\}}{\rOE{4,5,8,9,12}}
   \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}%
     {\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,13}}}}
+\end{tabproof}
 
-  \proofcase[2]{\{c,d\}\subseteq\{a,b\}}
-  \proofstep{15}{x\in\{c,d\}}{\rA}
-  \proofstep{15}{x=c\lor x=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{15}}
+\FormulaThmAuto{a=d,b=c\vdash \{a,b\}\subseteq \{c,d\}}
+\begin{tabproof}
+  \proofstep{1}{a=d}{\rA}
+  \proofstep{2}{b=c}{\rA}
+  \proofstep{3}{x\in\{a,b\}}{\rA}
+  \proofstep{3}{x=a\lor x=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
 
-  \proofcase[2.1]{x=c \vdash x\in\{a,b\}}
-  \proofstep{17}{x=c}{\rA}
-  \proofstep{1,17}{x=a}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{17,1}}
-  \proofstep{1,17}{x=a\lor x=b}{\rOIa{18}}
-  \proofstep{1,17}{x\in \{a,b\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{19}}
+  \proofcase[1]{x=a \vdash x\in\{c,d\}}
+  \proofstep{5}{x=a}{\rA}
+  \proofstep{1,5}{x=d}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,1}}
+  \proofstep{1,5}{x=c\lor x=d}{\rOIb{6}}
+  \proofstep{1,5}{x\in \{c,d\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{7}}
 
-  \proofcase[2.2]{x=d \vdash x\in\{a,b\}}
-  \proofstep{21}{x=d}{\rA}
-  \proofstep{2,21}{x=b}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{21,2}}
-  \proofstep{2,21}{x=a\lor x=b}{\rOIb{22}}
-  \proofstep{2,21}{x\in \{a,b\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{23}}
+  \proofcase[2]{x=b \vdash x\in\{c,d\}}
+  \proofstep{9}{x=b}{\rA}
+  \proofstep{2,9}{x=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,2}}
+  \proofstep{2,9}{x=c\lor x=d}{\rOIa{10}}
+  \proofstep{2,9}{x\in \{c,d\}}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{11}}
+  
+  \proofcasesummary[1]{\{a,b\}\subseteq\{c,d\}}
+  \proofstep{1,2,3}{x\in \{c,d\}}{\rOE{4,5,8,9,12}}
+  \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}%
+    {\FormulaRefAuto{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,13}}}}
+\end{tabproof}
 
-  \proofcasesummary[2]{\{c,d\}\subseteq\{a,b\}}
-  \proofstep{1,2,15}{x\in \{a,b\}}{\rOE{16,17,20,21,24}}
-  \proofstep{1,2}{\{c,d\}\subseteq \{a,b\}}%
-    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{15,25}}}}
+\FormulaThmAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}
+% --- Beweis ---
+\begin{tabproof}
+  \proofstep{1}{a=c}{\rA}
+  \proofstep{2}{b=d}{\rA}
+  \proofstep{2}{c=a}{\FormulaRefAuto{a=b\vdash b=a}{1}}
+  \proofstep{2}{b=d}{\FormulaRefAuto{a=b\vdash b=a}{2}}
 
-  \proofcasesummary{\{a,b\}=\{c,d\}} % (optional hübsch)
+  \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}{\FormulaRefAuto{a=c,b=d\vdash \{a,b\}\subseteq \{c,d\}}{1,2}}
+  \proofstep{1,2}{\{c,d\}\subseteq\{a,b\}}{\FormulaRefAuto{a=c,b=d\vdash \{a,b\}\subseteq \{c,d\}}{3,4}}
 
-  \proofstep{1,2}{\{a,b\}=\{c,d\}}%
-    {\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{\rAI{14,26}}}
+  \proofstep{1,2}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{5,6}}
+\end{tabproof}
+
+\FormulaThmAuto{a=c\land b=d\vdash \{a,b\}=\{c,d\}}
+\begin{tabproof}
+    \proofstep{1}{a=c\land b=d}{\rA}
+    \proofstep{1}{a=c}{\rAEa{1}}
+    \proofstep{1}{b=d}{\rAEb{1}}
+    \proofstep{1}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto{a=d, b=c\vdash \{a,b\}=\{c,d\}}
+% --- Beweis ---
+\begin{tabproof}
+  \proofstep{1}{a=d}{\rA}
+  \proofstep{2}{b=c}{\rA}
+  \proofstep{3}{d=a}{\FormulaRefAuto{a=b\vdash b=a}{1}}   % Symmetrie aus 1
+  \proofstep{4}{c=b}{\FormulaRefAuto{a=b\vdash b=a}{2}}   % Symmetrie aus 2
+
+  % Erstes Inklusionsziel: {a,b} ⊆ {c,d}
+  \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}{%
+    \FormulaRefAuto{a=d,b=c\vdash \{a,b\}\subseteq \{c,d\}}{1,2}}
+
+  % Zweites Inklusionsziel: {c,d} ⊆ {a,b}
+  % Anwenden des selben Teilmengen-Theorems mit Umbenennung (a',b',c',d')=(c,d,a,b)
+  % Voraussetzungen dafür sind c=b (Zeile 4) und d=a (Zeile 3)
+  \proofstep{4,3}{\{c,d\}\subseteq\{a,b\}}{%
+    \FormulaRefAuto{a=d,b=c\vdash \{a,b\}\subseteq \{c,d\}}{4,3}}
+
+  % Gleichheit aus beidseitiger Inklusion
+  \proofstep{1,2}{\{a,b\}=\{c,d\}}{%
+    \FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{5,6}}
+\end{tabproof}
+
+\FormulaThmAuto{a=d\land b=c\vdash \{a,b\}=\{c,d\}}
+\begin{tabproof}
+    \proofstep{1}{a=d\land b=c}{\rA}
+    \proofstep{1}{a=d}{\rAEa{1}}
+    \proofstep{1}{b=c}{\rAEb{1}}
+    \proofstep{1}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{a=d, b=c\vdash \{a,b\}=\{c,d\}}{2,3}}
 \end{tabproof}
 
 \FormulaThmAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}
@@ -947,6 +1004,28 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     \proofstep{1}{b\in \{c,d\}}{\FormulaRefAuto{A=B, x\in A\vdash x\in B}{1,5}}
     \proofstep{1}{b=c\lor b=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
     \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}{\rAI{4,7}}
+\end{tabproof}
+
+\FormulaThmAuto{\{a,b\}=\{c,d\},a=c,b=c\vdash d=c}
+\begin{tabproof}
+\proofstep{1}{\{a,b\}=\{c,d\}}{\rA}
+\proofstep{2}{a=c}{\rA}
+\proofstep{3}{b=c}{\rA}
+\proofstep{}{d\in\{c,d\}}{\FormulaRefAuto{b\in\{a,b\}}}
+\proofstep{1}{d\in\{a,b\}}{\rIE{1,4}}
+\proofstep{1}{d=a\lor d=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{5}}
+\proofstep{1,2,3}{d=c}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{2,3,5}}
+\end{tabproof}
+
+\FormulaThmAuto{\{a,b\}=\{c,d\},a=d,b=d\vdash c=d}
+\begin{tabproof}
+\proofstep{1}{\{a,b\}=\{c,d\}}{\rA}
+\proofstep{2}{a=d}{\rA}
+\proofstep{3}{b=d}{\rA}
+\proofstep{}{c\in\{c,d\}}{\FormulaRefAuto{a\in\{a,b\}}}
+\proofstep{1}{c\in\{a,b\}}{\rIE{1,4}}
+\proofstep{1}{c=a\lor c=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{5}}
+\proofstep{1,2,3}{c=d}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{2,3,5}}
 \end{tabproof}
 
 \FormulaThmAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}
@@ -963,19 +1042,17 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{4}{a=c\land b=c}{\rA}
   \proofstep{4}{a=c}{\rAEa{4}}
   \proofstep{4}{b=c}{\rAEb{4}}
-  \proofstep{1}{d=a\lor d=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{\rIE{1,\FormulaRefAuto{b\in\{a,b\}}}}}
-  \proofstep{1}{d=c}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{5,6,7}}
-  \proofstep{1,4}{b=d}{\FormulaRefAuto{a = b, c = b\vdash a = c}{6,8}}
-  \proofstep{1,4}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIa{\rAI{5,9}}}
-  \proofstep{11}{(a=c\land b=d) \lor (a=d\land b=c)}{\rA}
-  \proofstep{12}{a=d\land b=d}{\rA}
-  \proofstep{12}{a=d}{\rAEa{12}}
-  \proofstep{12}{b=d}{\rAEb{12}}
-  \proofstep{1}{c=a\lor c=b}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{\rIE{1,\FormulaRefAuto{a\in\{a,b\}}}}}
-  \proofstep{1,12}{c=d}{\FormulaRefAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}{13,14,15}}
-  \proofstep{1,12}{b=c}{\FormulaRefAuto{a = b, c = b\vdash a = c}{14,16}}
-  \proofstep{1,12}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIb{\rAI{13,17}}}
-  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\rOEn{3,4,10,11,11,12,18}}
+  \proofstep{1,4}{d=c}{\FormulaRefAuto{\{a,b\}=\{c,d\},a=c,b=c\vdash d=c}{1,5,6}}
+  \proofstep{1,4}{b=d}{\FormulaRefAuto{a = b, c = b\vdash a = c}{5,6}}
+  \proofstep{1,4}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIa{\rAI{5,8}}}
+  \proofstep{10}{(a=c\land b=d) \lor (a=d\land b=c)}{\rA}
+  \proofstep{11}{a=d\land b=d}{\rA}
+  \proofstep{11}{a=d}{\rAEa{12}}
+  \proofstep{11}{b=d}{\rAEb{12}}
+  \proofstep{1,11}{c=d}{\FormulaRefAuto{\{a,b\}=\{c,d\},a=d,b=d\vdash c=d}{1,12,13}}
+  \proofstep{1,11}{b=c}{\FormulaRefAuto{a = b, c = b\vdash a = c}{14,16}}
+  \proofstep{1,11}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIb{\rAI{12,15}}}
+  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\rOEn{3,4,9,10,10,11,16}}
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \closeproofpart
   \proofpart{\(\dashv\)}
@@ -993,18 +1070,59 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \closeproofpart
 \end{tabproofsplit}
 
+\FormulaThmAuto{\{a,b\}=\{c,d\}, a=c \vdash b=d}
+\begin{tabproof}
+\proofstep{1}{\{a,b\}=\{c,d\}}{\rA}
+\proofstep{2}{a=c}{\rA}
+\proofstep{1}{(a=c\land b=d)\;\lor\;(a=d\land b=c)}{\FormulaRefAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}{1}}
+\proofstep{4}{a=c\land b=d}{\rA}
+\proofstep{4}{b=d}{\rAEb{4}}
+\proofstep{6}{a=d\land b=c}{\rA}
+\proofstep{6}{a=d}{\rAEa{6}}
+\proofstep{6}{b=c}{\rAEb{6}}
+\proofstep{2}{c=a}{\FormulaRefAuto{a=b \vdash b=a}{2}}
+\proofstep{9,7}{c=d}{\FormulaRefAuto{a=b,\, b=c \vdash a=c}{9,7}}
+\proofstep{8,10}{b=d}{\FormulaRefAuto{a=b,\, b=c \vdash a=c}{8,10}}
+% Disjunktionselimination
+\proofstep{1,2}{b=d}{\rOE{3,4,5,6,11}}
+\end{tabproof}
+
 
 \section{Eigenschaften geordneter Paare}
 
 \FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}
-\begin{tabproofwide}
-  \proofstepwide{(a,b) = (c,d)}{\leftrightarrow}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}}
-  \proofstepwide{}{\leftrightarrow}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}}
-\end{tabproofwide}
-
-
-
-
+\begin{tabproofsplit}
+    \proofpart{\(\vdash\)}
+    \proofstep{1}{(a,b) = (c,d)}{\rA}
+    \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\rIE{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}},1}}
+    \proofstep{1}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\multirow{2}{*}{$\FormulaRefAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}{2}$}}
+    \proofstepstar{}{\lor \{a\}=\{c,d\}\land \{a,b\}=\{c\}}{}
+    \proofstep{4}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\rA}
+    \proofstep{4}{\{a\}=\{c\}}{\rAEa{4}}
+    \proofstep{4}{\{a,b\}=\{c,d\}}{\rAEb{4}}
+    \proofstep{4}{a=c}{\FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{5}}
+    \proofstep{4}{b=d}{\FormulaRefAuto{\{a,b\}=\{c,d\}, a=c \vdash b=d}{6,7}}
+    \proofstep{4}{a=c\land b=d}{\rAI{7,8}}
+    \proofstep{10}{\{a\}=\{c,d\}\land \{a,b\}=\{c\}}{\rA}
+    \proofstep{10}{\{a\}=\{c,d\}}{\rAEa{13}}
+    \proofstep{10}{\{a,b\}=\{c\}}{\rAEb{13}}
+    \proofstep{10}{a=c\land a=d}{\FormulaRefAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}{11}}
+    \proofstep{10}{c=a\land c=b}{\FormulaRefAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}{\FormulaRefAuto{a = b \vdash b = a}{12}}}
+    \proofstep{10}{a=c}{\rAEa{13}}
+    \proofstep{10}{a=d}{\rAEb{13}}
+    \proofstep{10}{c=b}{\rAEb{14}}
+    \proofstep{10}{b=d}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{17,\FormulaRefAuto{a = b,\, a = c \vdash b = c}{15,16}}}
+    \proofstep{10}{a=c\land b=d}{\rAI{15,18}}
+    \proofstep{1}{a=c\land b=d}{\rOE{3,4,9,10,19}}
+    \closeproofpart
+    \proofpart{\(\dashv\)}
+    \proofstep{1}{a=c\land b=d}{\rA}
+    \proofstep{1}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{a=c\land b=d\vdash \{a,b\}=\{c,d\}}{1}}
+    \proofstep{1}{a=c}{\rAEa{1}}
+    \proofstep{1}{{a}={c}}{\FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{3}}
+    \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{a=c, b=d\vdash \{a,b\}=\{c,d\}}{4,2}}
+    \closeproofpart
+\end{tabproofsplit}
 
 \section{Definition und Eigenschaften der Differenz}
 
@@ -1887,9 +2005,37 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \end{remark}
 
 \FormulaThmAuto[Kartesisches Produkt ($A \times B$)]{(a,b)\in A\times B\eqvdash a\in A\land b\in B}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{(a,b)\in A\times B}{\rA}
+  \proofstep{1}{\exists c\in A\exists d\in B((a,b)=(c,d))}{\FormulaRefAuto{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}{1}}
+  \proofstep{3}{c\in A\land d\in B\land (c,d)=(a,b)}{\rA}
+  \proofstep{3}{c\in A}{\rAEn{3}}
+  \proofstep{3}{d\in B}{\rAEn{3}}
+  \proofstep{3}{(c,d)=(a,b)}{\rAEn{3}}
+  \proofstep{3}{c=a\land d=b}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}{6}}
+  \proofstep{3}{c=a}{\rAEa{7}}
+  \proofstep{3}{d=b}{\rAEb{7}}
+  \proofstep{3}{a\in A}{\rIE{8,4}}
+  \proofstep{3}{b\in B}{\rIE{9,5}}
+  \proofstep{3}{a\in A\land b\in B}{\rAI{10,11}}
+  \proofstep{1}{a\in A\land b\in B}{\rEE{2,3,12}}
+\closeproofpart
+\proofpart{\(\dashv\)}
+  \proofstep{1}{a\in A\land b\in B}{\rA}
+  \proofstep{}{(a,b)=(a,b)}{\rII}
+  \proofstep{1}{a\in A\land b\in B\land (a,b)=(a,b)}{\rAI{1,2}}
+  \proofstep{1}{\exists a\in A\exists b\in B((a,b)=(a,b))}{\rEI{3}}
+  \proofstep{1}{(a,b)\in A\times B}{\FormulaRefAuto{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}{4}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{a\in A,b\in B\vdash (a,b)\in A\times B}
 \begin{tabproof}
-  \proofstep{}{ \exists! C\, \forall (a,b) \bigl((a,b) \in C \leftrightarrow \exists a \in A\, \exists b \in B}{\multirow{2}{*}{\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{\exists a \in A,\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}}}}}}
-  \proofstepstar{}{ \big(x=(a,b)\big)\bigr)}{}
+      \proofstep{1}{a\in A}{\rA}
+      \proofstep{2}{b\in B}{\rA}
+      \proofstep{1,2}{a\in A\land b\in B}{\rAI{1,2}}
+      \proofstep{1,2}{(a,b)\in A\times B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{3}}
 \end{tabproof}
 
 
@@ -2040,8 +2186,7 @@ Wir konstruieren die Menge der natürlichen Zahlen allein aus den Axiomen der Me
     {\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(x \cup \{x\} \in A)},15}}
 \end{tabproof}
 
-\subsection{Nachfolger-Graph auf einer Menge \(A\)}
-
+\subsection{Die Nachfolger-Funktion}
 
 \FormulaDefAuto
 {\mathrm{succ}_A := \{\, (x,y) \in A \times A \mid y = x \cup \{x\} \,\}}%
@@ -2054,7 +2199,7 @@ Wir konstruieren die Menge der natürlichen Zahlen allein aus den Axiomen der Me
 \end{tabproof}
 
 \FormulaThmAuto[Funktionale Eindeutigkeit von \(\mathrm{succ}_A\)]%
-{(x,y)\in \mathrm{succ}_A,\,(x,z)\in \mathrm{succ}_A \vdash y=z}{Seien \(x,y,z\in A\), dann gilt:}
+{(x,y)\in \mathrm{succ}_A,\,(x,z)\in \mathrm{succ}_A \vdash y=z}[Seien \(x,y,z\in A\), dann gilt:]
 \begin{tabproof}
   \proofstep{1}{(x,y)\in \mathrm{succ}_A}{\rA}
   \proofstep{2}{(x,z)\in \mathrm{succ}_A}{\rA}
@@ -2065,109 +2210,34 @@ Wir konstruieren die Menge der natürlichen Zahlen allein aus den Axiomen der Me
   \proofstep{1,2}{y=z}{\rIE{4,3}}
 \end{tabproof}
 
+\FormulaThmAuto{\mathrm{Induktiv}(A), x\in A\vdash (x,x\cup \{x\})\in \mathrm{succ}_A}
+\begin{tabproof}
+  \proofstep{1}{ \mathrm{Induktiv}(A) }{\rA}
+  \proofstep{2}{ x\in A }{\rA}
+  \proofstep{1,2}{ x\cup\{x\} \in A }{\FormulaRefAuto{\mathrm{Induktiv}(A),\,x\in A\vdash x \cup \{x\} \in A}{1,2}}
+  \proofstep{1,2}{ (x,x\cup\{x\}) \in A\times A}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{3}}
+  \proofstep{}{ (x,x\cup\{x\})=(x,x\cup\{x\})}{\rII}
+  \proofstep{1,2}{(x,x\cup\{x\}) \in \mathrm{succ}_A}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{4,5}}
+\end{tabproof}
+
+
+
 \FormulaThmAuto[Totalität von \(\mathrm{succ}_A\) auf induktiven Mengen]%
 {\mathrm{Induktiv}(A) \vdash \forall x\in A\,\exists y\in A\;((x,y)\in \mathrm{succ}_A)}
 \begin{tabproof}
   \proofstep{1}{ \mathrm{Induktiv}(A) }{\rA}
   \proofstep{2}{ x\in A }{\rA}
   \proofstep{1,2}{ x\cup\{x\} \in A }{\FormulaRefAuto{\mathrm{Induktiv}(A),\,x\in A\vdash x \cup \{x\} \in A}{1,2}}
-  \proofstep{2,3}{ \exists y\in A\; \bigl( y = x\cup\{x\} \land (x,y)\in \mathrm{succ}_A \bigr) }%
-    {\rEI{ \text{mit } y := x\cup\{x\},~ \rAI{3,\,\rUE{\FormulaRefAuto{\mathrm{succ}_A := \{\, (u,v) \in A \times A \mid v = u \cup \{u\} \,\}}{}} } }}
-  \proofstep{}{\forall x\in A\,\exists y\in A\; (x,y)\in \mathrm{succ}_A}{\rUI{\UEI{2,4}}}
+  \proofstep{1,2}{ (x,x\cup \{x\})\in \mathrm{succ}_A }{\FormulaRefAuto{\mathrm{Induktiv}(A), x\in A\vdash (x,x\cup \{x\})\in \mathrm{succ}_A}{1,2]}}
+  \proofstep{1,2}{ \exists y\in A((x,y)\in \mathrm{succ}_A) }{\rEI{\rAI{3,4}}}  
+  \proofstep{1,2}{\forall x\in A\exists y\in A((x,y)\in \mathrm{succ}_A) }{\rUI{\rRI{2,5}}}  
 \end{tabproof}
 
 \begin{remark}
-Die letzten beiden Sätze zeigen genau die beiden Funktions\-eigenschaften \enquote{Eindeutigkeit} und 
-\enquote{Totalität} für \(\mathrm{succ}_A\). Zusammen mit \(\mathrm{succ}_A \subseteq A\times A\) 
-erfüllt der Graph \(\mathrm{succ}_A\) damit die Axiome \(\Phi(F,A,A)\) aus dem Funktionskapitel; 
-insbesondere ist \(\mathrm{succ}_A\) eine Funktion \(A\to A\), \emph{sofern \(A\) induktiv ist}.
+Diese Sätze zeigen genau die Funktionseigenschaften von \(\mathrm{succ}_A\)  und führen zu folgender Definition.
 \end{remark}
 
-\subsection{Nachgeschaltete Kurzschreibweise (Klassenvorschrift)}
-
-\FormulaDefAuto[Nachfolger-Vorschrift]{\mathrm{succ}(x) := x \cup \{x\}}[Klassenvorschrift: gilt für jede Menge \(x\).]
-\begin{remark}
-Diese Vorschrift ist eine \textbf{Klassenfunktion}. 
-Beschränkt man sie auf eine induktive Menge \(A\), so ist der Graph der so entstehenden Abbildung genau
-\(\mathrm{succ}_A\) aus der obigen Definition:
-\[
-(x,y)\in \mathrm{succ}_A \quad\leftrightarrow\quad x\in A \land y\in A \land \bigl(y=\mathrm{succ}(x)\bigr).
-\]
-Insbesondere erhält man für die in Band~03 konstruierte kleinste induktive Menge \(\mathbb{N}\) 
-eine echte Funktion \(\mathrm{succ}_{\mathbb{N}}\colon \mathbb{N}\to \mathbb{N}\). 
-Im Peano-Kapitel wird deren Interpretation als \(S\) verwendet.
-\end{remark}
-
-\subsection{Definition des Nachfolgers}
-
-Der Nachfolger lässt sich mengentheoretisch wie folgt definieren.  
-\FormulaDefAuto[Nachfolger]{\mathrm{succ}(x) := x \cup \{x\}}[Für jede Menge \(x\) definieren wir:]
-\begin{remark}
-Diese Definition stimmt im späteren Bereich der natürlichen Zahlen mit der üblichen Interpretation \(S(x) = x+1\) überein. 
-
-\end{remark}
-\subsection{Induktive Mengen}
-
-Eine Menge heißt \emph{induktiv}, wenn sie die leere Menge enthält und mit der Nachfolgerfunktion abgeschlossen ist.
-
-\FormulaDefAuto[induktive Menge]{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(\mathrm{succ}(x) \in A)}[Für eine Menge \(A\) definieren wir:]
-
-
-\FormulaThmAuto{\exists A(\mathrm{Induktiv}(A))}
-\begin{tabproof}
-  \proofstep{}{ \exists A\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr) }{\FormulaRefAuto{\exists A\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr)}}
-  \proofstep{}{ \exists A\bigl(\emptyset \in A \land \forall x \in A\,(\mathrm{succ}(x) \in A)\bigr) }{\rIE{\FormulaRefAuto{\mathrm{succ}(x) := x \cup \{x\}},1}}
-  \proofstep{}{\exists A(\mathrm{Induktiv}(A)) }{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(\mathrm{succ}(x) \in A)},2}}
-\end{tabproof}
-
-\FormulaThmAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}
-\begin{tabproof}
-  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
-  \proofstep{1}{\emptyset \in A \land \forall x \in A\,(\mathrm{succ}(x) \in A)}{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(\mathrm{succ}(x) \in A)},1}}
-  \proofstep{1}{\emptyset \in A}{\rAEa{2}}
-\end{tabproof}
-
-\FormulaThmAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(\mathrm{succ}(x) \in A)}
-\begin{tabproof}
-  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
-  \proofstep{1}{\emptyset \in A \land \forall x \in A\,(\mathrm{succ}(x) \in A)}{\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(\mathrm{succ}(x) \in A)},1}}
-  \proofstep{1}{\forall x \in A\,(\mathrm{succ}(x) \in A)}{\rAEb{2}}
-\end{tabproof}
-
-\FormulaThmAuto{\mathrm{Induktiv}(A),x\in A\vdash \mathrm{succ}(x) \in A}
-\begin{tabproof}
-  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
-  \proofstep{2}{x\in A}{\rA}
-  \proofstep{2}{\mathrm{succ}(x)\in A}{\rRE{\rUE{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(\mathrm{succ}(x) \in A)}},2}}
-\end{tabproof}
-
-\FormulaThmAuto{\mathrm{Induktiv}(A),\, \mathrm{Induktiv}(B)\vdash \mathrm{Induktiv}(A\cap B)}
-\begin{tabproof}
-  \proofstep{1}{\mathrm{Induktiv}(A)}{\rA}
-  \proofstep{2}{\mathrm{Induktiv}(B)}{\rA}
-
-  % Null in A∩B
-  \proofstep{1}{\,\emptyset\in A}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}{1}}
-  \proofstep{2}{\,\emptyset\in B}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \emptyset\in A}{2}}
-  \proofstep{1,2}{\,\emptyset\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{3,4}}
-
-  % Abschluss unter Nachfolger für A∩B
-  \proofstep{1}{\forall x\in A\,(\mathrm{succ}(x)\in A)}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(\mathrm{succ}(x) \in A)}{1}}
-  \proofstep{2}{\forall x\in B\,(\mathrm{succ}(x)\in B)}{\FormulaRefAuto{\mathrm{Induktiv}(A)\vdash \forall x \in A\,(\mathrm{succ}(x) \in A)}{2}}
-  \proofstep{8}{x\in A\cap B}{\rA}
-  \proofstep{8}{x\in A}{\FormulaRefAuto{x\in A\cap B \vdash x\in A}{9}}
-  \proofstep{8}{x\in B}{\FormulaRefAuto{x\in A\cap B \vdash x\in B}{9}}
-  \proofstep{1,8}{\mathrm{succ}(x)\in A}{\rRE{\rUE{6},9}}
-  \proofstep{2,8}{\mathrm{succ}(x)\in B}{\rRE{\rUE{7},10}}
-  \proofstep{1,2,8}{\mathrm{succ}(x)\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{11,12}}
-  \proofstep{1,2}{\,\forall x\in A\cap B\,(\mathrm{succ}(x)\in A\cap B)}{\rUI{\rRI{8,13}}}
-
-  % Schluss: Induktivität von A∩B
-  \proofstep{1,2}{\,\emptyset\in A\cap B \;\land\; \forall x\in A\cap B\,(\mathrm{succ}(x)\in A\cap B)}{\rAI{5,14}}
-  \proofstep{1,2}{\,\mathrm{Induktiv}(A\cap B)}%
-    {\rIE{\FormulaRefAuto{\mathrm{Induktiv}(A) := \emptyset \in A \,\land\, \forall x\in A\,(\mathrm{succ}(x) \in A)},16}}
-\end{tabproof}
-
+\FormulaDefAuto[Nachfolger]{\mathrm{succ}(x) := x \cup \{x\}}[Sei A eine induktive Menge, dann definieren wir die Funktion \(\mathrm{succ}_A:A\mapsto A\)  für alle \(x\in A\) durch:]
 
 \section{Konstruktion der Menge der natürlichen Zahlen}
 
@@ -2200,7 +2270,6 @@ Eine Menge heißt \emph{induktiv}, wenn sie die leere Menge enthält und mit der
     \proofstepwide[]{x\in \mathbb{N}}{\leftrightarrow}{x\in \bigcap \{ A \mid \mathrm{Induktiv}(A) \}}{\FormulaRefAuto{\mathbb{N} := \bigcap \{ A \mid \mathrm{Induktiv}(A) \}}}
     \proofstepwide[]{}{\leftrightarrow}{\forall \mathrm{Induktiv}(N)(x\in N)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{\FormulaRefAuto{\exists A(\mathrm{Induktiv}(A))}}}
 \end{tabproofwide}
-
 
 \section{Eigenschaften der Menge der natürlichen Zahlen}
 
