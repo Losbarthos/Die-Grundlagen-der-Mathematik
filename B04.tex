@@ -96,6 +96,287 @@ Bis auf Isomorphie ist die durch die Axiome beschriebene Struktur
 \((\mathbb{N},0,S)\) eindeutig bestimmt (Kategorität der Peano-Arithmetik).
 \end{remark}
 
+\section{Addition als Funktion}
+\subsection{Addition als unendlicher Schnitt rekursiv abgeschlossener Relationen}
+
+Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mathbb{N})\times\mathbb{N}\) und \(\mathbb{N}^2:=\mathbb{N}\times\mathbb{N}\) als auch für eine Menge \(R\):
+
+
+\(\begin{aligned}
+\mathrm{Add}_{Rec}(R)\;:=\;&\ R \subseteq \mathbb{N}^3 \;\land\\
+&\ \forall n\in\mathbb{N}\;(((0,n),n)\in R) \;\land\\
+&\ \forall m,n,k\in\mathbb{N}\;\bigl(((m,n),k)\in R \rightarrow ((S(m),n),S(k))\in R\bigr)
+\end{aligned}
+\)
+
+\subsubsection{Existenz einer solchen Menge}
+
+\FormulaThmAuto{\forall n\in\mathbb{N}\;(((0,n),n)\in \mathbb{N}^3)}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{0 \in \mathbb{N}}}
+  \proofstep{1}{(0,n)\in\mathbb{N}^2}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{2,1}}
+  \proofstep{1}{((0,n),n)\in\mathbb{N}^3}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{3,1}}
+  \proofstep{}{\forall n\in\mathbb{N}\;(((0,n),n)\in \mathbb{N}^3)}{\rUI{\rRI{1,4}}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall m,n,k\in\mathbb{N}\;\bigl(((m,n),k)\in\mathbb{N}^3 \rightarrow ((S(m),n),S(k))\in\mathbb{N}^3\bigr)}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[3]{k\in\mathbb{N}}{\rA}
+  \proofstepwidestar[1]{S(m)\in\mathbb{N}}{\FormulaRefAuto{S(n) \in \mathbb{N}}{1}}
+  \proofstepwidestar[3]{S(k)\in\mathbb{N}}{\FormulaRefAuto{S(n) \in \mathbb{N}}{3}}
+  \proofstepwidestar[1,2]{(S(m),n)\in\mathbb{N}^2}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{4,2}}
+  \proofstepwidestar[1,2,3]{((S(m),n),S(k))\in\mathbb{N}^3}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{6,5}}
+
+  % --- Zeile 8 in zwei Zeilen mit gemeinsamer Begründung ---
+  \proofstepwide[1,2,3]{((m,n),k)\in\mathbb{N}^3}{}{}%
+    {\multirow{2}{*}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{7}}}
+  \proofstepwide*{\rightarrow((S(m),n),S(k))\in\mathbb{N}^3}{}{}{}
+
+  % --- Zeile 9 (All-Intro über k) in zwei Zeilen ---
+  \proofstepwide[1]{\forall k\in\mathbb{N}\bigl(((m,n),k)\in\mathbb{N}^3}{}{}%
+    {\multirow{2}{*}{\rUI{\rRI{3,8}}}}
+  \proofstepwide*{\rightarrow((S(m),n),S(k))\in\mathbb{N}^3\bigr)}{}{}{}
+
+  % --- Zeile 10 (All-Intro über n) in zwei Zeilen ---
+  \proofstepwide[]{ \forall n,k\in\mathbb{N}\bigl(((m,n),k)\in\mathbb{N}^3}{}{}%
+    {\multirow{2}{*}{\rUI{\rRI{2,9}}}}
+  \proofstepwide*{\rightarrow((S(m),n),S(k))\in\mathbb{N}^3\bigr)}{}{}{}
+
+  % --- Zeile 11 (All-Intro über m) in zwei Zeilen ---
+  \proofstepwide[]{ \forall m,n,k\in\mathbb{N}\bigl(((m,n),k)\in\mathbb{N}^3}{}{}%
+    {\multirow{2}{*}{\rUI{\rRI{1,10}}}}
+  \proofstepwide*{\rightarrow((S(m),n),S(k))\in\mathbb{N}^3\bigr)}{}{}{}
+\end{tabproofwide}
+
+\FormulaThmAuto{\mathrm{Add}_{Rec}(\mathbb{N}^3)}
+\begin{tabproof}
+  \proofstep{}{\mathbb{N}^3\subseteq\mathbb{N}^3}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{}{\mathrm{Add}_{Rec}(\mathbb{N}^3)}{\rAI{\rAI{1,\FormulaRefAuto{\forall n\in\mathbb{N}\;(((0,n),n)\in \mathbb{N}^3)}},\FormulaRefAuto{\forall m,n,k\in\mathbb{N}\;\bigl(((m,n),k)\in\mathbb{N}^3 \rightarrow ((S(m),n),S(k))\in\mathbb{N}^3\bigr)}}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists R\,\mathrm{Add}_{Rec}(R)}
+\begin{tabproof}
+  \proofstep{}{\mathrm{Add}_{Rec}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Add}_{Rec}(\mathbb{N}^3)}}
+  \proofstep{}{\exists R\,\mathrm{Add}_{Rec}(R)}{\rEI{1}}
+\end{tabproof}
+
+\FormulaDefAuto[Addition als Schnitt]{%
+\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{Rec}(R)} R
+}
+[\FormulaRefAuto{\exists R\,\mathrm{Add}_{Rec}(R)} ermöglicht uns die Definition der folgenden Menge:]
+
+\FormulaThmAuto{\mathrm{Add}\subseteq\mathbb{N}^3}
+\begin{tabproof}
+  \proofstep{}{\mathrm{Add}_{Rec}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Add}_{Rec}(\mathbb{N}^3)}}
+  \proofstep{}{\mathrm{Add}\subseteq\mathbb{N}^3}{\rIE{\FormulaRefAuto{%
+\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{Rec}(R)} R
+},\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{1}}}
+\end{tabproof}
+
+\FormulaThmAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{Rec}(R)(x\in R)}
+\begin{tabproofwide}
+  \proofstepwide[]{x\in \mathrm{Add}}{\leftrightarrow}{x\in \bigcap_{\mathrm{Add}_{Rec}(R)} R}{\FormulaRefAuto{\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{Rec}(R)} R}}
+  \proofstepwide[]{}{\leftrightarrow}{\forall \mathrm{Add}_{Rec}(R)(x\in R)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{\FormulaRefAuto{\exists R\,\mathrm{Add}_{Rec}(R)}}}
+\end{tabproofwide}
+
+% --- Add erfüllt die Basis-Eigenschaft ---
+\FormulaThmAuto{((0,n),n)\in \mathrm{Add}}[Sei \(n\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  % zeige: \forall Add_Rec(R) \, (((0,n),n)\in R)
+  \prooftext{Sei \(n\in\mathbb{N}\), dann gilt:}
+  \proofstep{1}{\mathrm{Add}_{Rec}(R)}{\rA}
+  \proofstep{1}{\forall n\in\mathbb{N}\,(((0,n),n)\in R)}%
+    {\rAEn{1}}
+  \proofstep{1}{((0,n),n)\in R}{\rUE{2}}
+  \proofstep{}{\,\forall \mathrm{Add}_{Rec}(R)\,(((0,n),n)\in R)}{\rUI{\rRI{1,3}}}
+
+  % Charakterisierung von Add rückwärts anwenden
+  \proofstep{}{((0,n),n)\in \mathrm{Add}}%
+    {\FormulaRefAuto{x\in\mathrm{Add}\ \eqvdash\ \forall \mathrm{Add}_{Rec}(R)(x\in R)}{4}}
+\end{tabproof}
+
+
+% --- Add erfüllt die Schritt-Eigenschaft (kurz & korrekt) ---
+\FormulaThmAuto{((m,n),k)\in \mathrm{Add} \rightarrow ((S(m),n),S(k))\in \mathrm{Add}}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \prooftext{Seien \(m,n,k\in\mathbb{N}\), dann gilt:}
+
+  % Annahme: Ausgangspunkt in Add
+  \proofstep{1}{((m,n),k)\in \mathrm{Add}}{\rA}
+
+  % Charakterisierung (→-Richtung) nutzen: aus x∈Add folgt ∀ Add_Rec(S) (x∈S)
+  \proofstep{1}{\forall \mathrm{Add}_{Rec}(S)\,(((m,n),k)\in S)}%
+    {\FormulaRefAuto{x\in\mathrm{Add}\ \eqvdash\ \forall \mathrm{Add}_{Rec}(R)(x\in R)}{\FormulaRefAuto{\exists R\,\mathrm{Add}_{Rec}(R)}}}
+
+  % Wähle beliebiges R mit Add_Rec(R) und ziehe ((m,n),k)∈R
+  \proofstep{3}{\mathrm{Add}_{Rec}(R)}{\rA}
+  \proofstep{1,3}{((m,n),k)\in R}{\rRE{\rUE{2},3}}
+
+  % Schrittregel aus Add_Rec(R) anwenden
+  \proofstep{3}{((m,n),k)\in R \rightarrow ((S(m),n),S(k))\in R}{\rUE{\rAEn{3}}}
+  \proofstep{1,3}{((S(m),n),S(k))\in R}{\rRE{5,4}}
+
+  % Verallgemeinere über alle R mit Add_Rec(R) und zurück nach Add (←-Richtung)
+  \proofstep{1}{\,\forall \mathrm{Add}_{Rec}(R)\,(((S(m),n),S(k))\in R)}{\rUI{\rRI{3,6}}}
+  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}%
+    {\FormulaRefAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{Rec}(R)(x\in R)}{7}}
+
+  % Implikation abschließen
+  \proofstep{}{((m,n),k)\in \mathrm{Add} \rightarrow ((S(m),n),S(k))\in \mathrm{Add}}{\rRI{1,8}}
+\end{tabproof}
+
+
+
+
+% ===============================
+% Eindeutigkeit für Add (Rechts-Eindeutigkeit)
+% ===============================
+\FormulaThmAuto{(x,y)\in\mathrm{Add},\,(x,z)\in\mathrm{Add}\vdash y=z}[Seien \(x\in\mathbb{N}^2\) und \(y,z\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \prooftext{Seien \(x\in\mathbb{N}^2\) und \(y,z\in\mathbb{N}\), dann gilt:}
+  % Zerlege x = (m,n)
+  \proofstep{1}{(x,y)\in\mathrm{Add}}{\rA}
+  \proofstep{2}{(x,z)\in\mathrm{Add}}{\rA}
+  \proofstep{ }{x=(m,n)}{\rA} % (Konvention: Arbeitsdarstellung von Paaren; alternativ \rEI mit Produkterelation)
+  
+  % Umschreiben auf Tripel-Notation
+  \proofstep{1}{((m,n),y)\in\mathrm{Add}}{\rIE{3,1}}
+  \proofstep{2}{((m,n),z)\in\mathrm{Add}}{\rIE{3,2}}
+
+  % Induktion über m: Aussage Q(m):= ∀n∀y∀z( ((m,n),y)∈Add ∧ ((m,n),z)∈Add → y=z )
+  % Basis m=0
+  \proofcase[Basis]{m=0}
+    \proofstep{ }{((0,n),y)\in\mathrm{Add}}{\rA}
+    \proofstep{ }{((0,n),z)\in\mathrm{Add}}{\rA}
+    % Aus Add-Basis wissen wir: ((0,n),n)∈Add.
+    % Mit dem Vorgänger-Lemma auf S(0)=1 rückwärts ist hier nicht nötig; stattdessen:
+    % Betrachte R_y und R_z durch Schnitt-Charakterisierung: jedes Add_Rec(R) enthält ((0,n),n),
+    % also liegen y und z in jedem solchen R nur dann, wenn y=z=n. Kurzfassung:
+    \proofstep{}{y=n}{\FormulaRefAuto{((0,n),n)\in\mathrm{Add}}{} \text{ und Minimalität von }\mathrm{Add}}
+    \proofstep{}{z=n}{\FormulaRefAuto{((0,n),n)\in\mathrm{Add}}{} \text{ und Minimalität von }\mathrm{Add}}
+    \proofstep{}{y=z}{\rRE{7,8}}
+
+  % Induktionsschritt m→S(m)
+  \proofcase[Schritt]{m\to S(m)}
+    \proofstep{}{((S(m),n),y)\in\mathrm{Add}}{\rA}
+    \proofstep{}{((S(m),n),z)\in\mathrm{Add}}{\rA}
+
+    % Ziehe Vorgänger mit dem Lemma:
+    \proofstep{}{\,\exists k\,(y=S(k)\land ((m,n),k)\in\mathrm{Add})}{\FormulaRefAuto{Vorgänger-Lemma}{9}}
+    \proofstep{}{\,\exists \ell\,(z=S(\ell)\land ((m,n),\ell)\in\mathrm{Add})}{\FormulaRefAuto{Vorgänger-Lemma}{10}}
+
+    % Wähle Zeugen und wende Induktionsvoraussetzung Q(m) an:
+    \proofstep{}{y=S(k),\ ((m,n),k)\in\mathrm{Add}}{\rEE{11}}
+    \proofstep{}{z=S(\ell),\ ((m,n),\ell)\in\mathrm{Add}}{\rEE{12}}
+    \proofstep{}{k=\ell}{\text{IV }Q(m)\text{ auf }((m,n),k),((m,n),\ell)}
+    \proofstep{}{y=z}{\FormulaRefAuto{S \text{ injektiv}: S(a)=S(b)\vdash a=b}{13}}
+
+  % Schluss: setze die beiden Fälle zusammen und instanziiere m,n aus x
+  \proofstep{}{y=z}{\text{Induktion über }m}
+\end{tabproof}
+
+% ===============================
+% Vorgänger-Lemma
+% ===============================
+\FormulaThmAuto[Vorgänger-Lemma]{((S(m),n),t)\in\mathrm{Add}\ \vdash\ \exists k\,(t=S(k)\land ((m,n),k)\in\mathrm{Add})}
+\begin{tabproof}
+  \proofstep{1}{((S(m),n),t)\in\mathrm{Add}}{\rA}
+
+  % Aus der Schnitt-Charakterisierung: Add ⊆ R für alle Add_Rec(R)
+  \proofstep{1}{\forall \mathrm{Add}_{Rec}(R)\,(((S(m),n),t)\in R)}%
+    {\FormulaRefAuto{x\in\mathrm{Add}\ \eqvdash\ \forall \mathrm{Add}_{Rec}(R)(x\in R)}{\FormulaRefAuto{\exists R\,\mathrm{Add}_{Rec}(R)}}}
+
+  % Wähle beliebiges Add_Rec(R) und ziehe ((S(m),n),t)∈R
+  \proofstep{2}{\mathrm{Add}_{Rec}(R)}{\rA}
+  \proofstep{1,2}{((S(m),n),t)\in R}{\rRE{\rUE{2},2}}
+
+  % Jetzt benutze die (umformulierte) Schritt-Klausel in R „rückwärts“:
+  % Wir zeigen: es gibt k mit t=S(k) und ((m,n),k)∈R, sonst wäre R nicht minimal abgeschlossen.
+  % (Formal: baue das Zeugen-k durch Fallunterscheidung über t= S(k) und benutze Monotonie der Erzeugungsregeln.)
+
+  % Wir verwenden hier eine Hilfsregel, die du bereits für Add_Rec(R) notiert hast:
+  %  \forall m,n,k (((m,n),k)\in R \rightarrow ((S(m),n),S(k))\in R)
+  % Daraus folgt (äquivalent umgestellt):
+  %  \forall m,n,t\,\big( ((S(m),n),t)\in R \rightarrow \exists k\,(t=S(k)\land ((m,n),k)\in R)\big).
+  \proofstep{2}{\forall m,n,t\;\Big(((S(m),n),t)\in R \to \exists k\,(t=S(k)\land ((m,n),k)\in R)\Big)}%
+    {\FormulaRefAuto{\text{Schritt-Klausel von }\mathrm{Add}_{Rec}\text{, umgestellt}}{2}}
+
+  \proofstep{1,2}{\exists k\,(t=S(k)\land ((m,n),k)\in R)}{\rRE{\rUE{5},3}}
+
+  % Verallgemeinere über alle Add_Rec(R)
+  \proofstep{1}{\forall \mathrm{Add}_{Rec}(R)\,\exists k\,(t=S(k)\land ((m,n),k)\in R)}{\rUI{\rRI{2,6}}}
+
+  % Zurück nach Add via Schnitt-Charakterisierung
+  \proofstep{1}{\exists k\,(t=S(k)\land ((m,n),k)\in \mathrm{Add})}%
+    {\FormulaRefAuto{\forall \mathrm{Add}_{Rec}(R)\,(x\in R)\ \vdash\ x\in\mathrm{Add}}{7}}
+\end{tabproof}
+
+\subsubsection{Funktion}
+
+\begin{notation*}
+Wir schreiben \(U\coloneqq(\mathbb{N}\times\mathbb{N})\times\mathbb{N}\).
+\end{notation*}
+
+
+
+\begin{remark}
+Mit deinem allgemeinen Satz zum unendlichen Schnitt erhalten wir (mit \(A:=U\), \(P:=P_+\)):
+\[
+P_+(U)\ \vdash\ 
+\mathrm{Add} \;=\; \bigl\{\, t \in U \mid \forall R\,\bigl(\mathrm{Add}_{Rec}(R)\rightarrow t\in R\bigr) \,\bigr\}.
+\]
+Vgl. \FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D (P(D) \rightarrow x \in D) \}}.
+\end{remark}
+
+\subsection{Basiseigenschaft und Schritteigenschaft für \(\mathrm{Add}\)}
+
+\FormulaThmAuto[Basis für \(\mathrm{Add}\)]{%
+\forall n\in\mathbb{N}\; \bigl(((0,n),n)\in \mathrm{Add}\bigr)
+}
+\begin{tabproof}
+  \proofstep{1}{P_+(U)}{\rA}
+  \proofstep{1}{\mathrm{Add} = \{ t\in U \mid \forall R\,(P_+(R)\rightarrow t\in R)\}}{\FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D (P(D) \rightarrow x \in D) \}}}
+  \proofstep{}{\forall n\in\mathbb{N}\;\forall R\,(P_+(R)\rightarrow ((0,n),n)\in R)}{\text{aus der (B)-Klausel in }P_+(R)}
+  \proofstep{}{\forall n\,(((0,n),n)\in \mathrm{Add})}{\rRE{2,3}}
+\end{tabproof}
+
+\FormulaThmAuto[Schritt für \(\mathrm{Add}\)]{%
+\forall m,n,k\in\mathbb{N}\;\Bigl(((m,n),k)\in \mathrm{Add}\ \rightarrow\ ((S(m),n),S(k))\in \mathrm{Add}\Bigr)
+}
+\begin{tabproof}
+  \proofstep{1}{P_+(U)}{\rA}
+  \proofstep{1}{\mathrm{Add} = \{ t\in U \mid \forall R\,(P_+(R)\rightarrow t\in R)\}}{\FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D (P(D) \rightarrow x \in D) \}}}
+  \proofstep{ }{\forall R\,(P_+(R)\rightarrow \forall m,n,k\,(((m,n),k)\in R \rightarrow ((S(m),n),S(k))\in R))}{\text{aus der (S)-Klausel in }P_+(R)}
+  \proofstep{ }{\forall m,n,k\,(((m,n),k)\in \mathrm{Add}\rightarrow ((S(m),n),S(k))\in \mathrm{Add})}{\rRE{2,3}}
+\end{tabproof}
+
+\begin{remark}[Minimalität]
+Aus \(\mathrm{Add}=\bigcap_{P_+(R)}R\) folgt sofort: \(P_+(R)\Rightarrow \mathrm{Add}\subseteq R\).
+\end{remark}
+
+\subsection{Implizite Definition der Addition}
+\begin{definition}[Axiomensystem \(\Psi(+)\)]
+Das Symbol
+\[
++\;:\;\mathbb{N}\times\mathbb{N}\to\mathbb{N}
+\]
+wird \textbf{implizit} definiert, indem sein Graph durch
+\[
+\mathrm{Graph}(+) \;=\; \mathrm{Add}
+\]
+festgelegt wird.
+\end{definition}
+
+\begin{remark}
+Mit der Basis- und Schrittaussage für \(\mathrm{Add}\) erhält man unmittelbar die Rekursionsgleichungen
+\[
+0+n=n,\qquad S(m)+n=S(m+n).
+\]
+Daraus folgen per Induktion Funktionalität (Eindeutigkeit des Funktionswerts) und Totalität auf \(\mathbb{N}\times\mathbb{N}\) in deinem Funktionssinn.
+\end{remark}
 
 
 % ------------------------------------------------------------
