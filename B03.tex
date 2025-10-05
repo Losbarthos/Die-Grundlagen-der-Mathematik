@@ -955,7 +955,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,2}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{5,6}}
 \end{tabproof}
 
-\FormulaThmAuto{a=c\land b=d\vdash \{a,b\}=\{c,d\}}
+\FormulaThmAuto{a=c\land b=d\vdash \{a,b\}=\{c,d\}}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
 \begin{tabproof}
     \proofstep{1}{a=c\land b=d}{\rA}
     \proofstep{1}{a=c}{\rAEa{1}}
@@ -1090,7 +1090,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
 \section{Eigenschaften geordneter Paare}
 
-\FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}
+\FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
 \begin{tabproofsplit}
     \proofpart{\(\vdash\)}
     \proofstep{1}{(a,b) = (c,d)}{\rA}
@@ -1124,11 +1124,31 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     \closeproofpart
 \end{tabproofsplit}
 
+\FormulaThmAuto{a\neq b\vdash (c,a)\neq (d,b)}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{a\neq b}{\rA}
+  \proofstep{2}{(c,a)=(d,b)}{\rA}
+  \proofstep{2}{a=b}{\rAEb{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{2}}}
+  \proofstep{1,2}{\bot}{\rBI{1,3}}
+  \proofstep{1}{(c,a)\neq (d,b)}{\rCI{2,4}}
+\end{tabproof}
+
+\FormulaThmAuto{a\neq b\vdash (a,c)\neq (b,d)}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{a\neq b}{\rA}
+  \proofstep{2}{(a,c)=(b,d)}{\rA}
+  \proofstep{2}{a=b}{\rAEa{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{2}}}
+  \proofstep{1,2}{\bot}{\rBI{1,3}}
+  \proofstep{1}{(a,c)\neq (b,d)}{\rCI{2,4}}
+\end{tabproof}
+
+
+
 \section{Definition und Eigenschaften der Differenz}
 
 \FormulaDefAuto{A \setminus B := \{ x \in A \mid x \notin B \}}
 
-\FormulaThmAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}
+\FormulaThmAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}
 \begin{tabproofwide}
   \proofstepwide{x \in A \setminus B}{\leftrightarrow}{x \in \{x \in A \mid x \notin B\}}%
     {\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{A \setminus B := \{ x \in A \mid x \notin B \}}{}}}}
@@ -1136,24 +1156,31 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\FormulaRefAuto{\{x \in A \mid P(x)\} := \iota B\bigl(\forall x\,(x \in B \leftrightarrow (x \in A \land P(x)))\bigr)}{1}}
 \end{tabproofwide}
 
+\FormulaThmAuto{x \in A \setminus B \vdash x \in A}
+\begin{tabproof}
+  \proofstep{1}{x \in A \setminus B}{\rA}
+  \proofstep{1}{x \in A \land x \notin B}{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{x \in A}{\rAEa{2}}
+\end{tabproof}
+
 \FormulaThmAuto{c \in A \setminus \{a\} \vdash c \neq a}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a\}}{\rA}
-  \proofstep{1}{c \notin \{a\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \notin \{a\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
   \proofstep{1}{c \neq a}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{2}}
 \end{tabproof}
 
 \FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq a}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
-  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
   \proofstep{1}{c \neq a}{\rAEa{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
 \end{tabproof}
 
 \FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq b}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
-  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
   \proofstep{1}{c \neq b}{\rAEb{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
 \end{tabproof}
 
@@ -1161,7 +1188,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus B}{\rA}
   \proofstep{2}{b \in B}{\rA}
-  \proofstep{1}{c \notin B}{\rAEb{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{1}}}
+  \proofstep{1}{c \notin B}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
   \proofstep{1,2}{c \neq b}{\FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,3}}
 \end{tabproof}
 
@@ -1197,7 +1224,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{a \in A}{\rA}
   \proofstep{2}{a \neq b}{\rA}
   \proofstep{2}{a \notin \{b\}}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{2}}
-  \proofstep{1,2}{a \in A \setminus \{b\}}{\FormulaRefAuto{x \in A \setminus B \leftrightarrow x \in A \land x \notin B}{\rAI{1,3}}}
+  \proofstep{1,2}{a \in A \setminus \{b\}}{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{\rAI{1,3}}}
 \end{tabproof}
 
 \FormulaThmAuto{a \in A,\, b \neq a \vdash a \in A \setminus \{b\}}
@@ -1208,6 +1235,29 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,2}{a \in A \setminus \{b\}}{\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{1,3}}
 \end{tabproof}
 
+\FormulaThmAuto{A\setminus B\subseteq A}
+\begin{tabproof}
+  \proofstep{1}{x\in A\setminus B}{\rA}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
+  \proofstep{1}{A\setminus B\subseteq A}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,2}}}}
+\end{tabproof}
+
+
+\FormulaThmAuto{A\subseteq C\vdash A\setminus B\subseteq C}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq C}{\rA}
+  \proofstep{2}{x\in A\setminus B}{\rA}
+  \proofstep{2}{x\in A}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
+  \proofstep{1,2}{x\in C}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{1,3}}
+  \proofstep{1,2}{A\setminus B\subseteq C}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,4}}}}
+\end{tabproof}
+
+\FormulaThmAuto{A=A\setminus \{a\}\vdash a\notin A}
+\begin{tabproof}
+  \proofstep{1}{A=A\setminus \{a\}}{\rA}
+  \proofstep{}{a\notin A\setminus \{a\}}{\FormulaRefAuto{a \notin A \setminus \{a\}}}
+  \proofstep{1}{a\notin A}{\rIE{1,2}}
+\end{tabproof}
 
 \section{Definition und Eigenschaften der Vereinigung}
 

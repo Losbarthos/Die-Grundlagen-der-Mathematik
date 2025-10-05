@@ -54,6 +54,19 @@ Die Axiome \(\Phi(0,S)\) legen die wesentlichen Eigenschaften der Struktur
 \((\mathbb{N},0,S)\) fest.
 \end{definition}
 
+\FormulaAxiomAuto[Totalität von \(S\)]{\exists n\in\mathbb{N}(S(m)=n)}[Sei \(m\in\mathbb{N}\). Dann gelte:]
+\begin{remark} 
+Das Axiom wird durch den Satz \FormulaRefAuto
+{\mathrm{Induktiv}(A) \vdash \forall x\in A\,\exists y\in A\;((x,y)\in \mathrm{succ}_A)} motiviert.
+\end{remark}
+
+\FormulaAxiomAuto[Funktionale Eindeutigkeit von \(S\)]{m=n\vdash S(m)=S(n)}[Seien \(n,m\in\mathbb{N}\). Dann gelte:]
+\begin{remark} 
+Das Axiom wird durch den Satz \FormulaRefAuto
+{(x,y)\in \mathrm{succ}_A,\,(x,z)\in \mathrm{succ}_A \vdash y=z} motiviert.
+\end{remark}
+
+
 \FormulaAxiomAuto[Null-Axiom]{0 \in \mathbb{N}}
 \begin{remark} 
 Das Axiom wird durch den Satz \FormulaRefAuto{\emptyset\in\mathbb{N}} motiviert.
@@ -86,6 +99,7 @@ Das Axiom wird durch den Satz
 \FormulaRefAuto{P(\emptyset),\, \forall x\in\mathbb{N}\,(P(x) \rightarrow P(\mathrm{succ}(x))) \vdash \forall x\in\mathbb{N}\,(P(x))} 
 motiviert.
 \end{remark}
+\label{rule:Induktion}
 
 \begin{remark}
 Die Axiome \(\Phi(0,S)\) fixieren die Bedeutung der Symbole \(0\) und \(S\) 
@@ -96,8 +110,53 @@ Bis auf Isomorphie ist die durch die Axiome beschriebene Struktur
 \((\mathbb{N},0,S)\) eindeutig bestimmt (Kategorität der Peano-Arithmetik).
 \end{remark}
 
-\section{Addition als Funktion}
-\subsection{Addition als unendlicher Schnitt rekursiv abgeschlossener Relationen}
+
+% ------------------------------------------------------------
+% Grundlegende Eigenschaften (direkt nach "Peano-Axiome")
+% ------------------------------------------------------------
+\chapter{Grundlegende Eigenschaften}
+
+\subsection{Zur Existenz eines Vorgängers}
+\FormulaThmAuto{%
+n=0 \;\lor\; \exists k\in\mathbb{N}\,(n=S(k))
+}[Sei \(n\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \prooftext{Sei \(n\in\mathbb{N}\), wir beweisen die Behauptung mit Hilfe des Induktionsprinzips:}
+
+  % Basis
+  \proofcase[Basis]{n=0}
+    \proofstep{}{0=0}{\rII}
+    \proofstep{}{0=0 \;\lor\; \exists k\in\mathbb{N}\,(0=S(k))}{\rOIa{1}}
+
+  % Schritt
+  \proofcase[Induktionsschritt]{n\mapsto S(n)}
+    \proofstep{3}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\rA}
+    \proofstep{}{n=n}{\rII}
+    \proofstep{}{S(n)=S(n)}{\FormulaRefAuto{m=n\vdash S(m)=S(n)}{4}}
+    \proofstep{}{\exists k\in\mathbb{N}(S(n)=S(k))}{\rEI{5}}
+    \proofstep{}{n=0\lor \exists k\in\mathbb{N}(S(n)=S(k))}{\rOIa{6}}
+    \proofstep{}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\rInduktion{2,3,7}}
+\end{tabproof}
+
+
+\FormulaThmAuto{%
+n\neq 0 \vdash \exists k\in\mathbb{N}\,(n=S(k))}[Sei \(n\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \prooftext{Sei \(n\in\mathbb{N}\) beliebig. Dann gilt:}
+
+  % Fixiere n und n≠0
+  \proofstep{1}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\FormulaRefAuto{%
+n=0 \;\lor\; \exists k\in\mathbb{N}\,(n=S(k))
+}}
+    \proofstep{1}{n\neq 0\rightarrow \exists k\in\mathbb{N}(n=S(k))}{\FormulaRefAuto{\neg P \rightarrow Q \dashv \vdash P \lor Q}}
+\end{tabproof}
+
+
+
+
+
+\chapter{Addition als Funktion}
+\section{Addition als unendlicher Schnitt rekursiv abgeschlossener Relationen}
 
 Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mathbb{N})\times\mathbb{N}\) und \(\mathbb{N}^2:=\mathbb{N}\times\mathbb{N}\) als auch für eine Menge \(R\):
 
@@ -109,7 +168,7 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
 \end{aligned}
 \)
 
-\subsubsection{Existenz einer solchen Menge}
+\subsection{Existenz einer solchen Menge}
 
 \FormulaThmAuto{\forall n\in\mathbb{N}\;(((0,n),n)\in \mathbb{N}^3)}
 \begin{tabproof}
@@ -176,6 +235,8 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
 },\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{1}}}
 \end{tabproof}
 
+\subsection{Grundlegende Eigenschaften}
+
 \FormulaThmAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{Rec}(R)(x\in R)}
 \begin{tabproofwide}
   \proofstepwide[]{x\in \mathrm{Add}}{\leftrightarrow}{x\in \bigcap_{\mathrm{Add}_{Rec}(R)} R}{\FormulaRefAuto{\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{Rec}(R)} R}}
@@ -200,7 +261,7 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
 
 
 % --- Add erfüllt die Schritt-Eigenschaft (kurz & korrekt) ---
-\FormulaThmAuto{((m,n),k)\in \mathrm{Add} \rightarrow ((S(m),n),S(k))\in \mathrm{Add}}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
+\FormulaThmAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
 \begin{tabproof}
   \prooftext{Seien \(m,n,k\in\mathbb{N}\), dann gilt:}
 
@@ -223,13 +284,109 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
   \proofstep{1}{\,\forall \mathrm{Add}_{Rec}(R)\,(((S(m),n),S(k))\in R)}{\rUI{\rRI{3,6}}}
   \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}%
     {\FormulaRefAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{Rec}(R)(x\in R)}{7}}
-
-  % Implikation abschließen
-  \proofstep{}{((m,n),k)\in \mathrm{Add} \rightarrow ((S(m),n),S(k))\in \mathrm{Add}}{\rRI{1,8}}
 \end{tabproof}
 
 
+\subsection{Funktionale Eindeutigkeit}
 
+% Aus ((0,n),y)∈Add und y≠n folgt ((0,m),m)∈Add\{((0,n),y)\}
+\FormulaThmAuto{y\neq n \;\vdash\; ((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}[Seien \(n,m,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{y\neq n}{\rA}
+
+  % Basiseigenschaft direkt als Theorem verwenden
+  \proofstep{}{((0,m),m)\in \mathrm{Add}}{\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
+
+  % Fallunterscheidung
+  \proofstep{}{m=n \lor m\neq n}{\FormulaRefAuto{P \lor \neg P}}
+
+  % --- Fall 1: m = n ---
+  \proofcase{m=n}
+    \proofstep{4}{m=n}{\rA}
+    \proofstep{1,4}{y\neq m}{\rIE{4,1}}
+    % aus 6: ((0,n),m)≠((0,n),y); aus 5: ((0,m),m)=((0,n),m) ⇒ gesuchte Ungleichheit
+    \proofstep{1,4}{((0,m),m)\neq((0,n),y)}%
+      {\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{5}}
+    \proofstep{1,4}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}%
+      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{2,6}}
+
+  % --- Fall 2: m ≠ n ---
+  \proofcase{m\neq n}
+    \proofstep{8}{m\neq n}{\rA}
+    \proofstep{8}{(0,m)\neq(0,n)}{\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{8}}
+    \proofstep{8}{((0,m),m)\neq((0,n),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{9}}
+    \proofstep{8}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}%
+      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{2,10}}
+
+  % Disjunktionseliminierung über (5)
+  \proofstep{1}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}{\rOE{3,4,7,8,11}}
+\end{tabproof}
+
+\FormulaThmAuto{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\vdash ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}[Seien \(m,n,k,x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}}{\rA}
+  \proofstep{1}{((m,n),k)\in \mathrm{Add}}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{1}}
+  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{2}}
+  \proofstep{1}{S(m)\neq 0}{\FormulaRefAuto{S(n) \neq 0}}
+  \proofstep{1}{(S(m),n)\neq (0,x)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{4}}
+  \proofstep{1}{((S(m),n),S(k))\neq ((0,x),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{5}}
+  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{3,6}}
+\end{tabproof}
+
+\FormulaThmAuto{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{\mathrm{Add}\subseteq\mathbb{N}^3}{\FormulaRefAuto{\mathrm{Add}\subseteq\mathbb{N}^3}}
+  \proofstep{1}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}{\FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}{1}}
+\end{tabproof}
+
+\FormulaThmAuto{x\neq y\vdash \mathrm{Add}_{Rec}(\mathrm{Add}\setminus\{((0,x),y)\})}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{x\neq y}{\rA}
+  \proofstep{}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}%
+    {\FormulaRefAuto{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}}
+  \proofstep{1}{\forall n\in\mathbb{N}\,(((0,n),n)\in \mathrm{Add}\setminus\{((0,x),y)\})}%
+    {\FormulaRefAuto{y\neq n \;\vdash\; ((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}{1}}
+
+  % --- die lange Zeile in zwei aufteilen (mit multirow im Begründungsfeld) ---
+  \proofstep{1}{%
+    \forall m,n,k\in\mathbb{N}\,\bigl(((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\ \rightarrow\,}%
+    {\multirow{2}{*}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\vdash ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}}}
+  \proofstepstar{}{\rightarrow ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}\bigr)}{}
+    
+    \proofstep{1}{ \mathrm{Add}_{Rec}(\mathrm{Add}\setminus\{((0,x),y)\})}%
+    {\rAI{\rAI{2,3},4}}
+\end{tabproof}
+
+\FormulaThmAuto{x\neq y\vdash \mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{x\neq y}{\rA}
+  \proofstep{1}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq \mathrm{Add}}{\FormulaRefAuto{A\setminus B\subseteq A}}
+  \proofstep{1}{\mathrm{Add}_{Rec}(\mathrm{Add}\setminus\{((0,x),y)\})}{\FormulaRefAuto{x\neq y\vdash \mathrm{Add}_{Rec}(\mathrm{Add}\setminus\{((0,x),y)\})}{1}}  
+  \proofstep{1}{\mathrm{Add}\subseteq \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{3}}  
+  \proofstep{1}{\mathrm{Add}=\mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{2,4}}  
+\end{tabproof}
+
+\FormulaThmAuto{x\neq y\vdash ((0,x),y)\notin \mathrm{Add}}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{x\neq y}{\rA}
+  \proofstep{1}{\mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{x\neq y\vdash \mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}{1}}
+  \proofstep{1}{((0,x),y)\notin \mathrm{Add}}{\FormulaRefAuto{A=A\setminus \{a\}\vdash a\notin A}{2}}
+\end{tabproof}
+
+\FormulaThmAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+  \proofstep{}{x\neq y\rightarrow ((0,x),y)\notin \mathrm{Add}}{\FormulaRefAuto{x\neq y\vdash ((0,x),y)\notin \mathrm{Add}}}
+  \proofstep{}{((0,x),y)\in \mathrm{Add}\rightarrow x=y}{\FormulaRefAuto{P\rightarrow Q\eqvdash \neg Q\rightarrow \neg P}{1}}
+\end{tabproof}
+
+\FormulaThmAuto{((0,x),y)\in\mathrm{Add},((0,x),z)\in\mathrm{Add}\vdash y=z}[Seien \(x,y,z\in\mathbb{N}\), dann gilt:]
+\begin{tabproof}
+\proofstep{1}{((0,x),y)\in\mathrm{Add}}{\rA}
+\proofstep{2}{((0,x),z)\in\mathrm{Add}}{\rA}
+\proofstep{1}{x=y}{\FormulaRefAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}{1}}
+\proofstep{2}{x=z}{\FormulaRefAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}{2}}
+\proofstep{1,2}{y=z}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{3,4}}
+\end{tabproof}
 
 % ===============================
 % Eindeutigkeit für Add (Rechts-Eindeutigkeit)
@@ -249,15 +406,9 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
   % Induktion über m: Aussage Q(m):= ∀n∀y∀z( ((m,n),y)∈Add ∧ ((m,n),z)∈Add → y=z )
   % Basis m=0
   \proofcase[Basis]{m=0}
-    \proofstep{ }{((0,n),y)\in\mathrm{Add}}{\rA}
-    \proofstep{ }{((0,n),z)\in\mathrm{Add}}{\rA}
-    % Aus Add-Basis wissen wir: ((0,n),n)∈Add.
-    % Mit dem Vorgänger-Lemma auf S(0)=1 rückwärts ist hier nicht nötig; stattdessen:
-    % Betrachte R_y und R_z durch Schnitt-Charakterisierung: jedes Add_Rec(R) enthält ((0,n),n),
-    % also liegen y und z in jedem solchen R nur dann, wenn y=z=n. Kurzfassung:
-    \proofstep{}{y=n}{\FormulaRefAuto{((0,n),n)\in\mathrm{Add}}{} \text{ und Minimalität von }\mathrm{Add}}
-    \proofstep{}{z=n}{\FormulaRefAuto{((0,n),n)\in\mathrm{Add}}{} \text{ und Minimalität von }\mathrm{Add}}
-    \proofstep{}{y=z}{\rRE{7,8}}
+    \proofstep{6}{((0,n),y)\in\mathrm{Add}}{\rA}
+    \proofstep{7}{((0,n),z)\in\mathrm{Add}}{\rA}
+    \proofstep{6,7}{y=z}{\FormulaRefAuto{((0,x),y)\in\mathrm{Add},((0,x),z)\in\mathrm{Add}\vdash y=z}{6,7}}
 
   % Induktionsschritt m→S(m)
   \proofcase[Schritt]{m\to S(m)}
@@ -314,7 +465,6 @@ Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mat
     {\FormulaRefAuto{\forall \mathrm{Add}_{Rec}(R)\,(x\in R)\ \vdash\ x\in\mathrm{Add}}{7}}
 \end{tabproof}
 
-\subsubsection{Funktion}
 
 \begin{notation*}
 Wir schreiben \(U\coloneqq(\mathbb{N}\times\mathbb{N})\times\mathbb{N}\).
