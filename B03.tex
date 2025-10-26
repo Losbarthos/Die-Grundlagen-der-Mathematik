@@ -33,27 +33,35 @@
 Die Mengenlehre ist ein fundamentaler Teil der Mathematik, der die Grundlage für viele andere Bereiche bildet. In diesem Kapitel werden wir die Zermelo-Fraenkel (ZF) Axiome der Mengenlehre einführen und diskutieren. Dabei bezeichnen \( A \), \( B \), \( C \) und \( D \) stets Mengen, es sei denn, es wird ausdrücklich etwas anderes angegeben. Alle Variablen, die als Mengen bezeichnet werden, sind implizit durch Allquantoren gebunden, es sei denn, es wird ein anderer Quantor verwendet. Das bedeutet, dass Aussagen wie „\( A = B \)“ oder „\( A \neq B \)“ für alle Mengen \( A \) und \( B \) gelten, ohne dass dies explizit angegeben werden muss.
 
 \chapter{Die Zermelo-Fraenkel-Axiome}
+
 Nachdem wir die grundlegenden Begriffe und Notationen eingeführt haben, wenden wir uns nun den Zermelo-Fraenkel-Axiomen zu, die das Fundament der modernen Mengenlehre bilden. Diese Axiome definieren, wie Mengen gebildet werden können und welche Eigenschaften sie besitzen.
 \begin{definition}[Begriff der Menge]
 Der \textbf{Begriff der Menge} wird durch das \textbf{Element-Symbol} \(\in\) \textbf{implizit definiert}. 
-Das Symbol \(\in\) ist ein binäres Prädikat, das die Mitgliedschaft zwischen einem Element und einer Menge 
-ausdrückt, also \(x \in y\) bedeutet, dass \(x\) ein Element von \(y\) ist. Die Eigenschaften von \(\in\) 
+Das Symbol \(\in\) ist ein binäres Prädikat, das die Mitgliedschaft zwischen zwei Mengen ausdrückt. 
+
+Der Ausdruck \(x \in y\) bedeutet, dass \(x\) ein Element von \(y\) ist. Die Eigenschaften von \(\in\) 
 werden durch die folgenden Axiome der Zermelo-Fraenkel-Mengenlehre festgelegt, welche zusammen die Menge von 
 Aussagen \(\Phi(\in)\) bilden:
 \end{definition}
 
-\FormulaAxiomAuto[Extensionalität]{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}
-
+\FormulaAxiomDelta[Extensionalität]{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}%
+{%
+\DeltaRow{Mengen}{A\dsep B}% 
+}%
 \FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
 
 \FormulaDefAuto[Leere Menge]{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
-\begin{remark}
-    Hieraus gewinnen wir für alle \(x\):
-    \[
-    x \not\in \emptyset.
-    \]
-Das Symbol \(\emptyset\) wird oft verwendet, um die leere Menge zu repräsentieren. Es stammt aus der skandinavischen Schreibweise des Buchstabens "`O"' und wurde von den Mathematikern André Weil und Bourbaki eingeführt. Es ist wichtig zu beachten, dass \(\emptyset\) nur ein Symbol ist und nicht als eine Zahl oder ein anderes mathematisches Objekt betrachtet werden sollte. In der Mengenlehre repräsentiert es speziell eine Menge, die keine Elemente enthält.
-\end{remark}
+
+
+\FormulaThmDelta[Leere Menge]{x \not\in \emptyset}%
+{%
+\DeltaRow{Mengen}{x}% 
+}
+\begin{tabproof}
+  \proofstep{}{ \forall x\,\bigl(x \not\in O\bigr) }{\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}}
+  \proofstep{}{ x \not\in O }{\rUE{1}}
+\end{tabproof}
+
 
 \FormulaThmAuto{ \exists! O\forall x (x \not\in O) }
 \begin{tabproof}
@@ -67,107 +75,171 @@ Das Symbol \(\emptyset\) wird oft verwendet, um die leere Menge zu repräsentier
   \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
 \end{tabproof}
 
-\FormulaAxiomAuto[Aussonderung]{\forall A\;\forall P\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)\Bigr)}
+\FormulaAxiomDelta[Aussonderung]{\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}%
+{%
+\DeltaRow{Mengen}{A}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}%
 
-
-\FormulaDefAuto[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}[Sei \(A\) eine Menge und \(P\) ein einstelliges Prädikat. Wir definieren:]
+\FormulaDefDelta[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}%
+{%
+\DeltaRow{Mengen}{A}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}%
 
 Hieraus gewinnen wir für alle \(x\) das Axiom:
-\FormulaAxiomAuto[Aussonderung]{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}
-bzw.
-\[x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}\]
+\FormulaAxiomDelta[Aussonderung]{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}%
+{%
+\DeltaRow{Mengen}{A}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}%
 
-\FormulaThmAuto[Zur Eindeutigkeit]{ \forall x (x \in B \leftrightarrow P(x)), \forall x (x \in C \leftrightarrow P(x)) \vdash B = C }
+\FormulaThmDelta{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}%
+{%
+\DeltaRow{Mengen}{A}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}
 \begin{tabproof}
-  \proofstep{1}{ \forall x (x \in B \leftrightarrow P(x)) }{ \rA }
-  \proofstep{2}{ \forall x (x \in C \leftrightarrow P(x)) }{ \rA }
-  \proofstep{1,2}{ \forall x (x \in B \leftrightarrow x \in C) }{ \FormulaRefAuto{ \forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x)) }{1,2} }
-  \proofstep{1,2}{ B = C }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{3} }
+    \proofstep{1}{ x \in A }{ \rA }
+    \proofstep{2}{ P(x) }{ \rA }
+    \proofstep{3}{ x \in A\land P(x) }{ \rAI{1,2} }
+    \proofstep{4}{ x \in \{x \in A \mid P(x)\} }{ \FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{3} }
 \end{tabproof}
 
-\FormulaThmAuto[Eindeutigkeit der Komprehension]{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }
+\FormulaThmDelta[Zur Eindeutigkeit]{ \forall x (x \in A \leftrightarrow P(x)), \forall x (x \in B \leftrightarrow P(x)) \vdash A = B }{%
+\DeltaRow{Mengen}{A\dsep B}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}
 \begin{tabproof}
-  \proofstep{1}{ \exists B(\forall x(x \in B\leftrightarrow P(x))) }{ \rA }
+  \proofstep{1}{ \forall x (x \in A \leftrightarrow P(x)) }{ \rA }
+  \proofstep{2}{ \forall x (x \in B \leftrightarrow P(x)) }{ \rA }
+  \proofstep{1,2}{ \forall x (x \in A \leftrightarrow x \in C) }{ \FormulaRefAuto{ \forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x)) }{1,2} }
+  \proofstep{1,2}{ A = B }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{3} }
+\end{tabproof}
+
+\FormulaThmDelta[Eindeutigkeit der Komprehension]{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) }{%
+\DeltaRow{Mengen}{A}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}
+\begin{tabproof}
+  \proofstep{1}{ \exists A(\forall x(x \in A\leftrightarrow P(x))) }{ \rA }
   \proofstep{2}{ \forall x(x \in A\leftrightarrow P(x)) }{ \rA }
   \proofstep{3}{ \forall x(x \in B\leftrightarrow P(x)) }{ \rA }
-  \proofstep{2,3}{ A = B }{ \FormulaRefAuto{ \forall x (x \in B \leftrightarrow P(x)), \forall x (x \in C \leftrightarrow P(x)) \vdash B = C }{2,3} }
-  \proofstep{1}{ \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
+  \proofstep{2,3}{ A = B }{ \FormulaRefAuto{ \forall x (x \in A \leftrightarrow P(x)), \forall x (x \in B \leftrightarrow P(x)) \vdash A = B}{2,3} }
+  \proofstep{1}{ \exists! A(\forall x(x \in A\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
 \end{tabproof}
 
-\FormulaThmAuto{ \forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x))) }
+\FormulaThmDelta{ \forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x))) }{%
+\DeltaRow{Mengen}{A\dsep B}% 
+\DeltaRow{Einstellige Prädikate}{P}%
+}
 \begin{tabproof}
   \proofstep{1}{ \forall x (P(x) \rightarrow x \in A) }{ \rA }
   \proofstep{1}{ \forall x(x \in A \land P(x) \leftrightarrow P(x)) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
   \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{ \FormulaRefAuto{ \{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr) } } }
-  \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) } }
+  \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) } }
 \end{tabproof}
 
-\FormulaDefAuto[Schnitt]{A \cap B := \{ x \in A \mid x \in B \}}
-
-\FormulaAxiomAuto[Paarmenge]{ \forall A,B\;\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }
-
-\FormulaDefAuto[Paarmenge]{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}[Wir definieren für gegebene Mengen \(A\) und \(B\):]
-
-Hieraus gewinnen wir für alle \(x\):
-\FormulaAxiomAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}
-
-
-
-\FormulaDefAuto[Geordnetes Paar]{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}}
-\begin{remark}
-	Ein geordnetes Paar ist eine Paarmenge und damit eindeutig bestimmt.
-\end{remark}
-
-\FormulaAxiomAuto[Vereinigung]{\forall A\;\exists C\;\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)\Bigr)}
-
-\FormulaDefAuto[Vereinigung]{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}[Für eine Menge \(A\) definieren wir:]
-\begin{remark}
-    Hieraus folgt für alle \(x\):
-\[
-x \in \bigcup A 
-\;\eqvdash\;
-\exists B\,(B \in A \,\land\, x \in B).
-\]
-\end{remark}
-
-\FormulaDefAuto[Teilmenge]{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }[Für Mengen \(A\) und \(B\) definieren wir:]{%
-In Worten: \(A\) ist Teilmenge von \(B\).
+\FormulaDefDelta[Schnitt]{A \cap B := \{ x \in A \mid x \in B \}}{%
+\DeltaRow{Mengen}{A\dsep B}%
 }
 
-\FormulaAxiomAuto[Potenzmenge]{ \forall A\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr) }
+\FormulaAxiomDelta[Paarmenge]{\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }{%
+\DeltaRow{Mengen}{A\dsep B}%
+}
 
-\FormulaDefAuto[Potenzmenge]{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}[Für eine Menge \(A\) definieren wir:]
+\FormulaDefDelta[Paarmenge]{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}{%
+\DeltaRow{Mengen}{A\dsep B}%
+}
+
+\FormulaThmDelta{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{%
+\DeltaRow{Mengen}{x\dsep A\dsep B}%
+}
+\begin{tabproof}
+  \proofstep{}{ \forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr) }{\FormulaRefAuto{\{A,B\} := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\; x = A \lor x = B\bigr)\Bigr)}}
+  \proofstep{}{ x \in C \;\leftrightarrow\; x = A \lor x = B }{\rUE{1}}
+\end{tabproof}
+
+\FormulaDefDelta[Geordnetes Paar]{(a, b) := \{ \{ a \}, \{ a, b \} \}}{
+\DeltaRow{Mengen}{a\dsep b}%
+}
+
+\FormulaAxiomDelta[Vereinigung]{\exists C\;\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)}{
+\DeltaRow{Mengen}{A}%
+}
+
+\FormulaDefDelta[Vereinigung]{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}{
+\DeltaRow{Mengen}{A}%
+}
+
+\FormulaThmDelta{x \in \bigcup A \;\eqvdash\;\exists B\,(B \in A \,\land\, x \in B)}%
+{%
+\DeltaRow{Mengen}{x\dsep A\dsep B}%
+}
+\begin{tabproof}
+  \proofstep{}{ \forall x\;\bigl(x \in \bigcup A \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr) }{\FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}}
+  \proofstep{}{ x \in \bigcup A \;\leftrightarrow\;\exists B\,(B \in A \land x \in B) }{\rUE{1}}
+\end{tabproof}
+
+
+
+\FormulaDefDelta[Teilmenge]{ A \subseteq B := \forall x\,(x\in A \rightarrow x\in B) }%
+{%
+\DeltaRow{Mengen}{A\dsep B}%
+}
 \begin{remark}
-Hieraus ergibt sich für alle \(x\):
-\[
-x \in \mathcal{P}(A) 
-\;\eqvdash\; 
-x \subseteq A.
-\]
+    In Worten: \(A\) ist Teilmenge von \(B\).
 \end{remark}
+
+\FormulaAxiomDelta[Potenzmenge]{\exists B\forall x\bigl(x \in B \leftrightarrow x \subseteq A\bigr)}%
+{%
+\DeltaRow{Mengen}{A}%
+}
+
+\FormulaDefDelta[Potenzmenge]{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}%
+{%
+\DeltaRow{Mengen}{A}%
+}
+
+\FormulaThmDelta[Potenzmenge]{x \in \mathcal{P}(A)\;\eqvdash\; x \subseteq A}%
+{%
+\DeltaRow{Mengen}{x\dsep A}%
+}
+\begin{tabproof}
+  \proofstep{}{ \forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr) }{\FormulaRefAuto{\mathcal{P}(A) := \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}}
+  \proofstep{}{ x \in \mathcal{P}(A)\;\leftrightarrow\; x \subseteq A }{\rUE{1}}
+\end{tabproof}
+
 
 \FormulaAxiomAuto[Unendlichkeit]{ \exists A\;\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr) }
 
-\FormulaAxiomAuto[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }
-
+\FormulaAxiomDelta[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{
+\DeltaRow{Mengen}{A}%
+}
 \begin{remark}
 Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge ein 
 \textbf{Minimalelement} enthält.    
 \end{remark}
 
-\FormulaAxiomAuto[Ersetzung (Relationenform)]{
-\forall A\;\forall R\;\Bigl( \forall x\in A\;\exists! y\;(x,y)\in R\;\rightarrow\; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr) \Bigr)
+\FormulaAxiomDelta[Ersetzung (Relationenform)]{
+\forall x\in A\;\exists! y\;(x,y)\in R\;\vdash \; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr)
+}{
+\DeltaRow{Mengen}{A\dsep R}
 }
 
-\FormulaAxiomAuto[Auswahlaxiom (AC)]{
-\forall x,y \in X \Bigl(x\neq \emptyset \land (x=y\lor x\cap y=\emptyset)\Bigr)
-\;\vdash\;\exists Y\,\forall x \in X\,\exists z\bigl(Y\cap x = \{z\}\bigr)
-}[Sei \(X\) eine Menge, dann gilt:]
-\begin{remark}
+\FormulaAxiomDelta[Auswahlaxiom (AC)]{
+\forall x,y \in A \Bigl(x\neq \emptyset \land (x=y\lor x\cap y=\emptyset)\Bigr)
+\;\vdash\;\exists B\,\forall x \in A\,\exists z\bigl(B\cap x = \{z\}\bigr)
+}{
+\DeltaRow{Mengen}{A}
+}
+
+
+
 Auf Methaebene definieren wir für beliebige Mengen \(x\) und \(A\): \[x\not\in A:=\neg(x\in A)\]
-\end{remark}
+
 \begin{remark}
-Im folgenden Abschnitten bezeichnen wir \(A,B,C\) als Mengen. Für die Elemente von Mengen verwenden wir häufig Kleinbuchstaben als Symbole wie \(x,y,z\).
+In folgenden Abschnitten bezeichnen wir \(A,\, B,\, C\) als Mengen. Für die Elemente von Mengen verwenden wir häufig Kleinbuchstaben als Symbole wie \(x,\, y,\, z\).
 \end{remark}
 
 \section{Ungleichheit von Mengen}
@@ -192,11 +264,9 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 \end{tabproof}
 
 
-\chapter{Eigenschaften}
+\chapter{Teilmengen}
 
-\section{Teilmengen}
-
-\subsection{Grundlegende Eigenschaften}
+\section{Grundlegende Eigenschaften}
 
 \FormulaThmAuto{ A\subseteq B,\, x\in A \vdash x\in B }
 \begin{tabproof}
@@ -238,7 +308,7 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstepwidestar[1,2,3]{z \in C}%
     {\FormulaRefAuto{P \rightarrow Q,\, R \rightarrow Q,\, P \lor R \vdash Q}{4,5,3}}
 \end{tabproofwide}
-\subsection{Ordnungsrelation}
+\section{Ordnungsrelation}
 
 \FormulaThmAuto[Reflexivität von Teilmengen]{ A \subseteq A }
 \begin{tabproof}
@@ -291,7 +361,7 @@ A \subseteq B, B = C \vdash A \subseteq C
 Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in einer \emph{Kette} \((\subseteq,=^{*})\) kombiniert werden,  da sie \emph{rechts-verträglich} sind. Ebenso ist \(=\) wegen \FormulaRefAuto{a = b \vdash b = a}{} außerdem Symmetrisch, was mit dem Stern in der Kette illustriert wird.
 \end{remark}
 
-\section{Leere Menge}
+\chapter{Leere Menge}
 
 
 \FormulaThmAuto{\forall A\,(\emptyset\subseteq A)}
@@ -337,7 +407,21 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \end{tabproof}
 
 
-\section{Ausgesonderte Menge}
+\chapter{Ausgesonderte Menge}
+
+\FormulaThmAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}
+\begin{tabproof}
+  \proofstep{1}{x \in \{x \in A \mid P(x)\}}{\rA}
+  \proofstep{1}{x\in A\land P(x)}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{1}}
+  \proofstep{1}{P(x)}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}
+\begin{tabproof}
+  \proofstep{1}{x \in \{x \in A \mid P(x)\}}{\rA}
+  \proofstep{1}{x\in A\land P(x)}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{1}}
+  \proofstep{1}{P(x)}{\rAEb{2}}
+\end{tabproof}
 
 \FormulaThmAuto{x \not\in \{x \in A \mid P(x)\}\eqvdash (x \not\in A \lor \neg P(x))}
 \begin{tabproofwide}
@@ -392,7 +476,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \proofstep{1,2}{\forall x\in A(P(x))}{\rUI{\rRI{2,4}}}
 \end{tabproof}
 
-\section{Russel Paradoxon und die universelle Menge}
+\chapter{Russel Paradoxon und die universelle Menge}
 
 \FormulaThmAuto[Russells Paradoxon in der ZF-Mengenlehre]{\neg \exists U \forall A (A \in U \leftrightarrow A \not\in A)}
 \begin{tabproof}
@@ -422,7 +506,7 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 \begin{tabproof}
 \proofstep{1}{\exists U \forall A (A \in U)}{\rA}
 \proofstep{1}{\forall A(A\not\in A\leftrightarrow A\in U\land A\not\in A)}{\FormulaRefAuto{\exists U \forall A (A \in U)\vdash \forall A(A\not\in A\leftrightarrow A\in U\land A\not\in A)}{1}}
-\proofstep{1}{\exists B\forall A(A\in B\leftrightarrow A\in U\land A\notin A)}{\FormulaRefAuto{\forall A\;\forall P\;\exists B\;\Bigl(\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)\Bigr)}{2}}
+\proofstep{1}{\exists B\forall A(A\in B\leftrightarrow A\in U\land A\notin A)}{\FormulaRefAuto{\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}{2}}
 \proofstep{4}{\forall A(A\in B\leftrightarrow A\in U\land A\notin A)}{\rA}
 \proofstep{1,4}{\forall A(A\in B\leftrightarrow A\notin A)}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)), \forall x(R(x)\leftrightarrow Q(x))\vdash \forall x(P(x)\leftrightarrow R(x))}{4,2}}
 \proofstep{1,4}{\exists B\forall A(A\in B\leftrightarrow A\notin A)}{\rEI{5}}
@@ -432,7 +516,7 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 \proofstep{}{\neg \exists U \forall A (A \in U)}{\rCI{1,9}}
 \end{tabproof}
 
-\section{Schnittmengen}
+\chapter{Schnittmengen}
 
 \FormulaThmAuto{x \in A \cap B \vdash x \in A}
 \begin{tabproof}
@@ -590,7 +674,7 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 \end{tabproof}
 
 
-\subsection{Der unendliche Schnitt}
+\section{Der unendliche Schnitt}
 
 In diesem Abschnitt sei \( P \) ein Prädikat, das einer Menge \( A \) eine Eigenschaft zuweist.
 
@@ -751,7 +835,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \end{tabproof}
 
 
-\section{Eigenschaften der Paarmenge}
+\chapter{Die Paarmenge}
 
 \FormulaThmAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}
 \begin{tabproofwide}
@@ -1088,13 +1172,13 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \end{tabproof}
 
 
-\section{Eigenschaften geordneter Paare}
+\chapter{Geordnete Paare}
 
 \FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
 \begin{tabproofsplit}
     \proofpart{\(\vdash\)}
     \proofstep{1}{(a,b) = (c,d)}{\rA}
-    \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\rIE{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}},1}}
+    \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\rIE{\FormulaRefAuto{(a, b) := \{ \{ a \}, \{ a, b \} \}},1}}
     \proofstep{1}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\multirow{2}{*}{$\FormulaRefAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}{2}$}}
     \proofstepstar{}{\lor \{a\}=\{c,d\}\land \{a,b\}=\{c\}}{}
     \proofstep{4}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\rA}
@@ -1124,6 +1208,14 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     \closeproofpart
 \end{tabproofsplit}
 
+\FormulaThmAuto{a=c,\, b=d\vdash (a,b) = (c,d)}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{a=c}{\rA}
+  \proofstep{2}{b=d}{\rA}
+  \proofstep{1,2}{a=c\land b=d}{\rAI{1,2}}
+  \proofstep{1,2}{(a,b) = (c,d)}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{3}}
+\end{tabproof}
+
 \FormulaThmAuto{a\neq b\vdash (c,a)\neq (d,b)}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
 \begin{tabproof}
   \proofstep{1}{a\neq b}{\rA}
@@ -1142,9 +1234,85 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{(a,c)\neq (b,d)}{\rCI{2,4}}
 \end{tabproof}
 
+\section{Verschachtelte Paare und Tripel}
+
+\FormulaDefAuto[Tripel (rechtsassoziiert)]{(x,y,z) := (x,(y,z))}[Seien \(x,y,z\) Elemente einer Menge \(A\). Dann definieren wir:]
 
 
-\section{Definition und Eigenschaften der Differenz}
+% --- Kernsatz: Komponenten-Eindeutigkeit des Tripels ---
+\FormulaThmAuto{(a,b,c)=(a',b',c') \eqvdash a=a' \land b=b' \land c=c'}[Seien \(a,b,c,a',b',c'\) Elemente einer Menge \(A\). Dann gilt:]
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{(a,b,c)=(a',b',c')}{\rA}
+    \proofstep{1}{(a,(b,c))=(a',(b',c'))}{\rIE{\FormulaRefAuto{(x,y,z) := (x,(y,z))},1}}
+    \proofstep{1}{a=a'\land (b,c)=(b',c')}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{2}}
+    \proofstep{1}{a=a'}{\rAEa{3}}
+    \proofstep{1}{(b,c)=(b',c')}{\rAEb{3}}
+    \proofstep{1}{b=b'\land c=c'}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{5}}
+    \proofstep{1}{b=b'}{\rAEa{6}}
+    \proofstep{1}{c=c'}{\rAEb{6}}
+    \proofstep{1}{a=a'\land b=b'}{\rAI{4,7}}
+    \proofstep{1}{a=a'\land b=b'\land c=c'}{\rAI{9,8}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{a=a'\land b=b'\land c=c'}{\rA}
+    \proofstep{1}{a=a'}{\rAEa{1}}
+    \proofstep{1}{b=b'}{\rAEn{1}}
+    \proofstep{1}{c=c'}{\rAEn{1}}
+    \proofstep{1}{(b,c)=(b',c')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{3,4}}
+    \proofstep{1}{(a,(b,c))=(a',(b',c'))}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{2,5}}
+    \proofstep{1}{(a,b,c)=(a',b',c')}{\rIE{\FormulaRefAuto{(x,y,z) := (x,(y,z))},6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+% 1) Aus komponentenweiser Gleichheit folgt Tripelgleichheit (rechtsassoziiert)
+\FormulaThmAuto{a=a',\, b=b',\, c=c' \vdash (a,b,c)=(a',b',c')}[Seien \(a,b,c,a',b',c'\) Elemente einer Menge \(A\). Dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{a=a'}{\rA}
+  \proofstep{2}{b=b'}{\rA}
+  \proofstep{3}{c=c'}{\rA}
+  \proofstep{1,2,3}{(a,b,c)=(a',b',c')}{\FormulaRefAuto{(a,b,c)=(a',b',c') \eqvdash a=a' \land b=b' \land c=c'}\rAI{\rAI{1,2},3}}
+\end{tabproof}
+
+% 2) Komponenten-Eindeutigkeit für linksassoziierte Kodierung (Äquivalenz)
+\FormulaThmAuto{((a,b),c)=((a',b'),c') \eqvdash a=a' \land b=b' \land c=c'}[Seien \(a,b,c,a',b',c'\) Elemente einer Menge \(A\). Dann gilt:]
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{((a,b),c)=((a',b'),c')}{\rA}
+    \proofstep{1}{(a,b)=(a',b')\land c=c'}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{1}}
+    \proofstep{1}{(a,b)=(a',b')}{\rAEa{2}}
+    \proofstep{1}{c=c'}{\rAEb{2}}
+    \proofstep{1}{a=a'\land b=b'}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{3}}
+    \proofstep{1}{a=a'}{\rAEa{5}}
+    \proofstep{1}{b=b'}{\rAEb{5}}
+    \proofstep{1}{a=a'\land b=b'}{\rAI{6,7}}
+    \proofstep{1}{a=a'\land b=b'\land c=c'}{\rAI{8,4}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{a=a'\land b=b'\land c=c'}{\rA}
+    \proofstep{1}{a=a'}{\rAEa{1}}
+    \proofstep{1}{b=b'}{\rAEn{1}}
+    \proofstep{1}{c=c'}{\rAEn{1}}
+    \proofstep{2,3}{(a,b)=(a',b')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{2,3}}
+    \proofstep{5,4}{((a,b),c)=((a',b'),c')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{5,4}}
+  \closeproofpart
+\end{tabproofsplit}
+
+% 3) Aus komponentenweiser Gleichheit folgt linksassoziierte Paar-Gleichheit (kurz)
+\FormulaThmAuto{a=a',\, b=b',\, c=c' \vdash ((a,b),c)=((a',b'),c')}[Seien \(a,b,c,a',b',c'\) Elemente einer Menge \(A\). Dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{a=a'}{\rA}
+  \proofstep{2}{b=b'}{\rA}
+  \proofstep{3}{c=c'}{\rA}
+  \proofstep{1,2,3}{((a,b),c)=((a',b'),c')}{\FormulaRefAuto{((a,b),c)=((a',b'),c') \eqvdash a=a' \land b=b' \land c=c'}\rAI{\rAI{1,2},3}}
+\end{tabproof}
+
+
+
+
+\chapter{Die Differenz}
 
 \FormulaDefAuto{A \setminus B := \{ x \in A \mid x \notin B \}}
 
@@ -1259,7 +1427,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{a\notin A}{\rIE{1,2}}
 \end{tabproof}
 
-\section{Definition und Eigenschaften der Vereinigung}
+\chapter{Die Vereinigung}
 
 \FormulaDefAuto[Vereinigung zweier Mengen]{A \cup B := \bigcup \{A, B\}}
 
@@ -1769,7 +1937,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
 
-\section[Eigenschaften von Teilmengen]{Eigenschaften von Teilmengen in Bezug auf Vereinigung und Durchschnitt}
+\chapter[Eigenschaften von Teilmengen]{Eigenschaften von Teilmengen in Bezug auf Vereinigung und Durchschnitt}
 
 
 \FormulaThmAuto{A \subseteq A \cup B}
@@ -1898,7 +2066,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\rChain{3,4}}
 \end{tabproofwide}
 
-\section{Ausschluss gegenseitiger Mitgliedschaft}
+\chapter{Ausschluss gegenseitiger Mitgliedschaft}
 
 \FormulaThmAuto{a\in b\vdash b\not\in a}
 \begin{tabproof}
@@ -2020,7 +2188,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{\{a\} \in \mathcal{P}(A \cup B)}{\FormulaRefAuto{a \in A \vdash \{a\} \in \mathcal{P}(A)}{5}}
   \proofstep{1,2}{\{\{a\},\{a,b\}\} \subseteq \mathcal{P}(A \cup B)}{\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{6,4}}
   \proofstep{1,2}{\{\{a\},\{a,b\}\} \in \mathcal{P}(\mathcal{P}(A \cup B))}{\FormulaRefAuto{\mathcal{P}(A) := \iota B\bigl(\forall x\,(x \in B \leftrightarrow x \subseteq A)\bigr)}{7}}
-  \proofstep{1,2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{\FormulaRefAuto{\forall a,b((a, b) := \{ \{ a \}, \{ a, b \}) \}},8}}
+  \proofstep{1,2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{\FormulaRefAuto{(a, b) := \{ \{ a \}, \{ a, b \} \}},8}}
 \end{tabproof}
 
 \FormulaThmAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}
@@ -2075,6 +2243,21 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \closeproofpart
 \end{tabproofsplit}
 
+\FormulaThmAuto{(a,b)\in A\times B\vdash a\in A}
+\begin{tabproof}
+      \proofstep{1}{(a,b)\in A\times B}{\rA}
+      \proofstep{1}{a\in A\land b\in B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+      \proofstep{1}{a\in A}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto{(a,b)\in A\times B\vdash b\in B}
+\begin{tabproof}
+      \proofstep{1}{(a,b)\in A\times B}{\rA}
+      \proofstep{1}{a\in A\land b\in B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+      \proofstep{1}{a\in B}{\rAEb{2}}
+\end{tabproof}
+
+
 \FormulaThmAuto{a\in A,b\in B\vdash (a,b)\in A\times B}
 \begin{tabproof}
       \proofstep{1}{a\in A}{\rA}
@@ -2083,13 +2266,87 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
       \proofstep{1,2}{(a,b)\in A\times B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{3}}
 \end{tabproof}
 
+% ============================================================
+%  Dreifache Produkte als verschachtelte Paare
+% ============================================================
+
+% ((a,b),c) ∈ (A×B)×C  ⇒  a∈A ∧ b∈B ∧ c∈C
+\FormulaThmAuto{((a,b),c)\in (A\times B)\times C\ \eqvdash\ a\in A\land b\in B\land c\in C}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{((a,b),c)\in (A\times B)\times C}{\rA}
+  % Erst Projektion aus (A×B)×C
+  \proofstep{1}{(a,b)\in A\times B\ \land\ c\in C}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{(a,b)\in A\times B}{\rAEa{2}}
+  \proofstep{1}{c\in C}{\rAEb{2}}
+  % Dann Projektion aus A×B
+  \proofstep{1}{a\in A\land b\in B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{3}}
+  \proofstep{1}{a\in A}{\rAEa{5}}
+  \proofstep{1}{b\in B}{\rAEb{5}}
+  \proofstep{1}{a\in A\land b\in B\land c\in C}{\rAI{\rAI{6,7},4}}
+\closeproofpart
+\proofpart{\(\dashv\)}
+  \proofstep{1}{a\in A\land b\in B\land c\in C}{\rA}
+  \proofstep{1}{a\in A\land b\in B}{\rAEa{1}}
+  \proofstep{1}{c\in C}{\rAEb{1}}
+  \proofstep{1}{(a,b)\in A\times B}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{2}}
+  \proofstep{1}{((a,b),c)\in (A\times B)\times C}{\FormulaRefAuto{a\in A, b\in B\vdash (a,b)\in A\times B}{4,3}}
+\closeproofpart
+\end{tabproofsplit}
+
+% (a,(b,c)) ∈ A×(B×C)  ⇒  a∈A ∧ b∈B ∧ c∈C
+\FormulaThmAuto{(a,(b,c))\in A\times (B\times C)\ \eqvdash\ a\in A\land b\in B\land c\in C}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{(a,(b,c))\in A\times (B\times C)}{\rA}
+  % Erst Projektion aus A×(B×C)
+  \proofstep{1}{a\in A\ \land\ (b,c)\in B\times C}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{a\in A}{\rAEa{2}}
+  \proofstep{1}{(b,c)\in B\times C}{\rAEb{2}}
+  % Dann Projektion aus B×C
+  \proofstep{1}{b\in B\land c\in C}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{4}}
+  \proofstep{1}{b\in B}{\rAEa{5}}
+  \proofstep{1}{c\in C}{\rAEb{5}}
+  \proofstep{1}{a\in A\land b\in B\land c\in C}{\rAI{3,\rAI{6,7}}}
+\closeproofpart
+\proofpart{\(\dashv\)}
+  \proofstep{1}{a\in A\land b\in B\land c\in C}{\rA}
+  \proofstep{1}{a\in A}{\rAEa{1}}
+  \proofstep{1}{b\in B\land c\in C}{\rAEb{1}}
+  \proofstep{1}{(b,c)\in B\times C}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{3}}
+  \proofstep{1}{(a,(b,c))\in A\times (B\times C)}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{2,4}}
+\closeproofpart
+\end{tabproofsplit}
+
+% Einführungsrichtungen getrennt (falls du sie einzeln haben willst):
+
+% a∈A, b∈B, c∈C  ⊢  (a,(b,c))∈A×(B×C)
+\FormulaThmAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ (a,(b,c))\in A\times (B\times C)}
+\begin{tabproof}
+  \proofstep{1}{a\in A}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{3}{c\in C}{\rA}
+  \proofstep{2,3}{(b,c)\in B\times C}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{2,3}}
+  \proofstep{1,4}{(a,(b,c))\in A\times (B\times C)}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,4}}
+\end{tabproof}
+
+% a∈A, b∈B, c∈C  ⊢  ((a,b),c)∈(A×B)×C
+\FormulaThmAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ ((a,b),c)\in (A\times B)\times C}
+\begin{tabproof}
+  \proofstep{1}{a\in A}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{3}{c\in C}{\rA}
+  \proofstep{1,2}{(a,b)\in A\times B}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{1,2}}
+  \proofstep{4,3}{((a,b),c)\in (A\times B)\times C}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{4,3}}
+\end{tabproof}
+
 \chapter{Funktionen}
 Nachdem wir die grundlegenden Begriffe der Mengenlehre eingeführt haben, wenden wir uns nun den 
 \textbf{Funktionen} zu. Diese sind zentrale Objekte der Mathematik und können als spezielle Mengen 
 von geordneten Paaren aufgefasst werden.
 
 \begin{definition}[Begriff der Funktion]
-Der \textbf{Begriff der Funktion} wird durch das Symbol
+Seien \(A,B\) Mengen, dann wird der \textbf{Begriff der Funktion} durch das Symbol
 \[
 F\colon A \to B
 \]
@@ -2101,43 +2358,59 @@ die die folgenden Eigenschaften erfüllt. Wir fassen diese Eigenschaften als Men
 
 \FormulaAxiomAuto[Existenz als Menge geordneter Paare]{F \subseteq A \times B}
 
-\FormulaAxiomAuto[Funktionale Eindeutigkeit]{\forall x \in A\,\forall y,z \in B\;\bigl((x,y)\in F \land (x,z)\in F \rightarrow y=z\bigr)}
+\FormulaAxiomAuto[Funktionale Eindeutigkeit]{(x,y)\in F,\, (x,z)\in F \vdash y=z}[Seien \(x\in A\) und \(y,z\in B\), dann gilt:]
 
-\FormulaAxiomAuto[Totale Definition auf der Domäne]{\forall x \in A\,\exists y \in B\;(x,y)\in F}
+\FormulaAxiomAuto[Totale Definition auf der Domäne]{\exists y\;(x,y)\in F}[Sei \(x\in A\), dann gilt:]
 
-\begin{remark}
-Die Bedingung (1) sagt aus, dass eine Funktion nichts anderes als eine Teilmenge des kartesischen Produkts ist.  
-Bedingung (2) fordert die Eindeutigkeit des Funktionswerts.  
-Bedingung (3) garantiert, dass jedes \(x\in A\) tatsächlich ein Bild in \(B\) hat.  
-\end{remark}
+\FormulaDefAuto[Domäne]{\mathrm{dom}(F)\coloneqq A}%
+[Sei \(F\colon A\to B\) eine Funktion. Dann definieren wir die Domäne von \(F\) durch:]
+
+\FormulaDefAuto[Kodomäne]{\mathrm{cod}(F)\coloneqq B}%
+[Sei \(F\colon A\to B\) eine Funktion. Dann definieren wir die Kodomäne von \(F\) durch:]
 
 \begin{definition}[Domäne und Kodomäne]
 Sei \(F\colon A\to B\) eine Funktion. Dann heißt
 \begin{itemize}
-  \item \(A\) der \textbf{Definitionsbereich (Domäne)} von \(F\), notiert als \(\mathrm{dom}(F)\),
-  \item \(B\) der \textbf{Wertebereich (Kodomain)} von \(F\).
+  \item \(\mathrm{dom}(F):=A\) der \textbf{Definitionsbereich (Domäne)} von \(F\),
+  \item \(\mathrm{cod}(F):=B\) der \textbf{Wertebereich (Kodomain)} von \(F\).
 \end{itemize}
 \end{definition}
 
 
-\FormulaThmAuto[Eindeutigkeit des Funktionswertes]{\forall x \in A\,\exists! y \in B\;(x,y)\in F}[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
+\FormulaThmAuto[Eindeutigkeit des Funktionswertes]{\exists! y\;(x,y)\in F}[Sei \(F\colon A\to B\) eine Funktion und \(y\in A\), dann gilt:]
 \begin{tabproof}
-  \proofstep{}{(x,y)\in F \land (x,z)\in F \rightarrow y=z}{\rUE{\FormulaRefAuto{\forall x \in A\,\forall y,z \in B\;\bigl((x,y)\in F \land (x,z)\in F \rightarrow y=z\bigr)}}}
-  \proofstep{}{\exists y\in B(x,y)\in F}{\rUE{\FormulaRefAuto{\forall x \in A\,\exists y \in B\;(x,y)\in F}}}
-  \proofstep{3}{(x,y)\in F}{\rA}
-  \proofstep{4}{(x,z)\in F}{\rA}
-  \proofstep{3,4}{(x,y)\in F \land (x,z)\in F}{\rAI{3,4}}
-  \proofstep{3,4}{y=z}{\rRE{1,5}}
-  \proofstep{}{\forall x\in A\exists! y\in B(x,y)\in F}{\rUI{\UEI{2,3,4,6}}}
+  \prooftext{Sei \(F\colon A\to B\) eine Funktion und \(y\in A\), dann gilt:}
+  \proofstep{}{\exists y(x,y)\in F}{\FormulaRefAuto{\exists y\;(x,y)\in F}}
+  \proofstep{2}{(x,y)\in F}{\rA}
+  \proofstep{3}{(x,z)\in F}{\rA}
+  \proofstep{2,3}{y=z}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{2,3}}
+  \proofstep{}{\exists! y\in B(x,y)\in F}{\UEI{1,2,3,4}}
 \end{tabproof}
 
-\begin{remark}
-Im Folgenden verwenden wir für \(x \in A\) die Notation
-\[
-F(x) := y \quad\text{genau dann, wenn}\quad (x,y)\in F.
-\]
-Dies ist wohldefiniert aufgrund des obigen Theorems.
-\end{remark}
+\FormulaDefAuto[Auswertung]{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}[Für \(F\colon A\to B\) und \(x\in A\) definieren wir:]
+
+\FormulaThmAuto{F(x)\in B}[Sei \(F\colon A\to B\) eine Funktion und \(x\in A\), dann gilt:]
+\begin{tabproof}
+  \proofstep{}{F\subseteq A\times B}{\FormulaRefAuto{F \subseteq A \times B}}
+  \proofstep{}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
+  \proofstep{}{(x,F(x))\in A\times B}{\FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{1,2}}
+  \proofstep{}{F(x)\in B}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
+\end{tabproof}
+
+\FormulaThmAuto{(x,y)\in F\vdash y=F(x)}[Sei \(F\colon A\to B\) eine Funktion mit \(x\in A\) und \(y\in B\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in F}{\rA}
+  \proofstep{1}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
+  \proofstep{1}{y=F(x)}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{1,2}}
+\end{tabproof}
+
+\FormulaThmAuto{(x,y)\in F\vdash F(x)=y}[Sei \(F\colon A\to B\) eine Funktion mit \(x\in A\) und \(y\in B\), dann gilt:]
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in F}{\rA}
+  \proofstep{1}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
+  \proofstep{1}{y=F(x)}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{2,1}}
+\end{tabproof}
+
 
 \FormulaDefAuto[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
 [Sei \(F\colon A\to B\) eine Funktion. Wir definieren den \textbf{Graphen} von \(F\) als die Menge aller Paare aus \(A\times B\), die zu \(F\) gehören:]
@@ -2148,7 +2421,7 @@ Dies ist wohldefiniert aufgrund des obigen Theorems.
 }[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
 
 \begin{tabproof}
-  \proofstep{}{\forall x \in A\,\exists! y \in B\;(x,y)\in F}{\FormulaRefAuto{\forall x \in A\,\exists! y \in B\;(x,y)\in F}}
+  \proofstep{}{\exists! y\;(x,y)\in F}{\FormulaRefAuto{\exists! y\;(x,y)\in F}}
   \proofstep{}{\exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;F(x)=y\bigr)}{\rRE{\rUE{\FormulaRefAuto{
 \forall A\;\forall R\;\Bigl( \forall x\in A\;\exists! y\;R(x,y)\in R\;\rightarrow\; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr) \Bigr)}
 },1}}
@@ -2158,6 +2431,113 @@ Dies ist wohldefiniert aufgrund des obigen Theorems.
 \FormulaDefAuto[Funktionsbild]{F(A) := \{y \mid \exists x \in A\,(F(x)=y)\}}%
 [Für eine Funktion \(F:A\to B\) definieren wir das Bild von \(A\) als die Menge aller Werte, 
 die \(F\) für Elemente aus \(A\) annimmt:]
+
+\section{Eigenschaften von Funktionen}
+\subsection{Injektivität, Surjektivität, Bijektivität}
+
+\begin{definition}[Begriff der injektiven Funktion]
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der injektiven Funktion}
+durch das Symbol
+\[
+F\colon A\hookrightarrow B
+\]
+\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich die Injektivität erfüllt.
+\end{definition}
+
+\FormulaAxiomAuto[Injektivität (Werteform)]%
+{F(x_1)=F(x_2)\ \vdash\ x_1=x_2}%
+[Seien \(A,B\) Mengen, \(F\colon A\to B\) und \(x_1,x_2\in A\). Dann gilt:]
+
+
+\begin{definition}[Begriff der surjektiven Funktion]
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der surjektiven Funktion}
+durch das Symbol
+\[
+F\colon A\twoheadrightarrow B
+\]
+\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich die Surjektivität erfüllt.
+\end{definition}
+
+\FormulaAxiomAuto[Surjektivität (Werteform)]%
+{\exists x\in A\; F(x)=y}%
+[Seien \(A,B\) Mengen, \(F\colon A\to B\) und \(y\in B\). Dann gilt:]
+
+
+\begin{definition}[Begriff der bijektiven Funktion]
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der bijektiven Funktion}
+durch das Symbol
+\[
+F\colon A \xrightarrow{\sim} B
+\]
+\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich
+\emph{Injektivität} und \emph{Surjektivität} erfüllt.
+\end{definition}
+
+\subsection{Inverse Relation und Umkehrfunktion}
+
+Wir definieren zunächst die inverse Relation zu einer Funktion und zeigen dann unter der Bijektivitätsbedingung, dass sie eine echte Umkehrfunktion ist.
+
+\FormulaDefAuto[Inverse Relation]{%
+F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}
+}[Sei \(F \colon A \to B\). Dann definieren wir die \emph{inverse Relation} \(F^{-1}\).]
+
+\FormulaThmAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}[Seien \(A,\,B\) Mengen, \(F \colon A \to B\), \(x\in A\) und \(y\in B\), dann gilt:]
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+\proofstep{1}{(x,y)\in F}{\rA}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Eindeutigkeit von \(F^{-1}\)]{F\colon A\hookrightarrow B, F^{-1}(y,x_1)\in F^{-1} ,\, (y,x_2)\in F^{-1} \vdash x_1 = x_2}[
+Seien \(A,\,B\) Mengen, \(x_1,x_2\in A\), \(y\in B\). Dann gilt:]
+\begin{tabproof}
+\prooftext{Seien \(A,\,B\) Mengen, \(x_1,x_2\in A\) und \(y\in B\), }
+\prooftext{Sei ferner \(F\colon A\hookrightarrow B\) eine injektive Funktion, dann gilt:}
+\proofstep{1}{(y,x_1)\in F^{-1}}{\rA}
+\proofstep{2}{(y,x_2)\in F^{-1}}{\rA}
+\proofstep{1}{(x_1,y)\in F}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
+\proofstep{2}{(x_2,y)\in F}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{2}}
+\proofstep{1}{y=F(x_1)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{3}}
+\proofstep{2}{y=F(x_2)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{4}}
+\proofstep{1,2}{F(x_1)=F(x_2)}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{5,6}}
+\proofstep{1,2}{x_1=x_2}{\FormulaRefAuto{F(x_1)=F(x_2)\ \vdash\ x_1=x_2}{7}}
+\end{tabproof}
+
+
+\FormulaThmAuto[Totalität von \(F^{-1}\)]%
+{F\colon A\twoheadrightarrow B \vdash \exists x\in A\; (y,x)\in F^{-1}}%
+[Seien \(A,\,B\) Mengen und \(y\in B\). Dann gilt:]
+\begin{tabproof}
+  \prooftext{Seien \(A,B\) Mengen und \(y\in B\). }
+  \prooftext{Sei ferner \(F\colon A\twoheadrightarrow B\) surjektiv, dann gilt:}
+  \proofstep{}{\exists x\in A\; y=F(x)}{\FormulaRefAuto{\exists x\in A\; F(x)=y}}
+  \proofstep{2}{x\in A\land y=F(x)}{\rA}
+  \proofstep{2}{x\in A}{\rAEa{2}}
+  \proofstep{2}{(x,F(x))\in F}{\FormulaRefAuto{(x,F(x))\in F}{3}}
+  \proofstep{2}{(F(x),x)\in F^{-1}}{\FormulaRefAuto{(x,F(x))\in F}{3}}
+  
+\end{tabproof}
+
+
+\FormulaThmAuto[Totalität von \(F^{-1}\)]{%
+\bigl(F \text{ ist surjektiv}\bigr) \;\rightarrow\;
+\bigl(\forall y\in B\;\exists x\in A\; (y,x)\in F^{-1}\bigr)
+}
+[Unter der Voraussetzung, dass \(F\) surjektiv ist, gilt: \(F^{-1}\) ist total (auf ganz \(B\)).]
+
+\FormulaThmAuto[Umkehrfunktion bei Bijektivität]{%
+\bigl(F \text{ ist bijektiv}\bigr) \;\rightarrow\; F^{-1} \text{ ist eine Funktion } B\to A
+}
+[Wenn \(F\colon A \to B\) bijektiv ist, dann ist die inverse Relation \(F^{-1}\) eine Umkehrfunktion von \(B\) nach \(A\).]
+
+\FormulaThmAuto[Rückgängigmachung]{%
+\forall x \in A\; \bigl(F^{-1}(F(x)) = x\bigr)\;\land\;\forall y \in B\; \bigl(F(F^{-1}(y)) = y\bigr)
+}
+[Wenn \(F\) bijektiv und \(F^{-1}\) die Umkehrfunktion ist, dann hebt sie \(F\) umgekehrt auf.]
+
+
+\section{Identität}
+
 
 \chapter{Konstruktion der natürlichen Zahlen}
 
@@ -2282,7 +2662,7 @@ Diese Sätze zeigen genau die Funktionseigenschaften von \(\mathrm{succ}_A\)  un
 
 \FormulaDefAuto[Nachfolger]{\mathrm{succ}(x) := x \cup \{x\}}[Sei A eine induktive Menge, dann definieren wir die Funktion \(\mathrm{succ}_A:A\mapsto A\)  für alle \(x\in A\) durch:]
 
-\section{Konstruktion der Menge der natürlichen Zahlen}
+\section{Konstruktion der natürlichen Zahlen}
 
 \FormulaThmAuto{
   \exists! C\; \forall B \Bigl(\mathrm{Induktiv}(B) \rightarrow 

@@ -1,5 +1,7 @@
 % main.tex (optimiert für schnelleres Kompilieren)
 \documentclass{book}
+\usepackage[T1]{fontenc} % <— ergänzen
+
 
 % --- Packages ---
 \usepackage{subfiles}
@@ -9,6 +11,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
 \usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % bessere Randprotrusion in Mathe
 \usepackage{hyperref}
 \usepackage{csquotes}
 \usepackage{enumitem}
@@ -22,6 +25,27 @@
 \usepackage{makecell}   % für \makecell
 \usepackage[nameinlink,capitalise]{cleveref}
 \usepackage{array} % <- nötig für >{$}l<{$} in longtable
+
+% Unterlaufende Boxen (h/v) NICHT melden
+\hbadness=10000   % suppress "Underfull \hbox (badness 10000)"
+\vbadness=10000   % suppress "Underfull \vbox ..."
+
+\hfuzz=0pt         % Toleranz für Overfull hbox (z. B. 0.5pt, 1pt, …)
+\overfullrule=0pt  % schwarzen Balken am Rand ausblenden
+
+% --- Δ-Zeilen global puffern + ausgeben ---
+\ExplSyntaxOn
+\tl_new:N \g_mx_delta_rows_tl
+\cs_new_protected:Npn \mx_set_delta_rows:n #1 { \tl_gset:Nn \g_mx_delta_rows_tl {#1} }
+\cs_new_protected:Npn \mx_clear_delta_rows: { \tl_gclear:N \g_mx_delta_rows_tl }
+\newcommand{\PrintDeltaRows}{%
+  \tl_if_empty:NF \g_mx_delta_rows_tl
+    {%
+      \DeltaBlockFromRows{\g_mx_delta_rows_tl}%
+      \mx_clear_delta_rows:%
+    }%
+}
+\ExplSyntaxOff
 
 
 \MakeAutoQuote{„}{“}
@@ -45,26 +69,25 @@
 % -------------------------------
 \newcounter{file}
 
-% Theorem
-\newcounter{theoremInFile}[file]
-\renewcommand{\thetheoremInFile}{\arabic{file}.\arabic{theoremInFile}}
-\newtheorem{theorem}[theoremInFile]{Theorem}
+\declaretheoremstyle[ headformat=\NAME\ \NUMBER\ \NOTE, % ← KEIN \\ mehr hier 
+postheadspace=\newline, % ← sauberer Zeilenumbruch nach dem Kopf 
+headpunct={}, 
+headfont=\bfseries, 
+bodyfont=\normalfont, 
+spaceabove=\topsep, 
+spacebelow=\topsep 
+]{mxplain}
 
-% Definition
-\newcounter{definitionInFile}[file]
-\renewcommand{\thedefinitionInFile}{\arabic{file}.\arabic{definitionInFile}}
-\newtheorem{definition}[definitionInFile]{Definition}
+% Zähler wie zuvor über 'file': ergibt Nummern "file.<laufend>"
+\declaretheorem[name=Theorem,   style=mxplain, numberwithin=file]{theorem}
+\declaretheorem[name=Definition,style=mxplain, numberwithin=file]{definition}
+\declaretheorem[name=Axiom,     style=mxplain, numberwithin=file]{axiom}
 
-% Axiom
-\newcounter{axiomInFile}[file]
-\renewcommand{\theaxiomInFile}{\arabic{file}.\arabic{axiomInFile}}
-\newtheorem{axiom}[axiomInFile]{Axiom}
-
-% Weitere Umgebungen, falls benötigt:
-\newtheorem{corollary}[theoremInFile]{Korollar}
-\newtheorem{lemma}[theoremInFile]{Lemma}
-\newtheorem{hilfsdefinition}[theoremInFile]{Hilfsdefinition}
-\newtheorem{tempdefinition}[theoremInFile]{Temporäre Definition}
+% Weitere Umgebungen (mit gleichem Stil/Nummerierung):
+\declaretheorem[name=Korollar,  style=mxplain, sibling=theorem]{corollary}
+\declaretheorem[name=Lemma,     style=mxplain, sibling=theorem]{lemma}
+\declaretheorem[name=Hilfsdefinition, style=mxplain, sibling=theorem]{hilfsdefinition}
+\declaretheorem[name=Temporäre Definition, style=mxplain, sibling=theorem]{tempdefinition}
 
 % Unnummerierte Umgebungen
 \theoremstyle{remark}
@@ -88,102 +111,33 @@
 
 \makeindex[name=satz,title=Sätze und Definitionen zu diesem Kapitel]
 
+
+
+
 % -------------------------------
-% Schneller Label-Sanitizer (expl3 + Cache)
-% Ergebnis wie bisher in \temp
+% Schneller Label-Sanitizer: Hash statt Regex (pdfLaTeX)
+% setzt wie gehabt \temp
 % -------------------------------
 \ExplSyntaxOn
-\prop_new:N \g__sanitize_cache_prop
-\tl_new:N   \l__sanitize_work_tl
-
-\cs_new_protected:Npn \sanitize #1
+\cs_set_protected:Npn \sanitize #1
   {
-    % Cache-Hit?
-    \prop_get:NnNTF \g__sanitize_cache_prop {#1} \l__sanitize_work_tl
-      { \tl_set_eq:NN \temp \l__sanitize_work_tl }
-      {
-        % Cache-Miss: berechnen
-        \tl_set:Nx \l__sanitize_work_tl { \detokenize{#1} }
+    \tl_set:Nx \l__sanitize_work_tl { \tl_to_str:n {#1} }
 
-        % ---- Mathematische Schriftarten
-        \regex_replace_all:nnN { \\mathcal } { mathcal } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\mathbb }   { mathbb }  \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\mathrm }   { rm }      \l__sanitize_work_tl
+    % Alle Whitespaces raus
+    \regex_replace_all:nnN { \s+ } { } \l__sanitize_work_tl
 
-        % ---- Logische Verknüpfungen
-        \regex_replace_all:nnN { \\leftrightarrow } { Equiv } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\rightarrow }      { Imp }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\eqvdash }         { Eqvboth }\l__sanitize_work_tl
-        \regex_replace_all:nnN { \\dashv }           { DashV } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\vdash }           { Vdash } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\iff }             { Iff }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\land }            { And }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\lor }             { Or }    \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\neg }             { Neg }   \l__sanitize_work_tl
+    % Ein-Zeichen-Spacing-Befehle: \, \; \: \!
+    \regex_replace_all:nnN { \\[,;:!] } { } \l__sanitize_work_tl
 
-        % ---- Quantoren und Mengen
-        \regex_replace_all:nnN { \\forall }  { Forall } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\exists }  { Exists } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\iota }    { Iota }   \l__sanitize_work_tl
+    % Wort-Spacing-Befehle: \quad \qquad \enspace \thinspace \negthinspace
+    \regex_replace_all:nnN { \\(?:quad|qquad|enspace|thinspace|negthinspace)\b } { } \l__sanitize_work_tl
 
-        % ---- Relationen und Operatoren
-        \regex_replace_all:nnN { :\= }       { Defeq }    \l__sanitize_work_tl
-        \regex_replace_all:nnN { \= }        { Eq }       \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\neq }     { Neq }      \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\notin }     { Notin }    \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\in }      { In }       \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\subseteq }{ Subseteq } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\times }   { Times }    \l__sanitize_work_tl
+    % Klammergrößen-Modifier und Varianten (inkl. l/r/gl/gr-Suffix)
+    \regex_replace_all:nnN { \\(?:left|right|middle)\b } { } \l__sanitize_work_tl
+    \regex_replace_all:nnN { \\(?:big|Big|bigg|Bigg)(?:l|r|gl|gr)?\b } { } \l__sanitize_work_tl
 
-
-        % ---- Mengenoperationen
-        \regex_replace_all:nnN { \\emptyset } { Emptyset } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\bigcup }   { Bigcup }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\cup }      { Cup }      \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\cap }      { Cap }      \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\bigcap }   { Bigcap }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\mid }      { Mid }      \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\setminus } { Setminus } \l__sanitize_work_tl
-
-        % ---- Zahlen
-        \regex_replace_all:nnN { \_ }  { Index } \l__sanitize_work_tl
-        \regex_replace_all:nnN { 0 }   { Null }  \l__sanitize_work_tl
-        \regex_replace_all:nnN { 1 }   { One }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { 2 }   { Two }   \l__sanitize_work_tl
-        \regex_replace_all:nnN { 3 }   { Three } \l__sanitize_work_tl
-        \regex_replace_all:nnN { 4 }   { Four }  \l__sanitize_work_tl
-
-        % ---- Klammern (literale Zeichen)
-        \regex_replace_all:nnN { \x{28} } { Lp } \l__sanitize_work_tl % (
-        \regex_replace_all:nnN { \x{29} } { Rp } \l__sanitize_work_tl % )
-        \regex_replace_all:nnN { \\bigl|\\bigr|\\Bigl|\\Bigr } { } \l__sanitize_work_tl
-
-        % ---- Störendes entfernen
-        \regex_replace_all:nnN { \\begin | \\end } { } \l__sanitize_work_tl
-        \regex_replace_all:nnN { aligned }         { } \l__sanitize_work_tl
-        \regex_replace_all:nnN { [\{\}] }          { } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\\\ }            { } \l__sanitize_work_tl
-        \regex_replace_all:nnN { [\ \t] }          { } \l__sanitize_work_tl
-        \regex_replace_all:nnN { \& }              { } \l__sanitize_work_tl
-        % ---- Abstands-/Trenn-Kommandos und verbleibende Backslashes entfernen
-        \regex_replace_all:nnN { \\\, } {} \l__sanitize_work_tl  % \,
-        \regex_replace_all:nnN { \\\; } {} \l__sanitize_work_tl  % \;
-        \regex_replace_all:nnN { \\\: } {} \l__sanitize_work_tl  % \:
-        \regex_replace_all:nnN { \\\! } {} \l__sanitize_work_tl  % \!
-        \regex_replace_all:nnN { \\quad } {} \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\qquad } {} \l__sanitize_work_tl
-        \regex_replace_all:nnN { \\~ } {} \l__sanitize_work_tl   % \~ (geschütztes Leerzeichen)
-        \regex_replace_all:nnN { \\\x{20} } {} \l__sanitize_work_tl % Backslash + Space
-        % am Ende: alle übrigen Backslashes killen (Sicherheitsnetz)
-        \regex_replace_all:nnN { \\ } {} \l__sanitize_work_tl
-
-        % ---- Sonstiges
-        \regex_replace_all:nnN { , }               { Comma } \l__sanitize_work_tl
-
-        % Ergebnis bereitstellen + cachen
-        \tl_set_eq:NN \temp \l__sanitize_work_tl
-        \prop_gput:NnV \g__sanitize_cache_prop {#1} \temp
-      }
+    % md5-Label
+    \tl_set:Nx \temp { md\pdfmdfivesum { \l__sanitize_work_tl } }
   }
 \ExplSyntaxOff
 
@@ -220,8 +174,10 @@
 \cs_new_protected:Npn \__cache_put_once:nn #1#2
   {
     % #1 = sanitized key (als String), #2 = volles Label (z.B. thm3_<...>)
-    \prop_if_in:NnF \g__ref_cache_prop {#1}
-      { \prop_gput:Nnn \g__ref_cache_prop {#1} {#2} }
+    \tl_clear_new:N \l__ref_raw_tl
+    \__normalize_key:Nn \l__ref_raw_tl { \lab }
+    \prop_if_in:NVF \g__ref_cache_prop \l__ref_raw_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l__ref_raw_tl { \labFull } }
   }
 
 \ExplSyntaxOn
@@ -248,94 +204,430 @@
 \ExplSyntaxOn
 
 % ====================== Theorem / Definition / Axiom =====================
-\NewDocumentCommand{\FormulaThmAuto}{o m o}
+% ====================== Theorem / Definition / Axiom =====================
+
+% \FormulaThmAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaThmAuto}{ o m o o }
   {
     \sanitize{#2}
     \edef\lab{\temp}
     \edef\labFull{thm\arabic{file}_\lab}
     \__cache_put_once_norm:nn { \lab } { \labFull }
 
+    % Alias-ID -> auf volles Label mappen (roher, getrimmter String)
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }%
+    }%
 
-
+    % Kopf starten (amsthm öffnet eine List-Umgebung)
     \IfNoValueTF{#1}
       {\begin{theorem}\label{\labFull}}
       {\begin{theorem}[#1]\label{\labFull}}%
-    \IfNoValueF{#3}{#3\par\medskip}%
+
+    % Optionaler Vortext-/Δ-Block direkt nach dem Kopf
+    \IfNoValueF{#3}{#3}%
+
+
+    % Display-Formel
+    \par\vspace{.2\baselineskip}
     \[
       #2
     \]
     \end{theorem}%
   }
 
-\NewDocumentCommand{\FormulaDefAuto}{o m o}
+% \FormulaDefAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaDefAuto}{ o m o o }
   {
     \sanitize{#2}
     \edef\labD{\temp}
     \edef\labFullD{def\arabic{file}_\labD}
     \__cache_put_once_norm:nn { \labD } { \labFullD }
 
-
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }%
+    }%
 
     \IfNoValueTF{#1}
       {\begin{definition}\label{\labFullD}}
       {\begin{definition}[#1]\label{\labFullD}}%
-    \IfNoValueF{#3}{#3\par\medskip}%
+
+    \IfNoValueF{#3}{#3}%
+
+    \par\vspace{.2\baselineskip}
     \[
       #2
     \]
     \end{definition}%
   }
 
-\NewDocumentCommand{\FormulaAxiomAuto}{o m o}
+% \FormulaAxiomAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaAxiomAuto}{ o m o o }
   {
     \sanitize{#2}
     \edef\labA{\temp}
     \edef\labFullA{ax\arabic{file}_\labA}
     \__cache_put_once_norm:nn { \labA } { \labFullA }
 
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }%
+    }%
 
     \IfNoValueTF{#1}
       {\begin{axiom}\label{\labFullA}}
       {\begin{axiom}[#1]\label{\labFullA}}%
-    \IfNoValueF{#3}{#3\par\medskip}%
+
+    \IfNoValueF{#3}{#3}%
+
+    \par\vspace{.2\baselineskip}
     \[
       #2
     \]
     \end{axiom}%
   }
 
-% =========================== Referenz-Makro ==============================
-% \FormulaRefAuto{<Formel>}[<explizites Präfix>]{<Zusatz>}
+% --- Δ-Block Bausteine (lassen wie gehabt) ---
+\usepackage{varwidth}
+
+% Labels in Kapitälchen, konsistente Zeilenhöhe
+\newcommand{\DeltaLabelStyle}[1]{\textnormal{\scshape #1}}
+
+\newcommand{\dsep}{,\allowbreak\ } % wie gehabt
+
+\newcommand{\DeltaRow}[2]{%
+  \DeltaLabelStyle{#1} & $#2$\\[-2pt]}
+
+\newcommand{\DeltaBlockFromRows}[1]{%
+  {\small
+    \setlength{\tabcolsep}{0pt}%
+    \renewcommand{\arraystretch}{1.05}%
+    \begin{varwidth}{\linewidth}
+      \begin{tabular}{@{}l@{\qquad}l@{}}% Labelspalte \quad-\qquad-Abstand
+        #1%
+      \end{tabular}%
+    \end{varwidth}%
+  }%
+  \vspace{.3\baselineskip}%
+}
+
+% --- Δ direkt im Theorem, MIT Auto-Label + optionalem Alias ---
+\NewDocumentCommand{\FormulaThmDelta}{ o m +m o }{%
+  \sanitize{#2}%
+  \edef\lab{\temp}%
+  \edef\labFull{thm\arabic{file}_\lab}%
+  \__cache_put_once_norm:nn { \lab } { \labFull }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}%
+    \tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{theorem}\label{\labFull}}%
+    {\begin{theorem}[#1]\label{\labFull}}%
+  \DeltaBlockFromRows{#3}%
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{theorem}%
+}
+
+\NewDocumentCommand{\FormulaDefDelta}{ o m +m o }{%
+  \sanitize{#2}\edef\labD{\temp}\edef\labFullD{def\arabic{file}_\labD}%
+  \__cache_put_once_norm:nn { \labD } { \labFullD }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}\tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{definition}\label{\labFullD}}%
+    {\begin{definition}[#1]\label{\labFullD}}%
+  \DeltaBlockFromRows{#3}%
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{definition}%
+}
+
+\NewDocumentCommand{\FormulaAxiomDelta}{ o m +m o }{%
+  \sanitize{#2}\edef\labA{\temp}\edef\labFullA{ax\arabic{file}_\labA}%
+  \__cache_put_once_norm:nn { \labA } { \labFullA }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}\tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{axiom}\label{\labFullA}}%
+    {\begin{axiom}[#1]\label{\labFullA}}%
+  \DeltaBlockFromRows{#3}%
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{axiom}%
+}
+
+
 \ExplSyntaxOn
+\bool_new:N \l__mx_ref_done_bool
+\cs_new_protected:Npn \__mx_print_ref:nn #1#2
+  {
+    \IfNoValueTF{#2}
+      { \mode_if_math:TF { \hyperref[#1]{\text{\cref*{#1}}} } { \hyperref[#1]{\cref*{#1}} } }
+      { \mode_if_math:TF { \hyperref[#1]{\text{\cref*{#1}(#2)}} } { \hyperref[#1]{\cref*{#1}(#2)} } }
+  }
+
+  \ExplSyntaxOn
+
+% Hilfsfunktion: wähle Label-Key (Hauptformel oder alternativer "geheimer" Key)
+\cs_new_protected:Npn \mx_pick_lab_from_main_or_alt:nnN #1#2#3
+  {
+    % #1 = md5(main), #2 = md5(alt), #3 -> tl var to receive chosen lab
+    \tl_clear_new:N \l__mx_normkey_tl
+    \__normalize_key:Nn \l__mx_normkey_tl { #1 }
+    \prop_if_in:NVTF \g__ref_cache_prop \l__mx_normkey_tl
+      { \tl_set:Nn #3 { #2 } } % main ist schon vergeben => nimm alt
+      { \tl_set:Nn #3 { #1 } } % sonst nimm main
+  }
+
+\ExplSyntaxOn
+% ---------- AutoK: [Titel]{Formel}{AltKey}[Vortext][Alias] ----------
+\NewDocumentCommand{\FormulaThmAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    % WICHTIG: K-Varianten labeln mit AltKey:
+    \edef\lab{\labAlt}
+    \edef\labFull{thm\arabic{file}_\lab}
+    \__cache_put_once_norm:nn { \lab } { \labFull }
+
+    % Alias (fakultativ) -> auf volles Label mappen
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }
+    }
+
+    % Umgebung ausgeben
+    \IfNoValueTF{#1}{\begin{theorem}\label{\labFull}}{\begin{theorem}[#1]\label{\labFull}}
+      \IfNoValueF{#4}{#4}
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{theorem}
+  }
+
+\NewDocumentCommand{\FormulaDefAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labD{\labAlt}
+    \edef\labFullD{def\arabic{file}_\labD}
+    \__cache_put_once_norm:nn { \labD } { \labFullD }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }
+    }
+
+    \IfNoValueTF{#1}{\begin{definition}\label{\labFullD}}{\begin{definition}[#1]\label{\labFullD}}
+      \IfNoValueF{#4}{#4}
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{definition}
+  }
+
+\NewDocumentCommand{\FormulaAxiomAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labA{\labAlt}
+    \edef\labFullA{ax\arabic{file}_\labA}
+    \__cache_put_once_norm:nn { \labA } { \labFullA }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }
+    }
+
+    \IfNoValueTF{#1}{\begin{axiom}\label{\labFullA}}{\begin{axiom}[#1]\label{\labFullA}}
+      \IfNoValueF{#4}{#4}
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{axiom}
+  }
+
+% ---------- DeltaK: [Titel]{Formel}{AltKey}{Δ-Zeilen}[Alias] ----------
+\NewDocumentCommand{\FormulaThmDeltaK}{ O{} m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\lab{\labAlt}
+    \edef\labFull{thm\arabic{file}_\lab}
+    \__cache_put_once_norm:nn { \lab } { \labFull }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }
+    }
+
+    \begin{theorem}[#1]\label{\labFull}
+      \DeltaBlockFromRows{#4}%
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{theorem}
+  }
+
+\NewDocumentCommand{\FormulaDefDeltaK}{ O{} m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labD{\labAlt}
+    \edef\labFullD{def\arabic{file}_\labD}
+    \__cache_put_once_norm:nn { \labD } { \labFullD }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }
+    }
+
+    \begin{definition}[#1]\label{\labFullD}
+      \DeltaBlockFromRows{#4}%
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{definition}
+  }
+
+\NewDocumentCommand{\FormulaAxiomDeltaK}{ O{} m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labA{\labAlt}
+    \edef\labFullA{ax\arabic{file}_\labA}
+    \__cache_put_once_norm:nn { \labA } { \labFullA }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }
+    }
+
+    \begin{axiom}[#1]\label{\labFullA}
+      \DeltaBlockFromRows{#4}%
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{axiom}
+  }
+\ExplSyntaxOff
+
 \NewDocumentCommand{\FormulaRefAuto}{m o g}
   {
-    % Key bilden + normalisieren
+    \bool_set_false:N \l__mx_ref_done_bool
+
+    % --- A) Alias-Lookup (roher String getrimmt) -------------------------
+    \tl_set:Nx \l__ref_alias_try_tl { \tl_to_str:n {#1} }
+    \tl_trim_spaces:N \l__ref_alias_try_tl
+    \prop_get:NVNT \g__ref_cache_prop \l__ref_alias_try_tl \l_tmpa_tl
+      {
+        \bool_set_true:N \l__mx_ref_done_bool
+        \__mx_print_ref:nn { \l_tmpa_tl } {#3}
+      }
+
+    % --- B) Hash der Formel IMMER bilden (für C und D nötig) -------------
     \edef\tempa{\unexpanded{#1}}
     \expandafter\sanitize\expandafter{\tempa}
-    \edef\lab{\temp}
-    \tl_clear_new:N \l__ref_raw_tl
-    \__normalize_key:Nn \l__ref_raw_tl { \lab }
+    \edef\lab{\temp} % md5-Hash der Formel ohne Spaces/Größenbefehle
 
-    % Expliziter Präfix -> direkte Referenz
-    \IfNoValueF{#2}
+    % --- C) Expliziter Präfix? -------------------------------------------
+    \bool_if:NF \l__mx_ref_done_bool
       {
-        \edef\labFull{#2_\lab}
-        \IfNoValueTF{#3}
-          { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}}} } { \hyperref[\labFull]{\cref*{\labFull}} } }
-          { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}(#3)}} } { \hyperref[\labFull]{\cref*{\labFull}(#3)} } }
-        \use_none:
+        \IfNoValueF{#2}
+          {
+            \edef\labFull{#2_\lab}
+            \bool_set_true:N \l__mx_ref_done_bool
+            \__mx_print_ref:nn { \labFull } {#3}
+          }
       }
 
-    % 1) Cache first (stabil: first wins)
-    \prop_get:NVNTF \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+    % --- D) Cache via Hash (mit demselben Normalizer wie beim Anlegen) -----
+    \bool_if:NF \l__mx_ref_done_bool
       {
-        \edef\labFull{\l_tmpa_tl}
-        \IfNoValueTF{#3}
-          { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}}} } { \hyperref[\labFull]{\cref*{\labFull}} } }
-          { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}(#3)}} } { \hyperref[\labFull]{\cref*{\labFull}(#3)} } }
+        \tl_clear_new:N \l__ref_raw_tl
+        \__normalize_key:Nn \l__ref_raw_tl { \lab }
+        \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+          {
+            \bool_set_true:N \l__mx_ref_done_bool
+            \__mx_print_ref:nn { \l_tmpa_tl } {#3}
+          }
       }
+
+    % --- E) Live-Suche thm -> def -> ax ---------------------------------
+    \bool_if:NF \l__mx_ref_done_bool
       {
-        % 2) Live-Suche thm -> def -> ax
         \__ref_find:nn {thm}{\lab}
         \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\lab} }
         \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\lab} }
@@ -343,12 +635,101 @@
           { \text{[??]} }
           {
             \edef\labFull{\l__ref_result_tl}
-            % einmalig in Cache legen (first wins)
-            \prop_if_in:NVF \g__ref_cache_prop \l__ref_raw_tl
-              { \prop_gput:NVx \g__ref_cache_prop \l__ref_raw_tl {\labFull} }
-            \IfNoValueTF{#3}
-              { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}}} } { \hyperref[\labFull]{\cref*{\labFull}} } }
-              { \mode_if_math:TF { \hyperref[\labFull]{\text{\cref*{\labFull}(#3)}} } { \hyperref[\labFull]{\cref*{\labFull}(#3)} } }
+            \prop_if_in:NnF \g__ref_cache_prop { \lab }
+              { \prop_gput:Nnn \g__ref_cache_prop { \lab } { \labFull } }
+            \__mx_print_ref:nn { \labFull } {#3}
+          }
+      }
+  }
+\ExplSyntaxOff
+
+\ExplSyntaxOn
+\RenewDocumentCommand{\FormulaRefAuto}{m o g o}
+  {
+    \bool_set_false:N \l__mx_ref_done_bool
+
+    % A) Alias-String (roher Text) direkt im Cache?
+    \tl_set:Nx \l__ref_alias_try_tl { \tl_to_str:n {#1} }
+    \tl_trim_spaces:N \l__ref_alias_try_tl
+    \prop_get:NVNT \g__ref_cache_prop \l__ref_alias_try_tl \l_tmpa_tl
+      { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+
+    % B) Hashes vorbereiten: main (Formel) und optional alt (AltKey)
+    \edef\tempa{\unexpanded{#1}} \expandafter\sanitize\expandafter{\tempa}
+    \edef\labMain{\temp}
+    \tl_clear_new:N \l__mx_lab_alt_tl
+    \IfNoValueF{#4}{
+      \edef\tempa{\unexpanded{#4}} \expandafter\sanitize\expandafter{\tempa}
+      \tl_set:Nx \l__mx_lab_alt_tl { \temp }
+    }
+
+    % C) Expliziter Präfix? -> jetzt: ALT ZUERST, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \IfNoValueF{#2}{
+          % 1) AltKey + Präfix
+          \tl_if_empty:NF \l__mx_lab_alt_tl
+            {
+              \edef\labFullTry{\tl_to_str:n{#2}_\l__mx_lab_alt_tl}
+              \exp_args:Nx \cs_if_exist:cT { r@\labFullTry }
+                { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \labFullTry } {#3} }
+            }
+          % 2) Main + Präfix (nur wenn noch nichts gefunden)
+          \bool_if:NF \l__mx_ref_done_bool
+            {
+              \edef\labFullTry{\tl_to_str:n{#2}_\labMain}
+              \exp_args:Nx \cs_if_exist:cT { r@\labFullTry }
+                { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \labFullTry } {#3} }
+            }
+        }
+      }
+
+    % D) Cache-Lookup: ALT zuerst, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \tl_clear_new:N \l__ref_raw_tl
+        % 1) AltKey
+        \tl_if_empty:NF \l__mx_lab_alt_tl
+          {
+            \__normalize_key:Nn \l__ref_raw_tl { \l__mx_lab_alt_tl }
+            \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+              { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+          }
+        % 2) Main
+        \bool_if:NF \l__mx_ref_done_bool
+          {
+            \__normalize_key:Nn \l__ref_raw_tl { \labMain }
+            \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+              { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+          }
+      }
+
+    % E) Live-Suche: ALT zuerst, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        % 1) AltKey-Suche
+        \tl_if_empty:NF \l__mx_lab_alt_tl
+          {
+            \__ref_find:nn {thm}{\l__mx_lab_alt_tl}
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\l__mx_lab_alt_tl} }
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\l__mx_lab_alt_tl} }
+          }
+        % 2) Falls nichts gefunden, Suche mit Main
+        \tl_if_empty:NT \l__ref_result_tl
+          {
+            \__ref_find:nn {thm}{\labMain}
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\labMain} }
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\labMain} }
+          }
+
+        \tl_if_empty:NTF \l__ref_result_tl
+          { \text{[??]} }
+          {
+            \edef\labFull{\l__ref_result_tl}
+            % Merker: mappe den verwendeten Key auf das volle Label (hier reicht main)
+            \prop_if_in:NnF \g__ref_cache_prop { \labMain }
+              { \prop_gput:Nnn \g__ref_cache_prop { \labMain } { \labFull } }
+            \__mx_print_ref:nn { \labFull } {#3}
           }
       }
   }
@@ -570,7 +951,6 @@
 % Dokumentstart
 % -------------------------------
 \setcounter{file}{3}
-
 
 
 
