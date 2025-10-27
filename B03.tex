@@ -40,14 +40,17 @@ Der \textbf{Begriff der Menge} wird durch das \textbf{Element-Symbol} \(\in\) \t
 Das Symbol \(\in\) ist ein binäres Prädikat, das die Mitgliedschaft zwischen zwei Mengen ausdrückt. 
 
 Der Ausdruck \(x \in y\) bedeutet, dass \(x\) ein Element von \(y\) ist. Die Eigenschaften von \(\in\) 
-werden durch die folgenden Axiome der Zermelo-Fraenkel-Mengenlehre festgelegt, welche zusammen die Menge von 
-Aussagen \(\Phi(\in)\) bilden:
+werden durch die folgenden Axiome der Zermelo-Fraenkel-Mengenlehre festgelegt.
 \end{definition}
+
+\section{Axiom der Extensionalität}
 
 \FormulaAxiomDelta[Extensionalität]{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}%
 {%
 \DeltaRow{Mengen}{A\dsep B}% 
 }%
+
+\section{Axiom der leeren Menge}
 \FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
 
 \FormulaDefAuto[Leere Menge]{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
@@ -74,6 +77,8 @@ Aussagen \(\Phi(\in)\) bilden:
   \proofstep{2,3}{ O = P }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } }
   \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
 \end{tabproof}
+
+\section{Axiom der Aussonderung}
 
 \FormulaAxiomDelta[Aussonderung]{\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}%
 {%
@@ -144,6 +149,8 @@ Hieraus gewinnen wir für alle \(x\) das Axiom:
 \DeltaRow{Mengen}{A\dsep B}%
 }
 
+\section{Axiom der Paarmenge}
+
 \FormulaAxiomDelta[Paarmenge]{\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }{%
 \DeltaRow{Mengen}{A\dsep B}%
 }
@@ -163,6 +170,9 @@ Hieraus gewinnen wir für alle \(x\) das Axiom:
 \FormulaDefDelta[Geordnetes Paar]{(a, b) := \{ \{ a \}, \{ a, b \} \}}{
 \DeltaRow{Mengen}{a\dsep b}%
 }
+
+\section{Axiom der Vereinigung}
+
 
 \FormulaAxiomDelta[Vereinigung]{\exists C\;\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)}{
 \DeltaRow{Mengen}{A}%
@@ -191,6 +201,9 @@ Hieraus gewinnen wir für alle \(x\) das Axiom:
     In Worten: \(A\) ist Teilmenge von \(B\).
 \end{remark}
 
+\section{Axiom der Potenzmenge}
+
+
 \FormulaAxiomDelta[Potenzmenge]{\exists B\forall x\bigl(x \in B \leftrightarrow x \subseteq A\bigr)}%
 {%
 \DeltaRow{Mengen}{A}%
@@ -210,8 +223,12 @@ Hieraus gewinnen wir für alle \(x\) das Axiom:
   \proofstep{}{ x \in \mathcal{P}(A)\;\leftrightarrow\; x \subseteq A }{\rUE{1}}
 \end{tabproof}
 
+\section{Axiom der Unendlichkeit}
+
 
 \FormulaAxiomAuto[Unendlichkeit]{ \exists A\;\bigl(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A)\bigr) }
+
+\section{Axiom der Regularität}
 
 \FormulaAxiomDelta[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{
 \DeltaRow{Mengen}{A}%
@@ -221,17 +238,120 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 \textbf{Minimalelement} enthält.    
 \end{remark}
 
-\FormulaAxiomDelta[Ersetzung (Relationenform)]{
-\forall x\in A\;\exists! y\;(x,y)\in R\;\vdash \; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr)
-}{
-\DeltaRow{Mengen}{A\dsep R}
+\section{Axiom der Ersetzung}
+
+\subsection{Funktionale Relationen}
+
+\begin{definition}[Begriff der funktionalen Relation auf \(A\)]
+Sei \(A\) eine Menge. Eine \textbf{funktionale Relation auf \(A\)} heißt eine Menge \(R\), die die folgenden Axiome erfüllt:
+\end{definition}
+
+\subsubsection{Funktionale Eindeutigkeit}
+\FormulaAxiomDelta[Funktionale Eindeutigkeit]
+{(x,y)\in R\dsep (x,z)\in R \vdash y=z}
+{
+\DeltaRow{Mengen}{x\dsep y\dsep z}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
 }
 
-\FormulaAxiomDelta[Auswahlaxiom (AC)]{
-\forall x,y \in A \Bigl(x\neq \emptyset \land (x=y\lor x\cap y=\emptyset)\Bigr)
-\;\vdash\;\exists B\,\forall x \in A\,\exists z\bigl(B\cap x = \{z\}\bigr)
+\subsubsection{Totalität}
+\FormulaAxiomDelta[Totalität auf \(A\)]
+{x\in A \vdash \exists y\,(x,y)\in R}
+{\DeltaRow{Mengen}{x\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+
+\subsubsection{Funktionswert}
+
+\FormulaThmDelta[Eindeutigkeit des Funktionswertes]{x\in A\vdash \exists! y\;(x,y)\in R}{
+\DeltaRow{Mengen}{x\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{\exists y(x,y)\in R}{\FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in R}{1}}
+  \proofstep{2}{(x,y)\in R}{\rA}
+  \proofstep{3}{(x,z)\in R}{\rA}
+  \proofstep{2,3}{y=z}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{2,3}}
+  \proofstep{1}{\exists! y(x,y)\in R}{\UEI{1,2,3,4}}
+\end{tabproof}
+
+\FormulaDefDelta[Funktionswert]{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{
+\DeltaRow{Mengen}{x\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+
+\FormulaThmDelta{x\in A\dsep (x,y)\in R\vdash y=R(x)}{
+\DeltaRow{Mengen}{x\dsep y\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in R}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{2}{(x,R(x))\in R}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{2}}
+  \proofstep{1}{y=R(x)}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta{x\in A\dsep (x,y)\in R\vdash R(x)=y}{
+\DeltaRow{Mengen}{x\dsep y\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in R}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{2}{(x,R(x))\in R}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{2}}
+  \proofstep{1}{y=R(x)}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{2,1}}
+\end{tabproof}
+
+
+\FormulaAxiomDelta[Ersetzung]{
+\exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;y=R(x) \bigr)
 }{
 \DeltaRow{Mengen}{A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+
+\FormulaDefDelta[Bildmenge unter \(R\) auf \(A\)]
+{R(A) \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}
+{
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+
+\FormulaThmDelta{y\in R(A)\eqvdash \exists x\in A\,y=R(x)}
+{
+  \DeltaRow{Mengen}{x\dsep y\dsep A}
+  \DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+\begin{tabproof}
+  \proofstep{}{ \forall y\;\bigl( y\in R(A) \leftrightarrow \exists x\in A\,y=R(x)\bigr) }{\FormulaRefAuto{R(A) \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}}
+  \proofstep{}{ y\in R(A) \leftrightarrow \exists x\in A\,y=R(x) }{\rUE{1}}
+\end{tabproof}
+
+\section{Auswahlaxiom}
+
+\begin{definition}[Paarweise disjunkte Familie nichtleerer Mengen]
+Eine \textbf{paarweise disjunkte Familie nichtleerer Mengen} ist eine Menge \(A\) von Mengen, die die folgenden der \textbf{Nichtleerheit} und \textbf{Paarweise Disjunktheit} erfüllt.
+\end{definition}
+
+% Nichtleerheit jedes Elements
+\FormulaAxiomDelta[Nichtleerheit]{ x \in A \vdash x \neq \emptyset }{
+  \DeltaRow{Mengen}{x}%
+  \DeltaRow{Paarweise disjunkte Familie nichtleerer Mengen}{A}%
+}
+
+% Paarweise Disjunktheit (Implikationsform, empfohlen)
+\FormulaAxiomDelta[Paarweise Disjunktheit]{ x \neq y,\, x,y \in A \vdash x \cap y = \emptyset }{
+  \DeltaRow{Mengen}{x \dsep y}%
+  \DeltaRow{Paarweise disjunkte Familie nichtleerer Mengen}{A}%
+}
+
+Hieraus ergibt sich nun das Auswahlaxiom der Zermelo-Fränkel-Axiome.
+
+\FormulaAxiomDelta[Auswahlaxiom (AC)]{
+\exists B\,\forall x \in A\,\exists z\,B\cap x = \{z\}
+}{
+\DeltaRow{Paarweise disjunkte Familie nichtleerer Mengen}{A}
 }
 
 
@@ -2351,135 +2471,74 @@ Seien \(A,B\) Mengen, dann wird der \textbf{Begriff der Funktion} durch das Symb
 F\colon A \to B
 \]
 \textbf{implizit definiert}. 
-Das Symbol \(F\colon A\to B\) bedeutet, dass \(F\) eine Teilmenge des kartesischen Produkts \(A\times B\) ist,
-die die folgenden Eigenschaften erfüllt. Wir fassen diese Eigenschaften als Menge von Aussagen 
-\(\Phi(F,A,B)\) zusammen:
+Das Symbol \(F\colon A\to B\) bedeutet, dass \(F\) eine funktionale Relation auf \(A\) ist, welche folgendes Axiom erfüllt.
 \end{definition}
 
-\FormulaAxiomAuto[Existenz als Menge geordneter Paare]{F \subseteq A \times B}
+\FormulaAxiomDelta[Existenz als Menge geordneter Paare]{F \subseteq A \times B}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktionale Relationen auf \(A\)}{F}
+}
 
-\FormulaAxiomAuto[Funktionale Eindeutigkeit]{(x,y)\in F,\, (x,z)\in F \vdash y=z}[Seien \(x\in A\) und \(y,z\in B\), dann gilt:]
-
-\FormulaAxiomAuto[Totale Definition auf der Domäne]{\exists y\;(x,y)\in F}[Sei \(x\in A\), dann gilt:]
-
-\FormulaDefAuto[Domäne]{\mathrm{dom}(F)\coloneqq A}%
-[Sei \(F\colon A\to B\) eine Funktion. Dann definieren wir die Domäne von \(F\) durch:]
-
-\FormulaDefAuto[Kodomäne]{\mathrm{cod}(F)\coloneqq B}%
-[Sei \(F\colon A\to B\) eine Funktion. Dann definieren wir die Kodomäne von \(F\) durch:]
-
-\begin{definition}[Domäne und Kodomäne]
-Sei \(F\colon A\to B\) eine Funktion. Dann heißt
-\begin{itemize}
-  \item \(\mathrm{dom}(F):=A\) der \textbf{Definitionsbereich (Domäne)} von \(F\),
-  \item \(\mathrm{cod}(F):=B\) der \textbf{Wertebereich (Kodomain)} von \(F\).
-\end{itemize}
-\end{definition}
-
-
-\FormulaThmAuto[Eindeutigkeit des Funktionswertes]{\exists! y\;(x,y)\in F}[Sei \(F\colon A\to B\) eine Funktion und \(y\in A\), dann gilt:]
+\FormulaThmDelta{x\in A\vdash F(x)\in B}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktionen}{F\colon A\to B}
+}
 \begin{tabproof}
-  \prooftext{Sei \(F\colon A\to B\) eine Funktion und \(y\in A\), dann gilt:}
-  \proofstep{}{\exists y(x,y)\in F}{\FormulaRefAuto{\exists y\;(x,y)\in F}}
-  \proofstep{2}{(x,y)\in F}{\rA}
-  \proofstep{3}{(x,z)\in F}{\rA}
-  \proofstep{2,3}{y=z}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{2,3}}
-  \proofstep{}{\exists! y\in B(x,y)\in F}{\UEI{1,2,3,4}}
-\end{tabproof}
-
-\FormulaDefAuto[Auswertung]{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}[Für \(F\colon A\to B\) und \(x\in A\) definieren wir:]
-
-\FormulaThmAuto{F(x)\in B}[Sei \(F\colon A\to B\) eine Funktion und \(x\in A\), dann gilt:]
-\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
   \proofstep{}{F\subseteq A\times B}{\FormulaRefAuto{F \subseteq A \times B}}
-  \proofstep{}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
-  \proofstep{}{(x,F(x))\in A\times B}{\FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{1,2}}
-  \proofstep{}{F(x)\in B}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
+  \proofstep{1}{(x,F(x))\in F}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{1}}
+  \proofstep{1}{(x,F(x))\in A\times B}{\FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{2,3}}
+  \proofstep{1}{F(x)\in B}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{4}}
 \end{tabproof}
 
-\FormulaThmAuto{(x,y)\in F\vdash y=F(x)}[Sei \(F\colon A\to B\) eine Funktion mit \(x\in A\) und \(y\in B\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in F}{\rA}
-  \proofstep{1}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
-  \proofstep{1}{y=F(x)}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{1,2}}
-\end{tabproof}
+\FormulaDefDelta[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Funktionen}{F\colon A\to B}
+}
 
-\FormulaThmAuto{(x,y)\in F\vdash F(x)=y}[Sei \(F\colon A\to B\) eine Funktion mit \(x\in A\) und \(y\in B\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in F}{\rA}
-  \proofstep{1}{(x,F(x))\in F}{\FormulaRefAuto{F(x) \coloneqq \iota y\,\bigl((x,y)\in F\bigr)}}
-  \proofstep{1}{y=F(x)}{\FormulaRefAuto{(x,y)\in F,\, (x,z)\in F \vdash y=z}{2,1}}
-\end{tabproof}
-
-
-\FormulaDefAuto[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
-[Sei \(F\colon A\to B\) eine Funktion. Wir definieren den \textbf{Graphen} von \(F\) als die Menge aller Paare aus \(A\times B\), die zu \(F\) gehören:]
-
-
-\FormulaThmAuto[Ersetzung über Funktionen]{
-  \exists! C\forall y(y\in C\leftrightarrow \exists x\in A (F(x)=y)
-}[Sei \(F\colon A\to B\) eine Funktion, dann gilt:]
-
-\begin{tabproof}
-  \proofstep{}{\exists! y\;(x,y)\in F}{\FormulaRefAuto{\exists! y\;(x,y)\in F}}
-  \proofstep{}{\exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;F(x)=y\bigr)}{\rRE{\rUE{\FormulaRefAuto{
-\forall A\;\forall R\;\Bigl( \forall x\in A\;\exists! y\;R(x,y)\in R\;\rightarrow\; \exists C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;(x,y)\in R \bigr) \Bigr)}
-},1}}
-  \proofstep{}{\exists! C\;\forall y\;\bigl( y\in C\;\leftrightarrow\; \exists x\in A\;F(x)=y\bigr)}{\FormulaRefAuto{ \exists B(\forall x(x \in B\leftrightarrow P(x)))\vdash \exists! B(\forall x(x \in B\leftrightarrow P(x))) }{2}}
-\end{tabproof}
-
-\FormulaDefAuto[Funktionsbild]{F(A) := \{y \mid \exists x \in A\,(F(x)=y)\}}%
-[Für eine Funktion \(F:A\to B\) definieren wir das Bild von \(A\) als die Menge aller Werte, 
-die \(F\) für Elemente aus \(A\) annimmt:]
 
 \section{Eigenschaften von Funktionen}
 \subsection{Injektivität, Surjektivität, Bijektivität}
 
 \begin{definition}[Begriff der injektiven Funktion]
-Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der injektiven Funktion}
-durch das Symbol
-\[
-F\colon A\hookrightarrow B
-\]
-\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich die Injektivität erfüllt.
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der injektiven Funktion} als eine Funktion \(F\colon A\to B\), die zusätzlich das Axiom der \textbf{Injektivität} erfüllt.
 \end{definition}
 
-\FormulaAxiomAuto[Injektivität (Werteform)]%
-{F(x_1)=F(x_2)\ \vdash\ x_1=x_2}%
-[Seien \(A,B\) Mengen, \(F\colon A\to B\) und \(x_1,x_2\in A\). Dann gilt:]
-
+\FormulaAxiomDelta[Injektivität]%
+{F(x)=F(y)\ \vdash\ x=y}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Funktionen}{F\colon A\to B}
+}
 
 \begin{definition}[Begriff der surjektiven Funktion]
-Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der surjektiven Funktion}
-durch das Symbol
-\[
-F\colon A\twoheadrightarrow B
-\]
-\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich die Surjektivität erfüllt.
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der surjektiven Funktion} als eine Funktion \(F\colon A\to B\), die zusätzlich das Axiom der \textbf{Surjektivität} erfüllt.
 \end{definition}
 
-\FormulaAxiomAuto[Surjektivität (Werteform)]%
-{\exists x\in A\; F(x)=y}%
-[Seien \(A,B\) Mengen, \(F\colon A\to B\) und \(y\in B\). Dann gilt:]
+\FormulaAxiomDelta[Surjektivität]%
+{y\in B\vdash \exists x\in A\; F(x)=y}
+{
+\DeltaRow{Mengen}{y\dsep A\dsep B}
+\DeltaRow{Funktionen}{F\colon A\to B}
+}
 
 
 \begin{definition}[Begriff der bijektiven Funktion]
-Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der bijektiven Funktion}
-durch das Symbol
-\[
-F\colon A \xrightarrow{\sim} B
-\]
-\textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich
-\emph{Injektivität} und \emph{Surjektivität} erfüllt.
+Seien \(A,B\) Mengen, dann definieren wir den \textbf{Begriff der bijektiven Funktion} \textbf{implizit definiert} als eine Funktion \(F\colon A\to B\), die zusätzlich die Eigenschaften der \textbf{Injektivität} und \textbf{Surjektivität} erfüllt.
 \end{definition}
 
 \subsection{Inverse Relation und Umkehrfunktion}
 
 Wir definieren zunächst die inverse Relation zu einer Funktion und zeigen dann unter der Bijektivitätsbedingung, dass sie eine echte Umkehrfunktion ist.
 
-\FormulaDefAuto[Inverse Relation]{%
+\FormulaDefDelta[Inverse Relation]{%
 F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}
-}[Sei \(F \colon A \to B\). Dann definieren wir die \emph{inverse Relation} \(F^{-1}\).]
+}
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Funktionen}{F\colon A\to B}
+}
 
 \FormulaThmAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}[Seien \(A,\,B\) Mengen, \(F \colon A \to B\), \(x\in A\) und \(y\in B\), dann gilt:]
 \begin{tabproofsplit}
