@@ -733,7 +733,29 @@ spacebelow=\topsep
           }
       }
   }
+  
 \ExplSyntaxOff
+
+% --- Feintuning (wie zuvor) ---
+\providecommand{\axstrut}{\rule{0pt}{1.25\baselineskip}}
+\providecommand{\axsep}{1pt}
+
+% 3-spaltige Tabelle: Titel | Referenz | Kommentar
+\NewDocumentEnvironment{AxTable}{}{% BEGIN
+  \par\small
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{1.12}%
+  \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}
+}{% END
+  \end{tabular}\par
+}
+
+% \AxLine{Titel}{Formel}[Kommentar rechts]
+\NewDocumentCommand{\AxLine}{ m m o }{%
+  \textbf{#1}: &
+  \axstrut \FormulaRefAuto{#2}[ax] &
+  \IfNoValueF{#3}{\axstrut \textnormal{\scriptsize(#3)}}\\[\axsep]
+}
 
 % =========================== Debug: nur Log-Ausgabe ======================
 \NewDocumentCommand{\debugrefcache}{m}{
