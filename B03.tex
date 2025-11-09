@@ -88,7 +88,7 @@ werden durch die folgenden Axiome der Zermelo-Fraenkel-Mengenlehre festgelegt.
   \proofstep{3}{ \forall x (x \not\in P) }{ \rA }
   \proofstep{2}{ \forall x (x \not\in O \lor x \in P) }{ \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
   \proofstep{3}{ \forall x (x \not\in P \lor x \in O) }{ \FormulaRefAuto{ \forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
-  \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) } }
+  \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) }{4,5} }
   \proofstep{2,3}{ O = P }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } }
   \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
 \end{tabproof}
@@ -301,6 +301,21 @@ Sei \(A\) eine Menge. Eine \textbf{funktionale Relation auf \(A\)} heißt eine M
 \DeltaRow{Funktionale Relationen auf \(A\)}{R}
 }
 
+\FormulaThmDelta{x\in A\dsep y\in A\dsep x=y\vdash R(x)=R(y)}
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A}
+\DeltaRow{Funktionale Relationen auf \(A\)}{R}
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{2}{y\in A}{\rA}
+    \proofstep{3}{x=y}{\rA}
+    \proofstep{1}{(x,R(x))\in R}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{1}}
+    \proofstep{2}{(y,R(y))\in R}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{2}}
+    \proofstep{1,3}{(y,R(x))\in R}{\rIE{3,4}}
+    \proofstep{1,2,3}{R(x)=R(y)}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{6,5}}
+\end{tabproof}
+
 \FormulaThmDelta{x\in A\dsep R(x)=y\vdash (x,y)\in R}
 {
 \DeltaRow{Mengen}{x\dsep y\dsep A}
@@ -356,20 +371,20 @@ Sei \(A\) eine Menge. Eine \textbf{funktionale Relation auf \(A\)} heißt eine M
 }
 
 \FormulaDefDelta[Bildmenge unter \(R\) auf \(A\)]
-{R(A) \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}
+{R[A] \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}
 {
   \DeltaRow{Mengen}{A}
   \DeltaRow{Funktionale Relationen auf \(A\)}{R}
 }
 
-\FormulaThmDelta{y\in R(A)\eqvdash \exists x\in A\,y=R(x)}
+\FormulaThmDelta{y\in R[A]\eqvdash \exists x\in A\,y=R(x)}
 {
   \DeltaRow{Mengen}{x\dsep y\dsep A}
   \DeltaRow{Funktionale Relationen auf \(A\)}{R}
 }
 \begin{tabproof}
-  \proofstep{}{ \forall y\;\bigl( y\in R(A) \leftrightarrow \exists x\in A\,y=R(x)\bigr) }{\FormulaRefAuto{R(A) \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}}
-  \proofstep{}{ y\in R(A) \leftrightarrow \exists x\in A\,y=R(x) }{\rUE{1}}
+  \proofstep{}{ \forall y\;\bigl( y\in R[A] \leftrightarrow \exists x\in A\,y=R(x)\bigr) }{\FormulaRefAuto{R[A] \coloneqq \iota C\Bigl(\forall y\;\bigl( y\in C \leftrightarrow \exists x\in A\,y=R(x) \bigr)\Bigr)}}
+  \proofstep{}{ y\in R[A] \leftrightarrow \exists x\in A\,y=R(x) }{\rUE{1}}
 \end{tabproof}
 
 \section{Auswahlaxiom}
@@ -412,7 +427,7 @@ Auf Methaebene definieren wir für beliebige Mengen \(x\) und \(A\): \[x\not\in 
 In folgenden Abschnitten bezeichnen wir \(A,\, B,\, C\) als Mengen. Für die Elemente von Mengen verwenden wir häufig Kleinbuchstaben als Symbole wie \(x,\, y,\, z\).
 \end{remark}
 
-\section{Ungleichheit von Mengen}
+\chapter{Ungleichheit von Mengen}
 
 \FormulaThmAuto{
 A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\land x\not\in B)
@@ -2612,6 +2627,96 @@ F\colon A \to B
   \proofstep{1}{y=F(x)}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{3,1}}
 \end{tabproof}
 
+\FormulaThmDelta{F(x)=G(x)\dsep (x,y)\in F\vdash (x,y)\in G}{
+\DeltaRow{Mengen}{x\dsep A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{F(x)=G(x)}{\rA}
+  \proofstep{2}{(x,y)\in F}{\rA}
+  \proofstep{2}{y=F(x)}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{2}}
+  \proofstep{1,2}{y=G(x)}{\FormulaRefAuto{a=b, b=c \vdash a=c}{3,1}}
+  \proofstep{2}{x\in A}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{2}}
+  \proofstep{1,2}{(x,y)\in G}{\FormulaRefAuto{x\in A\dsep y=R(x)\vdash (x,y)\in R}{5,4}}
+\end{tabproof}
+
+
+\FormulaThmDelta{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall x\in A (F(x)=G(x))}{\rA}
+  \proofstep{2}{(x,y)\in F}{\rA}
+  \proofstep{2}{x\in A}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{2}}
+  \proofstep{1,2}{F(x)=G(x)}{\rRE{\rUE{1},4}}
+  \proofstep{1,2}{(x,y)\in G}{\FormulaRefAuto{F(x)=G(x)\dsep (x,y)\in F\vdash (x,y)\in G}{5,3}}
+  \proofstep{1}{(x,y)\in F\rightarrow (x,y)\in G}{\rRI{2,6}}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{\rUI{7}}
+\end{tabproof}
+
+
+
+\FormulaThmDelta{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall x\in A (F(x)=G(x))}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{F(x)=G(x)}{\rRE{\rUE{1},2}}
+  \proofstep{1,2}{G(x)=F(x)}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstep{1}{\forall x\in A(G(x)=F(x))}{\rUI{\rRI{2,4}}}
+  \proofstep{1}{\forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{5}}
+\end{tabproof}
+
+\FormulaThmDelta{\forall x\in A (F(x)=G(x)) \eqvdash \forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x\in A (F(x)=G(x))}{\rA}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{1}}
+  \proofstep{1}{\forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{1}}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{2,3}}
+\closeproofpart
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{2}{(x,F(x))\in F}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{2}}
+  \proofstep{1}{(x,F(x))\in F\leftrightarrow (x,F(x))\in G}{\rUI{1}}
+  \proofstep{1,2}{(x,F(x))\in G}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{4,3}}
+  \proofstep{2}{(x,G(x))\in G}{\FormulaRefAuto{x\in A\vdash (R(x) \coloneqq \iota y\,\bigl((x,y)\in R\bigr)}{2}}
+  \proofstep{1,2}{F(x)=G(x)}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{5,6}}
+  \proofstep{1,2}{\forall x\in A(F(x)=G(x))}{\rUI{\rRI{2,7}}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDelta{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproofwide}
+  \proofstepwide{\forall x\in A (F(x)=G(x))}{\leftrightarrow}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}%
+    {\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash \forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}}
+  \proofstepwide{}{\leftrightarrow}{F=G}%
+    {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{1}}
+   \proofstepwide{\forall x\in A (F(x)=G(x))}{\leftrightarrow}{F=G}%
+    {\rChain{1,2}}
+\end{tabproofwide}
+
+\FormulaThmDelta{x\in A\dsep F=G\vdash F(x)=G(x)}{
+\DeltaRow{Mengen}{A\dsep B}
+\DeltaRow{Funktion}{F,G\colon A\to B}
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{2}{F=G}{\rA}
+    \proofstep{2}{\forall x\in A (F(x)=G(x))}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{2}}
+    \proofstep{1,2}{\forall x\in A (F(x)=G(x))}{\rRE{1,\rUI{3}}}
+\end{tabproof}
+
 \FormulaDefDelta[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
 {
 \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
@@ -2634,16 +2739,32 @@ F\colon A \to B
   \AxLine{Existenz als Menge geordneter Paare}{F \subseteq A \times B}
   \AxLine{Funktionale Eindeutigkeit}{(x,y)\in R\dsep (x,z)\in R \vdash y=z}[mit \(R\coloneq F\)]
   \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists y\,(x,y)\in R}[mit \(R\coloneq F\)]
-  \AxLine{Injektivität}{F(x)=F(y)\vdash x=y}
+  \AxLine{Injektivität}{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}
 \end{AxTable}
 \end{definition}
 
 \FormulaAxiomDelta[Injektivität]%
-{F(x)=F(y)\vdash x=y}%
+{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}%
 {
 \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
 \DeltaRow{Funktionen}{F\colon A\to B}
+}[Injektivität]
+
+
+\FormulaThmDelta%
+{(x,z_1)\in F\dsep (y,z_2)\in F\dsep F(x)=F(y)\vdash x=y}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep z_1\dsep z_2\dsep A\dsep B}
+\DeltaRow{Injektive Funktionen}{F\colon A\to B}
 }
+\begin{tabproof}
+  \proofstep{1}{(x,z_1)\in F}{\rA}
+  \proofstep{2}{(y,z_2)\in F}{\rA}
+  \proofstep{3}{F(x)=F(y)}{\rA}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{1}}
+  \proofstep{2}{y\in A}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{2}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{4,5,3}}
+\end{tabproof}
 
 \begin{definition}[Begriff der surjektiven Funktion]
 Seien \(A,B\) Mengen, dann wird der \textbf{Begriff der surjektiven Funktion} als Funktion
@@ -2667,7 +2788,17 @@ F\colon A \to B
 {
 \DeltaRow{Mengen}{y\dsep A\dsep B}
 \DeltaRow{Funktionen}{F\colon A\to B}
-}
+}[Surjektivität]
+
+\begin{theorem}
+Seien \(A,B\) Mengen und \(F\colon A\to B\) eine Funktion, dann ist \(\tilde{F}\colon B\to F[B]\) eine surjektive Funktion.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Surjektivität}{y\in R[A]\eqvdash \exists x\in A\,y=R(x)}
+\end{AxTable}
+\end{theorem}
+
 
 \begin{definition}[Begriff der bijektiven Funktion]
 Seien \(A,B\) Mengen, dann wird der \textbf{Begriff der bijektiven Funktion} als Funktion
@@ -2681,10 +2812,12 @@ F\colon A \to B
   \AxLine{Existenz als Menge geordneter Paare}{F \subseteq A \times B}
   \AxLine{Funktionale Eindeutigkeit}{(x,y)\in R\dsep (x,z)\in R \vdash y=z}[mit \(R\coloneq F\)]
   \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists y\,(x,y)\in R}[mit \(R\coloneq F\)]
-  \AxLine{Injektivität}{F(x)=F(y)\vdash x=y}
+  \AxLine{Injektivität}{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}
   \AxLine{Surjektivität}{y\in B\vdash \exists x\in A\; F(x)=y}
 \end{AxTable}
 \end{definition}
+
+\section{Beispiele von Funktionen}
 
 \subsection{Inverse Relation und Umkehrfunktion}
 
@@ -2704,7 +2837,7 @@ F^{-1} \subseteq B\times A}
 }
 
 \begin{tabproof}
-\proofstep{}{F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}}{\FormulaRefAuto{F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}}}
+\proofstep{}{F^{-1} = \{\, (y,x) \in B \times A \mid (x,y)\in F \}}{\FormulaRefAuto{F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}}}
 \proofstep{}{\{\, (y,x) \in B \times A \mid (x,y)\in F \}\subseteq B\times A}{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
 \proofstep{}{F^{-1}\subseteq B\times A}{\rIE{1,2}}
 \end{tabproof}
@@ -2728,7 +2861,7 @@ F^{-1} \subseteq B\times A}
 \closeproofpart
 \end{tabproofsplit}
 
-\FormulaThmDeltaK[Funktionale eindeutigkeit von \(F^{-1}\)]{(y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}{F injektiv\dsep (y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}
+\FormulaThmDeltaK[Funktionale Eindeutigkeit von \(F^{-1}\)]{(y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}{F injektiv\dsep (y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}
 {
 \DeltaRow{Mengen}{x_1\dsep x_2\dsep y}
 \DeltaRow{Injektive Funktionen}{F}
@@ -2741,7 +2874,7 @@ F^{-1} \subseteq B\times A}
 \proofstep{1}{y=F(x_1)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{3}}
 \proofstep{2}{y=F(x_2)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{4}}
 \proofstep{1,2}{F(x_1)=F(x_2)}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{5,6}}
-\proofstep{1,2}{x_1=x_2}{\FormulaRefAuto{F(x)=F(y)\vdash x=y}{7}}
+\proofstep{1,2}{x_1=x_2}{\FormulaRefAuto{(x,z_1)\in F\dsep (y,z_2)\in F\dsep F(x)=F(y)\vdash x=y}{3,4,7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Totalität auf \(B\)]%
@@ -2773,45 +2906,978 @@ Seien \(A,B\) Mengen und \(F\colon A\to B\) eine bijektive Funktion, dann ist \(
 \end{AxTable}
 \end{theorem}
 
-
-
-\FormulaThmDelta{F \textrm{ bijektiv} \vdash F^{-1}\colon B\to A \textrm{ ist eine Funktion}}
-{
-\DeltaRow{Mengen}{A\dsep B}
-\DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{F \textrm{ bijektiv}}{\rA}
-\end{tabproof}
-
-
-\FormulaAxiomDelta[Injektivität von \(F^{-1}\)]%
-{F^{-1}(x)=F^{-1}(y)\vdash x=y}%
+\FormulaThmDelta[Injektivität von \(F^{-1}\)]%
+{x\in B\dsep y\in B\dsep F^{-1}(x)=F^{-1}(y)\vdash x=y}%
 {
 \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
 \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
 }
+\begin{tabproof}
+  \proofstep{1}{F^{-1}(x)=F^{-1}(y)}{\rA}
+  \proofstep{2}{x\in B}{\rA}
+  \proofstep{3}{y\in B}{\rA}
+  \proofstep{1,2}{(x,F^{-1}(y))\in F^{-1}}{\FormulaRefAuto{x\in A\dsep R(x)=y\vdash (x,y)\in R}{2,1}}
+  \proofstep{1,3}{(y,F^{-1}(x))\in F^{-1}}{\FormulaRefAuto{x\in A\dsep y=R(x)\vdash (x,y)\in R}{3,1}}
+  \proofstep{1,2}{(F^{-1}(y),x)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{4}}
+  \proofstep{1,3}{(F^{-1}(x),y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{5}}
+  \proofstep{1,3}{(F^{-1}(y),y)\in F}{\rIE{1,7}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{(x,y)\in R\dsep (x,z)\in R \vdash y=z}{6,8}}
+\end{tabproof}
 
-
-\FormulaThmAuto[Totalität von \(F^{-1}\)]{%
-\bigl(F \text{ ist surjektiv}\bigr) \;\rightarrow\;
-\bigl(\forall y\in B\;\exists x\in A\; (y,x)\in F^{-1}\bigr)
+\FormulaThmDelta[Surjektivität von \(F^{-1}\)]%
+{x\in A\vdash \exists y\in B\; F^{-1}(y)=x}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Bijektive Funktionen}{F\colon A\to B}
 }
-[Unter der Voraussetzung, dass \(F\) surjektiv ist, gilt: \(F^{-1}\) ist total (auf ganz \(B\)).]
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{\exists y\,(x,y)\in F}{\FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in R}{1}}
+  \proofstep{3}{(x,y)\in F}{\rA}
+  \proofstep{3}{(y,x)\in F^{-1}}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
+  \proofstep{3}{F^{-1}(y)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
+  \proofstep{3}{y\in B}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{4}}
+  \proofstep{3}{\exists y\in B\, F^{-1}(y)=x}{\rEI{\rAI{6,5}}}
+  \proofstep{1}{\exists y\in B\, F^{-1}(y)=x}{\rEE{2,3,7}}
+\end{tabproof}
 
-\FormulaThmAuto[Umkehrfunktion bei Bijektivität]{%
-\bigl(F \text{ ist bijektiv}\bigr) \;\rightarrow\; F^{-1} \text{ ist eine Funktion } B\to A
+\begin{theorem}[\(F^{-1}\) als bijektive Funktion]
+Seien \(A,B\) Mengen und \(F\colon A\to B\) eine bijektive Funktion, dann ist \(F^{-1}\colon B\to A\) eine bijektive Funktion. Die sogenannte Umkehrfunktion von \(F\).
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{F^{-1} \subseteq B\times A}
+  \AxLine{Funktionale Eindeutigkeit}{F injektiv\dsep (y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}
+  \AxLine{Totalität auf \(B\)}{F surjektiv\dsep y\in B\vdash \exists x\, (y,x)\in F^{-1}}
+  \AxLine{Injektivität}{x\in B\dsep y\in B\dsep F^{-1}(x)=F^{-1}(y)\vdash x=y}
+  \AxLine{Surjektivität}{x\in A\vdash \exists y\in B\; F^{-1}(y)=x}
+\end{AxTable}
+\end{theorem}
+
+\FormulaThmDelta
+{x\in A\dsep F(x)=y\vdash F^{-1}(y)=x}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Bijektive Funktionen}{F\colon A\to B}
 }
-[Wenn \(F\colon A \to B\) bijektiv ist, dann ist die inverse Relation \(F^{-1}\) eine Umkehrfunktion von \(B\) nach \(A\).]
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{2}{F(x)=y}{\rA}
+    \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{x\in A\dsep R(x)=y\vdash (x,y)\in R}{1,2}}
+    \proofstep{1,2}{(y,x)\in F^{-1}}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
+    \proofstep{1,2}{F^{-1}(y)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
+\end{tabproof}
 
-\FormulaThmAuto[Rückgängigmachung]{%
-\forall x \in A\; \bigl(F^{-1}(F(x)) = x\bigr)\;\land\;\forall y \in B\; \bigl(F(F^{-1}(y)) = y\bigr)
+\FormulaThmDelta{%
+y\in B \dsep F^{-1}(y)=x \vdash F(x)=y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
 }
-[Wenn \(F\) bijektiv und \(F^{-1}\) die Umkehrfunktion ist, dann hebt sie \(F\) umgekehrt auf.]
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{2}{F^{-1}(y)=x}{\rA}
+
+  % Aus Funktionswert folgt geordnetes Paar in der (Umkehr-)Relation
+  \proofstep{1,2}{(y,x)\in F^{-1}}{\FormulaRefAuto{x\in A\dsep R(x)=y\vdash (x,y)\in R}{1,2}}
+
+  % Inversen-Charakterisierung
+  \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
+
+  % Aus Paar in F folgt Funktionswert
+  \proofstep{1,2}{F(x)=y}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+y\in B \vdash F\bigl(F^{-1}(y)\bigr)=y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{}{F^{-1}(y)=F^{-1}(y)}{\rII}
+
+  % Aus Funktionswert folgt geordnetes Paar in der (Umkehr-)Relation
+  \proofstep{1}{(y,F^{-1}(y))\in F^{-1}}{%
+    \FormulaRefAuto{x\in A \dsep R(x)=y \vdash (x,y)\in R}{1,2}
+  }
+
+  % Inversen-Charakterisierung
+  \proofstep{}{(F^{-1}(y),y)\in F}{%
+    \FormulaRefAuto{(x,y)\in F \eqvdash (y,x)\in F^{-1}}{3}
+  }
+
+  % Aus Paar in F folgt Funktionswert
+  \proofstep{}{F(F^{-1}(y))=y}{%
+    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{4}
+  }
+\end{tabproof}
+
+\FormulaThmDelta{%
+x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{}{F(x)=F(x)}{\rII}
+
+  % Aus Funktionswert folgt (x, F(x)) in F
+  \proofstep{1,2}{(x,F(x))\in F}{%
+    \FormulaRefAuto{x\in A \dsep R(x)=y \vdash (x,y)\in R}{1,2}
+  }
+
+  % Charakterisierung der Inversen
+  \proofstep{}{(F(x),x)\in F^{-1}}{%
+    \FormulaRefAuto{(x,y)\in F \eqvdash (y,x)\in F^{-1}}{3}
+  }
+
+  % Aus Paar in F^{-1} folgt Funktionswert von F^{-1}
+  \proofstep{}{F^{-1}(F(x))=x}{%
+    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{4}
+  }
+\end{tabproof}
+
+\FormulaThmDelta{%
+\forall y\in B\,\bigl(F(G(y))=y\bigr) \vdash G = F^{-1}
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionen}{G\colon B\to A}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall y\in B\,\bigl(F(G(y))=y\bigr)}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{1,2}{F(G(y))=y}{\rRE{\rUE{1},2}}
+  \proofstep{1,2}{F(F^{-1}(y))=y}{\FormulaRefAuto{y\in B \vdash F\bigl(F^{-1}(y)\bigr)=y}{2}}
+  \proofstep{2}{G(y)\in A}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+  \proofstep{2}{F^{-1}(y)\in A}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+  \proofstep{1,2}{G(y)=F^{-1}(y)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{5,6,3,4}}
+  \proofstep{1}{\forall y\,\Bigl(G(y)=F^{-1}(y)\Bigr)}{\rUI{\rRI{2,7}}}
+  \proofstep{1}{G=F^{-1}}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{8}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+\forall x\in A\,\bigl(F^{-1}(G(x))=x\bigr) \vdash G = F
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionen}{G\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall x\in A\,\bigl(F^{-1}(G(x))=x\bigr)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{F^{-1}(G(x))=x}{\rRE{\rUE{1},2}}
+  \proofstep{2}{F^{-1}\bigl(F(x)\bigr)=x}{\FormulaRefAuto{x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x}{2}}
+  \proofstep{2}{G(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{2}}
+  \proofstep{2}{F(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{2}}
+  \proofstep{1,2}{G(y)=F(y)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{5,6,3,4}}
+  \proofstep{1}{\forall y\,\Bigl(G(y)=F(y)\Bigr)}{\rUI{\rRI{2,7}}}
+  \proofstep{1}{G=F}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{8}}
+\end{tabproof}
 
 
-\section{Identität}
+\subsection{Identität}
 
+\subsubsection{Definition der Identität}
+% — Definition —
+\FormulaDefDelta[Identitätsrelation auf \(A\)]{%
+\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+
+% — Grundlegende Eigenschaften der Menge —
+\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
+\Id_A \subseteq A \times A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    \Id_A = \{\, (x,y) \in A \times A \mid x = y \,\}
+  }{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}}}
+  \proofstep{}{%
+    \{\, (x,y) \in A \times A \mid x = y \,\} \subseteq A \times A
+  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
+  \proofstep{}{%
+    \Id_A \subseteq A \times A
+  }{\rIE{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+(x,y)\in \Id_A \vdash x\in A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    (x,y)\in \Id_A
+  }{\rA}
+  \proofstep{1}{(x,y)\in \{\, (x,y) \in A \times A \mid x = y \,\}}{\rIE{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}},1}}
+  \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{2}}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{3}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+(x,y)\in \Id_A \vdash y\in A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    (x,y)\in \Id_A
+  }{\rA}
+  \proofstep{1}{(x,y)\in \{\, (x,y) \in A \times A \mid x = y \,\}}{\rIE{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}},1}}
+  \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{2}}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
+\end{tabproof}
+
+
+% — Charakterisierung der Elemente —
+\FormulaThmDelta{%
+(x,y)\in \Id_A \vdash x = y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+    \proofstep{1}{(x,y)\in \Id_A}{\rA}
+    \proofstep{1}{x=y}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+(x,y)\in \Id_A \vdash y = x
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+    \proofstep{1}{(x,y)\in \Id_A}{\rA}
+    \proofstep{1}{x=y}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
+    \proofstep{1}{y=x}{\FormulaRefAuto{a = b \vdash b = a}{1}}
+\end{tabproof}
+
+% — Charakterisierung der Elemente —
+\FormulaThmDelta{%
+x\in A\dsep x=y \vdash (x,y)\in \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{1}{x=y}{\rA}
+    \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{1,1}}
+    \proofstep{1}{(x,y)\in  \{\, (x,y) \in A \times A \mid x = y \,\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{3,2}}
+    \proofstep{1}{(x,y)\in  \Id_A}{\rIE{\FormulaRefAuto{%
+\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}
+},4}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+ (x,y)\in \Id_A\eqvdash x\in A\land x=y 
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{(x,y)\in \Id_A}{\rA}
+    \proofstep{1}{x\in A}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x\in A}{1}}
+    \proofstep{1}{x=y}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
+    \proofstep{1}{x\in A\land x=y}{\rAI{2,3}}
+  \closeproofpart
+    \proofpart{\(\dashv\)}
+    \proofstep{1}{x\in A\land x=y}{\rA}
+    \proofstep{1}{x\in A}{\rAEa{1}}
+    \proofstep{1}{x=y}{\rAEb{1}}
+    \proofstep{1}{(x,y)\in \Id_A}{\FormulaRefAuto{x\in A\dsep x=y \vdash (x,y)\in \Id_A}{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDelta{%
+ x\in A\land x=y\eqvdash y\in A\land y=x 
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproofsplit}
+    \proofpart{\(\vdash\)}
+    \proofstep{1}{x\in A\land x=y}{\rA}
+    \proofstep{1}{x\in A}{\rAEa{1}}
+    \proofstep{1}{x=y}{\rAEb{1}}
+    \proofstep{1}{y\in A}{\rIE{3,2}}
+    \proofstep{1}{y=x}{\FormulaRefAuto{a = b \vdash b = a}{3}}
+    \proofstep{1}{y\in A\land y=x}{\rAI{4,5}}
+  \closeproofpart
+    \proofpart{\(\dashv\)}
+    \proofstep{1}{y\in A\land y=x}{\rA}
+    \proofstep{1}{y\in A}{\rAEa{1}}
+    \proofstep{1}{y=x}{\rAEb{1}}
+    \proofstep{1}{x\in A}{\rIE{3,2}}
+    \proofstep{1}{x=y}{\FormulaRefAuto{a = b \vdash b = a}{3}}
+    \proofstep{1}{x\in A\land x=y}{\rAI{4,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDelta{%
+ (x,y)\in \Id_A\eqvdash (y,x)\in \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproofwide}
+  \proofstepwide{(x,y)\in \Id_A}{\leftrightarrow}{x\in A\land x=y}%
+    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash x\in A\land x=y}}
+  \proofstepwide{}{\leftrightarrow}{y\in A\land y=x}%
+    {\FormulaRefAuto{x\in A\land x=y\eqvdash y\in A\land y=x}}
+   \proofstepwide{}{\leftrightarrow}{(y,x)\in \Id_A}%
+    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash x\in A\land x=y}}   
+   \proofstepwide{(x,y)\in \Id_A}{\leftrightarrow}{(y,x)\in \Id_A}%
+    {\rChain{1,3}}  
+\end{tabproofwide}
+
+
+\FormulaThmDelta{%
+x\in A \vdash (x,x)\in \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep A}
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{1}{x=x}{\rII}
+    \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A\dsep x=y \vdash (x,y)\in \Id_A}{1,2}}
+\end{tabproof}
+
+% — Totalität (Zeugen durch Gleichheit) —
+\FormulaThmDelta[Totalität auf \(A\)]{%
+x\in A \vdash \exists y\, (x,y)\in \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
+  \proofstep{1}{\exists y\, (x,y)\in \Id_A}{\rEI{2}}
+\end{tabproof}
+
+% — Funktionale Eindeutigkeit —
+\FormulaThmDelta[Funktionale Eindeutigkeit der \(\Id_A\)]{%
+(x,y_1)\in \Id_A \dsep (x,y_2)\in \Id_A \vdash y_1 = y_2
+}{
+  \DeltaRow{Mengen}{x \dsep y_1 \dsep y_2 \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y_1)\in \Id_A}{\rA}
+  \proofstep{2}{(x,y_2)\in \Id_A}{\rA}
+  \proofstep{1}{x=y_1}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
+  \proofstep{2}{x=y_2}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{2}}
+  \proofstep{1,2}{y_1=y_2}{\FormulaRefAuto{a=b, a=c \vdash b=c}{3,4}}
+\end{tabproof}
+
+% — Identität als Funktion —
+\begin{theorem}[\(\Id_A\) als Funktion]
+Sei \(A\) eine Menge. Dann ist \(\Id_A\) eine Funktion \(\Id_A\colon A\to A\).
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{\Id_A \subseteq A\times A}
+  \AxLine{Funktionale Eindeutigkeit}{(x,y_1)\in \Id_A \dsep (x,y_2)\in \Id_A \vdash y_1=y_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists y\, (x,y)\in \Id_A}
+\end{AxTable}
+\end{theorem}
+
+% — Injektivität und Surjektivität —
+\FormulaThmDelta[Injektivität von \(\Id_A\)]{%
+x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{\Id_A(x)=\Id_A(y)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{2}{(x,\Id_A(x))\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{2}}
+  \proofstep{3}{(y,\Id_A(y))\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{3}}
+  \proofstep{2}{x=\Id_A(x)}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{4}}
+  \proofstep{3}{y=\Id_A(y)}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{5}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{a = b\dsep c = a\dsep d = b \vdash c = d}{1,6,7}}
+\end{tabproof}
+
+\FormulaThmDelta[Surjektivität von \(\Id_A\)]{%
+x\in A \vdash \exists y\in A\; \Id_A(y)=x
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
+  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{2}}
+  \proofstep{1}{\exists y\in A\; \Id_A(y)=x}{\rEI{\rAI{1,3}}}
+\end{tabproof}
+
+\begin{theorem}[\(\Id_A\) als bijektive Funktion]
+Sei \(A\) eine Menge. Dann ist \(\Id_A\colon A\to A\) bijektiv.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{\Id_A \subseteq A\times A}
+  \AxLine{Funktionale Eindeutigkeit}{(x,y_1)\in \Id_A \dsep (x,y_2)\in \Id_A \vdash y_1=y_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists y\, (x,y)\in \Id_A}
+  \AxLine{Injektivität}{x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y}
+  \AxLine{Surjektivität}{x\in A \vdash \exists y\in A\; \Id_A(y)=x}
+\end{AxTable}
+\end{theorem}
+
+\FormulaThmDelta{%
+(x,y)\in \Id_A^{-1}\eqvdash (x,y)\in \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproofwide}
+  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(y,x)\in \Id_A}%
+    {\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}}
+  \proofstepwide{}{\leftrightarrow}{(x,y)\in \Id_A}%
+    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash (y,x)\in \Id_A}} 
+  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(x,y)\in \Id_A}%
+    {\rChain{1,2}} 
+\end{tabproofwide}
+
+% — Eigeninvers-Eigenschaft —
+\FormulaThmDelta[Eigeninversität von \(\Id_A\)]{%
+\Id_A^{-1}=\Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproofwide}
+  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(x,y)\in \Id_A}{\FormulaRefAuto{(x,y)\in \Id_A^{-1}\eqvdash (x,y)\in \Id_A}}
+  \proofstepwide{\Id_A^{-1}}{=}{\Id_A}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+\end{tabproofwide}
+
+% — Fixpunkteigenschaft der Identität —
+\FormulaThmDelta[Fixpunkteigenschaft]{%
+x\in A \vdash \Id_A(x)=x
+}{
+  \DeltaRow{Mengen}{x \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
+  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{2}}
+\end{tabproof}
+
+\subsection{Komposition}
+
+\subsubsection{Definition der Komposition}
+
+% — Definition —
+\FormulaDefDelta[Komposition]{%
+G\circ F := \bigl\{\, (x,z) \in A \times C \mid z = G(F(x)) \,\bigr\}
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+
+\subsubsection{Die Komposition als Funktion}
+
+% — Existenz als Menge geordneter Paare —
+\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
+G\circ F \subseteq A \times C
+}{
+  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    G\circ F = \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}
+  }{\FormulaRefAuto{G\circ F := \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}}}
+  \proofstep{}{%
+    \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\} \subseteq A \times C
+  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
+  \proofstep{}{G\circ F \subseteq A \times C}{\rIE{1,2}}
+\end{tabproof}
+
+% — Typisierung der Elemente —
+\FormulaThmDelta{%
+(x,z)\in G\circ F \vdash x\in A \land z\in C
+}{
+  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,z)\in G\circ F}{\rA}
+  \proofstep{1}{(x,z)\in A\times C}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{1}}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{2}}
+  \proofstep{1}{z\in C}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{2}}
+  \proofstep{1}{x\in A\land z\in C}{\rAI{3,4}}
+\end{tabproof}
+
+% — Charakterisierung des Bildpaares —
+\FormulaThmDelta{%
+(x,z)\in G\circ F \vdash z = G(F(x))
+}{
+  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,z)\in G\circ F}{\rA}
+  \proofstep{1}{z=G(F(x))}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+x\in A \vdash (x,G(F(x)))\in G\circ F
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+  \proofstep{1}{G(F(x))\in C}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+  \proofstep{1}{(x,G(F(x)))\in A\times C}{\FormulaRefAuto{a\in A,b\in B\vdash (a,b)\in A\times B}{1,3}}
+  \proofstep{}{G(F(x))=G(F(x))}{\rII}
+  \proofstep{1}{(x,G(F(x)))\in \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{4,5}}
+  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\rIE{\FormulaRefAuto{G\circ F := \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}},3}}
+\end{tabproof}
+4
+% — Funktionale Eindeutigkeit der Komposition —
+\FormulaThmDelta[Funktionale Eindeutigkeit von \(G\circ F\)]{%
+(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2
+}{
+  \DeltaRow{Mengen}{x \dsep z_1 \dsep z_2 \dsep A \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,z_1)\in G\circ F}{\rA}
+  \proofstep{2}{(x,z_2)\in G\circ F}{\rA}
+  \proofstep{1}{z_1=G(F(x))}{\FormulaRefAuto{(x,z)\in G\circ F \vdash z = G(F(x))}{1}}
+  \proofstep{2}{z_2=G(F(x))}{\FormulaRefAuto{(x,z)\in G\circ F \vdash z = G(F(x))}{2}}
+  \proofstep{1,2}{z_1=z_2}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{3,4}}
+\end{tabproof}
+
+% — Totalität auf A —
+\FormulaThmDelta[Totalität auf \(A\)]{%
+x\in A \vdash \exists z\, (x,z)\in G\circ F
+}{
+  \DeltaRow{Mengen}{x \dsep z \dsep A}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\FormulaRefAuto{x\in A \vdash (x,G(F(x)))\in G\circ F}{1}}
+  \proofstep{1}{\exists z\, (x,z)\in G\circ F}{\rEI{2}}
+\end{tabproof}
+
+% — Komposition als Funktion —
+\begin{theorem}[\(G\circ F\) als Funktion]
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\) und \(G\colon B\to C\) Funktionen. Dann ist \(G\circ F\colon A\to C\) eine Funktion.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{G\circ F \subseteq A\times C}
+  \AxLine{Funktionale Eindeutigkeit}{(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists z\, (x,z)\in G\circ F}
+\end{AxTable}
+\end{theorem}
+
+\subsubsection{Die Auswertungseigenschaft}
+
+\FormulaThmDelta{%
+x\in A\dsep y\in A\dsep G(F(x))=G(F(y))\vdash (G\circ F)(x)=(G\circ F)(y)
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+\proofstep{1}{x\in A}{\rA}
+\proofstep{2}{y\in A}{\rA}
+\proofstep{3}{G(F(x))=G(F(y))}{\rA}
+\proofstep{1}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+\proofstep{2}{(G\circ F)(y)=G(F(y))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{2}}
+\proofstep{3}{(G\circ F)(x)=G(F(y))}{\rIE{4,3}}
+\proofstep{3}{(G\circ F)(x)=(G\circ F)(y)}{\rIE{5,6}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+x\in A\dsep y\in A\dsep (G\circ F)(x)=(G\circ F)(y) \vdash G(F(x))=G(F(y))
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{y\in A}{\rA}
+  \proofstep{3}{(G\circ F)(x)=(G\circ F)(y)}{\rA}
+
+  \proofstep{1}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstep{2}{(G\circ F)(y)=G(F(y))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{2}}
+
+  \proofstep{3}{G(F(x))=(G\circ F)(y)}{\rIE{4,3}}
+  \proofstep{3}{G(F(x))=G(F(y))}{\rIE{5,6}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+x\in A \vdash (G\circ F)(x)=G(F(x))
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\FormulaRefAuto{x\in A \vdash (x,G(F(x)))\in G\circ F}{1}}
+  \proofstep{1}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{2}}
+\end{tabproof}
+
+\subsubsection{Erhalt der Injektivität}
+
+% — Erhalt von Injektivität / Surjektivität / Bijektivität —
+\FormulaThmDelta[Erhalt der Injektivität]{%
+x\in A \dsep y\in A \dsep (G\circ F)(x)=(G\circ F)(y) \vdash x=y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
+  \DeltaRow{Injektive Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{(G\circ F)(x)=(G\circ F)(y)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{2}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+  \proofstep{3}{F(y)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{3}}
+  \proofstep{1}{G(F(x))=G(F(y))}{\rIE{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))},1}}
+  \proofstep{1,2,3}{F(x)=F(y)}{\FormulaRefAuto{Injektivität}{4,5,6}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{Injektivität}{2,3,7}}
+\end{tabproof}
+
+\begin{theorem}[\(G\circ F\) als injektive Funktion]
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\) und \(G\colon B\to C\) injektive Funktionen. Dann ist \(G\circ F\colon A\to C\) eine injektive Funktion.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{G\circ F \subseteq A\times C}
+  \AxLine{Funktionale Eindeutigkeit}{(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists z\, (x,z)\in G\circ F}
+  \AxLine{Injektivität}{x\in A \dsep y\in A \dsep (G\circ F)(x)=(G\circ F)(y) \vdash x=y}
+\end{AxTable}
+\end{theorem}
+
+\subsubsection{Erhalt der Surjektivität}
+
+\FormulaThmDelta[Erhalt der Surjektivität]{%
+z\in C \vdash \exists x\in A\, (G\circ F)(x)=z
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B \dsep C}
+  \DeltaRow{Surjektive Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{z\in C}{\rA}
+  \proofstep{1}{\exists y\in B\, G(y)=z}{\FormulaRefAuto{Surjektivität}{1}} % (Schema: Surj. von G)
+  \proofstep{3}{y\in B \land G(y)=z}{\rA}
+  \proofstep{3}{y\in B}{\rAEa{3}}
+  \proofstep{3}{G(y)=z}{\rAEb{3}}
+  \proofstep{3}{\exists x\in A\, F(x)=y}{\FormulaRefAuto{y\in B \vdash \exists x\in A\, F(x)=y}{4}}
+  \proofstep{7}{x\in A \land F(x)=y}{\rA}
+  \proofstep{7}{x\in A}{\rAEa{7}}
+  \proofstep{7}{F(x)=y}{\rAEb{7}}
+  \proofstep{3,7}{G(F(x))=z}{\rIE{9,5}}
+  \proofstep{3,7}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{8}}
+  \proofstep{3,7}{(G\circ F)(x)=z}{\rIE{11,10}}
+  \proofstep{3,7}{\exists x\in A\,(G\circ F)(x)=z}{\rEI{\rAI{8,12}}}
+  \proofstep{3}{\exists x\in A\,(G\circ F)(x)=z}{\rEE{6,7,13}}
+  \proofstep{1}{\exists x\in A\,(G\circ F)(x)=z}{\rEE{2,3,14}}
+\end{tabproof}
+
+\begin{theorem}[\(G\circ F\) als surjektive Funktion]
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\) und \(G\colon B\to C\) surjektive Funktionen. Dann ist \(G\circ F\colon A\to C\) eine surjektive Funktion.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{G\circ F \subseteq A\times C}
+  \AxLine{Funktionale Eindeutigkeit}{(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists z\, (x,z)\in G\circ F}
+  \AxLine{Surjektivität}{z\in C \vdash \exists x\in A\, (G\circ F)(x)=z}
+\end{AxTable}
+\end{theorem}
+
+\subsubsection{Erhalt der Bijektivität}
+
+\begin{theorem}[\(G\circ F\) als bijektive Funktion]
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\) und \(G\colon B\to C\) bijektive Funktionen. Dann ist \(G\circ F\colon A\to C\) eine bijektive Funktion.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Existenz als Menge geordneter Paare}{G\circ F \subseteq A\times C}
+  \AxLine{Funktionale Eindeutigkeit}{(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2}
+  \AxLine{Totalität auf \(A\)}{x\in A \vdash \exists z\, (x,z)\in G\circ F}
+  \AxLine{Injektivität}{x\in A \dsep y\in A \dsep (G\circ F)(x)=(G\circ F)(y) \vdash x=y}
+  \AxLine{Surjektivität}{z\in C \vdash \exists x\in A\, (G\circ F)(x)=z}
+\end{AxTable}
+\end{theorem}
+
+\subsubsection{Rechenregeln}
+
+\FormulaThmDelta{%
+G = H \vdash F\circ G = F\circ H
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep C \dsep D}
+  \DeltaRow{Funktionen}{G,H\colon A\to B \dsep F\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{G=H}{\rA}
+  \proofstep{}{F\circ G=F\circ G}{\rII}
+  \proofstep{}{F\circ G=F\circ H}{\rIE{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+G = H \vdash G\circ F = H\circ F
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G,H\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{G=H}{\rA}
+  \proofstep{}{G\circ F=G\circ F}{\rII}
+  \proofstep{}{G\circ F=H\circ F}{\rIE{1,2}}
+\end{tabproof}
+
+% — Assoziativität der Komposition —
+\FormulaThmDelta[Assoziativität]{%
+H\circ (G\circ F) = (H\circ G)\circ F
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep C \dsep D}
+  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C \dsep H\colon C\to D}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[1]{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+  \proofstepwidestar[1]{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstepwide[1]{(H\circ(G\circ F))(x)}{=}{H((G\circ F)(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstepwide[1]{}{=}{H(G(F(x)))}{\rIE{3,4}}
+  \proofstepwide[1]{}{=}{(H\circ G)(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{2}}
+  \proofstepwide[1]{}{=}{((H\circ G)\circ F)(x)}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstepwide[1]{(H\circ(G\circ F))(x)}{=}{((H\circ G)\circ F)(x)}{\rChain{4,7}}
+  \proofstepwide[]{\forall x\in A\,((H\circ(G\circ F))(x)}{=}{((H\circ G)\circ F)(x))}{\rUI{\rRI{1,8}}}
+  \proofstepwide[]{H\circ (G\circ F)}{=}{(H\circ G)\circ F}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{9}}
+\end{tabproofwide}
+
+% — Linksneutralität —
+\FormulaThmDelta[Linksneutralität]{%
+\Id_B \circ F = F
+}{
+  \DeltaRow{Mengen}{A \dsep B}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[1]{F(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{1}}
+
+  \proofstepwide[1]{(\Id_B\circ F)(x)}{=}{\Id_B(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstepwide[1]{}{=}{F(x)}{\FormulaRefAuto{x\in A \vdash \Id_A(x)=x}{3}}
+  \proofstepwide[1]{(\Id_B\circ F)(x)}{=}{F(x)}{\rChain{3,4}}
+  
+  \proofstepwide[]{\forall x\in A\,\bigl((\Id_B\circ F)(x)}{=}{F(x)\bigr)}{\rUI{\rRI{1,5}}}
+  \proofstepwide[]{\Id_B\circ F}{=}{F}{\FormulaRefAuto{\forall x\in A\,(F(x)=G(x)) \eqvdash F=G}{6}}
+\end{tabproofwide}
+
+% — Rechtsneutralität —
+\FormulaThmDelta[Rechtsneutralität]{%
+F \circ \Id_A = F
+}{
+  \DeltaRow{Mengen}{A \dsep B}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+
+  % Fixpunkteigenschaft der Identität auf A
+  \proofstepwidestar[1]{\Id_A(x)=x}{\FormulaRefAuto{x\in A \vdash \Id_A(x)=x}{1}}
+
+  % Komposition auswerten
+  \proofstepwide[1]{(F\circ \Id_A)(x)}{=}{F(\Id_A(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+
+  % Ersetze \Id_A(x) durch x
+  \proofstepwide[1]{}{=}{F(x)}{\rIE{2,3}}
+
+  \proofstepwide[1]{(F\circ \Id_A)(x)}{=}{F(x)}{\rChain{3,4}}
+  
+  % Verallgemeinern und Extensionalität
+  \proofstepwide[]{\forall x\in A\,\bigl((F\circ \Id_A)(x)}{=}{F(x)\bigr)}{\rUI{\rRI{1,5}}}
+  \proofstepwide[]{F\circ \Id_A}{=}{F}{\FormulaRefAuto{\forall x\in A\,(F(x)=G(x)) \eqvdash F=G}{6}}
+\end{tabproofwide}
+
+\FormulaThmDelta{%
+F\circ F^{-1} = \Id_B
+}{
+  \DeltaRow{Mengen}{A \dsep B}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+    \proofstep{1}{y\in B}{\rA}
+    \proofstep{1}{F(F^{-1}(y))=y}{\FormulaRefAuto{y\in B \vdash F\bigl(F^{-1}(y)\bigr)=y}{1}}
+    \proofstep{1}{(F\circ F^{-1})(y)=F(F^{-1}(y))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{2}}
+    \proofstep{1}{(F\circ F^{-1})(y)=y}{\rIE{2,3}}
+    \proofstep{1}{\Id_B(y)=y}{\FormulaRefAuto{x\in A \vdash \Id_A(x)=x}{1}}
+    \proofstep{1}{(F\circ F^{-1})(y)=\Id_B(y)}{\rIE{4,5}}
+    \proofstep{1}{\forall y\in B\,(F\circ F^{-1})(y)=\Id_B(y)}{\rUI{\rRI{1,6}}}
+    \proofstep{1}{F\circ F^{-1}=\Id_B}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{7}}    
+\end{tabproof}
+
+\FormulaThmDelta{%
+F^{-1}\circ F = \Id_A
+}{
+  \DeltaRow{Mengen}{x \dsep A \dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{F^{-1}(F(x))=x}{\FormulaRefAuto{x\in A \vdash F^{-1}(F(x))=x}{1}}
+  \proofstep{1}{(F^{-1}\circ F)(x)=F^{-1}(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+  \proofstep{1}{(F^{-1}\circ F)(x)=x}{\rIE{2,3}}
+  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{x\in A \vdash \Id_A(x)=x}{1}}
+  \proofstep{1}{(F^{-1}\circ F)(x)=\Id_A(x)}{\rIE{4,5}}
+  \proofstep{ }{\forall x\in A\,\bigl((F^{-1}\circ F)(x)=\Id_A(x)\bigr)}{\rUI{\rRI{1,6}}}
+  \proofstep{ }{F^{-1}\circ F=\Id_A}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{7}}
+\end{tabproof}
+
+% Inversenformel für Kompositionen
+\FormulaThmDelta[Inverse der Komposition]{%
+ G^{-1}\circ F^{-1} = (F\circ G)^{-1}
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
+  \DeltaRow{Bijektive Funktionen}{G\colon A\to B \dsep F\colon B\to C}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[1]{G(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{1}}
+  \proofstepwidestar[1]{F(G(x))\in C}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{2}}
+
+  \proofstepwidestar[1]{(F\circ G)(x)=F(G(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{1}}
+
+  \proofstepwidestar[1]{F^{-1}(F(G(x)))=G(x)}{\FormulaRefAuto{x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x}{2}}
+
+  \proofstepwidestar[1]{G^{-1}(G(x))=x}{\FormulaRefAuto{x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x}{1}}
+
+    
+  \proofstepwide[1]{(G^{-1}\circ F^{-1})((F\circ G)(x))}{=}{(G^{-1}\circ F^{-1})(F(G(x)))}{\rIE{4,7}}
+  \proofstepwide[1]{}{=}{G^{-1}(F^{-1}(F(G(x))))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{3}}
+
+  \proofstepwide[1]{}{=}{G^{-1}(G(x))}{\rIE{5,9}}
+  \proofstepwide[1]{}{=}{x}{\rIE{6,10}}
+  \proofstepwide[1]{(G^{-1}\circ F^{-1})((F\circ G)(x))}{=}{x}{\rChain{7,10}}
+  \proofstepwidestar[]{\forall x\in A\, \bigl((F\circ G)(G^{-1}\circ F^{-1})(y)=y\bigr)}{\rUI{\rRI{1,11}}}
+
+  \proofstepwidestar[]{\forall x\in A\, \bigl((F\circ G)(G^{-1}\circ F^{-1})(y)=y\bigr)}{\rUI{\rRI{1,11}}}
+
+  \proofstepwidestar[]{(G^{-1}\circ F^{-1})=(F\circ G)^{-1}}{\FormulaRefAuto{\forall y\in B\,\bigl(F(G(y))=y\bigr) \vdash G = F^{-1}}{13}}
+\end{tabproofwide}
+
+\subsubsection{Eigenschaften der Komponenten}
+
+\FormulaThmDeltaK{%
+x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y
+}{G\circ F\colon A\to C bijektiv\dsep x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Bijektive Funktionen}{G\circ F\colon A\to C }
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{2}{y\in A}{\rA}
+    \proofstep{3}{F(x)=F(y)}{\rA}
+    \proofstep{1}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+    \proofstep{2}{F(y)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+    \proofstep{1,2,3}{G(F(x))=G(F(y))}{\FormulaRefAuto{x\in A\dsep y\in A\dsep x=y\vdash R(x)=R(y)}{4,5,3}}
+    \proofstep{1,2,3}{(G\circ F)(x)=(G\circ F)(y)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep G(F(x))=G(F(y))\vdash (G\circ F)(x)=(G\circ F)(y)}{6}}
+    \proofstep{1,2,3}{x=y}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{7}}
+\end{tabproof}
+
+\FormulaThmDeltaK{%
+y\in C\vdash \exists x\in B\; G(x)=y
+}{G\circ F\colon A\to C bijektiv\dsep y\in C\vdash \exists x\in B\; G(x)=y}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Bijektive Funktionen}{G\circ F\colon A\to C }
+}
+\begin{tabproof}
+    \proofstep{1}{y\in C}{\rA}
+    \proofstep{1}{\exists x\in A\, (G\circ F)(x)=y}{\FormulaRefAuto{y\in B\vdash \exists x\in A\; F(x)=y}{1}}
+    \proofstep{3}{x\in A\land (G\circ F)(x)=y}{\rA}
+    \proofstep{3}{x\in A}{\rAEa{3}}
+    \proofstep{3}{(G\circ F)(x)=y}{\rAEb{3}}
+    \proofstep{3}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{4}}
+    \proofstep{3}{G(F(x))=y}{\rEE{6,5}}
+    \proofstep{3}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{4}}
+    \proofstep{3}{F(x)\in B\land G(F(x))=y}{\rAI{8,7}}
+    \proofstep{3}{\exists x\in B\, G(x)=y}{\rEI{9}}
+    \proofstep{1}{\exists x\in B\, G(x)=y}{\rEE{2,3,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK{%
+x\in B\dsep y\in B\dsep G(x)=G(y)\vdash x=y
+}{G\circ F\colon A\to C bijektiv\dsep F\colon A\to B surjektiv\dsep x\in B\dsep y\in B\dsep G(x)=G(y)\vdash x=y}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{G\colon B\to C}
+  \DeltaRow{Surjektive Funktionen}{F\colon A\to B}
+  \DeltaRow{Bijektive Funktionen}{G\circ F\colon A\to C }
+}
+\begin{tabproof}
+    \proofstep{1}{x\in B}{\rA}
+    \proofstep{2}{y\in B}{\rA}
+    \proofstep{3}{G(x)=G(y)}{\rA}
+    \proofstep{1}{\exists u\in A\,F(u)=x}{\FormulaRefAuto{y\in B\vdash \exists x\in A\; F(x)=y}{1}}
+    \proofstep{2}{\exists v\in A\,F(v)=y}{\FormulaRefAuto{y\in B\vdash \exists x\in A\; F(x)=y}{2}}
+    \proofstep{6}{u\in A\land F(u)=x}{\rA}
+    \proofstep{6}{u\in A}{\rAEa{6}}
+    \proofstep{6}{F(u)=x}{\rAEb{6}}
+    \proofstep{9}{v\in A\land F(v)=y}{\rA}
+    \proofstep{9}{v\in A}{\rAEa{9}}
+    \proofstep{9}{F(v)=y}{\rAEb{9}}
+    \proofstep{3,6,9}{G(F(u))=G(F(v))}{\rIE{9,\rIE{8,3}}}
+    \proofstep{3,6,9}{(G\circ F)(u)=(G\circ F)(v)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep (G\circ F)(x)=(G\circ F)(y) \vdash G(F(x))=G(F(y))}{7,10,13}}
+    \proofstep{3,6,9}{u=v}{\FormulaRefAuto{x\in A \dsep y\in A \dsep (G\circ F)(x)=(G\circ F)(y) \vdash x=y}{7,10,14}}
+    \proofstep{3,6,9}{F(u)=F(v)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep x=y\vdash R(x)=R(y)}{7,10,14}}
+    \proofstep{3,6,9}{x=y}{\rIE{11,\rIE{8,15}}}
+    \proofstep{1,3,9}{x=y}{\rEE{4,6,16}}
+    \proofstep{1,2,3}{x=y}{\rEE{5,9,17}}
+\end{tabproof}
+
+\begin{theorem}
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\), \(G\colon B\to C\)  Funktionen und \(G\circ F\colon A\to C\) eine bijektive Funktion. Dann ist \(F\) injektiv.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Injektivität}{G\circ F\colon A\to C bijektiv\dsep x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}
+\end{AxTable}
+\end{theorem}
+
+\begin{theorem}
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\), \(G\colon B\to C\)  Funktionen und \(G\circ F\colon A\to C\) eine bijektive Funktion. Dann ist \(G\) surjektiv.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Surjektivität}{G\circ F\colon A\to C bijektiv\dsep y\in C\vdash \exists x\in B\; G(x)=y}
+\end{AxTable}
+\end{theorem}
+
+\begin{theorem}
+Seien \(A,B,C\) Mengen, \(F\colon A\to B\) eine surjektive Funktion, \(G\colon B\to C\) eine Funktionen und \(G\circ F\colon A\to C\) eine bijektive Funktion. Dann ist \(G\) bijektiv.
+
+\noindent\textbf{Herleitung der Eigenschaften}
+\begin{AxTable}
+  \AxLine{Injektivität}{G\circ F\colon A\to C bijektiv\dsep F\colon A\to B surjektiv\dsep x\in B\dsep y\in B\dsep G(x)=G(y)\vdash x=y}
+  \AxLine{Surjektivität}{G\circ F\colon A\to C bijektiv\dsep y\in C\vdash \exists x\in B\; G(x)=y}
+\end{AxTable}
+\end{theorem}
+
+
+
+\FormulaRefAuto{G\circ F\colon A\to C bijektiv\dsep x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{1}
+
+
+
+
+\FormulaThmDelta{%
+F\circ G = \Id_A \vdash G=F^{-1}
+}{
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Bijektive Funktionen}{G\colon A\to B \dsep F\colon B\to C}
+}
 
 \chapter{Konstruktion der natürlichen Zahlen}
 

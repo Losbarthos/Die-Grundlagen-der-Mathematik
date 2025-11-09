@@ -496,7 +496,8 @@ spacebelow=\topsep
   }
 
 % ---------- DeltaK: [Titel]{Formel}{AltKey}{Δ-Zeilen}[Alias] ----------
-\NewDocumentCommand{\FormulaThmDeltaK}{ O{} m m +m o }
+% --- Theorem (DeltaK) ---
+\NewDocumentCommand{\FormulaThmDeltaK}{ o m m +m o }
   {
     \sanitize{#2}\edef\labMain{\temp}
     \sanitize{#3}\edef\labAlt{\temp}
@@ -511,7 +512,9 @@ spacebelow=\topsep
         { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }
     }
 
-    \begin{theorem}[#1]\label{\labFull}
+    \IfNoValueTF{#1}
+      {\begin{theorem}\label{\labFull}}
+      {\begin{theorem}[#1]\label{\labFull}}
       \DeltaBlockFromRows{#4}%
       {%
         \abovedisplayskip=.6\baselineskip
@@ -525,7 +528,8 @@ spacebelow=\topsep
     \end{theorem}
   }
 
-\NewDocumentCommand{\FormulaDefDeltaK}{ O{} m m +m o }
+% --- Definition (DeltaK) ---
+\NewDocumentCommand{\FormulaDefDeltaK}{ o m m +m o }
   {
     \sanitize{#2}\edef\labMain{\temp}
     \sanitize{#3}\edef\labAlt{\temp}
@@ -540,7 +544,9 @@ spacebelow=\topsep
         { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }
     }
 
-    \begin{definition}[#1]\label{\labFullD}
+    \IfNoValueTF{#1}
+      {\begin{definition}\label{\labFullD}}
+      {\begin{definition}[#1]\label{\labFullD}}
       \DeltaBlockFromRows{#4}%
       {%
         \abovedisplayskip=.6\baselineskip
@@ -554,7 +560,8 @@ spacebelow=\topsep
     \end{definition}
   }
 
-\NewDocumentCommand{\FormulaAxiomDeltaK}{ O{} m m +m o }
+% --- Axiom (DeltaK) ---
+\NewDocumentCommand{\FormulaAxiomDeltaK}{ o m m +m o }
   {
     \sanitize{#2}\edef\labMain{\temp}
     \sanitize{#3}\edef\labAlt{\temp}
@@ -569,7 +576,9 @@ spacebelow=\topsep
         { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }
     }
 
-    \begin{axiom}[#1]\label{\labFullA}
+    \IfNoValueTF{#1}
+      {\begin{axiom}\label{\labFullA}}
+      {\begin{axiom}[#1]\label{\labFullA}}
       \DeltaBlockFromRows{#4}%
       {%
         \abovedisplayskip=.6\baselineskip
@@ -783,12 +792,20 @@ spacebelow=\topsep
 \newcounter{proofstepnr}
 
 % Ersatz für tabproof: Beweis-Kopf selbst setzen, longtable auf Top-Level
+\newcommand{\ProofGap}{.5em} % zentrale Lücke (nach Bedarf anpassen)
+\newcolumntype{G}{@{\hspace{\ProofGap}}} % interkolumnarer Spacer
+
+\newcommand{\ProofRowStretch}{1.16}   % 1.00 = Standard; >1.0 = größer
+\newcommand{\ProofExtraRowHeight}{.3ex} % kleiner Zusatzpuffer pro Zeile
+
 \newenvironment{tabproof}{
   \par\noindent\textit{Beweis.}\par\medskip
   \setcounter{proofstepnr}{0}%
   \begingroup
   \setlength{\tabcolsep}{0pt}%
-  \begin{longtable}{@{}l r >{$}l<{$} >{$}l<{$}@{}}
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}l<{$}@{}}
 }{
   \end{longtable}%
   \endgroup
@@ -805,7 +822,9 @@ spacebelow=\topsep
   \setcounter{proofstepnr}{0}%
   \begingroup
   \setlength{\tabcolsep}{0pt}%
-  \begin{longtable}{@{}l r >{$}l<{$} >{$}l<{$}@{}}
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}l<{$}@{}}
 }
 
 \newcommand{\closeproofpart}{%
@@ -853,12 +872,17 @@ spacebelow=\topsep
   \setcounter{proofstepnr}{0}%
   \begingroup
   \setlength{\tabcolsep}{0pt}%
-  \begin{longtable}{@{}l r >{$}l<{$} >{$}c<{$} >{$}l<{$} >{$}l<{$}@{}}
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  % Spalten: leer | (Nr) | Term1 | Op | Term2 | Rechtfertigung
+  %                Gap        Gap
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}c<{$} G >{$}l<{$} >{$}l<{$}@{}}
 }{
   \end{longtable}%
   \endgroup
   \par\hfill\qedsymbol\par
 }
+
 
 \newenvironment{tabproofsplitwide}
   {\begin{proof}}
@@ -868,8 +892,11 @@ spacebelow=\topsep
   \par\medskip\noindent #1:\par%
   \setcounter{proofstepnr}{0}%
   \begingroup
-  \setlength{\tabcolsep}{0pt}%
-  \begin{longtable}{@{}l r >{$}l<{$} >{$}c<{$} >{$}l<{$} >{$}l<{$}@{}}
+  \setlength{\tabcolsep}{0pt}%  <-- korrigiert (nicht \tabcolumntsep)
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  %                Gap        Gap
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}c<{$} G >{$}l<{$} >{$}l<{$}@{}}
 }
 
 \newcommand{\closeproofpartwide}{%
