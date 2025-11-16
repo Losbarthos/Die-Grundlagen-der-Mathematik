@@ -170,15 +170,7 @@ spacebelow=\topsep
       }
   }
 
-% --- Beim Anlegen: Key -> volles Label in Cache schreiben, aber NIE überschreiben
-\cs_new_protected:Npn \__cache_put_once:nn #1#2
-  {
-    % #1 = sanitized key (als String), #2 = volles Label (z.B. thm3_<...>)
-    \tl_clear_new:N \l__ref_raw_tl
-    \__normalize_key:Nn \l__ref_raw_tl { \lab }
-    \prop_if_in:NVF \g__ref_cache_prop \l__ref_raw_tl
-      { \prop_gput:NVx \g__ref_cache_prop \l__ref_raw_tl { \labFull } }
-  }
+
 
 \ExplSyntaxOn
 % --- Key normalisieren: stringifizieren + Spaces trimmen
@@ -197,11 +189,158 @@ spacebelow=\topsep
     \prop_if_in:NVF \g__ref_cache_prop \l__ref_key_norm_tl
       { \prop_gput:NVx \g__ref_cache_prop \l__ref_key_norm_tl {#2} }
   }
-\ExplSyntaxOff
 
+% --- Formel-Stack: alle Formeln sammeln und später ausgeben ---
 
+\newif\ifnostack      % globaler Schalter
+\nostackfalse         % Standard: sammeln
 
-\ExplSyntaxOn
+% Sequenz für Einträge:
+%  - {F}{<Label>}{<Formel>}
+%  - {H}{<Level-Text>}{<Überschrift>}
+\seq_new:N \g_mx_formula_stack_seq
+
+% HIER ÄNDERN:
+\cs_set_protected:Npn \mx_push_heading:nn #1#2
+  {
+    \ifnostack\else
+      % 'x' statt 'n': #2 wird einmal expandiert
+      \seq_gput_right:Nx \g_mx_formula_stack_seq { {H}{#1}{#2} }
+    \fi
+  }
+
+% (Formelteil bleibt wie gehabt)
+\cs_new_protected:Npn \mx_push_formula:nn #1#2
+  {
+    \ifnostack\else
+      \tl_set:Nx \l_tmpa_tl {#1}
+      \seq_gput_right:Nn \g_mx_formula_stack_seq { {F}{\l_tmpa_tl}{#2} }
+    \fi
+  }
+
+% ==== Überschriften-Hooks für das Formelregister (mit Stern-Unterstützung) ====
+\makeatletter
+\let\mx@oldpart\part
+\let\mx@oldchapter\chapter
+\let\mx@oldsection\section
+\let\mx@oldsubsection\subsection
+\let\mx@oldsubsubsection\subsubsection
+\let\mx@oldparagraph\paragraph
+
+% \part: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\part}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldpart*{#3}}{\mx@oldpart*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldpart{#3}}{\mx@oldpart[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thepart\space #3%
+    }%
+  }%
+}
+
+% \chapter: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\chapter}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldchapter*{#3}}{\mx@oldchapter*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldchapter{#3}}{\mx@oldchapter[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thechapter\space #3%
+    }%
+  }%
+}
+
+% \section: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\section}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsection*{#3}}{\mx@oldsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsection{#3}}{\mx@oldsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesection\space #3%
+    }%
+  }%
+}
+
+% \subsection: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\subsection}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsubsection*{#3}}{\mx@oldsubsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsubsection{#3}}{\mx@oldsubsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesubsection\space #3%
+    }%
+  }%
+}
+
+% optional: \subsubsection ebenfalls aufnehmen
+\RenewDocumentCommand{\subsubsection}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsubsubsection*{#3}}{\mx@oldsubsubsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsubsubsection{#3}}{\mx@oldsubsubsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesubsubsection\space #3%
+    }%
+  }%
+}
+
+% \paragraph: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\paragraph}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldparagraph*{#3}}{\mx@oldparagraph*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldparagraph{#3}}{\mx@oldparagraph[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \theparagraph\space #3%
+    }%
+  }%
+}
+
+\makeatother
+% ==== Ende Überschriften-Hooks ====
+
+% Eintrag ausgeben
+\cs_new_protected:Npn \mx_print_formula_item_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: links die Formel, rechts die Referenz
+        {F}{
+          $ #3 $ & \FormulaRefAuto{#3} \\
+        }
+        % Überschrift: fett, linksbündig in der ersten Spalte,
+        % zweite Spalte leer
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+\cs_new_protected:Npn \mx_print_formula_item:n #1
+  { \mx_print_formula_item_aux:nnn #1 }
+
+% Formelregister am Ende ausgeben
+\NewDocumentCommand{\PrintFormulaStack}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister}%
+        \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item:n {##1} }
+        \end{longtable}
+      }
+  }
+
+% Stack manuell leeren (z.B. pro Band/Kapitel)
+\NewDocumentCommand{\ClearFormulaStack}{}{
+  \seq_gclear:N \g_mx_formula_stack_seq
+}
 
 % ====================== Theorem / Definition / Axiom =====================
 % ====================== Theorem / Definition / Axiom =====================
@@ -229,6 +368,9 @@ spacebelow=\topsep
 
     % Optionaler Vortext-/Δ-Block direkt nach dem Kopf
     \IfNoValueF{#3}{#3}%
+
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFull}{#2}
 
 
     % Display-Formel
@@ -260,6 +402,9 @@ spacebelow=\topsep
 
     \IfNoValueF{#3}{#3}%
 
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFullD}{#2}
+
     \par\vspace{.2\baselineskip}
     \[
       #2
@@ -288,6 +433,9 @@ spacebelow=\topsep
 
     \IfNoValueF{#3}{#3}%
 
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFullA}{#2}
+
     \par\vspace{.2\baselineskip}
     \[
       #2
@@ -303,15 +451,20 @@ spacebelow=\topsep
 
 \newcommand{\dsep}{,\allowbreak\ } % wie gehabt
 
-\newcommand{\DeltaRow}[2]{%
-  \DeltaLabelStyle{#1} & $#2$\\[-2pt]}
+% braucht expl3/xparse (hast du schon)
+\NewDocumentCommand{\DeltaRow}{ m m O{} }{%
+  \DeltaLabelStyle{#1}& $#2$%
+  \tl_if_blank:nTF {#3} { & } { & \axstrut #3 }%
+  \\[-2pt]%
+}
 
-\newcommand{\DeltaBlockFromRows}[1]{%
+% --- Δ-Block mit 3 Spalten ---
+\NewDocumentCommand{\DeltaBlockFromRows}{ m }{%
   {\small
     \setlength{\tabcolsep}{0pt}%
     \renewcommand{\arraystretch}{1.05}%
     \begin{varwidth}{\linewidth}
-      \begin{tabular}{@{}l@{\qquad}l@{}}% Labelspalte \quad-\qquad-Abstand
+      \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}%
         #1%
       \end{tabular}%
     \end{varwidth}%
@@ -335,6 +488,9 @@ spacebelow=\topsep
     {\begin{theorem}\label{\labFull}}%
     {\begin{theorem}[#1]\label{\labFull}}%
   \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFull}{#2}
   {%
     \abovedisplayskip=.6\baselineskip
     \belowdisplayskip=.6\baselineskip
@@ -359,6 +515,9 @@ spacebelow=\topsep
     {\begin{definition}\label{\labFullD}}%
     {\begin{definition}[#1]\label{\labFullD}}%
   \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFullD}{#2}
   {%
     \abovedisplayskip=.6\baselineskip
     \belowdisplayskip=.6\baselineskip
@@ -383,6 +542,9 @@ spacebelow=\topsep
     {\begin{axiom}\label{\labFullA}}%
     {\begin{axiom}[#1]\label{\labFullA}}%
   \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFullA}{#2}
   {%
     \abovedisplayskip=.6\baselineskip
     \belowdisplayskip=.6\baselineskip
@@ -428,7 +590,9 @@ spacebelow=\topsep
     % WICHTIG: K-Varianten labeln mit AltKey:
     \edef\lab{\labAlt}
     \edef\labFull{thm\arabic{file}_\lab}
-    \__cache_put_once_norm:nn { \lab } { \labFull }
+        % Neu: sowohl AltKey als auch Hauptformel in den Cache legen
+    \__cache_put_once_norm:nn { \lab }     { \labFull }
+    \__cache_put_once_norm:nn { \labMain } { \labFull }
 
     % Alias (fakultativ) -> auf volles Label mappen
     \IfNoValueF{#5}{
@@ -440,6 +604,10 @@ spacebelow=\topsep
     % Umgebung ausgeben
     \IfNoValueTF{#1}{\begin{theorem}\label{\labFull}}{\begin{theorem}[#1]\label{\labFull}}
       \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFull}{#2}
+      
       \par\vspace{.2\baselineskip}
       \[
         #2
@@ -454,7 +622,8 @@ spacebelow=\topsep
 
     \edef\labD{\labAlt}
     \edef\labFullD{def\arabic{file}_\labD}
-    \__cache_put_once_norm:nn { \labD } { \labFullD }
+    \__cache_put_once_norm:nn { \labD }    { \labFullD }
+    \__cache_put_once_norm:nn { \labMain } { \labFullD }
 
     \IfNoValueF{#5}{
       \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
@@ -464,6 +633,10 @@ spacebelow=\topsep
 
     \IfNoValueTF{#1}{\begin{definition}\label{\labFullD}}{\begin{definition}[#1]\label{\labFullD}}
       \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullD}{#2}
+      
       \par\vspace{.2\baselineskip}
       \[
         #2
@@ -478,7 +651,8 @@ spacebelow=\topsep
 
     \edef\labA{\labAlt}
     \edef\labFullA{ax\arabic{file}_\labA}
-    \__cache_put_once_norm:nn { \labA } { \labFullA }
+        \__cache_put_once_norm:nn { \labA }    { \labFullA }
+    \__cache_put_once_norm:nn { \labMain } { \labFullA }
 
     \IfNoValueF{#5}{
       \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
@@ -488,6 +662,10 @@ spacebelow=\topsep
 
     \IfNoValueTF{#1}{\begin{axiom}\label{\labFullA}}{\begin{axiom}[#1]\label{\labFullA}}
       \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullA}{#2}
+      
       \par\vspace{.2\baselineskip}
       \[
         #2
@@ -504,7 +682,8 @@ spacebelow=\topsep
 
     \edef\lab{\labAlt}
     \edef\labFull{thm\arabic{file}_\lab}
-    \__cache_put_once_norm:nn { \lab } { \labFull }
+    \__cache_put_once_norm:nn { \lab }     { \labFull }
+    \__cache_put_once_norm:nn { \labMain } { \labFull }
 
     \IfNoValueF{#5}{
       \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
@@ -516,6 +695,10 @@ spacebelow=\topsep
       {\begin{theorem}\label{\labFull}}
       {\begin{theorem}[#1]\label{\labFull}}
       \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFull}{#2}
+      
       {%
         \abovedisplayskip=.6\baselineskip
         \belowdisplayskip=.6\baselineskip
@@ -536,7 +719,8 @@ spacebelow=\topsep
 
     \edef\labD{\labAlt}
     \edef\labFullD{def\arabic{file}_\labD}
-    \__cache_put_once_norm:nn { \labD } { \labFullD }
+    \__cache_put_once_norm:nn { \labD }    { \labFullD }
+    \__cache_put_once_norm:nn { \labMain } { \labFullD }
 
     \IfNoValueF{#5}{
       \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
@@ -548,6 +732,9 @@ spacebelow=\topsep
       {\begin{definition}\label{\labFullD}}
       {\begin{definition}[#1]\label{\labFullD}}
       \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullD}{#2}
       {%
         \abovedisplayskip=.6\baselineskip
         \belowdisplayskip=.6\baselineskip
@@ -568,7 +755,8 @@ spacebelow=\topsep
 
     \edef\labA{\labAlt}
     \edef\labFullA{ax\arabic{file}_\labA}
-    \__cache_put_once_norm:nn { \labA } { \labFullA }
+    \__cache_put_once_norm:nn { \labA }    { \labFullA }
+    \__cache_put_once_norm:nn { \labMain } { \labFullA }
 
     \IfNoValueF{#5}{
       \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
@@ -580,6 +768,10 @@ spacebelow=\topsep
       {\begin{axiom}\label{\labFullA}}
       {\begin{axiom}[#1]\label{\labFullA}}
       \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullA}{#2}
+      
       {%
         \abovedisplayskip=.6\baselineskip
         \belowdisplayskip=.6\baselineskip
@@ -832,6 +1024,22 @@ spacebelow=\topsep
   \endgroup
 }
 
+\NewDocumentCommand{\proofaxline}{ o m m }{%
+  % #1 = optionaler Kommentar (z.B. "aus Komposition")
+  % #2 = Titel-Text links
+  % #3 = Formel für \FormulaRefAuto (rechts, math)
+  % Spalte1 leer, Spalte2 leer:
+  & & %
+  % Spalte3: Titel (eigene Formatierung, NICHT die Mathe-Vorgabe der Spalte nutzen)
+  \multicolumn{1}{@{}@{}l@{}}{\textbf{#2}:}%
+  % Spalte4: Gap (leer)
+  & %
+  % Spalte5: Mathe-Referenz + optionaler Kommentar
+  \axstrut \FormulaRefAuto{#3}[ax]%
+  \IfNoValueF{#1}{\ \textnormal{\scriptsize(#1)}}%
+  \\[\axsep]%
+}
+
 \newcommand{\proofstep}[3]{%
   \stepcounter{proofstepnr}%
   #1 & (\arabic{proofstepnr}) & #2 & #3\\%
@@ -924,77 +1132,6 @@ spacebelow=\topsep
     { & (\arabic{proofstepnr}) & \multicolumn{3}{>{$}l<{$}}{#2} & #3\\}
     { #1 & (\arabic{proofstepnr}) & \multicolumn{3}{>{$}l<{$}}{#2} & #3\\}
 }
-
-
-% ==== Abschnittstitel sammeln (alle Ebenen) ====
-\ExplSyntaxOn
-\seq_new:N \g__mx_sectioning_seq
-
-% Anzeigename für Level
-\cs_new:Npn \mx_level_label:n #1
-  {
-    \str_case:nnF {#1}
-      {
-        {part}          {Part}
-        {chapter}       {Chapter}
-        {section}       {Section}
-        {subsection}    {Subsection}
-        {subsubsection} {Subsubsection}
-        {paragraph}     {Paragraph}
-        {subparagraph}  {Subparagraph}
-      }
-      {#1}
-  }
-
-% the<counter> oder leer
-\cs_new:Npn \mx_the_counter_or_empty:n #1
-  { \cs_if_exist:cTF { the#1 } { \use:c { the#1 } } { } }
-
-% Eintrag speichern
-\cs_new_protected:Npn \mx_store_entry:nnn #1#2#3
-  { \seq_gput_right:Nn \g__mx_sectioning_seq { #1~#2:~#3 } }
-
-% Einen Abschnittsbefehl patchen (nur wenn er existiert)
-\cs_new_protected:Npn \mx_patch_one:n #1
-  {
-    \cs_if_exist:cT {#1}
-      {
-        \cs_new_eq:cc { mx_old_#1 } { #1 }
-        \exp_args:Nc \RenewDocumentCommand {#1} { s o m }
-          {
-            \IfBooleanTF{##1}
-              {
-                \use:c { mx_old_#1 } * {##3}
-                \mx_store_entry:nnn { \mx_level_label:n {#1} } {*} {##3}
-              }
-              {
-                \IfNoValueTF{##2}
-                  { \use:c { mx_old_#1 } {##3} }
-                  { \use:c { mx_old_#1 } [##2] {##3} }
-                \mx_store_entry:nnn
-                  { \mx_level_label:n {#1} }
-                  { \mx_the_counter_frozen:n {#1} } % <— HIER die neue Funktion
-                  { ##3 }
-              }
-          }
-      }
-  }
-
-% Alle Ebenen abarbeiten
-\clist_map_inline:nn
-  { part, chapter, section, subsection, subsubsection, paragraph, subparagraph }
-  { \mx_patch_one:n {#1} }
-
-% Ausgabe-Kommando
-\NewDocumentCommand \ShowSectioningList {} {
-  \iow_term:x { ==== Gesammelte Abschnittstitel ==== }
-  \seq_map_inline:Nn \g__mx_sectioning_seq { \iow_term:n {##1} }
-  \par\bigskip
-  \textbf{Gesammelte Abschnittstitel}\\
-  \seq_use:Nn \g__mx_sectioning_seq { \\ }
-}
-\ExplSyntaxOff
-% ==== Ende Abschnittstitel-Sammler ====
 
 % -------------------------------
 % Dokumentstart
