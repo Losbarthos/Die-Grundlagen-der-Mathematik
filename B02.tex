@@ -21,35 +21,7 @@
 %\listoftheorems
 \setcounter{file}{2}
 
-\chapter{Elimination verschachtelter Konjugationen}
 
-\FormulaThmAuto{(P \land (Q \land R))\vdash Q}
-\begin{tabproof}
-  \proofstep{1}{P \land (Q \land R)}{\rA}
-  \proofstep{1}{Q \land R}{\rAEb{1}}
-  \proofstep{1}{Q}{\rAEa{1}}
-\end{tabproof}
-
-\FormulaThmAuto{(P \land (Q \land R))\vdash R}
-\begin{tabproof}
-  \proofstep{1}{P \land (Q \land R)}{\rA}
-  \proofstep{1}{Q \land R}{\rAEb{1}}
-  \proofstep{1}{R}{\rAEb{1}}
-\end{tabproof}
-
-\FormulaThmAuto{(P \land Q) \land R\vdash P}
-\begin{tabproof}
-  \proofstep{1}{(P \land Q) \land R}{\rA}
-  \proofstep{1}{P\land Q}{\rAEa{1}}
-  \proofstep{1}{P}{\rAEa{1}}
-\end{tabproof}
-
-\FormulaThmAuto{(P \land Q) \land R\vdash Q}
-\begin{tabproof}
-  \proofstep{1}{(P \land Q) \land R}{\rA}
-  \proofstep{1}{P \land Q}{\rAEa{1}}
-  \proofstep{1}{Q}{\rAEb{1}}
-\end{tabproof}
 
 \chapter{Selbstbezüglichkeiten}
 
@@ -84,6 +56,8 @@
   \proofstep{1}{Q \rightarrow P}{\rLREb{1}}
   \proofstep{1,2}{P}{\rRE{2,3}} % korrigiert von Q auf P
 \end{tabproof}
+
+\chapter{Konjunktion im Konsequens}
 
 \FormulaThmAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (Q \land R)}
 \begin{tabproof}
@@ -324,6 +298,9 @@ Auf Basis des vorangegangenen Theorems können \(\to\) und \(\leftrightarrow\) n
 
 \chapter{Assoziativgesetze}
 
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q \dsep R \dsep P_1 \dsep P_2 \dsep P_3}
+\end{DeltaContext}
 
 \FormulaThmAuto[Assoziativgesetz Oder-Verknüpfung]{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}
 \begin{tabproofsplit}
@@ -392,110 +369,30 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \FormulaDefAuto[Meta-Notation für dreifache Konjunktion]{P \land Q \land R \coloneqq P \land (Q \land R)}
 \FormulaDefAuto[Meta-Notation für dreifache Disjunktion]{P \lor Q \lor R \coloneqq P \lor (Q \lor R)}
 
+\section{Elimination dreifacher Konjugationen}
 
-\subsubsection{Eliminierung der $n$-fachen Disjunktion (Block-Variante, ohne Mengenlehre)}
-\label{rule:OEn}
+\FormulaThmAuto{P\land Q\land R\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P\land Q\land R}{\rA}
+  \proofstep{1}{P\land Q}{\rAEb{1}}
+  \proofstep{1}{Q}{\rAEa{1}}
+\end{tabproof}
 
-\begin{remark}
-Wir verwenden weiterhin die rechte Klammerkonvention
-\[
-P_1 \lor \cdots \lor P_n \;:=\; P_1 \lor \bigl(P_2 \lor (\cdots \lor P_n)\bigr).
-\]
-Durch das Assoziativgesetz ist jede Umklammerung äquivalent. Insbesondere dürfen wir benachbarte Disjunkte zu einem \enquote{Block}
-\[
-P_i \lor \cdots \lor P_j
-\]
-zusammenfassen (ohne die Reihenfolge zu ändern).
-\end{remark}
+\section{Elimination dreifacher Disjunktion}
 
-\begin{definition}[Block-$\lor$E]
-Sei \(n\ge 2\) und in Zeile \(m\) gegeben:
-\[
-\begin{array}{l l l l}
-  i & (m) & P_1 \lor \cdots \lor P_n & \dots
-\end{array}
-\]
-Wähle Indizes
-\[
-1 = t_1 < t_2 < \cdots < t_{r} < t_{r+1} = n+1
-\]
-und definiere für \(u=1,\dots,r\) den \emph{Block}
-\[
-B_u \;:=\; P_{t_u} \lor P_{t_u+1} \lor \cdots \lor P_{t_{u+1}-1}.
-\]
-Angenommen, es gibt für jedes \(u\) einen Unterbeweis
-\[
-\begin{array}{l l l l}
-  m_u & (m_u) & B_u & \rA \\
-  j_u,m_u & (l_u) & R & \dots
-\end{array}
-\]
-Dann darf in einer neuen Zeile \(l\) geschlossen werden:
-\[
-\begin{array}{l l l l}
-  i,j_1,\dots,j_r & (l) & R & \rOEn{\,m,\;m_1,l_1,\;\dots,\;m_r,l_r\,}
-\end{array}
-\]
-\textbf{Nebenbedingungen:}
-\begin{itemize}
-  \item \(m < m_u \le l_u < l\) für alle \(u\).
-  \item Falls \(m_u = l_u\), dann steht in Zeile \(m_u\) bereits genau \(R\)
-        (z.\,B. wenn der gewählte Block \(B_u\) syntaktisch \(R\) ist).
-        Andernfalls ist eine (ggf. 1-zeilige) Herleitung \(B_u \vdash R\) nötig,
-        also \(m_u < l_u\).
-  \item Die Blockannahmen \(m_u\) dürfen nur innerhalb des jeweiligen
-        Unterbeweises verwendet werden; in Zeile \(l\) sind alle \(m_u\) getilgt.
-\end{itemize}
-\end{definition}
-
-\subsubsection{Eliminierung der $n$-fachen Konjunktion (Block-Variante, ohne Mengenlehre)}
-\label{rule:AEn}
-
-\begin{remark}
-Wir verwenden die linke Klammerkonvention
-\[
-P_1 \land \cdots \land P_n \;:=\; \bigl(\cdots((P_1 \land P_2)\land P_3)\cdots \land P_n\bigr).
-\]
-Durch das Assoziativgesetz ist jede Umklammerung äquivalent. Insbesondere dürfen wir benachbarte Konjunkte zu einem \enquote{Block}
-\[
-P_i \land \cdots \land P_j
-\]
-zusammenfassen (ohne die Reihenfolge zu ändern).
-\end{remark}
-
-\begin{definition}[Block-$\land$E]
-Sei \(n \ge 2\) und in Zeile \(m\) gegeben:
-\[
-\begin{array}{l l l l}
-  i & (m) & P_1 \land \cdots \land P_n & \dots
-\end{array}
-\]
-Wähle Indizes
-\[
-1 \le a \le b \le n.
-\]
-Definiere den \emph{Block}
-\[
-C_{[a,b]} \;:=\; P_a \land P_{a+1} \land \cdots \land P_b
-\]
-(wobei \(C_{[k,k]} := P_k\) ein Einzelkonjunkt ist).
-Dann darf in einer neuen Zeile \(l\) geschlossen werden:
-\[
-\begin{array}{l l l l}
-  i & (l) & C_{[a,b]} & \rAEn{m}
-\end{array}
-\]
-
-\textbf{Nebenbedingungen:}
-\begin{itemize}
-  \item \(m < l\).
-  \item Die Regel \(\rAEn{m}\) steht für eine endliche Folge von Standard-\(\land E\)\,--Schritten,
-        die aus \(P_1 \land \cdots \land P_n\) den Block \(C_{[a,b]}\) projektiv \enquote{herausliest}.
-        (Insbesondere ist \(\rAEn{m}\) die übliche Projektion auf \(P_k\).)
-  \item Es sind keine Unterbeweise nötig (im Gegensatz zu \(\lor E\)); die Eliminierung der Konjunktion ist rein projektiv.
-\end{itemize}
-\end{definition}
-
+\FormulaThmAuto{P_1\lor P_2\lor P_3\dsep [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\vdash R}
+\begin{tabproof}
+  \proofstep{1}{P_1\lor P_2\lor P_3}{\rA}
+  \proofstep{2}{P_1 \lor P_2}{\rA}
+  \proofstep{3}{P_1}{\rA}
+  \proofstep{3}{R}{[P_1]\vdots R(3)} 
+  \proofstep{5}{P_2}{\rA}
+  \proofstep{5}{R}{[P_2]\vdots R(5)}  
+  \proofstep{2}{R}{\rOE{2,3,4,5,6}} 
+  \proofstep{8}{P_3}{\rA}
+  \proofstep{8}{R}{[P_3]\vdots R(8)} 
+  \proofstep{1}{R}{\rOE{1,2,7,8,9}}
+\end{tabproof}
 
 
 \chapter{Modus Tollens}
@@ -1348,6 +1245,8 @@ Dann darf in einer neuen Zeile \(l\) geschlossen werden:
   \closeproofpart
 \end{tabproofsplit}
 
+\chapter{Kontradiktionen}
+
 \FormulaThmAuto{\neg (P\leftrightarrow \neg P)}
 \begin{tabproof}
   \proofstep{1}{P\leftrightarrow \neg P}{\rA}
@@ -1359,6 +1258,77 @@ Dann darf in einer neuen Zeile \(l\) geschlossen werden:
   \proofstep{1}{\bot}{\rBI{6,5}}
   \proofstep{}{\neg(P\leftrightarrow \neg P)}{\rCI{1,7}}
 \end{tabproof}
+
+\FormulaThmAuto{\neg(\neg P \leftrightarrow P)}
+\begin{tabproof}
+  \proofstep{1}{\neg P \leftrightarrow P}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{\neg P}{\FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{1,2}}
+  \proofstep{1,2}{\bot}{\rBI{2,3}}
+  \proofstep{1}{\neg P}{\rCI{2,4}}
+  \proofstep{1}{P}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,5}}
+  \proofstep{1}{\bot}{\rBI{5,6}}
+  \proofstep{}{\neg(\neg P \leftrightarrow P)}{\rCI{1,7}}
+\end{tabproof}
+
+\chapter{Invarianzen}
+
+\FormulaThmAuto{Q\vdash (P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}
+\begin{tabproof}
+  % Annahme: Q
+  \proofstep{1}{Q}{\rA}
+
+  % Erster Teil: (P ↔ Q∧R) → (P ↔ R)
+  \proofstep{2}{P\leftrightarrow Q\land R}{\rA}
+  \proofstep{2}{P\rightarrow Q\land R}{\rLREa{2}}
+  \proofstep{2}{Q\land R\rightarrow P}{\rLREb{2}}
+
+  % Zeige: P → R
+  \proofstep{5}{P}{\rA}
+  \proofstep{2,5}{Q\land R}{\rRE{3,5}}
+  \proofstep{2,5}{R}{\rAEb{6}}
+  \proofstep{2}{P\rightarrow R}{\rRI{5,7}}
+
+  % Zeige: R → P (hier brauchen wir Q)
+  \proofstep{9}{R}{\rA}
+  \proofstep{1,9}{Q\land R}{\rAI{1,9}}
+  \proofstep{1,2,9}{P}{\rRE{4,10}}
+  \proofstep{1,2}{R\rightarrow P}{\rRI{9,11}}
+
+  % Damit: P ↔ R
+  \proofstep{1,2}{P\leftrightarrow R}{\rLRI{8,12}}
+
+  % Also: (P ↔ Q∧R) → (P ↔ R)
+  \proofstep{1}{(P\leftrightarrow Q\land R)\rightarrow (P\leftrightarrow R)}{\rRI{2,13}}
+
+  % Zweiter Teil: (P ↔ R) → (P ↔ Q∧R)
+  \proofstep{15}{P\leftrightarrow R}{\rA}
+  \proofstep{15}{P\rightarrow R}{\rLREa{15}}
+  \proofstep{15}{R\rightarrow P}{\rLREb{15}}
+
+  % Zeige: P → Q∧R
+  \proofstep{18}{P}{\rA}
+  \proofstep{15,18}{R}{\rRE{16,18}}
+  \proofstep{1,15,18}{Q\land R}{\rAI{1,19}}
+  \proofstep{1,15}{P\rightarrow Q\land R}{\rRI{18,20}}
+
+  % Zeige: Q∧R → P
+  \proofstep{22}{Q\land R}{\rA}
+  \proofstep{22}{R}{\rAEb{22}}
+  \proofstep{15,22}{P}{\rRE{17,23}}
+  \proofstep{15}{Q\land R\rightarrow P}{\rRI{22,24}}
+
+  % Damit: P ↔ Q∧R
+  \proofstep{1,15}{P\leftrightarrow Q\land R}{\rLRI{21,25}}
+
+  % Also: (P ↔ R) → (P ↔ Q∧R)
+  \proofstep{1}{(P\leftrightarrow R)\rightarrow (P\leftrightarrow Q\land R)}{\rRI{15,26}}
+
+  % Zusammen: (P ↔ Q∧R) ↔ (P ↔ R)
+  \proofstep{1}{(P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}{\rLRI{14,27}}
+\end{tabproof}
+
+
 
 \chapter{Quantorenlogische Implikationen}
 
@@ -2133,6 +2103,17 @@ Dann darf in einer neuen Zeile \(l\) geschlossen werden:
   \proofstep{6}{c = d}{\FormulaRefAuto{a = b \vdash b = a}{6}}
 \end{tabproof}
 
+\FormulaThmAuto{a = b\dsep a = c\dsep b=d\vdash c = d}
+\begin{tabproof}
+  \proofstep{1}{a = b}{\rA}
+  \proofstep{2}{a = c}{\rA}
+  \proofstep{3}{b = d}{\rA}
+  \proofstep{2}{c = a}{\FormulaRefAuto{a=b\vdash b=a}{2}}
+  \proofstep{3}{d = b}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstep{1,2,3}{c = d}{\FormulaRefAuto{a = b\dsep c = a\dsep d = b \vdash c = d}{1,4,5}}
+\end{tabproof}
+
+
 
 \FormulaThmAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}
 \begin{tabproof}
@@ -2145,9 +2126,6 @@ Dann darf in einer neuen Zeile \(l\) geschlossen werden:
   \proofstep{2,6}{d=c}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,2}}
   \proofstep{1,2}{d=c}{\rOE{3,4,5,6,7}}
 \end{tabproof}
-
-
-
 
 \chapter{Theoreme mit dem Nicht-Gleichheitszeichen}
 
