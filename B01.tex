@@ -97,7 +97,7 @@ Wir reservieren ferner die folgenden Symbole:
     \]
   \item die \emph{(logischen) Quantoren}
     \[
-      \forall,\quad \exists,\quad \exists!
+      \forall,\quad \exists
     \]
   \item das \emph{Gleichheitszeichen}
     \[
@@ -108,6 +108,12 @@ Wir reservieren ferner die folgenden Symbole:
       ( \quad )
     \]
 \end{itemize}
+
+Zusätzlich verwenden wir das Symbol \(\exists!\) für den
+\emph{Eindeutigkeitsquantor}. Es gehört nicht zur Grundsprache
+\(\mathcal L\), sondern wird als Abkürzung verstanden, die sich
+durch die bereits vorhandenen Symbole \(\exists,\forall,=\) ausdrücken
+lässt (siehe Abschnitt über abgeleitete Regeln).
 
 \subsection{Terme}
 
@@ -146,7 +152,7 @@ bilden wir die \emph{Aussagen der Logik}.
     \text{(v)}\; (A \land B)\dsep (A \lor B)\dsep
        (A \rightarrow B)\dsep (A \leftrightarrow B)\\
        \qquad\text{ sind Aussagen},\\[0.4em]
-    \text{(vi)}\; \forall x\,A \dsep \exists x\,A \dsep \exists!x\,A
+    \text{(vi)}\; \forall x\,A \dsep \exists x\,A
        \text{ sind Aussagen}.
   \end{array}
 }{
@@ -162,6 +168,14 @@ Im weiteren Verlauf verwenden wir die Begriffe \enquote{Aussage}
 und \enquote{Formel} weitgehend synonym: Eine \emph{wohlgeformte
 Formel} der Sprache \(\mathcal L\) nennen wir oft kurz einfach
 \enquote{Aussage}.
+
+Zusätzlich benutzen wir die Schreibweise \(\exists!x\,A\) als
+metasprachliche Abkürzung für eine bereits definierte Formel, die
+nur die Quantoren \(\forall,\exists\) und das Gleichheitszeichen
+\((=)\) verwendet. Das Symbol \(\exists!\) gehört also nicht zur
+Grundsprache \(\mathcal L\), sondern nur zur Meta\-Notation, ähnlich
+wie das Ungleichheitszeichen \(\neq\) (vgl.\ Abschnitt über
+Metadefinitionen).
 \end{remark}
 
 
@@ -640,12 +654,19 @@ Liegt in einem Regelschema ein Subbeweis mit mehreren Annahmen
 \[
   [A_1,\dots,A_r]\vdots P_j
 \]
-vor. Der entsprechende Block beginnt analog mit den Annahmezeilen
+vor, so beginnt der entsprechende Block analog mit den Annahmezeilen
 \[
-  A_1,\dots,A_r
+\boxed{%
+  \begin{array}{llll}
+    \{k_1\} & (k_1) & A_1 & \rA \\[0.2ex]
+           &       &\vdots&     \\[0.2ex]
+    \{k_r\} & (k_r) & A_r & \rA
+  \end{array}
+}
 \]
-; die Menge \(I_s\) enthält dann alle zu diesen Annahmen gehörigen
-Indizes, die beim Entladen gemeinsam aus \(I_s\) entfernt werden.
+wobei \(I_s\) dann alle zu diesen Annahmen gehörigen Indizes
+\(k_1,\dots,k_r\) enthält. Beim Entladen werden diese gemeinsam aus
+\(I_s\) entfernt.
 
 \medskip
 
@@ -722,7 +743,7 @@ realisiert werden.
 \section{Sätze, Axiome und Definitionen}
 
 \begin{DeltaContext}{In diesem Abschnitt verwendete Symbole}
-  \DeltaRow{Aussagen}{A \dsep B \dsep \varphi}
+  \DeltaRow{Aussagen}{A \dsep B \dsep P_1 \dsep \dots \dsep P_n \dsep R \dsep \varphi}
   \DeltaRow{Prämissenmengen}{\Gamma}
   \DeltaRow{Mengen}{M \dsep N \dsep X \dsep Y}
   \DeltaRow{Funktionen}{F \dsep G}
@@ -808,13 +829,15 @@ Im Text wird ein Axiom durch eine Überschrift wie
 \[
   \text{Axiom 3.8 (Menge geordneter Paare)}
 \]
-gekennzeichnet. Es folgt der Kontext, z.\,B.\ in der Form
+gekennzeichnet. 
+
+Es folgt der Kontext, z.\,B.\ in der Form
 \[
   \text{Mengen: } M,N
   \qquad
   \text{Relationen/Funktionen: } F \subseteq M \times N.
 \]
-und die betreffende Formel \(\varphi\).
+Danach folgt die betreffende Formel \(\varphi\).
 
 Wir verwenden die Kurznotation \(\vdash\), \([P]\vdots Q\),
 \(\mid_x\) bei Axiomen im Allgemeinen \emph{nicht}; wo wir Axiome
@@ -863,7 +886,7 @@ charakterisiert werden.
   \DeltaRow{Aussagen}{A \dsep B \dsep C \dsep \varphi}
   \DeltaRow{Prädikatensymbole}{P \dsep Q \dsep R}
   \DeltaRow{Terme}{t_1 \dsep \dots \dsep t_n}
-  \DeltaRow{Neue Symbole}{Q \dsep \sigma \dsep \iota}
+  \DeltaRow{Neue Symbole}{S \dsep \sigma \dsep \iota}
 \end{DeltaContext}
 
 In diesem Abschnitt beschreiben wir, in welcher Form wir neue
@@ -877,18 +900,18 @@ vorhandene Ausdrücke erklärt werden.
 \subsection{Explizite Definitionen}
 
 \begin{definition}[Explizite Definition]
-Sei \(\varphi(t_1,\dots,t_n)\) eine wohldefinierte Aussage in der
+Sei \(\varphi(t_1,\dots,t_n)\) eine wohlgeformte Formel der
 Sprache \(\mathcal L\), in der Terme \(t_1,\dots,t_n\) vorkommen
-dürfen, und sei \(Q\) ein neues \(n\)-stelliges Symbol (z.\,B.\ ein
+dürfen, und sei \(S\) ein neues \(n\)-stelliges Symbol (z.\,B.\ ein
 neues Prädikatensymbol oder ein neues Funktionssymbol).
 
-Eine \textbf{explizite Definition} von \(Q\) schreiben wir in
+Eine \textbf{explizite Definition} von \(S\) schreiben wir in
 metasprachlicher Notation als
 \[
-  Q(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n).
+  S(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n).
 \]
 Damit vereinbaren wir: Überall dort, wo der Ausdruck
-\(Q(t_1,\dots,t_n)\) vorkommt, darf er als Abkürzung für
+\(S(t_1,\dots,t_n)\) vorkommt, darf er als Abkürzung für
 \(\varphi(t_1,\dots,t_n)\) gelesen werden – und umgekehrt.
 Das Symbol \(\coloneqq\) gehört dabei nicht zur Sprache
 \(\mathcal L\), sondern kennzeichnet lediglich eine Definition.
@@ -898,18 +921,18 @@ Das Symbol \(\coloneqq\) gehört dabei nicht zur Sprache
 Formal kann man eine explizite Definition durch eine Formel
 \[
   \forall t_1,\dots,t_n\,
-    \bigl( Q(t_1,\dots,t_n) \leftrightarrow
+    \bigl( S(t_1,\dots,t_n) \leftrightarrow
            \varphi(t_1,\dots,t_n) \bigr)
 \]
 in der Sprache \(\mathcal L\) ausdrücken. Für unser Kalkül
 interpretieren wir eine solche Definition syntaktisch über die
 beiden \emph{definitorischen Regelschemata}
 \[
-  \varphi(t_1,\dots,t_n) \vdash Q(t_1,\dots,t_n)
+  \varphi(t_1,\dots,t_n) \vdash S(t_1,\dots,t_n)
   \qquad\text{und}\qquad
-  Q(t_1,\dots,t_n) \vdash \varphi(t_1,\dots,t_n).
+  S(t_1,\dots,t_n) \vdash \varphi(t_1,\dots,t_n).
 \]
-Das bedeutet: In Beweisen dürfen wir \(Q(t_1,\dots,t_n)\)
+Das bedeutet: In Beweisen dürfen wir \(S(t_1,\dots,t_n)\)
 jederzeit durch \(\varphi(t_1,\dots,t_n)\) ersetzen und umgekehrt.
 
 Ein typisches Beispiel ist die Definition der Teilmengenrelation
@@ -926,19 +949,19 @@ hin- und herzuschalten.
 \begin{definition}[Partielle Definition]
 Seien \(C(t_1,\dots,t_n)\) und \(\varphi(t_1,\dots,t_n)\) wohldefinierte
 Aussagen in der Sprache \(\mathcal L\), in denen Terme
-\(t_1,\dots,t_n\) vorkommen dürfen, und sei \(Q\) wieder ein neues
+\(t_1,\dots,t_n\) vorkommen dürfen, und sei \(S\) wieder ein neues
 \(n\)-stelliges Symbol.
 
-Eine \textbf{partielle Definition} von \(Q\) schreiben wir
+Eine \textbf{partielle Definition} von \(S\) schreiben wir
 metasprachlich als
 \[
   C(t_1,\dots,t_n) \rightarrow
-  \bigl(Q(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n)\bigr).
+  \bigl(S(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n)\bigr).
 \]
-Damit wird \(Q(t_1,\dots,t_n)\) nur \emph{unter der Bedingung}
+Damit wird \(S(t_1,\dots,t_n)\) nur \emph{unter der Bedingung}
 \(C(t_1,\dots,t_n)\) als Abkürzung für \(\varphi(t_1,\dots,t_n)\)
 verstanden; außerhalb des durch \(C\) beschriebenen Bereichs bleibt
-\(Q\) unbestimmt.
+\(S\) unbestimmt.
 \end{definition}
 
 \begin{remark}
@@ -946,15 +969,15 @@ Auch partielle Definitionen können wir syntaktisch über
 Regelschemata fassen. Aus
 \[
   C(t_1,\dots,t_n) \rightarrow
-  \bigl(Q(t_1,\dots,t_n) \leftrightarrow \varphi(t_1,\dots,t_n)\bigr)
+  \bigl(S(t_1,\dots,t_n) \leftrightarrow \varphi(t_1,\dots,t_n)\bigr)
 \]
 ergeben sich etwa die beiden Regeln
 \[
   C(t_1,\dots,t_n),\; \varphi(t_1,\dots,t_n)
-    \vdash Q(t_1,\dots,t_n)
+    \vdash S(t_1,\dots,t_n)
 \]
 \[
-  C(t_1,\dots,t_n),\; Q(t_1,\dots,t_n)
+  C(t_1,\dots,t_n),\; S(t_1,\dots,t_n)
     \vdash \varphi(t_1,\dots,t_n).
 \]
 Explizite Definitionen erhält man als Spezialfall durch die stets
@@ -1001,6 +1024,16 @@ Interpretation von \(\sigma\) \emph{existierend} und
 \emph{eindeutig} festlegt, ist eine Frage der Semantik der
 jeweiligen Theorie. Diese Fragen werden wir erst später, insbesondere
 im Mengenlehre-Band, präzise behandeln.
+
+In den Beispielen schreiben wir gelegentlich Sequenzen wie
+\((x,y)\in F,\,(x,z)\in F \vdash y=z\) als Kurzform für Aussagen,
+die sich durch eine einzelne Formel ausdrücken lassen, etwa
+\[
+  \forall x,y,z\;\bigl(((x,y)\in F \land (x,z)\in F) \rightarrow y=z\bigr).
+\]
+Die eigentlichen Axiome einer Theorie sind stets Formeln in
+\(\mathcal L\); Sequenzschreibweisen dienen nur der
+metasprachlichen Darstellung.
 \end{remark}
 
 \begin{remark}
@@ -1169,8 +1202,6 @@ Beide Operatoren werden in unserem System nicht als primitive Symbole
 verstanden, sondern über bereits bekannte Formeln definiert
 (zum Beispiel lässt sich \(\lxor\) mit Hilfe von \(\land,\lor,\neg\) und
 \(\exists!\) mit Hilfe von \(\exists,\forall,=\) ausdrücken).
-Aus diesen Definitionen zusammen mit den elementaren Schlussregeln folgen
-die nun aufgeführten abgeleiteten Regeln.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.25}
@@ -1208,6 +1239,15 @@ $\exists!$
 \bottomrule
 \end{tabularx}
 \end{center}
+\begin{remark}
+In den Regelschemata für den Eindeutigkeitsquantor \(\exists!\) gehen
+wir stillschweigend davon aus, dass die in den Subbeweisen verwendeten
+Variablen (etwa \(a,b\)) als Eigenvariablen gewählt werden, d.\,h. sie
+kommen außerhalb dieser Subbeweise nicht frei vor. Formal lassen sich
+die Regeln aus einer geeigneten expliziten Definition von \(\exists!\)
+ableiten.
+\end{remark}
+
 
 
 
@@ -1223,7 +1263,7 @@ definierenden Ausdruck wechseln) oder ein „Eliminierungsschritt“
 
 \medskip
 
-\textbf{Metadefinitionen} (auch \emph{meta-sprachliche Definitionen})
+\textbf{Metadefinitionen} (auch \emph{metasprachliche Definitionen})
 liegen dagegen \emph{außerhalb} des eigentlichen Kalküls. Man kann sie
 sich als reine „Abkürzungsvereinbarungen“ auf der \emph{Meta-Ebene}
 vorstellen:
@@ -1245,7 +1285,7 @@ vorstellen:
 \begin{definition}[Meta-Notation für Ungleichheit]
 \label{def:neq-meta}
 Seien \(t\) und \(u\) beliebige Terme. Wir führen das
-\emph{Nicht-Gleichheitszeichen} als meta-sprachliche Abkürzung ein durch
+\emph{Nicht-Gleichheitszeichen} als metasprachliche Abkürzung ein durch
 \[
   t \neq u \;\coloneqq\; \neg\bigl(t = u\bigr).
 \]
