@@ -69,11 +69,11 @@ Typische Bezeichnungen für Konstantensymbole sind
 \paragraph{Funktionssymbole.}
 Typische Bezeichnungen für Funktionssymbole sind
 \[
-\begin{array}{l@{\dsep}l@{\dsep}l@{\dsep}l}
-  f & f_0 & f_1 & \dots \\
-  g & g_0 & g_1 & \dots
-\end{array}
+  f, f_0, f_1, \dots,\quad g, g_0, g_1, \dots
 \]
+Dabei hat jedes Funktionssymbol eine feste Stelligkeit (z.\,B.\ 
+einstellig, zweistellig usw.), die wir im Kontext voraussetzen.
+
 
 \paragraph{Prädikatensymbole.}
 Typische Bezeichnungen für Prädikatensymbole sind
@@ -84,6 +84,8 @@ Typische Bezeichnungen für Prädikatensymbole sind
   R & R_0 & R_1 & \dots
 \end{array}
 \]
+Dabei hat jedes Prädikatensymbol eine feste Stelligkeit (z.\,B.\ 
+einstellig, zweistellig usw.), die wir im Kontext voraussetzen.
 
 \subsection{Logische Symbole}
 
@@ -155,429 +157,173 @@ bilden wir die \emph{Aussagen der Logik}.
   \DeltaRow{Quantoren}{\forall \dsep \exists \dsep \exists!}
   \DeltaRow{Aussagen}{A \dsep B}
 }
+\begin{remark}
+Im weiteren Verlauf verwenden wir die Begriffe \enquote{Aussage}
+und \enquote{Formel} weitgehend synonym: Eine \emph{wohlgeformte
+Formel} der Sprache \(\mathcal L\) nennen wir oft kurz einfach
+\enquote{Aussage}.
+\end{remark}
+
 
 \chapter{Beweistheorie}
 
+% =========================================================
 \section{Einleitung zur Beweistheorie}
-Beweistheorie ist ein zentraler Bestandteil der formalen Logik, der sich mit den Methoden und Prinzipien befasst, mit denen logische Aussagen bewiesen werden können. Durch die systematische Anwendung von Regeln können wir die Gültigkeit von Aussagen innerhalb eines logischen Systems feststellen. In diesem Kapitel werden wir das Kalkül des natürlichen Schließens als eine der grundlegenden Beweisformen kennenlernen und anwenden.
 
-\section{Formale Sprache}
+In den vorherigen Kapiteln haben wir die \emph{Syntax} der
+Aussagenlogik und der Prädikatenlogik als formale Sprachen
+beschrieben. In diesem Kapitel interessiert uns nun, wie man mit
+solchen Formeln \emph{systematisch Beweise} führt.
 
-\begin{definition}[Formale Sprache]
-Eine \textbf{formale Sprache} \(\mathcal{L}\) besteht aus zwei Hauptkomponenten:
+Unter \enquote{Beweistheorie} verstehen wir die Untersuchung von
+Regelsystemen (\emph{Kalkülen}), mit deren Hilfe sich aus gegebenen
+Prämissen neue Formeln ableiten lassen. Im Mittelpunkt dieses
+Kapitels steht das \emph{Kalkül des natürlichen Schließens}, das
+sich an der intuitiven menschlichen Argumentation orientiert, aber
+präzise und formal formuliert ist.
 
-\begin{enumerate}
-    \item \textbf{Alphabet} \( \Sigma \): Eine endliche Menge von \textbf{Symbolen} (z.\,B.\ Buchstaben, Zeichen, Operatoren), die die Grundbausteine der Sprache bilden.
-    \item \textbf{Syntaxregeln}: Regeln, die festlegen, wie die Symbole aus \( \Sigma \) kombiniert werden dürfen, um \textbf{wohlgeformte Formeln} (Wff) der Sprache zu bilden. Diese Regeln definieren die Struktur der zulässigen Ausdrücke in der Sprache.
-\end{enumerate}
+Unser Ziel ist es, Beweise nicht mehr nur informell in Worten zu
+führen, sondern als \emph{endliche, nachvollziehbare Ableitungen}
+mit klar festgelegten Schlussregeln aufzuschreiben.
 
-Eine \textbf{wohlgeformte Formel} ist eine endliche Zeichenkette aus Symbolen des Alphabets \( \Sigma \), die den Syntaxregeln der formalen Sprache \(\mathcal{L}\) entspricht.
-\end{definition}
+% =========================================================
+\section{Formale Sprache und Notation}
+
+Wir arbeiten im Folgenden mit einer festen formalen Sprache
+\(\mathcal L\), etwa der in Kapitel \enquote{Aussagenlogik und
+Prädikatenlogik} eingeführten Aussagensprache oder
+Prädikatensprache erster Stufe. Die dort beschriebenen Symbole,
+Terme und Aussagen bilden den syntaktischen Rahmen, in dem wir
+unsere Beweise formulieren.
+
+Die Objekte, mit denen wir in der Beweistheorie arbeiten, sind
+ausschließlich \emph{wohlgeformte Formeln} (Aussagen) von
+\(\mathcal L\). Zur Bezeichnung solcher Formeln verwenden wir
+typischerweise Großbuchstaben
+\[
+  A,B,C,\dots
+\]
+sowie griechische Buchstaben
+\[
+  \varphi,\psi,\chi,\dots
+\]
+für \enquote{beliebige} Formeln. Mengen von Formeln bezeichnen wir
+mit \(\Gamma,\Delta,\dots\) und sprechen von \emph{Prämissenmengen}
+oder \emph{Kontexten}.
 
 \begin{remark}
-Die \textbf{Prädikatenlogik} und die \textbf{Aussagenlogik} sind zentrale Beispiele für formale Sprachen. Sie erfüllen die oben genannten Kriterien, indem sie jeweils ein spezifisches Alphabet und klare Syntaxregeln definieren, die die Konstruktion wohlgeformter Formeln ermöglichen.
+In diesem Kapitel arbeiten wir auf zwei Ebenen:
+\begin{itemize}
+  \item Die \emph{Objektsprache} \(\mathcal L\) besteht aus den
+        wohlgeformten Formeln, die wir syntaktisch definiert haben.
+        Auf diesen Formeln operiert das Kalkül direkt.
+  \item Daneben verwenden wir eine \emph{Metasprache}, in der wir
+        insbesondere ein Symbol \(\vdash\) für \enquote{Ableitbarkeit}
+        sowie einige weitere Kurzschreibweisen für Beweise und
+        Subbeweise einführen werden (z.\,B.\ für Hilfsbeweise und
+        Eigenvariablenbedingungen). Diese Metasymbole gehören nicht zur
+        Objektsprache \(\mathcal L\), sondern dienen nur dazu, Beweise
+        im Kalkül kompakt zu beschreiben.
+\end{itemize}
 \end{remark}
 
-\subsection{Beispiele für Formale Sprachen}
+% =========================================================
+\section{Grundbegriffe: Kalkül, Beweis und Argument}
 
-Um die Definition einer formalen Sprache zu verdeutlichen, betrachten wir zwei grundlegende logische Systeme: die \textbf{Aussagenlogik} und die \textbf{Prädikatenlogik}.
-
-\subsubsection{Aussagenlogik}
-
-\begin{itemize}
-    \item \textbf{Alphabet} \( \Sigma \): Besteht aus
-    \begin{enumerate}
-        \item \textbf{Aussagevariablen}: Symbole wie \( p, q, r, \ldots \), die atomare Aussagen repräsentieren.
-        \item \textbf{Logische Operatoren}: 
-        \begin{itemize}
-            \item \( \neg \) (Nicht)
-            \item \( \land \) (Und)
-            \item \( \lor \) (Oder)
-            \item \( \rightarrow \) (Impliziert)
-            \item \( \leftrightarrow \) (Genau dann wenn)
-        \end{itemize}
-        \item \textbf{Klammern}: \( (, ) \), die zur Strukturierung von Ausdrücken verwendet werden.
-    \end{enumerate}
-    
-    \item \textbf{Syntaxregeln}: Bestimmen, wie Aussagevariablen und Operatoren kombiniert werden dürfen, um \textbf{wohlgeformte Formeln} zu bilden. Beispiele hierfür sind:
-    \begin{itemize}
-        \item Eine Aussagevariable allein ist eine wohlgeformte Formel, z.\,B.\ \( p \).
-        \item Wenn \( \phi \) eine wohlgeformte Formel ist, dann ist \( \neg \phi \) ebenfalls eine wohlgeformte Formel.
-        \item Wenn \( \phi \) und \( \psi \) wohlgeformte Formeln sind, dann sind auch \( \phi \land \psi \), \( \phi \lor \psi \), \( \phi \rightarrow \psi \) und \( \phi \leftrightarrow \psi \) wohlgeformte Formeln.
-        \item Klammern werden verwendet, um die Struktur und Priorität der Operatoren zu definieren, z.\,B.\ \( (p \land q) \rightarrow r \).
-    \end{itemize}
-\end{itemize}
-
-\subsubsection{Prädikatenlogik}
-
-\begin{itemize}
-    \item \textbf{Alphabet} \( \Sigma \): Enthält die folgenden Komponenten:
-    \begin{enumerate}
-        \item \textbf{Individuenkonstanten}: Symbole, die spezifische Objekte in der Domäne repräsentieren, z.\,B.\ \( a, b, c, \ldots \).
-        \item \textbf{Variablen}: Symbole wie \( x, y, z, \ldots \), die beliebige Elemente der Do-mäne darstellen können.
-        \item \textbf{Funktionssymbole}: Symbole wie \( f, g, h, \ldots \), die Funktionen mit festgelegter Anzahl der Argumente repräsentieren, z.\,B.\ \( f(x), g(x, y) \).
-        \item \textbf{Prädikate}: Symbole wie \( P, Q, R, \ldots \), die Relationen oder Eigenschaften ausdrücken und ebenfalls eine festgelegte Arity haben, z.\,B.\ \( P(x), Q(x, y) \).
-        \item \textbf{Quantoren}: \( \forall \) (Für alle) und \( \exists \) (Es existiert), die die Bereiche der Variablen einschränken.
-        \item \textbf{Logische Operatoren}: Wie in der Aussagenlogik, einschließlich \( \neg \) (Nicht), \( \land \) (Und), \( \lor \) (Oder), \( \rightarrow \) (Impliziert), \( \leftrightarrow \) (Genau dann wenn).
-        \item \textbf{Gleichheitszeichen}: \( = \), das die Gleichheit zweier Terme ausdrückt.
-        \item \textbf{Klammern}: \( (, ) \), die zur Strukturierung von Ausdrücken verwendet werden.
-    \end{enumerate}
-    
-    \item \textbf{Syntaxregeln}: Regeln, die festlegen, wie die Symbole aus \( \Sigma \) kombiniert werden dürfen, um \textbf{wohlgeformte Formeln} (Wff) der Sprache zu bilden. Diese Regeln definieren die Struktur der zulässigen Ausdrücke in der Sprache.
-\end{itemize}
-
-\section{Grundbegriffe: Kalkül und Beweis}
-
-Bevor wir uns dem Kalkül des natürlichen Schließens zuwenden, ist es wichtig, die grundlegenden Begriffe \textit{Kalkül} und \textit{Beweis} präzise zu definieren.
+Bevor wir das konkrete Kalkül des natürlichen Schließens einführen,
+fassen wir einige Grundbegriffe zusammen, die für alle Kalküle
+gleichartig formuliert werden können.
 
 \begin{definition}[Kalkül]
-Ein \textbf{Kalkül} (auch \textit{formales Kalkül} oder \textit{formales System} genannt) ist ein strukturiertes System, das aus folgenden Komponenten besteht:
-
+Ein \textbf{(logischer) Kalkül} \(\mathcal C\) besteht aus
 \begin{enumerate}
-    \item \textbf{Formale Sprache} \(\mathcal{L}\): Bestehend aus einem Alphabet von Symbolen und Syntaxregeln, die bestimmen, wie wohlgeformte Formeln gebildet werden.
-    \item \textbf{Axiome} und/oder \textbf{Annahmen} (Prämissen): Eine Menge von wohlgeformten Formeln in der Sprache \(\mathcal{L}\), die ohne Beweis als wahr angenommen werden.
-    \item \textbf{Inferenzenregeln}: Regeln, die festlegen, wie aus gegebenen Formeln neue Formeln abgeleitet werden können.
+  \item einer formalen Sprache \(\mathcal L\),
+  \item einer (eventuell leeren) Menge \(\mathsf{Ax}\) von Formeln
+        in \(\mathcal L\) (den \textbf{Axiomen}),
+  \item einer Menge \(\mathsf{Reg}\) von \textbf{Schlussregeln}.
 \end{enumerate}
-
-Die \textbf{Axiome} und \textbf{Annahmen} sind wohlgeformte Formeln, die als Ausgangspunkt dienen. Die \textbf{Inferenzenregeln} ermöglichen es, innerhalb des Kalküls systematisch neue Aussagen zu beweisen.
+Im \emph{Kalkül des natürlichen Schließens}, das wir im Folgenden
+verwenden, nehmen wir \(\mathsf{Ax} = \emptyset\); alle inhaltlichen
+Axiome (z.\,B.\ die ZFC-Axiome) werden später als Teile von Theorien
+bzw.\ impliziten Definitionen eingeführt.
 \end{definition}
 
 \begin{definition}[Beweis]
-Ein \textbf{Beweis} in einem Kalkül ist eine endliche Folge von Aussagen
+Sei \(\mathcal C\) ein Kalkül in der Sprache \(\mathcal L\).
+Ein \textbf{Beweis} einer Formel \(\varphi\) aus einer Menge
+\(\Gamma\) von Formeln ist eine endliche Folge
 \[
-\phi_1, \phi_2, \ldots, \phi_n
+  \varphi_1,\varphi_2,\dots,\varphi_n
 \]
-wobei jede Aussage \(\phi_i\) entweder eine \textbf{Annahme} (Prämisse), ein \textbf{Axiom} ist oder sich durch Anwendung einer Inferenzenregel auf vorhergehende Aussagen \(\phi_{j}\) (mit \(j < i\)) ableiten lässt. Die letzte Formel \(\phi_n\) des Beweises ist die zu beweisende Aussage.
-\end{definition}
-
-\begin{definition}[Argument]
-Ein \textbf{Argument} in der Logik besteht aus einer Menge von Aussagen, den sogenannten \textbf{Prämissen}, und einer Aussage, der \textbf{Schlussfolgerung}. Die Prämissen sollen die Schlussfolgerung unterstützen oder begründen.
-
-Formal kann ein Argument als geordnetes Paar \((\Gamma, \phi)\)  definiert werden, wobei \(\Gamma\) eine Menge von Aussagen (die Prämissen) und \(\phi\) eine einzelne Aussage (die Schlussfolgerung) ist.
-
-Ein Argument \((\Gamma, \phi)\) wird als \textbf{gültig} bezeichnet, wenn es eine Ableitung der Schlussfolgerung \(\phi\) aus den Prämissen in \(\Gamma\) gemäß den Regeln des Kalküls gibt.
-
-\end{definition}
-
-
-\section{Definition einer Theorie}
-
-Eine \textbf{Theorie} in der Prädikatenlogik ist ein formales System, das aus einer Menge von Aussagen besteht, die als Axiome dienen. Aus diesen Axiomen können mittels logischer Schlussregeln weitere Aussagen bewiesen werden.
-
-\begin{definition}[Theorie]
-Eine \textbf{Theorie} \(\mathcal{T}\) in der Prädikatenlogik besteht aus einem \textbf{Axiomensystem} \(\Sigma\) und umfasst alle Aussagen \(\phi\) in der Sprache \(\mathcal{L}\), für die gilt:
-\[
-\Sigma \vdash \phi
-\]
-Das bedeutet, dass die Aussage \(\phi\) beweisbar ist aus den Axiomen \(\Sigma\) unter Verwendung der festgelegten Schlussregeln.
-\end{definition}
-
-\begin{remark}
-Der wesentliche Unterschied zwischen einem \textbf{Kalkül} und einer \textbf{Theorie} besteht darin, dass der Kalkül das formale System mit seiner \textbf{Sprache}, \textbf{Axiomen} und \textbf{Inferenzenregeln} definiert, während eine Theorie eine spezifische Menge von Axiomen innerhalb dieses Kalküls ist und alle daraus ableitbaren Aussagen umfasst.
-\end{remark}
-
-\section{Eigenschaften einer Theorie}
-
-Die Eigenschaften \textbf{Konsistenz} und \textbf{Vollständigkeit} sind zentrale Merkmale einer Theorie. Diese werden im Folgenden separat definiert und formal beschrieben.
-
-\subsection{Konsistenz}
-
-\begin{definition}[Konsistenz]
-Eine \textbf{Theorie} \(\mathcal{T}\) mit Axiomensystem \(\Sigma\) ist \textbf{konsistent}, wenn es keine Aussage \(\phi\) gibt, für die sowohl \(\Sigma \vdash \phi\) als auch \(\Sigma \vdash \neg \phi\) gilt.
-\end{definition}
-
-\begin{remark}
-Eine Theorie ist konsistent genau dann, wenn sie keine widersprüchlichen Aussagen enthält. Das bedeutet, es ist nicht möglich, sowohl eine Aussage als auch ihr Gegenteil aus den Axiomen abzuleiten.
-\end{remark}
-
-\subsection{Vollständigkeit}
-
-\begin{definition}[Vollständigkeit]
-Eine \textbf{Theorie} \(\mathcal{T}\) mit Axiomensystem \(\Sigma\) ist \textbf{vollständig}, wenn für jede Aussage \(\phi\) in der Sprache \(\mathcal{L}\) entweder \(\Sigma \vdash \phi\) oder \(\Sigma \vdash \neg \phi\) gilt.
-\end{definition}
-
-\begin{remark}
-Eine Theorie ist vollständig genau dann, wenn für jede Aussage entweder die Aussage selbst oder ihre Negation aus den Axiomen ableitbar ist.
-\end{remark}
-
-\section{Arten von Definitionen}
-
-\subsection{Explizite Definitionen}
-
-\begin{definition}[Explizite Definition]
-Sei \(\varphi(x_1,\dots,x_n)\) ein bereits bekannter, wohldefinierter Ausdruck (z.\,B.\ ein Prädikat oder Term) in einer formalen Sprache \(\mathcal{L}\) und \(Q(x_1,\dots,x_n)\) ein \emph{neues} Symbol, das in \(\mathcal{L}\) bisher nicht vorkam. Dann nennen wir
-\[
-\forall x_1,\dots,x_n \bigl( Q(x_1,\dots,x_n) \coloneqq \varphi(x_1,\dots,x_n) \bigr)
-\]
-eine \textbf{explizite Definition} von \(Q\). In dieser Definition heißt:
+von Formeln in \(\mathcal L\) mit den folgenden Eigenschaften:
 \begin{itemize}
-    \item \(Q\) \textbf{Definiendum} (das neu eingeführte Symbol),
-    \item \(\varphi\) \textbf{Definiens} (der bereits bekannte Ausdruck).
+  \item jedes \(\varphi_i\) ist entweder
+    \begin{itemize}
+      \item ein Element aus \(\Gamma\) (eine \textbf{Annahme}),
+      \item ein Axiom aus \(\mathsf{Ax}\) oder
+      \item durch Anwendung einer Schlussregel aus vorher in der
+            Folge vorkommenden Formeln gewonnen;
+    \end{itemize}
+  \item die letzte Formel ist \(\varphi_n = \varphi\).
 \end{itemize}
-
-\noindent
-\subsubsection{Wohldefiniertheit der expliziten Definition} 
-\begin{enumerate}
-    \item Alle in \(\varphi\) vorkommenden Symbole (Variablen, Konstanten, Funktions- oder Prädikatsymbole) sind bereits bekannt \emph{und} ihrerseits wohldefiniert.
-    \item Das neue Symbol \(Q\) kommt in \(\varphi\) selbst nicht vor (keine Zirkularität).
-    \item Für jede mögliche Belegung der Variablen \(x_1,\dots,x_n\) existiert genau ein \(y\), sodass \(\varphi(x_1,\dots,x_n) = y\). Formal ausgedrückt:
-    \[
-    \forall x_1,\dots,x_n \, \forall y \, \forall z \, \bigl( \varphi(x_1,\dots,x_n) = y \land \varphi(x_1,\dots,x_n) = z \rightarrow y = z \bigr).
-    \]
-    \item Für jede mögliche Belegung der Variablen \(x_1, \dots, x_n\) ist \(\varphi(x_1,\dots,x_n)\) widerspruchsfrei und erfüllt das Prinzip des ausgeschlossenen Dritten. Formal:
-    \[
-    \forall x_1,\dots,x_n \, \neg \bigl( \varphi(x_1,\dots,x_n) \land \neg \varphi(x_1,\dots,x_n) \bigr) \quad \text{(Konsistenz)},
-    \]
-    sowie
-    \[
-    \forall x_1,\dots,x_n \, \bigl( \varphi(x_1,\dots,x_n) \lor \neg \varphi(x_1,\dots,x_n) \bigr) \quad \text{(Vollständigkeit)}.
-    \]
-\end{enumerate}
-\end{definition}
-
-\subsection{Partielle Definitionen}
-\begin{definition}[Partielle Definition]
-Sei \(\varphi(x_1,\dots,x_n)\) ein bereits bekannter, wohldefinierter Ausdruck (z.\,B.\ ein Prädikat oder Term) in einer formalen Sprache \(\mathcal{L}\), \(C(x_1,\dots,x_n)\) eine Bedingung (ein weiteres Prädikat), und \(Q(x_1,\dots,x_n)\) ein \emph{neues} Symbol, das in \(\mathcal{L}\) bisher nicht vorkam. Dann nennen wir
+In diesem Fall schreiben wir
 \[
-\forall x_1,\dots,x_n \bigl( C(x_1,\dots,x_n) \rightarrow ( Q(x_1,\dots,x_n) \coloneqq \varphi(x_1,\dots,x_n) ) \bigr)
+  \Gamma \vdash_{\mathcal C} \varphi
 \]
-eine \textbf{partielle Definition} von \(Q\). In dieser Definition heißt:
-\begin{itemize}
-    \item \(Q\) \textbf{Definiendum} (das neu eingeführte Symbol),
-    \item \(\varphi\) \textbf{Definiens} (der bereits bekannte Ausdruck),
-    \item \(C\) \textbf{Bedingung} (das Prädikat, unter dem die Definition gilt).
-\end{itemize}
-
-\noindent
-\subsubsection{Wohldefiniertheit der partiellen Definition} \emph{wohldefiniert}, wenn
-\begin{enumerate}
-    \item Alle in \(\varphi\) und \(C\) vorkommenden Symbole (Variablen, Konstanten und Funktions- oder Prädikatsymbole) sind bereits bekannt \emph{und} ihrerseits wohldefiniert.
-    \item Das neue Symbol \(Q\) kommt weder in \(\varphi\) noch in \(C\) selbst vor (keine Zirkularität).
-    \item Für jede mögliche Belegung der Variablen \(x_1,\dots,x_n\), für die \(C(x_1,\dots,x_n)\) wahr ist, existiert genau ein \(y\), sodass \(\varphi(x_1,\dots,x_n) = y\). Formal:
-    \[
-    \begin{aligned}
-    & \forall x_1,\dots,x_n \, \forall y \, \forall z \, 
-       \bigl( C(x_1,\dots,x_n) \rightarrow \\
-    &\qquad (\varphi(x_1,\dots,x_n) = y \land 
-              \varphi(x_1,\dots,x_n) = z \rightarrow y = z ) \bigr).
-    \end{aligned}
-    \]
-    \item Für jede mögliche Belegung der Variablen \(x_1, \dots, x_n\), für die \(C(x_1,\dots,x_n)\) wahr ist, gilt, dass \(\varphi(x_1,\dots,x_n)\) widerspruchsfrei und vollständig ist. Formal:
-    \[
-    \begin{aligned}
-    & \forall x_1,\dots,x_n \, 
-       \bigl( C(x_1,\dots,x_n) \rightarrow \\
-    &\qquad \neg\bigl( \varphi(x_1,\dots,x_n) \land 
-                       \neg \varphi(x_1,\dots,x_n) \bigr) \bigr)
-       \quad \text{(Konsistenz)}.
-    \end{aligned}
-    \]
-    sowie
-    \[
-    \begin{aligned}
-    & \forall x_1,\dots,x_n \, 
-       \bigl( C(x_1,\dots,x_n) \rightarrow \\
-    &\qquad ( \varphi(x_1,\dots,x_n) \lor 
-               \neg \varphi(x_1,\dots,x_n) ) \bigr)
-       \quad \text{(Vollständigkeit)}.
-    \end{aligned}
-    \]
-\end{enumerate}
+und sagen: \enquote{\(\varphi\) ist aus \(\Gamma\) im Kalkül
+\(\mathcal C\) ableitbar}. Ist der Kalkül aus dem Zusammenhang
+klar, lassen wir den Index \(\mathcal C\) meist weg und schreiben
+nur \(\Gamma \vdash \varphi\).
 \end{definition}
 
-\subsection{Rekursive Definition}
+\begin{definition}[Argument und Gültigkeit]
+Ein \textbf{Argument} ist ein geordnetes Paar \((\Gamma,\varphi)\),
+wobei \(\Gamma\) eine Menge von Formeln (die \textbf{Prämissen})
+und \(\varphi\) eine einzelne Formel (die \textbf{Schlussfolgerung})
+ist.
 
-\begin{definition}[Rekursive Definition]
-Sei \(\sigma(x_1, \ldots, x_n)\) ein \emph{neues} Symbol, das in einer formalen Sprache \(\mathcal{L}\) eingeführt werden soll. Eine \textbf{rekursive Definition} von \(\sigma\) besteht aus zwei Teilen:
-
-\begin{itemize}
-    \item \textbf{Basisfall:} Eine oder mehrere explizite Festlegungen von \(\sigma\) für spezielle Werte der Variablen, beispielsweise:
-    \[
-    \sigma(a_1, \ldots, a_k) \coloneqq b \quad \text{für feste Werte } a_1, \ldots, a_k \text{ und } b.
-    \]
-    Hierbei sind \(a_1, \ldots, a_k\) konkrete Werte aus der Domäne \(D\) und \(b\) ein bereits bekannter Term oder Wert in \(\mathcal{L}\).
-    
-    \item \textbf{Rekursionsvorschrift:} Eine oder mehrere Regeln, die \(\sigma(x_1, \ldots, x_n)\) für allgemeine Werte der Variablen definieren, indem sie auf zuvor definierte Werte von \(\sigma\) Bezug nehmen. Dies erfolgt in der Form:
-    \[
-    \sigma(x_1, \ldots, x_n) \coloneqq f\big(\sigma(y_1, \ldots, y_m), z_1, \ldots, z_p\big),
-    \]
-    wobei \(y_1, \ldots, y_m\) eine Teilmenge von \(x_1, \ldots, x_n\) ist, \(f\) eine bekannte Funktion in der Sprache \(\mathcal{L}\), und \(z_1, \ldots, z_p\) bekannte Terme in \(\mathcal{L}\) sind. Die Terme \(z_1, \ldots, z_p\) dürfen nicht rekursiv auf \(\sigma\) zurückgreifen, können jedoch von den Variablen \(x_1, \ldots, x_n\) abhängen oder andere bekannte Größen in \(\mathcal{L}\) enthalten.
-\end{itemize}
-
-In dieser Definition heißt:
-\begin{itemize}
-    \item \(\sigma\) \textbf{Definiendum} (das neu eingeführte Symbol),
-    \item Die Basisfälle und Rekursionsvorschriften zusammen bilden das \textbf{Definiens}.
-\end{itemize}
-
-\noindent
-\subsubsection{Wohldefiniertheit der rekursiven Definition}
-\begin{enumerate}
-    \item \textbf{Terminierung der Rekursion:} Für jede mögliche Belegung der Variablen \(x_1, \ldots, x_n\) wird die Rekursion nach endlich vielen Schritten beendet. Formal:
-    \[
-    \forall x_1, \ldots, x_n \, \exists k \in \mathbb{N} \, \bigl( \text{\(\sigma(x_1, \ldots, x_n)\) wird nach \(k\) Schritten berechnet} \bigr).
-    \]
-    \item \textbf{Eindeutigkeit:} Für jede Belegung der Variablen \(x_1, \ldots, x_n\) gibt es genau einen Wert \(y\), sodass die Rekursionsvorschrift für \(\sigma(x_1, \ldots, x_n)\) erfüllt ist. Formal:
-    \[
-    \forall x_1, \ldots, x_n \, \forall y \, \forall z \, \bigl( \sigma(x_1, \ldots, x_n) = y \land \sigma(x_1, \ldots, x_n) = z \rightarrow y = z \bigr).
-    \]
-    \item \textbf{Konsistenz der Rekursionsvorschrift:} Für jede mögliche Belegung der Variablen \(x_1, \ldots, x_n\) erzeugt die Rekursionsvorschrift keinen Widerspruch. Formal:
-    \[
-    \forall x_1, \ldots, x_n \, \neg \bigl( \sigma(x_1, \ldots, x_n) \land \neg \sigma(x_1, \ldots, x_n) \bigr).
-    \]
-    \item \textbf{Vollständigkeit der Rekursionsvorschrift:} Für jede mögliche Belegung der Variablen \(x_1, \ldots, x_n\) existiert ein definierter Wert. Formal:
-    \[
-    \forall x_1, \ldots, x_n \, \bigl( \sigma(x_1, \ldots, x_n) \lor \neg \sigma(x_1, \ldots, x_n) \bigr).
-    \]
-    \item \textbf{Monotonie der Rekursion:} Die Rekursionsvorschrift bezieht sich nur auf kleinere oder gleichwertige Argumente, die gemäß einer festen Ordnungsrelation \(R\) definiert sind. Formal:
-    \[
-    \forall x_1, \ldots, x_n \, \forall y_1, \ldots, y_m \, \bigl( R((y_1, \ldots, y_m), (x_1, \ldots, x_n)) \bigr),
-    \]
-    wobei \(R\) die Terminierung sicherstellt.
-\end{enumerate}
-\end{definition}
-
-
-\subsection{Implizite Definition}
-
-Die \textbf{implizite Definition} ist eine Methode, neue Symbole oder Konzepte in einer Theorie einzuführen, indem ihre Eigenschaften durch Axiome festgelegt werden, anstatt sie direkt zu definieren.
-
-\begin{definition}[Implizite Definition]
-Eine \textbf{implizite Definition} eines neuen Symbols \(\sigma\) in einer Theorie \(\mathcal{T}\) besteht aus einer Menge von \textbf{Aussagen} \(\Phi(\sigma)\), die die Eigenschaften von \(\sigma\) festlegen.
-In formalen Kalkülen dürfen diese Axiome durch \textbf{äquivalente Schlussregeln} ersetzt werden, die dieselben Eigenschaften syntaktisch ausdrücken, um die Anwendbarkeit zu erleichtern.
-
-\end{definition}
-
-\subsubsection{Wohldefiniertheit einer Impliziten Definition}
-
-\begin{definition}[Wohldefiniertheit einer impliziten Definition]
-Eine implizite Definition \(\Phi(\sigma)\) ist \emph{wohldefiniert}, wenn sie die folgenden Eigenschaften erfüllt:
-\begin{enumerate}
-    \item \textbf{Konsistenz:} Die Menge der Aussagen \(\Phi(\sigma)\) darf keine widersprüchlichen Bedingungen enthalten. Formal:
-    \[
-    \neg \exists \phi, \psi \in \Phi(\sigma) \, \bigl( \phi \land \neg \phi \bigr).
-    \]
-
-    \item \textbf{Existenz:} Es muss mindestens eine Interpretation von \(\sigma\) geben, die alle Aussagen in \(\Phi(\sigma)\) erfüllt. Formal:
-    \[
-    \exists \sigma' \, \forall \phi \in \Phi(\sigma) \, \bigl( \phi[\sigma' / \sigma] \bigr),
-    \]
-    wobei \(\phi[\sigma' / \sigma]\) die Aussage \(\phi\) mit der Interpretation \(\sigma'\) für das Symbol \(\sigma\) bezeichnet.
-
-    \item \textbf{Eindeutigkeit:} Es darf höchstens eine Interpretation von \(\sigma\) geben, die alle Aussagen in \(\Phi(\sigma)\) erfüllt. Formal:
-    \[
-    \forall \sigma', \sigma'' \, \bigl( (\forall \phi \in \Phi(\sigma) \, \phi[\sigma' / \sigma]) \land (\forall \phi \in \Phi(\sigma) \, \phi[\sigma'' / \sigma]) \rightarrow \sigma' = \sigma'' \bigr).
-    \]
-\end{enumerate}
-\end{definition}
-
-\subsection{Das Iota-Symbol}
-
-In manchen Fällen möchten wir einen Begriff oder ein Symbol definieren, der oder das eindeutig durch eine bestimmte Eigenschaft charakterisiert ist. Hier kommt das \textbf{Iota-Symbol} \( \iota \) zum Einsatz, das in der formalen Logik verwendet wird, um auf ein eindeutig bestimmtes Objekt Bezug zu nehmen.
-
-\begin{definition}[Iota-Symbol (\( \iota \))]
-Sei \( P(x) \) eine Aussage oder Eigenschaft über \( x \). Falls es genau ein \( x \) gibt, für das \( P(x) \) gilt, schreiben wir:
+Das Argument \((\Gamma,\varphi)\) heißt \textbf{(syntaktisch)
+gültig} (im Kalkül \(\mathcal C\)), falls
 \[
-\iota x \, P(x)
+  \Gamma \vdash_{\mathcal C} \varphi
 \]
-und meinen damit \enquote{das eindeutige \( x \), für das \( P(x) \) gilt}.
-
-Formal bedeutet dies:
-\[
-\exists! x \, P(x) \quad \text{und} \quad \iota x \, P(x) \text{ ist dieses eindeutige } x.
-\]
-Dabei steht \( \exists! x \, P(x) \) für \enquote{Es existiert genau ein \( x \), für das \( P(x) \) gilt} und ist definiert als:
-\[
-\exists x \, P(x) \land \forall y \, (P(y) \rightarrow y = x).
-\]
+gilt, das heißt, wenn es einen Beweis von \(\varphi\) aus \(\Gamma\)
+gemäß den Schlussregeln von \(\mathcal C\) gibt.
 \end{definition}
 
-\paragraph{Definition einer neuen Konstante}
+In den folgenden Abschnitten fixieren wir nun ein konkretes Kalkül,
+nämlich das Kalkül des natürlichen Schließens, und entwickeln eine
+Notation, mit der Beweise sowohl tabellarisch als auch in einer
+kompakten metalogischen Kurzschreibweise dargestellt werden können.
 
-\begin{definition}[Iota-Definition]
-Sei \(P(x)\) eine bereits bekannte und wohldefinierte Eigenschaft in einer formalen Sprache \(\mathcal{L}\). Sei \(\sigma\) ein \emph{neues} Symbol (z.\,B.\ eine neue Konstante), das in \(\mathcal{L}\) bisher nicht vorkam. Dann definieren wir
-\[
-\sigma \coloneqq \iota x\,P(x)
-\]
-\emph{genau dann}, wenn \(\exists!\,x\,P(x)\) (es existiert \emph{genau ein} \(x\), für das \(P(x)\) gilt). 
-
-\noindent
-In dieser Definition heißt:
-\begin{itemize}
-    \item \(\sigma\) \textbf{Definiendum} (das neu eingeführte Symbol),
-    \item \(\iota x\,P(x)\) \textbf{Definiens} (der bereits bekannte Ausdruck mit dem Iota-Operator).
-\end{itemize}
-
-\noindent
-\textbf{Wohldefiniertheit der Iota-Definition} setzt voraus:
-\begin{enumerate}
-    \item \(\exists!\,x\,P(x)\), d.\,h.\ es existiert \emph{genau ein} \(x\), für das \(P(x)\) gilt.
-    \item Das neue Symbol \(\sigma\) kommt in \(\iota x\,P(x)\) selbst nicht vor (keine Zirkularität).
-\end{enumerate}
-\end{definition}
-
-
-\section{Grundlegende Beweisprinzipien}
-
-In diesem Abschnitt werden weiterführende Konzepte vorgestellt, die im Rahmen von Beweisen und der Entwicklung formaler Theorien eine zentrale Rolle spielen.
-
-
-\begin{definition}[Theorem]
-Ein \textbf{Theorem} ist eine Aussage, die innerhalb eines Kalküls unter Verwendung der definierten Inferenzenregeln und gegebenen Annahmen bewiesen wurde. Theoreme sind zentrale Bestandteile mathematischer Theorien und dienen als Bausteine für weiterführende Beweise.
-\end{definition}
-
-\begin{definition}[Lemma]
-Ein \textbf{Lemma} ist ein unterstützender Satz, der im Verlauf des Beweisens eines Theorems verwendet wird. Lemmata dienen dazu, komplexere Beweise in überschaubare Schritte zu gliedern.
-\end{definition}
-
-\begin{definition}[Korollar]
-Ein \textbf{Korollar} ist eine Aussage, die sich unmittelbar aus einem bereits bewiesenen Theorem oder Lemma ableiten lässt. Korollare sind oft direkte Konsequenzen der zuvor bewiesenen Aussagen.
-\end{definition}
-\begin{remark}
-Die in Theoremen, Lemmata und Korollaren zu zeigenden Argumente notieren wir im Folgenden durch \(\Gamma \vdash \phi\). Dabei stellt \(\Gamma\) eine Aufzählung der Prämissen dar, die notwendig sind, um \(\phi\) zu zeigen.
-
-\noindent
-\textbf{Keine Annahmen:} Falls keine Annahmen für den Beweis notwendig sind, um \(\phi\) zu zeigen, notieren wir das Argument schlicht als \(\phi\). Dies impliziert, dass der Beweis aus dem \emph{leeren} Prämissenkontext \(\Gamma = \varnothing\) geführt werden kann, d.\,h.\ \(\varnothing \vdash \phi\).
-Besteht \(\Gamma\) aus lediglich einer Annahme \(\psi\) und gilt neben \(\psi\vdash\phi\) auch \(\phi\vdash\psi\), so schreiben wir für beide Argumente schlicht: \(\psi\dashv\vdash \phi\).
-\end{remark}
-
-\begin{definition}[Hilfsdefinition]
-Eine \textbf{Hilfsdefinition} ist eine unterstützende Definition, die im Verlauf der Entwicklung einer formalen Theorie eingeführt wird, um eine komplexere Hauptdefinition vorzubereiten oder zu vereinfachen. Hilfsdefinitionen können als Zwischenstufen betrachtet werden, die es ermöglichen, komplexe Begriffe in mehreren Schritten aufzubauen.
-\end{definition}
-
-\begin{remark}
-Hilfsdefinitionen dienen dazu, Definitionen modular und über-sichtlich zu gestalten. Sie sind im Allgemeinen lokal auf den Kontext der Hauptdefinition beschränkt.
-\end{remark}
-
-\begin{definition}[Temporäre Definition]
-Eine \textbf{temporäre Definition} ist eine Definition, die ausschließlich innerhalb eines Beweises eingeführt wird, um dessen Struktur zu vereinfachen und zu verdeutlichen. Diese Definition hat keine Bedeutung außerhalb des Beweises und wird nach Abschluss des Beweises nicht weiter verwendet.
-\end{definition}
-
-\begin{remark}
-Temporäre Definitionen sind nützlich, um komplexe Beweisschritte zu modularisieren und zu vereinfachen. Sie werden nur im Rahmen eines einzelnen Beweises verwendet und danach verworfen.
-\end{remark}
-
+% =========================================================
 \section{Kalkül des natürlichen Schließens}
 
 \subsection{Einführung}
-Das Kalkül des natürlichen Schließens ist ein formales System, das in der
-Aussagen- und Prädikatenlogik verwendet wird, um Beweise zu führen. Es wurde
-entwickelt, um eine Methode zur Verfügung zu stellen, die der Art und Weise,
-wie Menschen intuitiv logische Schlussfolgerungen ziehen, möglichst nahe kommt.
 
-Das natürliche Schließen ist ein spezielles Kalkül, das \emph{keine Axiome}
-verwendet, sondern sich vollständig auf eine festgelegte Menge von
-\emph{Schlussregeln} stützt. Diese Schlussregeln sind die fundamentalen
-Bausteine des Kalküls und bestimmen, wie aus gegebenen Formeln neue Formeln
-abgeleitet werden können. Sie definieren die zulässigen Schritte innerhalb des
-Systems und gewährleisten so die logische Korrektheit der abgeleiteten
-Aussagen.
+In den vorangegangenen Abschnitten haben wir allgemeine Begriffe wie
+\emph{Kalkül}, \emph{Beweis} und \emph{gültiges Argument} eingeführt.
+Nun fixieren wir einen ganz bestimmten Kalkül, der im weiteren Verlauf
+als unser \enquote{Standardbeweissystem} dienen soll: das
+\emph{Kalkül des natürlichen Schließens}.
 
-Ein \emph{Beweis} im Kalkül des natürlichen Schließens ist eine endliche Folge
-von Formeln, bei der jede Formel entweder eine \emph{Annahme} (Prämisse) ist
-oder sich durch Anwendung einer der Schlussregeln auf zuvor eingeführte
-Formeln ableiten lässt.
+Dieser Kalkül arbeitet in einer fest gewählten formalen Sprache
+\(\mathcal L\) (etwa der in Kapitel \enquote{Aussagenlogik und
+Prädikatenlogik} eingeführten Aussagensprache oder
+Prädikatensprache erster Stufe) und besitzt
+\[
+  \mathsf{Ax} = \emptyset,
+\]
+verwendet also \emph{keine Axiome}, sondern ausschließlich eine
+vorgegebene Menge von \emph{Schlussregeln}. Alle inhaltlichen Axiome
+(z.\,B.\ die ZFC-Axiome) treten später getrennt als Teile von
+Theorien auf.
 
+Wann immer wir im Folgenden (ohne Zusatz) \enquote{\(\Gamma \vdash \varphi\)}
+oder \enquote{Beweis} sagen, ist damit die Ableitbarkeit bzw.\ ein Beweis
+im Kalkül des natürlichen Schließens gemeint.
+
+% ---------------------------------------------------------
 \subsection{Tabellarische Beweisdarstellung nach Lemmon}
 
 Im Folgenden verwenden wir eine tabellarische Darstellung der Beweise
@@ -592,26 +338,25 @@ und ist wie folgt zu lesen:
   \item \(m\) ist die \emph{Zeilennummer} (eine natürliche Zahl),
   \item \(P\) ist die in dieser Zeile auftretende Formel,
   \item \(I\) ist eine endliche Menge von Zeilennummern, die die noch offenen
-        \emph{Annahmen} (Prämissen) dieser Zeile kodiert,
+        \emph{Annahmen} dieser Zeile kodiert,
   \item \(\text{Regelname } j_1,\dots,j_\ell\) gibt an, welche Schlussregel
         angewendet wurde und auf welche Zeilen \(j_1,\dots,j_\ell\) sich diese
         Anwendung bezieht.
 \end{itemize}
 
+In Worten: Eine Beweistabelle ist nichts anderes als eine Liste
+von Zeilen. Jede Zeile enthält eine Formel, außerdem merken wir,
+von welchen Annahmen diese Zeile noch abhängt und mit welcher
+Schlussregel sie gewonnen wurde.
+
 Eine Zeile ist eine \emph{Annahme}, wenn sie nur aus sich selbst abhängt und
 noch keinen Schluss aus vorherigen Zeilen darstellt:
-
-
-\label{rule:A}
 \[
-  \begin{array}{llll}
-    \{i\} & (i) & P & \rA
-  \end{array}
+  \{i\} \ (i)\ P \ \rA
 \]
-
-Hier ist \(P\) eine beliebige Formel, \(i\) ist die Zeilennummer, und \(I=\{i\}\)
-markiert, dass die Zeile \(i\) nur von sich selbst als offener Annahme
-abhängt.
+Hier ist \(P\) eine beliebige Formel, \(i\) ist die Zeilennummer, und
+\(I=\{i\}\) markiert, dass die Zeile \(i\) nur von sich selbst als offener
+Annahme abhängt.
 
 \begin{definition}[Beweistabelle]
 Eine \emph{Beweistabelle} ist eine endliche Sequenz von Zeilen
@@ -628,6 +373,7 @@ hat und folgenden Bedingungen genügt:
     \[
       \{i\}\ (i)\ P_i\ \rA
     \]
+    \label{rule:A}
     hat.
   \item \textbf{Schlussregeln.} Jede nicht als Annahme eingeführte Zeile
     \(Z_m\) entsteht durch Anwendung einer der festgelegten Schlussregeln
@@ -642,6 +388,125 @@ und ihre Abhängigkeitsmenge \(I_N\) genau die Zeilennummern der Annahmen
 \(P_1,\dots,P_n\) umfasst.
 \end{definition}
 
+% ---------------------------------------------------------
+\subsection{Metalogische Kurznotation}
+
+Die tabellarische Darstellung ist sehr präzise, aber für Erklärungen oft
+zu feinmaschig. Daher verwenden wir eine vereinfachte \emph{metalogische
+Notation}, die nur noch offene Annahmen, Hilfsbeweise und bestimmte
+Nebenbedingungen sichtbar macht.
+
+\begin{definition}[Sequenzen \(P_1,\dots,P_n \vdash R\)]
+Seien \(P_1,\dots,P_n,R\) Formeln. Wir schreiben
+\[
+  P_1,\dots,P_n \vdash R,
+\]
+wenn es eine Beweistabelle gibt, deren letzte Zeile die Formel \(R\) enthält
+und deren offene Annahmen genau \(P_1,\dots,P_n\) sind (in irgendeiner
+Reihenfolge). Allgemeiner schreiben wir für eine Menge \(\Gamma\) von Formeln
+\[
+  \Gamma \vdash R,
+\]
+wenn es eine Beweistabelle mit letzter Zeile \(R\) gibt, deren offene Annahmen
+genau die Formeln aus \(\Gamma\) sind.
+
+In allen Ausdrücken der Form \(P_1,\dots,P_n \vdash R\) sind die
+\(P_i\) also immer \emph{Formeln} der Sprache \(\mathcal L\). Zusätzliche
+Symbole wie \([\,]\), \(\vdots\) oder \(\mid_x\) werden nur als
+metasprachliche Markierungen an solchen Formeln angebracht.
+\end{definition}
+
+\begin{definition}[Subbeweise]
+Seien \(P\) und \(Q\) Formeln. Wir schreiben
+\[
+  [P]\vdots Q,
+\]
+wenn es in einer Beweistabelle einen \emph{Subbeweis} gibt, der mit einer
+Annahmezeile
+\[
+  \{k\}\ (k)\ P\ \rA
+\]
+beginnt und in einer Zeile mit Formel \(Q\) endet.
+
+Wir erweitern diese Notation auf endlich viele Annahmen, indem wir
+\[
+  [P_1,\dots,P_k]\vdots Q
+\]
+schreiben, wenn es einen Subbeweis gibt, der mit den Annahmezeilen
+\[
+  \{k_1\}\ (k_1)\ P_1\ \rA,\quad
+  \dots,\quad
+  \{k_k\}\ (k_k)\ P_k\ \rA
+\]
+beginnt und in einer Zeile mit Formel \(Q\) endet. Der bisherige Fall
+\([P]\vdots Q\) ist dabei der Spezialfall \(k=1\).
+
+Wenn wir in einer Sequenz
+\[
+  P_1,\dots,P_{j-1},\,[S_1,\dots,S_k]\vdots Q,\,P_{j+1},\dots,P_n \vdash R
+\]
+schreiben, ist damit gemeint, dass
+\begin{itemize}
+  \item die zugrunde liegende Formel an der \(j\)-ten Stelle \(Q\) ist und
+  \item es zu dieser Formel in der Beweistabelle einen Subbeweis gibt, der
+        mit den Annahmen \(S_1,\dots,S_k\) beginnt und in \(Q\) endet.
+\end{itemize}
+Die Klammerung \([S_1,\dots,S_k]\vdots Q\) ist also nur eine Markierung für
+diese besondere Situation, keine neue Art von Formel.
+\end{definition}
+
+\begin{example}
+  Die Notation \([P]\vdots Q\) soll man sich so vorstellen:
+  Wir machen einen Hilfsbeweis, in dem wir \(P\) annehmen
+  und am Ende \(Q\) folgern. Diesen Block können wir später
+  in einer Schlussregel (z.\,B.\ bei \(\rightarrow I\)) als
+  Baustein verwenden.
+\end{example}
+
+\begin{definition}[Eigenvariablenbedingung \(P(x)\mid_x\)]
+Sei \(P(x)\) eine Formel mit einer freien Variable \(x\). Wir schreiben
+\[
+  P_1,\dots,P_{j-1},\,P(x)\mid_x,\,P_{j+1},\dots,P_n \vdash R,
+\]
+wenn
+\begin{itemize}
+  \item die zugrunde liegende Formel an der \(j\)-ten Stelle genau \(P(x)\)
+        ist und
+  \item es eine Beweistabelle mit letzter Zeile \(R\) gibt, deren offene
+        Annahmen genau \(P_1,\dots,P_n\) sind und in der \(x\) in keiner
+        der Annahmen \(P_i\) mit \(i\neq j\) frei vorkommt.
+\end{itemize}
+Die Schreibweise \(P(x)\mid_x\) ist damit eine Kurzform für die übliche
+Eigenvariablenbedingung; sie verändert die Liste der Annahmen
+\(P_1,\dots,P_n\) nicht, sondern markiert nur den Eintrag \(P(x)\).
+\end{definition}
+
+\begin{definition}[Subbeweis mit Eigenvariablenbedingung \(P(x)\vdots Q\mid_x\)]
+Seien \(P(x)\) und \(Q\) Formeln. Wir schreiben
+\[
+  P(x)\vdots Q\mid_x,
+\]
+wenn es einen Subbeweis \([P(x)]\vdots Q\) gibt, bei dem zusätzlich gilt:
+\begin{itemize}
+  \item In allen offenen Annahmen von \(Q\) außerhalb der speziellen Annahme
+        \(P(x)\) kommt \(x\) nicht frei vor, und
+  \item in der Schlussformel \(Q\) kommt \(x\) nicht frei vor.
+\end{itemize}
+Wenn wir diese Notation innerhalb einer Sequenz \(P_1,\dots,P_n \vdash R\)
+verwenden, ist immer gemeint, dass an der betreffenden Stelle die Formel
+\(Q\) steht und für den Beweis die oben beschriebene Situation vorliegt.
+\end{definition}
+
+\begin{remark}
+Die Notationen \([P]\vdots Q\), \(P(x)\mid_x\) und \(P(x)\vdots Q\mid_x\)
+erzeugen also keine neuen Arten von Formeln. Sie sind metasprachliche
+Zusätze, mit denen wir bestimmte Eigenschaften der zugehörigen
+Beweistabellen (Subbeweise, Eigenvariablenbedingungen) knapp
+kennzeichnen. Die eigentlichen Annahmen bleiben immer Formeln
+\(P_1,\dots,P_n\).
+\end{remark}
+
+% ---------------------------------------------------------
 \subsection{Abstrakte Schreibweise für Schlussregeln}
 
 Metalogisch beschreiben wir eine Schlussregel in der abstrakten Form
@@ -650,28 +515,58 @@ Metalogisch beschreiben wir eine Schlussregel in der abstrakten Form
 \]
 Dies ist so zu lesen:
 \begin{quote}
-  Wenn in einer Beweistabelle die Formeln \(P_1,\dots,P_n\) in geeigneter Weise
-  zur Verfügung stehen, dann erlaubt die Schlussregel \(\Delta\), die Formel
-  \(R\) als neue Zeile einzuführen.
+  \(\Delta\) ist eine Schlussregel, die aus den Formeln
+  \(P_1,\dots,P_n\) eine Formel \(R\) als neue Zeile ableiten darf.
 \end{quote}
 Die abstrakte Notation blendet die genaue tabellarische Form (Indizes,
-Zeilennummern, Referenzen) aus. Um die Verbindung zur Beweistabelle explizit
-zu machen, verwenden wir eine kompakte Schreibweise in Form von \emph{Regelschemata}, die beide Ebenen miteinander verknüpft.
+Zeilennummern, Referenzen) aus. Sie sagt nur, \emph{welche} Formeln als
+Voraussetzungen und welche Formel als Schluss auftreten.
 
-\subsection{Regelschemata ohne und mit entladenen Annahmen}
-
-\begin{DeltaContext}{In diesem Abschnitt verwendete Symbole}
-  \DeltaRow{Aussagen}{P_1 \dsep \dots \dsep P_n \dsep A \dsep R}
-  \DeltaRow{Zeilennummern}{m_1 \dsep \dots \dsep m_n \dsep m \dsep k}
-  \DeltaRow{Indexmengen}{I_1 \dsep \dots \dsep I_n \dsep I \dsep I_s}
-\end{DeltaContext}
-
-\paragraph{Regeln ohne entladene Annahmen.}
-Ein Regelschema der Form
+In komplexeren Regeln können in dieser Notation auch die oben
+eingeführten Markierungen vorkommen, etwa
+\([P]\vdots Q\), \(P(x)\mid_x\) oder \(P(x)\vdots Q\mid_x\). In solchen
+Fällen beschreibt ein Ausdruck
 \[
-  P_1,\dots,P_n \;\vdash_\Delta\; R
+  S_1,\dots,S_n \;\vdash_\Delta\; R
 \]
-wird tabellarisch durch folgendes Schema repräsentiert:
+eine Kombination aus offenen Annahmen, Subbeweisen und
+Eigenvariablenbedingungen, wie in der vorherigen Untersektion erklärt.
+
+% ---------------------------------------------------------
+\subsection{Regelschemata und ihre tabellarische Gestalt}
+
+\begin{remark}
+Dieser Abschnitt ist technischer als die vorherigen. Er ist vor
+allem dafür gedacht, später wirklich exakt nachweisen zu können,
+dass jede unserer Regeln in Beweistabellen korrekt umgesetzt
+werden kann. Wer zunächst nur ein Gefühl für die Beweisregeln
+bekommen möchte, kann diesen Abschnitt beim ersten Lesen
+überspringen und später zurückkehren.
+\end{remark}
+
+Schlussregeln formulieren wir im Allgemeinen in der Form
+\[
+  S_1,\dots,S_n \;\vdash_\Delta\; R,
+\]
+wobei jedes \(S_i\) eine der folgenden Schema-Premissen ist:
+\begin{itemize}
+  \item eine Formel \(P\),
+  \item ein markierter Subbeweis \([P]\vdots Q\) (oder allgemeiner
+        \([P_1,\dots,P_k]\vdots Q\)),
+  \item eine Formel mit Eigenvariablenbedingung \(P(x)\mid_x\),
+  \item ein Subbeweis mit Eigenvariablenbedingung \(P(x)\vdots Q\mid_x\).
+\end{itemize}
+
+Die Intuition ist:
+\begin{quote}
+  Immer wenn in einer Beweistabelle die in \(S_1,\dots,S_n\) beschriebene
+  Konstellation realisiert ist, darf eine neue Zeile mit Formel \(R\)
+  nach der Regel \(\Delta\) eingeführt werden.
+\end{quote}
+
+Für den einfachsten Fall, in dem alle \(S_i\) nur Formeln \(P_i\) sind,
+kann man die Verbindung zur tabellarischen Darstellung so illustrieren:
+
 \begin{RuleSchema}
 \[
 P_1,\dots,P_n \;\vdash_\Delta\; R
@@ -695,142 +590,480 @@ I := I_1 \cup \dots \cup I_n.
 \]
 \end{RuleSchema}
 
-Die Indizes \(i_1,\dots,i_n\) geben an, an welchen Zeilennummern die Formeln
-\(P_1,\dots,P_n\) tatsächlich im konkreten Beweis vorkommen. Die Mengen
-\(I_1,\dots,I_n\) kodieren die offenen Annahmen dieser Zeilen. Die Regel
-\(\Delta\) erlaubt es, aus diesen Zeilen eine neue Zeile \(m\) mit Formel
-\(R\) zu bilden, deren Abhängigkeitsmenge die Vereinigung der bisherigen
-Abhängigkeitsmengen ist.
+Hier markieren die Zeilen mit \(P_{i_1},\dots,P_{i_n}\) die Stellen in
+der Beweistabelle, an denen die Premissen des Regelschemas tatsächlich
+auftreten; die Mengen \(I_1,\dots,I_n\) kodieren die jeweils offenen
+Annahmen dieser Zeilen. Die Schlusszeile mit Formel \(R\) trägt als
+Abhängigkeitsmenge die Vereinigung aller bisherigen Abhängigkeitsmengen.
 
-\paragraph{Regeln mit einer entladenen Annahme.}
-Viele Schlussregeln (zum Beispiel \(\rightarrow I\), \(\neg I\), \(\lor E\))
-arbeiten mit einem \emph{Hilfsbeweis} unter einer zusätzlichen Annahme \(A\),
-die am Ende des Subbeweises wieder \enquote{entladen} wird. Meta\-logisch
-schreiben wir dies als
+Tritt in einem Regelschema anstelle einer bloßen Formel \(P_j\) ein
+Subbeweis \([A]\vdots P_j\) auf, so bedeutet dies tabellarisch, dass
+die entsprechende Zeile
 \[
-  P_1,\dots,[A]\vdots P_j,\dots,P_n \;\vdash_\Delta\; R,
+  \begin{array}{llll}
+    I_j & (m_{i_j}) & P_j & \cdots
+  \end{array}
 \]
-wobei \([A]\vdots P_j\) einen Teilbeweis bezeichnet, der mit einer Annahme
-\(A\) beginnt und in \(P_j\) endet.
-
-Tabellarisch verwenden wir dafür das Schema:
-\begin{RuleSchema}
+in der obigen Box durch einen Block der Form
 \[
-P_1,\dots,[A]\vdots P_j,\dots,P_n \;\vdash_\Delta\; R
-\]
-
-\[
-\leadsto\;
 \boxed{%
   \begin{array}{llll}
-       &        &\vdots  &        \\[0.2ex]
-    k  &(k)     &A       &\rA     \\[0.2ex]
-       &        &\vdots  &        \\[0.2ex]
-    I_s&(m_{i_s})&P_j    &\cdots  \\[0.2ex]
-       &        &\vdots  &        \\[0.4ex]
-    I  &(m)      &R      &\Delta(\text{alle verwendeten }m_{i_r}\text{ inkl.\ }k,m_{i_s}) \\
+    k   & (k)       & A   & \rA   \\[0.2ex]
+        &           &\vdots&      \\[0.2ex]
+    I_s & (m_{i_s}) & P_j & \cdots
   \end{array}
 }
 \]
-
-\[
-i_s = j,\qquad
-I_s' := I_s \setminus \{k\},
-\]
-
-\[
-\text{es gibt weitere Zeilen }(I_r,(m_{i_r}),P_{i_r},\dots)
-\text{ für } r \neq s,
-\]
-
-\[
-I := \bigcup_{r\neq s} I_r \,\cup\, I_s'.
-\]
-\end{RuleSchema}
-
-Dabei ist \(k\) die Zeilennummer der eingeführten Annahme \(A\) mit
-Abhängigkeitsmenge \(\{k\}\), und \(m_{i_s}\) ist die Zeile, in der der
-Subbeweis unter dieser Annahme endet (Formel \(P_j\), mit \(i_s=j\)). Beim
-Übergang zur Schlusszeile \(m\) mit Formel \(R\) wird die Annahme \(A\)
-entladen, indem der Index \(k\) aus der Abhängigkeitsmenge \(I_s\) entfernt
-wird. Entsprechend wird \(I\) durch Vereinigung dieser bereinigten Mengen
-gebildet.
-
-\subsection{Meta-Notation für Eigenvariablenbedingungen}
-
-Bei Quantorenregeln treten oft sogenannte \emph{Eigenvariablenbedingungen}
-auf: bestimmte freie Variablen dürfen in offenen Annahmen oder in der
-Konklusion nicht frei vorkommen. Um solche Nebenbedingungen kompakt notieren
-zu können, verwenden wir eine spezielle Meta-Notation.
-
-\begin{definition}[Notation \(P(x)\mid_x\)]
-Sei \(P(x)\) eine Formel mit einer freien Variable \(x\).
-Wir schreiben
-\[
-  P(x)\mid_x,
-\]
-wenn es eine Beweistabelle gibt, in der eine Zeile
-\[
-  I\ (m)\ P(x)\ \dots
-\]
-vorkommt, so dass in keiner der durch \(I\) kodierten offenen Annahmen die
-Variable \(x\) frei vorkommt. 
-
-Allgemeiner schreiben wir
-\[
-  P_1,\dots,P_{j-1},\,P(x)\mid_x,\,P_{j+1},\dots,P_n \;\vdash\; R,
-\]
-wenn es eine Beweistabelle mit letzter Zeile \(R\) gibt und eine Zeile mit
-Formel \(P(x)\), so dass
+ersetzt wird. Dabei gilt:
 \begin{itemize}
-  \item \(P_1,\dots,P_n\) genau die offenen Annahmen der letzten Zeile sind,
-  \item \(P(x)\) an der \(j\)-ten Stelle dieser Liste steht und
-  \item in keiner der übrigen offenen Annahmen die Variable \(x\) frei vorkommt.
+  \item \(k\) ist die Zeilennummer der Annahme \(A\) mit
+        Abhängigkeitsmenge \(\{k\}\),
+  \item \(m_{i_s}\) ist die Zeilennummer der Schlusszeile des Subbeweises
+        mit Formel \(P_j\),
+  \item \(I_s\) ist die zu dieser Schlusszeile gehörige
+        Abhängigkeitsmenge und enthält insbesondere den Index \(k\).
 \end{itemize}
+Beim Übergang zur Schlusszeile mit Formel \(R\) wird die Annahme
+\(A\) \emph{entladen}, indem man \(k\) aus dieser Menge entfernt.
+Statt \(I_j\) verwendet man also die bereinigte Menge
+\[
+  I_j' := I_s \setminus \{k\}.
+\]
+Die Abhängigkeitsmenge der Schlusszeile ist dann
+\[
+  I := I_1 \cup \dots \cup I_{j-1} \cup I_j' \cup I_{j+1} \cup \dots \cup I_n.
+\]
+
+\medskip
+
+Liegt in einem Regelschema ein Subbeweis mit mehreren Annahmen
+\[
+  [A_1,\dots,A_r]\vdots P_j
+\]
+vor. Der entsprechende Block beginnt analog mit den Annahmezeilen
+\[
+  A_1,\dots,A_r
+\]
+; die Menge \(I_s\) enthält dann alle zu diesen Annahmen gehörigen
+Indizes, die beim Entladen gemeinsam aus \(I_s\) entfernt werden.
+
+\medskip
+
+Wenn eine Schema-Premisse in der abstrakten Notation als
+\(P(x)\mid_x\) notiert ist, so betrachten wir wieder die
+entsprechende Zeile
+\[
+  \begin{array}{llll}
+    I_j & (m_{i_j}) & P(x) & \cdots
+  \end{array}
+\]
+in der Beweistabelle. Die Markierung \(P(x)\mid_x\) bedeutet dann
+tabellarisch:
+\begin{itemize}
+  \item Die Zeile \(m_{i_j}\) trägt die Formel \(P(x)\),
+  \item für jede Zeilennummer \(\ell \in I_j\), deren Zeile eine
+        \emph{Annahme} ist und mit \(m_{i_j}\) als offene Annahme
+        verbunden bleibt, kommt die Variable \(x\) in der dortigen
+        Formel nicht frei vor.
+\end{itemize}
+Mit anderen Worten: In allen offenen Annahmen, von denen die Zeile
+\(m_{i_j}\) abhängt, ist \(x\) (abgesehen von der Formel \(P(x)\)
+selbst) nicht frei. Dies ist genau die Eigenvariablenbedingung, die
+bei der Allquantor-Einführung \(\forall I\) verwendet wird.
+
+\medskip
+
+Tritt schließlich in einem Regelschema eine Schema-Premisse der Form
+\(P(x)\vdots Q\mid_x\) auf, so kombinieren wir die beiden oben
+beschriebenen Situationen. Tabellarisch wird die entsprechende
+Zeile
+\[
+  \begin{array}{llll}
+    I_j & (m_{i_j}) & Q & \cdots
+  \end{array}
+\]
+durch einen Subbeweisblock
+\[
+\boxed{%
+  \begin{array}{llll}
+    k   & (k)       & P(x) & \rA   \\[0.2ex]
+        &           &\vdots&       \\[0.2ex]
+    I_s & (m_{i_s}) & Q    & \cdots
+  \end{array}
+}
+\]
+ersetzt, wobei wiederum \(m_{i_s}\) die Schlusszeile des Subbeweises
+ist und \(I_s\) die zugehörige Abhängigkeitsmenge. Die Markierung
+\(\mid_x\) steht dabei für die zusätzliche Eigenvariablenbedingung:
+\begin{itemize}
+  \item In allen offenen Annahmen, deren Zeilennummer in
+        \(I_s \setminus \{k\}\) liegt, kommt \(x\) nicht frei vor,
+  \item in der Schlussformel \(Q\) kommt \(x\) ebenfalls nicht frei vor.
+\end{itemize}
+Beim Übergang zur Schlusszeile mit Formel \(R\) wird wie oben die
+Annahme \(P(x)\) entladen, indem man \(k\) aus \(I_s\) entfernt und
+die bereinigte Menge
+\[
+  I_j' := I_s \setminus \{k\}
+\]
+an die Stelle von \(I_j\) setzt. Die Gesamtabhängigkeitsmenge der
+Schlusszeile erhält man dann wieder durch Vereinigung aller
+auftretenden Indexmengen (mit \(I_j\) ersetzt durch \(I_j'\)).
+
+\medskip
+
+In den nachfolgenden Abschnitten formulieren wir alle konkreten
+Schlussregeln des natürlichen Schließens in dieser Kurznotation.
+Die Beispiele werden jeweils zeigen, wie die Regelschemata in
+Beweistabellen konkret aussehen und wie Subbeweise sowie
+Eigenvariablenbedingungen in der tabellarischen Darstellung
+realisiert werden.
+% =========================================================
+\section{Sätze, Axiome und Definitionen}
+
+\begin{DeltaContext}{In diesem Abschnitt verwendete Symbole}
+  \DeltaRow{Aussagen}{A \dsep B \dsep \varphi}
+  \DeltaRow{Prämissenmengen}{\Gamma}
+  \DeltaRow{Mengen}{M \dsep N \dsep X \dsep Y}
+  \DeltaRow{Funktionen}{F \dsep G}
+\end{DeltaContext}
+
+In diesem Abschnitt gehen wir systematischer darauf ein,
+wie wir im Skript wichtige Aussagen hervorheben und welche
+Rollen \enquote{Theoreme}, \enquote{Axiome} und \enquote{Definitionen}
+dabei spielen. Wer sich zunächst auf die praktische Verwendung
+konzentrieren möchte, kann die späteren Abschnitte über implizite
+Definitionen und das Iota-Symbol beim ersten Lesen überspringen.
+
+Im weiteren Verlauf des Skripts werden vor allem
+\begin{itemize}
+  \item \textbf{Axiome} mathematischer Theorien (z.\,B.\ ZFC),
+  \item \textbf{Sätze/Theoreme} (ggf.\ auch Lemma, Korollar),
+  \item \textbf{Definitionen} neuer Begriffe
+\end{itemize}
+hervorgehoben und nummeriert.
+
+Jeder solcher Block hat im Wesentlichen zwei Bestandteile:
+\begin{enumerate}
+  \item einen \textbf{formalen Kern}, also entweder
+        \begin{itemize}
+          \item eine einzelne Formel \(\varphi\) in \(\mathcal L\) oder
+          \item eine Sequenz\-Aussage \(P_1,\dots,P_n \vdash R\),
+                ggf.\ mit den in der vorigen Sektion eingeführten
+                Markierungen \([P]\vdots Q\), \(P(x)\mid_x\),
+                \(P(x)\vdots Q\mid_x\), wenn es um
+                \emph{metalogische} Aussagen über das Kalkül geht;
+        \end{itemize}
+  \item kurze \textbf{Kontextzeilen}, in denen wir angeben, wie die
+        auftretenden Buchstaben zu lesen sind, z.\,B.
+        \[
+          \text{Mengen: } M,N \qquad
+          \text{Funktionen: } F\colon M\to N.
+        \]
+\end{enumerate}
+Die Kontextzeilen gehören nicht zur formalen Aussage selbst; sie
+sollen nur deutlich machen, welche Art von Objekten mit den
+Symbolen gemeint ist (Mengen, Funktionen u.\,Ä.).
+
+\begin{definition}[Theorem]
+Ein \textbf{Theorem} ist im weiteren Sinn jede hervorgehobene
+Aussage, deren formaler Kern entweder
+\begin{itemize}
+  \item eine Formel \(\varphi\) in \(\mathcal L\) oder
+  \item eine Sequenz\-Aussage \(P_1,\dots,P_n \vdash R\) (ggf.\ mit
+        Markierungen wie \([P]\vdots Q\) oder \(P(x)\mid_x\))
+\end{itemize}
+ist und für die es im Kalkül des natürlichen Schließens einen
+Beweis gibt.
+
+Im Text wird ein Theorem durch eine Überschrift wie
+\[
+  \text{Theorem 3.188}
+\]
+gekennzeichnet, gefolgt von
+\begin{itemize}
+  \item dem Kontext (z.\,B.\ \enquote{Mengen:
+        \(M,N\)}, \enquote{Funktionen: \(F\colon M\to N\)}),
+  \item und der eigentlichen Aussage (Formel oder Sequenz), z.\,B.
+        \[
+          (x,y)\in F \;\vdash\; (x,y)\in M\times N
+        \]
+        oder
+        \[
+          P_1\lor P_2\lor P_3,\; [P_1]\vdots R,\; [P_2]\vdots R,\;
+          [P_3]\vdots R \;\vdash\; R.
+        \]
+\end{itemize}
+Danach folgt gewöhnlich der Beweis, meist in tabellarischer Form.
 \end{definition}
 
-Die Notation \(P(x)\mid_x\) fasst also die übliche Bedingung zusammen, dass
-\(x\) \enquote{neu} ist und nur in dem Teil des Beweises frei vorkommt, in dem
-\(P(x)\) selbst erscheint, nicht aber in den übrigen offenen Annahmen.
+\begin{definition}[Axiom]
+Ein \textbf{Axiom} ist eine Formel \(\varphi\) der Sprache
+\(\mathcal L\), die wir in einer Theorie \emph{ohne Beweis} als
+gültig voraussetzen. Im Sinne der oben gegebenen Kalkül\-Definition
+(\(\mathsf{Ax}\subseteq \mathrm{Formeln}(\mathcal L)\)) sind Axiome
+also stets \emph{Formeln}, keine Sequenzen.
 
-\begin{definition}[Notation \(P(x)\vdots Q\mid_x\)]
-Seien \(P(x)\) und \(Q\) Formeln. Wir schreiben
+Im Text wird ein Axiom durch eine Überschrift wie
 \[
-  P(x)\vdots Q\mid_x,
+  \text{Axiom 3.8 (Menge geordneter Paare)}
 \]
-wenn es einen Subbeweis
+gekennzeichnet. Es folgt der Kontext, z.\,B.\ in der Form
 \[
-  [P(x)]\ \vdots\ Q
+  \text{Mengen: } M,N
+  \qquad
+  \text{Relationen/Funktionen: } F \subseteq M \times N.
 \]
-gibt, d.\,h.\ eine Folge von Zeilen, die mit einer Annahmezeile
-\[
-  \{k\}\ (k)\ P(x)\ \rA
-\]
-beginnt und in einer Zeile
-\[
-  J\ (m)\ Q\ \dots
-\]
-endet, so dass die folgende Eigenvariablenbedingung erfüllt ist:
-\begin{itemize}
-  \item Die Variable \(x\) kommt in keiner der durch \(J\setminus\{k\}\)
-        kodierten offenen Annahmen frei vor, und
-  \item \(x\) kommt in der Konklusion \(Q\) nicht frei vor.
-\end{itemize}
-Wir können dies informell so lesen:
-\enquote{Es gibt einen Subbeweis von \(P(x)\) nach \(Q\), in dem \(x\) nur in
-der speziellen Annahme \(P(x)\) und deren Ableitungen frei vorkommt, aber
-nicht in den übrigen offenen Annahmen und nicht in \(Q\) selbst.}
+und die betreffende Formel \(\varphi\).
+
+Wir verwenden die Kurznotation \(\vdash\), \([P]\vdots Q\),
+\(\mid_x\) bei Axiomen im Allgemeinen \emph{nicht}; wo wir Axiome
+gelegentlich in Sequenzform umformulieren, ist dies ausdrücklich
+als \emph{metalogische} Umschreibung zu verstehen, nicht als Teil
+der eigentlichen Axiomformulierung.
 \end{definition}
 
 \begin{remark}
-Die Notationen \(P(x)\mid_x\) und \(P(x)\vdots Q\mid_x\) sind rein
-metalogische Kurzschreibweisen. Sie fassen jeweils bestimmte
-Eigenvariablenbedingungen zusammen, die insbesondere bei den Regeln für
-Quantoren (z.\,B.\ All- und Existenzquantor) auftreten. Die konkreten
-Quantorenregeln werden später in dieser Notation formuliert.
+Damit bleiben die \enquote{aussagenlogischen Schlussregeln} des
+natürlichen Schließens klar von Axiomen getrennt: Sie gehören
+zur Menge \(\mathsf{Reg}\) des Kalküls und werden mit Hilfe der
+metalogischen Kurznotation beschrieben, sind aber selbst
+\emph{keine} Axiome einer Theorie. Der Begriff des Kalküls aus
+der oben gegebenen Definition bleibt dadurch unverändert korrekt.
 \end{remark}
 
-\subsection{Übersicht über die elementaren Schlussregeln}
+\begin{definition}[Definition]
+Eine \textbf{Definition} führt einen neuen Begriff oder ein neues
+Symbol ein, indem angegeben wird, durch welche Eigenschaften es
+bestimmt ist. Im Text wird eine Definition durch eine Überschrift
+wie
+\[
+  \text{Definition 3.5 (Teilmenge)}
+\]
+gekennzeichnet. Danach folgen der Kontext (z.\,B.\ \enquote{Mengen:
+\(M,N\)}) und eine Formel, die den neuen Begriff beschreibt, etwa
+\[
+  M \subseteq N \coloneqq \forall x\,(x\in M \rightarrow x\in N).
+\]
+In diesem Beispiel wird das Symbol \(\subseteq\) eingeführt und
+als Abkürzung für eine bereits bekannte Formel erklärt.
+
+In Definitionsblöcken verwenden wir in der Regel keine
+Subbeweis\- oder Eigenvariablen\-Markierungen wie \([P]\vdots Q\)
+oder \(\mid_x\), da Definitionen vor allem neue Schreibweisen
+fixieren. Streng genommen wäre ihre Verwendung dort aber möglich,
+da auch Definitionen letztlich durch Formeln in \(\mathcal L\)
+charakterisiert werden.
+\end{definition}
+
+% =========================================================
+\section{Arten von Definitionen}
+
+\begin{DeltaContext}{In diesem Abschnitt verwendete Symbole}
+  \DeltaRow{Aussagen}{A \dsep B \dsep C \dsep \varphi}
+  \DeltaRow{Prädikatensymbole}{P \dsep Q \dsep R}
+  \DeltaRow{Terme}{t_1 \dsep \dots \dsep t_n}
+  \DeltaRow{Neue Symbole}{Q \dsep \sigma \dsep \iota}
+\end{DeltaContext}
+
+In diesem Abschnitt beschreiben wir, in welcher Form wir neue
+Symbole zur bereits festgelegten Sprache \(\mathcal L\) hinzufügen.
+Alle Definitionen sind dabei \emph{syntaktisch} zu verstehen:
+Das zugrundeliegende logische Kalkül (insbesondere die
+Schlussregeln des natürlichen Schließens) bleibt unverändert, wir
+führen lediglich neue Schreibweisen ein, die durch bereits
+vorhandene Ausdrücke erklärt werden.
+
+\subsection{Explizite Definitionen}
+
+\begin{definition}[Explizite Definition]
+Sei \(\varphi(t_1,\dots,t_n)\) eine wohldefinierte Aussage in der
+Sprache \(\mathcal L\), in der Terme \(t_1,\dots,t_n\) vorkommen
+dürfen, und sei \(Q\) ein neues \(n\)-stelliges Symbol (z.\,B.\ ein
+neues Prädikatensymbol oder ein neues Funktionssymbol).
+
+Eine \textbf{explizite Definition} von \(Q\) schreiben wir in
+metasprachlicher Notation als
+\[
+  Q(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n).
+\]
+Damit vereinbaren wir: Überall dort, wo der Ausdruck
+\(Q(t_1,\dots,t_n)\) vorkommt, darf er als Abkürzung für
+\(\varphi(t_1,\dots,t_n)\) gelesen werden – und umgekehrt.
+Das Symbol \(\coloneqq\) gehört dabei nicht zur Sprache
+\(\mathcal L\), sondern kennzeichnet lediglich eine Definition.
+\end{definition}
+
+\begin{remark}
+Formal kann man eine explizite Definition durch eine Formel
+\[
+  \forall t_1,\dots,t_n\,
+    \bigl( Q(t_1,\dots,t_n) \leftrightarrow
+           \varphi(t_1,\dots,t_n) \bigr)
+\]
+in der Sprache \(\mathcal L\) ausdrücken. Für unser Kalkül
+interpretieren wir eine solche Definition syntaktisch über die
+beiden \emph{definitorischen Regelschemata}
+\[
+  \varphi(t_1,\dots,t_n) \vdash Q(t_1,\dots,t_n)
+  \qquad\text{und}\qquad
+  Q(t_1,\dots,t_n) \vdash \varphi(t_1,\dots,t_n).
+\]
+Das bedeutet: In Beweisen dürfen wir \(Q(t_1,\dots,t_n)\)
+jederzeit durch \(\varphi(t_1,\dots,t_n)\) ersetzen und umgekehrt.
+
+Ein typisches Beispiel ist die Definition der Teilmengenrelation
+\[
+  A \subseteq B \coloneqq \forall x\,(x\in A \rightarrow x\in B).
+\]
+Syntaktisch erlaubt uns diese Definition, zwischen
+\(A \subseteq B\) und \(\forall x\,(x\in A \rightarrow x\in B)\)
+hin- und herzuschalten.
+\end{remark}
+
+\subsection{Partielle Definitionen}
+
+\begin{definition}[Partielle Definition]
+Seien \(C(t_1,\dots,t_n)\) und \(\varphi(t_1,\dots,t_n)\) wohldefinierte
+Aussagen in der Sprache \(\mathcal L\), in denen Terme
+\(t_1,\dots,t_n\) vorkommen dürfen, und sei \(Q\) wieder ein neues
+\(n\)-stelliges Symbol.
+
+Eine \textbf{partielle Definition} von \(Q\) schreiben wir
+metasprachlich als
+\[
+  C(t_1,\dots,t_n) \rightarrow
+  \bigl(Q(t_1,\dots,t_n) \coloneqq \varphi(t_1,\dots,t_n)\bigr).
+\]
+Damit wird \(Q(t_1,\dots,t_n)\) nur \emph{unter der Bedingung}
+\(C(t_1,\dots,t_n)\) als Abkürzung für \(\varphi(t_1,\dots,t_n)\)
+verstanden; außerhalb des durch \(C\) beschriebenen Bereichs bleibt
+\(Q\) unbestimmt.
+\end{definition}
+
+\begin{remark}
+Auch partielle Definitionen können wir syntaktisch über
+Regelschemata fassen. Aus
+\[
+  C(t_1,\dots,t_n) \rightarrow
+  \bigl(Q(t_1,\dots,t_n) \leftrightarrow \varphi(t_1,\dots,t_n)\bigr)
+\]
+ergeben sich etwa die beiden Regeln
+\[
+  C(t_1,\dots,t_n),\; \varphi(t_1,\dots,t_n)
+    \vdash Q(t_1,\dots,t_n)
+\]
+\[
+  C(t_1,\dots,t_n),\; Q(t_1,\dots,t_n)
+    \vdash \varphi(t_1,\dots,t_n).
+\]
+Explizite Definitionen erhält man als Spezialfall durch die stets
+wahre Bedingung \(C(t_1,\dots,t_n)\), also informell
+\(C \equiv \text{\enquote{immer wahr}}\).
+\end{remark}
+
+\subsection{Implizite Definitionen}
+
+\begin{definition}[Implizite Definition]
+Sei \(\sigma\) ein neues Symbol (z.\,B.\ ein Prädikaten- oder
+Funktionssymbol). Eine endliche Menge von Formeln
+\[
+  \Phi(\sigma) = \{\phi_1(\sigma),\dots,\phi_k(\sigma)\}
+\]
+in einer erweiterten Sprache, in der \(\sigma\) vorkommen darf,
+heißt \textbf{implizite Definition} von \(\sigma\), wenn wir
+vereinbaren:
+\[
+  \sigma \text{ soll genau so beschaffen sein, dass alle }
+  \phi_i(\sigma) \text{ gelten.}
+\]
+Die Formeln in \(\Phi(\sigma)\) spielen dann die Rolle von
+\enquote{Axiomen}, die den Begriff \(\sigma\) charakterisieren.
+\end{definition}
+
+\begin{remark}
+Wichtige Beispiele für implizite Definitionen in unserem Skript
+sind:
+\begin{itemize}
+  \item die Zermelo–Fraenkel-Axiome als implizite Definition
+        des zweistelligen Prädikats \(\in\) (Begriff der Menge),
+  \item die Axiome
+        \[
+          F \subseteq A \times B,\quad
+          (x,y)\in F,\,(x,z)\in F \vdash y=z,\quad
+          x\in A \vdash \exists y\,(x,y)\in F
+        \]
+        als implizite Definition des Begriffs \enquote{Funktion}
+        \(F\colon A\to B\).
+\end{itemize}
+Ob eine gegebene Axiomenmenge \(\Phi(\sigma)\) tatsächlich eine
+Interpretation von \(\sigma\) \emph{existierend} und
+\emph{eindeutig} festlegt, ist eine Frage der Semantik der
+jeweiligen Theorie. Diese Fragen werden wir erst später, insbesondere
+im Mengenlehre-Band, präzise behandeln.
+\end{remark}
+
+\begin{remark}
+Viele rekursive Definitionen (etwa die Definition von Addition
+und Multiplikation auf den natürlichen Zahlen) lassen sich als
+Spezialfälle impliziter Definitionen auffassen: Die Gleichungen
+für Rekursionsanfang und Rekursionsschritt bilden zusammen die
+Menge \(\Phi(\sigma)\). Ob diese Gleichungen eine eindeutige
+Funktion bestimmen, ergibt sich dann aus allgemeinen Existenz- und
+Eindeutigkeitssätzen (z.\,B.\ dem Dedekindschen
+Rekursionstheorem), die wir erst nach Einführung der natürlichen
+Zahlen im Mengenlehre-Band formulieren.
+\end{remark}
+
+\subsection{Das Iota-Symbol und Iota-Definitionen}
+
+In vielen Situationen möchten wir ein Objekt bezeichnen, das durch
+eine Eigenschaft eindeutig charakterisiert ist. Dazu verwenden wir
+ein spezielles Bindungssymbol.
+
+\begin{definition}[Iota-Symbol]
+Sei \(P(x)\) eine Aussage über \(x\). Falls es \emph{genau ein}
+Objekt mit dieser Eigenschaft gibt, schreiben wir
+\[
+  \iota x\,P(x)
+\]
+für \enquote{das eindeutige \(x\), für das \(P(x)\) gilt}. Formal
+setzen wir voraus, dass die Existenz- und Eindeutigkeitsaussage
+\[
+  \exists! x\,P(x)
+\]
+in der betreffenden Theorie bereits bewiesen oder als Axiom
+vorausgesetzt ist.
+\end{definition}
+
+\begin{definition}[Iota-Definition]
+Sei \(P(x)\) eine wohldefinierte Eigenschaft und \(\sigma\) ein
+neues Konstantensymbol. Wenn \(\exists! x\,P(x)\) gilt, können wir
+\[
+  \sigma \coloneqq \iota x\,P(x)
+\]
+als \textbf{Iota-Definition} von \(\sigma\) einführen. Dabei ist
+\(\sigma\) das \emph{Definiendum} und \(\iota x\,P(x)\) das
+\emph{Definiens}. Syntaktisch interpretieren wir dies wie bei
+expliziten Definitionen: Überall, wo \(\sigma\) vorkommt, darf
+stattdessen der Ausdruck \(\iota x\,P(x)\) stehen und umgekehrt.
+\end{definition}
+
+\begin{remark}
+Iota-Definitionen sind ein Spezialfall expliziter Definitionen
+für Konstanten: eine bewiesene oder geforderte Aussage der Form
+\(\exists! x\,P(x)\) wird in einem neuen Symbol \(\sigma\)
+\enquote{gebündelt}. Typische Beispiele sind:
+\begin{itemize}
+  \item die Definition der leeren Menge als
+        \(\emptyset \coloneqq \iota O\,\forall x\,(x\notin O)\),
+  \item die Definition von Supremum, Infimum oder anderen
+        eindeutig bestimmten Objekten in geordneten Strukturen.
+\end{itemize}
+\end{remark}
+
+
+\section{Übersicht über die elementaren Schlussregeln}
 
 \begin{center}
   \renewcommand{\arraystretch}{1.3}
@@ -976,478 +1209,78 @@ $\exists!$
 \end{tabularx}
 \end{center}
 
-\subsection{Theoreme, Definitionen und Axiome als Schlussregeln}
-
-In diesem Abschnitt legen wir fest, wie bereits bewiesene Theoreme,
-eingeführte Definitionen und Axiome später in Beweistabellen als
-\emph{Schlussregeln} verwendet werden dürfen. Die Leitidee ist immer:
-Eine Aussage der Form
-\[
-  P_1,\dots,P_n \vdash C
-\]
-wird metalogisch als Regel mit Voraussetzungen \(P_1,\dots,P_n\) und
-Konklusion \(C\) gelesen. In der Beweistabelle erscheint diese Regel als
-Index unter dem Schlussstrich; an die Stelle eines abstrakten Symbols
-\(\Delta\) tritt jeweils die Nummer des entsprechenden Theorems,
-der Definition oder des Axioms (z.\,B.\ \enquote{Thm.~2.34}).
-
-\subsubsection{Theoreme als Regeln}
-
-Sei in diesem Skript ein Theorem der Form
-\[
-  P_1,\dots,P_n \vdash C
-\]
-bewiesen und mit einer Nummer (z.\,B.\ \enquote{Thm.~s}) versehen.
-
-In späteren Beweisen darf jede Zeile
-\[
-  I\ (m)\ C\ \text{Thm.~s}(j_1,\dots,j_n)
-\]
-als Anwendung dieses Theorems gelesen werden, sofern in den Zeilen
-\(j_1,\dots,j_n\) die Formeln \(P_1,\dots,P_n\) abgeleitet wurden und
-\(I\) genau die Vereinigung der Abhängigkeitsmengen dieser Zeilen ist.
-Metalogisch entspricht dies genau der abstrakten Notation
-\[
-  P_1,\dots,P_n \;\vdash_{\text{Thm.~s}}\; C.
-\]
-
-\subsubsection{Explizite und partielle Definitionen als Regeln}
-
-Sei eine neue Symbolfolge \(Q(x_1,\dots,x_n)\) explizit durch
-\[
-  Q(x_1,\dots,x_n) \coloneqq \varphi(x_1,\dots,x_n)
-\]
-eingeführt und als Definition ausgezeichnet (etwa durch
-\verb|\FormulaDefAuto| oder \verb|\FormulaDefDeltaK|). Metalogisch liefert
-diese Definition sofort die beiden Regeln
-\[
-  \varphi(x_1,\dots,x_n) \vdash Q(x_1,\dots,x_n),
-  \qquad
-  Q(x_1,\dots,x_n) \vdash \varphi(x_1,\dots,x_n).
-\]
-In der Beweistabelle dürfen wir dann Zeilen der Form
-\[
-  I\ (m)\ Q(x_1,\dots,x_n)\ \text{Def.~t}(j)
-  \quad\text{bzw.}\quad
-  I\ (m)\ \varphi(x_1,\dots,x_n)\ \text{Def.~t}(j)
-\]
-verwenden, sobald in Zeile \(j\) jeweils die andere Seite der Definition
-hergeleitet wurde. Der Index \enquote{Def.~t} ist dabei die Nummer der
-entsprechenden Definition.
-
-\paragraph{Partielle Definition.}
-Sei nun \(Q(x_1,\dots,x_n)\) nur \emph{unter einer Bedingung}
-\(C(x_1,\dots,x_n)\) durch \(\varphi(x_1,\dots,x_n)\) festgelegt, etwa in
-der Form
-\[
-  C(x_1,\dots,x_n) \rightarrow
-  \bigl(Q(x_1,\dots,x_n) \coloneqq \varphi(x_1,\dots,x_n)\bigr).
-\]
-Intuitiv bedeutet dies:
-\enquote{Immer wenn die Bedingung \(C\) erfüllt ist, darf \(Q\) wie
-\(\varphi\) behandelt werden.}
-
-Metalogisch ergeben sich daraus die beiden Regeln
-\[
-  C(x_1,\dots,x_n),\ \varphi(x_1,\dots,x_n)
-    \vdash Q(x_1,\dots,x_n),
-\]
-bzw.
-\[
-  C(x_1,\dots,x_n),\ Q(x_1,\dots,x_n)
-    \vdash \varphi(x_1,\dots,x_n).
-\]
-In der Beweistabelle sehen entsprechende Zeilen zum Beispiel so aus:
-\[
-  I\ (m)\ Q(x_1,\dots,x_n)\ \text{Def.~t}(j,k)
-\]
-bzw.
-\[
-  I\ (m)\ \varphi(x_1,\dots,x_n)\ \text{Def.~t}(j,k),
-\]
-wobei \(j\) auf eine Zeile mit \(C(x_1,\dots,x_n)\) und \(k\) auf die
-jeweils andere Seite der partiellen Definition verweist.
-Die Abhängigkeitsmenge \(I\) ist wieder die Vereinigung der
-Abhängigkeitsmengen der referenzierten Zeilen.
-
-\subsubsection{Implizite Definitionen und Axiome}
-
-Bei einer \emph{impliziten} Definition wird ein neues Symbol \(\sigma\)
-nicht durch eine einzelne Gleichung festgelegt, sondern durch eine Menge
-von Axiomen
-\[
-  \Phi(\sigma) = \{\phi_i(\sigma) \mid i \in I\},
-\]
-die die gewünschten Eigenschaften von \(\sigma\) beschreiben. Jedes
-\(\phi_i(\sigma)\) kann dabei entweder als reine Formel oder in
-Sequenzschreibweise (z.\,B.\ \(\Gamma_i \vdash \Delta_i\)) angegeben sein.
-
-\begin{itemize}
-  \item Ist \(\phi_i(\sigma)\) eine Formel \(\psi(\sigma)\), so lesen wir
-        sie als Regel
-        \[
-          \vdash_{\phi_i(\sigma)}\; \psi(\sigma)
-        \]
-        ohne Voraussetzungen. In der Beweistabelle kann also eine Zeile
-        \[
-          \;\ (m)\ \psi(\sigma)\ \text{Ax.~u}
-        \]
-        stehen, sobald \(\psi(\sigma)\) zu den Axiomen \(\Phi(\sigma)\)
-        gehört (Index \enquote{Ax.~u} = Nummer des Axioms).
-  \item Ist \(\phi_i(\sigma)\) in Sequenzform \(\Gamma_i \vdash \Delta_i\)
-        notiert, so wird sie wie ein Theorem als Regel
-        \[
-          \Gamma_i \;\vdash_{\phi_i(\sigma)}\; \Delta_i
-        \]
-        verwendet. In der Beweistabelle sieht dies genau so aus wie bei
-        Theoremen: die Prämissen \(\Gamma_i\) werden in vorherigen Zeilen
-        abgeleitet, und in der neuen Zeile erscheint \(\Delta_i\) mit dem
-        Index der entsprechenden Axiomnummer.
-\end{itemize}
-
-Damit erweitern implizite Definitionen und Axiome das Regelsystem des
-natürlichen Schließens: neben den \enquote{logischen} Regeln (für
-\(\land,\lor,\rightarrow,\leftrightarrow,\neg,\forall,\exists,=\) usw.)
-stehen uns zusätzlich alle in \(\Phi(\sigma)\) formulierten Axiome als
-weitere, fest verdrahtete Schlussregeln zur Verfügung. In der Praxis
-werden diese Axiome in diesem Skript häufig mit der
-\verb|\FormulaDefDeltaK|-Umgebung eingeführt; ihre Nummern können dann in
-Beweistabellen genauso als Regelindizes verwendet werden wie Theorem- oder
-Definitionsnummern.
 
 
-\section{Verkettungen}
+\section{Metanotation und Metaregeln}
 
-\subsection{Allgemeine Formulierung der verketteten Regelanwendung}
-In den bisherigen Kapiteln haben wir eine Vielzahl von Inferenzregeln eingeführt, die jeweils genau \emph{einen} logischen Schritt ausführen. In der praktischen Beweisführung ist es jedoch oft wünschenswert, mehrere dieser Regeln \emph{hintereinander} in einem einzigen Schluss anzuwenden, um den Beweisfluss kompakter und übersichtlicher zu gestalten. Dieses Vorgehen wird im Folgenden als \emph{verkettete Regelanwendung} bezeichnet.
-
-\begin{definition}[Verkettete Regelanwendung]
-Sei eine Zeile \((m)\) einer Beweistabelle gegeben, in der bereits eine Aussage \(P\) steht. Angenommen, es existiere eine endliche Folge von Regeln \(R_1, R_2, \dots, R_k\), so dass man durch \emph{hintereinandergeschaltete Anwendung} dieser Regeln auf \(P\) eine Aussage \(Q\) gewinnt.
-
-\paragraph{Annahmen}
-\textbf{Zeile \(m\):}
-\[
-\begin{array}{llll}
-   i & (m) & P & \dots \\
-\end{array}
-\]
-
-\paragraph{Schluss}
-\textbf{Zeile \(n\):}
-\[
-\begin{array}{llll}
-   i & (n) & Q & R_1R_2\cdots R_k(m) \\
-\end{array}
-\]
-oder präziser, falls Platz vorhanden ist:
-\[
-\begin{array}{llll}
-   i 
-   & (n) 
-   & Q 
-   & R_1 \,\circ\, R_2 \,\circ\,\cdots\,\circ\, R_k \;(m) \\
-\end{array}
-\]
-Hierbei bedeutet \(R_1 \circ R_2 \circ \dots \circ R_k\), dass zuerst \(R_1\) auf Zeile \(m\) angewendet wird, dann \(R_2\) auf das \emph{Ergebnis} von \(R_1\) usw.
-\end{definition}
-
-\begin{remark}
-Die verkettete Regelanwendung ist \emph{keine} neue logische Regel im Sinne eines Axioms oder einer Erweiterung des Kalküls, sondern eine reine \emph{Abkürzungsnotation}. Sie ändert nicht die \emph{Inhalte} eines Beweises, sondern \emph{lediglich} die Darstellung und Zusammenfassung mehrerer Einzelschritte in einer kompakten Zeile.
-\end{remark}
-
-\subsection{Kettennotation}
-\begin{definition}[Verallgemeinerte Transitivität zweier Symbole \(\sigma_1\) und \(\sigma_2\)]
-\label{rule:Chain}
-Seien \(\sigma_1,\sigma_2\) zwei binäre Symbole, die in einer Domäne \(D\) definiert sind.  
-Wenn gezeigt wurde, dass für alle \(x,y,z \text{ aus } D\) gilt:
-\[
-\bigl(x \;\sigma_1\; y, \quad y \;\sigma_2\; z\bigr)
-\quad\vdash\quad
-x \;\sigma_1\; z,
-\]
-dann sind \(\sigma_1\) und \(\sigma_2\) \emph{(rechts-)verträglich} im Sinne einer verallgemeinerten Transitivität. Aus dieser Eigenschaft resultiert, dass man \(\sigma_1\) und \(\sigma_2\) in einer \emph{Kette} zusammensetzen kann, um in einem Schritt vom Anfangs\- zum End-Objekt zu schließen.
-\end{definition}
-
-\noindent
-\textbf{Ergänzung (mehrere Operatoren).}  
-Seien nun \(\sigma_1, \sigma_2, \dots, \sigma_o\) verschiedene binäre Symbole (Operatoren oder Relationen), für die alle passenden Transitivitätsaussagen dieser Art vorliegen. Insbesondere gelte für jedes \(i\in\{1,\ldots,o\}\):
-\[
-\bigl(x \;\sigma_1\; y \quad\land\quad y \;\sigma_i\; z\bigr)
-\;\vdash\;
-x \;\sigma_1\; z.
-\]
-Damit können wir nun aus einer ganzen Kettenfolge
-\[
-x_1 \;\sigma_{k_1}\; x_2,\quad
-x_2 \;\sigma_{k_2}\; x_3,\quad
-\dots,\quad
-x_n \;\sigma_{k_n}\; x_{n+1}
-\]
-in einem \emph{abkürzenden} Schritt folgern, dass
-\[
-x_1 \;\sigma_1\; x_{n+1}
-\]
-gilt, sofern jeder Übergang durch die obigen Verträglichkeits- beziehungsweise Transitivitätseigenschaften gerechtfertigt ist.
-
-\begin{remark}[Kettenregel \rChain{}]
-Um diese verkettete Anwendung auch in einer Beweistabelle übersichtlich darzustellen, können wir eine Regel \(\rChain{}\) einführen. Sie verknüpft die Zeilen \(m_1,\dots,m_n\) des Beweises zu einem einzigen Schluss. 
-\end{remark}
-
-\noindent
-\textbf{Formale Darstellung in der Beweistabelle}:  
-Angenommen, wir haben folgende \(n\) Zeilen, in denen jeweils \(\sigma_{k_i}\) bereits abgeleitet wurde:
-
-    \[
-	\begin{array}{llclll}
-            \multicolumn{6}{l}{\textbf{Zeile } m \text{:}}\\
-             i_1 &  (m)  & \multicolumn{3}{l}{x_1\sigma_{k_1} x_2} & \dots \\
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m+1 \text{:}}\\
-             i_2 &  (m+1)  & \multicolumn{3}{l}{x_2\sigma_{k_2} x_3} & \dots \\
-            \multicolumn{6}{c}{}\\
-            \multicolumn{6}{c}{\vdots}\\
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m+(n-1) \text{:}}\\
-             i_n &  (m+(n-1))  & \multicolumn{3}{l}{x_n\sigma_{k_n} x_{n+1}} & \dots \\   
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m+n \text{:}}\\
-             i_1,i_2,\dots,i_n &  (m+n)  & \multicolumn{3}{l}{x_1\sigma_{k_1} x_{n+1}} & \rChain{m_1,m_n} 
-        \end{array}
-    \]
-
-Dann soll in einer \emph{neuen} Zeile \(m_{n+1}\) durch Anwendung von \(\rChain\{m_1,\dots,m_n\}\) abgekürzt folgen:
-\[
-i_1,\dots,i_n \,(m_{n+1})\colon
-\quad
-x_1 \;\sigma_1\; x_{n+1}.
-\]
-
-Hierbei sind \(\boldsymbol{i_1, \dots, i_n}\) die Annahmelisten, welche die offenen Annahmen bezeichnen, von denen jede Zeile abhängt. 
-
-
-\noindent
-\textbf{Abkürzende Notation}:  
-Manchmal werden die Zwischenschritte nur angedeutet, also ab Zeile \(m_2\) lediglich das \(\sigma_{k_2}\) und das Objekt \(x_3\) notiert:
-
-    \[
-	\begin{array}{llclll}
-            \multicolumn{6}{l}{\textbf{Zeile } m \text{:}}\\
-             i_1 &  (m)  & x_1&\sigma_{k_1}& x_2 & \dots \\
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m+1 \text{:}}\\
-             i_2 &  (m+1)  &  &\sigma_{k_2}& x_3 & \dots \\
-            \multicolumn{6}{c}{}\\
-            \multicolumn{6}{c}{\vdots}\\
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m_n \text{:}}\\
-             i_n &  (m_n)  & &\sigma_{k_n}&x_{n+1} & \dots \\   
-            \multicolumn{6}{l}{}\\
-            \multicolumn{6}{l}{\textbf{Zeile } m+n \text{:}}\\
-             i_1,i_2,\dots,i_n &  (m+n)  & x_1&\sigma_{k_1}& x_{n+1} & \rChain{m_1,m_n} 
-        \end{array}
-    \]
-    
-\begin{remark}[Geordnete Operatorenmengen und erweiterte Kettennotation]
-In manchen Beweissituationen treten mehrere binäre Operatoren \(\sigma_1, \dots, \sigma_n\) auf, die durch eine Kette verbunden werden können (z.\,B.\ \(\sigma_1 = \to\) und \(\sigma_2 = \leftrightarrow\)) und für die jeweils die passende \emph{rechts-Verträglichkeit} nachgewiesen wurde. Um festzulegen, \emph{welcher} dieser Operatoren im letzten Schritt maßgebend ist, notieren wir sie als geordnetes \(n\)-Tupel:
-\[
-\boldsymbol{\Theta} = (\sigma_1, \sigma_2, \ldots, \sigma_n),
-\]
-wobei \(\sigma_1\) vorrangig für den finalen Schluss verwendet wird, sofern alle nötigen Verträglichkeitsnachweise \(\sigma_1\)-\(\sigma_j\) vorliegen. Dies ermöglicht eine klare Priorisierung und eine einheitliche Referenz, ohne bei jeder Mischkette erneut angeben zu müssen, welcher Operator \(\sigma_i\) im Endschluss \(\sigma_1\) \textbf{dominiert}.
-
-\smallskip
-
-\textbf{Symmetrische Operatoren:} Falls zusätzlich ein Operator \(\sigma\) \emph{symmetrisch} ist (d.\,h.\ \(x \,\sigma\, y \vdash y \,\sigma\, x\)), kann man in einer Kettennotation stillschweigend die Reihenfolge der Operanden vertauschen, ohne jedes Mal explizit auf die Symmetrie-Eigenschaft verweisen zu müssen. In der Tupeldarstellung \(\boldsymbol{\Theta}\) kann dies beispielsweise durch ein kleines Symbol oder einen Index \(\sigma^*\) angedeutet werden, um zu verdeutlichen, dass \(\sigma\) in beide Richtungen anwendbar ist.
-\end{remark}
-
-\subsubsection{Behandlung mehrfacher Gleichheiten}
-In der Praxis können Gleichheitsausdrücke mehrere Terme involvieren, wie beispielsweise \(a = b = c\). Solche Ausdrücke sind jedoch nicht direkt in der Prädikatenlogik darstellbar. Stattdessen werden sie durch eine Verkettung von binären Gleichheiten ausgedrückt, die mittels der Konjunktion \(\land\) verbunden sind. Der Ausdruck \(a = b = c\) wird somit zu \(a = b \land b = c\).
-
-\begin{definition}
-\[
-\forall a, b, c \left( a = b = c \right) := \left( a = b \land b = c \right)
-\]
-\end{definition}
-
-\paragraph{Einführungsregel für das Identitätssymbol dreier Gleichheiten:}
-\label{rule:rIIb}
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b \land b = c & \dots \\
- 	i & (2) & a = b = c & \rIIb{1} \\
-\end{array}
-\]
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b & \dots \\
-        i & (2) & b = c & \dots \\
- 	i,j & (3) & a = b = c & \rIIb{1,2} \\
-\end{array}
-\]
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b & \dots \\
-        i & (2) & a = c & \dots \\
- 	i,j & (3) & a = b = c & \rIIb{1,2} \\
-\end{array}
-\]
-
-\(i\) und \(j\) sind dabei Listen von Annahmen.
-
-
-\paragraph{Eliminierungsregel für das Identitätssymbol dreier Gleichheiten:}
-\label{rule:rIEb}
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b = c & \dots \\
-        i & (2) & a = b & \rIEb{1} \\
- 	i & (3) & a = c & \rIEb{1} \\
-        i & (4) & b = c & \rIEb{1} \\
-\end{array}
-\]
-
-\(i\) ist dabei eine Liste von Annahmen.
-
-\subsubsection{Direkte Anwendung von Gleichheitsregeln auf Prädikate}
-
-Falls eine Regel oder ein Theorem mit der Bezeichnung \textit{RegelName} die Gleichheit \(a = b\) ausdrückt, gilt automatisch, dass für jedes Prädikat \(P(x)\), das entweder \(P(a)\) oder \(P(b)\) beschreibt, direkt geschlossen werden kann, dass \(P(b)\) aus \(P(a)\) folgt (und umgekehrt).
-
-\paragraph{Formulierung:}
-Falls eine Regel oder ein Theorem die Gleichheit \(a = b\) ausdrückt, so kann sie ebenso in folgendem Kontext verwendet werden:
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b & \text{\textit{RegelName}} \\
-	i & (2) & P(a) & \dots \\
-	i & (3) & P(b) & \text{\textit{RegelName}} \\
-\end{array}
-\]
-
-Analog dazu:
-
-\[
-\begin{array}{llll}
-	i & (1) & a = b & \text{\textit{RegelName}} \\
-	i & (2) & P(b) & \dots \\
-	i & (3) & P(a) & \text{\textit{RegelName}} \\
-\end{array}
-\]
-
-\paragraph{Vorteile:}
-- Die explizite Verwendung der Eliminierungsregel (\(\rIE{}\)) entfällt.
-- Gleichheiten können direkt in Beweisen genutzt werden, wodurch Beweise kompakter und übersichtlicher werden.
-
-
-
-\subsection{Regeln für das Nicht-Gleichheitszeichen}
-
-\begin{definition}[Nicht-Gleichheitszeichen]
-\label{rule:Neq}
-\[\forall t,u(t\neq u\coloneqq \neg(t=u))\]
-\end{definition}
-
-
-\subsection{Vereinfachung für das Nicht-Gleichheitszeichen}
-Das Symbol \(\neq\), das die Ungleichheit von Elementen darstellt, ist in seiner Bedeutung offensichtlich und direkt verständlich. Es bedeutet einfach, dass zwei Elemente nicht gleich sind. Aufgrund dieser direkten und intuitiven Bedeutung können wir in vielen Fällen auf separate Einführungs- und Eliminierungsregeln für \(\neq\) verzichten.
-
-Die Notation \(t \neq u\) ist äquivalent zu \(\neg(t = u)\) und kann direkt verwendet werden, ohne dass eine formale Regel angewendet werden muss. Dies vereinfacht den Umgang mit der Ungleichheit in logischen Argumentationen und Beweisen.
-
-Daher können wir in Zukunft die Verwendung von \(t \neq u\) als eine unmittelbare Folgerung von \(\neg(t = u)\) und umgekehrt ansehen, ohne explizit eine Regel anzuwenden.
-\section{Metadefinition}
 \subsection{Was ist eine Metadefinition?}
 
-
-Wir haben bisher gezeigt, dass man \emph{Definitionen} in einem formalen Kalkül auch wie \emph{Regeln} verwenden kann: Im Beweis taucht dann etwa ein „Einführungsschritt“ auf (wenn wir von der definierten Seite zum definierenden Ausdruck wechseln wollen) oder ein „Eliminierungsschritt“ (umgekehrt).  
+Wir haben bisher gesehen, dass man \emph{Definitionen} im formalen
+Kalkül wie \emph{Regeln} verwenden kann: Im Beweis taucht dann etwa
+ein „Einführungsschritt“ auf (wenn wir von der definierten Seite zum
+definierenden Ausdruck wechseln) oder ein „Eliminierungsschritt“
+(umgekehrt).
 
 \medskip
 
-\textbf{Metadefinitionen} (auch \emph{meta-sprachliche Definitionen} genannt) sind hingegen \emph{außerhalb} des eigentlichen Kalküls angesiedelt. Man kann sie sich als reine „Abkürzungsvereinbarungen“ auf der \emph{Meta-Ebene} vorstellen:
+\textbf{Metadefinitionen} (auch \emph{meta-sprachliche Definitionen})
+liegen dagegen \emph{außerhalb} des eigentlichen Kalküls. Man kann sie
+sich als reine „Abkürzungsvereinbarungen“ auf der \emph{Meta-Ebene}
+vorstellen:
 
 \begin{itemize}
-\item Sie \emph{erweitern} nicht das formale System und werden \emph{nicht} als Inferenzregel im Beweis verwendet.
-\item Stattdessen legen sie fest, dass gewisse Schreibweisen (z.\,B.\ \(\forall x \in A(P(x))\)) \emph{bloß} Kurzformen für bereits bekannte Standardformen (\(\forall x\,(x\in A \to P(x))\)) sind.
-\item In der Praxis darf man solche Metadefinitionen \emph{jederzeit} und ohne gesonderte Begründung verwenden – weil sie das System nicht verändern, sondern nur unser Schreiben/Lesen vereinfachen.
+  \item Sie \emph{erweitern} das formale System nicht und treten
+        \emph{nicht} als eigene Inferenzregeln im Beweis auf.
+  \item Stattdessen legen sie fest, dass wir gewisse Schreibweisen
+        (z.\,B.\ \(t \neq u\) oder Quantoren mit einer Bedingung)
+        nur als Kurzformen für bereits bekannte Standardformen
+        verwenden.
+  \item In Beweisen dürfen solche Metadefinitionen jederzeit stillschweigend
+        benutzt werden, weil sie nur die Notation vereinfachen, nicht die
+        zugrundeliegende Logik verändern.
 \end{itemize}
 
-\bigskip
+\subsection{Meta-Notation für das Nicht-Gleichheitszeichen}
 
-\noindent
-\textbf{Beispiel für eine Metadefinition:}  
-Wir vereinbaren einmalig:
+\begin{definition}[Meta-Notation für Ungleichheit]
+\label{def:neq-meta}
+Seien \(t\) und \(u\) beliebige Terme. Wir führen das
+\emph{Nicht-Gleichheitszeichen} als meta-sprachliche Abkürzung ein durch
 \[
-t \,\neq\, u
-\;\coloneqq\;
-\neg\bigl(t = u\bigr).
+  t \neq u \;\coloneqq\; \neg\bigl(t = u\bigr).
 \]
-Dies sagt auf Meta-Ebene nichts anderes als: 
-\enquote{Wenn wir \(a\neq b\) schreiben, meinen wir in Wahrheit \(\neg (a = b)\).}  
-Daher benötigen wir keine gesonderten \emph{Einführungs-} und \emph{Eliminierungsregeln} für \(\neq\), sondern können direkt
-\(t \neq u\) verwenden.  
-Aus Sicht eines formalen Beweises ist das \(\neq\)-Symbol gar kein neuer Bestandteil des Kalküls, sondern nur ein bequemes Schreibkürzel.
-
-\bigskip
-
-\begin{remark}
-\textbf{Fazit:} Ob eine Definition \emph{innerhalb} des formalen Systems (als Regel) gebraucht wird oder nur \emph{meta-sprachlich} als Schreibabkürzung, hängt davon ab, ob wir daraus im Beweis eigenständige Schritte ableiten (z.B.\ \(\to\)-Einführung) oder ob wir nur die Notation vereinfachen. 
-\end{remark}
-
-\subsection{Meta-Notation für bedingte Quantifizierung}
-In vielen mathematischen Texten begegnet man Schreibweisen wie
-\[
-\forall x \in A(P(x))\text{ oder }\forall x \neq y(Q(x,y)).
-\]
-Formal bedeutet dies immer, dass \emph{vor} der Aussage eine Bedingung (z.B.\;$x\in A$ oder $x \neq y$) steht, und \emph{danach} der zu beweisende Teil (z.B.\;$P(x)$, $Q(x,y)$). Damit ist klar: ``Für alle $x$ \emph{mit} $x\in A$ gilt $P(x)$.''
-
-\bigskip
-
-Eine präzise Art, dies \emph{ohne} viele Einzeldefinitionen formal einzuführen, ist eine \textbf{meta-sprachliche Sammel-Definition}. 
-
-\begin{definition}[Meta-Notation für bedingte Quantoren]
-Seien $\alpha(x)$ und $\beta(x)$ zwei Formeln der Prädikatenlogik (wobei $x$ jeweils eine freie Variable sein kann). Wir \textbf{vereinbaren} folgende \emph{Schreibkürzel}:
-
-\begin{enumerate}
-  \item \[
-    \forall(\alpha(x))(\beta(x))
-    \quad\coloneqq\quad
-    \forall x\bigl(\alpha(x)\to\beta(x)\bigr).
-  \]
-  \item \[
-    \exists (\alpha(x))(\beta(x))
-    \quad\coloneqq\quad
-    \exists x\bigl(\alpha(x)\land\beta(x)\bigr).
-  \]
-    \item \[
-    \exists! (\alpha(x))(\beta(x))
-    \quad\coloneqq\quad
-    \exists! x\bigl(\alpha(x)\land\beta(x)\bigr).
-  \]
-\end{enumerate}
-%
-Diese \textbf{Meta-Notation} ist nur eine abkürzende Schreibweise und erweitert die Logik \emph{nicht}: In Beweisen oder in unserem formalen Kalkül kann man jederzeit diese Ausdrücke in die Standardform (rechts) übersetzen – und umgekehrt.
+Das Symbol \(\neq\) gehört damit nicht zur eigentlichen Objektsprache
+\(\mathcal L\), sondern ist nur eine Kurzschreibweise:
+Überall, wo \(t \neq u\) steht, kann ebenso gut \(\neg(t = u)\)
+geschrieben werden, und umgekehrt.
 \end{definition}
 
-\subsection{Meta-Notation: Klammerwegfall bei assoziativen Operatoren}
+\begin{remark}
+Wir brauchen für \(\neq\) keine eigenen Schlussregeln: In Beweisen
+arbeiten wir immer mit der zugrundeliegenden Formel \(\neg(t = u)\).
+\(\neq\) ist lediglich eine bequemere Schreibweise.
+\end{remark}
 
-\section{Meta-Regeln und ihre Anwendung}
-\subsection{Was sind Meta-Regeln?}
-\emph{Meta-Regeln} sind bereits bewiesene Theoreme oder Schlussmuster, die wir wie „fertige Werkzeuge“ nutzen. Sie \emph{erweitern} das formale System \emph{nicht}, sondern ermöglichen nur eine kürzere Beweisführung: 
+
+\subsection{Meta-Regeln und ihre Anwendung}
+
+\emph{Meta-Regeln} sind bereits bewiesene Theoreme oder allgemeine
+Schlussmuster, die wir später wie „fertige Werkzeuge“ verwenden.
+Sie \emph{erweitern} das formale System nicht, sondern dienen nur
+dazu, Beweise kürzer und übersichtlicher aufzuschreiben.
+
 \begin{itemize}
-\item Nach einmaliger Nennung darf man sie an jedem passenden Ort stillschweigend verwenden.  
-\item Die formale Korrektheit bleibt gewahrt, da alles auf bereits Bewiesenem beruht.
+  \item Nach einmaliger Einführung darf eine Meta-Regel an jeder
+        passenden Stelle im Beweis stillschweigend benutzt werden.
+  \item Die formale Korrektheit bleibt gewahrt, weil jede Meta-Regel
+        selbst im Kalkül des natürlichen Schließens bewiesen wurde
+        (oder auf Axiomen beruht).
 \end{itemize}
 
-\subsection{Meta-Regeln versus formale Inferenzregeln}
-\label{sec:metaRegelnVsInferenzregeln}
-\begin{itemize}
-\item \textbf{Formale Inferenzregeln} (z.B.\ $\land$-Einführung) beschreiben direkt zulässige Beweisschritte.
-\item \textbf{Meta-Regeln} sagen nur, dass bereits Bewiesenes \emph{wie ein abgekürztes Argument} wiederverwendet werden darf.  
-\end{itemize}
-
-\subsection{Vorgehen in der Praxis}
-In fortgeschrittenen Texten werden Meta-Regeln oft am Kapitel- oder Beweisanfang angekündigt und dann nur noch per Verweis benutzt, um Dopplungen zu vermeiden. Dies macht komplexe Beweise kürzer und übersichtlicher, ohne an formaler Strenge einzubüßen.
+Später werden wir einige besonders häufig verwendete Meta-Regeln
+gesondert hervorheben (z.\,B.\ Varianten des indirekten Beweises
+oder Beweisschemata für \enquote{Fallunterscheidung}) und im Text
+darauf verweisen, wenn wir sie anwenden.
 
 
 \end{document}
