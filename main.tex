@@ -323,6 +323,47 @@ spacebelow=\topsep
       { } % Default: nichts
   }
 
+  % --- Variante: mit Quelltext in der zweiten Spalte ---
+\cs_new_protected:Npn \mx_print_formula_item_src_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: links gesetzt, rechts LaTeX-Quelltext
+        {F}{
+          $ #3 $ & \ShowFormulaSource{#3} \\
+        }
+        % Überschrift: fett, zweite Spalte leer
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+  % --- Variante: NUR Quelltext (eine Spalte) ---
+\cs_new_protected:Npn \mx_print_formula_plain_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: nur Quelltext
+        {F}{
+          \ShowFormulaSource{#3}\\
+        }
+        % Überschrift: fett, als Abschnittstrenner
+        {H}{
+          \textbf{#3}\\[0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+\cs_new_protected:Npn \mx_print_formula_plain:n #1
+  { \mx_print_formula_plain_aux:nnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_item_src:n #1
+  { \mx_print_formula_item_src_aux:nnn #1 }
+
 \cs_new_protected:Npn \mx_print_formula_item:n #1
   { \mx_print_formula_item_aux:nnn #1 }
 
@@ -339,10 +380,72 @@ spacebelow=\topsep
       }
   }
 
+  % Formelregister mit Quelltext in der zweiten Spalte
+\NewDocumentCommand{\PrintFormulaStackSources}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (mit Quelltext)}%
+        \begin{longtable}{@{}p{0.45\linewidth}@{\qquad}p{0.48\linewidth}@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item_src:n {##1} }
+        \end{longtable}
+      }
+  }
+
 % Stack manuell leeren (z.B. pro Band/Kapitel)
 \NewDocumentCommand{\ClearFormulaStack}{}{
   \seq_gclear:N \g_mx_formula_stack_seq
 }
+
+% Formelregister NUR mit Quelltext (eine Spalte, gut kopierbar)
+\NewDocumentCommand{\PrintFormulaStackSourcesPlain}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (Quelltext)}%
+        \begin{longtable}{@{}p{\linewidth}@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_plain:n {##1} }
+        \end{longtable}
+      }
+  }
+
+% --- Neue Variante: Quelltext links, Referenz rechts ---
+\cs_new_protected:Npn \mx_print_formula_item_src_ref_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel-Eintrag: links Quelltext, rechts Referenz
+        {F}{
+          \ShowFormulaSource{#3} & \FormulaRefAuto{#3} \\
+        }
+        % Überschrift-Eintrag (H): Abschnittstrenner
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+\cs_new_protected:Npn \mx_print_formula_item_src_ref:n #1
+  { \mx_print_formula_item_src_ref_aux:nnn #1 }
+
+% Formelregister: Quelltext + Referenz (Typ steckt in der Referenz)
+\NewDocumentCommand{\PrintFormulaStackSourcesPlainWithType}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (Quelltext mit Referenz)}%
+        \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item_src_ref:n {##1} }
+        \end{longtable}
+      }
+  }
+
+
 
 % ====================== Theorem / Definition / Axiom =====================
 % ====================== Theorem / Definition / Axiom =====================
@@ -472,6 +575,14 @@ spacebelow=\topsep
     \end{varwidth}%
   }%
   \vspace{.3\baselineskip}%
+}
+
+% --- Hilfsbefehl: Formel-Quelltext hübsch in Schreibmaschine darstellen ---
+\newcommand{\ShowFormulaSource}[1]{%
+  \begingroup
+    \ttfamily\footnotesize
+    \detokenize{#1}%
+  \endgroup
 }
 
 

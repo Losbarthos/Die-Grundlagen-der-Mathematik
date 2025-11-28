@@ -430,6 +430,27 @@ Symbole wie \([\,]\), \(\vdots\) oder \(\mid_x\) werden nur als
 metasprachliche Markierungen an solchen Formeln angebracht.
 \end{definition}
 
+\begin{definition}[Syntaktische Äquivalenz \(\eqvdash\)]
+Seien \(P\) und \(Q\) Formeln der Sprache \(\mathcal L\).
+Wir schreiben
+\[
+  P \eqvdash Q,
+\]
+wenn sowohl \(P \vdash Q\) als auch \(Q \vdash P\) gilt. In diesem Fall
+sagen wir, \(P\) und \(Q\) seien \emph{(syntaktisch) äquivalent} im
+Kalkül des natürlichen Schließens.
+
+Die Notation \(\eqvdash\) ist rein metasprachlich: Sie gehört nicht zur
+Objektsprache \(\mathcal L\), sondern fasst nur kurz zusammen, dass zwei
+Formeln wechselseitig aus einander herleitbar sind. In Formelschemata
+werden wir Schreibweisen wie
+\[
+  P \eqvdash Q
+\]
+als Abkürzung für das Paar von Sequenzen \(P \vdash Q\) und
+\(Q \vdash P\) verwenden.
+\end{definition}
+
 \begin{definition}[Subbeweise]
 Seien \(P\) und \(Q\) Formeln. Wir schreiben
 \[
@@ -1095,6 +1116,70 @@ für Konstanten: eine bewiesene oder geforderte Aussage der Form
 \end{itemize}
 \end{remark}
 
+\subsection{Schematische Schreibweise mit Parametern}
+
+In vielen Axiomen und Sätzen lassen wir einige Symbole (etwa \(A,B,F,x\))
+\emph{frei} im formalen Kern stehen und geben in den Kontextzeilen
+nur an, wie diese Symbole zu lesen sind, z.\,B.
+
+\DeltaBlockFromRows{
+  \DeltaRow{Mengen}{A \dsep B}
+  \DeltaRow{Funktionen}{F\colon A \to B}
+}
+\newline
+Solche Blöcke sind stets \emph{schematisch} zu verstehen: Die freien
+Buchstaben \(A,B,F,\dots\) stehen für beliebige Objekte der jeweils
+angegebenen Art. Formal entspricht dies einer stillschweigenden
+Allquantifikation über diese Parameter.
+
+\begin{example}[Extensionalität]
+Das Axiom der Extensionalität notieren wir etwa als
+\[
+  \forall x\,(x \in A \leftrightarrow x \in B) \vdash A = B,
+\]
+mit Kontextzeile:
+
+\DeltaBlockFromRows{
+  \DeltaRow{Mengen}{A \dsep B}
+}
+\newline
+Die präzise Lesart in der Sprache der Mengenlehre ist
+\[
+  \forall A\,\forall B\,
+    \bigl( \forall x\,(x \in A \leftrightarrow x \in B)
+           \rightarrow A = B \bigr).
+\]
+Die Sequenzschreibweise ist also eine metasprachliche Kurzform
+für diese vollständig quantifizierte Formel, wobei \(A,B\) als
+beliebige, aber feste Mengen zu verstehen sind.
+\end{example}
+
+\begin{remark}
+Allgemein gilt: In den Kontextzeilen eines Theorems oder Axioms
+werden die freien Buchstaben des formalen Kerns aufgelistet und
+ihrem Typ zugeordnet (Mengen, Funktionen, Prämissenmengen usw.).
+Eine Aussage der Form
+\[
+  \Phi(A_1,\dots,A_n) \vdash \Psi(A_1,\dots,A_n)
+\]
+ist dann als Kurzform der vollständig quantifizierten Formel
+\[
+  \forall A_1 \dots \forall A_n\,
+  \bigl(\Phi(A_1,\dots,A_n) \rightarrow
+        \Psi(A_1,\dots,A_n)\bigr)
+\]
+zu verstehen (gegebenenfalls ergänzt um weitere in den
+Kontextzeilen genannte Bedingungen).
+
+In Beweisen arbeiten wir meist direkt mit der Sequenzschreibweise:
+Sobald für konkrete Objekte \(A_1,\dots,A_n\) die Voraussetzung
+\(\Phi(A_1,\dots,A_n)\) gezeigt ist, darf die Schlussformel
+\(\Psi(A_1,\dots,A_n)\) mit Verweis auf das entsprechende Theorem
+oder Axiom eingeführt werden. Die dazu gehörigen Allquantor- und
+Implikationsschritte werden nicht jedes Mal ausgeschrieben, sondern
+durch das schematische \(\vdash\) mitabgedeckt.
+\end{remark}
+
 
 \section{Übersicht über die elementaren Schlussregeln}
 
@@ -1321,6 +1406,92 @@ Später werden wir einige besonders häufig verwendete Meta-Regeln
 gesondert hervorheben (z.\,B.\ Varianten des indirekten Beweises
 oder Beweisschemata für \enquote{Fallunterscheidung}) und im Text
 darauf verweisen, wenn wir sie anwenden.
+
+\subsection{Meta-Regel: Ersetzung äquivalenter Teilausdrücke}
+
+
+Neben den bisher genannten Meta-Regeln verwenden wir im weiteren
+eine Meta-Regel, die das Bikonditional \(\leftrightarrow\) ähnlich
+wie das Gleichheitszeichen behandelt.
+
+\begin{definition}[Meta-Regel der Äquivalenzersetzung]\label{rule:LRSubst}
+Seien \(P\) und \(Q\) Formeln der Sprache \(\mathcal L\), und sei
+\(\varphi(P)\) eine Formel, in der \(P\) an einer ausgezeichneten
+Stelle als (Teil-)Formel vorkommt. Dann verwenden wir das folgende
+metalogische Regelschema:
+\[
+  P \leftrightarrow Q,\; \varphi(P) \;\vdash\; \varphi(Q).
+\]
+
+Analoge gilt in umgekehrter Richtung:
+\[
+  P \leftrightarrow Q,\; \varphi(Q) \;\vdash\; \varphi(P).
+\]
+
+Die Schreibweise \(\varphi(P)\) ist dabei rein metasprachlich:
+Sie steht für eine beliebige Formel, in der an einer markierten
+Stelle \(P\) als Teilausdruck vorkommt; \(\varphi(Q)\) entsteht
+durch Ersetzung genau dieser ausgezeichneten Vorkommensstelle von
+\(P\) durch \(Q\).
+\end{definition}
+
+\begin{remark}
+Diese Meta-Regel ist vollständig aus den elementaren Regeln für
+\(\leftrightarrow\) ableitbar:
+Aus \(P \leftrightarrow Q\) folgen zunächst \(P \rightarrow Q\)
+und \(Q \rightarrow P\) mittels \(\leftrightarrow E_1\) und
+\(\leftrightarrow E_2\). Durch wiederholte Anwendung der
+Implikationselimination \((\rightarrow E)\) in einem geeigneten
+Hilfsbeweis lässt sich dann zeigen, dass aus einem Beweis von
+\(\varphi(P)\) auch ein Beweis von \(\varphi(Q)\) entsteht (und
+umgekehrt). Die Meta-Regel erweitert das Kalkül also nicht, sondern
+fasst nur ein allgemeines, bereits beweisbares Schlussmuster in
+kompakter Form zusammen.
+
+In Beweistabellen können wir die Anwendung dieser Meta-Regel
+ggf.\ durch einen eigenen Regellabel (etwa
+\(\text{\(\leftrightarrow\)-Subst}\)) kennzeichnen; formal handelt
+es sich jedoch um die Verwendung eines bereits bewiesenen
+Theorems und nicht um eine neue elementare Schlussregel.
+\end{remark}
+
+\subsection{Meta-Regel: Kettenschreibweise für transitive Relationen}
+\label{rule:Chain}
+
+\begin{remark}[Kettenschreibweise für transitive Relationen]
+Viele der in der Logik verwendeten zweistelligen Ausdrücke verhalten
+sich (wie wir später noch präzise zeigen werden) transitiv auf einer
+geeigneten Klasse von Objekten. Typische Beispiele sind
+\begin{itemize}
+  \item die Implikation \(\rightarrow\) und das Bikonditional
+        \(\leftrightarrow\) auf Formeln,
+  \item die Gleichheit \(=\) auf Termen.
+\end{itemize}
+Für solche Relationen verwenden wir metasprachlich eine
+\emph{Kettenschreibweise}: Aus einer Folge
+\[
+  X_0 \mathsf R X_1,\; X_1 \mathsf R X_2,\; \dots,\;
+  X_{n-1} \mathsf R X_n
+\]
+machen wir kurz
+\[
+  X_0 \mathsf R X_1 \mathsf R \dots \mathsf R X_n.
+\]
+Diese Schreibweise ist nur eine Abkürzung für die iterierte Anwendung
+des entsprechenden Transitivitätssatzes. Konkret sprechen wir etwa von
+einer \enquote{Implikationskette}
+\[
+  P_0 \rightarrow P_1 \rightarrow \dots \rightarrow P_n,
+\]
+von einer \enquote{\(\leftrightarrow\)-Kette}
+\[
+  P_0 \leftrightarrow P_1 \leftrightarrow \dots \leftrightarrow P_n
+\]
+oder von einer \enquote{Gleichheitskette}
+\[
+  t_0 = t_1 = \dots = t_n.
+\]
+\end{remark}
 
 
 \end{document}
