@@ -136,7 +136,7 @@ Nachdem wir die grundlegenden Begriffe und Notationen eingeführt haben, wenden 
 A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\land x\not\in B)
 }
 \begin{tabproofwide}
-  \proofstepwide{A \neq B}{\leftrightarrow}{\neg(\forall x(x\in A\leftrightarrow x\in B))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}}
+  \proofstepwide{A \neq B}{\leftrightarrow}{\neg(\forall x(x\in A\leftrightarrow x\in B))}{\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}}
   \proofstepwide{}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\FormulaRefAuto{\neg\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{1}}}
   \proofstepwide*{}{\lor}{\exists x(x \in A\land x\not\in B)}{}
   \proofstepwide{A \neq B}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\rChain{1,2}}}
@@ -220,7 +220,7 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 \begin{tabproofwide}
   \proofstepwide{A \subseteq B \land B \subseteq A}{\leftrightarrow}{\forall x(x \in A \rightarrow x \in B)}{\multirow{2}{*}{\FormulaRefAuto{ A \subseteq B := \forall x\,(x \in A \rightarrow x \in B) }}}
   \proofstepwide{}{ \land }{\forall x(x \in B \rightarrow x \in A)}{}
-  \proofstepwide*{}{ \leftrightarrow }{\forall x(x \in A \leftrightarrow x \in B)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
+  \proofstepwide*{}{ \leftrightarrow }{\forall x(x \in A \leftrightarrow x \in B)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
   \proofstepwide{}{ \leftrightarrow }{A = B}{\FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{2}}
   \proofstepwide*{A \subseteq B \land B \subseteq A}{ \leftrightarrow }{A = B}{\rChain{1,3}}
 \end{tabproofwide}
@@ -262,13 +262,12 @@ Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in ei
 
 
 \chapter{Leere Menge}
-\FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
-%%begin novalidate
 \section{Axiom der leeren Menge}
-\FormulaDefAuto[Leere Menge]{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
-%%end novalidate
+
+\FormulaAxiomAuto[Leere Menge]{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
 
 \section{Definition der leeren Menge}
+
 
 \FormulaThmAuto{ \exists! O\forall x (x \not\in O) }
 \begin{tabproof}
@@ -277,10 +276,14 @@ Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in ei
   \proofstep{3}{ \forall x (x \not\in P) }{ \rA }
   \proofstep{2}{ \forall x (x \not\in O \lor x \in P) }{ \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
   \proofstep{3}{ \forall x (x \not\in P \lor x \in O) }{ \FormulaRefAuto{ \forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
-  \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) }{4,5} }
+  \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) }{4,5} }
   \proofstep{2,3}{ O = P }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } }
   \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
 \end{tabproof}
+
+%%begin novalidate
+\FormulaDefAuto[Leere Menge]{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
+%%end novalidate
 
 \FormulaThmDelta[Leere Menge]{x \not\in \emptyset}%
 {%
@@ -296,8 +299,9 @@ Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in ei
 }
 \begin{tabproof}
     \proofstep{1}{\forall x\, x\notin A}{\rA}
-    \proofstep{}{\forall x\, x\notin \emptyset}{\FormulaRefAuto{\exists! O\forall x (x \not\in O)}}
+    \proofstep{}{\forall x\, x\notin \emptyset}{\FormulaRefAuto{x \not\in \emptyset}}
     \proofstep{}{\exists! O\forall x (x \not\in O)}{\FormulaRefAuto{\exists! O\forall x (x \not\in O)}}
+    \proofstep{}{A=\emptyset}{\FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}{3,2,1}}
     
 \end{tabproof}
 
@@ -363,6 +367,8 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
         \proofstep{1}{A \neq \emptyset}{\rEE{1,2,3}}
     \closeproofpart
 \end{tabproofsplit}
+
+
     
 
 \chapter{Aussonderung}
@@ -484,7 +490,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 
 \FormulaThmAuto{x \not\in \{x \in A \mid P(x)\}\eqvdash (x \not\in A \lor \neg P(x))}
 \begin{tabproofwide}
-  \proofstepwide{x \not\in \{x \in A \mid P(x)\}}{\leftrightarrow}{\neg(x \in A \land P(x))}{\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\{x\in A \mid P(x)\} := \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)) ))}}}
+  \proofstepwide{x \not\in \{x \in A \mid P(x)\}}{\leftrightarrow}{\neg(x \in A \land P(x))}{\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\{x\in A \mid P(x)\} := \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)) ))}}}
   \proofstepwide{\neg(x \in A \land P(x))}{\leftrightarrow}{x \not\in A \lor \neg P(x)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}}
   \proofstepwide{x \not\in \{x \in A \mid P(x)\}}{\leftrightarrow}{x \not\in A \lor \neg P(x)}{\rChain{1,2}}
 \end{tabproofwide}
@@ -1003,7 +1009,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \FormulaThmAuto{x \notin \{a\} \eqvdash x \neq a}
 \begin{tabproof}
   \proofstep{}{x \notin \{a\} \leftrightarrow x \neq a}%
-    {\FormulaRefAuto{P \leftrightarrow Q \dashv \vdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}}
+    {\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}}
 \end{tabproof}
 
 \FormulaThmAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}
@@ -1219,7 +1225,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}%
     {\FormulaRefAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}{1}}
     \proofstep{1}{(a=c\land b=c)\lor (a=c\land b=d)\lor}%
-  {\multirow{2}{*}{$\FormulaRefAuto{(P \lor Q) \land (R \lor S) \dashv \vdash
+  {\multirow{2}{*}{$\FormulaRefAuto{(P \lor Q) \land (R \lor S) \eqvdash
    (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}{2}$}}
 \proofstepstar{}{(a=d\land b=c)\lor (a=d\land b=d)}{}
   \proofstep{4}{a=c\land b=c}{\rA}
@@ -1235,7 +1241,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,11}{c=d}{\FormulaRefAuto{\{a,b\}=\{c,d\},a=d,b=d\vdash c=d}{1,12,13}}
   \proofstep{1,11}{b=c}{\FormulaRefAuto{a = b, c = b\vdash a = c}{14,16}}
   \proofstep{1,11}{(a=c\land b=d) \lor (a=d\land b=c)}{\rOIb{\rAI{12,15}}}
-  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\rOEn{3,4,9,10,10,11,16}}
+  \proofstep{1}{(a=c\land b=d)\lor (a=d\land b=c)}{\FormulaRefAuto{P_1\lor P_2\lor P_3\lor P_4\dsep [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\dsep [P_4]\vdots R\vdash R}{3,4,9,10,10,11,16}}
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \closeproofpart
   \proofpart{\(\dashv\)}
@@ -1357,8 +1363,8 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofpart{\(\dashv\)}
     \proofstep{1}{a=a'\land b=b'\land c=c'}{\rA}
     \proofstep{1}{a=a'}{\rAEa{1}}
-    \proofstep{1}{b=b'}{\rAEn{1}}
-    \proofstep{1}{c=c'}{\rAEn{1}}
+    \proofstep{1}{b=b'}{\FormulaRefAuto{P\land Q\land R\vdash Q}{1}}
+    \proofstep{1}{c=c'}{\rAEb{1}}
     \proofstep{1}{(b,c)=(b',c')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{3,4}}
     \proofstep{1}{(a,(b,c))=(a',(b',c'))}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{2,5}}
     \proofstep{1}{(a,b,c)=(a',b',c')}{\rIE{\FormulaRefAuto{(x,y,z) := (x,(y,z))},6}}
@@ -1392,8 +1398,8 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofpart{\(\dashv\)}
     \proofstep{1}{a=a'\land b=b'\land c=c'}{\rA}
     \proofstep{1}{a=a'}{\rAEa{1}}
-    \proofstep{1}{b=b'}{\rAEn{1}}
-    \proofstep{1}{c=c'}{\rAEn{1}}
+    \proofstep{1}{b=b'}{\FormulaRefAuto{P\land Q\land R\vdash Q}{1}}
+    \proofstep{1}{c=c'}{\rAEb{1}}
     \proofstep{2,3}{(a,b)=(a',b')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{2,3}}
     \proofstep{5,4}{((a,b),c)=((a',b'),c')}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}{5,4}}
   \closeproofpart
@@ -1548,8 +1554,6 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{}{ x \in \bigcup A \;\leftrightarrow\;\exists B\,(B \in A \land x \in B) }{\rUE{1}}
 \end{tabproof}
 
-\section{Grundlegende Eigenschaften}
-
 \FormulaDefAuto[Vereinigung zweier Mengen]{A \cup B := \bigcup \{A, B\}}
 
 \FormulaThmAuto{x\in A \cup B \eqvdash x\in \bigcup \{A, B\}}
@@ -1580,8 +1584,12 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstepwide{}{\leftrightarrow}{\exists C\,((C = A \lor C = B) \land z \in C)}%
     {\rLRS{\FormulaRefAuto{\{A,B\} := \iota C\bigl(\forall x\,(x \in C \leftrightarrow x = A \lor x = B)\bigr)}{}}}
   \proofstepwide{}{\leftrightarrow}{z \in A \lor z \in B}%
-    {\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \dashv \vdash P(a) \lor P(b)}{3}}
+    {\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \eqvdash P(a) \lor P(b)}{3}}
 \end{tabproofwide}
+
+\section{Grundlegende Eigenschaften}
+
+\subsection{Elementare Eigenschaften}
 
 \FormulaThmAuto{z \in A \vdash z \in A \cup B}
 \begin{tabproof}
@@ -1612,7 +1620,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
   % --- Zeile 7: auf zwei Zeilen gesplittet ---
   \proofstepwide{}{\leftrightarrow}{\exists B\,\bigl(B = \{a\} \lor B = \{b\}\bigr)}%
-    {\multirow{2}{*}{\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \dashv \vdash P(a) \lor P(b)}{6}}}
+    {\multirow{2}{*}{\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \eqvdash P(a) \lor P(b)}{6}}}
   \proofstepwide*{}{\land}{x \in B}{}
   % -------------------------------------------
 
@@ -1708,6 +1716,8 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstep{1,2}{A \not\subseteq B}{\rCI{3,7}}
 \end{tabproof}
 
+\subsection{Idempotenz, Kommutativität, Assoziativität}
+
 \FormulaThmAuto{x \in A \eqvdash x \in A \cup A}
 \begin{tabproofwide}
   \proofstepwide{x \in A}{\leftrightarrow}{x \in A \lor x \in A}%
@@ -1718,7 +1728,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\rChain{1,2}}
 \end{tabproofwide}
 
-\FormulaThmAuto{A = A \cup A}
+\FormulaThmAuto[Idempotenz]{A = A \cup A}
 \begin{tabproofwide}
   \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup A}%
     {\FormulaRefAuto{x \in A \eqvdash x \in A \cup A}}
@@ -1738,7 +1748,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\rChain{1,3}}
 \end{tabproofwide}
 
-\FormulaThmAuto{A \cup B = B \cup A}
+\FormulaThmAuto[Kommutativität]{A \cup B = B \cup A}
 \begin{tabproofwide}
   \proofstepwide{x \in A \cup B}{\leftrightarrow}{x \in B \cup A}%
     {\FormulaRefAuto{x \in A \cup B \eqvdash x \in B \cup A}}
@@ -1797,7 +1807,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstepwide{z \in A \cup B}{\leftrightarrow}{z \in A \lor z \in B}%
     {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide{}{ \leftrightarrow }{z \not\in A \rightarrow z \in B}%
-    {\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1}}
+    {\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{1}}
 \end{tabproofwide}
 
 \FormulaThmAuto{z \in A \cup B \eqvdash z \not\in B \rightarrow z \in A}
@@ -1805,7 +1815,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstepwide{z \in A \cup B}{\leftrightarrow}{z \in A \lor z \in B}%
     {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide{}{\leftrightarrow}{z \not\in B \rightarrow z \in A}%
-    {\FormulaRefAuto{P \rightarrow Q \dashv \vdash \neg P \lor Q}{1}}
+    {\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{1}}
 \end{tabproofwide}
 
 \FormulaThmAuto{A=B\vdash A\cup C = B\cup C}
@@ -1859,6 +1869,8 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
   \proofstepwide{(A \cup B) \cup C}{=}{A \cup (B \cup C)}%
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
+
+\subsection{ Distributivgesetze}
 
 \FormulaThmAuto{z \in A \cup (B \cap C) \eqvdash z \in A \lor (z \in B \land z \in C)}
 \begin{tabproofwide}
@@ -1947,7 +1959,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{P \land (Q \lor R) \dashv \vdash (P \land Q) \lor (P \land R)}{1}}}
+    {\multirow{2}{*}{\FormulaRefAuto{P \land (Q \lor R) \eqvdash (P \land Q) \lor (P \land R)}{1}}}
   \proofstepwide*{}{\lor}{(z \in A \land z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
@@ -1969,7 +1981,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q) \land R \dashv \vdash (P \land R) \lor (Q \land R)}{1}}}
+    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q) \land R \eqvdash (P \land R) \lor (Q \land R)}{1}}}
   \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
@@ -1991,7 +2003,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{(P \land Q) \lor R \dashv \vdash (P \lor R) \land (Q \lor R)}{1}}}
+    {\multirow{2}{*}{\FormulaRefAuto{(P \land Q) \lor R \eqvdash (P \lor R) \land (Q \lor R)}{1}}}
   \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
@@ -2013,7 +2025,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \dashv \vdash (P \lor Q) \land (P \lor R)}{1}}}
+    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \eqvdash (P \lor Q) \land (P \lor R)}{1}}}
   \proofstepwide*{}{\land}{(z \in A \lor z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
@@ -2058,7 +2070,7 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
 
-\section[Eigenschaften von Teilmengen]{Eigenschaften in Bezug auf Teilmengen}
+\subsection{Eigenschaften in Bezug auf Teilmengen}
 
 
 \FormulaThmAuto{A \subseteq A \cup B}
@@ -2188,6 +2200,8 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \end{tabproofwide}
 
 \chapter{Regularität}
+
+\section{Axiom der Regulariät}
 
 \FormulaAxiomDelta[Regularität (Fundamentalsatz)]{ A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset) }{
 \DeltaRow{Mengen}{A}%
@@ -2348,9 +2362,9 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 \FormulaThmAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \mathcal{P}(\mathcal{P}(A \cup B))}
 \begin{tabproof}
   \proofstep{1}{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)}{\rA}
-  \proofstep{2}{(a \in A\land b \in B)\land x=(a,b)}{\rA}
-  \proofstep{2}{a \in A}{\FormulaRefAuto{(P\land Q)\land R\vdash P}{2}}
-  \proofstep{2}{b \in B}{\FormulaRefAuto{(P\land Q)\land R\vdash Q}{2}}
+  \proofstep{2}{a \in A\land b \in B\land x=(a,b)}{\rA}
+  \proofstep{2}{a \in A}{\rAEa{2}}
+  \proofstep{2}{b \in B}{\FormulaRefAuto{P\land Q\land R\vdash Q}{2}}
   \proofstep{2}{x=(a,b)}{\rAEb{2}}
   \proofstep{2}{(a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{\FormulaRefAuto{a \in A,\, b \in B \vdash (a,b) \in \mathcal{P}(\mathcal{P}(A \cup B))}{3,4}}
   \proofstep{2}{x \in \mathcal{P}(\mathcal{P}(A \cup B))}{\rIE{5,6}}  
@@ -2381,9 +2395,9 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \proofstep{1}{(a,b)\in A\times B}{\rA}
   \proofstep{1}{\exists c\in A\exists d\in B((a,b)=(c,d))}{\FormulaRefAuto{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}{1}}
   \proofstep{3}{c\in A\land d\in B\land (c,d)=(a,b)}{\rA}
-  \proofstep{3}{c\in A}{\rAEn{3}}
-  \proofstep{3}{d\in B}{\rAEn{3}}
-  \proofstep{3}{(c,d)=(a,b)}{\rAEn{3}}
+  \proofstep{3}{c\in A}{\rAEa{3}}
+  \proofstep{3}{d\in B}{\FormulaRefAuto{P\land Q\land R\vdash Q}{3}}
+  \proofstep{3}{(c,d)=(a,b)}{\rAEb{3}}
   \proofstep{3}{c=a\land d=b}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}{6}}
   \proofstep{3}{c=a}{\rAEa{7}}
   \proofstep{3}{d=b}{\rAEb{7}}
@@ -2603,7 +2617,7 @@ von geordneten Paaren aufgefasst werden.
 \FormulaAxiomDelta[Totalität]
 {x\in A \vdash \exists y\,(x,y)\in F}
 {
-\DeltaRow{Mengen}{x\dsep A\dsep F}
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep F}
 }
 
 \section{Funktionswert}
@@ -2755,10 +2769,10 @@ von geordneten Paaren aufgefasst werden.
   \proofstep{1}{\forall x\in A (F(x)=G(x))}{\rA}
   \proofstep{2}{(x,y)\in F}{\rA}
   \proofstep{2}{x\in A}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{2}}
-  \proofstep{1,2}{F(x)=G(x)}{\rRE{\rUE{1},4}}
-  \proofstep{1,2}{(x,y)\in G}{\FormulaRefAuto{F(x)=G(x)\dsep (x,y)\in F\vdash (x,y)\in G}{5,3}}
-  \proofstep{1}{(x,y)\in F\rightarrow (x,y)\in G}{\rRI{2,6}}
-  \proofstep{1}{\forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{\rUI{7}}
+  \proofstep{1,2}{F(x)=G(x)}{\rRE{\rUE{1},3}}
+  \proofstep{1,2}{(x,y)\in G}{\FormulaRefAuto{F(x)=G(x)\dsep (x,y)\in F\vdash (x,y)\in G}{4,2}}
+  \proofstep{1}{(x,y)\in F\rightarrow (x,y)\in G}{\rRI{2,5}}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{\rUI{6}}
 \end{tabproof}
 
 
@@ -2785,7 +2799,7 @@ von geordneten Paaren aufgefasst werden.
   \proofstep{1}{\forall x\in A (F(x)=G(x))}{\rA}
   \proofstep{1}{\forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in F\rightarrow (x,y)\in G)}{1}}
   \proofstep{1}{\forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \vdash \forall (x,y)((x,y)\in G\rightarrow (x,y)\in F)}{1}}
-  \proofstep{1}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \dashv \vdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{2,3}}
+  \proofstep{1}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{2,3}}
 \closeproofpart
 \proofpart{\(\dashv\)}
   \proofstep{1}{\forall (x,y)((x,y)\in F\leftrightarrow (x,y)\in G)}{\rA}
@@ -2882,12 +2896,135 @@ von geordneten Paaren aufgefasst werden.
     \proofstep{1}{F\subseteq A\times F[A]}{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,6}}}}
 \end{tabproof}
 
+\section{Graph einer Funktion}
 
-\FormulaDefDelta[Graph einer Funktion]{\mathrm{Graph}(F) := \{\, (x,y) \in A \times B \mid (x,y)\in F \,\}}%
+\FormulaDefDelta[Graph einer Funktion]{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}}%
 {
 \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Funktionen}{F\colon A\to B}
+\DeltaRow{Funktionensymbol}{F}
 }
+
+\FormulaThmDelta{\Graph(F)\subseteq A\times B}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+    \proofstep{1}{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}}{\FormulaRefAuto{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}}}
+    \proofstep{1}{\{(x,y) \in A \times B \mid y=F(x)\}\subseteq A\times B}{\FormulaRefAuto{\{ x \in A \mid P(x)\} \subseteq A}}
+    \proofstep{1}{\Graph(F)\subseteq A\times B}{\rIE{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta{(x,y)\in \Graph(F)\vdash y=F(x)}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+\DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in \Graph(F)}{\rA}
+  \proofstep{}{\Graph(F)=\{(x,y) \in A \times B \mid y=F(x)\}}{\FormulaRefAuto{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}}}
+  \proofstep{1}{y=F(x)}{\FormulaRefAuto{x \in A\dsep A=\{x \in B \mid P(x)\}\vdash P(x)}{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta[Funktionale Eindeutigkeit von \(\Graph(F)\)]{(x,y)\in \Graph(F)\dsep (x,z)\in \Graph(F)\vdash y=z}%
+{
+\DeltaRow{Mengen}{x\dsep y\dsep z}
+\DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in \Graph(F)}{\rA}
+  \proofstep{2}{(x,z)\in \Graph(F)}{\rA}
+  \proofstep{1}{y = F(x)}{\FormulaRefAuto{(x,y)\in Graph(F)\vdash y=F(x)}{1}}
+  \proofstep{2}{z = F(x)}{\FormulaRefAuto{(x,y)\in Graph(F)\vdash y=F(x)}{2}}
+  \proofstep{5}{y = z}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{3,4}}
+\end{tabproof}
+
+\FormulaThmDelta
+{\forall u\in A\,F(u)\in B\dsep x\in A \vdash \exists y\,(x,y)\in\Graph(F)}
+{
+\DeltaRow{Mengen}{u\dsep x\dsep y}
+\DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in A\,F(u)\in B}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{F(x)\in B}{\rRE{\rUE{1},2}}
+  \proofstep{1,2}{(x,F(x))\in A\times B}{\FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,3}}
+  \proofstep{}{F(x)=F(x)}{\rII}
+  \proofstep{1,2}{(x,F(x))\in\{(x,y)\in A \times B\mid y=F(x)\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{4,5}}
+  \proofstep{1,2}{(x,F(x))\in\Graph(F)}{\rIE{\FormulaRefAuto{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}},6}}
+  \proofstep{1,2}{\exists y\,(x,y)\in\Graph(F)}{\rEI{7}}
+\end{tabproof}
+
+\FormulaThmDelta[Graph eines Funktionensymbols ist eine Funktion]
+{\forall u\in A\,F(u)\in B \vdash \Graph(F)\colon A\to B}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in A\,F(u)\in B}{\rA}
+  \proofstep{}{\Graph(F) \subseteq A\times B }%
+    {\FormulaRefAuto{\Graph(F)\subseteq A\times B}}
+  \proofstep{}{\forall (x,y),(x,z)\in \Graph(F)\, y=z }%
+    {\FormulaRefAuto{(x,y)\in \Graph(F)\dsep (x,z)\in \Graph(F)\vdash y=z}}
+  \proofstep{1}{\forall x\in A \exists y\,(x,y)\in \Graph(F)}%
+    {\FormulaRefAuto{\forall u\in A\,F(u)\in B\dsep x\in A \vdash \exists y\,(x,y)\in\Graph(F)}{1}}
+  \proofstep{1}{\Graph(F)\colon A\to B}%
+    {\FormulaRefAuto{Funktion}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Funktionswerte von \(\Graph(F)\)]
+{\forall u\in A\,F(u)\in B \vdash \forall x\in A\,\Graph(F)(x) = F(x)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionensymbol}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in A\,F(u)\in B}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1}{\Graph(F)\colon A\to B}{\FormulaRefAuto{\forall u\in A\,F(u)\in B \vdash \Graph(F)\colon A\to B}{1}}
+  \proofstep{1,2}{(x,\Graph(x))\in\Graph(F)}{\FormulaRefAuto{x\in A\vdash (x,F(x))\in F}{3,2}}
+  \proofstep{1,2}{\Graph(F)(x) = F(x)}{\FormulaRefAuto{(x,y)\in \Graph(F)\vdash y=F(x)}{4}}
+  \proofstep{1}{\forall x\in A\,\Graph(F)(x) = F(x)}{\rUI{\rRI{2,5}}}
+\end{tabproof}
+
+\FormulaThmDelta
+{\forall u\in A\,t(u)\in B \vdash \exists F\colon A\to B\,\forall x\in A\,F(x) = t(x)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionensymbol}{t}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in A\,t(u)\in B}{\rA}
+  \proofstep{1}{\forall x\in A\,\Graph(t)(x) = t(x)}{\FormulaRefAuto{\forall u\in A\,F(u)\in B \vdash \forall x\in A\,\Graph(F)(x) = F(x)}{1}}
+  \proofstep{1}{\Graph(t)\colon A\to B}{\FormulaRefAuto{\forall u\in A\,F(u)\in B \vdash \Graph(F)\colon A\to B}{1}}
+  \proofstep{1}{\exists F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{\rEI{\rAI{3,2}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Funktion]{\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{
+  \DeltaRow{Mengen}{A\dsep B\dsep F\dsep x}
+  \DeltaRow{Funktionensymbol}{t}
+  %
+  \DeltaRow{\textbf{Bedingungen}}{}
+  \DeltaRow{Definition einer Funktionsvorschrift}{x\in A\vdash t(x):=y}
+  \DeltaRow{Typisierungsaxiom}{x\in A\vdash t(x)\in B}
+  \DeltaRow{\textbf{Folgerung}}{}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in A\,t(u)\in B}{\rA}
+  \proofstep{1}{\exists F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{\FormulaRefAuto{\forall u\in A\,t(u)\in B \vdash \exists F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1}}
+  \proofstep{3}{F\colon A\to B\land \forall x\in A\, F(x)=t(x)}{\rA}
+  \proofstep{4}{G\colon A\to B\land \forall x\in A\, G(x)=t(x)}{\rA}
+  \proofstep{3}{F\colon A\to B}{\rAEa{3}}
+  \proofstep{3}{\forall x\in A\, F(x)=t(x)}{\rAEb{3}}
+  \proofstep{4}{G\colon A\to B}{\rAEa{4}}
+  \proofstep{4}{\forall x\in A\, G(x)=t(x)}{\rAEb{4}}
+  \proofstep{3,4}{\forall x\in A\, F(x)=G(x)}{\FormulaRefAuto{\forall x\, F(x)\rightarrow P(x)=Q(x)\dsep \forall x\, F(x)\rightarrow P(x)=R(x)\vdash \forall x\, F(x)\rightarrow Q(x)=R(x)}{6,8}}
+  \proofstep{3,4}{F=G}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{9}}
+  \proofstep{3,4}{\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{\UEI{2,3,4,10}}
+\end{tabproof}
+
 
 
 \section{Eigenschaften von Funktionen}
@@ -3057,504 +3194,929 @@ von geordneten Paaren aufgefasst werden.
     \closeproofpart
 \end{tabproofsplit}
 
+\FormulaThmDelta[Eindeutigkeit des Urbildes bei Bijektivität]{%
+F\colon A\bij B \dsep y\in B \vdash \exists! x\in A\; F(x)=y
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep F\dsep x \dsep y \dsep z}
+}
+\begin{tabproof}
+  % Annahmen
+  \proofstep{1}{F\colon A\bij B}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+
+  % Existenz eines Urbildes aus Surjektivität
+  \proofstep{1,2}{\exists x\in A\,F(x)=y}{%
+    \FormulaRefAuto{y\in B\vdash \exists x\in A\; F(x)=y}{1,2}}
+
+  % Uniqueness-Teil: angenommen zwei Urbilder x,z
+  \proofstep{3}{x\in A \land F(x)=y}{\rA}
+  \proofstep{4}{z\in A \land F(z)=y}{\rA}
+
+  % Aus den Konjunktionen die Einzelteile holen
+  \proofstep{3}{x\in A}{\rAEa{3}}
+  \proofstep{3}{F(x)=y}{\rAEb{3}}
+  \proofstep{4}{z\in A}{\rAEa{4}}
+  \proofstep{4}{F(z)=y}{\rAEb{4}}
+
+  % F(x)=y und F(z)=y ⇒ F(x)=F(z) (über Gleichheitseigenschaften)
+  \proofstep{4}{y=F(z)}{\FormulaRefAuto{a=b \vdash b=a}{9}}
+  \proofstep{3,4}{F(x)=F(z)}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,10}}
+
+  % Injektivität verwenden: aus x,z∈A und F(x)=F(z) folgt x=z
+  \proofstep{1,3,4}{x=z}{%
+    \FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{6,8,11}}
+
+  % ∃!-Einführung: aus Existenz (3) und Eindeutigkeit (Subbeweis 3–11)
+  \proofstep{1,2}{\exists! x\in A\,F(x)=y}{\UEI{3,4,5,12}}
+\end{tabproof}
+
 
 \section{Beispiele von Funktionen}
 
-\subsection{Einschränkung einer Funktion}
+\subsection{Die Identitätsfunktion}
 
-\subsubsection{Definition der Einschränkung}
+\subsubsection{Definition der Identitätsfunktion}
 
-% — Definition —
-\FormulaDefDeltaK[Einschränkung von \(F\) auf \(C\)]{%
-C\subseteq A \vdash F\restriction_C := \{\, (x,y) \in F \mid x \in C \,\}
-}{Einschränkung}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
+\FormulaDefDelta[Funktionsvorschrift für die Identitätsfunktion auf \(A\)]
+{x\in A \vdash t_{\Id_A}(x) \coloneqq x}
+{
+\DeltaRow{Mengen}{A\dsep x}
+\DeltaRow{Funktionensymbol}{t_{\Id_A}}
 }
 
-\subsubsection{Die Funktionseigenschaften}
 
-% — Existenz als Menge geordneter Paare / Teilmenge von F —
-\FormulaThmDelta[Existenz als Teilmenge von \(F\)]{%
-C\subseteq A \vdash F\restriction_C \subseteq F
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom]
+{x\in A \vdash t_{\Id_A}(x)\in A}
+{
+  \DeltaRow{Mengen}{A\dsep x}
+\DeltaRow{Funktionensymbol}{t_{\Id_A}}
 }
 \begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{1}{t_{\Id_A}(x)=x}{\FormulaRefAuto{x\in A \vdash t_{\Id_A}(x) \coloneqq x}{1}}
+    \proofstep{1}{t_{\Id_A}(x)\in A}{\rIE{2,1}}
+\end{tabproof}
+
+
+\FormulaThmDelta[Identität als Funktion]{\exists! F\colon A\to A\,\forall x\in A\,F(x) = t_{\Id_A}(x)}{
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Funktionensymbol}{t_{\Id_A}}
+}
+\begin{tabproof}
+    \proofstep{}{\forall x\in A\,t_{\Id_A}(x)= x}{\FormulaRefAuto{x\in A \vdash t_{\Id_A}(x) \coloneqq x}}
+    \proofstep{}{\forall x\in A\,t_{\Id_A}(x)\in A}{\FormulaRefAuto{x\in A \vdash t_{\Id_A}(x)\in A}}
+    \proofstep{}{\exists! F\colon A\to A\,\forall x\in A\,F(x) = t_{\Id_A}(x)}{\FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Identitätsfunktion auf \(A\)]
+{\Id_A\coloneqq\iota F\left(F\colon A\to A \land \forall x\in A\, F(x)=t_{\Id_A}(x)\right)}
+{
+\DeltaRow{Mengen}{A}
+\DeltaRow{Funktionensymbol}{t_{\Id_A}}
+}
+
+\FormulaThmDelta[Identitätsfunktion auf \(A\)]
+{\Id_A\colon A\to A}
+{
+\DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+    \proofstep{}{\Id_A\colon A\to A}{\rAEa{\FormulaRefAuto{\Id_A\coloneqq\iota F\left(F\colon A\to A \land \forall x\in A\, F(x)=t_{\Id_A}(x)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Identitätsfunktion auf \(A\)]
+{x\in A\vdash \Id_A(x)=x}
+{
+\DeltaRow{Mengen}{A\dsep x}
+}
+\begin{tabproof}
+    \proofstep{1}{x\in A}{\rA}
+    \proofstep{}{\forall x\in A\, \Id_A(x)=t_{\Id_A}(x)}{\rAEb{\FormulaRefAuto{\Id_A\coloneqq\iota F\left(F\colon A\to A \land \forall x\in A\, F(x)=t_{\Id_A}(x)\right)}}}
+    \proofstep{1}{\Id_A(x)=t_{\Id_A}(x)}{\rRE{1,\rUE{2}}}
+    \proofstep{1}{t_{\Id_A}(x)=x}{\FormulaRefAuto{x\in A \vdash t_{\Id_A}(x) \coloneqq x}{1}}
+    \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
+\subsubsection{Die Bijektionseigenschaften}
+
+\paragraph{Injektivität}
+\FormulaThmDelta[Injektivität von \(\Id_A\)]{%
+x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{\Id_A(x)=\Id_A(y)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{2}{\Id_A(x)=x}{\FormulaRefAuto{x\in A\vdash \Id_A(x)=x}{2}}
+  \proofstep{3}{\Id_A(y)=y}{\FormulaRefAuto{x\in A\vdash \Id_A(x)=x}{3}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{a = b\dsep a = c\dsep b=d\vdash c = d}{1,4,5}}
+\end{tabproof}
+
+\paragraph{Surjektivität}
+\FormulaThmDelta[Surjektivität von \(\Id_A\)]{%
+x\in A \vdash \exists y\in A\; \Id_A(y)=x
+}{
+  \DeltaRow{Mengen}{x \dsep y \dsep A}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{x\in A\vdash \Id_A(x)=x}{1}}
+  \proofstep{1}{\exists y\in A\; \Id_A(y)=x}{\rEI{\rAI{1,2}}}
+\end{tabproof}
+
+\paragraph{Bijektivität}
+\FormulaThmDelta[\(\Id_A\) als bijektive Funktion]{%
+\Id_A\colon A\bij A
+}{
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+    \proofstep{}{\Id_A\colon A\to A}{\FormulaRefAuto{\Id_A\colon A\to A}}
+    \proofstep{}{\forall x,y\in A\,(\Id_A(x)=\Id_A(y) \rightarrow x=y)}{\FormulaRefAuto{x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y}}
+    \proofstep{}{\forall x\in A\exists y\in A\,\Id_A(y)=x}{\FormulaRefAuto{x\in A \vdash \exists y\in A\; \Id_A(y)=x}}
+    \proofstep{}{\Id_A\colon A\bij A}{\FormulaRefAuto{Bijektive Funktion}{1,2,3}}
+\end{tabproof}
+
+\subsection{Die Projektionen auf die Komponenten}
+
+\subsubsection{Projektion auf die erste Komponente}
+
+\FormulaDefDelta[Funktionsvorschrift für die Projektion auf die erste Komponente]
+{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(\pi_1\)]
+{(x,y)\in A\times B \vdash t_{\pi_1}(x,y)\in A}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{1}{x\in A \land y\in B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{x\in A}{\rAEa{2}}
+  \proofstep{1}{t_{\pi_1}(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}{1}}
+  \proofstep{1}{t_{\pi_1}(x,y)\in A}{\rIE{4,3}}
+\end{tabproof}
+
+
+
+\FormulaThmDelta[Projektion auf die erste Komponente als Funktion]{%
+\exists! F\colon A\times B\to A\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_1}(x,y)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_1}(x,y)= x}{\FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}}
+
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_1}(x,y)\in A}{\FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y)\in A}}
+    
+  \proofstep{}{\exists! F\colon A\times B\to A\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_1}(x,y)}{%
+    \FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Projektion auf die erste Komponente]
+{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+
+\FormulaThmDelta[Projektion auf die erste Komponente]
+{\pi_1\colon A\times B\to A}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\pi_1\colon A\times B\to A}{%
+    \rAEa{\FormulaRefAuto{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Projektion auf die erste Komponente]
+{(x,y)\in A\times B \vdash \pi_1(x,y)=x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
   \proofstep{}{%
-    F\restriction_C = \{\, (x,y) \in F \mid x \in C \,\}
-  }{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C := \{\, (x,y) \in F \mid x \in C \,\}}{1}}
+    \forall x\in A\,\forall y\in B\, \pi_1(x,y)=t_{\pi_1}(x,y)}{%
+    \rAEb{\FormulaRefAuto{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}}}
+  \proofstep{1}{\pi_1(x,y)=t_{\pi_1}(x,y)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{t_{\pi_1}(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}{1}}
+  \proofstep{1}{\pi_1(x,y)=x}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
+\FormulaThmDelta
+{x\in A\dsep y\in B \vdash \pi_1(x,y)=x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{1,2}{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,2}}
+  \proofstep{1,2}{\pi_1(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B\vdash \pi_1(x,y)=x}{3}}
+\end{tabproof}
+
+\paragraph{Surjektivität}
+
+\FormulaThmDelta[Surjektivität von \(\pi_1\)]{%
+x\in A \dsep b_0\in B \vdash \exists z\in A\times B\; \pi_1(z)=x
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep x \dsep b_0 \dsep z}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{b_0\in B}{\rA}
+  % Paarbildung
+  \proofstep{1,2}{(x,b_0)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,2}}
+  % Grundgleichung der Projektion: (x,b0) in A×B ⇒ π1(x,b0)=x
+  \proofstep{1,2}{\pi_1(x,b_0)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{3}}
+  % Existenzzeuge z = (x,b0) für Surjektivität
+  \proofstep{1,2}{\exists z\in A\times B\; \pi_1(z)=x}{%
+    \rEI{\rAI{3,4}}}
+\end{tabproof}
+
+\subsubsection{Projektion auf die zweite Komponente}
+
+\FormulaDefDelta[Funktionsvorschrift für die Projektion auf die zweite Komponente]
+{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(\pi_2\)]
+{(x,y)\in A\times B \vdash t_{\pi_2}(x,y)\in B}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{1}{x\in A \land y\in B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{y\in B}{\rAEb{2}}
+  \proofstep{1}{t_{\pi_2}(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}{1}}
+  \proofstep{1}{t_{\pi_2}(x,y)\in B}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmDelta[Projektion auf die zweite Komponente als Funktion]{%
+\exists! F\colon A\times B\to B\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_2}(x,y)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+\begin{tabproof}
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_2}(x,y)= y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}}
+
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_2}(x,y)\in B}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y)\in B}}
+    
+  \proofstep{}{\exists! F\colon A\times B\to B\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_2}(x,y)}{%
+    \FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Projektion auf die zweite Komponente]
+{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+
+\FormulaThmDelta[Projektion auf die zweite Komponente]
+{\pi_2\colon A\times B\to B}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\pi_2\colon A\times B\to B}{%
+    \rAEa{\FormulaRefAuto{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Projektion auf die zweite Komponente]
+{(x,y)\in A\times B \vdash \pi_2(x,y)=y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
   \proofstep{}{%
-    \{\, (x,y) \in F \mid x \in C \,\} \subseteq F
-  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
-  \proofstep{}{%
-    F\restriction_C \subseteq F
-  }{\rIE{2,3}}
+    \forall x\in A\,\forall y\in B\, \pi_2(x,y)=t_{\pi_2}(x,y)}{%
+    \rAEb{\FormulaRefAuto{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}}}
+  \proofstep{1}{\pi_2(x,y)=t_{\pi_2}(x,y)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{t_{\pi_2}(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}{1}}
+  \proofstep{1}{\pi_2(x,y)=y}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
 \end{tabproof}
 
-
-% — Projektion auf die erste Komponente: x liegt in C —
-\FormulaThmDelta{%
-C\subseteq A \dsep (x,y)\in F\restriction_C \vdash x\in C
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{(x,y)\in F\restriction_C}{\rA}
-  \proofstep{1,2}{(x,y)\in \{\, (x,y) \in F \mid x \in C \,\}}%
-    {\rIE{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C := \{\, (x,y) \in F \mid x \in C \,\}}{1},2}}
-  \proofstep{1,2}{x\in C}{\FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash P(x)}{3}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{(x,y)\in F\restriction_C}{\rA}
-  \proofstep{1,2}{(x,y)\in \{\, (x,y) \in F \mid x \in C \,\}}%
-    {\rIE{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C := \{\, (x,y) \in F \mid x \in C \,\}}{1},2}}
-  \proofstep{1,2}{(x,y)\in F}%
-    {\FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash x\in A}{3}}
-\end{tabproof}
-
-% — Projektion auf die zweite Komponente: y liegt in B (über F) —
-\FormulaThmDelta{%
-C\subseteq A \dsep (x,y)\in F\restriction_C \vdash y\in B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{(x,y)\in F\restriction_C}{\rA}
-  \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F}{1,2}}
-  \proofstep{1,2}{y\in B}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
-\end{tabproof}
-
-
-% — Charakterisierung über F und C: (x,y) in F|_C <-> x in C und (x,y) in F —
-
-\FormulaThmDelta{%
-C\subseteq A \dsep (x,y)\in F\restriction_C \vdash x\in C\land (x,y)\in F
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{(x,y)\in F\restriction_C}{\rA}
-  \proofstep{1,2}{x\in C}{\FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash x\in C}{1,2}}
-  \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F}{1,2}}
-  \proofstep{1,2}{x\in C\land (x,y)\in F}{\rAI{3,4}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-C\subseteq A \dsep x\in C\dsep (x,y)\in F \vdash (x,y)\in F\restriction_C
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{3}{(x,y)\in F}{\rA}
-  \proofstep{2,3}{(x,y)\in \{\, (x,y) \in F \mid x \in C \,\}}%
-    {\FormulaRefAuto{x\in A, P(x)\vdash x\in\{x\in A\mid P(x)\}}{3,2}}
-  \proofstep{1,2,3}{(x,y)\in F\restriction_C}{\rIE{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C := \{\, (x,y) \in F \mid x \in C \,\}}{1},4}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-(x,y)\in F\restriction_C \eqvdash x\in C\land (x,y)\in F
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{(x,y)\in F\restriction_C}{\rA}
-    \proofstep{1}{x\in C\land (x,y)\in F}{\FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash x\in C\land (x,y)\in F}{1}}
-  \closeproofpart
-  \proofpart{\(\dashv\)}
-    \proofstep{1}{x\in C\land (x,y)\in F}{\rA}
-    \proofstep{1}{x\in C}{\rAEa{1}}
-    \proofstep{1}{(x,y)\in F}{\rAEb{1}}
-    \proofstep{1}{(x,y)\in F\restriction_C}{\FormulaRefAuto{C\subseteq A \dsep x\in C\dsep (x,y)\in F \vdash (x,y)\in F\restriction_C}{2,3}}
-  \closeproofpart
-\end{tabproofsplit}
-
-
-% — Funktionswerte der Einschränkung und Übereinstimmung mit F —
-
-\FormulaThmDelta{%
-C\subseteq A \dsep x\in C \vdash (x,F(x))\in F\restriction_C
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{1,2}{x\in A}{\FormulaRefAuto{A\subseteq B,x\in A\vdash x\in B}{1,2}}
-  \proofstep{1,2}{(x,F(x))\in F}{\FormulaRefAuto{x\in A\dsep y\in A\dsep x=y\vdash F(x)=F(y)}{3}}
-  \proofstep{1,2}{(x,F(x))\in F\restriction_C}{\FormulaRefAuto{C\subseteq A \dsep x\in C\dsep (x,y)\in F \vdash (x,y)\in F\restriction_C}{1,2,4}}
-\end{tabproof}
-
-\FormulaThmDelta[Existenz als Menge geordneter Paare der Einschränkung]{%
-F\restriction_C \subseteq C\times B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in F\restriction_C}{\rA}
-
-  \proofstep{1}{(x,y)\in F}{%
-    \FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F}{1}
-  }
-  \proofstep{1}{x\in C}{%
-    \FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash x\in C}{2}
-  }
-
- \proofstep{1}{y\in B}{%
-    \FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash y\in B}{2}
-  }
-
- \proofstep{1}{(x,y)\in C\times B}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}
-  }
-
-  \proofstep{}{\forall x,y\, ((x,y)\in F\restriction_C\rightarrow (x,y)\in C\times B)}{%
-    \rUI{\rRI{1,5}}
-  }
-
-  \proofstep{}{F\restriction_C \subseteq C\times B}{
-  \FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{6}
-  }
-\end{tabproof}
-
-\FormulaThmDeltaK[Funktionale Eindeutigkeit der Einschränkung]{%
-(x,y_1)\in F\restriction_C \dsep (x,y_2)\in F\restriction_C \vdash y_1 = y_2
-}{%
-C\subseteq A \dsep F\colon A\to B \dsep (x,y_1)\in F\restriction_C \dsep (x,y_2)\in F\restriction_C 
-\vdash y_1 = y_2
-}{
-  \DeltaRow{Mengen}{x \dsep y_1 \dsep y_2 \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  % Annahmen
-  \proofstep{1}{(x,y_1)\in F\restriction_C}{\rA}
-  \proofstep{2}{(x,y_2)\in F\restriction_C}{\rA}
-
-  % Von der Einschränkung zurück zur ursprünglichen Funktion
-  \proofstep{1}{(x,y_1)\in F}{%
-    \FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F}{1}
-  }
-  \proofstep{2}{(x,y_2)\in F}{%
-    \FormulaRefAuto{C\subseteq A \dsep (x,y)\in F\restriction_C \vdash (x,y)\in F}{2}
-  }
-
-  % Funktionale Eindeutigkeit von F nutzen
-  \proofstep{1,2}{y_1 = y_2}{%
-    \FormulaRefAuto{(x,y)\in F\dsep (x,z)\in F \vdash y=z}{3,4}
-  }
-\end{tabproof}
-
-\FormulaThmDeltaK[Totalität der Einschränkung]{%
-C\subseteq A\dsep x\in C \vdash \exists y\, (x,y)\in F\restriction_C
-}{%
-C\subseteq A \dsep \forall y\in B\,\exists x\in C\,F(x)=y \dsep y\in B \vdash \exists x\, (x,y)\in F\restriction_C
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  % Annahmen
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{1,2}{x\in A}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{1,2}}
-  \proofstep{1,2}{\exists y\,(x,y)\in F}{%
-  \FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in F}{3}%
-  }
-  \proofstep{5}{(x,b)\in F}{\rA}
-  \proofstep{1,2,5}{(x,b)\in F\restriction_C}{\FormulaRefAuto{C\subseteq A \dsep x\in C\dsep (x,y)\in F \vdash (x,y)\in F\restriction_C}{1,2,5}}
-  \proofstep{1,2,5}{\exists y\,(x,y)\in F\restriction_C}{\rEI{6}}
-  \proofstep{1,2}{\exists y\,(x,y)\in F\restriction_C}{\rEE{4,5,7}}
-\end{tabproof}
-
-% — F\restriction_C ist eine Funktion C -> B —
-
-\FormulaThmDelta[\(F\restriction_C\) als Funktion]{%
- F\restriction_C\colon C\to B
-}{
-  \DeltaRow{Mengen}{A \dsep B \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{}{F\restriction_C \subseteq C\times B}{\FormulaRefAuto{F\restriction_C\subseteq C\times B}}
-  \proofstep{}{\forall (x,y_1),(x,y_2)\in F\restriction_C\, y_1 = y_2}{\FormulaRefAuto{(x,y_1)\in F\restriction_C \dsep (x,y_2)\in F\restriction_C \vdash y_1 = y_2}}
-  \proofstep{}{\forall x\in C\, \exists y\, (x,y)\in F\restriction_C}{\FormulaRefAuto{C\subseteq A\dsep x\in C \vdash \exists y\, (x,y)\in F\restriction_C}}
-  \proofstep{}{F\restriction_C\colon C\to B}{\FormulaRefAuto{Funktion}{1,2,3}}
-\end{tabproof}
-
-\subsubsection{Weitere Eigenschaften}
-
-\FormulaThmDelta[Funktionswerte der Einschränkung]{%
-C\subseteq A \dsep x\in C \vdash (F\restriction_C)(x)=F(x)
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{1,2}{(x,F(x))\in F\restriction_C}{\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash (x,F(x))\in F\restriction_C}{1,2}}
-  \proofstep{1,2}{(F\restriction_C)(x)=F(x)}{\FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{3}}
-\end{tabproof}
-
-\subsection{Umkehrfunktion}
-
-\subsubsection{Definition}
-
-\FormulaDefDelta[Inverse Relation]{%
-F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}
-}
+\FormulaThmDelta
+{x\in A\dsep y\in B\,\pi_2(x,y)=y}
 {
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Funktionen}{F\colon A\to B}
-}
-
-\subsubsection{Die Funktionseigenschaften}
-
-
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-F^{-1} \subseteq B\times A}
-{
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Funktionen}{F\colon A\to B}
-}
-
-\begin{tabproof}
-\proofstep{}{F^{-1} = \{\, (y,x) \in B \times A \mid (x,y)\in F \}}{\FormulaRefAuto{F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}}}
-\proofstep{}{\{\, (y,x) \in B \times A \mid (x,y)\in F \}\subseteq B\times A}{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
-\proofstep{}{F^{-1}\subseteq B\times A}{\rIE{1,2}}
-\end{tabproof}
-
-
-\FormulaThmDelta{(x,y)\in F\eqvdash (y,x)\in F^{-1}}
-{
-\DeltaRow{Mengen}{x\dsep y}
-\DeltaRow{Funktionen}{F}
-}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-\proofstep{1}{(x,y)\in F}{\rA}
-\proofstep{1}{(x,y)\in A\times B}{\FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,\FormulaRefAuto{F \subseteq A \times B}}}
-\proofstep{1}{(y,x)\in B\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash (b,a)\in B\times A}}
-\proofstep{1}{(y,x)\in F^{-1}}{\rIE{\FormulaRefAuto{F^{-1} := \{\, (y,x) \in B \times A \mid (x,y)\in F \}},\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{3,1}}}
-\closeproofpart
-\proofpart{\(\dashv\)}
-\proofstep{1}{(x,y)\in F^{-1}}{\rA}
-\proofstep{1}{(x,y)\in F}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmDeltaK[Funktionale Eindeutigkeit von \(F^{-1}\)]{(y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}{F injektiv\dsep (y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}
-{
-\DeltaRow{Mengen}{x_1\dsep x_2\dsep y}
-\DeltaRow{Injektive Funktionen}{F}
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
 }
 \begin{tabproof}
-\proofstep{1}{(y,x_1)\in F^{-1}}{\rA}
-\proofstep{2}{(y,x_2)\in F^{-1}}{\rA}
-\proofstep{1}{(x_1,y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{1}}
-\proofstep{2}{(x_2,y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{2}}
-\proofstep{1}{y=F(x_1)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{3}}
-\proofstep{2}{y=F(x_2)}{\FormulaRefAuto{(x,y)\in F\vdash y=F(x)}{4}}
-\proofstep{1,2}{F(x_1)=F(x_2)}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{5,6}}
-\proofstep{1,2}{x_1=x_2}{\FormulaRefAuto{(x,z_1)\in F\dsep (y,z_2)\in F\dsep F(x)=F(y)\vdash x=y}{3,4,7}}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{1,2}{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,2}}
+  \proofstep{1,2}{\pi_2(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{3}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Totalität auf \(B\)]%
-{y\in B\vdash \exists x\, (y,x)\in F^{-1}}{F surjektiv\dsep y\in B\vdash \exists x\, (y,x)\in F^{-1}}
-{
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Surjektive Funktionen}{F\colon A\to B}
+\paragraph{Surjektivität}
+
+\FormulaThmDelta[Surjektivität von \(\pi_2\)]{%
+y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep y \dsep a_0 \dsep z}
 }
 \begin{tabproof}
   \proofstep{1}{y\in B}{\rA}
-  \proofstep{1}{\exists x\in A\, F(x)=y}{\FormulaRefAuto{y\in B\vdash \exists x\in A F(x)=y}{1}}
-  \proofstep{3}{x\in A\land F(x)=y}{\rA}
-  \proofstep{3}{x\in A}{\rAEa{3}}
-  \proofstep{3}{F(x)=y}{\rAEb{3}}
-  \proofstep{3}{(x,y)\in F}{\FormulaRefAuto{x\in A\dsep F(x)=y\vdash (x,y)\in F}{4,5}}
-  \proofstep{3}{(y,x)\in F^{-1}}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{6}}
-  \proofstep{3}{\exists x\,(y,x)\in F^{-1}}{\rEI{7}}
-  \proofstep{1}{\exists x\,(y,x)\in F^{-1}}{\rEE{2,3,8}}
+  \proofstep{2}{a_0\in A}{\rA}
+  % Paarbildung
+  \proofstep{1,2}{(a_0,y)\in A\times B}{%
+    \FormulaRefAuto{a\in A \dsep b\in B \vdash (a,b)\in A\times B}{2,1}}
+  % Grundgleichung der Projektion: (a0,y) in A×B ⇒ π2(a0,y)=y
+  \proofstep{1,2}{\pi_2(a_0,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{3}}
+  % Existenzzeuge z = (a0,y) für Surjektivität
+  \proofstep{1,2}{\exists z\in A\times B\; \pi_2(z)=y}{%
+    \rEI{\rAI{3,4}}}
 \end{tabproof}
 
-\FormulaThmDelta[\(F^{-1}\) als Funktion]%
-{F^{-1}\colon B\to A}
+\subsection{Die Inklusionsabbildung}
+
+\subsubsection{Definition der Inklusionsabbildung}
+
+\FormulaDefDelta[Funktionsvorschrift für die Inklusionsabbildung von \(A\) nach \(B\)]
+{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x) \coloneqq x}
 {
-\DeltaRow{Mengen}{A\dsep B}
-\DeltaRow{Bijektive Funktionen}{F\colon A\bij B}
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionensymbol}{t_{\iota_{A,B}}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(t_{\iota_{A,B}}\)]
+{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x)\in B}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionensymbol}{t_{\iota_{A,B}}}
 }
 \begin{tabproof}
-    \proofstep{}{F^{-1} \subseteq B\times A}{\FormulaRefAuto{F^{-1} \subseteq B\times A}}
-    \proofstep{}{\forall (y,x_1),(y,x_2)\in F^{-1}\, x_1=x_2}{\FormulaRefAuto{F injektiv\dsep (y,x_1)\in F^{-1}\dsep (y,x_2)\in F^{-1} \vdash x_1 = x_2}}
-    \proofstep{}{\forall y\in B\exists x\, (y,x)\in F^{-1}}{\FormulaRefAuto{F surjektiv\dsep y\in B\vdash \exists x\, (y,x)\in F^{-1}}}
-    \proofstep{}{F^{-1}\colon B\to A}{\FormulaRefAuto{Funktion}{1,2,3}}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{x\in B}{%
+    \FormulaRefAuto{A\subseteq B, x\in A \vdash x\in B}{1,2}}
+  \proofstep{1,2}{t_{\iota_{A,B}}(x)=x}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x) \coloneqq x}{1,2}}
+  \proofstep{1,2}{t_{\iota_{A,B}}(x)\in B}{\rIE{4,3}}
 \end{tabproof}
 
-\subsubsection{Die Bijektionseigeschaften}
+\FormulaThmDelta[Inklusionsabbildung als Funktion]{%
+A\subseteq B\vdash \exists! F\colon A\to B\,\forall x\in A\,F(x) = t_{\iota_{A,B}}(x)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionensymbol}{t_{\iota_{A,B}}}
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{1}{\forall x\in A\,t_{\iota_{A,B}}(x)=x}{\FormulaRefAuto{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x) \coloneqq x}{1}}
+  \proofstep{1}{\forall x\in A\,t_{\iota_{A,B}}(x)\in B}{\FormulaRefAuto{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x)\in B}{1}}
+  \proofstep{1}{\exists! F\colon A\to B\,\forall x\in A\,F(x) = t_{\iota_{A,B}}(x)}{%
+    \FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{2,3}}
+\end{tabproof}
+
+\FormulaDefDelta[Inklusionsabbildung von \(A\) nach \(B\)]
+{\iota_{A,B}\coloneqq\iota F\left(F\colon A\to B \land \forall x\in A\, F(x)=t_{\iota_{A,B}}(x)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{t_{\iota_{A,B}}}
+}
+
+\FormulaThmDelta[Inklusionsabbildung von \(A\) nach \(B\)]
+{\iota_{A,B}\colon A\to B}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\iota_{A,B}\colon A\to B}{%
+    \rAEa{\FormulaRefAuto{\iota_{A,B}\coloneqq\iota F\left(F\colon A\to B \land \forall x\in A\, F(x)=t_{\iota_{A,B}}(x)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Inklusionsabbildung]
+{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{}{%
+    \forall x\in A\, \iota_{A,B}(x)=t_{\iota_{A,B}}(x)}{%
+    \rAEb{\FormulaRefAuto{\iota_{A,B}\coloneqq\iota F\left(F\colon A\to B \land \forall x\in A\, F(x)=t_{\iota_{A,B}}(x)\right)}}}
+  \proofstep{2}{\iota_{A,B}(x)=t_{\iota_{A,B}}(x)}{\rRE{2,\rUE{3}}}
+  \proofstep{1,2}{t_{\iota_{A,B}}(x)=x}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash t_{\iota_{A,B}}(x) \coloneqq x}{1,2}}
+  \proofstep{1,2}{\iota_{A,B}(x)=x}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproof}
+
+\subsubsection{Die Injektivität der Inklusionsabbildung}
+
+\paragraph{Injektivität}
+\FormulaThmDelta[Injektivität von \(\iota_{A,B}\)]{%
+x\in A \dsep y\in A \dsep \iota_{A,B}(x)=\iota_{A,B}(y) \vdash x=y
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep x \dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{\iota_{A,B}(x)=\iota_{A,B}(y)}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{2}{\iota_{A,B}(x)=x}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{2}}
+  \proofstep{3}{\iota_{A,B}(y)=y}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{3}}
+  \proofstep{1,2,3}{x=y}{%
+    \FormulaRefAuto{a = b\dsep a = c\dsep b=d\vdash c = d}{1,4,5}}
+\end{tabproof}
+
+\subsection{Die Einschränkung einer Funktion}
+
+\subsubsection{Definition der eingeschränkten Funktionsvorschrift}
+
+\FormulaDefDelta[Funktionsvorschrift für die Einschränkung von \(F\) auf \(C\)]
+{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x) \coloneqq F(x)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionensymbol}{t_{F\restriction_C}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(t_{F\restriction_C}\)]
+{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x)\in B}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionensymbol}{t_{F\restriction_C}}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{x\in C}{\rA}
+  % aus C⊆A und x∈C folgt x∈A
+  \proofstep{1,2}{x\in A}{\FormulaRefAuto{A\subseteq B, x\in A \vdash x\in B}{1,2}}
+  % Typisierungsaxiom für F selbst: x∈A ⇒ F(x)∈ B
+  \proofstep{3}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{3}}
+  % Definition der Funktionsvorschrift der Einschränkung
+  \proofstep{1,2,3}{t_{F\restriction_C}(x)=F(x)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x) \coloneqq F(x)}{1,2,3}}
+  % Über Gleichung auf den Wertebereich schließen
+  \proofstep{1,2,3}{t_{F\restriction_C}(x)\in B}{\rIE{6,5}}
+\end{tabproof}
+
+\subsubsection{Die Einschränkung als Funktion}
+
+\FormulaThmDelta[Einschränkung als Funktion]{%
+C\subseteq A \vdash
+\exists! G\colon C\to B\,\forall x\in C\,G(x) = t_{F\restriction_C}(x)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionensymbol}{t_{F\restriction_C}}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+
+  \proofstep{1}{\forall x\in C\, t_{F\restriction_C}(x) = F(x)}{\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x) \coloneqq F(x)}{1}}
+
+  \proofstep{1}{\forall x\in C\, t_{F\restriction_C}(x)\in B}{\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x)\in B}{1}}
+  % Existenz und Eindeutigkeit einer Funktion G: C→B mit dieser Vorschrift
+  \proofstep{1}{\exists! G\colon C\to B\,\forall x\in C\,G(x) = t_{F\restriction_C}(x)}{%
+    \FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{2,3}}
+\end{tabproof}
+
+\FormulaDefDelta[Einschränkung von \(F\) auf \(C\)]
+{C\subseteq A \vdash F\restriction_C\coloneqq\iota G\left(G\colon C\to B \land \forall x\in C\, G(x)=t_{F\restriction_C}(x)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+  \DeltaRow{Funktionensymbol}{t_{F\restriction_C}}
+}
+
+\FormulaThmDelta[Einschränkung von \(F\) auf \(C\)]
+{C\subseteq A \vdash F\restriction_C\colon C\to B}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{}{\;F\restriction_C\colon C\to B}{%
+    \rAEa{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\coloneqq\iota G\left(G\colon C\to B \land \forall x\in C\, G(x)=t_{F\restriction_C}(x)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Einschränkung]
+{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{x\in C}{\rA}
+  \proofstep{1}{%
+    \forall x\in C\, F\restriction_C(x)=t_{F\restriction_C}(x)}{%
+    \rAEb{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\coloneqq\iota G\left(G\colon C\to B \land \forall x\in C\, G(x)=t_{F\restriction_C}(x)\right)}{1}}}
+  \proofstep{1,2}{F\restriction_C(x)=t_{F\restriction_C}(x)}{\rRE{2,\rUE{3}}}
+  \proofstep{1,2}{t_{F\restriction_C}(x)=F(x)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash t_{F\restriction_C}(x) \coloneqq F(x)}{1,2}}
+  \proofstep{1,2}{F\restriction_C(x)=F(x)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproof}
+
+\subsubsection{Die Auswertungseigenschaft}
+
+\FormulaThmDelta{%
+C\subseteq A \dsep x\in C \dsep y\in C \dsep F(x)=F(y)\vdash F\restriction_C(x)=F\restriction_C(y)
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep C \dsep x \dsep y}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{x\in C}{\rA}
+  \proofstep{3}{y\in C}{\rA}
+  \proofstep{4}{F(x)=F(y)}{\rA}
+  \proofstep{1,2}{F\restriction_C(x)=F(x)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{1,2}}
+  \proofstep{1,3}{F\restriction_C(y)=F(y)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{1,3}}
+  \proofstep{1,3}{F(y)=F\restriction_C(y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
+  \proofstep{1,3,4}{F(x)=F\restriction_C(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,7}}
+  \proofstep{1,2,3,4}{F\restriction_C(x)=F\restriction_C(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,8}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+C\subseteq A \dsep x\in C \dsep y\in C \dsep F\restriction_C(x)=F\restriction_C(y)\vdash F(x)=F(y)
+}{
+  \DeltaRow{Mengen}{A \dsep B \dsep C \dsep x \dsep y}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{x\in C}{\rA}
+  \proofstep{3}{y\in C}{\rA}
+  \proofstep{4}{F\restriction_C(x)=F\restriction_C(y)}{\rA}
+  \proofstep{1,2}{F\restriction_C(x)=F(x)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{1,2}}
+  \proofstep{1,3}{F\restriction_C(y)=F(y)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{1,3}}
+  \proofstep{1,2}{F(x)=F\restriction_C(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{1,2,4}{F(x)=F\restriction_C(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,4}}
+  \proofstep{1,2,3,4}{F(x)=F(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,6}}
+\end{tabproof}
+
+\subsubsection{Erhalt von Eigenschaften}
+
+\FormulaThmDelta[Injektivität der Einschränkung]{%
+C\subseteq A \dsep x\in C \dsep y\in C \dsep
+F\restriction_C(x)=F\restriction_C(y) \vdash x=y
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x\dsep y}
+  \DeltaRow{Injektive Funktionen}{F\colon A\rightarrowtail B}
+  \DeltaRow{Funktionen}{F\restriction_C\colon C\to B}[\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}]
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{x\in C}{\rA}
+  \proofstep{3}{y\in C}{\rA}
+  \proofstep{4}{F\restriction_C(x)=F\restriction_C(y)}{\rA}
+  \proofstep{1,2,3,4}{F(x)=F(y)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \dsep y\in C \dsep F\restriction_C(x)=F\restriction_C(y)\vdash F(x)=F(y)}{1,2,3,4}}
+  \proofstep{2}{x\in A}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{2}}
+  \proofstep{3}{y\in A}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{3}}
+  \proofstep{1,6,7,11}{x=y}{%
+    \FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{6,7,5}}
+\end{tabproof}
+
+\FormulaThmDelta[Einschränkung einer injektiven Funktion]{%
+ C\subseteq A \vdash F\restriction_C\colon C\rightarrowtail B
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Injektive Funktionen}{F\colon A\rightarrowtail B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{1}{F\restriction_C\colon C\to B}{%
+    \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{1}}
+  \proofstep{1,2}{\forall x,y\in C\,(F\restriction_C(x)=F\restriction_C(y)\rightarrow x=y)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \dsep y\in C \dsep
+F\restriction_C(x)=F\restriction_C(y) \vdash x=y}{1,2}}
+  \proofstep{1,2}{F\restriction_C\colon C\rightarrowtail B}{%
+    \FormulaRefAuto{Injektive Funktion}{3,4}}
+\end{tabproof}
+
+\FormulaThmDelta[Surjektivität der Einschränkung auf das Bild]{%
+C\subseteq A \dsep y\in F[C] \vdash \exists x\in C\, F\restriction_C(x)=y
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{2}{y\in F[C]}{\rA}
+
+  % Bildmengen-Theorem auf C angewandt: y∈F[C] ⇒ ∃x∈C (y=F(x))
+  \proofstep{2}{\exists x\in C\, y=F(x)}{%
+    \FormulaRefAuto{y\in F[A]\eqvdash \exists x\in A\,y=F(x)}{2}}
+  
+  \proofstep{3}{x\in C\land y=F(x)}{\rA}
+  \proofstep{3}{x\in C}{\rAEa{3}}
+  \proofstep{3}{y=F(x)}{\rAEb{3}}
+
+  % Grundgleichung der Einschränkung
+  \proofstep{1,3}{F\restriction_C(x)=F(x)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{1,4}}
+
+  % Aus F|_C(x)=F(x) und y=F(x) folgt F|_C(x)=y
+  \proofstep{3}{F(x)=y}{\FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{3}{F\restriction_C(x)=y}{%
+    \FormulaRefAuto{a=b,\, b=c \vdash a=c}{6,7}}
+
+  % Zeugenexistenz
+  \proofstep{3}{\exists x\in C\,F\restriction_C(x)=y}{\rEI{\rAI{4,8}}}
+  \proofstep{2}{\exists x\in C\,F\restriction_C(x)=y}{\rEE{3,9}}
+\end{tabproof}
+
+\FormulaThmDelta[Einschränkung als surjektive Funktion auf das Bild]{%
+C\subseteq A \vdash F\restriction_C\colon C\twoheadrightarrow F[C]
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{C\subseteq A}{\rA}
+  \proofstep{1}{F\restriction_C\colon C\to B}{%
+    \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{1}}
+  \proofstep{1}{\forall y\in F[C]\;\exists x\in C\,F\restriction_C(x)=y}{%
+    \FormulaRefAuto{C\subseteq A \dsep y\in F[C] \vdash \exists x\in C\, F\restriction_C(x)=y}{1}}
+  \proofstep{1}{F\restriction_C\colon C\twoheadrightarrow F[C]}{%
+    \FormulaRefAuto{Surjektive Funktion}{2,3}}
+\end{tabproof}
+
+\subsection{Die Umkehrfunktion}
+
+\subsubsection{Definition der Umkehrfunktionsvorschrift}
+
+\FormulaDefDelta[Funktionsvorschrift für die Umkehrfunktion von \(F\)]
+{y\in B \vdash t_{F^{-1}}(y) \coloneqq \iota x\bigl(x\in A \land F(x)=y\bigr)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+  \DeltaRow{Funktionensymbol}{t_{F^{-1}}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(t_{F^{-1}}\)]
+{y\in B \vdash t_{F^{-1}}(y)\in A}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+  \DeltaRow{Funktionensymbol}{t_{F^{-1}}}
+}
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{1}{t_{F^{-1}}(y)\in A}{\rAEa{\FormulaRefAuto{y\in B \vdash t_{F^{-1}}(y) \coloneqq \iota x\bigl(x\in A \land F(x)=y\bigr)}{1}}}
+\end{tabproof}
+
+\FormulaThmDelta
+{y\in B \vdash F(t_{F^{-1}}(y))=y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+  \DeltaRow{Funktionensymbol}{t_{F^{-1}}}
+}
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{1}{F(t_{F^{-1}}(y))=y}{\rAEb{\FormulaRefAuto{y\in B \vdash t_{F^{-1}}(y) \coloneqq \iota x\bigl(x\in A \land F(x)=y\bigr)}{1}}}
+\end{tabproof}
+
+\subsubsection{Die Umkehrfunktion als Funktion}
+
+\FormulaThmDelta[Umkehrfunktion als Funktion]{%
+\exists! G\colon B\to A\,\forall y\in B\,G(y) = t_{F^{-1}}(y)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+  \DeltaRow{Funktionensymbol}{t_{F^{-1}}}
+}
+\begin{tabproof}
+  \proofstep{}{\forall y\in B\,t_{F^{-1}}(y)=\iota x\bigl(x\in A\land F(x)=y\bigr)}{\FormulaRefAuto{y\in B \vdash t_{F^{-1}}(y) \coloneqq \iota x\bigl(x\in A \land F(x)=y\bigr)}}
+  \proofstep{}{\forall y\in B\,t_{F^{-1}}(y)\in A}{\FormulaRefAuto{y\in B \vdash t_{F^{-1}}(y)\in A}}
+  \proofstep{}{\exists! G\colon B\to A\,\forall y\in B\,G(y) = t_{F^{-1}}(y)}{\FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Umkehrfunktion von \(F\)]
+{F^{-1}\coloneqq\iota G\left(G\colon B\to A \land 
+  \forall y\in B\, G(y)=t_{F^{-1}}(y)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+  \DeltaRow{Funktionensymbol}{t_{F^{-1}}}
+}
+
+\FormulaThmDelta[Umkehrfunktion von \(F\)]
+{F^{-1}\colon B\to A}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+}
+\begin{tabproof}
+  \proofstep{}{F^{-1}\colon B\to A}{%
+    \rAEa{\FormulaRefAuto{\exists! G\colon B\to A\,\forall y\in B\,G(y) = t_{F^{-1}}(y)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Umkehrfunktion von \(F\)]
+{y\in B\vdash F^{-1}(y)=t_{F^{-1}}(y)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+}
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{1}{F^{-1}(y)=t_{F^{-1}}(y)}{%
+    \rRE{1,\rAEb{\FormulaRefAuto{\exists! G\colon B\to A\,\forall y\in B\,G(y) = t_{F^{-1}}(y)}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Typisierungsaxiom für \(t_{F^{-1}}\)]
+{y\in B \vdash F^{-1}(y)\in A}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+}
+
+\subsubsection{Grundgleichungen der Umkehrfunktion}
+
+\FormulaThmDelta[Links-Umkehrung]
+{x\in A \vdash F^{-1}(F(x)) = x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{F(x)\in B}{%
+    \FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+  \proofstep{1}{t_{F^{-1}}(F(x))\in A}{%
+    \FormulaRefAuto{y\in B \vdash t_{F^{-1}}(y)\in A}{1}}
+  \proofstep{1}{F(t_{F^{-1}}(F(x))) = F(x)}{\FormulaRefAuto{y\in B \vdash F(t_{F^{-1}}(y))=y}{2}}
+  \proofstep{1}{F^{-1}(F(x))=t_{F^{-1}}(F(x))}{\FormulaRefAuto{y\in B\vdash F^{-1}(y)=t_{F^{-1}}(y)}{2}}
+  \proofstep{1}{t_{F^{-1}}(F(x))=x}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{3,2,4}}
+  \proofstep{1}{F^{-1}(F(x))=x}{\FormulaRefAuto{a=b,b=c\vdash a=c}{5,6}}
+\end{tabproof}
+\FormulaThmDelta[Rechts-Umkehrung]
+{y\in B \vdash F(F^{-1}(y)) = y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep y}
+  \DeltaRow{Funktionen}{F\colon A\bij B}
+}
+\begin{tabproof}
+  \proofstep{1}{y\in B}{\rA}
+  \proofstep{1}{t_{F^{-1}}(y)=F^{-1}(y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{y\in B\vdash F^{-1}(y)=t_{F^{-1}}(y)}{1}}
+  }
+  \proofstep{1}{F(t_{F^{-1}}(y))=y}{%
+    \FormulaRefAuto{y\in B \vdash F(t_{F^{-1}}(y))=y}{2}}
+  \proofstep{1}{F(F^{-1}(y))=y}{%
+    \rIE{2,3}}
+\end{tabproof}
+
+\subsubsection{Die Bijektionseigenschaften der Umkehrfunktion}
 
 \FormulaThmDelta[Injektivität von \(F^{-1}\)]%
 {x\in B\dsep y\in B\dsep F^{-1}(x)=F^{-1}(y)\vdash x=y}%
 {
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+  \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\bij B}
 }
 \begin{tabproof}
-  \proofstep{1}{F^{-1}(x)=F^{-1}(y)}{\rA}
-  \proofstep{2}{x\in B}{\rA}
-  \proofstep{3}{y\in B}{\rA}
-  \proofstep{1,2}{(x,F^{-1}(y))\in F^{-1}}{\FormulaRefAuto{x\in A\dsep F(x)=y\vdash (x,y)\in F}{2,1}}
-  \proofstep{1,3}{(y,F^{-1}(x))\in F^{-1}}{\FormulaRefAuto{x\in A\dsep y=F(x)\vdash (x,y)\in F}{3,1}}
-  \proofstep{1,2}{(F^{-1}(y),x)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{4}}
-  \proofstep{1,3}{(F^{-1}(x),y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{5}}
-  \proofstep{1,3}{(F^{-1}(y),y)\in F}{\rIE{1,7}}
-  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{(x,y)\in F\dsep (x,z)\in F \vdash y=z}{6,8}}
+  \proofstep{1}{x\in B}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{3}{F^{-1}(x)=F^{-1}(y)}{\rA}
+  \proofstep{}{F^{-1}\colon B\to A}{\FormulaRefAuto{F^{-1}\colon B\to A}}
+  \proofstep{1}{F^{-1}(x)\in A}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{1,4}}
+  \proofstep{2}{F^{-1}(y)\in A}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2,4}}
+  \proofstep{1}{F(F^{-1}(x))=x}{%
+    \FormulaRefAuto{F\colon A\bij B \dsep y\in B \vdash F(F^{-1}(y)) = y}{1}}
+  \proofstep{2}{F(F^{-1}(y))=y}{%
+    \FormulaRefAuto{F\colon A\bij B \dsep y\in B \vdash F(F^{-1}(y)) = y}{2}}
+  \proofstep{1,2,3}{F(F^{-1}(x))=F(F^{-1}(y))}{%
+    \FormulaRefAuto{x\in A\dsep y\in A\dsep x=y\vdash F(x)=F(y)}{3}}
+  \proofstep{1,2,3}{x=y}{%
+    \FormulaRefAuto{a = b\dsep a = c\dsep b=d\vdash c = d}{9,7,8}}
 \end{tabproof}
 
 \FormulaThmDelta[Surjektivität von \(F^{-1}\)]%
 {x\in A\vdash \exists y\in B\; F^{-1}(y)=x}%
 {
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Bijektive Funktionen}{F\colon A\to B}
+  \DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\bij B}
 }
 \begin{tabproof}
   \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{\exists y\,(x,y)\in F}{\FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in F}{1}}
-  \proofstep{3}{(x,y)\in F}{\rA}
-  \proofstep{3}{(y,x)\in F^{-1}}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
-  \proofstep{3}{F^{-1}(y)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
-  \proofstep{3}{y\in B}{\FormulaRefAuto{(x,y)\in F\vdash x\in A}{4}}
-  \proofstep{3}{\exists y\in B\, F^{-1}(y)=x}{\rEI{\rAI{6,5}}}
-  \proofstep{1}{\exists y\in B\, F^{-1}(y)=x}{\rEE{2,3,7}}
+  % Typisierung von F:
+  \proofstep{1}{F(x)\in B}{%
+    \FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+  % Links-Umkehrung: F^{-1}(F(x))=x
+  \proofstep{1}{F^{-1}(F(x))=x}{%
+    \FormulaRefAuto{x\in A \vdash F^{-1}(F(x)) = x}{1}}
+  % Zeugenbildung y := F(x)
+  \proofstep{1}{\exists y\in B\; F^{-1}(y)=x}{%
+    \rEI{\rAI{2,3}}}
 \end{tabproof}
 
 \FormulaThmDelta[\(F^{-1}\) als bijektive Funktion]%
 {F^{-1}\colon B\bij A}%
 {
-\DeltaRow{Mengen}{A\dsep B}
-\DeltaRow{Bijektive Funktionen}{F\colon A\bij B}
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Bijektive Funktionen}{F\colon A\bij B}
 }
 \begin{tabproof}
   \proofstep{}{F^{-1}\colon B\to A}{\FormulaRefAuto{F^{-1}\colon B\to A}}
-  \proofstep{}{\forall x,y\in B\, (F^{-1}(x)=F^{-1}(y)\rightarrow x=y)}{\FormulaRefAuto{x\in B\dsep y\in B\dsep F^{-1}(x)=F^{-1}(y)\vdash x=y}}
-  \proofstep{}{\forall x\in A\exists y\in B\, F^{-1}(y)=x}{\FormulaRefAuto{x\in A\vdash \exists y\in B\; F^{-1}(y)=x}}
-  \proofstep{}{F^{-1}\colon A\bij B}{\FormulaRefAuto{Bijektive Funktion}{1,2,3}}
+  \proofstep{}{\forall x,y\in B\, (F^{-1}(x)=F^{-1}(y)\rightarrow x=y)}{%
+    \FormulaRefAuto{x\in B\dsep y\in B\dsep F^{-1}(x)=F^{-1}(y)\vdash x=y}}
+  \proofstep{}{\forall x\in A\exists y\in B\, F^{-1}(y)=x}{%
+    \FormulaRefAuto{x\in A\vdash \exists y\in B\; F^{-1}(y)=x}}
+  \proofstep{}{F^{-1}\colon B\bij A}{%
+    \FormulaRefAuto{Bijektive Funktion}{1,2,3}}
+\end{tabproof}
+
+\FormulaThmDelta[Eigeninversität von \(\Id_A\)]{%
+\Id_A^{-1}=\Id_A
+}{
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  % 1. \Id_A ist bijektiv
+  \proofstep{}{%
+    \Id_A\colon A\bij A}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}}
+  %
+  % 2. Links-Umkehrung für F = \Id_A
+  \proofstep{}{%
+    \forall x\in A\, \Id_A^{-1}(\Id_A(x)) = x}{%
+    \FormulaRefAuto{x\in A \vdash F^{-1}(F(x)) = x}{1}}
+  %
+  % 3. Grundgleichung der Identität: \Id_A(x)=x
+  \proofstep{}{%
+    \forall x\in A\, \Id_A(x)=x}{%
+    \FormulaRefAuto{x\in A\vdash \Id_A(x)=x}}
+  %
+  % 4. Für jedes x∈A: \Id_A^{-1}(x)=x
+  \proofstep{}{%
+    \forall x\in A\, \Id_A^{-1}(x)=x}{%
+    \FormulaRefAuto{\forall x\in A\,\Id_A^{-1}(\Id_A(x))=x
+                    \dsep \forall x\in A\,\Id_A(x)=x
+                    \vdash \forall x\in A\,\Id_A^{-1}(x)=x}{2,3}}
+  %
+  % 5. Funktionsgleichheit: aus gleichen Werten folgt Gleichheit der Funktionen
+  \proofstep{}{%
+    \Id_A^{-1} = \Id_A}{%
+    \FormulaRefAuto{F\colon A\to A\dsep G\colon A\to A
+                    \dsep \forall x\in A\,F(x)=G(x)\vdash F=G}{%
+                      \FormulaRefAuto{\Id_A^{-1}\colon A\to A},
+                      \FormulaRefAuto{\Id_A\colon A\to A},
+                      4}}
 \end{tabproof}
 
 \subsubsection{Weitere Eigenschaften}
-
-\FormulaThmDelta
-{x\in A\dsep F(x)=y\vdash F^{-1}(y)=x}%
-{
-\DeltaRow{Mengen}{x\dsep y\dsep A\dsep B}
-\DeltaRow{Bijektive Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-    \proofstep{1}{x\in A}{\rA}
-    \proofstep{2}{F(x)=y}{\rA}
-    \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{x\in A\dsep F(x)=y\vdash (x,y)\in F}{1,2}}
-    \proofstep{1,2}{(y,x)\in F^{-1}}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
-    \proofstep{1,2}{F^{-1}(y)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-y\in B \dsep F^{-1}(y)=x \vdash F(x)=y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{y\in B}{\rA}
-  \proofstep{2}{F^{-1}(y)=x}{\rA}
-
-  % Aus Funktionswert folgt geordnetes Paar in der (Umkehr-)Relation
-  \proofstep{1,2}{(y,x)\in F^{-1}}{\FormulaRefAuto{x\in A\dsep F(x)=y\vdash (x,y)\in F}{1,2}}
-
-  % Inversen-Charakterisierung
-  \proofstep{1,2}{(x,y)\in F}{\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}{3}}
-
-  % Aus Paar in F folgt Funktionswert
-  \proofstep{1,2}{F(x)=y}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{4}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-y\in B \vdash F\bigl(F^{-1}(y)\bigr)=y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{y\in B}{\rA}
-  \proofstep{}{F^{-1}(y)=F^{-1}(y)}{\rII}
-
-  % Aus Funktionswert folgt geordnetes Paar in der (Umkehr-)Relation
-  \proofstep{1}{(y,F^{-1}(y))\in F^{-1}}{%
-    \FormulaRefAuto{x\in A \dsep R(x)=y \vdash (x,y)\in R}{1,2}
-  }
-
-  % Inversen-Charakterisierung
-  \proofstep{}{(F^{-1}(y),y)\in F}{%
-    \FormulaRefAuto{(x,y)\in F \eqvdash (y,x)\in F^{-1}}{3}
-  }
-
-  % Aus Paar in F folgt Funktionswert
-  \proofstep{}{F(F^{-1}(y))=y}{%
-    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{4}
-  }
-\end{tabproof}
-
-\FormulaThmDelta{%
-x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-  \DeltaRow{Bijektive Funktionen}{F\colon A\to B}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{}{F(x)=F(x)}{\rII}
-
-  % Aus Funktionswert folgt (x, F(x)) in F
-  \proofstep{1,2}{(x,F(x))\in F}{%
-    \FormulaRefAuto{x\in A \dsep R(x)=y \vdash (x,y)\in R}{1,2}
-  }
-
-  % Charakterisierung der Inversen
-  \proofstep{}{(F(x),x)\in F^{-1}}{%
-    \FormulaRefAuto{(x,y)\in F \eqvdash (y,x)\in F^{-1}}{3}
-  }
-
-  % Aus Paar in F^{-1} folgt Funktionswert von F^{-1}
-  \proofstep{}{F^{-1}(F(x))=x}{%
-    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{4}
-  }
-\end{tabproof}
 
 \FormulaThmDelta{%
 \forall y\in B\,\bigl(F(G(y))=y\bigr) \vdash G = F^{-1}
@@ -3586,7 +4148,7 @@ x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x
   \proofstep{1}{\forall x\in A\,\bigl(F^{-1}(G(x))=x\bigr)}{\rA}
   \proofstep{2}{x\in A}{\rA}
   \proofstep{1,2}{F^{-1}(G(x))=x}{\rRE{\rUE{1},2}}
-  \proofstep{2}{F^{-1}\bigl(F(x)\bigr)=x}{\FormulaRefAuto{x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x}{2}}
+  \proofstep{2}{F^{-1}\bigl(F(x)\bigr)=x}{\FormulaRefAuto{x\in A \vdash F^{-1}(F(x)) = x}{2}}
   \proofstep{2}{G(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{2}}
   \proofstep{2}{F(x)\in B}{\FormulaRefAuto{x\in A \vdash F(x)\in B}{2}}
   \proofstep{1,2}{G(y)=F(y)}{\FormulaRefAuto{x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{5,6,3,4}}
@@ -3594,989 +4156,102 @@ x\in A \vdash F^{-1}\bigl(F(x)\bigr)=x
   \proofstep{1}{G=F}{\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{8}}
 \end{tabproof}
 
+\subsection{Die Komposition von Funktionen}
 
-\subsection{Identität}
+\subsubsection{Funktionsvorschrift und Typisierung}
 
-\subsubsection{Definition der Identität}
-% — Definition —
-\FormulaDefDeltaK[Identitätsrelation auf \(A\)]{%
-\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}
-}{Identität}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
+\FormulaDefDelta[Funktionsvorschrift für die Komposition \(G\circ F\)]
+{x\in A \vdash t_{G\circ F}(x) \coloneqq G(F(x))}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Funktionensymbol}{t_{G\circ F}}
 }
 
-\subsubsection{Die Funktionseigenschaften}
-
-% — Grundlegende Eigenschaften der Menge —
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-\Id_A \subseteq A \times A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \Id_A = \{\, (x,y) \in A \times A \mid x = y \,\}
-  }{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}}}
-  \proofstep{}{%
-    \{\, (x,y) \in A \times A \mid x = y \,\} \subseteq A \times A
-  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
-  \proofstep{}{%
-    \Id_A \subseteq A \times A
-  }{\rIE{1,2}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-(x,y)\in \Id_A \vdash x\in A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    (x,y)\in \Id_A
-  }{\rA}
-  \proofstep{1}{(x,y)\in \{\, (x,y) \in A \times A \mid x = y \,\}}{\rIE{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}},1}}
-  \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{2}}
-  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{3}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-(x,y)\in \Id_A \vdash y\in A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    (x,y)\in \Id_A
-  }{\rA}
-  \proofstep{1}{(x,y)\in \{\, (x,y) \in A \times A \mid x = y \,\}}{\rIE{\FormulaRefAuto{\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}},1}}
-  \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{2}}
-  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
-\end{tabproof}
-
-
-% — Charakterisierung der Elemente —
-\FormulaThmDelta{%
-(x,y)\in \Id_A \vdash x = y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-    \proofstep{1}{(x,y)\in \Id_A}{\rA}
-    \proofstep{1}{x=y}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-(x,y)\in \Id_A \vdash y = x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-    \proofstep{1}{(x,y)\in \Id_A}{\rA}
-    \proofstep{1}{x=y}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
-    \proofstep{1}{y=x}{\FormulaRefAuto{a = b \vdash b = a}{1}}
-\end{tabproof}
-
-% — Charakterisierung der Elemente —
-\FormulaThmDelta{%
-x\in A\dsep x=y \vdash (x,y)\in \Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-    \proofstep{1}{x\in A}{\rA}
-    \proofstep{1}{x=y}{\rA}
-    \proofstep{1}{(x,y)\in A\times A}{\FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{1,1}}
-    \proofstep{1}{(x,y)\in  \{\, (x,y) \in A \times A \mid x = y \,\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{3,2}}
-    \proofstep{1}{(x,y)\in  \Id_A}{\rIE{\FormulaRefAuto{%
-\Id_A := \{\, (x,y) \in A \times A \mid x = y \,\}
-},4}}
-\end{tabproof}
-
-\FormulaThmDelta{%
- (x,y)\in \Id_A\eqvdash x\in A\land x=y 
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{(x,y)\in \Id_A}{\rA}
-    \proofstep{1}{x\in A}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x\in A}{1}}
-    \proofstep{1}{x=y}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
-    \proofstep{1}{x\in A\land x=y}{\rAI{2,3}}
-  \closeproofpart
-    \proofpart{\(\dashv\)}
-    \proofstep{1}{x\in A\land x=y}{\rA}
-    \proofstep{1}{x\in A}{\rAEa{1}}
-    \proofstep{1}{x=y}{\rAEb{1}}
-    \proofstep{1}{(x,y)\in \Id_A}{\FormulaRefAuto{x\in A\dsep x=y \vdash (x,y)\in \Id_A}{2,3}}
-  \closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmDelta{%
- x\in A\land x=y\eqvdash y\in A\land y=x 
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproofsplit}
-    \proofpart{\(\vdash\)}
-    \proofstep{1}{x\in A\land x=y}{\rA}
-    \proofstep{1}{x\in A}{\rAEa{1}}
-    \proofstep{1}{x=y}{\rAEb{1}}
-    \proofstep{1}{y\in A}{\rIE{3,2}}
-    \proofstep{1}{y=x}{\FormulaRefAuto{a = b \vdash b = a}{3}}
-    \proofstep{1}{y\in A\land y=x}{\rAI{4,5}}
-  \closeproofpart
-    \proofpart{\(\dashv\)}
-    \proofstep{1}{y\in A\land y=x}{\rA}
-    \proofstep{1}{y\in A}{\rAEa{1}}
-    \proofstep{1}{y=x}{\rAEb{1}}
-    \proofstep{1}{x\in A}{\rIE{3,2}}
-    \proofstep{1}{x=y}{\FormulaRefAuto{a = b \vdash b = a}{3}}
-    \proofstep{1}{x\in A\land x=y}{\rAI{4,5}}
-  \closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmDelta{%
- (x,y)\in \Id_A\eqvdash (y,x)\in \Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproofwide}
-  \proofstepwide{(x,y)\in \Id_A}{\leftrightarrow}{x\in A\land x=y}%
-    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash x\in A\land x=y}}
-  \proofstepwide{}{\leftrightarrow}{y\in A\land y=x}%
-    {\FormulaRefAuto{x\in A\land x=y\eqvdash y\in A\land y=x}}
-   \proofstepwide{}{\leftrightarrow}{(y,x)\in \Id_A}%
-    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash x\in A\land x=y}}   
-   \proofstepwide{(x,y)\in \Id_A}{\leftrightarrow}{(y,x)\in \Id_A}%
-    {\rChain{1,3}}  
-\end{tabproofwide}
-
-
-\FormulaThmDelta{%
-x\in A \vdash (x,x)\in \Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep A}
-}
-\begin{tabproof}
-    \proofstep{1}{x\in A}{\rA}
-    \proofstep{1}{x=x}{\rII}
-    \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A\dsep x=y \vdash (x,y)\in \Id_A}{1,2}}
-\end{tabproof}
-
-% — Totalität (Zeugen durch Gleichheit) —
-\FormulaThmDelta[Totalität auf \(A\)]{%
-x\in A \vdash \exists y\, (x,y)\in \Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(t_{G\circ F}\)]
+{x\in A \vdash t_{G\circ F}(x)\in C}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Funktionensymbol}{t_{G\circ F}}
 }
 \begin{tabproof}
   \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
-  \proofstep{1}{\exists y\, (x,y)\in \Id_A}{\rEI{2}}
+  % Typ von F
+  \proofstep{1}{F(x)\in B}{%
+    \FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
+  % Typ von G
+  \proofstep{1}{G(F(x))\in C}{%
+    \FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
+  % Definition der Vorschrift
+  \proofstep{1}{t_{G\circ F}(x)=G(F(x))}{%
+    \FormulaRefAuto{x\in A \vdash t_{G\circ F}(x) \coloneqq G(F(x))}{1}}
+  % Wertebereich per Gleichheitselimination
+  \proofstep{1}{t_{G\circ F}(x)\in C}{\rIE{4,3}}
 \end{tabproof}
 
-% — Funktionale Eindeutigkeit —
-\FormulaThmDelta[Funktionale Eindeutigkeit der \(\Id_A\)]{%
-(x,y_1)\in \Id_A \dsep (x,y_2)\in \Id_A \vdash y_1 = y_2
-}{
-  \DeltaRow{Mengen}{x \dsep y_1 \dsep y_2 \dsep A}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y_1)\in \Id_A}{\rA}
-  \proofstep{2}{(x,y_2)\in \Id_A}{\rA}
-  \proofstep{1}{x=y_1}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{1}}
-  \proofstep{2}{x=y_2}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{2}}
-  \proofstep{1,2}{y_1=y_2}{\FormulaRefAuto{a=b, a=c \vdash b=c}{3,4}}
-\end{tabproof}
-
-\FormulaThmDelta[\(\Id_A\) als Funktion]{%
-\Id_A\colon A\to A
-}{
-  \DeltaRow{Mengen}{A}
-}
-\begin{tabproof}
-    \proofstep{}{\Id_A \subseteq A \times A}{\FormulaRefAuto{\Id_A \subseteq A\times A}}
-    \proofstep{}{\forall (x,y_1)\dsep (x,y_2)\in \Id_A y_1=y_2}{\FormulaRefAuto{(x,y_1)\in \Id_A \dsep (x,y_2)\in \Id_A \vdash y_1=y_2}}
-    \proofstep{}{\forall x\in A\exists y\,(x,y)\in \Id_A}{\FormulaRefAuto{x\in A \vdash \exists y\, (x,y)\in \Id_A}}
-    \proofstep{}{\Id_A\colon A\to A}{\FormulaRefAuto{Funktion}{1,2,3}}
-\end{tabproof}
-
-\subsubsection{Die Bijektionseigenschaften}
-
-
-% — Injektivität und Surjektivität —
-\FormulaThmDelta[Injektivität von \(\Id_A\)]{%
-x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-  \proofstep{1}{\Id_A(x)=\Id_A(y)}{\rA}
-  \proofstep{2}{x\in A}{\rA}
-  \proofstep{3}{y\in A}{\rA}
-  \proofstep{2}{(x,\Id_A(x))\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{2}}
-  \proofstep{3}{(y,\Id_A(y))\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{3}}
-  \proofstep{2}{x=\Id_A(x)}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{4}}
-  \proofstep{3}{y=\Id_A(y)}{\FormulaRefAuto{(x,y)\in \Id_A \vdash x = y}{5}}
-  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{a = b\dsep c = a\dsep d = b \vdash c = d}{1,6,7}}
-\end{tabproof}
-
-\FormulaThmDelta[Surjektivität von \(\Id_A\)]{%
-x\in A \vdash \exists y\in A\; \Id_A(y)=x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
-  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{2}}
-  \proofstep{1}{\exists y\in A\; \Id_A(y)=x}{\rEI{\rAI{1,3}}}
-\end{tabproof}
-
-\FormulaThmDelta[\(\Id_A\) als bijektive Funktion]{%
-\Id_A\colon A\bij A
-}{
-  \DeltaRow{Mengen}{A}
-}
-\begin{tabproof}
-    \proofstep{}{\Id_A\colon A\to A}{\FormulaRefAuto{\Id_A\colon A\to A}}
-    \proofstep{}{\forall x,y\in A\,(\Id_A(x)=\Id_A(y) \rightarrow x=y)}{\FormulaRefAuto{x\in A \dsep y\in A \dsep \Id_A(x)=\Id_A(y) \vdash x=y}}
-    \proofstep{}{\forall x\in A\exists y\in A\,\Id_A(y)=x}{\FormulaRefAuto{x\in A \vdash \exists y\in A\; \Id_A(y)=x}}
-    \proofstep{}{\Id_A\colon A\bij A}{\FormulaRefAuto{Bijektive Funktion}{1,2,3}}
-\end{tabproof}
-
-\subsubsection{Weitere Eigenschaften}
-
-\FormulaThmDelta{%
-(x,y)\in \Id_A^{-1}\eqvdash (x,y)\in \Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproofwide}
-  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(y,x)\in \Id_A}%
-    {\FormulaRefAuto{(x,y)\in F\eqvdash (y,x)\in F^{-1}}}
-  \proofstepwide{}{\leftrightarrow}{(x,y)\in \Id_A}%
-    {\FormulaRefAuto{(x,y)\in \Id_A\eqvdash (y,x)\in \Id_A}} 
-  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(x,y)\in \Id_A}%
-    {\rChain{1,2}} 
-\end{tabproofwide}
-
-% — Eigeninvers-Eigenschaft —
-\FormulaThmDelta[Eigeninversität von \(\Id_A\)]{%
-\Id_A^{-1}=\Id_A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A}
-}
-\begin{tabproofwide}
-  \proofstepwide{(x,y)\in \Id_A^{-1}}{\leftrightarrow}{(x,y)\in \Id_A}{\FormulaRefAuto{(x,y)\in \Id_A^{-1}\eqvdash (x,y)\in \Id_A}}
-  \proofstepwide{\Id_A^{-1}}{=}{\Id_A}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
-\end{tabproofwide}
-
-% — Fixpunkteigenschaft der Identität —
-\FormulaThmDelta[Fixpunkteigenschaft]{%
-x\in A \vdash \Id_A(x)=x
-}{
-  \DeltaRow{Mengen}{x \dsep A}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{(x,x)\in \Id_A}{\FormulaRefAuto{x\in A \vdash (x,x)\in \Id_A}{1}}
-  \proofstep{1}{\Id_A(x)=x}{\FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{2}}
-\end{tabproof}
-
-\subsection{Inklusionsabbildung}
-
-\subsubsection{Definition der Inklusionsabbildung}
-% — Definition —
-\FormulaDefDeltaK[Inklusionsabbildung von \(C\) in \(A\)]{%
-C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}
-}{Inklusionsabbildung}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-
-\subsubsection{Die Funktionseigenschaften}
-
-% — Grundlegende Eigenschaft der Menge —
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-C\subseteq A \vdash \iota_{C,A} \subseteq C \times A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{1}{%
-    \iota_{C,A} = \{\, (x,y) \in C \times A \mid x = y \,\}
-  }{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}}{1}}
-  \proofstep{}{%
-    \{\, (x,y) \in C \times A \mid x = y \,\} \subseteq C \times A
-  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
-  \proofstep{1}{%
-    \iota_{C,A} \subseteq C \times A
-  }{\rIE{2,3}}
-\end{tabproof}
-
-% — Projektion auf die erste Komponente: x liegt in C —
-\FormulaThmDelta{%
-(x,y)\in \iota_{C,A} \vdash x\in C
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in \iota_{C,A}}{\rA}
-  \proofstep{2}{C\subseteq A}{\rA}
-  \proofstep{1,2}{(x,y)\in \{\, (x,y) \in C \times A \mid x = y \,\}}{%
-    \rIE{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}}{2},1}
-  }
-  \proofstep{1,2}{(x,y)\in C\times A}{%
-    \FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{3}
-  }
-  \proofstep{1,2}{x\in C}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{4}
-  }
-\end{tabproof}
-
-% — Projektion auf die zweite Komponente: y liegt in A —
-\FormulaThmDelta{%
-(x,y)\in \iota_{C,A} \vdash y\in A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in \iota_{C,A}}{\rA}
-  \proofstep{2}{C\subseteq A}{\rA}
-  \proofstep{1,2}{(x,y)\in \{\, (x,y) \in C \times A \mid x = y \,\}}{%
-    \rIE{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}}{2},1}
-  }
-  \proofstep{1,2}{(x,y)\in C\times A}{%
-    \FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{3}
-  }
-  \proofstep{1,2}{y\in A}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{4}
-  }
-\end{tabproof}
-
-% — Charakterisierung der Elemente: (x,y) in iota_{C,A} -> x=y —
-\FormulaThmDelta{%
-(x,y)\in \iota_{C,A} \vdash x = y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in \iota_{C,A}}{\rA}
-  \proofstep{2}{C\subseteq A}{\rA}
-  \proofstep{1,2}{(x,y)\in \{\, (x,y) \in C \times A \mid x = y \,\}}{%
-    \rIE{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}}{2},1}
-  }
-  \proofstep{1,2}{x=y}{%
-    \FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{3}
-  }
-\end{tabproof}
-
-% — Umkehrung: aus x\in C und y=x folgt (x,y)\in iota_{C,A} —
-\FormulaThmDelta{%
-C\subseteq A \dsep x\in C \dsep y=x \vdash (x,y)\in \iota_{C,A}
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{3}{y=x}{\rA}
-  \proofstep{1,2}{x\in A}{%
-    \FormulaRefAuto{A\subseteq B,x\in A\vdash x\in B}{1,2}
-  }
-  \proofstep{1,2,3}{y\in A}{\rIE{3,4}}
-  \proofstep{2,5}{(x,y)\in C\times A}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,5}
-  }
-  \proofstep{2,3,6}{(x,y)\in \{\, (x,y) \in C \times A \mid x = y \,\}}{%
-    \FormulaRefAuto{x\in A, P(x)\vdash x\in\{x\in A\mid P(x)\}}{6,3}
-  }
-  \proofstep{1,2,3}{(x,y)\in \iota_{C,A}}{%
-    \rIE{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} := \{\, (x,y) \in C \times A \mid x = y \,\}}{1},7}
-  }
-\end{tabproof}
-
-% — Äquivalente Charakterisierung der Elemente —
-\FormulaThmDelta{%
-(x,y)\in \iota_{C,A}\eqvdash x\in C\land y=x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{(x,y)\in \iota_{C,A}}{\rA}
-    \proofstep{2}{C\subseteq A}{\rA}
-    \proofstep{1,2}{x\in C}{\FormulaRefAuto{(x,y)\in \iota_{C,A} \vdash x\in C}{1}}
-    \proofstep{1,2}{x=y}{\FormulaRefAuto{(x,y)\in \iota_{C,A} \vdash x=y}{1}}
-    \proofstep{1,2}{y=x}{\FormulaRefAuto{a=b\vdash b=a}{4}}
-    \proofstep{1,2}{x\in C\land y=x}{\rAI{3,5}}
-  \closeproofpart
-  \proofpart{\(\dashv\)}
-    \proofstep{1}{x\in C\land y=x}{\rA}
-    \proofstep{1}{x\in C}{\rAEa{1}}
-    \proofstep{1}{y=x}{\rAEb{1}}
-    \proofstep{1}{x=y}{\FormulaRefAuto{a=b\vdash b=a}{3}}
-    \proofstep{1}{(x,y)\in \iota_{C,A}}{%
-      \FormulaRefAuto{C\subseteq A \dsep x\in C \dsep y=x \vdash (x,y)\in \iota_{C,A}}{1,2,4}
-    }
-  \closeproofpart
-\end{tabproofsplit}
-
-% — Diagonalelemente —
-\FormulaThmDelta{%
-x\in C \vdash (x,x)\in \iota_{C,A}
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{2}{x=x}{\rII}
-  \proofstep{1,2}{(x,x)\in \iota_{C,A}}{%
-    \FormulaRefAuto{C\subseteq A \dsep x\in C \dsep y=x \vdash (x,y)\in \iota_{C,A}}{1,2,3}
-  }
-\end{tabproof}
-
-% — Totalität auf C —
-\FormulaThmDelta[Totalität auf \(C\)]{%
-x\in C \vdash \exists y\, (x,y)\in \iota_{C,A}
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in C}{\rA}
-  \proofstep{1}{(x,x)\in \iota_{C,A}}{\FormulaRefAuto{x\in C \vdash (x,x)\in \iota_{C,A}}{1}}
-  \proofstep{1}{\exists y\,(x,y)\in \iota_{C,A}}{\rEI{2}}
-\end{tabproof}
-
-% — Funktionale Eindeutigkeit —
-\FormulaThmDelta[Funktionale Eindeutigkeit von \(\iota_{C,A}\)]{%
-(x,y_1)\in \iota_{C,A} \dsep (x,y_2)\in \iota_{C,A} \vdash y_1 = y_2
-}{
-  \DeltaRow{Mengen}{x \dsep y_1 \dsep y_2 \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y_1)\in \iota_{C,A}}{\rA}
-  \proofstep{2}{(x,y_2)\in \iota_{C,A}}{\rA}
-  \proofstep{1}{x=y_1}{\FormulaRefAuto{(x,y)\in \iota_{C,A} \vdash x=y}{1}}
-  \proofstep{2}{x=y_2}{\FormulaRefAuto{(x,y)\in \iota_{C,A} \vdash x=y}{2}}
-  \proofstep{1,2}{y_1=y_2}{\FormulaRefAuto{a=b, a=c \vdash b=c}{3,4}}
-\end{tabproof}
-
-% — \iota_{C,A} als Funktion C -> A —
-\FormulaThmDelta[\(\iota_{C,A}\) als Funktion]{%
-\iota_{C,A}\colon C\to A
-}{
-  \DeltaRow{Mengen}{A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \iota_{C,A} \subseteq C \times A
-  }{\FormulaRefAuto{C\subseteq A \vdash \iota_{C,A} \subseteq C \times A}}
-  \proofstep{}{%
-    \forall (x,y_1)\dsep (x,y_2)\in \iota_{C,A} \; y_1=y_2
-  }{\FormulaRefAuto{(x,y_1)\in \iota_{C,A} \dsep (x,y_2)\in \iota_{C,A} \vdash y_1=y_2}}
-  \proofstep{}{%
-    \forall x\in C\,\exists y\, (x,y)\in \iota_{C,A}
-  }{\FormulaRefAuto{x\in C \vdash \exists y\, (x,y)\in \iota_{C,A}}}
-  \proofstep{}{\iota_{C,A}\colon C\to A}{\FormulaRefAuto{Funktion}{1,2,3}}
-\end{tabproof}
-
-% — Funktionswert der Inklusionsabbildung (Fixpunkteigenschaft) —
-\FormulaThmDelta[Funktionswert der Inklusionsabbildung]{%
-C\subseteq A \dsep x\in C \vdash \iota_{C,A}(x)=x
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-  \DeltaRow{Funktionen}{\iota_{C,A}\colon C\to A}
-}
-\begin{tabproof}
-  \proofstep{1}{C\subseteq A}{\rA}
-  \proofstep{2}{x\in C}{\rA}
-  \proofstep{2}{(x,x)\in \iota_{C,A}}{\FormulaRefAuto{x\in C \vdash (x,x)\in \iota_{C,A}}{2}}
-  \proofstep{1,2}{\iota_{C,A}(x)=x}{%
-    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{3}
-  }
-\end{tabproof}
-
-\subsubsection{Injektivitätseigenschaft}
-
-\FormulaThmDelta[Injektivität von \(\iota_{C,A}\)]{%
-x_1\in C \dsep x_2\in C \dsep \iota_{C,A}(x_1)=\iota_{C,A}(x_2) \vdash x_1=x_2
-}{
-  \DeltaRow{Mengen}{x_1 \dsep x_2 \dsep A \dsep C}
-  \DeltaRow{Teilmengen}{C\subseteq A}
-  \DeltaRow{Funktionen}{\iota_{C,A}\colon C\to A}
-}
-\begin{tabproof}
-  \proofstep{1}{x_1\in C}{\rA}
-  \proofstep{2}{x_2\in C}{\rA}
-  \proofstep{3}{\iota_{C,A}(x_1)=\iota_{C,A}(x_2)}{\rA}
-  \proofstep{1}{\iota_{C,A}(x_1)=x_1}{%
-    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash \iota_{C,A}(x)=x}{1}
-  }
-  \proofstep{2}{\iota_{C,A}(x_2)=x_2}{%
-    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash \iota_{C,A}(x)=x}{2}
-  }
-  \proofstep{1,2,3}{x_1=x_2}{%
-    \FormulaRefAuto{a = b\dsep a = c\dsep b=d\vdash c = d}{3,4,5}
-  }
-\end{tabproof}
-
-
-\subsection{Erste Projektion}
-
-\subsubsection{Definition der Projektion}
-
-% — Definition der ersten Projektion —
-\FormulaDefDeltaK[Erste Projektion auf \(A\)]{%
-  \pi_1 := \{\, ((x,y),z) \in (A \times B) \times A \mid (x,y)\in A\times B \land z = x \,\}
-}{Projektion1}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-
-\subsubsection{Die Funktionseigenschaften}
-
-% — Grundlegende Eigenschaft: Menge geordneter Paare —
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-  \pi_1 \subseteq (A \times B) \times A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \pi_1 \subseteq (A\times B)\times A
-  }{\FormulaRefAuto{A=\{ x \in B \mid P(x) \}\vdash  A\subseteq B}{\FormulaRefAuto{\pi_1 := \{\, ((x,y),z) \in (A \times B) \times A \mid (x,y)\in A\times B \land z = x \,\}}}}
-\end{tabproof}
-
-% — Elemente der Projektion liegen im Produktraum —
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_1 \vdash (x,y)\in A\times B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_1}{\rA}
-  \proofstep{1}{((x,y),z)\in (A\times B)\times A}{%
-    \FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash x\in A}{1}}
-  \proofstep{1}{(x,y)\in A\times B}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{2}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_1 \vdash z\in A
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_1}{\rA}
-  \proofstep{1}{((x,y),z)\in (A\times B)\times A}{%
-    \FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash x\in A}{1}}
-  \proofstep{1}{z\in A}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{2}}
-\end{tabproof}
-
-% — Charakterisierung: z = x —
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_1 \vdash z = x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_1}{\rA}
-  \proofstep{1}{(x,y)\in A\times B \land z = x}{%
-    \FormulaRefAuto{x \in A\dsep A=\{x \in B \mid P(x)\}\vdash P(x)}{1,\FormulaRefAuto{\pi_1 := \{\, ((x,y),z) \in (A \times B) \times A \mid (x,y)\in A\times B \land z = x \,\}}}}
-  \proofstep{1}{z=x}{\rAEb{3}}
-\end{tabproof}
-
-% — Einführungsrichtung: aus (x,y)\in A\times B folgt Element der Projektion —
-\FormulaThmDelta{%
-  (x,y)\in A\times B \vdash ((x,y),x)\in \pi_1
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{1}}
-  \proofstep{1}{(x,y)\in A\times B \land x=x}{\rAI{1,\rII}}
-  \proofstep{1}{((x,y),x)\in (A\times B)\times A}{\FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{1,2}}
-  \proofstep{1}{((x,y),x)\in \pi_1}{\FormulaRefAuto{x \in A\dsep P(x)\dsep B=\{x \in A \mid P(x)\}\vdash x \in B}{4,3,\FormulaRefAuto{\pi_1 := \{\, ((x,y),z) \in (A \times B) \times A \mid (x,y)\in A\times B \land z = x \,\}}}}
-\end{tabproof}
-
-% — Totalität: jeder Punkt im Produktraum hat ein Bild —
-\FormulaThmDelta[Totalität auf \(A\times B\)]{%
-  (x,y)\in A\times B \vdash \exists z\, ((x,y),z)\in \pi_1
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{((x,y),x)\in \pi_1}{\FormulaRefAuto{(x,y)\in A\times B \vdash ((x,y),x)\in \pi_1}{1}}
-  \proofstep{1}{\exists z\,((x,y),z)\in \pi_1}{\rEI{2}}
-\end{tabproof}
-
-% — Funktionale Eindeutigkeit —
-\FormulaThmDelta[Funktionale Eindeutigkeit von \(\pi_1\)]{%
-  ((x,y),z_1)\in \pi_1 \dsep ((x,y),z_2)\in \pi_1 \vdash z_1 = z_2
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z_1 \dsep z_2 \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z_1)\in \pi_1}{\rA}
-  \proofstep{2}{((x,y),z_2)\in \pi_1}{\rA}
-  \proofstep{1}{z_1=x}{\FormulaRefAuto{((x,y),z)\in \pi_1 \vdash z = x}{1}}
-  \proofstep{2}{z_2=x}{\FormulaRefAuto{((x,y),z)\in \pi_1 \vdash z = x}{2}}
-  \proofstep{1,2}{z_1=z_2}{\FormulaRefAuto{a=b, c=b \vdash a=c}{3,4}}
-\end{tabproof}
-
-% — Projektion als Funktion —
-\FormulaThmDelta[\(\pi_1\) als Funktion]{%
-  \pi_1\colon A\times B \to A
-}{
-  \DeltaRow{Mengen}{A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \pi_1 \subseteq (A\times B)\times A
-  }{\FormulaRefAuto{\pi_1 \subseteq (A \times B) \times A}}
-  \proofstep{}{%
-    \forall (x,y)\in A\times B\,\exists z\,((x,y),z)\in \pi_1
-  }{\FormulaRefAuto{(x,y)\in A\times B \vdash \exists z\, ((x,y),z)\in \pi_1}}
-  \proofstep{}{%
-    \forall \,(((x,y),z_1), ((x,y),z_2)\in \pi_1\,z_1=z_2)
-  }{\FormulaRefAuto{((x,y),z_1)\in \pi_1 \dsep ((x,y),z_2)\in \pi_1 \vdash z_1=z_2}}
-  \proofstep{}{%
-    \pi_1\colon A\times B\to A
-  }{\FormulaRefAuto{Funktion}{1,2,3}}
-\end{tabproof}
-
-\subsubsection{Weitere Eigenschaften}
-
-\paragraph{Fixpunkteigenschaft der Projektion}
-
-% — Fixpunkteigenschaft der Projektion —
-\FormulaThmDelta[Fixpunkteigenschaft der Projektion]{%
-  (x,y)\in A\times B \vdash \pi_1(x,y) = x
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{((x,y),x)\in \pi_1}{\FormulaRefAuto{(x,y)\in A\times B \vdash ((x,y),x)\in \pi_1}{1}}
-  \proofstep{1}{\pi_1(x,y)=x}{\FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{2}}
-\end{tabproof}
-
-\paragraph{Surjektivität der Projektion}
-
-\FormulaThmDelta[Existenz eines Urbildpaares]{%
-  B \neq \emptyset \dsep x\in A \vdash \exists (x,y)\in A\times B\,\bigl(\pi_1(x,y)=x\bigr)
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-}
-\begin{tabproof}
-  % 1. Annahme: B ist nicht leer
-  \proofstep{1}{B \neq \emptyset}{\rA}
-  % 2. Annahme: x \in A
-  \proofstep{2}{x\in A}{\rA}
-  % 3. Aus B \neq \emptyset folgt: es gibt ein y \in B
-  \proofstep{1}{\exists y\in B}{%
-    \FormulaRefAuto{A \neq \emptyset \vdash \exists x\in A}{1}}
-  % 4. Existenzauswahl: wähle ein beliebiges y \in B
-  \proofstep{3}{y\in B}{\rA}
-  % 5. Mit x\in A und y\in B liegt (x,y) im Produktraum
-  \proofstep{2,3}{(x,y)\in A\times B}{%
-    \FormulaRefAuto{a\in A \dsep b\in B \vdash (a,b)\in A\times B}{2,3}}
-  % 6. Fixpunkteigenschaft: pi_1(x,y) = x
-  \proofstep{2,3}{\pi_1(x,y)=x}{%
-    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{5}}
-  % 7. Existenz eines passenden Paares (x,y)
-  \proofstep{2,3}{\exists (x,y)\in A\times B\,\bigl(\pi_1(x,y)=x\bigr)}{\rEI{6}}
-  % 8. Beseitigung der Existenzannahme über y
-  \proofstep{1,2}{\exists (x,y)\in A\times B\,\bigl(\pi_1(x,y)=x\bigr)}{\rEE{3,7}}
-\end{tabproof}
-
-\subsection{Zweite Projektion}
-
-\subsubsection{Definition der Projektion}
-
-% — Definition der zweiten Projektion —
-\FormulaDefDeltaK[Zweite Projektion auf \(B\)]{%
-  \pi_2 := \{\, ((x,y),z) \in (A \times B) \times B
-              \mid (x,y)\in A\times B \land z = y \,\}
-}{Projektion2}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-
-\subsubsection{Die Funktionseigenschaften}
-
-% — Grundlegende Eigenschaft: Menge geordneter Paare —
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-  \pi_2 \subseteq (A \times B) \times B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \pi_2 \subseteq (A\times B)\times B
-  }{%
-    \FormulaRefAuto{A = \{ x \in B \mid P(x) \} \vdash A \subseteq B}{%
-      \FormulaRefAuto{\pi_2 := \{\, ((x,y),z) \in (A \times B) \times B
-        \mid (x,y)\in A\times B \land z = y \,\}}%
-    }%
-  }
-\end{tabproof}
-
-% — Elemente der Projektion liegen im Produktraum —
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_2 \vdash (x,y)\in A\times B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_2}{\rA}
-  \proofstep{1}{((x,y),z)\in (A\times B)\times B}{%
-    \FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash x\in A}{1}}
-  \proofstep{1}{(x,y)\in A\times B}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{2}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_2 \vdash z\in B
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_2}{\rA}
-  \proofstep{1}{((x,y),z)\in (A\times B)\times B}{%
-    \FormulaRefAuto{x\in \{x\in A\mid P(x)\}\vdash x\in A}{1}}
-  \proofstep{1}{z\in B}{%
-    \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{2}}
-\end{tabproof}
-
-% — Charakterisierung: z = y —
-\FormulaThmDelta{%
-  ((x,y),z)\in \pi_2 \vdash z = y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z)\in \pi_2}{\rA}
-  \proofstep{1}{(x,y)\in A\times B \land z = y}{%
-    \FormulaRefAuto{x \in A\dsep A=\{x \in B \mid P(x)\}\vdash P(x)}{%
-      1,\FormulaRefAuto{\pi_2 := \{\, ((x,y),z) \in (A \times B) \times B
-        \mid (x,y)\in A\times B \land z = y \,\}}%
-    }%
-  }
-  \proofstep{1}{z=y}{\rAEb{2}}
-\end{tabproof}
-
-% — Einführungsrichtung: aus (x,y)\in A\times B folgt Element der Projektion —
-\FormulaThmDelta{%
-  (x,y)\in A\times B \vdash ((x,y),y)\in \pi_2
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{y\in B}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{1}}
-  \proofstep{1}{(x,y)\in A\times B \land y=y}{\rAI{1,\rII}}
-  \proofstep{1}{((x,y),y)\in (A\times B)\times B}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{1,2}}
-  \proofstep{1}{((x,y),y)\in \pi_2}{%
-    \FormulaRefAuto{x \in A\dsep P(x)\dsep B=\{x \in A \mid P(x)\}\vdash x \in B}{4,3,\FormulaRefAuto{\pi_2 := \{\, ((x,y),z) \in (A \times B) \times B
-      \mid (x,y)\in A\times B \land z = y \,\}}}}
-\end{tabproof}
-
-% — Totalität: jeder Punkt im Produktraum hat ein Bild —
-\FormulaThmDelta[Totalität auf \(A\times B\)]{%
-  (x,y)\in A\times B \vdash \exists z\, ((x,y),z)\in \pi_2
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{((x,y),y)\in \pi_2}{%
-    \FormulaRefAuto{(x,y)\in A\times B \vdash ((x,y),y)\in \pi_2}{1}}
-  \proofstep{1}{\exists z\,((x,y),z)\in \pi_2}{\rEI{2}}
-\end{tabproof}
-
-% — Funktionale Eindeutigkeit —
-\FormulaThmDelta[Funktionale Eindeutigkeit von \(\pi_2\)]{%
-  ((x,y),z_1)\in \pi_2 \dsep ((x,y),z_2)\in \pi_2 \vdash z_1 = z_2
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z_1 \dsep z_2 \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{((x,y),z_1)\in \pi_2}{\rA}
-  \proofstep{2}{((x,y),z_2)\in \pi_2}{\rA}
-  \proofstep{1}{z_1=y}{\FormulaRefAuto{((x,y),z)\in \pi_2 \vdash z = y}{1}}
-  \proofstep{2}{z_2=y}{\FormulaRefAuto{((x,y),z)\in \pi_2 \vdash z = y}{2}}
-  \proofstep{1,2}{z_1=z_2}{\FormulaRefAuto{a=b, c=b \vdash a=c}{3,4}}
-\end{tabproof}
-
-% — Projektion als Funktion —
-\FormulaThmDelta[\(\pi_2\) als Funktion]{%
-  \pi_2\colon A\times B \to B
-}{
-  \DeltaRow{Mengen}{A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    \pi_2 \subseteq (A\times B)\times B
-  }{\FormulaRefAuto{\pi_2 \subseteq (A \times B) \times B}}
-  \proofstep{}{%
-    \forall (x,y)\in A\times B\,\exists z\,((x,y),z)\in \pi_2
-  }{\FormulaRefAuto{(x,y)\in A\times B \vdash \exists z\, ((x,y),z)\in \pi_2}}
-  \proofstep{}{%
-    \forall ((x,y),z_1),((x,y),z_2)\in \pi_2\, z_1=z_2
-  }{\FormulaRefAuto{((x,y),z_1)\in \pi_2 \dsep ((x,y),z_2)\in \pi_2 \vdash z_1=z_2}}
-  \proofstep{}{%
-    \pi_2\colon A\times B\to B
-  }{\FormulaRefAuto{Funktion}{1,2,3}}
-\end{tabproof}
-
-\subsubsection{Weitere Eigenschaften}
-
-% — Fixpunkteigenschaft der Projektion —
-\FormulaThmDelta[Fixpunkteigenschaft der Projektion]{%
-  (x,y)\in A\times B \vdash \pi_2(x,y) = y
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep A \dsep B}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,y)\in A\times B}{\rA}
-  \proofstep{1}{((x,y),y)\in \pi_2}{%
-    \FormulaRefAuto{(x,y)\in A\times B \vdash ((x,y),y)\in \pi_2}{1}}
-  \proofstep{1}{\pi_2(x,y)=y}{%
-    \FormulaRefAuto{(x,y)\in F \vdash F(x)=y}{2}}
-\end{tabproof}
-
-\subsection{Komposition}
-
-\subsubsection{Definition der Komposition}
-
-% — Definition —
-\FormulaDefDelta[Komposition]{%
-G\circ F := \bigl\{\, (x,z) \in A \times C \mid z = G(F(x)) \,\bigr\}
-}{
-  \DeltaRow{Mengen}{x \dsep y \dsep z \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-
-\subsubsection{Funktionseigenschaften}
-
-% — Existenz als Menge geordneter Paare —
-\FormulaThmDelta[Existenz als Menge geordneter Paare]{%
-G\circ F \subseteq A \times C
-}{
-  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{}{%
-    G\circ F = \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}
-  }{\FormulaRefAuto{G\circ F := \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}}}
-  \proofstep{}{%
-    \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\} \subseteq A \times C
-  }{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}}
-  \proofstep{}{G\circ F \subseteq A \times C}{\rIE{1,2}}
-\end{tabproof}
-
-% — Typisierung der Elemente —
-\FormulaThmDelta{%
-(x,z)\in G\circ F \vdash x\in A \land z\in C
-}{
-  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,z)\in G\circ F}{\rA}
-  \proofstep{1}{(x,z)\in A\times C}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{1}}
-  \proofstep{1}{x\in A}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{2}}
-  \proofstep{1}{z\in C}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{2}}
-  \proofstep{1}{x\in A\land z\in C}{\rAI{3,4}}
-\end{tabproof}
-
-% — Charakterisierung des Bildpaares —
-\FormulaThmDelta{%
-(x,z)\in G\circ F \vdash z = G(F(x))
-}{
-  \DeltaRow{Mengen}{x \dsep z \dsep A \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,z)\in G\circ F}{\rA}
-  \proofstep{1}{z=G(F(x))}{\FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash P(x)}{1}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-x\in A \vdash (x,G(F(x)))\in G\circ F
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{F(x)\in B}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{1}}
-  \proofstep{1}{G(F(x))\in C}{\FormulaRefAuto{x\in A\vdash F(x)\in B}{2}}
-  \proofstep{1}{(x,G(F(x)))\in A\times C}{\FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{1,3}}
-  \proofstep{}{G(F(x))=G(F(x))}{\rII}
-  \proofstep{1}{(x,G(F(x)))\in \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{4,5}}
-  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\rIE{\FormulaRefAuto{G\circ F := \{\, (x,z) \in A \times C \mid z = G(F(x)) \,\}},3}}
-\end{tabproof}
-4
-% — Funktionale Eindeutigkeit der Komposition —
-\FormulaThmDelta[Funktionale Eindeutigkeit von \(G\circ F\)]{%
-(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2
-}{
-  \DeltaRow{Mengen}{x \dsep z_1 \dsep z_2 \dsep A \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{(x,z_1)\in G\circ F}{\rA}
-  \proofstep{2}{(x,z_2)\in G\circ F}{\rA}
-  \proofstep{1}{z_1=G(F(x))}{\FormulaRefAuto{(x,z)\in G\circ F \vdash z = G(F(x))}{1}}
-  \proofstep{2}{z_2=G(F(x))}{\FormulaRefAuto{(x,z)\in G\circ F \vdash z = G(F(x))}{2}}
-  \proofstep{1,2}{z_1=z_2}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{3,4}}
-\end{tabproof}
-
-% — Totalität auf A —
-\FormulaThmDelta[Totalität auf \(A\)]{%
-x\in A \vdash \exists z\, (x,z)\in G\circ F
-}{
-  \DeltaRow{Mengen}{x \dsep z \dsep A}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\FormulaRefAuto{x\in A \vdash (x,G(F(x)))\in G\circ F}{1}}
-  \proofstep{1}{\exists z\, (x,z)\in G\circ F}{\rEI{2}}
-\end{tabproof}
+\subsubsection{Die Komposition als Funktion}
 
 \FormulaThmDelta[Komposition als Funktion]{%
-G\circ F\colon A\to C
+\exists! H\colon A\to C\,\forall x\in A\,H(x) = t_{G\circ F}(x)%
 }{
-  \DeltaRow{Mengen}{A\dsep B\dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Funktionensymbol}{t_{G\circ F}}
 }
 \begin{tabproof}
-  \proofstep{}{G\circ F \subseteq A\times C}{\FormulaRefAuto{G\circ F \subseteq A\times C}}
-  \proofstep{}{\forall (x,y_1)\dsep (x,y_2)\in G\circ F\,y_1=y_2}{\FormulaRefAuto{(x,z_1)\in G\circ F \dsep (x,z_2)\in G\circ F \vdash z_1=z_2}}
-  \proofstep{}{\forall x\in A\exists y\, (x,y)\in G\circ F}{\FormulaRefAuto{x\in A \vdash \exists z\, (x,z)\in G\circ F}}
-  \proofstep{}{G\circ F\colon A\to C}{\FormulaRefAuto{Funktion}{1,2,3}}
+  % Vorschrift global
+  \proofstep{}{\forall x\in A\,t_{G\circ F}(x)=G(F(x))}{%
+    \FormulaRefAuto{x\in A \vdash t_{G\circ F}(x) \coloneqq G(F(x))}}
+  % Typ global
+  \proofstep{}{\forall x\in A\,t_{G\circ F}(x)\in C}{%
+    \FormulaRefAuto{x\in A \vdash t_{G\circ F}(x)\in C}}
+  % Existenz und Eindeutigkeit der Funktion H: A→C mit dieser Vorschrift
+  \proofstep{}{\exists! H\colon A\to C\,\forall x\in A\,H(x) = t_{G\circ F}(x)}{%
+    \FormulaRefAuto{x\in A\vdash t(x):=y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\subsubsection{Definition und Grundgleichung der Komposition}
+
+\FormulaDefDelta[Komposition von \(F\) und \(G\)]
+{G\circ F\coloneqq\iota H\left(H\colon A\to C \land \forall x\in A\, H(x)=t_{G\circ F}(x)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+  \DeltaRow{Funktionensymbol}{t_{G\circ F}}
+}
+
+\FormulaThmDelta[Komposition von \(F\) und \(G\)]
+{G\circ F\colon A\to C}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{}{G\circ F\colon A\to C}{%
+    \rAEa{\FormulaRefAuto{G\circ F\coloneqq\iota H\left(H\colon A\to C \land \forall x\in A\, H(x)=t_{G\circ F}(x)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Komposition]
+{x\in A \vdash (G\circ F)(x)=G(F(x))}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F\colon A\to B\dsep G\colon B\to C}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  % aus der Definition von G∘F
+  \proofstep{}{%
+    \forall x\in A\, (G\circ F)(x)=t_{G\circ F}(x)}{%
+    \rAEb{\FormulaRefAuto{G\circ F\coloneqq\iota H\left(H\colon A\to C \land \forall x\in A\, H(x)=t_{G\circ F}(x)\right)}}}
+  \proofstep{1}{(G\circ F)(x)=t_{G\circ F}(x)}{\rRE{1,\rUE{2}}}
+  % aus der Vorschrift
+  \proofstep{1}{t_{G\circ F}(x)=G(F(x))}{%
+    \FormulaRefAuto{x\in A \vdash t_{G\circ F}(x) \coloneqq G(F(x))}{1}}
+  % Transitvität der Gleichheit
+  \proofstep{1}{(G\circ F)(x)=G(F(x))}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
 \end{tabproof}
 
 \subsubsection{Die Auswertungseigenschaft}
@@ -4613,18 +4288,6 @@ x\in A\dsep y\in A\dsep (G\circ F)(x)=(G\circ F)(y) \vdash G(F(x))=G(F(y))
 
   \proofstep{3}{G(F(x))=(G\circ F)(y)}{\rIE{4,3}}
   \proofstep{3}{G(F(x))=G(F(y))}{\rIE{5,6}}
-\end{tabproof}
-
-\FormulaThmDelta{%
-x\in A \vdash (G\circ F)(x)=G(F(x))
-}{
-  \DeltaRow{Mengen}{x \dsep A \dsep B \dsep C}
-  \DeltaRow{Funktionen}{F\colon A\to B \dsep G\colon B\to C}
-}
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
-  \proofstep{1}{(x,G(F(x)))\in G\circ F}{\FormulaRefAuto{x\in A \vdash (x,G(F(x)))\in G\circ F}{1}}
-  \proofstep{1}{(G\circ F)(x)=G(F(x))}{\FormulaRefAuto{(x,y)\in F\vdash F(x)=y}{2}}
 \end{tabproof}
 
 \subsubsection{Erhalt der Injektivität}
@@ -4874,6 +4537,8 @@ F^{-1}\circ F = \Id_A
   \proofstepwidestar[]{(G^{-1}\circ F^{-1})=(F\circ G)^{-1}}{\FormulaRefAuto{\forall y\in B\,\bigl(F(G(y))=y\bigr) \vdash G = F^{-1}}{13}}
 \end{tabproofwide}
 
+
+
 \subsubsection{Eigenschaften der Komponenten}
 
 \FormulaThmDeltaK{%
@@ -5067,14 +4732,178 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \DeltaRow{Totale Relationen}{ }
 }
 
-\FormulaThmDelta[Auswahlaxiom (AC – Relationsform)]{%
-  \exists F\colon A\to B\,\forall x\in A\,\bigl((x,F(x))\in R\bigr)
-}{%
-  \DeltaRow{Mengen}{A \dsep B}
-  \DeltaRow{Totale Relation}{R \text{ totale Relation auf } A\dsep B}
-  \DeltaRow{Funktion}{F\colon A\to B}
+\FormulaThmDelta
+{\pi_1\restriction_R\colon R\to A}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Totale Relation}{R \subseteq A \times B}
 }
+\begin{tabproof}
+  \proofstep{}{R\subseteq A\times B}{\FormulaRefAuto{F \subseteq A \times B}}
+  \proofstep{}{\,\pi_1\colon A\times B\to A}{%
+    \FormulaRefAuto{\pi_1\colon A\times B\to A}}
+  \proofstep{1}{\pi_1\restriction_R\colon R\to A}{%
+    \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{1,2}}
+\end{tabproof}
 
+\FormulaThmDelta
+{x\in A\vdash \exists y\in R(\pi_1\restriction_R(y)=x)}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Totale Relation}{R \subseteq A \times B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[]{R\subseteq A\times B}{\FormulaRefAuto{F \subseteq A \times B}}
+  \proofstepwidestar[1]{\exists x' (x,x')\in R}{\FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in F}{1}}
+  \proofstepwidestar[4]{(x,x')\in R}{\rA}
+  \proofstepwidestar[4]{(x,x')\in A\times B}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{2,4}}
+  \proofstepwide[4]{\pi_1\restriction_R(x,x')}{=}{\pi_1(x,x')}{\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{2,4}}
+  \proofstepwide[4]{}{=}{x}{\FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{5}}
+  \proofstepwide[4]{\pi_1\restriction_R(x,x')}{=}{x}{\rChain{6,7}}
+  \proofstepwidestar[4]{\exists y\in R \pi_1\restriction_R(y)=x}{\rEI{\rAI{4,8}}}
+  \proofstepwidestar[1]{\exists y\in R \pi_1\restriction_R(y)=x}{\rEE{3,4,9}}
+\end{tabproofwide}
+
+\FormulaThmDelta{%
+\pi_1\restriction_R\colon R\sur A
+}{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Totale Relation}{R \subseteq A \times B}
+}
+\begin{tabproof}
+    \proofstep{}{\pi_1\restriction_R\colon R\to A}{\FormulaRefAuto{\pi_1\restriction_R\colon R\to A}}
+    \proofstep{}{\forall x\in A \exists y\in R\,(\pi_1\restriction_R(y)=x)}{\FormulaRefAuto{x\in A\vdash \exists y\in R(\pi_1\restriction_R(y)=x)}}
+    \proofstep{}{\pi_1\restriction_R\colon R\sur A}{\FormulaRefAuto{Surjektive Funktion}{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+  \exists F\colon A\to B\,\forall x\in A\,\bigl((x,F(x))\in R\bigr)
+}{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Totale Relation}{R \subseteq A \times B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\pi_1\restriction_R\colon R\sur A}%
+    {\FormulaRefAuto{\pi_1\restriction_R\colon R\sur A}}
+  \proofstepwidestar[]{\exists G\colon A\to R\,\bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)}%
+    {\FormulaRefAuto{\exists F\colon A \to B \, (G \circ F = \Id_A)}{1}}
+  \proofstepwidestar[3]{G\colon A\to R\land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)}{\rA}
+  \proofstepwidestar[3]{G\colon A\to R}{\rAEa{3}}
+  \proofstepwidestar[3]{\pi_1\restriction_R\circ G = \Id_A}{\rAEb{3}}
+  \proofstepwidestar[]{R\subseteq A\times B}{\FormulaRefAuto{F \subseteq A \times B}}
+  \proofstepwidestar[]{\pi_2\colon A\times B\to B}{\FormulaRefAuto{\pi_2\colon A\times B\to B}}
+  \proofstepwidestar[]{\pi_2\restriction_R\colon R\to B}%
+    {\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{6}}
+  \proofstepwidestar[3]{\pi_2\restriction_R\circ G\colon A\to B}%
+    {\FormulaRefAuto{G\circ F\colon A\to C}{4,8}}
+  \proofstepwidestar[10]{x\in A}{\rA}
+  \proofstepwidestar[3,10]{G(x)\in R}%
+    {\FormulaRefAuto{x\in A\vdash F(x)\in B}{10,4}}
+  \proofstepwidestar[3,10]{G(x)\in A\times B}%
+    {\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{6,11}}
+  \proofstepwidestar[3]{\forall u\in A\,\bigl((\pi_1\restriction_R\circ G)(u)=\Id_A(u)\bigr)}%
+    {\FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{5}}
+  \proofstepwidestar[3,10]{(\pi_1\restriction_R\circ G)(x)=\Id_A(x)}%
+    {\rRE{10,\rUE{13}}}
+  \proofstepwidestar[10]{\Id_A(x)=x}{\FormulaRefAuto{x\in A\vdash \Id_A(x)=x}{10}}
+  \proofstepwidestar[3,10]{\pi_1\restriction_R(G(x))=x}%
+    {\FormulaRefAuto{a=b,\,b=c\vdash a=c}{14,15}}
+  \proofstepwidestar[3,10]{\pi_1\restriction_R(G(x))=\pi_1(G(x))}%
+    {\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{6,11}}
+  \proofstepwidestar[3,10]{\pi_1(G(x))=x}%
+    {\FormulaRefAuto{a=b,\,b=c\vdash a=c}{16,17}}
+  \proofstepwidestar[3,10]{\pi_2\restriction_R(G(x))=\pi_2(G(x))}%
+    {\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}{6,11}}
+  \proofstepwidestar[3,10]{(\pi_2\restriction_R\circ G)(x)=\pi_2(G(x))}%
+    {\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{10}}
+  \proofstepwidestar[3,10]{G(x) = \bigl(\pi_1(G(x)),\pi_2(G(x))\bigr)}%
+    {\FormulaRefAuto{z\in A\times B\vdash z=(\pi_1(z),\pi_2(z))}{12}}
+  \proofstepwidestar[3,10]{G(x) = \bigl(x,(\pi_2\restriction_R\circ G)(x)\bigr)}%
+    {\FormulaRefAuto{a=b,\,b=c\vdash a=c}{15,\rChain{18,20}}}
+  \proofstepwidestar[3,10]{\bigl(x,(\pi_2\restriction_R\circ G)(x)\bigr)\in R}{\rIE{22,11}}
+  \proofstepwidestar[3]{\forall x\in A\,\bigl(x,(\pi_2\restriction_R\circ G)(x)\bigr)\in R}%
+    {\rUI{\rRI{10,23}}}
+  \proofstepwidestar[3]{\exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}%
+    {\rEI{\rAI{9,24}}}
+  \proofstepwidestar[]{\exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}%
+    {\rEE{2,3,25}}
+\end{tabproofwide}
+
+
+\FormulaThmDelta{%
+  R \subseteq A\times B,\ G\colon A\to R,\ \pi_1\restriction_R\circ G = \Id_A
+  \vdash \forall x\in A\,\bigl(x,\pi_2(G(x))\bigr)\in R
+}{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Relation}{R \subseteq A \times B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{R\subseteq A\times B}{\rA}
+  \proofstepwidestar[2]{G\colon A\to R}{\rA}
+  \proofstepwidestar[3]{\pi_1\restriction_R\circ G = \Id_A}{\rA}
+  \proofstepwidestar[4]{x\in A}{\rA}
+  \proofstepwidestar[2,4]{G(x)\in R}{\FormulaRefAuto{x\in A\vdash F(x)\in B}}
+  \proofstepwidestar[1,5]{G(x)\in A\times B}{\FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}}
+  \proofstepwidestar[3]{\forall u\in A\,\bigl((\pi_1\restriction_R\circ G)(u)=\Id_A(u)\bigr)}%
+    {\FormulaRefAuto{F=G \eqvdash \forall x\in A\,(F(x)=G(x))}}
+  \proofstepwidestar[3,4]{(\pi_1\restriction_R\circ G)(x)=\Id_A(x)}{\rRE{4,\rUE{7}}}
+  \proofstepwidestar[4]{(\pi_1\restriction_R\circ G)(x)=\pi_1\restriction_R(G(x))}%
+    {\FormulaRefAuto{x\in A \vdash (H\circ F)(x)=H(F(x))}}
+  \proofstepwidestar[4]{\Id_A(x)=x}{\FormulaRefAuto{x\in A\vdash \Id_A(x)=x}}
+  \proofstepwidestar[3,4]{(\pi_1\restriction_R\circ G)(x)=x}%
+    {\FormulaRefAuto{a=b,\,b=c\vdash a=c}}
+  \proofstepwidestar[3,4]{\pi_1\restriction_R(G(x))=x}%
+    {\FormulaRefAuto{a=b,\,b=c\vdash a=c}}
+  \proofstepwidestar[1,5]{\pi_1\restriction_R(G(x))=\pi_1(G(x))}%
+    {\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}}
+  \proofstepwidestar[1,2,3,4]{\pi_1(G(x))=x}{\FormulaRefAuto{a=b,\,b=c\vdash a=c}}
+  \proofstepwidestar[1,2,4]{G(x) = \bigl(\pi_1(G(x)),\pi_2(G(x))\bigr)}%
+    {\FormulaRefAuto{z\in A\times B\vdash z=(\pi_1(z),\pi_2(z))}}
+  \proofstepwidestar[1,2,3,4]{G(x) = \bigl(x,\pi_2(G(x))\bigr)}%
+    {\FormulaRefAuto{\pi_1(z)=x \vdash (\pi_1(z),\pi_2(z))=(x,\pi_2(z))}}
+  \proofstepwidestar[1,2,3,4]{\bigl(x,\pi_2(G(x))\bigr)\in R}{\rIE{15,5}}
+  \proofstepwidestar[1,2,3]{\forall x\in A\,\bigl(x,\pi_2(G(x))\bigr)\in R}{\rUI{\rRI{4,16}}}
+\end{tabproofwide}
+
+\FormulaThmDelta{%
+  G\colon A\to R \land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)
+  \vdash \exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R
+}{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Relation}{R \subseteq A \times B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{G\colon A\to R \land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)}{\rA}
+  \proofstepwidestar[1]{G\colon A\to R}{\rAEa{1}}
+  \proofstepwidestar[1]{\pi_1\restriction_R\circ G = \Id_A}{\rAEb{1}}
+  \proofstepwidestar[]{R\subseteq A\times B}{\FormulaRefAuto{R\subseteq A\times B}[]}
+  \proofstepwidestar[1]{\forall x\in A\,\bigl(x,\pi_2(G(x))\bigr)\in R}{%
+    \FormulaRefAuto{R \subseteq A\times B \land G\colon A\to R \land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)%
+      \vdash \forall x\in A\,\bigl(x,\pi_2(G(x))\bigr)\in R}{2,3,4}}
+  \proofstepwidestar[1]{\pi_2\circ G\colon A\to B}{\FormulaRefAuto{G\circ F\colon A\to C}{2}}
+  \proofstepwidestar[1]{\exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}{\rEI{\rAI{6,5}}}
+\end{tabproofwide}
+
+
+\FormulaThmDelta{%
+  \exists F\colon A\to B\,\forall x\in A\,\bigl((x,F(x))\in R\bigr)
+}{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Totale Relation}{R \subseteq A \times B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\pi_1\restriction_R\colon R\sur A}%
+    {\FormulaRefAuto{\pi_1\restriction_R\colon R\sur A}}
+  \proofstepwidestar[]{\exists G\colon A\to R\,\bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)}%
+    {\FormulaRefAuto{\exists F\colon A \to B \, (G \circ F = \Id_A)}{1}}
+  \proofstepwidestar[3]{G\colon A\to R\land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)}{\rA}
+  \proofstepwidestar[3]{\exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}%
+    {\FormulaRefAuto{G\colon A\to R \land \bigl(\pi_1\restriction_R\circ G = \Id_A\bigr)
+      \vdash \exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}{3}}
+  \proofstepwidestar[]{\exists F\colon A\to B\,\forall x\in A\,(x,F(x))\in R}%
+    {\rEE{2,3,4}}
+\end{tabproofwide}
 
 
 \chapter{Konstruktion der natürlichen Zahlen}
