@@ -2379,12 +2379,12 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 %%begin novalidate
 \FormulaDefAuto[Kartesisches Produkt ($A \times B$)]{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}
 %%end novalidate
-\begin{remark}
-    Hieraus ergibt sich folgendes:
-\[
-    x \in A \times B \eqvdash \exists a \in A\, \exists b \in B \big(x=(a,b)\big)
-\]
-\end{remark}
+
+\FormulaThmAuto{x\in A\times B\eqvdash \exists a \in A\, \exists b \in B\,x=(a,b)}
+\begin{tabproof}
+    \proofstep{}{x\in A\times B\leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)}{\FormulaRefAuto{A \times B := \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}}
+\end{tabproof}
+
 
 
 \subsection{Grundlegende Eigenschaften}
@@ -3565,6 +3565,56 @@ y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
   \proofstep{1,2}{\exists z\in A\times B\; \pi_2(z)=y}{%
     \rEI{\rAI{3,4}}}
 \end{tabproof}
+
+\subsubsection{Eigenschaften von Projektionsabbildungen}
+
+\FormulaThmDelta[Rekonstruktion aus Projektionen]{%
+  (x,y)\in A\times B \vdash (x,y) = \bigl(\pi_1(x,y),\pi_2(x,y)\bigr)
+}{
+  \DeltaRow{Projektion auf erste Komponente}{\pi_1:A\times B\to A}
+  \DeltaRow{Projektion auf zweite Komponente}{\pi_2:A\times B\to B}
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{(x,y)\in A\times B}{\rA}
+  \proofstepwidestar[1]{\pi_1(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{1}}
+  \proofstepwidestar[1]{\pi_2(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{1}}
+  \proofstepwide[1]{(x,y)}{=}{(\pi_1(x,y),x)}{\rIE{2,4}}
+  \proofstepwide[1]{}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rIE{3,4}}
+  \proofstepwide[1]{(x,y)}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rChain{4,5}}
+\end{tabproofwide}
+
+\FormulaThmDelta[Element des Produkts als Paar]{%
+  z\in A\times B \vdash z = \bigl(\pi_1(z),\pi_2(z)\bigr)
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{z\in A\times B}{\rA}
+  \proofstepwidestar[1]{\exists x\in A\,\exists y\in B\, z=(x,y)}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash \exists a \in A\, \exists b \in B\,x=(a,b)}{1}}
+  \proofstepwidestar[3]{x\in A\land y\in B\land z=(x,y)}{\rA}
+  \proofstepwidestar[3]{x\in A}{\rAEa{3}}
+  \proofstepwidestar[3]{y\in B}{\FormulaRefAuto{P\land Q\land R\vdash Q}{3}}
+  \proofstepwidestar[3]{z=(x,y)}{\rAEb{3}}
+  \proofstepwidestar[3]{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{4,5}}
+  \proofstepwidestar[3]{(x,y)=\bigl(\pi_1(x,y),\pi_2(x,y)\bigr)}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash (x,y)=\bigl(\pi_1(x,y),\pi_2(x,y)\bigr)}{7}}
+  \proofstepwidestar[3]{\pi_1(z)=\pi_1(x,y)}{%
+    \FormulaRefAuto{a=b \vdash f(a)=f(b)}{5}}
+  \proofstepwidestar[3]{\pi_2(z)=\pi_2(x,y)}{%
+    \FormulaRefAuto{a=b \vdash f(a)=f(b)}{5}}
+  \proofstepwidestar[3]{\bigl(\pi_1(z),\pi_2(z)\bigr)=\bigl(\pi_1(x,y),\pi_2(x,y)\bigr)}{%
+    \FormulaRefAuto{a=c \dsep b=d \vdash (a,b)=(c,d)}{8,9}}
+  \proofstepwidestar[3]{z=\bigl(\pi_1(z),\pi_2(z)\bigr)}{%
+    \FormulaRefAuto{a=b \dsep b=c \vdash a=c}{5,\rChain{7,10}}}
+  \proofstepwidestar[]{z=\bigl(\pi_1(z),\pi_2(z)\bigr)}{%
+    \rEE{2,3,11}}
+\end{tabproofwide}
+xxx
 
 \subsection{Die Inklusionsabbildung}
 
