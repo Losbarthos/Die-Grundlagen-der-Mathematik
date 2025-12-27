@@ -1,0 +1,140 @@
+% tex/impl/proof-tables.tex
+\RequirePackage{xparse}
+\RequirePackage{array}
+\RequirePackage{longtable}
+\RequirePackage{amsthm} % für proof-Umgebung / qed
+
+\providecommand{\axstrut}{\rule{0pt}{1.25\baselineskip}}
+\providecommand{\axsep}{1pt}
+
+% Spaltentyp für eingerückte Abhängigkeitslisten
+\newcolumntype{G}{>{\raggedright\arraybackslash}p{0.055\textwidth}}
+
+\newcounter{proofstepnr}
+
+\newenvironment{tabproof}
+  {\par\small
+   \setcounter{proofstepnr}{0}%
+   \setlength{\tabcolsep}{2pt}%
+   \renewcommand{\arraystretch}{1.15}%
+   \begin{longtable}{@{}G r >{$}l<{$} >{$}l<{$}@{}}}
+  {\end{longtable}\par}
+
+
+% ------------------------------------------------------------
+% Split-Variante wie in der alten main.tex:
+% tabproofsplit = nur proof-Wrapper
+% \proofpart öffnet je Teil eine eigene longtable
+% \closeproofpart schließt sie wieder
+% ------------------------------------------------------------
+
+\newenvironment{tabproofsplit}
+  {\begin{proof}\leavevmode\par\nobreak}
+  {\end{proof}}
+
+
+\newcommand{\proofpart}[1]{%
+  \par\medskip\noindent #1:\par%
+  \par\small
+  \setcounter{proofstepnr}{0}%
+  \setlength{\tabcolsep}{2pt}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{@{}G r >{$}l<{$} >{$}l<{$}@{}}
+}
+
+\newcommand{\closeproofpart}{%
+  \end{longtable}\par
+}
+
+% -------------------- WIDE (analog) --------------------
+
+\NewDocumentEnvironment{tabproofsplitwide}{}{% BEGIN
+  \begin{proof}\leavevmode\par\nobreak
+}{% END
+  \end{proof}
+}
+
+\newcommand{\proofpartwide}[1]{%
+  \par\medskip\noindent #1:\par%
+  \par\small
+  \setcounter{proofstepnr}{0}%
+  \setlength{\tabcolsep}{2pt}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{@{}G r >{$}p{0.34\textwidth}<{$} >{$}c<{$} >{$}p{0.34\textwidth}<{$} l@{}}
+}
+
+\newcommand{\closeproofpartwide}{%
+  \end{longtable}\par
+}
+
+% Alias: falls du irgendwo noch tabproofwidesplit verwendest
+\NewDocumentEnvironment{tabproofwidesplit}{}{% BEGIN
+  \begin{tabproofsplitwide}
+}{% END
+  \end{tabproofsplitwide}
+}
+
+
+
+% tex/impl/proof-tables.tex
+
+% Wide: (Deps) | Nr | Links | Rel | Rechts | Begründung
+\NewDocumentEnvironment{tabproofwide}{}{%
+  \par\small
+  \setcounter{proofstepnr}{0}%
+  \setlength{\tabcolsep}{2pt}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{@{}G r >{$}p{0.34\textwidth}<{$} >{$}c<{$} >{$}p{0.34\textwidth}<{$} l@{}}
+}{%
+  \end{longtable}\par
+}
+
+% \proofstepwide[<deps>]{<links>}{<rel>}{<rechts>}{<begruendung>}
+% Sternform: keine neue Schritt-Nr. (Fortsetzungszeile)
+\NewDocumentCommand{\proofstepwide}{s O{} m m m m}{%
+  \IfBooleanTF{#1}
+    {#2 &  & #3 & #4 & #5 & #6\\}%
+    {\stepcounter{proofstepnr}%
+     #2 & \theproofstepnr & #3 & #4 & #5 & #6\\}%
+}
+
+% Zeile nur "Formel + Begründung" (wie bei dir: \proofstepwidestar[1]{A\subseteq C}{\rA})
+\ProvideDocumentCommand{\proofstepwidestar}{O{} m m}{%
+  \stepcounter{proofstepnr}%
+  #1 & \theproofstepnr & #2 &  &  & #3\\%
+}
+
+
+
+% Proofzeilen
+\NewDocumentCommand{\proofstep}{m m m}{%
+  \stepcounter{proofstepnr}%
+  #1 & \theproofstepnr & #2 & \ensuremath{#3}\\%
+}
+
+
+
+% wie \proofstep, aber ohne Schritt-Nummer (für Folgezeilen, Umbrüche, etc.)
+\ProvideDocumentCommand{\proofstepstar}{m m m}{%
+  #1 &  & #2 & #3\\%
+}
+\ProvideDocumentCommand{\proofstepstarwide}{m m m}{%
+  #1 &  & #2 & #3\\%
+}
+
+
+% Axiom-/Theorem-Referenzzeilen (nutzt FormulaRefAuto)
+\NewDocumentCommand{\proofaxline}{m m o}{%
+  \stepcounter{proofstepnr}%
+  #1 & \theproofstepnr & #2 &
+  \axstrut \FormulaRefAuto{#2}[ax]%
+  \IfNoValueF{#3}{\axstrut \textnormal{\scriptsize(#3)}}\\[\axsep]
+}
+
+\newcommand{\proofcase}[2][]{%
+  & & \text{\bfseries Fall\if\relax#1\relax\else~#1\fi: } #2 & \\[-.35ex]%
+}
+\newcommand{\proofcasesummary}[2][]{%
+  & & \text{\bfseries Schluss\if\relax#1\relax\else~ Fall~#1\fi: } #2 & \\[-.35ex]%
+}
+\newcommand{\proofcaserule}{\cline{3-4}\noalign{\vspace{-0.3ex}}}

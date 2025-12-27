@@ -10,9 +10,15 @@
 
 \ifSubfilesClassLoaded{
     \usepackage{xr-hyper}
-  \externaldocument{_B01}
+  \externaldocument{registry/_B01}
 }{
    % Code für als Subfile eingebunden
+}
+
+% Band-2 Registry/Debug unter festem Namen schreiben
+\directlua{
+  thmlookup.registry_path = "_B02.registry.tsv"
+  thmlookup.debug_path    = "_B02.debug.log"
 }
 
 \begin{document}
@@ -20,6 +26,7 @@
 \tableofcontents
 %\listoftheorems
 \setcounter{file}{2}
+\renewcommand{\FormulaBandID}{2}
 
 
 \chapter{Strukturgesetze der Junktoren}
@@ -216,6 +223,15 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1}{P\land Q\land R}{\rA}
   \proofstep{1}{P\land Q}{\rAEb{1}}
   \proofstep{1}{Q}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto{P\dsep Q\dsep R\vdash P\land Q\land R}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{R}{\rA}
+  \proofstep{1,2}{P\land Q}{\rAI{1,2}}
+  \proofstep{1,2,3}{P\land Q\land R}{\rAI{4,3}}
 \end{tabproof}
 
 \subsection{Elimination mehrfacher Disjunktion}
@@ -1376,7 +1392,7 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1}{b = a}{\rIE{1,2}}
 \end{tabproof}
 \begin{remark}
-  Aus \(\FormulaRefAuto{a = b \vdash b = a}\) wissen wir, dass jede
+  Aus \FormulaRefAuto{a = b \vdash b = a} wissen wir, dass jede
   hergeleitete Gleichung auch in umgekehrter Richtung gilt.
   Um die Beweise übersichtlicher zu halten, vereinbaren wir daher:
   \emph{Wenn wir einen Satz der Form \(\Gamma \vdash s = t\) zitieren,
@@ -1677,276 +1693,6 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \closeproofpart
 \end{tabproofsplit}
 
-
-
-\section{Distribution von Quantoren über Junktoren}
-\begin{DeltaContext}{Im Kapitel verwendete Symbole}
-  \DeltaRow{Aussagenvariablen}{P}
-  \DeltaRow{Prädikatensymbole}{F\dsep G\dsep P \dsep Q}
-  \DeltaRow{Variablen}{x\dsep y}
-  \DeltaRow{Konstantensymbole}{a}
-\end{DeltaContext}
-
-
-\FormulaThmAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}
-\begin{tabproof}
-  \proofstep{1}{P(a)}{\rA}
-  \proofstep{2}{\forall x(P(x) \rightarrow Q(x))}{\rA}
-  \proofstep{2}{P(a) \rightarrow Q(a)}{\rUE{2}}
-  \proofstep{1,2}{Q(a)}{\rRE{1,3}}
-\end{tabproof}
-
-\FormulaThmAuto{P(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash Q(a)}
-\begin{tabproof}
-  \proofstep{1}{P(a)}{\rA}
-  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
-  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
-  \proofstep{1,2}{Q(a)}{\FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{3,1}}
-\end{tabproof}
-
-\FormulaThmAuto{Q(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash P(a)}
-\begin{tabproof}
-  \proofstep{1}{Q(a)}{\rA}
-  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
-  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
-  \proofstep{1,2}{P(a)}{\FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{3,1}}
-\end{tabproof}
-
-\FormulaThmAuto{\forall x(P \rightarrow Q(x)) \eqvdash P \rightarrow \forall x(Q(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rA}
-  \proofstep{2}{P}{\rA}
-  \proofstep{1,2}{P \rightarrow Q(x)}{\rUE{1}}
-  \proofstep{1,2}{Q(x)}{\rRE{2,3}}
-  \proofstep{2}{\forall x(Q(x))}{\rUI{4}}
-  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rRI{2,5}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rA}
-  \proofstep{2}{P}{\rA}
-  \proofstep{1}{\forall x(Q(x))}{\rRE{1,2}}
-  \proofstep{1,2}{Q(x)}{\rUE{3}}
-  \proofstep{2}{P \rightarrow Q(x)}{\rRI{2,4}}
-  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rUI{5}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmAuto{\forall x(P \land Q(x)) \eqvdash P \land \forall x(Q(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\forall x(P \land Q(x))}{\rA}
-  \proofstep{1}{P \land Q(x)}{\rUE{1}}
-  \proofstep{1}{P}{\rAEa{2}}
-  \proofstep{1}{Q(x)}{\rAEb{2}}
-  \proofstep{1}{\forall x(Q(x))}{\rUI{4}}
-  \proofstep{1}{P \land \forall x(Q(x))}{\rAI{3,5}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{P \land \forall x(Q(x))}{\rA}
-  \proofstep{1}{P}{\rAEa{1}}
-  \proofstep{1}{\forall x(Q(x))}{\rAEb{1}}
-  \proofstep{1}{Q(x)}{\rUE{3}}
-  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
-  \proofstep{1}{\forall x(P \land Q(x))}{\rUI{5}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmAuto{\exists x(P \land Q(x)) \eqvdash P \land \exists x(Q(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\exists x(P \land Q(x))}{\rA}
-  \proofstep{1}{P \land Q(x)}{\rEE{1}}
-  \proofstep{1}{P}{\rAEa{2}}
-  \proofstep{1}{Q(x)}{\rAEb{2}}
-  \proofstep{1}{\exists x(Q(x))}{\rEI{4}}
-  \proofstep{1}{P \land \exists x(Q(x))}{\rAI{3,5}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{P \land \exists x(Q(x))}{\rA}
-  \proofstep{1}{P}{\rAEa{1}}
-  \proofstep{1}{\exists x(Q(x))}{\rAEb{1}}
-  \proofstep{1}{Q(x)}{\rEE{3}}
-  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
-  \proofstep{1}{\exists x(P \land Q(x))}{\rEI{5}}
-\closeproofpart
-\end{tabproofsplit}
-
-
-\FormulaThmAuto{\forall x(P \lor Q(x)) \eqvdash P \lor \forall x(Q(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\forall x(P \lor Q(x))}{\rA}
-  \proofstep{2}{\neg(P \lor \forall x(Q(x)))}{\rA}
-  \proofstep{2}{\neg P \land \neg \forall x(Q(x))}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}}
-  \proofstep{2}{\neg P}{\rAEa{3}}
-  \proofstep{2}{\neg \forall x(Q(x))}{\rAEb{3}}
-  \proofstep{2}{\exists x(\neg Q(x))}{\FormulaRefAuto{\neg\forall x(P(x))\eqvdash \exists x(\neg P(x))}{5}}
-  \proofstep{2}{\neg F(a)}{\rEE{6}}
-  \proofstep{1}{P \lor F(a)}{\rUE{1}}
-  \proofstep{9}{P}{\rA}
-  \proofstep{2,9}{\bot}{\rBI{4,9}}
-  \proofstep{9}{P \lor \forall x(Q(x))}{\rCE{2,10}}
-  \proofstep{12}{F(a)}{\rA}
-  \proofstep{2,12}{\bot}{\rBI{12,7}}
-  \proofstep{12}{P \lor \forall x(Q(x))}{\rCE{2,13}}
-  \proofstep{1}{P \lor \forall x(Q(x))}{\rOE{8,9,11,12,14}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{P \lor \forall x(Q(x))}{\rA}
-  \proofstep{2}{P}{\rA}
-  \proofstep{2}{P \lor Q(x)}{\rOIa{2}}
-  \proofstep{2}{\forall x(P \lor Q(x))}{\rUI{3}}
-  \proofstep{5}{\forall x(Q(x))}{\rA}
-  \proofstep{5}{Q(x)}{\rUE{5}}
-  \proofstep{5}{P \lor Q(x)}{\rOIb{6}}
-  \proofstep{5}{\forall x(P \lor Q(x))}{\rUI{7}}
-  \proofstep{1}{\forall x(P \lor Q(x))}{\rOE{1,2,4,5,8}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmAuto{\exists x(P \lor F(x)) \eqvdash P \lor \exists x(F(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\exists x(P \lor F(x))}{\rA}
-  \proofstep{2}{P \lor F(a)}{\rA}
-  \proofstep{3}{P}{\rA}
-  \proofstep{1,3}{P \lor \exists x(F(x))}{\rOIa{3}}
-  \proofstep{5}{F(a)}{\rA}
-  \proofstep{1,5}{\exists x(F(x))}{\rEI{5}}
-  \proofstep{1,5}{P \lor \exists x(F(x))}{\rOIb{6}}
-  \proofstep{2}{P \lor \exists x(F(x))}{\rOE{2,3,4,5,7}}
-  \proofstep{1}{P \lor \exists x(F(x))}{\rEE{1,2,8}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{P \lor \exists x(F(x))}{\rA}
-  \proofstep{2}{P}{\rA}
-  \proofstep{2}{P \lor F(x)}{\rOIa{2}}
-  \proofstep{2}{\exists x(P \lor F(x))}{\rEI{3}}
-  \proofstep{5}{\exists x(F(x))}{\rA}
-  \proofstep{5}{F(a)}{\rEE{5}}
-  \proofstep{5}{P \lor F(a)}{\rOIb{6}}
-  \proofstep{5}{\exists x(P \lor F(x))}{\rEI{7}}
-  \proofstep{1}{\exists x(P \lor F(x))}{\rOE{1,2,4,5,8}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmAuto{\exists x(F(x) \rightarrow P) \eqvdash \forall x(F(x)) \rightarrow P}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rA}
-  \proofstep{2}{F(a) \rightarrow P}{\rA}
-  \proofstep{3}{\forall x(F(x))}{\rA}
-  \proofstep{3}{F(a)}{\rUE{3}}
-  \proofstep{2,3}{P}{\rRE{2,4}}
-  \proofstep{2}{\forall x(F(x)) \rightarrow P}{\rRI{3,5}}
-  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rEE{1,2,6}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rA}
-  \proofstep{2}{\forall x(F(x))}{\rA}
-  \proofstep{1}{P}{\rRE{1,2}}
-  \proofstep{1}{F(a) \rightarrow P}{\rRI{3}}
-  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rEI{4}}
-\closeproofpart
-\end{tabproofsplit}
-
-
-\FormulaThmAuto{\forall x(F(x)\land G(x))\eqvdash \forall x(F(x))\land \forall x(G(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\forall x(F(x)\land G(x))}{\rA}
-  \proofstep{1}{F(x)\land G(x)}{\rUE{1}}	
-  \proofstep{1}{F(x)}{\rAEa{2}}
-  \proofstep{1}{\forall x(F(x))}{\rUI{3}}	
-  \proofstep{1}{G(x)}{\rAEb{2}}
-  \proofstep{1}{\forall x(G(x))}{\rUI{5}}
-  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rAI{4,6}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rA}
-  \proofstep{1}{\forall x(F(x))}{\rAEa{1}}
-  \proofstep{1}{F(x)}{\rUE{2}}
-  \proofstep{1}{\forall x(G(x))}{\rAEb{1}}
-  \proofstep{1}{G(x)}{\rUE{4}}
-  \proofstep{1}{F(x)\land G(x)}{\rAI{3,5}}
-  \proofstep{1}{\forall x(F(x)\land G(x))}{\rUI{6}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))}
-\begin{tabproof}
-  \proofstep{1}{\forall x(F(x))\lor\forall x(G(x))}{\rA}
-  \proofstep{2}{\forall x(F(x))}{\rA}
-  \proofstep{2}{F(a)}{\rUE{2}}
-  \proofstep{2}{F(a)\lor G(a)}{\rOIa{3}}
-  \proofstep{2}{\forall x(F(x)\lor G(x))}{\rUI{4}}
-  \proofstep{6}{\forall x(G(x))}{\rA}
-  \proofstep{6}{G(a)}{\rUE{6}}
-  \proofstep{6}{F(a)\lor G(a)}{\rOIb{7}}
-  \proofstep{6}{\forall x(F(x)\lor G(x))}{\rUI{8}}
-  \proofstep{1}{\forall x(F(x)\lor G(x))}{\rOE{1,2,5,6,9}}
-\end{tabproof}
-
-\FormulaThmAuto{\exists x(F(x)\lor G(x))\eqvdash \exists x(F(x))\lor \exists x(G(x))}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rA}
-  \proofstep{2}{F(a)\lor G(a)}{\rA}
-  \proofstep{3}{F(a)}{\rA}
-  \proofstep{3}{\exists x(F(x))}{\rEI{3}}
-  \proofstep{3}{\exists x(F(x))\lor \exists x(G(x))}{\rOIa{4}}
-  \proofstep{6}{G(a)}{\rA}
-  \proofstep{6}{\exists x(G(x))}{\rEI{6}}
-  \proofstep{6}{\exists x(F(x))\lor \exists x(G(x))}{\rOIb{7}}
-  \proofstep{2}{\exists x(F(x))\lor \exists x(G(x))}{\rOE{2,3,5,6,8}}
-  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rEE{1,2,9}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rA}
-  \proofstep{2}{\exists x(F(x))}{\rA}
-  \proofstep{3}{F(a)}{\rA}
-  \proofstep{3}{F(a)\lor G(a)}{\rOIa{3}}
-  \proofstep{3}{\exists x(F(x)\lor G(x))}{\rEI{4}}
-  \proofstep{2}{\exists x(F(x)\lor G(x))}{\rEE{2,3,5}}
-  \proofstep{7}{\exists x(G(x))}{\rA}
-  \proofstep{8}{G(a)}{\rA}
-  \proofstep{8}{F(a)\lor G(a)}{\rOIb{8}}
-  \proofstep{8}{\exists x(F(x)\lor G(x))}{\rEI{9}}
-  \proofstep{7}{\exists x(F(x)\lor G(x))}{\rEE{7,8,10}}
-  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rOE{1,2,6,7,11}}
-\closeproofpart
-\end{tabproofsplit}
-
-
-\FormulaThmAuto{\exists x\exists yF(x,y)\vdash \exists y\exists x F(x,y)}
-\begin{tabproof}
-  \proofstep{1}{\exists x\exists y F(x,y)}{\rA}
-  \proofstep{2}{\exists y F(a,y)}{\rA}
-  \proofstep{3}{F(a,b)}{\rA}
-  \proofstep{3}{\exists x F(x,b)}{\rEI{3}}
-  \proofstep{3}{\exists y\exists x F(x,y)}{\rEI{4}}
-  \proofstep{2}{\exists y\exists x F(x,y)}{\rEE{2,3,5}}
-  \proofstep{1}{\exists y\exists x F(x,y)}{\rEE{1,2,6}}
-\end{tabproof}
-
-\FormulaThmAuto{\forall x\forall yF(x,y)\vdash \forall y\forall x F(x,y)}
-\begin{tabproof}
-  \proofstep{1}{\forall x\forall y F(x,y)}{\rA}
-  \proofstep{1}{\forall y F(a,y)}{\rUE{1}}
-  \proofstep{1}{F(a,b)}{\rUE{2}}
-  \proofstep{1}{\forall x F(x,b)}{\rUI{3}}
-  \proofstep{1}{\forall y\forall x F(x,y)}{\rUI{4}}
-\end{tabproof}
-
 \section{Negation von
   \texorpdfstring{$\forall$}{∀}
   und
@@ -2226,6 +1972,278 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
     \proofstep{1}{\neg\forall x(P(x)\leftrightarrow Q(x))}{\FormulaRefAuto{P \leftrightarrow Q, \neg Q \vdash \neg P}{2,3}}
   \closeproofpart
 \end{tabproofsplit}
+
+
+
+\section{Distribution von Quantoren über Junktoren}
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagenvariablen}{P}
+  \DeltaRow{Prädikatensymbole}{F\dsep G\dsep P \dsep Q}
+  \DeltaRow{Variablen}{x\dsep y}
+  \DeltaRow{Konstantensymbole}{a}
+\end{DeltaContext}
+
+
+\FormulaThmAuto{P(a), \forall x(P(x) \rightarrow Q(x)) \vdash Q(a)}
+\begin{tabproof}
+  \proofstep{1}{P(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \rightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \rightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{Q(a)}{\rRE{1,3}}
+\end{tabproof}
+
+\FormulaThmAuto{P(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash Q(a)}
+\begin{tabproof}
+  \proofstep{1}{P(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{Q(a)}{\FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{3,1}}
+\end{tabproof}
+
+\FormulaThmAuto{Q(a), \forall x(P(x) \leftrightarrow Q(x)) \vdash P(a)}
+\begin{tabproof}
+  \proofstep{1}{Q(a)}{\rA}
+  \proofstep{2}{\forall x(P(x) \leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{P(a) \leftrightarrow Q(a)}{\rUE{2}}
+  \proofstep{1,2}{P(a)}{\FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{3,1}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x(P \rightarrow Q(x)) \eqvdash P \rightarrow \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1,2}{P \rightarrow Q(x)}{\rUE{1}}
+  \proofstep{1,2}{Q(x)}{\rRE{2,3}}
+  \proofstep{2}{\forall x(Q(x))}{\rUI{4}}
+  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rRI{2,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \rightarrow \forall x(Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1}{\forall x(Q(x))}{\rRE{1,2}}
+  \proofstep{1,2}{Q(x)}{\rUE{3}}
+  \proofstep{2}{P \rightarrow Q(x)}{\rRI{2,4}}
+  \proofstep{1}{\forall x(P \rightarrow Q(x))}{\rUI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(P \land Q(x)) \eqvdash P \land \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \land Q(x))}{\rA}
+  \proofstep{1}{P \land Q(x)}{\rUE{1}}
+  \proofstep{1}{P}{\rAEa{2}}
+  \proofstep{1}{Q(x)}{\rAEb{2}}
+  \proofstep{1}{\forall x(Q(x))}{\rUI{4}}
+  \proofstep{1}{P \land \forall x(Q(x))}{\rAI{3,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \land \forall x(Q(x))}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{\forall x(Q(x))}{\rAEb{1}}
+  \proofstep{1}{Q(x)}{\rUE{3}}
+  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
+  \proofstep{1}{\forall x(P \land Q(x))}{\rUI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(P \land Q(x)) \eqvdash P \land \exists x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(P \land Q(x))}{\rA}
+  \proofstep{1}{P \land Q(x)}{\rEE{1}}
+  \proofstep{1}{P}{\rAEa{2}}
+  \proofstep{1}{Q(x)}{\rAEb{2}}
+  \proofstep{1}{\exists x(Q(x))}{\rEI{4}}
+  \proofstep{1}{P \land \exists x(Q(x))}{\rAI{3,5}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \land \exists x(Q(x))}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{\exists x(Q(x))}{\rAEb{1}}
+  \proofstep{1}{Q(x)}{\rEE{3}}
+  \proofstep{1}{P \land Q(x)}{\rAI{2,4}}
+  \proofstep{1}{\exists x(P \land Q(x))}{\rEI{5}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x(P \lor Q(x)) \eqvdash P \lor \forall x(Q(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(P \lor Q(x))}{\rA}
+  \proofstep{2}{\neg(P \lor \forall x(Q(x)))}{\rA}
+  \proofstep{2}{\neg P \land \neg \forall x(Q(x))}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}}
+  \proofstep{2}{\neg P}{\rAEa{3}}
+  \proofstep{2}{\neg \forall x(Q(x))}{\rAEb{3}}
+  \proofstep{2}{\exists x(\neg Q(x))}{\FormulaRefAuto{\neg\forall x(P(x))\eqvdash \exists x (\neg P(x))}{5}}
+  \proofstep{2}{\neg F(a)}{\rEE{6}}
+  \proofstep{1}{P \lor F(a)}{\rUE{1}}
+  \proofstep{9}{P}{\rA}
+  \proofstep{2,9}{\bot}{\rBI{4,9}}
+  \proofstep{9}{P \lor \forall x(Q(x))}{\rCE{2,10}}
+  \proofstep{12}{F(a)}{\rA}
+  \proofstep{2,12}{\bot}{\rBI{12,7}}
+  \proofstep{12}{P \lor \forall x(Q(x))}{\rCE{2,13}}
+  \proofstep{1}{P \lor \forall x(Q(x))}{\rOE{8,9,11,12,14}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \lor \forall x(Q(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor Q(x)}{\rOIa{2}}
+  \proofstep{2}{\forall x(P \lor Q(x))}{\rUI{3}}
+  \proofstep{5}{\forall x(Q(x))}{\rA}
+  \proofstep{5}{Q(x)}{\rUE{5}}
+  \proofstep{5}{P \lor Q(x)}{\rOIb{6}}
+  \proofstep{5}{\forall x(P \lor Q(x))}{\rUI{7}}
+  \proofstep{1}{\forall x(P \lor Q(x))}{\rOE{1,2,4,5,8}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(P \lor F(x)) \eqvdash P \lor \exists x(F(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(P \lor F(x))}{\rA}
+  \proofstep{2}{P \lor F(a)}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{P \lor \exists x(F(x))}{\rOIa{3}}
+  \proofstep{5}{F(a)}{\rA}
+  \proofstep{1,5}{\exists x(F(x))}{\rEI{5}}
+  \proofstep{1,5}{P \lor \exists x(F(x))}{\rOIb{6}}
+  \proofstep{2}{P \lor \exists x(F(x))}{\rOE{2,3,4,5,7}}
+  \proofstep{1}{P \lor \exists x(F(x))}{\rEE{1,2,8}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{P \lor \exists x(F(x))}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{2}{P \lor F(x)}{\rOIa{2}}
+  \proofstep{2}{\exists x(P \lor F(x))}{\rEI{3}}
+  \proofstep{5}{\exists x(F(x))}{\rA}
+  \proofstep{5}{F(a)}{\rEE{5}}
+  \proofstep{5}{P \lor F(a)}{\rOIb{6}}
+  \proofstep{5}{\exists x(P \lor F(x))}{\rEI{7}}
+  \proofstep{1}{\exists x(P \lor F(x))}{\rOE{1,2,4,5,8}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\exists x(F(x) \rightarrow P) \eqvdash \forall x(F(x)) \rightarrow P}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rA}
+  \proofstep{2}{F(a) \rightarrow P}{\rA}
+  \proofstep{3}{\forall x(F(x))}{\rA}
+  \proofstep{3}{F(a)}{\rUE{3}}
+  \proofstep{2,3}{P}{\rRE{2,4}}
+  \proofstep{2}{\forall x(F(x)) \rightarrow P}{\rRI{3,5}}
+  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rEE{1,2,6}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\forall x(F(x)) \rightarrow P}{\rA}
+  \proofstep{2}{\forall x(F(x))}{\rA}
+  \proofstep{1}{P}{\rRE{1,2}}
+  \proofstep{1}{F(a) \rightarrow P}{\rRI{3}}
+  \proofstep{1}{\exists x(F(x) \rightarrow P)}{\rEI{4}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\forall x(F(x)\land G(x))\eqvdash \forall x(F(x))\land \forall x(G(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\forall x(F(x)\land G(x))}{\rA}
+  \proofstep{1}{F(x)\land G(x)}{\rUE{1}}	
+  \proofstep{1}{F(x)}{\rAEa{2}}
+  \proofstep{1}{\forall x(F(x))}{\rUI{3}}	
+  \proofstep{1}{G(x)}{\rAEb{2}}
+  \proofstep{1}{\forall x(G(x))}{\rUI{5}}
+  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rAI{4,6}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\forall x(F(x))\land \forall x(G(x))}{\rA}
+  \proofstep{1}{\forall x(F(x))}{\rAEa{1}}
+  \proofstep{1}{F(x)}{\rUE{2}}
+  \proofstep{1}{\forall x(G(x))}{\rAEb{1}}
+  \proofstep{1}{G(x)}{\rUE{4}}
+  \proofstep{1}{F(x)\land G(x)}{\rAI{3,5}}
+  \proofstep{1}{\forall x(F(x)\land G(x))}{\rUI{6}}
+\closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))}
+\begin{tabproof}
+  \proofstep{1}{\forall x(F(x))\lor\forall x(G(x))}{\rA}
+  \proofstep{2}{\forall x(F(x))}{\rA}
+  \proofstep{2}{F(a)}{\rUE{2}}
+  \proofstep{2}{F(a)\lor G(a)}{\rOIa{3}}
+  \proofstep{2}{\forall x(F(x)\lor G(x))}{\rUI{4}}
+  \proofstep{6}{\forall x(G(x))}{\rA}
+  \proofstep{6}{G(a)}{\rUE{6}}
+  \proofstep{6}{F(a)\lor G(a)}{\rOIb{7}}
+  \proofstep{6}{\forall x(F(x)\lor G(x))}{\rUI{8}}
+  \proofstep{1}{\forall x(F(x)\lor G(x))}{\rOE{1,2,5,6,9}}
+\end{tabproof}
+
+\FormulaThmAuto{\exists x(F(x)\lor G(x))\eqvdash \exists x(F(x))\lor \exists x(G(x))}
+\begin{tabproofsplit}
+\proofpart{\(\vdash\)}
+  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rA}
+  \proofstep{2}{F(a)\lor G(a)}{\rA}
+  \proofstep{3}{F(a)}{\rA}
+  \proofstep{3}{\exists x(F(x))}{\rEI{3}}
+  \proofstep{3}{\exists x(F(x))\lor \exists x(G(x))}{\rOIa{4}}
+  \proofstep{6}{G(a)}{\rA}
+  \proofstep{6}{\exists x(G(x))}{\rEI{6}}
+  \proofstep{6}{\exists x(F(x))\lor \exists x(G(x))}{\rOIb{7}}
+  \proofstep{2}{\exists x(F(x))\lor \exists x(G(x))}{\rOE{2,3,5,6,8}}
+  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rEE{1,2,9}}
+\closeproofpart
+
+\proofpart{\(\dashv\)}
+  \proofstep{1}{\exists x(F(x))\lor \exists x(G(x))}{\rA}
+  \proofstep{2}{\exists x(F(x))}{\rA}
+  \proofstep{3}{F(a)}{\rA}
+  \proofstep{3}{F(a)\lor G(a)}{\rOIa{3}}
+  \proofstep{3}{\exists x(F(x)\lor G(x))}{\rEI{4}}
+  \proofstep{2}{\exists x(F(x)\lor G(x))}{\rEE{2,3,5}}
+  \proofstep{7}{\exists x(G(x))}{\rA}
+  \proofstep{8}{G(a)}{\rA}
+  \proofstep{8}{F(a)\lor G(a)}{\rOIb{8}}
+  \proofstep{8}{\exists x(F(x)\lor G(x))}{\rEI{9}}
+  \proofstep{7}{\exists x(F(x)\lor G(x))}{\rEE{7,8,10}}
+  \proofstep{1}{\exists x(F(x)\lor G(x))}{\rOE{1,2,6,7,11}}
+\closeproofpart
+\end{tabproofsplit}
+
+
+\FormulaThmAuto{\exists x\exists yF(x,y)\vdash \exists y\exists x F(x,y)}
+\begin{tabproof}
+  \proofstep{1}{\exists x\exists y F(x,y)}{\rA}
+  \proofstep{2}{\exists y F(a,y)}{\rA}
+  \proofstep{3}{F(a,b)}{\rA}
+  \proofstep{3}{\exists x F(x,b)}{\rEI{3}}
+  \proofstep{3}{\exists y\exists x F(x,y)}{\rEI{4}}
+  \proofstep{2}{\exists y\exists x F(x,y)}{\rEE{2,3,5}}
+  \proofstep{1}{\exists y\exists x F(x,y)}{\rEE{1,2,6}}
+\end{tabproof}
+
+\FormulaThmAuto{\forall x\forall yF(x,y)\vdash \forall y\forall x F(x,y)}
+\begin{tabproof}
+  \proofstep{1}{\forall x\forall y F(x,y)}{\rA}
+  \proofstep{1}{\forall y F(a,y)}{\rUE{1}}
+  \proofstep{1}{F(a,b)}{\rUE{2}}
+  \proofstep{1}{\forall x F(x,b)}{\rUI{3}}
+  \proofstep{1}{\forall y\forall x F(x,y)}{\rUI{4}}
+\end{tabproof}
+
+
 
 \section{Invarianzen gegenüber universellen Aussagen}
 \begin{DeltaContext}{Im Kapitel verwendete Symbole}

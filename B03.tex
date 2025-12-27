@@ -6,8 +6,8 @@
 
 \ifSubfilesClassLoaded{
     \usepackage{xr}
-    \externaldocument{_B01}
-  \externaldocument{_B02}
+    \externaldocument{registry/_B01}
+  \externaldocument{registry/_B02}
 }{
    % Code für als Subfile eingebunden
 }
@@ -16,9 +16,18 @@
 \author{Martin Kunze}
 \date{}
 \setcounter{file}{3}
+\renewcommand{\FormulaBandID}{3}
 
 
+% Band-3 Registry/Debug unter festem Namen schreiben
+\directlua{
+  thmlookup.registry_path = "_B03.registry.tsv"
+  thmlookup.debug_path    = "_B03.debug.log"
+}
 
+\AtBeginDocument{%
+\directlua{ thmlookup.load_registry_file("registry/_B02.registry.tsv") }%
+}
 
 \begin{document}
 
@@ -179,7 +188,7 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstep{1}{ A = B }{ \rA }
   \proofstep{2}{ x \in A }{ \rA }
   \proofstep{1}{ x \in A \leftrightarrow x \in B }{ \rUE{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } } }
-  \proofstep{1,2}{ x \in B }{ \FormulaRefAuto{ P \leftrightarrow Q,\; P \vdash Q }{3,2} }
+  \proofstep{1,2}{ x \in B }{ \FormulaRefAuto{ P \leftrightarrow Q, P \vdash Q }{3,2} }
 \end{tabproof}
 
 \FormulaThmAuto{ a \in A,\; b \not\in A \vdash a \neq b }
@@ -204,7 +213,7 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
     {\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{2}}}
 
   \proofstepwidestar[1,2,3]{z \in C}%
-    {\FormulaRefAuto{P \rightarrow Q,\, R \rightarrow Q,\, P \lor R \vdash Q}{4,5,3}}
+    {\FormulaRefAuto{P \rightarrow Q, R \rightarrow Q, P \lor R \vdash Q}{4,5,3}}
 \end{tabproofwide}
 \section{Ordnungsrelation}
 
@@ -413,7 +422,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \begin{tabproof}
   \proofstep{1}{ \forall x (P(x) \rightarrow x \in A) }{ \rA }
   \proofstep{1}{ \forall x(x \in A \land P(x) \leftrightarrow P(x)) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
-  \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{ \FormulaRefAuto{ \{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr) } } }
+  \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}}}
   \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) } }
 \end{tabproof}
 
@@ -431,7 +440,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \DeltaRow{Einstellige Prädikate}{P}%
 }%
 
-\FormulaThmDelta{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}%
+\FormulaThmDelta{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}%
 {%
 \DeltaRow{Mengen}{A\dsep x}% 
 \DeltaRow{Einstellige Prädikate}{P}%
@@ -452,7 +461,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
     \proofstep{1}{ x \in A }{ \rA }
     \proofstep{2}{ P(x) }{ \rA }
     \proofstep{3}{ B=\{x \in A \mid P(x)\} }{ \rA }
-    \proofstep{1,2}{ x \in \{x \in A \mid P(x)\} }{ \FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{1,2} }
+    \proofstep{1,2}{ x \in \{x \in A \mid P(x)\} }{ \FormulaRefAuto{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}{1,2} }
     \proofstep{1,2,3}{ x \in B }{ \rIE{3,4}}
 \end{tabproof}
 
@@ -506,7 +515,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
 \FormulaThmAuto{A=\{ x \in B \mid P(x) \}\vdash  A\subseteq B}
 \begin{tabproof}
   \proofstep{1}{A=\{ x \in B \mid P(x) \}}{\rA}
-  \proofstep{1}{\{ x \in B \mid P(x) \}\subseteq B}{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}{1}}
+  \proofstep{1}{\{x \in B \mid P(x)\}\subseteq B}{\FormulaRefAuto{\{ x \in A \mid P(x) \} \subseteq A}{1}}
 \proofstep{1}{A\subseteq B}{\rIE{1,2}}
 \end{tabproof}
 
@@ -1552,6 +1561,19 @@ Wir bezeichnen mit \( I_A := \{ x \in A \mid \forall A (P(A) \rightarrow x \in A
 \begin{tabproof}
   \proofstep{}{ \forall x\;\bigl(x \in \bigcup A \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr) }{\FormulaRefAuto{\bigcup A := \iota C\Bigl(\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \land x \in B)\bigr)\Bigr)}}
   \proofstep{}{ x \in \bigcup A \;\leftrightarrow\;\exists B\,(B \in A \land x \in B) }{\rUE{1}}
+\end{tabproof}
+
+
+\FormulaThmDelta{B\in A\dsep x\in B\vdash x \in \bigcup A}%
+{%
+\DeltaRow{Mengen}{x\dsep A\dsep B}%
+}
+\begin{tabproof}
+  \proofstep{1}{ B\in A }{\rA}
+  \proofstep{2}{ x\in B }{\rA}
+  \proofstep{1,2}{ B\in A\land x\in B }{\rAI{1,2}}
+  \proofstep{1,2}{ \exists B\,B\in A\land x\in B }{\rEI{3}}
+  \proofstep{1,2}{ x \in \bigcup A }{\FormulaRefAuto{x \in \bigcup A \;\eqvdash\;\exists B\,(B \in A \,\land\, x \in B)}{4}}
 \end{tabproof}
 
 \FormulaDefAuto[Vereinigung zweier Mengen]{A \cup B := \bigcup \{A, B\}}
@@ -2951,7 +2973,7 @@ von geordneten Paaren aufgefasst werden.
   \proofstep{1,2}{F(x)\in B}{\rRE{\rUE{1},2}}
   \proofstep{1,2}{(x,F(x))\in A\times B}{\FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,3}}
   \proofstep{}{F(x)=F(x)}{\rII}
-  \proofstep{1,2}{(x,F(x))\in\{(x,y)\in A \times B\mid y=F(x)\}}{\FormulaRefAuto{x \in A, P(x)\vdash x \in \{x \in A \mid P(x)\}}{4,5}}
+  \proofstep{1,2}{(x,F(x))\in\{(x,y)\in A \times B\mid y=F(x)\}}{\FormulaRefAuto{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}{4,5}}
   \proofstep{1,2}{(x,F(x))\in\Graph(F)}{\rIE{\FormulaRefAuto{\Graph(F):=\{(x,y) \in A \times B \mid y=F(x)\}},6}}
   \proofstep{1,2}{\exists y\,(x,y)\in\Graph(F)}{\rEI{7}}
 \end{tabproof}
@@ -3714,7 +3736,7 @@ x\in A \dsep y\in A \dsep \iota_{A,B}(x)=\iota_{A,B}(y) \vdash x=y
   \proofstep{3}{\iota_{A,B}(y)=y}{%
     \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{3}}
   \proofstep{1,2,3}{x=y}{%
-    \FormulaRefAuto{a = b\dsep a = c\dsep b=d\vdash c = d}{1,4,5}}
+    \FormulaRefAuto{a=b\dsep a=c\dsep b=d\vdash c=d}{1,4,5}}
 \end{tabproof}
 
 \subsection{Die Einschränkung einer Funktion}
@@ -4810,7 +4832,7 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
             \end{aligned}}
            [\parbox[t]{3cm}{\FormulaRefAuto{X \in M \dsep Y \in M \dsep X \neq Y \vdash X \cap Y = \varnothing}}]
   \DeltaRow{\textbf{Neue Symbole}}{}
-  \DeltaRow{\makecell[l]{Paarweise disjunkte\\ nichtleere Familie}}{\DisjFam(M)}
+  \DeltaRow{\makecell[l]{Paarweise disjunkte\\ nichtleere Familie}}{}
 }
 
 \section{Äquivalente Formulierungen des Auswahlprinzips}
@@ -5080,7 +5102,7 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 \begin{tabproof}
   \proofstep{}{R_M=\{\, (X,a)\in M\times \bigcup M \mid a\in X \,\}}{\rA}
   \proofstep{}{R_M \subseteq M\times \bigcup M}{%
-    \FormulaRefAuto{\{\,z\in C \mid P(z)\,\}\subseteq C}{}}
+    \FormulaRefAuto{\{\,x\in A \mid P(x)\,\}\subseteq A}{}}
 \end{tabproof}
 
 % ------------------------------------------------------------
@@ -5095,14 +5117,14 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 \begin{tabproof}
   \proofstep{1}{(X,a)\in R_M}{\rA}
   \proofstep{1}{(X,a)\in M\times \bigcup M \land a\in X}{%
-    \FormulaRefAuto{z\in \{\,t\in C \mid P(t)\,\} \vdash z\in C \land P(z)}{1}}
+    \FormulaRefAuto{x \in \{x \in A \mid P(x)\} \eqvdash x \in A \land P(x)}{1}}
   \proofstep{1}{(X,a)\in M\times \bigcup M}{\rAEa{2}}
   \proofstep{1}{a\in X}{\rAEb{2}}
   \proofstep{1}{X\in M \land a\in \bigcup M}{%
-    \FormulaRefAuto{(x,y)\in A\times B \vdash x\in A \land y\in B}{3}}
+    \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{3}}
   \proofstep{1}{X\in M}{\rAEa{5}}
   \proofstep{1}{a\in \bigcup M}{\rAEb{5}}
-  \proofstep{1}{X\in M \land a\in \bigcup M \land a\in X}{\rAI{\rAI{6,7},4}}
+  \proofstep{1}{X\in M \land a\in \bigcup M \land a\in X}{\FormulaRefAuto{P\dsep Q\dsep R\vdash P\land Q\land R}{6,7,4}}
 \end{tabproof}
 
 % ------------------------------------------------------------
@@ -5118,35 +5140,64 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \proofstep{1}{X\in M}{\rA}
   \proofstep{2}{a\in X}{\rA}
   \proofstep{1,2}{a\in \bigcup M}{%
-    \FormulaRefAuto{X\in M \dsep a\in X \vdash a\in \bigcup M}{1,2}}
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,2}}
   \proofstep{1,3}{(X,a)\in M\times \bigcup M}{%
-    \FormulaRefAuto{x\in A \dsep y\in B \vdash (x,y)\in A\times B}{1,3}}
+    \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{1,3}}
   \proofstep{1,2,4}{(X,a)\in R_M}{%
-    \FormulaRefAuto{x\in A \dsep P(x) \vdash x\in \{\,t\in A \mid P(t)\,\}}{4,2}}
+    \FormulaRefAuto{x\in A \dsep P(x) \vdash x\in \{\,x\in A \mid P(x)\,\}}{4,2}}
 \end{tabproof}
 
-% ------------------------------------------------------------
-% 4) Lemma: DisjFam(M) liefert Totalität von R_M (also: TotRel)
-% ------------------------------------------------------------
-\FormulaThmDelta
-{\DisjFam(M)\vdash \TotRel{R_M,M,\bigcup M}}
-{
+% ============================================================
+% (1) Totalität von R_M (als eigenes Lemma)
+% ============================================================
+
+\FormulaThmDeltaK[Totalität von $R_M$]{%
+  X\in M \vdash \exists a\,\bigl((X,a)\in R_M\bigr)
+}{%
+  \DisjFam(M)\vdash X\in M \vdash \exists a\,\bigl((X,a)\in R_M\bigr)
+}{
   \DeltaRow{Mengen}{M \dsep X \dsep a}
-  \DeltaRow{Familie}{\DisjFam(M)}
+  \DeltaRow{\makecell[l]{Paarweise disjunkte\\ nichtleere Familie}}{\DisjFam(M)}
   \DeltaRow{Relation}{R_M}
 }
 \begin{tabproof}
-  \proofstep{1}{\DisjFam(M)}{\rA}
-  \proofstep{}{R_M \subseteq M\times \bigcup M}{\FormulaRefAuto{R_M \subseteq M\times \bigcup M}}
-  \proofstep{3}{X\in M}{\rA}
-  \proofstep{3}{X\neq\varnothing}{\FormulaRefAuto{X\in M \vdash X\neq\varnothing}{3}}
-  \proofstep{3}{\exists a\,(a\in X)}{\FormulaRefAuto{X\neq\varnothing \vdash \exists a\,(a\in X)}{4}}
-  \proofstep{6}{a\in X}{\rA}
-  \proofstep{3,6}{(X,a)\in R_M}{\FormulaRefAuto{X\in M \dsep a\in X \vdash (X,a)\in R_M}{3,6}}
-  \proofstep{3}{\exists a\in \bigcup M\,((X,a)\in R_M)}{\rEE{5,6,7}}
-  \proofstep{1}{X\in M \vdash \exists a\in \bigcup M\,((X,a)\in R_M)}{\rRI{3,8}}
-  \proofstep{1}{\TotRel{R_M,M,\bigcup M}}{\rAI{2,9}}
+  \proofstep{1}{X\in M}{\rA}
+
+  \proofstep{1}{X\neq\emptyset}{%
+    \FormulaRefAuto{X\in A \vdash A\neq\emptyset}{2}}
+
+  \proofstep{1}{\exists a\,(a\in X)}{%
+    \FormulaRefAuto{A\neq\emptyset \eqvdash \exists x\,(x\in A)}{2}}
+
+  \proofstep{4}{a\in X}{\rA}
+
+  \proofstep{1,4}{(X,a)\in R_M}{%
+    \FormulaRefAuto{X\in M \dsep a\in X \vdash (X,a)\in R_M}{1,4}}
+
+  \proofstep{1,4}{\exists a\,\bigl((X,a)\in R_M\bigr)}{\rEI{5}}
+
+  \proofstep{1}{\exists a\,\bigl((X,a)\in R_M\bigr)}{\rEE{3,4,6}}
+
+  \proofstep{}{X\in M \vdash \exists a\,\bigl((X,a)\in R_M\bigr)}{\rRI{1,7}}
 \end{tabproof}
+xxx
+
+% ============================================================
+% (2) TotRel(R_M,M,⋃M) als "Definition-Style"-Theorem (ohne tabproof)
+% ============================================================
+
+\FormulaThmDeltaK[Totale Relation]{\TotRel{R_M,M,\bigcup M}}{%
+  \DisjFam(M)\vdash \TotRel{R_M,M,\bigcup M}
+}{
+  \DeltaRow{Mengen}{M \dsep X \dsep a}
+  \DeltaRow{\makecell[l]{Paarweise disjunkte\\ nichtleere Familie}}{\DisjFam(M)}
+  \DeltaRow{Relation}{R_M}
+  \DeltaRow{\textbf{Begründung}}{}
+  \DeltaRow{Menge geordneter Paare}{R_M \subseteq M\times \bigcup M}
+    [\FormulaRefAuto{R_M \subseteq M\times \bigcup M}]
+  \DeltaRow{Totalität}{X\in M \vdash \exists a\,\bigl((X,a)\in R_M\bigr)}
+    [\FormulaRefAuto{X\in M \vdash \exists a\,\bigl((X,a)\in R_M\bigr)}]
+}{}
 
 % ------------------------------------------------------------
 % 5) Lemma: ACrel liefert eine Auswahlfunktion F auf M für R_M
@@ -5172,7 +5223,7 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \proofstep{5}{\forall X\in M\,(F(X)\in X)}{\rUI{\rRI{6,9}}}
   \proofstep{1,2}{\exists F\colon M\to \bigcup M\,\forall X\in M\,(F(X)\in X)}{\rEI{\rAI{10,\rAEa{5}}}}
 \end{tabproof}
-
+xxx
 % ------------------------------------------------------------
 % 6) Lemma: Disjunktheit macht die Wahl eindeutig (über L = Bild(F))
 % ------------------------------------------------------------
@@ -5371,7 +5422,7 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \proofstep{5}{G(b)=y}{%
     \rAEb{\FormulaRefAuto{z\in \{\,t\in B \mid P(t)\,\} \vdash z\in B \land P(z)}{8}}}
   \proofstep{5}{x=y}{\FormulaRefAuto{a=b \dsep a=c \vdash b=c}{9,10}}
-  \proofstep{5}{\bot}{\rNE{4,11}}
+  \proofstep{5}{\bot}{\rBI{4,11}}
   \proofstep{}{b\in \Fib(G,x)\cap \Fib(G,y) \rightarrow \bot}{\rRI{5,12}}
   \proofstep{}{ \Fib(G,x)\cap \Fib(G,y)=\varnothing}{%
     \FormulaRefAuto{\forall b\,(b\in X \rightarrow \bot)\eqvdash X=\varnothing}{13}}

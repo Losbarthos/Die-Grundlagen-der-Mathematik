@@ -1,0 +1,518 @@
+% tex/impl/formula-envs.tex
+\RequirePackage{amsthm}
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+
+% ------------------------------------------------------------
+% Formelregister / Formel-Stack (wie früher aus der alten main)
+% ------------------------------------------------------------
+\RequirePackage{longtable}
+
+\providecommand{\ShowFormulaSource}[1]{%
+  \begingroup\ttfamily\footnotesize\detokenize{#1}\endgroup
+}
+
+\ExplSyntaxOn
+\newif\ifnostack
+\nostackfalse
+
+\seq_new:N \g_mx_formula_stack_seq
+\bool_new:N \g_mx_formula_stack_enabled_bool
+\bool_gset_true:N \g_mx_formula_stack_enabled_bool
+
+\cs_new_protected:Npn \mx_push_formula:nnn #1#2#3
+  {
+    \bool_if:NT \g_mx_formula_stack_enabled_bool
+      {
+        \seq_gput_right:Nx \g_mx_formula_stack_seq
+          { {F}{\exp_not:n{#1}}{#2}{\exp_not:n{#3}} }
+      }
+  }
+
+\NewDocumentCommand{\MxPushFormula}{m m m}{ \mx_push_formula:nnn {#1}{#2}{#3} }
+
+
+
+
+\cs_new_protected:Npn \mx_print_formula_item_aux:nnnn #1#2#3#4
+  {
+    \str_case:nnF {#1}
+      {
+        {F}{ $ #4 $ & \ThmLookupEmitRef{#2}{#3} \\ }
+      }
+      { } % Default: nichts
+  }
+\cs_new_protected:Npn \mx_print_formula_item:n #1
+  { \mx_print_formula_item_aux:nnnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_item_src_aux:nnnn #1#2#3#4
+  {
+    \str_case:nnF {#1}
+      {
+        {F}{ $ #4 $ & \ShowFormulaSource{#4} \\ }
+      }
+      { }
+  }
+\cs_new_protected:Npn \mx_print_formula_item_src:n #1
+  { \mx_print_formula_item_src_aux:nnnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_plain_aux:nnnn #1#2#3#4
+  {
+    \str_case:nnF {#1}
+      {
+        {F}{ \ShowFormulaSource{#4}\\ }
+      }
+      { }
+  }
+\cs_new_protected:Npn \mx_print_formula_plain:n #1
+  { \mx_print_formula_plain_aux:nnnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_item_src_ref_aux:nnnn #1#2#3#4
+  {
+    \str_case:nnF {#1}
+      {
+        {F}{ \ShowFormulaSource{#4} & \ThmLookupEmitRef{#2}{#3} \\ }
+      }
+      { }
+  }
+\cs_new_protected:Npn \mx_print_formula_item_src_ref:n #1
+  { \mx_print_formula_item_src_ref_aux:nnnn #1 }
+
+\NewDocumentCommand{\ClearFormulaStack}{}{
+  \seq_gclear:N \g_mx_formula_stack_seq
+}
+
+\NewDocumentCommand{\PrintFormulaStack}{}{
+  \seq_if_empty:NF \g_mx_formula_stack_seq
+    {
+      \chapter*{Formelregister}%
+      \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+        \seq_map_inline:Nn \g_mx_formula_stack_seq
+          { \mx_print_formula_item:n {##1} }
+      \end{longtable}
+    }
+}
+
+\NewDocumentCommand{\PrintFormulaStackSources}{}{
+  \seq_if_empty:NF \g_mx_formula_stack_seq
+    {
+      \chapter*{Formelregister (mit Quelltext)}%
+      \begin{longtable}{@{}p{0.45\linewidth}@{\qquad}p{0.48\linewidth}@{}}
+        \seq_map_inline:Nn \g_mx_formula_stack_seq
+          { \mx_print_formula_item_src:n {##1} }
+      \end{longtable}
+    }
+}
+
+\NewDocumentCommand{\PrintFormulaStackSourcesPlain}{}{
+  \seq_if_empty:NF \g_mx_formula_stack_seq
+    {
+      \chapter*{Formelregister (Quelltext)}%
+      \begin{longtable}{@{}p{\linewidth}@{}}
+        \seq_map_inline:Nn \g_mx_formula_stack_seq
+          { \mx_print_formula_plain:n {##1} }
+      \end{longtable}
+    }
+}
+
+\NewDocumentCommand{\PrintFormulaStackSourcesPlainWithType}{}{
+  \seq_if_empty:NF \g_mx_formula_stack_seq
+    {
+      \chapter*{Formelregister (Quelltext mit Referenz)}%
+      \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+        \seq_map_inline:Nn \g_mx_formula_stack_seq
+          { \mx_print_formula_item_src_ref:n {##1} }
+      \end{longtable}
+    }
+}
+\ExplSyntaxOff
+
+
+% ------------------------------------------------------------
+% Remark/Hint/Example (werden im Skript via \begin{remark} ... genutzt)
+% ------------------------------------------------------------
+\theoremstyle{remark}
+\newtheorem*{remark}{Bemerkung}
+\newtheorem*{hint}{Hinweis}
+\newtheorem*{example}{Beispiel}
+\newtheorem*{notation*}{Notation}
+
+% (optional) danach wieder zurückschalten, falls du später andere Styles willst
+\theoremstyle{plain}
+
+
+% ------------------------------------------------------------
+% 1) Drei unabhängige Umgebungen / Zähler
+% ------------------------------------------------------------
+\newtheorem{formulaThm}{Theorem}
+\newtheorem{formulaDef}{Definition}
+\newtheorem{formulaAx}{Axiom}
+
+
+% ------------------------------------------------------------
+% 1b) Alias-Umgebungen für "klassische" \begin{definition} ...
+%     (nutzen die gleichen Zähler wie formulaDef/formulaThm/formulaAx)
+% ------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{definition}[formulaDef]{Definition}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[formulaThm]{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{axiom}[formulaAx]{Axiom}
+
+% ------------------------------------------------------------
+% 2) Reset-Logik:
+%    - bei Kapitelwechsel -> wieder .1
+%    - bei Sektionswechsel -> wieder ... .1
+% ------------------------------------------------------------
+\makeatletter
+\@addtoreset{formulaThm}{chapter}
+\@addtoreset{formulaDef}{chapter}
+\@addtoreset{formulaAx}{chapter}
+
+\@addtoreset{formulaThm}{section}
+\@addtoreset{formulaDef}{section}
+\@addtoreset{formulaAx}{section}
+\makeatother
+
+% ------------------------------------------------------------
+% 3) Nummerierungsdarstellung:
+%    - wenn section>0:  \thesection.<n>  -> 1.1.1
+%    - sonst:           \thechapter.<n>  -> 1.1
+%    (robust: falls keine chapters existieren -> fallback)
+% ------------------------------------------------------------
+\makeatletter
+\newcommand{\Formula@chap}{%
+  \ifcsname thechapter\endcsname
+    \thechapter
+  \else
+    \arabic{section}%
+  \fi
+}
+\makeatother
+
+% Band-Prefix (Standard 0, wird pro Band überschrieben)
+\providecommand{\FormulaBandID}{0}
+
+\renewcommand{\theformulaThm}{%
+  \FormulaBandID.\ifnum\value{section}>0 \thesection.\arabic{formulaThm}\else \csname Formula@chap\endcsname.\arabic{formulaThm}\fi
+}
+\renewcommand{\theformulaDef}{%
+  \FormulaBandID.\ifnum\value{section}>0 \thesection.\arabic{formulaDef}\else \csname Formula@chap\endcsname.\arabic{formulaDef}\fi
+}
+\renewcommand{\theformulaAx}{%
+  \FormulaBandID.\ifnum\value{section}>0 \thesection.\arabic{formulaAx}\else \csname Formula@chap\endcsname.\arabic{formulaAx}\fi
+}
+
+
+% ------------------------------------------------------------
+% Auto-Makros + Delta-Makros (mit Push via \MxPushFormula)
+% ------------------------------------------------------------
+
+% \FormulaThmAuto[<Titel>]{<Druckformel>}[<Keyformel>][<ID>]
+\NewDocumentCommand{\FormulaThmAuto}{o m o o}{%
+  % Keyformel bestimmen (Default: Druckformel)
+  \def\mxKey{#2}%
+  \IfNoValueF{#3}{%
+    \IfBlankTF{#3}{}{%
+      \def\mxKey{#3}%
+    }%
+  }%
+
+  % Umgebung starten (Titel optional) + Label erst JETZT bilden
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaThm}%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \label{\mxLbl}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{\mxKey}%
+    }
+    {%
+      \begin{formulaThm}[#1]%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \label{\mxLbl}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{\mxKey}{#1}%
+    }%
+
+  % optional: ID registrieren
+  \IfNoValueF{#4}{%
+    \IfBlankTF{#4}{}{%
+      \ThmLookupRegisterId{#4}{theorem}{\mxLbl}%
+    }%
+  }%
+
+  % Stack
+  \MxPushFormula{theorem}{\mxLbl}{#2}%
+
+  \[
+    #2
+  \]
+  \end{formulaThm}%
+}
+
+
+
+
+
+\NewDocumentCommand{\FormulaDefAuto}{o m}{%
+  \IfNoValueTF{#1}
+    {\begin{formulaDef}\label{def:auto:\theformulaDef}%
+      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}%
+    }
+    {\begin{formulaDef}[#1]\label{def:auto:\theformulaDef}%
+      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}{#1}%
+    }%
+  \MxPushFormula{definition}{def:auto:\theformulaDef}{#2}%
+  \[
+    #2
+  \]
+  \end{formulaDef}%
+}
+
+\NewDocumentCommand{\FormulaAxiomAuto}{o m}{%
+  \IfNoValueTF{#1}
+    {\begin{formulaAx}\label{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}%
+    }
+    {\begin{formulaAx}[#1]\label{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}{#1}%
+    }%
+  \MxPushFormula{axiom}{ax:auto:\theformulaAx}{#2}%
+  \[
+    #2
+  \]
+  \end{formulaAx}%
+}
+
+% -------------------------
+% Definition: Delta
+% -------------------------
+\NewDocumentCommand{\FormulaDefDelta}{o m +G{}}{%
+  \IfNoValueTF{#1}
+    {\begin{formulaDef}\label{def:auto:\theformulaDef}%
+      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}%
+    }
+    {\begin{formulaDef}[#1]\label{def:auto:\theformulaDef}%
+      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}{#1}%
+    }%
+  \MxPushFormula{definition}{def:auto:\theformulaDef}{#2}%
+  \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
+  \[
+    #2
+  \]%
+  \end{formulaDef}%
+}
+
+% -------------------------
+% Theorem: Delta
+% -------------------------
+\NewDocumentCommand{\FormulaThmDelta}{o m +G{}}{%
+  \IfNoValueTF{#1}
+    {\begin{formulaThm}\label{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}%
+    }
+    {\begin{formulaThm}[#1]\label{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}{#1}%
+    }%
+  \MxPushFormula{theorem}{thm:auto:\theformulaThm}{#2}%
+  \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
+  \[
+    #2
+  \]%
+  \end{formulaThm}%
+}
+
+% -------------------------
+% Axiom: Delta
+% -------------------------
+\NewDocumentCommand{\FormulaAxiomDelta}{o m +m}{%
+  \IfNoValueTF{#1}
+    {\begin{formulaAx}\label{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}%
+    }
+    {\begin{formulaAx}[#1]\label{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}{#1}%
+    }%
+  \MxPushFormula{axiom}{ax:auto:\theformulaAx}{#2}%
+  \DeltaBlockFromRows{#3}%
+  \[
+    #2
+  \]%
+  \end{formulaAx}%
+}
+
+% ------------------------------------------------------------
+% DeltaK: Definition
+% #1 optionaler Titel
+% #2 sichtbare Formel (Ausgabe)
+% #3 Name/ID (zusätzlich referenzierbar)
+% #4 DeltaRows
+% ------------------------------------------------------------
+\NewDocumentCommand{\FormulaDefDeltaK}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaDef}\label{def:auto:\theformulaDef}%
+        % 1) per sichtbarer Formel referenzierbar
+        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}%
+        % (optional) auch als Struktur unter #3
+        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#3}%
+    }{%
+      \begin{formulaDef}[#1]\label{def:auto:\theformulaDef}%
+        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}{#1}%
+        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#3}{#1}%
+    }%
+  % 2) per ID/Name referenzierbar (das ist entscheidend für "Funktion")
+  \ThmLookupRegisterId{#3}{definition}{def:auto:\theformulaDef}%
+
+  % Stack: sinnvollerweise die sichtbare Formel pushen
+  \MxPushFormula{definition}{def:auto:\theformulaDef}{#2}%
+
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \[
+    #2
+  \]%
+  \end{formulaDef}%
+}
+
+
+% -------------------------
+% Theorem: Delta + Kontext (K)
+% #1 optionaler Titel, #2 Formel, #3 Kontext-Überschrift, #4 DeltaRows
+% -------------------------
+% #1 optionaler Titel (für die Theorem-Überschrift)
+% #2 sichtbare Formel (wird gesetzt)
+% #3 Key-Formel (wird NUR registriert / für Referenzen benutzt, NICHT gesetzt)
+% #4 Delta-Block (Rows)
+
+\NewDocumentCommand{\FormulaThmDeltaK}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaThm}\label{thm:auto:\theformulaThm}%
+      % Struktur: sichtbare Formel (#2)
+      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}%
+    }{%
+      \begin{formulaThm}[#1]\label{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}{#1}%
+    }%
+
+  % ID: Name (#3)
+  \ThmLookupRegisterId{#3}{theorem}{thm:auto:\theformulaThm}%
+
+  % Stack: die sichtbare Formel (#2)
+  \MxPushFormula{theorem}{thm:auto:\theformulaThm}{#2}%
+
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \[
+    #2
+  \]%
+  \end{formulaThm}%
+}
+
+
+
+% ------------------------------------------------------------
+% DeltaK: Axiom
+% #1 optionaler Titel
+% #2 sichtbare Formel (Ausgabe)
+% #3 Key-Formel (nur für Registry/Referenzen, keine Ausgabe)
+% #4 DeltaRows
+% ------------------------------------------------------------
+\NewDocumentCommand{\FormulaAxiomDeltaK}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaAx}\label{ax:auto:\theformulaAx}%
+      % Struktur: sichtbare Formel (#2)
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}%
+    }{%
+      \begin{formulaAx}[#1]\label{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}{#1}%
+    }%
+
+  % ID: Name (#3)
+  \ThmLookupRegisterId{#3}{axiom}{ax:auto:\theformulaAx}%
+
+  % Stack: sichtbare Formel (#2)
+  \MxPushFormula{axiom}{ax:auto:\theformulaAx}{#2}%
+
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \[
+    #2
+  \]%
+  \end{formulaAx}%
+}
+
+
+
+
+
+\ExplSyntaxOn
+\ProvideDocumentCommand{\FormulaRefAuto}{s O{} m o g}{%
+  % #1 = Stern
+  % #2 = opts (vor der Formel)
+  % #3 = query (Formel oder ID)
+  % #4 = shorthand nach der Formel in [...] (ax|def|thm)
+  % #5 = (optional) altes Dummy-Argument in {...} -> wird ignoriert
+
+  \tl_set:Nn \l_tmpa_tl {#2}
+
+  \IfNoValueF{#4}{
+    \str_case:nn {#4}{
+      {ax}  { \tl_put_right:Nn \l_tmpa_tl { env=axiom } }
+      {def} { \tl_put_right:Nn \l_tmpa_tl { env=definition } }
+      {thm} { \tl_put_right:Nn \l_tmpa_tl { env=theorem } }
+    }{}
+  }
+
+  % ID-Shortcut: reine Tokens ohne Backslash/Leerzeichen
+  \regex_match:nnTF { \A [A-Za-z0-9:_\-]+ \Z } {#3}
+    {
+      \int_compare:nTF { \tl_count:n {#3} > 1 }
+        { \ThmRefById{#3} }
+        {
+          \IfBooleanTF{#1}
+            { \ThmRefByStructure*[\tl_use:N \l_tmpa_tl]{#3} }
+            { \ThmRefByStructure [\tl_use:N \l_tmpa_tl]{#3} }
+        }
+    }
+    {
+      \IfBooleanTF{#1}
+        { \ThmRefByStructure*[\tl_use:N \l_tmpa_tl]{#3} }
+        { \ThmRefByStructure [\tl_use:N \l_tmpa_tl]{#3} }
+    }
+}
+\ExplSyntaxOff
+
+
+\input{tex/impl/delta-context.tex}
+
+
+% --- PATCH: erlaubt auch \FormulaThmAuto{Formel}[Titel] ---
+\makeatletter
+
+\let\FormulaThmAuto@orig\FormulaThmAuto
+
+% Wenn direkt ein [ kommt: Originalverhalten (Titel zuerst)
+\renewcommand{\FormulaThmAuto}{%
+  \@ifnextchar[{\FormulaThmAuto@orig}{\FormulaThmAuto@formulafirst}%
+}
+
+% Fall: zuerst {Formel}, danach optional [Titel]
+\def\FormulaThmAuto@formulafirst#1{%
+  \@ifnextchar[{\FormulaThmAuto@withtitle{#1}}{\FormulaThmAuto@orig{#1}}%
+}
+
+% WICHTIG: Titel wird als delimited Argument [..] gelesen
+\def\FormulaThmAuto@withtitle#1[#2]{%
+  \FormulaThmAuto@orig[#2]{#1}%
+}
+
+\makeatother
+% --- END PATCH ---

@@ -1,0 +1,1393 @@
+% main.tex (optimiert für schnelleres Kompilieren)
+\documentclass{book}
+\usepackage[T1]{fontenc} % <— ergänzen
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+
+% --- Packages ---
+\usepackage{subfiles}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % bessere Randprotrusion in Mathe
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{enumitem}
+\usepackage{thmtools}
+\usepackage{etoolbox}
+\usepackage{longtable}
+\usepackage{xparse}       % für NewDocumentCommand
+\usepackage{imakeidx}
+\usepackage{bussproofs}
+\usepackage{multirow}
+\usepackage{makecell}   % für \makecell
+\usepackage[nameinlink,capitalise]{cleveref}
+\usepackage{array} % <- nötig für >{$}l<{$} in longtable
+
+% Unterlaufende Boxen (h/v) NICHT melden
+\hbadness=10000   % suppress "Underfull \hbox (badness 10000)"
+\vbadness=10000   % suppress "Underfull \vbox ..."
+
+\hfuzz=0pt         % Toleranz für Overfull hbox (z. B. 0.5pt, 1pt, …)
+\overfullrule=0pt  % schwarzen Balken am Rand ausblenden
+
+% --- Δ-Zeilen global puffern + ausgeben ---
+\ExplSyntaxOn
+\tl_new:N \g_mx_delta_rows_tl
+\cs_new_protected:Npn \mx_set_delta_rows:n #1 { \tl_gset:Nn \g_mx_delta_rows_tl {#1} }
+\cs_new_protected:Npn \mx_clear_delta_rows: { \tl_gclear:N \g_mx_delta_rows_tl }
+\newcommand{\PrintDeltaRows}{%
+  \tl_if_empty:NF \g_mx_delta_rows_tl
+    {%
+      \DeltaBlockFromRows{\g_mx_delta_rows_tl}%
+      \mx_clear_delta_rows:%
+    }%
+}
+\ExplSyntaxOff
+
+
+\MakeAutoQuote{„}{“}
+\hypersetup{
+  bookmarksopen=false,
+  bookmarksnumbered=true
+}
+
+% Optionaler Turbo-Draft-Schalter (keine Syntaxänderung an deinem Dokument notwendig)
+\newif\iffastcompile
+% \fastcompiletrue % <- bei Bedarf für schnelle Drafts aktivieren
+\iffastcompile
+  \usepackage[draft]{hyperref}
+  \microtypesetup{activate=false}
+\fi
+
+\input{commands.tex}
+
+% -------------------------------
+% Datei-Zähler und Theorem-Zähler
+% -------------------------------
+\newcounter{file}
+
+\declaretheoremstyle[ headformat=\NAME\ \NUMBER\ \NOTE, % ← KEIN \\ mehr hier 
+postheadspace=\newline, % ← sauberer Zeilenumbruch nach dem Kopf 
+headpunct={}, 
+headfont=\bfseries, 
+bodyfont=\normalfont, 
+spaceabove=\topsep, 
+spacebelow=\topsep 
+]{mxplain}
+
+% Zähler wie zuvor über 'file': ergibt Nummern "file.<laufend>"
+\declaretheorem[name=Theorem,   style=mxplain, numberwithin=file]{theorem}
+\declaretheorem[name=Definition,style=mxplain, numberwithin=file]{definition}
+\declaretheorem[name=Axiom,     style=mxplain, numberwithin=file]{axiom}
+
+% Weitere Umgebungen (mit gleichem Stil/Nummerierung):
+\declaretheorem[name=Korollar,  style=mxplain, sibling=theorem]{corollary}
+\declaretheorem[name=Lemma,     style=mxplain, sibling=theorem]{lemma}
+\declaretheorem[name=Hilfsdefinition, style=mxplain, sibling=theorem]{hilfsdefinition}
+\declaretheorem[name=Temporäre Definition, style=mxplain, sibling=theorem]{tempdefinition}
+
+% Unnummerierte Umgebungen
+\theoremstyle{remark}
+\newtheorem*{remark}{Bemerkung}
+\newtheorem*{bemerkung}{Bemerkung}
+\newtheorem*{example}{Beispiel}
+\newtheorem*{hint}{Hinweis}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{notation*}{Notation}
+
+% Kürzere Namen für Referenzen
+\crefname{theorem}{Thm}{Thms}
+\Crefname{theorem}{Thm}{Thms}
+
+\crefname{definition}{Def}{Defs}
+\Crefname{definition}{Def}{Defs}
+
+\crefname{axiom}{Ax}{Axs}
+\Crefname{axiom}{Ax}{Axs}
+
+
+\makeindex[name=satz,title=Sätze und Definitionen zu diesem Kapitel]
+
+
+
+
+% -------------------------------
+% Schneller Label-Sanitizer: Hash statt Regex (pdfLaTeX)
+% setzt wie gehabt \temp
+% -------------------------------
+\ExplSyntaxOn
+\cs_set_protected:Npn \sanitize #1
+  {
+    \tl_set:Nx \l__sanitize_work_tl { \tl_to_str:n {#1} }
+
+    % Alle Whitespaces raus
+    \regex_replace_all:nnN { \s+ } { } \l__sanitize_work_tl
+
+    % Ein-Zeichen-Spacing-Befehle: \, \; \: \!
+    \regex_replace_all:nnN { \\[,;:!] } { } \l__sanitize_work_tl
+
+    % Wort-Spacing-Befehle: \quad \qquad \enspace \thinspace \negthinspace
+    \regex_replace_all:nnN { \\(?:quad|qquad|enspace|thinspace|negthinspace)\b } { } \l__sanitize_work_tl
+
+    % Klammergrößen-Modifier und Varianten (inkl. l/r/gl/gr-Suffix)
+    \regex_replace_all:nnN { \\(?:left|right|middle)\b } { } \l__sanitize_work_tl
+    \regex_replace_all:nnN { \\(?:big|Big|bigg|Bigg)(?:l|r|gl|gr)?\b } { } \l__sanitize_work_tl
+
+    % md5-Label
+    \tl_set:Nx \temp { md\pdfmdfivesum { \l__sanitize_work_tl } }
+  }
+\ExplSyntaxOff
+
+\makeatletter
+\newcommand{\debugsanitize}[1]{%
+  \def\tempa{#1}%
+  \expandafter\sanitize\expandafter{\tempa}%
+  \typeout{Ergebnis von sanitize: [\temp]}%
+}
+\makeatother
+
+% ========= Stabile Auto-Labels via prop-Cache (ohne \csname-Tricks) =====
+\ExplSyntaxOn
+
+% Guarded: Cache/Temporaries nur einmal anlegen
+\prop_if_exist:NF \g__ref_cache_prop { \prop_new:N \g__ref_cache_prop }
+\tl_if_exist:NF   \l__ref_raw_tl     { \tl_new:N   \l__ref_raw_tl     }
+\tl_if_exist:NF   \l__ref_result_tl  { \tl_new:N   \l__ref_result_tl  }
+
+% --- Hilfsfunktion: ersten Treffer eines Präfixes (thm/def/ax) in allen Dateien
+\cs_new_protected:Npn \__ref_find:nn #1#2
+  {
+    \tl_clear:N \l__ref_result_tl
+    \int_step_inline:nn { \value{maxfile} }
+      {
+        \exp_args:Nx \cs_if_exist:cTF { r@#1##1_#2 }
+          { \tl_set:Nx \l__ref_result_tl { #1##1_#2 } \prg_break: }
+          { }
+        \prg_break_point:
+      }
+  }
+
+
+
+\ExplSyntaxOn
+% --- Key normalisieren: stringifizieren + Spaces trimmen
+\cs_new_protected:Npn \__normalize_key:Nn #1#2
+  {
+    \tl_set:Nx \l_tmpa_tl {#2}              % 1x expandieren (macht aus \lab -> Inhalt)
+    \tl_set:Nx #1 { \tl_to_str:V \l_tmpa_tl }% dann den expandierten Inhalt in String wandeln
+    \tl_trim_spaces:N #1
+  }
+
+% --- Cache: put-once mit normalisiertem Key
+\cs_new_protected:Npn \__cache_put_once_norm:nn #1#2
+  {
+    \tl_clear_new:N \l__ref_key_norm_tl
+    \__normalize_key:Nn \l__ref_key_norm_tl {#1}
+    \prop_if_in:NVF \g__ref_cache_prop \l__ref_key_norm_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l__ref_key_norm_tl {#2} }
+  }
+
+% --- Formel-Stack: alle Formeln sammeln und später ausgeben ---
+
+\newif\ifnostack      % globaler Schalter
+\nostackfalse         % Standard: sammeln
+
+% Sequenz für Einträge:
+%  - {F}{<Label>}{<Formel>}
+%  - {H}{<Level-Text>}{<Überschrift>}
+\seq_new:N \g_mx_formula_stack_seq
+
+% HIER ÄNDERN:
+\cs_set_protected:Npn \mx_push_heading:nn #1#2
+  {
+    \ifnostack\else
+      % 'x' statt 'n': #2 wird einmal expandiert
+      \seq_gput_right:Nx \g_mx_formula_stack_seq { {H}{#1}{#2} }
+    \fi
+  }
+
+% (Formelteil bleibt wie gehabt)
+\cs_new_protected:Npn \mx_push_formula:nn #1#2
+  {
+    \ifnostack\else
+      \tl_set:Nx \l_tmpa_tl {#1}
+      \seq_gput_right:Nn \g_mx_formula_stack_seq { {F}{\l_tmpa_tl}{#2} }
+    \fi
+  }
+
+% ==== Überschriften-Hooks für das Formelregister (mit Stern-Unterstützung) ====
+\makeatletter
+\let\mx@oldpart\part
+\let\mx@oldchapter\chapter
+\let\mx@oldsection\section
+\let\mx@oldsubsection\subsection
+\let\mx@oldsubsubsection\subsubsection
+\let\mx@oldparagraph\paragraph
+
+% \part: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\part}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldpart*{#3}}{\mx@oldpart*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldpart{#3}}{\mx@oldpart[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thepart\space #3%
+    }%
+  }%
+}
+
+% \chapter: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\chapter}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldchapter*{#3}}{\mx@oldchapter*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldchapter{#3}}{\mx@oldchapter[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thechapter\space #3%
+    }%
+  }%
+}
+
+% \section: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\section}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsection*{#3}}{\mx@oldsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsection{#3}}{\mx@oldsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesection\space #3%
+    }%
+  }%
+}
+
+% \subsection: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\subsection}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsubsection*{#3}}{\mx@oldsubsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsubsection{#3}}{\mx@oldsubsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesubsection\space #3%
+    }%
+  }%
+}
+
+% optional: \subsubsection ebenfalls aufnehmen
+\RenewDocumentCommand{\subsubsection}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldsubsubsection*{#3}}{\mx@oldsubsubsection*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldsubsubsection{#3}}{\mx@oldsubsubsection[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \thesubsubsection\space #3%
+    }%
+  }%
+}
+
+% \paragraph: [*][Kurzform]{Titel}
+\RenewDocumentCommand{\paragraph}{s o m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}{\mx@oldparagraph*{#3}}{\mx@oldparagraph*[#2]{#3}}%
+  }{%
+    \IfNoValueTF{#2}{\mx@oldparagraph{#3}}{\mx@oldparagraph[#2]{#3}}%
+    \mx_push_heading:nn{}{%
+      \theparagraph\space #3%
+    }%
+  }%
+}
+
+\makeatother
+% ==== Ende Überschriften-Hooks ====
+
+% Eintrag ausgeben
+\cs_new_protected:Npn \mx_print_formula_item_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: links die Formel, rechts die Referenz
+        {F}{
+          $ #3 $ & \FormulaRefAuto{#3} \\
+        }
+        % Überschrift: fett, linksbündig in der ersten Spalte,
+        % zweite Spalte leer
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+  % --- Variante: mit Quelltext in der zweiten Spalte ---
+\cs_new_protected:Npn \mx_print_formula_item_src_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: links gesetzt, rechts LaTeX-Quelltext
+        {F}{
+          $ #3 $ & \ShowFormulaSource{#3} \\
+        }
+        % Überschrift: fett, zweite Spalte leer
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+  % --- Variante: NUR Quelltext (eine Spalte) ---
+\cs_new_protected:Npn \mx_print_formula_plain_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel: nur Quelltext
+        {F}{
+          \ShowFormulaSource{#3}\\
+        }
+        % Überschrift: fett, als Abschnittstrenner
+        {H}{
+          \textbf{#3}\\[0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+\cs_new_protected:Npn \mx_print_formula_plain:n #1
+  { \mx_print_formula_plain_aux:nnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_item_src:n #1
+  { \mx_print_formula_item_src_aux:nnn #1 }
+
+\cs_new_protected:Npn \mx_print_formula_item:n #1
+  { \mx_print_formula_item_aux:nnn #1 }
+
+% Formelregister am Ende ausgeben
+\NewDocumentCommand{\PrintFormulaStack}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister}%
+        \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item:n {##1} }
+        \end{longtable}
+      }
+  }
+
+  % Formelregister mit Quelltext in der zweiten Spalte
+\NewDocumentCommand{\PrintFormulaStackSources}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (mit Quelltext)}%
+        \begin{longtable}{@{}p{0.45\linewidth}@{\qquad}p{0.48\linewidth}@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item_src:n {##1} }
+        \end{longtable}
+      }
+  }
+
+% Stack manuell leeren (z.B. pro Band/Kapitel)
+\NewDocumentCommand{\ClearFormulaStack}{}{
+  \seq_gclear:N \g_mx_formula_stack_seq
+}
+
+% Formelregister NUR mit Quelltext (eine Spalte, gut kopierbar)
+\NewDocumentCommand{\PrintFormulaStackSourcesPlain}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (Quelltext)}%
+        \begin{longtable}{@{}p{\linewidth}@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_plain:n {##1} }
+        \end{longtable}
+      }
+  }
+
+% --- Neue Variante: Quelltext links, Referenz rechts ---
+\cs_new_protected:Npn \mx_print_formula_item_src_ref_aux:nnn #1#2#3
+  {
+    \str_case:nnF {#1}
+      {
+        % Formel-Eintrag: links Quelltext, rechts Referenz
+        {F}{
+          \ShowFormulaSource{#3} & \FormulaRefAuto{#3} \\
+        }
+        % Überschrift-Eintrag (H): Abschnittstrenner
+        {H}{
+          \textbf{#3} & \\
+          [0.6\baselineskip]
+        }
+      }
+      { } % Default: nichts
+  }
+
+\cs_new_protected:Npn \mx_print_formula_item_src_ref:n #1
+  { \mx_print_formula_item_src_ref_aux:nnn #1 }
+
+% Formelregister: Quelltext + Referenz (Typ steckt in der Referenz)
+\NewDocumentCommand{\PrintFormulaStackSourcesPlainWithType}{}
+  {
+    \seq_if_empty:NF \g_mx_formula_stack_seq
+      {
+        \chapter*{Formelregister (Quelltext mit Referenz)}%
+        \begin{longtable}{@{}p{0.75\linewidth}@{\qquad}l@{}}
+          \seq_map_inline:Nn \g_mx_formula_stack_seq
+            { \mx_print_formula_item_src_ref:n {##1} }
+        \end{longtable}
+      }
+  }
+
+
+
+% ====================== Theorem / Definition / Axiom =====================
+% ====================== Theorem / Definition / Axiom =====================
+
+% \FormulaThmAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaThmAuto}{ o m o o }
+  {
+    \sanitize{#2}
+    \edef\lab{\temp}
+    \edef\labFull{thm\arabic{file}_\lab}
+    \__cache_put_once_norm:nn { \lab } { \labFull }
+
+    % Alias-ID -> auf volles Label mappen (roher, getrimmter String)
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }%
+    }%
+
+    % Kopf starten (amsthm öffnet eine List-Umgebung)
+    \IfNoValueTF{#1}
+      {\begin{theorem}\label{\labFull}}
+      {\begin{theorem}[#1]\label{\labFull}}%
+
+    % Optionaler Vortext-/Δ-Block direkt nach dem Kopf
+    \IfNoValueF{#3}{#3}%
+
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFull}{#2}
+
+
+    % Display-Formel
+    \par\vspace{.2\baselineskip}
+    \[
+      #2
+    \]
+    \end{theorem}%
+  }
+
+% \FormulaDefAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaDefAuto}{ o m o o }
+  {
+    \sanitize{#2}
+    \edef\labD{\temp}
+    \edef\labFullD{def\arabic{file}_\labD}
+    \__cache_put_once_norm:nn { \labD } { \labFullD }
+
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }%
+    }%
+
+    \IfNoValueTF{#1}
+      {\begin{definition}\label{\labFullD}}
+      {\begin{definition}[#1]\label{\labFullD}}%
+
+    \IfNoValueF{#3}{#3}%
+
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFullD}{#2}
+
+    \par\vspace{.2\baselineskip}
+    \[
+      #2
+    \]
+    \end{definition}%
+  }
+
+% \FormulaAxiomAuto[<Titel>]{<Formel>}[<Vortext-/Δ-Block>][<Alias-ID>]
+\NewDocumentCommand{\FormulaAxiomAuto}{ o m o o }
+  {
+    \sanitize{#2}
+    \edef\labA{\temp}
+    \edef\labFullA{ax\arabic{file}_\labA}
+    \__cache_put_once_norm:nn { \labA } { \labFullA }
+
+    \IfNoValueF{#4}{%
+      \tl_set:Nx \l_tmpa_tl {#4}%
+      \tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }%
+    }%
+
+    \IfNoValueTF{#1}
+      {\begin{axiom}\label{\labFullA}}
+      {\begin{axiom}[#1]\label{\labFullA}}%
+
+    \IfNoValueF{#3}{#3}%
+
+    % NEU: Formel in den Stack schieben
+    \mx_push_formula:nn {\labFullA}{#2}
+
+    \par\vspace{.2\baselineskip}
+    \[
+      #2
+    \]
+    \end{axiom}%
+  }
+
+% --- Δ-Block Bausteine (lassen wie gehabt) ---
+\usepackage{varwidth}
+
+% Labels in Kapitälchen, konsistente Zeilenhöhe
+\newcommand{\DeltaLabelStyle}[1]{\textnormal{\scshape #1}}
+
+\newcommand{\dsep}{,\allowbreak\ } % wie gehabt
+
+% braucht expl3/xparse (hast du schon)
+\NewDocumentCommand{\DeltaRow}{ m m O{} }{%
+  \DeltaLabelStyle{#1}& $#2$%
+  \tl_if_blank:nTF {#3} { & } { & \axstrut #3 }%
+  \\[-2pt]%
+}
+
+% --- Δ-Block mit 3 Spalten ---
+\NewDocumentCommand{\DeltaBlockFromRows}{ m }{%
+  {\small
+    \setlength{\tabcolsep}{0pt}%
+    \renewcommand{\arraystretch}{1.05}%
+    \begin{varwidth}{\linewidth}
+      \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}%
+        #1%
+      \end{tabular}%
+    \end{varwidth}%
+  }%
+  \vspace{.3\baselineskip}%
+}
+
+% --- Hilfsbefehl: Formel-Quelltext hübsch in Schreibmaschine darstellen ---
+\newcommand{\ShowFormulaSource}[1]{%
+  \begingroup
+    \ttfamily\footnotesize
+    \detokenize{#1}%
+  \endgroup
+}
+
+
+% Kontext-Block für Kapitel/Sektion
+% Verwendung:
+%   \begin{DeltaContext}{Im Kapitel verwendete Symbole}
+%     \DeltaRow{Aussagevariablen}{P \dsep Q \dsep R \dsep P_1 \dsep P_2 \dsep P_3}
+%   \end{DeltaContext}
+
+\NewDocumentEnvironment{DeltaContext}{m +b}{%
+  \par\vspace{.75\baselineskip}%
+  \noindent
+  \begin{minipage}{\linewidth}
+    \hrule\vspace{.3\baselineskip}%
+    {\bfseries #1}\par
+    \vspace{.25\baselineskip}%
+    \DeltaBlockFromRows{#2}%
+    \vspace{.3\baselineskip}\hrule
+  \end{minipage}%
+  \par\vspace{.75\baselineskip}%
+}{}
+
+\newenvironment{RuleSchema}{\begin{samepage}}{\end{samepage}}
+
+
+% --- Δ direkt im Theorem, MIT Auto-Label + optionalem Alias ---
+\NewDocumentCommand{\FormulaThmDelta}{ o m +m o }{%
+  \sanitize{#2}%
+  \edef\lab{\temp}%
+  \edef\labFull{thm\arabic{file}_\lab}%
+  \__cache_put_once_norm:nn { \lab } { \labFull }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}%
+    \tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{theorem}\label{\labFull}}%
+    {\begin{theorem}[#1]\label{\labFull}}%
+  \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFull}{#2}
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{theorem}%
+}
+
+\NewDocumentCommand{\FormulaDefDelta}{ o m +m o }{%
+  \sanitize{#2}\edef\labD{\temp}\edef\labFullD{def\arabic{file}_\labD}%
+  \__cache_put_once_norm:nn { \labD } { \labFullD }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}\tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{definition}\label{\labFullD}}%
+    {\begin{definition}[#1]\label{\labFullD}}%
+  \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFullD}{#2}
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{definition}%
+}
+
+\NewDocumentCommand{\FormulaAxiomDelta}{ o m +m o }{%
+  \sanitize{#2}\edef\labA{\temp}\edef\labFullA{ax\arabic{file}_\labA}%
+  \__cache_put_once_norm:nn { \labA } { \labFullA }%
+  \IfNoValueF{#4}{%
+    \tl_set:Nx \l_tmpa_tl {#4}\tl_trim_spaces:N \l_tmpa_tl
+    \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+      { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }%
+  }%
+  \IfNoValueTF{#1}
+    {\begin{axiom}\label{\labFullA}}%
+    {\begin{axiom}[#1]\label{\labFullA}}%
+  \DeltaBlockFromRows{#3}%
+
+  % NEU: Formel in den Stack schieben
+  \mx_push_formula:nn {\labFullA}{#2}
+  {%
+    \abovedisplayskip=.6\baselineskip
+    \belowdisplayskip=.6\baselineskip
+    \abovedisplayshortskip=.4\baselineskip
+    \belowdisplayshortskip=.4\baselineskip
+    \[
+      #2
+    \]
+  }%
+  \end{axiom}%
+}
+
+
+\ExplSyntaxOn
+\bool_new:N \l__mx_ref_done_bool
+\cs_new_protected:Npn \__mx_print_ref:nn #1#2
+  {
+    \IfNoValueTF{#2}
+      { \mode_if_math:TF { \hyperref[#1]{\text{\cref*{#1}}} } { \hyperref[#1]{\cref*{#1}} } }
+      { \mode_if_math:TF { \hyperref[#1]{\text{\cref*{#1}(#2)}} } { \hyperref[#1]{\cref*{#1}(#2)} } }
+  }
+
+  \ExplSyntaxOn
+
+% Hilfsfunktion: wähle Label-Key (Hauptformel oder alternativer "geheimer" Key)
+\cs_new_protected:Npn \mx_pick_lab_from_main_or_alt:nnN #1#2#3
+  {
+    % #1 = md5(main), #2 = md5(alt), #3 -> tl var to receive chosen lab
+    \tl_clear_new:N \l__mx_normkey_tl
+    \__normalize_key:Nn \l__mx_normkey_tl { #1 }
+    \prop_if_in:NVTF \g__ref_cache_prop \l__mx_normkey_tl
+      { \tl_set:Nn #3 { #2 } } % main ist schon vergeben => nimm alt
+      { \tl_set:Nn #3 { #1 } } % sonst nimm main
+  }
+
+\ExplSyntaxOn
+% ---------- AutoK: [Titel]{Formel}{AltKey}[Vortext][Alias] ----------
+\NewDocumentCommand{\FormulaThmAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    % WICHTIG: K-Varianten labeln mit AltKey:
+    \edef\lab{\labAlt}
+    \edef\labFull{thm\arabic{file}_\lab}
+        % Neu: sowohl AltKey als auch Hauptformel in den Cache legen
+    \__cache_put_once_norm:nn { \lab }     { \labFull }
+    \__cache_put_once_norm:nn { \labMain } { \labFull }
+
+    % Alias (fakultativ) -> auf volles Label mappen
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }
+    }
+
+    % Umgebung ausgeben
+    \IfNoValueTF{#1}{\begin{theorem}\label{\labFull}}{\begin{theorem}[#1]\label{\labFull}}
+      \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFull}{#2}
+      
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{theorem}
+  }
+
+\NewDocumentCommand{\FormulaDefAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labD{\labAlt}
+    \edef\labFullD{def\arabic{file}_\labD}
+    \__cache_put_once_norm:nn { \labD }    { \labFullD }
+    \__cache_put_once_norm:nn { \labMain } { \labFullD }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }
+    }
+
+    \IfNoValueTF{#1}{\begin{definition}\label{\labFullD}}{\begin{definition}[#1]\label{\labFullD}}
+      \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullD}{#2}
+      
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{definition}
+  }
+
+\NewDocumentCommand{\FormulaAxiomAutoK}{ o m m o o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labA{\labAlt}
+    \edef\labFullA{ax\arabic{file}_\labA}
+        \__cache_put_once_norm:nn { \labA }    { \labFullA }
+    \__cache_put_once_norm:nn { \labMain } { \labFullA }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }
+    }
+
+    \IfNoValueTF{#1}{\begin{axiom}\label{\labFullA}}{\begin{axiom}[#1]\label{\labFullA}}
+      \IfNoValueF{#4}{#4}
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullA}{#2}
+      
+      \par\vspace{.2\baselineskip}
+      \[
+        #2
+      \]
+    \end{axiom}
+  }
+
+% ---------- DeltaK: [Titel]{Formel}{AltKey}{Δ-Zeilen}[Alias] ----------
+% --- Theorem (DeltaK) ---
+\NewDocumentCommand{\FormulaThmDeltaK}{ o m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\lab{\labAlt}
+    \edef\labFull{thm\arabic{file}_\lab}
+    \__cache_put_once_norm:nn { \lab }     { \labFull }
+    \__cache_put_once_norm:nn { \labMain } { \labFull }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFull } }
+    }
+
+    \IfNoValueTF{#1}
+      {\begin{theorem}\label{\labFull}}
+      {\begin{theorem}[#1]\label{\labFull}}
+      \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFull}{#2}
+      
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{theorem}
+  }
+
+% --- Definition (DeltaK) ---
+\NewDocumentCommand{\FormulaDefDeltaK}{ o m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labD{\labAlt}
+    \edef\labFullD{def\arabic{file}_\labD}
+    \__cache_put_once_norm:nn { \labD }    { \labFullD }
+    \__cache_put_once_norm:nn { \labMain } { \labFullD }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullD } }
+    }
+
+    \IfNoValueTF{#1}
+      {\begin{definition}\label{\labFullD}}
+      {\begin{definition}[#1]\label{\labFullD}}
+      \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullD}{#2}
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{definition}
+  }
+
+% --- Axiom (DeltaK) ---
+\NewDocumentCommand{\FormulaAxiomDeltaK}{ o m m +m o }
+  {
+    \sanitize{#2}\edef\labMain{\temp}
+    \sanitize{#3}\edef\labAlt{\temp}
+
+    \edef\labA{\labAlt}
+    \edef\labFullA{ax\arabic{file}_\labA}
+    \__cache_put_once_norm:nn { \labA }    { \labFullA }
+    \__cache_put_once_norm:nn { \labMain } { \labFullA }
+
+    \IfNoValueF{#5}{
+      \tl_set:Nx \l_tmpa_tl {#5}\tl_trim_spaces:N \l_tmpa_tl
+      \prop_if_in:NVF \g__ref_cache_prop \l_tmpa_tl
+        { \prop_gput:NVx \g__ref_cache_prop \l_tmpa_tl { \labFullA } }
+    }
+
+    \IfNoValueTF{#1}
+      {\begin{axiom}\label{\labFullA}}
+      {\begin{axiom}[#1]\label{\labFullA}}
+      \DeltaBlockFromRows{#4}%
+
+      % NEU: Formel in den Stack schieben
+      \mx_push_formula:nn {\labFullA}{#2}
+      
+      {%
+        \abovedisplayskip=.6\baselineskip
+        \belowdisplayskip=.6\baselineskip
+        \abovedisplayshortskip=.4\baselineskip
+        \belowdisplayshortskip=.4\baselineskip
+        \[
+          #2
+        \]
+      }
+    \end{axiom}
+  }
+\ExplSyntaxOff
+
+\NewDocumentCommand{\FormulaRefAuto}{m o g}
+  {
+    \bool_set_false:N \l__mx_ref_done_bool
+
+    % --- A) Alias-Lookup (roher String getrimmt) -------------------------
+    \tl_set:Nx \l__ref_alias_try_tl { \tl_to_str:n {#1} }
+    \tl_trim_spaces:N \l__ref_alias_try_tl
+    \prop_get:NVNT \g__ref_cache_prop \l__ref_alias_try_tl \l_tmpa_tl
+      {
+        \bool_set_true:N \l__mx_ref_done_bool
+        \__mx_print_ref:nn { \l_tmpa_tl } {#3}
+      }
+
+    % --- B) Hash der Formel IMMER bilden (für C und D nötig) -------------
+    \edef\tempa{\unexpanded{#1}}
+    \expandafter\sanitize\expandafter{\tempa}
+    \edef\lab{\temp} % md5-Hash der Formel ohne Spaces/Größenbefehle
+
+    % --- C) Expliziter Präfix? -------------------------------------------
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \IfNoValueF{#2}
+          {
+            \edef\labFull{#2_\lab}
+            \bool_set_true:N \l__mx_ref_done_bool
+            \__mx_print_ref:nn { \labFull } {#3}
+          }
+      }
+
+    % --- D) Cache via Hash (mit demselben Normalizer wie beim Anlegen) -----
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \tl_clear_new:N \l__ref_raw_tl
+        \__normalize_key:Nn \l__ref_raw_tl { \lab }
+        \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+          {
+            \bool_set_true:N \l__mx_ref_done_bool
+            \__mx_print_ref:nn { \l_tmpa_tl } {#3}
+          }
+      }
+
+    % --- E) Live-Suche thm -> def -> ax ---------------------------------
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \__ref_find:nn {thm}{\lab}
+        \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\lab} }
+        \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\lab} }
+        \tl_if_empty:NTF \l__ref_result_tl
+          { \text{[??]} }
+          {
+            \edef\labFull{\l__ref_result_tl}
+            \prop_if_in:NnF \g__ref_cache_prop { \lab }
+              { \prop_gput:Nnn \g__ref_cache_prop { \lab } { \labFull } }
+            \__mx_print_ref:nn { \labFull } {#3}
+          }
+      }
+  }
+\ExplSyntaxOff
+
+\ExplSyntaxOn
+\RenewDocumentCommand{\FormulaRefAuto}{m o g o}
+  {
+    \bool_set_false:N \l__mx_ref_done_bool
+
+    % A) Alias-String (roher Text) direkt im Cache?
+    \tl_set:Nx \l__ref_alias_try_tl { \tl_to_str:n {#1} }
+    \tl_trim_spaces:N \l__ref_alias_try_tl
+    \prop_get:NVNT \g__ref_cache_prop \l__ref_alias_try_tl \l_tmpa_tl
+      { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+
+    % B) Hashes vorbereiten: main (Formel) und optional alt (AltKey)
+    \edef\tempa{\unexpanded{#1}} \expandafter\sanitize\expandafter{\tempa}
+    \edef\labMain{\temp}
+    \tl_clear_new:N \l__mx_lab_alt_tl
+    \IfNoValueF{#4}{
+      \edef\tempa{\unexpanded{#4}} \expandafter\sanitize\expandafter{\tempa}
+      \tl_set:Nx \l__mx_lab_alt_tl { \temp }
+    }
+
+    % C) Expliziter Präfix? -> jetzt: ALT ZUERST, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \IfNoValueF{#2}{
+          % 1) AltKey + Präfix
+          \tl_if_empty:NF \l__mx_lab_alt_tl
+            {
+              \edef\labFullTry{\tl_to_str:n{#2}_\l__mx_lab_alt_tl}
+              \exp_args:Nx \cs_if_exist:cT { r@\labFullTry }
+                { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \labFullTry } {#3} }
+            }
+          % 2) Main + Präfix (nur wenn noch nichts gefunden)
+          \bool_if:NF \l__mx_ref_done_bool
+            {
+              \edef\labFullTry{\tl_to_str:n{#2}_\labMain}
+              \exp_args:Nx \cs_if_exist:cT { r@\labFullTry }
+                { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \labFullTry } {#3} }
+            }
+        }
+      }
+
+    % D) Cache-Lookup: ALT zuerst, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        \tl_clear_new:N \l__ref_raw_tl
+        % 1) AltKey
+        \tl_if_empty:NF \l__mx_lab_alt_tl
+          {
+            \__normalize_key:Nn \l__ref_raw_tl { \l__mx_lab_alt_tl }
+            \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+              { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+          }
+        % 2) Main
+        \bool_if:NF \l__mx_ref_done_bool
+          {
+            \__normalize_key:Nn \l__ref_raw_tl { \labMain }
+            \prop_get:NVNT \g__ref_cache_prop \l__ref_raw_tl \l_tmpa_tl
+              { \bool_set_true:N \l__mx_ref_done_bool \__mx_print_ref:nn { \l_tmpa_tl } {#3} }
+          }
+      }
+
+    % E) Live-Suche: ALT zuerst, dann MAIN
+    \bool_if:NF \l__mx_ref_done_bool
+      {
+        % 1) AltKey-Suche
+        \tl_if_empty:NF \l__mx_lab_alt_tl
+          {
+            \__ref_find:nn {thm}{\l__mx_lab_alt_tl}
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\l__mx_lab_alt_tl} }
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\l__mx_lab_alt_tl} }
+          }
+        % 2) Falls nichts gefunden, Suche mit Main
+        \tl_if_empty:NT \l__ref_result_tl
+          {
+            \__ref_find:nn {thm}{\labMain}
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {def}{\labMain} }
+            \tl_if_empty:NT \l__ref_result_tl { \__ref_find:nn {ax}{\labMain} }
+          }
+
+        \tl_if_empty:NTF \l__ref_result_tl
+          { \text{[??]} }
+          {
+            \edef\labFull{\l__ref_result_tl}
+            % Merker: mappe den verwendeten Key auf das volle Label (hier reicht main)
+            \prop_if_in:NnF \g__ref_cache_prop { \labMain }
+              { \prop_gput:Nnn \g__ref_cache_prop { \labMain } { \labFull } }
+            \__mx_print_ref:nn { \labFull } {#3}
+          }
+      }
+  }
+  
+\ExplSyntaxOff
+
+% --- Feintuning (wie zuvor) ---
+\providecommand{\axstrut}{\rule{0pt}{1.25\baselineskip}}
+\providecommand{\axsep}{1pt}
+
+% 3-spaltige Tabelle: Titel | Referenz | Kommentar
+\NewDocumentEnvironment{AxTable}{}{% BEGIN
+  \par\small
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{1.12}%
+  \begin{tabular}{@{}l@{\qquad}l@{\qquad}l@{}}
+}{% END
+  \end{tabular}\par
+}
+
+% \AxLine{Titel}{Formel}[Kommentar rechts]
+\NewDocumentCommand{\AxLine}{ m m o }{%
+  \textbf{#1}: &
+  \axstrut \FormulaRefAuto{#2}[ax] &
+  \IfNoValueF{#3}{\axstrut \textnormal{\scriptsize(#3)}}\\[\axsep]
+}
+
+% =========================== Debug: nur Log-Ausgabe ======================
+\NewDocumentCommand{\debugrefcache}{m}{
+  \sanitize{#1}
+  \iow_log:x { ===~Cache-Abfrage~für~Key:~[\tl_to_str:N \temp] }
+  \prop_get:NnNT \g__ref_cache_prop {\temp} \l_tmpa_tl
+    { \iow_log:x { -->~Cache-Eintrag~gefunden:~[\tl_to_str:N \l_tmpa_tl] } }
+}
+
+\NewDocumentCommand{\dumprefcache}{}{
+  \iow_log:x { ===~Aktueller~Inhalt~von~g__ref_cache_prop~=== }
+  \prop_map_inline:Nn \g__ref_cache_prop { \iow_log:x { *~##1~=>~##2 } }
+  \iow_log:x { ===~Ende~Cache~=== }
+}
+
+\ExplSyntaxOff
+\makeatletter
+\newcounter{maxfile}
+\setcounter{maxfile}{4} % <- Anzahl deiner Dateien
+\makeatother
+
+% -------------------------------
+% Beweisumgebungen (seitenumbruchfähig)
+% -------------------------------
+\newcounter{proofstepnr}
+
+% Ersatz für tabproof: Beweis-Kopf selbst setzen, longtable auf Top-Level
+\newcommand{\ProofGap}{.5em} % zentrale Lücke (nach Bedarf anpassen)
+\newcolumntype{G}{@{\hspace{\ProofGap}}} % interkolumnarer Spacer
+
+\newcommand{\ProofRowStretch}{1.16}   % 1.00 = Standard; >1.0 = größer
+\newcommand{\ProofExtraRowHeight}{.3ex} % kleiner Zusatzpuffer pro Zeile
+
+\newenvironment{tabproof}{
+  \par\noindent\textit{Beweis.}\par\medskip
+  \setcounter{proofstepnr}{0}%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}l<{$}@{}}
+}{
+  \end{longtable}%
+  \endgroup
+  \par\hfill\qedsymbol\par
+}
+
+% Gesplittete Variante mit \proofpart ... \closeproofpart
+\newenvironment{tabproofsplit}
+  {\begin{proof}}
+  {\end{proof}}
+
+\newcommand{\proofpart}[1]{%
+  \par\medskip\noindent #1:\par%
+  \setcounter{proofstepnr}{0}%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}l<{$}@{}}
+}
+
+\newcommand{\closeproofpart}{%
+  \end{longtable}%
+  \endgroup
+}
+
+\NewDocumentCommand{\proofaxline}{ o m m }{%
+  % #1 = optionaler Kommentar (z.B. "aus Komposition")
+  % #2 = Titel-Text links
+  % #3 = Formel für \FormulaRefAuto (rechts, math)
+  % Spalte1 leer, Spalte2 leer:
+  & & %
+  % Spalte3: Titel (eigene Formatierung, NICHT die Mathe-Vorgabe der Spalte nutzen)
+  \multicolumn{1}{@{}@{}l@{}}{\textbf{#2}:}%
+  % Spalte4: Gap (leer)
+  & %
+  % Spalte5: Mathe-Referenz + optionaler Kommentar
+  \axstrut \FormulaRefAuto{#3}[ax]%
+  \IfNoValueF{#1}{\ \textnormal{\scriptsize(#1)}}%
+  \\[\axsep]%
+}
+
+\newcommand{\proofstep}[3]{%
+  \stepcounter{proofstepnr}%
+  #1 & (\arabic{proofstepnr}) & #2 & #3\\%
+}
+
+
+
+\newcommand{\proofstepstar}[3]{%
+  #1 & & #2 & #3\\%
+}
+
+% Case-Überschrift (hast du schon ähnlich)
+\newcommand{\proofcase}[2][]{%
+  & & \text{\bfseries Fall\if\relax#1\relax\else~#1\fi: } #2 & \\[-.35ex]%
+}
+
+% Case-Schlusszeile über alle Spalten 3–4 (kein multicolumn nötig)
+\newcommand{\proofcasesummary}[2][]{%
+  & & \text{\bfseries Schluss\if\relax#1\relax\else~ Fall~#1\fi: } #2 & \\[-.35ex]%
+}
+
+% (optional) dünne Trennlinie unter einem Fallblock
+\newcommand{\proofcaserule}{\cline{3-4}\noalign{\vspace{-0.3ex}}}
+
+\newcommand{\prooftext}[2][]{%
+  % Spalte 1 leer
+  %
+  &
+  % Spalten 3–4: linksbündig spannen
+  \multicolumn{3}{@{}l@{}@{}}{%
+    \text{#2\if\relax#1\relax\else\ \normalfont\scriptsize[#1]\fi}%
+  }\\[-.35ex]%
+}
+
+% --- Breitere Variante (wide) mit 6 Spalten: leer | (Nr) | Term1 | Op | Term2 | Rechtfertigung
+\newenvironment{tabproofwide}{
+  \par\noindent\textit{Beweis.}\par\medskip
+  \setcounter{proofstepnr}{0}%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  % Spalten: leer | (Nr) | Term1 | Op | Term2 | Rechtfertigung
+  %                Gap        Gap
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}c<{$} G >{$}l<{$} >{$}l<{$}@{}}
+}{
+  \end{longtable}%
+  \endgroup
+  \par\hfill\qedsymbol\par
+}
+
+
+\newenvironment{tabproofsplitwide}
+  {\begin{proof}}
+  {\end{proof}}
+
+\newcommand{\proofpartwide}[1]{%
+  \par\medskip\noindent #1:\par%
+  \setcounter{proofstepnr}{0}%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%  <-- korrigiert (nicht \tabcolumntsep)
+  \renewcommand{\arraystretch}{\ProofRowStretch}%
+  \setlength{\extrarowheight}{\ProofExtraRowHeight}%
+  %                Gap        Gap
+  \begin{longtable}{@{}l r >{$}l<{$} G >{$}c<{$} G >{$}l<{$} >{$}l<{$}@{}}
+}
+
+\newcommand{\closeproofpartwide}{%
+  \end{longtable}%
+  \endgroup
+}
+
+
+\NewDocumentCommand{\proofstepwide}{s o m m m m}{%
+  \IfBooleanTF{#1}{%
+    \IfNoValueTF{#2}
+      { & & #3 & #4 & #5 & #6\\}
+      { #2 & & #3 & #4 & #5 & #6\\}
+  }{%
+    \stepcounter{proofstepnr}%
+    \IfNoValueTF{#2}
+      { & (\arabic{proofstepnr}) & #3 & #4 & #5 & #6\\}
+      { #2 & (\arabic{proofstepnr}) & #3 & #4 & #5 & #6\\}
+  }%
+}
+
+\NewDocumentCommand{\proofstepwidestar}{o m m}{%
+  \stepcounter{proofstepnr}%
+  \IfNoValueTF{#1}
+    { & (\arabic{proofstepnr}) & \multicolumn{3}{>{$}l<{$}}{#2} & #3\\}
+    { #1 & (\arabic{proofstepnr}) & \multicolumn{3}{>{$}l<{$}}{#2} & #3\\}
+}
+
+% -------------------------------
+% Dokumentstart
+% -------------------------------
+\setcounter{file}{3}
+
+
+
+
+\begin{document}
+
+\title{}
+\author{}
+\date{}
+
+
+\part{Bd. 01 - Grundlagen der Logik: Eine Einführung in Theorie und Basiskonzepte}
+\subfile{B01} 
+\part{Bd. 02 - Theoreme der Logik: Vertiefte Beweise und Methoden}
+\subfile{B02} 
+\part{Bd. 03 - Mengenlehre}
+\subfile{B03} 
+
+
+
+
+\end{document}
+
+/* Beispiele 
+
+\FormulaThmAuto[Assoziativgesetz Oder-Verknüpfung]{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lor (Q \lor R)}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{P \lor Q}{\rOIa{2}}
+    \proofstep{2}{(P \lor Q) \lor R}{\rOIa{3}}
+    \proofstep{5}{Q \lor R}{\rA}
+    \proofstep{6}{Q}{\rA}
+    \proofstep{6}{P \lor Q}{\rOIb{6}}
+    \proofstep{6}{(P \lor Q) \lor R}{\rOIa{7}}
+    \proofstep{9}{R}{\rA}
+    \proofstep{9}{(P \lor Q) \lor R}{\rOIb{9}}
+    \proofstep{5}{(P \lor Q) \lor R}{\rOE{5,6,8,9,10}}
+    \proofstep{1}{(P \lor Q) \lor R}{\rOE{1,2,4,5,11}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P \lor Q) \lor R}{\rA}
+    \proofstep{2}{P \lor Q}{\rA}
+    \proofstep{3}{P}{\rA}
+    \proofstep{3}{P \lor (Q \lor R)}{\rOIa{3}}
+    \proofstep{5}{Q}{\rA}
+    \proofstep{5}{Q \lor R}{\rOIa{5}}
+    \proofstep{5}{P \lor (Q \lor R)}{\rOIb{6}}
+    \proofstep{2}{P \lor (Q \lor R)}{\rOE{2,3,4,5,7}}
+    \proofstep{9}{R}{\rA}
+    \proofstep{9}{Q \lor R}{\rOIb{9}}
+    \proofstep{9}{P \lor (Q \lor R)}{\rOIb{10}}
+    \proofstep{1}{P \lor (Q \lor R)}{\rOE{1,2,8,9,11}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{A \subseteq B \vdash A \cap C \subseteq B \cap C}
+\begin{tabproof}
+  \proofstep{1}{A \subseteq B}{\rA}
+  \proofstep{2}{x \in A \cap C}{\rA}
+  \proofstep{2}{x \in A}{\FormulaRefAuto{x \in A \cap B \vdash x \in A}{2}}
+  \proofstep{2}{x \in C}{\FormulaRefAuto{x \in A \cap B \vdash x \in B}{2}}
+  \proofstep{1,2}{x \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{1,3}}
+  \proofstep{1,2}{x \in B \cap C}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{5,4}}}
+  \proofstep{1}{A \cap C \subseteq B \cap C}{\FormulaRefAuto{A \subseteq B := \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,6}}}}
+\end{tabproof}
+
+
+\FormulaThmAuto{A \subseteq B \eqvdash A \cap B = A}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{A \subseteq B}{\rA}
+    \proofstepwidestar[]{A \cap B \subseteq A}{\FormulaRefAuto{A \cap B \subseteq A}}
+    \proofstepwide{A}{=}{A \cap A}{\FormulaRefAuto{A = A \cap A}}
+    \proofstepwide[1]{}{\subseteq}{A \cap B}{\FormulaRefAuto{A \subseteq B \vdash A \cap C \subseteq B \cap C}{1}}
+    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rChain{3,4}}
+    \proofstepwide[1]{A \cap B}{=}{A}{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{\rAI{2,5}}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{A \cap B = A}{\rA}
+    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rAEb{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{1}}}
+    \proofstepwide[1]{A \cap B}{\subseteq}{B}{\FormulaRefAuto{A \cap B \subseteq B}}
+    \proofstepwide[1]{A}{\subseteq}{B}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{2,3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{P(A)}{\rA}
+  \proofstepwidestar[2]{\forall C\, (P(C)\rightarrow x\in C)}{\rA}
+  \proofstepwidestar[]{\forall C\, (P(C)\rightarrow x\in C) \rightarrow x\in A}{\rRI{2,\FormulaRefAuto{P(a), \forall x\, (P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}}}
+  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{x\in I_A}{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D\, (P(D) \rightarrow x \in D) \}}{1}}}}
+  \proofstepwide[1]{}{\leftrightarrow}{x\in A \land \forall C\, (P(C)\rightarrow x\in C)}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rIE{\rUE{\DefBigcapLbAMidPLpARpRbMidSubB{}},4}}}
+  \proofstepwide[1]{}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{3}}
+  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\rChain{4,6}}
+\end{tabproofwide}
+
+\FormulaThmAuto{A \subseteq C,\, B \subseteq C \vdash A \cup B \subseteq C}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A \subseteq C}{\rA}
+  \proofstepwidestar[2]{B \subseteq C}{\rA}
+  \proofstepwide{z \in A \cup B}{\rightarrow}{z \in A \lor z \in B}%
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
+  \proofstepwide[1,2]{}{ \rightarrow}{z \in C}%
+    {\FormulaRefAuto{P \rightarrow Q,\, R \rightarrow Q,\, P \lor R \vdash Q}%
+      {\rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{1}},%
+       \rUE{\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{2}},3}}
+  \proofstepwide[1,2]{z \in A \cup B}{\rightarrow}{z \in C}%
+    {\rChain{3,4}}
+  \proofstepwidestar[1,2]{A \cup B \subseteq C}%
+    {\FormulaRefAuto{A \subseteq B := \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
+\end{tabproofwide}
+
+
+*/

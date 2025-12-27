@@ -1,0 +1,111 @@
+% tex/impl/thmlookup.tex  (stabiler Stand)
+
+\RequirePackage{xparse}
+\RequirePackage{luacode}
+
+% Lua-Modul laden
+\directlua{ thmlookup = dofile("tex/impl/thmlookup.lua") }
+
+% ---- Ausgabeformat für Referenzen ----
+\makeatletter
+\providecommand{\ThmLookupPrefix@theorem}{Th.}
+\providecommand{\ThmLookupPrefix@definition}{Def.}
+\providecommand{\ThmLookupPrefix@axiom}{Ax.}
+\providecommand{\ThmLookupPrefix@fallback}{Ref.}
+\makeatother
+
+% \ThmLookupEmitRef{<env>}{<label>} -> "Th. 1.1" (verlinkt via \ref)
+\NewDocumentCommand{\ThmLookupEmitRef}{m m}{%
+  \ifcsname ThmLookupPrefix@#1\endcsname
+    \csname ThmLookupPrefix@#1\endcsname
+  \else
+    \ThmLookupPrefix@fallback
+  \fi
+  ~\ref{#2}%
+}
+
+% \ThmLookupRegister{<label>}{<env>}{<number>}{<statement>}{<title>}
+\NewDocumentCommand{\ThmLookupRegister}{m m m m g}{%
+  \begingroup
+    \def\mxTitle{}%
+    \IfNoValueF{#5}{\def\mxTitle{#5}}%
+
+    % sanft expandieren (z.B. \mxKey), aber keine TeX-Logik in Lua
+    \edef\mxStmt{\unexpanded\expandafter{#4}}%
+    \csname protected@edef\endcsname\mxLabel{#1}%
+    \csname protected@edef\endcsname\mxEnv{#2}%
+    \csname protected@edef\endcsname\mxNum{#3}%
+
+    % INHALT detokenize'n (nicht den Makronamen)
+    \edef\mxLabelStr{\expandafter\detokenize\expandafter{\mxLabel}}%
+    \edef\mxEnvStr  {\expandafter\detokenize\expandafter{\mxEnv}}%
+    \edef\mxNumStr  {\expandafter\detokenize\expandafter{\mxNum}}%
+    \edef\mxStmtStr {\expandafter\detokenize\expandafter{\mxStmt}}%
+    \edef\mxTitleStr{\expandafter\detokenize\expandafter{\mxTitle}}%
+
+    \edef\mxLuaCode{%
+      thmlookup.register(
+        "\luaescapestring{\mxLabelStr}",
+        "\luaescapestring{\mxEnvStr}",
+        "\luaescapestring{\mxNumStr}",
+        "\luaescapestring{\mxStmtStr}",
+        "\luaescapestring{\mxTitleStr}"
+      )%
+    }%
+    \directlua{\mxLuaCode}%
+  \endgroup
+}
+
+% \ThmLookupRegisterId{<id>}{<env>}{<number>}
+\NewDocumentCommand{\ThmLookupRegisterId}{m m m}{%
+  \begingroup
+    \csname protected@edef\endcsname\mxId{#1}%
+    \csname protected@edef\endcsname\mxEnv{#2}%
+    \csname protected@edef\endcsname\mxNum{#3}%
+
+    \edef\mxIdStr {\expandafter\detokenize\expandafter{\mxId}}%
+    \edef\mxEnvStr{\expandafter\detokenize\expandafter{\mxEnv}}%
+    \edef\mxNumStr{\expandafter\detokenize\expandafter{\mxNum}}%
+
+    \edef\mxLuaCode{%
+      thmlookup.register_id(
+        "\luaescapestring{\mxIdStr}",
+        "\luaescapestring{\mxEnvStr}",
+        "\luaescapestring{\mxNumStr}"
+      )%
+    }%
+    \directlua{\mxLuaCode}%
+  \endgroup
+}
+
+% \ThmRefByStructure{<expr>}  bzw. \ThmRefByStructure*{<expr>}
+\NewDocumentCommand{\ThmRefByStructure}{s O{} m}{%
+  \begingroup
+    \def\mxStar{false}%
+    \IfBooleanT{#1}{\def\mxStar{true}}%
+
+    \edef\mxExpr{\unexpanded\expandafter{#3}}%
+    \edef\mxExprStr{\expandafter\detokenize\expandafter{\mxExpr}}%
+    \edef\mxOptsStr{\detokenize{#2}}%
+
+    \edef\mxLuaCode{%
+      thmlookup.ref_by_structure(
+        "\luaescapestring{\mxOptsStr}",
+        "\luaescapestring{\mxExprStr}",
+        \mxStar
+      )%
+    }%
+    \directlua{\mxLuaCode}%
+  \endgroup
+}
+
+\NewDocumentCommand{\ThmRefById}{m}{%
+  \directlua{
+    thmlookup.ref_by_id("\luaescapestring{\detokenize{#1}}")
+  }%
+}
+
+% IMPORTANT: nicht reset_files(), sonst gehen Vorwärtsreferenzen in B03 nie
+\AtBeginDocument{%
+  \directlua{ thmlookup.prepare_run() }%
+}
