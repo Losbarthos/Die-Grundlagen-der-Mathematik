@@ -99,13 +99,64 @@
   \endgroup
 }
 
+% -------------------------
+% Forward-Ref-Variante (auflösbar ab dem 2. Lauf via .aux)
+% -------------------------
+\makeatletter
+
+% Wird aus der .aux gelesen und definiert die gecachte Referenz
+\NewDocumentCommand{\mxFwdNeed}{m m m m}{%
+  \directlua{
+    thmlookup.define_ref_macro(
+      "\luaescapestring{\detokenize{#1}}",
+      "\luaescapestring{\detokenize{#2}}",
+      "\luaescapestring{\detokenize{#3}}",
+      #4
+    )
+  }%
+}
+
+% \ThmRefByStructureFwd{<expr>} bzw. \ThmRefByStructureFwd*{<expr>}
+\NewDocumentCommand{\ThmRefByStructureFwd}{s O{} m}{%
+  \begingroup
+    \def\mxStarNum{0}%
+    \IfBooleanT{#1}{\def\mxStarNum{1}}%
+
+    \edef\mxExpr{\unexpanded\expandafter{#3}}%
+    \edef\mxExprStr{\expandafter\detokenize\expandafter{\mxExpr}}%
+    \edef\mxOptsStr{\detokenize{#2}}%
+
+    % Query-Key in \mxFwdQKey schreiben lassen
+    \directlua{
+      local q = thmlookup.query_key("\luaescapestring{\mxOptsStr}", "\luaescapestring{\mxExprStr}")
+      tex.sprint("\\gdef\\mxFwdQKey{" .. q .. "}")
+    }%
+
+    % immer in .aux schreiben
+    \protected@write\@auxout{}{%
+      \string\mxFwdNeed{\mxFwdQKey}{\mxOptsStr}{\mxExprStr}{\mxStarNum}%
+    }%
+    
+    % nur falls noch nicht definiert: sofort versuchen
+    \expandafter\ifx\csname mxFwdRef@\mxFwdQKey\endcsname\relax
+      \mxFwdNeed{\mxFwdQKey}{\mxOptsStr}{\mxExprStr}{\mxStarNum}%
+    \fi
+    
+    \csname mxFwdRef@\mxFwdQKey\endcsname
+
+
+  \endgroup
+}
+
+\makeatother
+
+
 \NewDocumentCommand{\ThmRefById}{m}{%
   \directlua{
     thmlookup.ref_by_id("\luaescapestring{\detokenize{#1}}")
   }%
 }
 
-% IMPORTANT: nicht reset_files(), sonst gehen Vorwärtsreferenzen in B03 nie
-\AtBeginDocument{%
-  \directlua{ thmlookup.prepare_run() }%
-}
+% IMPORTANT: muss VOR dem Einlesen der .aux passieren, sonst bleiben Fwd-Refs "nicht gefunden"
+\directlua{ thmlookup.prepare_run() }
+

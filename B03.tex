@@ -8,6 +8,7 @@
     \usepackage{xr}
     \externaldocument{registry/_B01}
   \externaldocument{registry/_B02}
+  \externaldocument{registry/_B03}
 }{
    % Code für als Subfile eingebunden
 }
@@ -15,26 +16,28 @@
 \title{Bd. 03 - Mengenlehre}
 \author{Martin Kunze}
 \date{}
-\setcounter{file}{3}
-\renewcommand{\FormulaBandID}{3}
 
+% Standalone-B03: feste Registry/Debug-Dateien + Cross-Band-Load
+% Standalone-B03: feste Registry/Debug-Dateien + Cross-Band-Load
+\ifSubfilesClassLoaded{
+  \directlua{
+    thmlookup.registry_path = "registry/_B03.registry.tsv";
+    thmlookup.debug_path    = "registry/_B03.debug.log";
+    thmlookup.prepare_run();
+    thmlookup.load_registry_file("registry/_B01.registry.tsv");
+    thmlookup.load_registry_file("registry/_B02.registry.tsv");
+    texio.write_nl("thmlookup: loaded B02 registry")
+  }
+}{}
 
-% Band-3 Registry/Debug unter festem Namen schreiben
-\directlua{
-  thmlookup.registry_path = "_B03.registry.tsv"
-  thmlookup.debug_path    = "_B03.debug.log"
-}
-
-\AtBeginDocument{%
-\directlua{ thmlookup.load_registry_file("registry/_B02.registry.tsv") }%
-}
 
 \begin{document}
 
 \maketitle
 \tableofcontents
 %\listoftheorems
-
+\setcounter{file}{3}
+\renewcommand{\FormulaBandID}{3}
 
 
 \chapter{Einführung}
@@ -51,61 +54,61 @@ Nachdem wir die grundlegenden Begriffe und Notationen eingeführt haben, wenden 
   % — Extensionalität —
   \DeltaRow{Extensionalität}
            {\forall x\, (x \in A \leftrightarrow x \in B) \vdash A = B}
-           [\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \vdash A = B}]
+           [\FormulaRefAutoFwd{\forall x\, (x \in A \leftrightarrow x \in B) \vdash A = B}]
   %
   % — Leere Menge —
   \DeltaRow{Leere Menge}
            {\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}
-           [\FormulaRefAuto{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}]
+           [\FormulaRefAutoFwd{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)}]
   %
   % — Aussonderung (Schema) —
   \DeltaRow{Aussonderung}
            {\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}
-           [\FormulaRefAuto{\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}]
+           [\FormulaRefAutoFwd{\exists B\;\forall x\;\bigl(x \in B \;\leftrightarrow\; x \in A \,\land\, P(x)\bigr)}]
   %
   % — Paarmenge —
   \DeltaRow{Paarmenge}
            {\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr) }
-           [\FormulaRefAuto{\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr)}]
+           [\FormulaRefAutoFwd{\exists C\;\bigl(\forall x\,(x \in C \leftrightarrow x=A \lor x=B)\bigr)}]
   %
   % — Vereinigung —
   \DeltaRow{Vereinigung}
            {\exists C\;\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)}
-           [\FormulaRefAuto{\exists C\;\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)}]
+           [\FormulaRefAutoFwd{\exists C\;\forall x\;\bigl(x \in C \;\leftrightarrow\;\exists B\,(B \in A \,\land\, x \in B)\bigr)}]
   %
   % — Regularität (Fundierung) —
   \DeltaRow{Regularität}
            {A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset)}
-           [\FormulaRefAuto{A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset)}]
+           [\FormulaRefAutoFwd{A \neq \emptyset \vdash \exists x \in A \,(x \cap A = \emptyset)}]
   %
   % — Potenzmenge —
   \DeltaRow{Potenzmenge}
            {\exists B\forall x\bigl(x \in B \leftrightarrow x \subseteq A\bigr)}
-           [\FormulaRefAuto{\exists B\forall x\bigl(x \in B \leftrightarrow x \subseteq A\bigr)}]
+           [\FormulaRefAutoFwd{\exists B\forall x\bigl(x \in B \leftrightarrow x \subseteq A\bigr)}]
   %
   % — Ersetzung (Schema) —
   \DeltaRow{Ersetzung}
            {\exists B\;\forall y\;\bigl( y\in B\;\leftrightarrow\; \exists x\in A\;y=F(x) \bigr)}
-           [\FormulaRefAuto{\exists B\;\forall y\;\bigl( y\in B\;\leftrightarrow\; \exists x\in A\;y=F(x) \bigr)}]
+           [\FormulaRefAutoFwd{\exists B\;\forall y\;\bigl( y\in B\;\leftrightarrow\; \exists x\in A\;y=F(x) \bigr)}]
   %
   % — Auswahlaxiom (eine Form) —
   \DeltaRow{Auswahlaxiom}
            {\exists F\colon A \to B \, (G \circ F = \Id_A)}
-           [\FormulaRefAuto{\exists F\colon A \to B \, (G \circ F = \Id_B)}]
+           [\FormulaRefAutoFwd{\exists F\colon A \to B \, (G \circ F = \Id_A)}]
   %
   % — Unendlichkeit —
   \DeltaRow{Unendlichkeit}
            {\exists A\,\bigl(\emptyset\in A \land \forall x\in A\,(\,x\cup\{x\}\in A\,)\bigr)}
-           [\FormulaRefAuto{\exists A\,(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A))}]
+           [\FormulaRefAutoFwd{\exists A\,(\emptyset \in A \land \forall x \in A\,(x \cup \{x\} \in A))}]
 %
     \DeltaRow{\textbf{Neue Symbole}}{}
     \DeltaRow{Mengen}{A\dsep B\dsep C\dsep O\dsep x}
     %%begin novalidate
-    \DeltaRow{Leere Menge}{\emptyset}[\FormulaRefAuto{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}]
+    \DeltaRow{Leere Menge}{\emptyset}[\FormulaRefAutoFwd{\emptyset := \iota O\bigl(\forall x\,(x \not\in O)\bigr)}]
     %%end novalidate
-    \DeltaRow{Funktionen}{F\colon A\to B}[\FormulaRefAuto{Funktion}]
-    \DeltaRow{Surjektive Funktionen}{G\colon B\sur A}[\FormulaRefAuto{Surjektive Funktion}]
-    \DeltaRow{Identität}{\Id_A\colon A\to A}[\FormulaRefAuto{Identität}]
+    \DeltaRow{Funktionen}{F\colon A\to B}[\FormulaRefAutoFwd{Funktion}]
+    \DeltaRow{Surjektive Funktionen}{G\colon B\sur A}[\FormulaRefAutoFwd{Surjektive Funktion}]
+    \DeltaRow{Identität}{\Id_A\colon A\to A}[\FormulaRefAutoFwd{\Id_A\colon A\to A}]
     \DeltaRow{Element}{ }
 }
 

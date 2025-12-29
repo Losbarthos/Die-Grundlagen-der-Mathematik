@@ -349,7 +349,6 @@ local function alpha_normalize(statement)
   return table.concat(out, " ")
 end
 
--- ---------- registry ----------
 function M.register(label, env, number, statement, title)
   label = label or ""
   env = env or ""
@@ -360,41 +359,62 @@ function M.register(label, env, number, statement, title)
   local canon = alpha_normalize(statement)
   local key = make_key(canon)
 
-  local record = {
-    label = label, env = env, number = number,
-    key = key, canon = canon, title = title
-  }
+    local record = {
+      label = label, env = env, number = number,
+      key = key, canon = canon, title = title,
+      loaded = false,
+      self_loaded = false, -- <--- ergänzen
+    }
 
-  -- memory index + duplicate policy
+
   M.by_key[key] = M.by_key[key] or {}
 
-  if #M.by_key[key] > 0 then
-    -- idempotent (gleiches Label/Env) -> ok
-    for _, r in ipairs(M.by_key[key]) do
-      if r.label == label and r.env == env then
-        return
-      end
-    end
+  local line = table.concat({
+    escape_field(M.format_version),
+    escape_field(label),
+    escape_field(env),
+    escape_field(number),
+    escape_field(key),
+    escape_field(canon),
+    escape_field(title)
+  }, "\t")
 
-    -- NEU: wenn alle bisherigen Kandidaten nur aus einem VORLAUF geladen wurden,
-    -- dann sind das "stale" Einträge (Nummern haben sich evtl. verschoben).
-    -- Diese dürfen wir überschreiben, ohne einen Duplikat-Fehler zu werfen.
+  -- 1) gleicher (label,env) Eintrag vorhanden?
+  local existing_idx = nil
+  local existing_is_loaded = false
+  for idx, r in ipairs(M.by_key[key]) do
+    if r.label == label and r.env == env then
+      existing_idx = idx
+      existing_is_loaded = (r.loaded ~= false) -- nil zählt als loaded
+      break
+    end
+  end
+
+  if existing_idx then
+    if existing_is_loaded then
+      -- Vorlauf-Eintrag -> aktualisieren und erneut in Registry schreiben
+      M.by_key[key][existing_idx] = record
+      append_line(M.registry_path, line)
+    end
+    -- wenn schon in diesem Lauf registriert: idempotent
+    return
+  end
+
+  -- 2) gleicher Key, aber anderes label/env -> stale vs echtes Duplikat
+  if #M.by_key[key] > 0 then
     local has_fresh = false
     for _, r in ipairs(M.by_key[key]) do
-      -- Nur explizit loaded==false zählt als "fresh".
-      -- nil behandeln wir als "geladen/alt", damit alte Registry-Dateien nicht knallen.
       if r.loaded == false then
         has_fresh = true
         break
       end
     end
 
-
     if not has_fresh then
-      -- nur geladene Altlasten -> überschreiben
+      -- nur Altlasten -> überschreiben
       M.by_key[key] = {}
     else
-      -- echter Duplikat im selben Lauf -> wie bisher behandeln
+      -- echter Duplikat im selben Lauf
       write_debug_block(statement, canon, key, "duplicate-register", M.by_key[key])
 
       if M.duplicate_policy == "error" then
@@ -413,54 +433,57 @@ function M.register(label, env, number, statement, title)
           " (skipping new)")
         return
       end
-      -- policy == "keep" => weiter und zusätzlich eintragen
+      -- policy == "keep" => weiter
     end
   end
 
-
   table.insert(M.by_key[key], record)
-
-
-  -- file registry
-  local line = table.concat({
-    escape_field(M.format_version),
-    escape_field(label),
-    escape_field(env),
-    escape_field(number),
-    escape_field(key),
-    escape_field(canon),
-    escape_field(title)
-  }, "\t")
-
   append_line(M.registry_path, line)
 end
 
--- ---------- id registry ----------
+
+
+ -- ---------- id registry ----------
 function M.register_id(id, env, label)
   id = id or ""
   env = env or ""
   label = label or ""
-
   if id == "" then return end
 
-  -- einfache Duplicate-Policy: erster gewinnt, weitere werden gewarnt
-  if M.by_id[id] then
-    texio.write_nl("thmlookup WARNING: duplicate id '" .. id .. "' (keeping first)")
-    return
+  local existing = M.by_id[id]
+  if existing then
+    -- nur self-loaded Altlast darf überschrieben werden
+    if not (existing.loaded == true and existing.self_loaded == true) then
+      texio.write_nl("thmlookup WARNING: duplicate id '" .. id .. "' (keeping first)")
+      return
+    end
   end
 
-  M.by_id[id] = { env = env, label = label }
+  -- in-memory (fresh)
+  M.by_id[id] = { env = env, label = label, loaded = false, self_loaded = false }
+
+  -- persistieren in TSV
+  local line = table.concat({
+    "ID",
+    escape_field(id),
+    escape_field(env),
+    escape_field(label)
+  }, "\t")
+  append_line(M.registry_path, line)
 end
+
+
 
 function M.ref_by_id(id)
   id = id or ""
   local r = M.by_id[id]
-  if not r then
+  if (not r) or (r.self_loaded == true) then
     tex.sprint("\\textbf{[Theorem nicht gefunden]}")
     return
   end
   tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
 end
+
 
 -- ---------- opts parsing (MVP) ----------
 local function parse_opts(opts)
@@ -482,7 +505,18 @@ function M.ref_by_structure(opts, expr, starred)
   local canon = alpha_normalize(expr)
   local key = make_key(canon)
 
-  local candidates = M.by_key[key] or {}
+  local all = M.by_key[key] or {}
+  local candidates = {}
+  local blocked_forward = false
+    
+  for _, r in ipairs(all) do
+    if r.self_loaded == true then
+      blocked_forward = true
+    else
+      candidates[#candidates+1] = r
+    end
+  end
+
 
   -- optional env filter
   if o.env then
@@ -504,10 +538,11 @@ function M.ref_by_structure(opts, expr, starred)
 
 
   if #candidates == 0 then
-    write_debug_block(expr, canon, key, "none", {})
+    write_debug_block(expr, canon, key, blocked_forward and "blocked-forward" or "none", {})
     tex.sprint("\\textbf{[Theorem nicht gefunden]}")
     return
   end
+
 
   -- ambiguous
   write_debug_block(expr, canon, key, "ambiguous", candidates)
@@ -564,28 +599,45 @@ end
 function M.load_registry()
   local f = io.open(M.registry_path, "r")
   if not f then return end
+
   for line in f:lines() do
     if line ~= "" then
       local c = split_tsv(line)
-      -- format: ver, label, env, number, key, canon, title
-      local label  = unescape_field(c[2] or "")
-      local env    = unescape_field(c[3] or "")
-      local number = unescape_field(c[4] or "")
-      local key    = unescape_field(c[5] or "")
-      local canon  = unescape_field(c[6] or "")
-      local title  = unescape_field(c[7] or "")
-      if key ~= "" then
-        M.by_key[key] = M.by_key[key] or {}
-        table.insert(M.by_key[key], {
-          label = label, env = env, number = number,
-          key = key, canon = canon, title = title,
-          loaded = true,   -- <--- NEU
-        })
+      local tag = c[1] or ""
+
+      if tag == "ID" then
+        local id    = unescape_field(c[2] or "")
+        local env   = unescape_field(c[3] or "")
+        local label = unescape_field(c[4] or "")
+        if id ~= "" then
+          -- self-registry => self_loaded = true
+          M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = true }
+        end
+
+      else
+        local label  = unescape_field(c[2] or "")
+        local env    = unescape_field(c[3] or "")
+        local number = unescape_field(c[4] or "")
+        local key    = unescape_field(c[5] or "")
+        local canon  = unescape_field(c[6] or "")
+        local title  = unescape_field(c[7] or "")
+
+        if key ~= "" then
+          M.by_key[key] = M.by_key[key] or {}
+          table.insert(M.by_key[key], {
+            label = label, env = env, number = number,
+            key = key, canon = canon, title = title,
+            loaded = true,
+            self_loaded = true, -- self-registry
+          })
+        end
       end
     end
   end
+
   f:close()
 end
+
 
 -- Call at begin of document:
 -- 1) Load previous run registry into memory (enables forward refs)
@@ -605,41 +657,134 @@ end
 -- Lädt eine Registry-Datei (TSV) in den aktuellen Speicherindex (M.by_key)
 function M.load_registry_file(path)
   local f = io.open(path, "r")
-  if not f then return end
+  if not f then
+    texio.write_nl("thmlookup: cannot open registry file: " .. tostring(path))
+    return
+  end
+
   for line in f:lines() do
     if line ~= "" then
-      local cols = {}
-      local start = 1
-      while true do
-        local tab = line:find("\t", start, true)
-        if tab then
-          cols[#cols+1] = line:sub(start, tab-1)
-          start = tab + 1
-        else
-          cols[#cols+1] = line:sub(start)
-          break
-        end
-      end
+      local cols = split_tsv(line)
+      local tag = cols[1] or ""
 
-      -- erwartetes Format: ver, label, env, number, key, canon, title
-      local label  = unescape_field(cols[2] or "")
-      local env    = unescape_field(cols[3] or "")
-      local number = unescape_field(cols[4] or "")
-      local key    = unescape_field(cols[5] or "")
-      local canon  = unescape_field(cols[6] or "")
-      local title  = unescape_field(cols[7] or "")
-      if key ~= "" then
-        M.by_key[key] = M.by_key[key] or {}
-        table.insert(M.by_key[key], {
+      if tag == "ID" then
+        -- Format: ID, id, env, label
+        local id    = unescape_field(cols[2] or "")
+        local env   = unescape_field(cols[3] or "")
+        local label = unescape_field(cols[4] or "")
+
+        if id ~= "" then
+          local existing = M.by_id[id]
+          -- Cross-band darf self-loaded überschreiben; echte Konflikte nicht
+          if (not existing) or (existing.self_loaded == true) then
+            M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = false }
+          end
+        end
+
+      else
+        -- erwartetes Format: ver, label, env, number, key, canon, title
+        local label  = unescape_field(cols[2] or "")
+        local env    = unescape_field(cols[3] or "")
+        local number = unescape_field(cols[4] or "")
+        local key_in = unescape_field(cols[5] or "")
+        local canon  = unescape_field(cols[6] or "")
+        local title  = unescape_field(cols[7] or "")
+
+        local rec = {
           label = label, env = env, number = number,
-          key = key, canon = canon, title = title,
-          loaded = true,   -- <--- NEU
-        })
+          canon = canon, title = title,
+          loaded = true,
+          self_loaded = false,
+        }
+
+        -- 1) unter dem Key aus der TSV ablegen (falls vorhanden)
+        if key_in ~= "" then
+          M.by_key[key_in] = M.by_key[key_in] or {}
+          table.insert(M.by_key[key_in], rec)
+        end
+
+        -- 2) zusätzlich unter dem *aktuell* berechneten Key ablegen
+        local key_now = make_key(canon)
+        if key_now ~= "" and key_now ~= key_in then
+          M.by_key[key_now] = M.by_key[key_now] or {}
+          table.insert(M.by_key[key_now], rec)
+        end
       end
     end
   end
+
   f:close()
 end
+
+
+
+-- --------- forward-ref support via .aux ---------
+
+-- simple FNV-1a 32-bit hash (fallback if md5 is not available)
+local function fnv1a32_hex(s)
+  local h = 2166136261
+  for i = 1, #s do
+    h = h ~ s:byte(i)
+    h = (h * 16777619) % 2^32
+  end
+  return string.format("%08x", h)
+end
+
+local function stable_hash_hex(s)
+  local h = md5_hex(s)
+  if h then return h end
+  return fnv1a32_hex(s)
+end
+
+-- query key: depends on canonicalized expr + opts (so env-filter etc. is part of key)
+function M.query_key(opts, expr)
+  opts = opts or ""
+  expr = expr or ""
+  local canon = alpha_normalize(expr)
+  local blob = canon .. "\n" .. tostring(opts)
+  return "q" .. stable_hash_hex(blob)
+end
+
+-- defines TeX macro \mxFwdRef@<qkey> to the resolved reference (or "nicht gefunden")
+function M.define_ref_macro(qkey, opts, expr, starred)
+  qkey = qkey or ""
+  opts = opts or ""
+  expr = expr or ""
+  starred = (starred == 1) or (starred == true)
+
+  local o = parse_opts(opts)
+  local canon = alpha_normalize(expr)
+  local key = make_key(canon)
+
+  local candidates = M.by_key[key] or {}
+
+  -- optional env filter
+  if o.env then
+    local filtered = {}
+    for _, r in ipairs(candidates) do
+      if r.env == o.env then filtered[#filtered+1] = r end
+    end
+    candidates = filtered
+  end
+
+  local texcode
+  if #candidates == 1 then
+    local r = candidates[1]
+    texcode = "\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}"
+  elseif #candidates == 0 then
+    texcode = "\\textbf{[Theorem nicht gefunden]}"
+  else
+    -- ambiguous
+    if starred then
+      texcode = "\\textbf{[Mehrdeutig: bitte wählen]}"
+    else
+      texcode = "\\textbf{[Mehrdeutige Theorem-Referenz]}"
+    end
+  end
+
+  tex.sprint("\\expandafter\\gdef\\csname mxFwdRef@" .. qkey .. "\\endcsname{" .. texcode .. "}")
+end
+
 
 
 return M

@@ -27,73 +27,40 @@
 
 \newcounter{file}
 
+% --- thmlookup: pro Band in eigene Dateien schreiben ---
+\directlua{
+  function thmlookup.set_band_output(tag)
+    local base = "registry/_" .. tag
+    thmlookup.registry_path = base .. ".registry.tsv"
+    thmlookup.debug_path    = base .. ".debug.log"
+
+    -- Dateien leeren/neu anlegen
+    local f = io.open(thmlookup.registry_path, "w"); if f then f:write(""); f:close() end
+    local g = io.open(thmlookup.debug_path, "w");    if g then g:write(""); g:close() end
+
+    texio.write_nl("thmlookup: output -> " .. thmlookup.registry_path)
+  end
+}
+
+\newcommand{\ThmLookupBand}[1]{%
+  \directlua{thmlookup.set_band_output("\luaescapestring{#1}")}%
+}
+
 
 \begin{document}
 
-\tableofcontents
+\ThmLookupBand{B01}
+\subfile{B01}
 
-\FormulaDefDelta[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}%
+\clearpage
+\ThmLookupBand{B02}
+\subfile{B02}
 
+\clearpage
+\ThmLookupBand{B03}
+\subfile{B03}
 
-\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}%
-
-\FormulaRefAuto{ \{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr) }
-
-\begin{tabproof}
-  \proofstep{1}{ \forall x (P(x) \rightarrow x \in A) }{ \rA }
-  \proofstep{1}{ \forall x(x \in A \land P(x) \leftrightarrow P(x)) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
-  \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{ \FormulaRefAuto{ \{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr) } } }
-  \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) } }
-\end{tabproof}
-
-\FormulaThmAuto[Reflexivität der Implikation]{P \rightarrow P}
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
-  \proofstep{}{P \rightarrow P}{\rRE{1}}
-\end{tabproof}
-
-\FormulaThmAuto[Reflexivität des Bikonditionals]{P \leftrightarrow P}
-
-\FormulaThmAuto[Kommutativgesetz für \(\lor\)]{P \lor Q \vdash Q \lor P}
-
-\FormulaRefAuto{P \lor Q \vdash Q \lor P}
-
-\FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
-
-
-\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{5}
-
-
-\FormulaDefDeltaK[Begriff der Funktion]{F\colon A\to B}{Funktion}{
-  \DeltaRow{Mengen}{A\dsep B\dsep F\dsep x\dsep y\dsep z}
-  \DeltaRow{\textbf{Axiome}}{}
-  %
-  % — Existenz als Menge geordneter Paare —
-  \DeltaRow{Menge geordneter Paare}
-           {F \subseteq A \times B}
-           [\FormulaRefAuto{F \subseteq A \times B}]
-  %
-  % — Funktionale Eindeutigkeit —
-  \DeltaRow{Funktionale Eindeutigkeit}
-           {(x,y)\in F\dsep (x,z)\in F \vdash y=z}
-           [\FormulaRefAuto{(x,y)\in F\dsep (x,z)\in F \vdash y=z}]
-  %
-  % — Aussonderung (Schema) —
-  \DeltaRow{Totalität}
-           {x\in A \vdash \exists y\,(x,y)\in F}
-           [\FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in F}]
-%
-    \DeltaRow{\textbf{Neue Symbole}}{}
-    \DeltaRow{Funktionen}{ }
-}
-
-\FormulaRefAuto{F\colon A\to B}{1}
-
-\FormulaRefAuto{Funktion}{1}
-
-\FormulaThmAuto{\neg\forall x(P(x)) \eqvdash \exists x (\neg P(x))}
-
-\FormulaRefAuto{\neg\forall x(P(x))\eqvdash \exists x(\neg P(x))}
-
+% ggf. weitere Bände:
+% \clearpage \ThmLookupBand{B04} \subfile{B04}
 
 \end{document}

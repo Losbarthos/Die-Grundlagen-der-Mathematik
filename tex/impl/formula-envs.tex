@@ -143,10 +143,25 @@
 
 % ------------------------------------------------------------
 % 1) Drei unabhängige Umgebungen / Zähler
+%    (Kopfzeile endet mit Zeilenumbruch)
 % ------------------------------------------------------------
+\makeatletter
+\newtheoremstyle{mxformula}%
+  {3pt}% Space above
+  {3pt}% Space below
+  {\itshape}% Body font
+  {0pt}% Indent amount
+  {\bfseries}% Head font
+  {.}% Head punctuation
+  {\newline}% Head space  <-- DAS ist der entscheidende Punkt
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}% Head spec
+\makeatother
+
+\theoremstyle{mxformula}
 \newtheorem{formulaThm}{Theorem}
 \newtheorem{formulaDef}{Definition}
 \newtheorem{formulaAx}{Axiom}
+
 
 
 % ------------------------------------------------------------
@@ -489,6 +504,24 @@
     }
 }
 \ExplSyntaxOff
+
+\ExplSyntaxOn
+\ProvideDocumentCommand{\FormulaRefAutoFwd}{s O{} m o g}{%
+  \tl_set:Nn \l_tmpa_tl {#2}
+  \IfNoValueF{#4}{
+    \str_case:nn {#4}{
+      {ax}  { \tl_put_right:Nn \l_tmpa_tl { env=axiom } }
+      {def} { \tl_put_right:Nn \l_tmpa_tl { env=definition } }
+      {thm} { \tl_put_right:Nn \l_tmpa_tl { env=theorem } }
+    }{}
+  }
+  \IfBooleanTF{#1}
+    { \ThmRefByStructureFwd*[\tl_use:N \l_tmpa_tl]{#3} }
+    { \ThmRefByStructureFwd [\tl_use:N \l_tmpa_tl]{#3} }
+}
+\ExplSyntaxOff
+
+
 
 
 \input{tex/impl/delta-context.tex}
