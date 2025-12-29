@@ -418,16 +418,34 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \emptyset
   \proofstep{1}{ \exists! A(\forall x(x \in A\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
 \end{tabproof}
 
-\FormulaThmDelta{ \forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x))) }{%
-\DeltaRow{Mengen}{A\dsep B}% 
+\FormulaThmDelta{%
+  \forall x(P(x)\rightarrow x\in A)\vdash \exists B\bigl(\forall x(x\in B\leftrightarrow P(x))\bigr)
+}{%
+\DeltaRow{Mengen}{A\dsep B}%
 \DeltaRow{Einstellige Prädikate}{P}%
 }
 \begin{tabproof}
   \proofstep{1}{ \forall x (P(x) \rightarrow x \in A) }{ \rA }
-  \proofstep{1}{ \forall x(x \in A \land P(x) \leftrightarrow P(x)) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
-  \proofstep{1}{ \exists B(\forall x(x \in B \leftrightarrow P(x))) }{ \rEI{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}}}
-  \proofstep{1}{ \exists! B(\forall x(x \in B \leftrightarrow P(x))) }{ \FormulaRefAuto{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) } }
+  \proofstep{1}{ \forall x\bigl((x \in A \land P(x)) \leftrightarrow P(x)\bigr) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow Q(x))\vdash \forall x((Q(x)\land P(x))\leftrightarrow P(x)) } }
+  \proofstep{}{ \exists B\;\forall x\;\bigl(x \in B \leftrightarrow x \in A \land P(x)\bigr) }{ \FormulaRefAuto{ \exists B\;\forall x\;\bigl(x \in B \leftrightarrow x \in A \,\land\, P(x)\bigr) } }
+  \proofstep{4}{ \forall x\bigl(x \in C \leftrightarrow x \in A \land P(x)\bigr) }{ \rA }
+  \proofstep{1,4}{ \forall x\bigl(x \in C \leftrightarrow P(x)\bigr) }{ \FormulaRefAuto{ \forall x(P(x)\leftrightarrow Q(x)), \forall x(Q(x)\leftrightarrow R(x))\vdash \forall x(P(x)\leftrightarrow R(x)) }{4,2} }
+  \proofstep{1,4}{ \exists B\bigl(\forall x(x \in B \leftrightarrow P(x))\bigr) }{ \rEI{5} }
+  \proofstep{1}{ \exists B\bigl(\forall x(x \in B \leftrightarrow P(x))\bigr) }{ \rEE{3,4,6} }
 \end{tabproof}
+
+\FormulaThmDelta{%
+  \forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))
+}{%
+\DeltaRow{Mengen}{A\dsep B}%
+\DeltaRow{Einstellige Prädikate}{P}%
+}
+\begin{tabproof}
+  \proofstep{1}{ \forall x(P(x)\rightarrow x\in A) }{ \rA }
+  \proofstep{1}{ \exists B\bigl(\forall x(x\in B\leftrightarrow P(x))\bigr) }{ \FormulaRefAuto{ \forall x(P(x)\rightarrow x\in A)\vdash \exists B\bigl(\forall x(x\in B\leftrightarrow P(x))\bigr) } }
+  \proofstep{1}{ \exists! B\bigl(\forall x(x\in B\leftrightarrow P(x))\bigr) }{ \FormulaRefAuto{ \exists A(\forall x(x \in A\leftrightarrow P(x)))\vdash \exists! A(\forall x(x \in A\leftrightarrow P(x))) } }
+\end{tabproof}
+
 
 %%begin novalidate
 \FormulaDefDelta[Aussonderung]{\{x\in A \,\mid\, P(x)\} := \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}%

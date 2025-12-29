@@ -267,10 +267,6 @@
   \end{formulaThm}%
 }
 
-
-
-
-
 \NewDocumentCommand{\FormulaDefAuto}{o m}{%
   \IfNoValueTF{#1}
     {\begin{formulaDef}\label{def:auto:\theformulaDef}%
@@ -306,14 +302,19 @@
 % -------------------------
 \NewDocumentCommand{\FormulaDefDelta}{o m +G{}}{%
   \IfNoValueTF{#1}
-    {\begin{formulaDef}\label{def:auto:\theformulaDef}%
-      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}%
+    {%
+      \begin{formulaDef}%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}%
     }
-    {\begin{formulaDef}[#1]\label{def:auto:\theformulaDef}%
-      \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}{#1}%
+    {%
+      \begin{formulaDef}[#1]%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}{#1}%
     }%
-  \MxPushFormula{definition}{def:auto:\theformulaDef}{#2}%
+  \MxPushFormula{definition}{\mxLbl}{#2}%
   \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
@@ -325,14 +326,19 @@
 % -------------------------
 \NewDocumentCommand{\FormulaThmDelta}{o m +G{}}{%
   \IfNoValueTF{#1}
-    {\begin{formulaThm}\label{thm:auto:\theformulaThm}%
-      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}%
+    {%
+      \begin{formulaThm}%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}%
     }
-    {\begin{formulaThm}[#1]\label{thm:auto:\theformulaThm}%
-      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}{#1}%
+    {%
+      \begin{formulaThm}[#1]%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}{#1}%
     }%
-  \MxPushFormula{theorem}{thm:auto:\theformulaThm}{#2}%
+  \MxPushFormula{theorem}{\mxLbl}{#2}%
   \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
@@ -344,14 +350,19 @@
 % -------------------------
 \NewDocumentCommand{\FormulaAxiomDelta}{o m +m}{%
   \IfNoValueTF{#1}
-    {\begin{formulaAx}\label{ax:auto:\theformulaAx}%
-      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}%
+    {%
+      \begin{formulaAx}%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}%
     }
-    {\begin{formulaAx}[#1]\label{ax:auto:\theformulaAx}%
-      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}{#1}%
+    {%
+      \begin{formulaAx}[#1]%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}{#1}%
     }%
-  \MxPushFormula{axiom}{ax:auto:\theformulaAx}{#2}%
+  \MxPushFormula{axiom}{\mxLbl}{#2}%
   \DeltaBlockFromRows{#3}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
@@ -360,113 +371,83 @@
 
 % ------------------------------------------------------------
 % DeltaK: Definition
-% #1 optionaler Titel
-% #2 sichtbare Formel (Ausgabe)
-% #3 Name/ID (zusätzlich referenzierbar)
-% #4 DeltaRows
 % ------------------------------------------------------------
 \NewDocumentCommand{\FormulaDefDeltaK}{o m m +m}{%
   \IfNoValueTF{#1}
     {%
-      \begin{formulaDef}\label{def:auto:\theformulaDef}%
-        % 1) per sichtbarer Formel referenzierbar
-        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}%
-        % (optional) auch als Struktur unter #3
-        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#3}%
+      \begin{formulaDef}%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}%
     }{%
-      \begin{formulaDef}[#1]\label{def:auto:\theformulaDef}%
-        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#2}{#1}%
-        \ThmLookupRegister{def:auto:\theformulaDef}{definition}{\theformulaDef}{#3}{#1}%
+      \begin{formulaDef}[#1]%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}{#1}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}{#1}%
     }%
-  % 2) per ID/Name referenzierbar (das ist entscheidend für "Funktion")
-  \ThmLookupRegisterId{#3}{definition}{def:auto:\theformulaDef}%
-
-  % Stack: sinnvollerweise die sichtbare Formel pushen
-  \MxPushFormula{definition}{def:auto:\theformulaDef}{#2}%
-
+  \ThmLookupRegisterId{#3}{definition}{\mxLbl}%
+  \MxPushFormula{definition}{\mxLbl}{#2}%
   \begin{DeltaContext}{ }%
     #4%
   \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
   \end{formulaDef}%
 }
 
-
-% -------------------------
-% Theorem: Delta + Kontext (K)
-% #1 optionaler Titel, #2 Formel, #3 Kontext-Überschrift, #4 DeltaRows
-% -------------------------
-% #1 optionaler Titel (für die Theorem-Überschrift)
-% #2 sichtbare Formel (wird gesetzt)
-% #3 Key-Formel (wird NUR registriert / für Referenzen benutzt, NICHT gesetzt)
-% #4 Delta-Block (Rows)
-
+% ------------------------------------------------------------
+% DeltaK: Theorem
+% ------------------------------------------------------------
 \NewDocumentCommand{\FormulaThmDeltaK}{o m m +m}{%
   \IfNoValueTF{#1}
     {%
-      \begin{formulaThm}\label{thm:auto:\theformulaThm}%
-      % Struktur: sichtbare Formel (#2)
-      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}%
+      \begin{formulaThm}%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}%
     }{%
-      \begin{formulaThm}[#1]\label{thm:auto:\theformulaThm}%
-      \ThmLookupRegister{thm:auto:\theformulaThm}{theorem}{\theformulaThm}{#2}{#1}%
+      \begin{formulaThm}[#1]%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}{#1}%
     }%
-
-  % ID: Name (#3)
-  \ThmLookupRegisterId{#3}{theorem}{thm:auto:\theformulaThm}%
-
-  % Stack: die sichtbare Formel (#2)
-  \MxPushFormula{theorem}{thm:auto:\theformulaThm}{#2}%
-
+  \ThmLookupRegisterId{#3}{theorem}{\mxLbl}%
+  \MxPushFormula{theorem}{\mxLbl}{#2}%
   \begin{DeltaContext}{ }%
     #4%
   \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
   \end{formulaThm}%
 }
 
-
-
 % ------------------------------------------------------------
 % DeltaK: Axiom
-% #1 optionaler Titel
-% #2 sichtbare Formel (Ausgabe)
-% #3 Key-Formel (nur für Registry/Referenzen, keine Ausgabe)
-% #4 DeltaRows
 % ------------------------------------------------------------
 \NewDocumentCommand{\FormulaAxiomDeltaK}{o m m +m}{%
   \IfNoValueTF{#1}
     {%
-      \begin{formulaAx}\label{ax:auto:\theformulaAx}%
-      % Struktur: sichtbare Formel (#2)
-      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}%
+      \begin{formulaAx}%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}%
     }{%
-      \begin{formulaAx}[#1]\label{ax:auto:\theformulaAx}%
-      \ThmLookupRegister{ax:auto:\theformulaAx}{axiom}{\theformulaAx}{#2}{#1}%
+      \begin{formulaAx}[#1]%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}{#1}%
     }%
-
-  % ID: Name (#3)
-  \ThmLookupRegisterId{#3}{axiom}{ax:auto:\theformulaAx}%
-
-  % Stack: sichtbare Formel (#2)
-  \MxPushFormula{axiom}{ax:auto:\theformulaAx}{#2}%
-
+  \ThmLookupRegisterId{#3}{axiom}{\mxLbl}%
+  \MxPushFormula{axiom}{\mxLbl}{#2}%
   \begin{DeltaContext}{ }%
     #4%
   \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
   \[
     #2
   \]%
   \end{formulaAx}%
 }
-
-
-
-
 
 \ExplSyntaxOn
 \ProvideDocumentCommand{\FormulaRefAuto}{s O{} m o g}{%
