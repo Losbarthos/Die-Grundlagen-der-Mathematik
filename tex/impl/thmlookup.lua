@@ -262,6 +262,26 @@ local function alpha_normalize(statement)
     return name
   end
 
+    -- Normalisiere Einzelbuchstaben, die als Sub-/Superskript im selben Token hängen (z.B. R_A, R^A, f_n)
+  local function canon_free_var(v)
+    if (not map[v]) and M.normalize_free_vars then
+      map[v] = "V" .. tostring(next_id)
+      next_id = next_id + 1
+    end
+    return map[v] or v
+  end
+
+  local function normalize_subsup_in_token(tok)
+    -- zuerst geklammerte Varianten
+    tok = tok:gsub("_%{([A-Za-z])%}", function(v) return "_{" .. canon_free_var(v) .. "}" end)
+    tok = tok:gsub("%^%{([A-Za-z])%}", function(v) return "^{" .. canon_free_var(v) .. "}" end)
+    -- dann ungeklammerte Varianten
+    tok = tok:gsub("_([A-Za-z])", function(v) return "_{" .. canon_free_var(v) .. "}" end)
+    tok = tok:gsub("%^([A-Za-z])", function(v) return "^{" .. canon_free_var(v) .. "}" end)
+    return tok
+  end
+
+
   
   while idx <= #toks do
     local tok = toks[idx]
@@ -324,6 +344,10 @@ local function alpha_normalize(statement)
       -- treat \{ and \} as literal braces (set-builder notation)
       if tok == "\\{" then tok = "{" end
       if tok == "\\}" then tok = "}" end
+
+      -- *** NEU: Sub-/Superskript-Buchstaben im Token normalisieren (R_A, R^A, ...)
+      tok = normalize_subsup_in_token(tok)
+
       -- generic token: normalize some common operators by stripping backslash
       if tok:sub(1,1) == "\\" then
         local name = tok:sub(2)

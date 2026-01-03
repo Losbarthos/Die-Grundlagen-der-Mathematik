@@ -432,10 +432,12 @@
       \begin{formulaAx}%
       \edef\mxLbl{ax:auto:\theformulaAx}%
       \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#3}%  <-- FIX
     }{%
       \begin{formulaAx}[#1]%
       \edef\mxLbl{ax:auto:\theformulaAx}%
       \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}{#1}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#3}{#1}% <-- FIX
     }%
   \ThmLookupRegisterId{#3}{axiom}{\mxLbl}%
   \MxPushFormula{axiom}{\mxLbl}{#2}%
@@ -449,14 +451,94 @@
   \end{formulaAx}%
 }
 
-\ExplSyntaxOn
-\ProvideDocumentCommand{\FormulaRefAuto}{s O{} m o g}{%
-  % #1 = Stern
-  % #2 = opts (vor der Formel)
-  % #3 = query (Formel oder ID)
-  % #4 = shorthand nach der Formel in [...] (ax|def|thm)
-  % #5 = (optional) altes Dummy-Argument in {...} -> wird ignoriert
+% ------------------------------------------------------------
+% DeltaR: Theorem  (Key #3 für Referenz, Anzeige #2)
+% ------------------------------------------------------------
+\NewDocumentCommand{\FormulaThmDeltaR}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaThm}%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#3}%
+    }{%
+      \begin{formulaThm}[#1]%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#3}{#1}%
+    }%
+  \ThmLookupRegisterId{#3}{theorem}{\mxLbl}%
+  \MxPushFormula{theorem}{\mxLbl}{#2}%
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
+  \[
+    #2
+  \]%
+  \end{formulaThm}%
+}
 
+% ------------------------------------------------------------
+% DeltaR: Definition
+% ------------------------------------------------------------
+\NewDocumentCommand{\FormulaDefDeltaR}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaDef}%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}%
+    }{%
+      \begin{formulaDef}[#1]%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}{#1}%
+    }%
+  \ThmLookupRegisterId{#3}{definition}{\mxLbl}%
+  \MxPushFormula{definition}{\mxLbl}{#2}%
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
+  \[
+    #2
+  \]%
+  \end{formulaDef}%
+}
+
+% ------------------------------------------------------------
+% DeltaR: Axiom
+% ------------------------------------------------------------
+\NewDocumentCommand{\FormulaAxiomDeltaR}{o m m +m}{%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaAx}%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#3}%
+    }{%
+      \begin{formulaAx}[#1]%
+      \edef\mxLbl{ax:auto:\theformulaAx}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#3}{#1}%
+    }%
+  \ThmLookupRegisterId{#3}{axiom}{\mxLbl}%
+  \MxPushFormula{axiom}{\mxLbl}{#2}%
+  \begin{DeltaContext}{ }%
+    #4%
+  \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
+  \[
+    #2
+  \]%
+  \end{formulaAx}%
+}
+
+
+\ExplSyntaxOn
+
+\cs_new_protected:Npn \mx_formula_ref_suffix:n #1
+  {
+    \IfNoValueF{#1}
+      { \tl_if_blank:nF {#1} { (#1) } }
+  }
+
+\ProvideDocumentCommand{\FormulaRefAuto}{s O{} m o g}{%
   \tl_set:Nn \l_tmpa_tl {#2}
 
   \IfNoValueF{#4}{
@@ -467,7 +549,6 @@
     }{}
   }
 
-  % ID-Shortcut: reine Tokens ohne Backslash/Leerzeichen
   \regex_match:nnTF { \A [A-Za-z0-9:_\-]+ \Z } {#3}
     {
       \int_compare:nTF { \tl_count:n {#3} > 1 }
@@ -483,8 +564,32 @@
         { \ThmRefByStructure*[\tl_use:N \l_tmpa_tl]{#3} }
         { \ThmRefByStructure [\tl_use:N \l_tmpa_tl]{#3} }
     }
+
+  % <<< HIER: altes {...} wieder anhängen
+  \mx_formula_ref_suffix:n {#5}
 }
+
+\ProvideDocumentCommand{\FormulaRefAutoFwd}{s O{} m o g}{%
+  \tl_set:Nn \l_tmpa_tl {#2}
+
+  \IfNoValueF{#4}{
+    \str_case:nn {#4}{
+      {ax}  { \tl_put_right:Nn \l_tmpa_tl { env=axiom } }
+      {def} { \tl_put_right:Nn \l_tmpa_tl { env=definition } }
+      {thm} { \tl_put_right:Nn \l_tmpa_tl { env=theorem } }
+    }{}
+  }
+
+  \IfBooleanTF{#1}
+    { \ThmRefByStructureFwd*[\tl_use:N \l_tmpa_tl]{#3} }
+    { \ThmRefByStructureFwd [\tl_use:N \l_tmpa_tl]{#3} }
+
+  % <<< HIER ebenso
+  \mx_formula_ref_suffix:n {#5}
+}
+
 \ExplSyntaxOff
+
 
 \ExplSyntaxOn
 \ProvideDocumentCommand{\FormulaRefAutoFwd}{s O{} m o g}{%
