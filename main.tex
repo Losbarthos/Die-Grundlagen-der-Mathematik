@@ -15,6 +15,7 @@
 \usepackage{amsthm}
 \usepackage{xparse}
 \usepackage{multirow}
+\usepackage{microtype}
 
 
 \input{tex/impl/thmlookup.tex}
@@ -31,10 +32,17 @@
 \directlua{
   function thmlookup.set_band_output(tag)
     local base = "registry/_" .. tag
-    thmlookup.registry_path = base .. ".registry.tsv"
-    thmlookup.debug_path    = base .. ".debug.log"
+    local reg  = base .. ".registry.tsv"
+    local dbg  = base .. ".debug.log"
 
-    -- Dateien leeren/neu anlegen
+    -- WICHTIG: alte Band-Registry in den Speicher laden (cross-band lookup)
+    thmlookup.load_registry_file(reg)
+
+    -- Output dieses Laufs in genau diese Dateien schreiben
+    thmlookup.registry_path = reg
+    thmlookup.debug_path    = dbg
+
+    -- Dateien für diesen Lauf leeren/neu anlegen
     local f = io.open(thmlookup.registry_path, "w"); if f then f:write(""); f:close() end
     local g = io.open(thmlookup.debug_path, "w");    if g then g:write(""); g:close() end
 
@@ -42,25 +50,28 @@
   end
 }
 
-\newcommand{\ThmLookupBand}[1]{%
-  \directlua{thmlookup.set_band_output("\luaescapestring{#1}")}%
-}
+
+
+% --- Warnschwellen ---
+\hbadness=10000
+\vbadness=10000
+\hfuzz=1pt
+\vfuzz=1pt
 
 
 \begin{document}
 
-\FormulaThmAuto[Totale Relation]{R_M,M,\bigcup M}
-\FormulaThmAuto[Totale Relation]{R^M,M,\bigcup M}
+
+\FormulaRefAutoFwd{\Id_A\colon A\to A}
 
 
+\FormulaThmDeltaK[Identitätsfunktion auf \(A\)]
+{\Id_A\colon A\to A}{\Id_A\colon A\to A}
+{
+\DeltaRow{Mengen}{A}
+}
 
- \FormulaRefAuto{R_M,A,\bigcup A}{1}
-
-\FormulaRefAuto{R_A,A,\bigcup A}{1}
-
- \FormulaRefAuto{R^M,A,\bigcup A}{1}
-
-\FormulaRefAuto{R^A,A,\bigcup A}{1}
+\FormulaRefAuto{\Id_A\colon A\to A}
 
 %\ThmLookupBand{B01}
 %\subfile{B01}
@@ -73,7 +84,6 @@
 %\ThmLookupBand{B03}
 %\subfile{B03}
 
-% ggf. weitere Bände:
-% \clearpage \ThmLookupBand{B04} \subfile{B04}
+
 
 \end{document}

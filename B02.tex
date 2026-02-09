@@ -241,6 +241,28 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1,2,3}{P\land Q\land R}{\rAI{4,3}}
 \end{tabproof}
 
+\subsection{Einführung dreifacher Disjunktion}
+
+\FormulaThmAuto{Q\vdash P\lor Q\lor R}
+\begin{tabproof}
+  \proofstep{1}{Q}{\rA}
+  \proofstep{1}{Q\lor R}{\rOIa{1}}
+  \proofstep{1}{P\lor Q\lor R}{\rOIb{2}}
+\end{tabproof}
+
+\FormulaThmAuto{P\vdash P\lor Q\lor R}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{1}{P\lor Q\lor R}{\rOIa{1}}
+\end{tabproof}
+
+\FormulaThmAuto{R\vdash P\lor Q\lor R}
+\begin{tabproof}
+  \proofstep{1}{R}{\rA}
+  \proofstep{1}{Q\lor R}{\rOIb{1}}
+  \proofstep{1}{P\lor Q\lor R}{\rOIb{2}}
+\end{tabproof}
+
 \subsection{Elimination mehrfacher Disjunktion}
 
 \FormulaThmAuto{P_1\lor P_2\lor P_3\dsep [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\vdash R}
@@ -565,6 +587,25 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{5}{P \lor \neg P}{\rOIb{5}}
   \proofstep{1,5}{\bot}{\rBI{1,6}}
   \proofstep{}{P \lor \neg P}{\rCE{1,7}}
+\end{tabproof}
+
+\FormulaThmAuto[Satz der Explosion]{P \land \neg P\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P \land \neg P}{\rA}
+  \proofstep{1}{P}{\rAEa{1}}
+  \proofstep{1}{\neg P}{\rAEb{1}}
+  \proofstep{1}{\bot}{\rBI{3,2}}
+  \proofstep{1}{Q}{\rCE{4}}
+\end{tabproof}
+
+\FormulaThmAuto[Explosion ohne Konjunktion]{%
+  P\dsep \neg P \vdash Q%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg P}{\rA}
+  \proofstep{1,2}{P\land \neg P}{\rAI{1,2}}
+  \proofstep{1,2}{Q}{\FormulaRefAuto{P \land \neg P\vdash Q}{3}}
 \end{tabproof}
 
 \section{De-morgansche Gesetze}
@@ -973,8 +1014,6 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 
   \closeproofpart
 \end{tabproofsplit}
-
-
 
 \FormulaThmAuto{\neg P \rightarrow Q \eqvdash P \lor Q}
 \begin{tabproofwide}
@@ -1449,6 +1488,24 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{3}{d = b}{\FormulaRefAuto{a=b\vdash b=a}{3}}
   \proofstep{1,2,3}{c = d}{\FormulaRefAuto{a = b\dsep c = a\dsep d = b \vdash c = d}{1,4,5}}
 \end{tabproof}
+
+\FormulaThmDelta{a=b \dsep c=d \dsep P(b,d)\vdash P(a,c)}{
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}
+  \DeltaRow{Zweistellige Prädikate}{P}
+}
+\begin{tabproof}
+  \proofstep{1}{a=b}{\rA}
+  \proofstep{2}{c=d}{\rA}
+  \proofstep{3}{P(b,d)}{\rA}
+
+  \proofstep{1}{b=a}{\FormulaRefAuto{a=b \vdash b=a}{1}}
+  \proofstep{2}{d=c}{\FormulaRefAuto{a=b \vdash b=a}{2}}
+
+  \proofstep{1,3}{P(a,d)}{\rIE{4,3}}
+  \proofstep{1,2,3}{P(a,c)}{\rIE{5,6}}
+\end{tabproof}
+
+
 
 \FormulaThmAuto{a = c,\, b = c, d=a\lor d=b \vdash d = c}
 \begin{tabproof}
@@ -2301,7 +2358,14 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
     \proofstep{1,2}{\forall x\, Q(x)=R(x)}{\rUI{5}}
 \end{tabproof}
 
-\FormulaThmAuto{\forall x\, F(x)\rightarrow P(x)=Q(x)\dsep \forall x\, F(x)\rightarrow P(x)=R(x)\vdash \forall x\, F(x)\rightarrow Q(x)=R(x)}
+\FormulaThmDeltaR{%
+  \begin{aligned}[t]
+    &\forall x\, F(x)\rightarrow P(x)=Q(x)\\
+    &\forall x\, F(x)\rightarrow P(x)=R(x)\\
+    &\vdash \forall x\, F(x)\rightarrow Q(x)=R(x)
+  \end{aligned}%
+}{\forall x\, F(x)\rightarrow P(x)=Q(x)\dsep \forall x\, F(x)\rightarrow P(x)=R(x)\vdash \forall x\, F(x)\rightarrow Q(x)=R(x)}{\DeltaRow{Prädikatensymbole}{P\dsep Q\dsep R}
+}
 \begin{tabproof}
     \proofstep{1}{\forall x\, F(x)\rightarrow P(x)=Q(x)}{\rA}
     \proofstep{2}{\forall x\, F(x)\rightarrow P(x)=R(x)}{\rA}

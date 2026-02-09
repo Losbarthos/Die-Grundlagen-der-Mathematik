@@ -178,16 +178,19 @@ end
 local function is_spacing_cmd(tok)
   return tok == "\\," or tok == "\\;" or tok == "\\!" or tok == "\\:" or tok == "\\ " or
   tok == "\\quad" or tok == "\\qquad" or tok == "\\allowbreak" or tok == "~" or
- -- Delimiter sizing / fences (sollen *nicht* den Key beeinflussen)
- tok == "\\left" or tok == "\\right" or tok == "\\middle" or
- tok == "\\big" or tok == "\\Big" or tok == "\\bigg" or tok == "\\Bigg" or
- tok == "\\bigl" or tok == "\\bigr" or
- tok == "\\Bigl" or tok == "\\Bigr" or
- tok == "\\biggl" or tok == "\\biggr" or
- tok == "\\Biggl" or tok == "\\Biggr" or 
- tok == "\\mskip" or tok == "\\mkern" or tok == "\\kern" or 
- tok == "\\thinmuskip" or tok == "\\medmuskip" or tok == "\\thickmuskip" or tok == "\\ifmmode" or tok == "\\else" or tok == "\\fi"
+  -- Delimiter sizing / fences (sollen *nicht* den Key beeinflussen)
+  tok == "\\left" or tok == "\\right" or tok == "\\middle" or
+  tok == "\\big" or tok == "\\Big" or tok == "\\bigg" or tok == "\\Bigg" or
+  tok == "\\bigl" or tok == "\\bigr" or
+  tok == "\\Bigl" or tok == "\\Bigr" or
+  tok == "\\biggl" or tok == "\\biggr" or
+  tok == "\\Biggl" or tok == "\\Biggr" or 
+  tok == "\\mskip" or tok == "\\mkern" or tok == "\\kern" or 
+  tok == "\\thinmuskip" or tok == "\\medmuskip" or tok == "\\thickmuskip" or
+  tok == "\\ifmmode" or tok == "\\else" or tok == "\\fi" or
+  tok == "\\protect" or tok == "\\relax"
 end
+
 
 
 local function is_quantifier(tok)
@@ -532,34 +535,43 @@ function M.ref_by_structure(opts, expr, starred)
   local all = M.by_key[key] or {}
   local candidates = {}
   local blocked_forward = false
-    
+  local self_candidates = {}
+
   for _, r in ipairs(all) do
     if r.self_loaded == true then
       blocked_forward = true
+      self_candidates[#self_candidates+1] = r
     else
       candidates[#candidates+1] = r
     end
   end
 
-
-  -- optional env filter
+  -- optional env filter (auf beide Listen anwenden)
   if o.env then
-    local filtered = {}
-    for _, r in ipairs(candidates) do
-      if r.env == o.env then filtered[#filtered+1] = r end
+    local function filt(list)
+      local out = {}
+      for _, r in ipairs(list) do
+        if r.env == o.env then out[#out+1] = r end
+      end
+      return out
     end
-    candidates = filtered
+    candidates = filt(candidates)
+    self_candidates = filt(self_candidates)
   end
 
+  -- 1) frischer Treffer
   if #candidates == 1 then
     local r = candidates[1]
-    local env = r.env or ""
-    local lbl = r.label or ""
-    tex.sprint("\\ThmLookupEmitRef{" .. env .. "}{" .. lbl .. "}")
+    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
     return
   end
 
-
+  -- 2) Fallback: genau ein self_loaded Treffer
+  if #candidates == 0 and #self_candidates == 1 then
+    local r = self_candidates[1]
+    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
+    return
+  end
 
   if #candidates == 0 then
     write_debug_block(expr, canon, key, blocked_forward and "blocked-forward" or "none", {})
@@ -567,8 +579,7 @@ function M.ref_by_structure(opts, expr, starred)
     return
   end
 
-
-  -- ambiguous
+  -- ambiguous (wie bisher)
   write_debug_block(expr, canon, key, "ambiguous", candidates)
   if starred then
     tex.sprint("\\textbf{[Mehrdeutig: bitte wählen]}\\,")
@@ -583,6 +594,7 @@ function M.ref_by_structure(opts, expr, starred)
     tex.sprint("\\textbf{[Mehrdeutige Theorem-Referenz]}")
   end
 end
+
 
 function M.reset_files()
   local f = io.open(M.registry_path, "w")

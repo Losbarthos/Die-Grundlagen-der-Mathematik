@@ -301,16 +301,18 @@
 % Definition: Delta
 % -------------------------
 \NewDocumentCommand{\FormulaDefDelta}{o m +G{}}{%
+  % Wrapper wie bei ThmAuto/ThmDelta: verhindert 1-Schritt-Expansion von \TotRel, \bigcup, ...
+  \def\mxKey{#2}%
   \IfNoValueTF{#1}
     {%
       \begin{formulaDef}%
       \edef\mxLbl{def:auto:\theformulaDef}%
-      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{\mxKey}%
     }
     {%
       \begin{formulaDef}[#1]%
       \edef\mxLbl{def:auto:\theformulaDef}%
-      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#2}{#1}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{\mxKey}{#1}%
     }%
   \MxPushFormula{definition}{\mxLbl}{#2}%
   \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
@@ -321,20 +323,23 @@
   \end{formulaDef}%
 }
 
+
 % -------------------------
 % Theorem: Delta
 % -------------------------
 \NewDocumentCommand{\FormulaThmDelta}{o m +G{}}{%
+  % Keyformel wie bei Auto: Wrapper verhindert 1-Schritt-Expansion des ersten Tokens der eigentlichen Formel
+  \def\mxKey{#2}%
   \IfNoValueTF{#1}
     {%
       \begin{formulaThm}%
       \edef\mxLbl{thm:auto:\theformulaThm}%
-      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{\mxKey}%
     }
     {%
       \begin{formulaThm}[#1]%
       \edef\mxLbl{thm:auto:\theformulaThm}%
-      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#2}{#1}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{\mxKey}{#1}%
     }%
   \MxPushFormula{theorem}{\mxLbl}{#2}%
   \IfBlankTF{#3}{}{\DeltaBlockFromRows{#3}}%
@@ -345,20 +350,23 @@
   \end{formulaThm}%
 }
 
+
 % -------------------------
 % Axiom: Delta
 % -------------------------
 \NewDocumentCommand{\FormulaAxiomDelta}{o m +m}{%
+  % Wrapper: verhindert 1-Schritt-Expansion des ersten Formeltokens
+  \def\mxKey{#2}%
   \IfNoValueTF{#1}
     {%
       \begin{formulaAx}%
       \edef\mxLbl{ax:auto:\theformulaAx}%
-      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{\mxKey}%
     }
     {%
       \begin{formulaAx}[#1]%
       \edef\mxLbl{ax:auto:\theformulaAx}%
-      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{#2}{#1}%
+      \ThmLookupRegister{\mxLbl}{axiom}{\theformulaAx}{\mxKey}{#1}%
     }%
   \MxPushFormula{axiom}{\mxLbl}{#2}%
   \DeltaBlockFromRows{#3}%
@@ -368,6 +376,7 @@
   \]%
   \end{formulaAx}%
 }
+
 
 % ------------------------------------------------------------
 % DeltaK: Definition
@@ -387,9 +396,11 @@
     }%
   \ThmLookupRegisterId{#3}{definition}{\mxLbl}%
   \MxPushFormula{definition}{\mxLbl}{#2}%
-  \begin{DeltaContext}{ }%
-    #4%
-  \end{DeltaContext}%
+  \IfBlankTF{#4}{}{%
+    \begin{DeltaContext}{ }%
+      #4%
+    \end{DeltaContext}%
+  }%
   \phantomsection\label{\mxLbl}%
   \[
     #2

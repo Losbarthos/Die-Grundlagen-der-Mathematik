@@ -4,7 +4,11 @@
 \RequirePackage{luacode}
 
 % Lua-Modul laden
-\directlua{ thmlookup = dofile("tex/impl/thmlookup.lua") }
+\directlua{
+  if not thmlookup or not thmlookup.ref_by_structure then
+    thmlookup = dofile("tex/impl/thmlookup.lua")
+  end
+}
 
 % ---- Ausgabeformat für Referenzen ----
 \makeatletter
@@ -84,8 +88,8 @@
     \def\mxStar{false}%
     \IfBooleanT{#1}{\def\mxStar{true}}%
 
-    \edef\mxExpr{\unexpanded\expandafter{#3}}%
-    \edef\mxExprStr{\expandafter\detokenize\expandafter{\mxExpr}}%
+    % KEINE Expansion: sonst wird z.B. \bigcup -> \DOTSB\bigcup@\slimits@ ...
+    \edef\mxExprStr{\detokenize{#3}}%
     \edef\mxOptsStr{\detokenize{#2}}%
 
     \edef\mxLuaCode{%
@@ -98,6 +102,7 @@
     \directlua{\mxLuaCode}%
   \endgroup
 }
+
 
 % -------------------------
 % Forward-Ref-Variante (auflösbar ab dem 2. Lauf via .aux)
@@ -158,5 +163,10 @@
 }
 
 % IMPORTANT: muss VOR dem Einlesen der .aux passieren, sonst bleiben Fwd-Refs "nicht gefunden"
-\directlua{ thmlookup.prepare_run() }
+\directlua{
+  if not thmlookup.__prepared then
+    thmlookup.prepare_run()
+    thmlookup.__prepared = true
+  end
+}
 
