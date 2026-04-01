@@ -43,6 +43,11 @@
   \DeltaRow{Aussagevariablen}{P}
 \end{DeltaContext}
 
+\FormulaThmAuto[Reflexivität der Implikation]{P \vdash P}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+\end{tabproof}
+
 \FormulaThmAuto[Reflexivität der Implikation]{P \rightarrow P}
 \begin{tabproof}
   \proofstep{1}{P}{\rA}
@@ -228,8 +233,15 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \FormulaThmAuto{P\land Q\land R\vdash Q}
 \begin{tabproof}
   \proofstep{1}{P\land Q\land R}{\rA}
-  \proofstep{1}{P\land Q}{\rAEb{1}}
-  \proofstep{1}{Q}{\rAEa{2}}
+  \proofstep{1}{P\land Q}{\rAEa{1}}
+  \proofstep{1}{Q}{\rAEb{2}}
+\end{tabproof}
+
+\FormulaThmAuto{P\land Q\land R\vdash R}
+\begin{tabproof}
+  \proofstep{1}{P\land Q\land R}{\rA}
+  \proofstep{1}{Q\land R}{\rAEb{1}}
+  \proofstep{1}{R}{\rAEb{2}}
 \end{tabproof}
 
 \FormulaThmAuto{P\dsep Q\dsep R\vdash P\land Q\land R}
@@ -2401,6 +2413,154 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1,4,5}{a = b}{\UEE{1,2,3,10}}
 \end{tabproof}
 
+\subsection{Fallterme}
+
+
+\FormulaThmDelta[Wohldefiniertheit]{%
+  P\lor\neg P \vdash \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Mengen}{a\dsep b\dsep u}%
+}
+\begin{tabproof}
+  \proofstep{1}{P\lor\neg P}{\rA}
+
+  \proofstep{2}{P}{\rA}
+    \proofstep{3}{P}{\rA}
+    \proofstep{4}{a=a}{\rII}
+    \proofstep{3}{P\rightarrow a=a}{\rRI{3,4}}
+
+    \proofstep{6}{\neg P}{\rA}
+    \proofstep{2,6}{a=b}{\FormulaRefAuto{P\dsep \neg P\vdash Q}{2,6}}
+    \proofstep{2}{\neg P\rightarrow a=b}{\rRI{6,7}}
+
+    \proofstep{2}{(P\rightarrow a=a)\land(\neg P\rightarrow a=b)}{\rAI{5,8}}
+    \proofstep{2}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{9}}
+
+  \proofstep{11}{\neg P}{\rA}
+    \proofstep{12}{P}{\rA}
+    \proofstep{11,12}{b=a}{\FormulaRefAuto{P\dsep \neg P\vdash Q}{12,11}}
+    \proofstep{11}{P\rightarrow b=a}{\rRI{12,13}}
+
+    \proofstep{15}{\neg P}{\rA}
+    \proofstep{16}{b=b}{\rII}
+    \proofstep{11}{\neg P\rightarrow b=b}{\rRI{15,16}}
+
+    \proofstep{11}{(P\rightarrow b=a)\land(\neg P\rightarrow b=b)}{\rAI{14,17}}
+    \proofstep{11}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{18}}
+
+  \proofstep{}{ \exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rOE{1,2,10,11,19}}
+
+  \proofstep{21}{(P\rightarrow a=a)\land(\neg P\rightarrow a=b)}{\rA}
+  \proofstep{22}{(P\rightarrow b=a)\land(\neg P\rightarrow b=b)}{\rA}
+
+  \proofstep{23}{P}{\rA}
+    \proofstep{24}{P\rightarrow a=a}{\rAEa{21}}
+    \proofstep{23,24}{a=a}{\rRE{23,24}}
+    \proofstep{26}{P\rightarrow b=a}{\rAEa{22}}
+    \proofstep{23,26}{b=a}{\rRE{23,26}}
+    \proofstep{23,21,22}{a=b}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{25,28}}
+
+  \proofstep{30}{\neg P}{\rA}
+    \proofstep{31}{\neg P\rightarrow a=b}{\rAEb{21}}
+    \proofstep{30,31}{a=b}{\rRE{30,31}}
+
+  \proofstep{21,22}{a=b}{\rOE{1,23,29,30,33}}
+
+  \proofstep{}{ \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\UEI{20,21,22,34}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Notation des Fallterms]{%
+  \IfThenElse{P}{a}{b}%
+}{Fallterm}{%
+  \DeltaRow{Aussagenvariablen}{P}%
+  \DeltaRow{Variablen}{a\dsep b\dsep u}%
+  %
+  \DeltaRow{\textbf{Definition}}{}%
+  \DeltaRow{Fallterm}{\IfThenElse{P}{a}{b}}%
+  \DeltaRow{}{%
+    \coloneqq \iota u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)%
+  }%
+  %
+  \DeltaRow{\textbf{Neue Symbole}}{}%
+}
+
+\FormulaThmDelta[Charakterisierung des Fallterms]{%
+  \vdash (P\rightarrow \IfThenElse{P}{a}{b}=a)\land(\neg P\rightarrow \IfThenElse{P}{a}{b}=b)%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Variablen}{a\dsep b}%
+}
+\begin{tabproof}
+  \proofstep{}{(P\rightarrow \IfThenElse{P}{a}{b}=a)\land(\neg P\rightarrow \IfThenElse{P}{a}{b}=b)}{%
+    \FormulaRefAuto{Fallterm}%
+  }
+\end{tabproof}
+
+\FormulaThmDelta{%
+  P \vdash \IfThenElse{P}{a}{b}=a%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Variablen}{a\dsep b}%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{}{(P\rightarrow \IfThenElse{P}{a}{b}=a)\land(\neg P\rightarrow \IfThenElse{P}{a}{b}=b)}{%
+    \FormulaRefAuto{Fallterm}}
+  \proofstep{}{P\rightarrow \IfThenElse{P}{a}{b}=a}{\rAEa{2}}
+  \proofstep{1}{\IfThenElse{P}{a}{b}=a}{\rRE{1,3}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+  \neg P \vdash \IfThenElse{P}{a}{b}=b%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Variablen}{a\dsep b}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{}{(P\rightarrow \IfThenElse{P}{a}{b}=a)\land(\neg P\rightarrow \IfThenElse{P}{a}{b}=b)}{%
+    \FormulaRefAuto{Fallterm}}
+  \proofstep{}{\neg P\rightarrow \IfThenElse{P}{a}{b}=b}{\rAEb{2}}
+  \proofstep{1}{\IfThenElse{P}{a}{b}=b}{\rRE{1,3}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+  a=b \vdash \IfThenElse{P}{a}{b}=a%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Variablen}{a\dsep b}%
+}
+\begin{tabproof}
+  \proofstep{1}{a=b}{\rA}
+  \proofstep{}{P\lor \neg P}{\FormulaRefAuto{P \lor \neg P}}
+
+  \proofstep{3}{P}{\rA}
+  \proofstep{3}{\IfThenElse{P}{a}{b}=a}{%
+    \FormulaRefAuto{P \vdash \IfThenElse{P}{a}{b}=a}}
+
+  \proofstep{5}{\neg P}{\rA}
+  \proofstep{5}{\IfThenElse{P}{a}{b}=b}{%
+    \FormulaRefAuto{\neg P \vdash \IfThenElse{P}{a}{b}=b}}
+  \proofstep{1}{b=a}{\FormulaRefAuto{a = b \vdash b = a}}
+  \proofstep{6,7}{\IfThenElse{P}{a}{b}=a}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}}
+
+  \proofstep{}{ \IfThenElse{P}{a}{b}=a }{\rOE{2,3,4,5,8}}
+\end{tabproof}
+
+\FormulaThmDelta{%
+  a=b \vdash \IfThenElse{P}{a}{b}=b%
+}{%
+  \DeltaDecl{Aussagen}{P}%
+  \DeltaDecl{Variablen}{a\dsep b}%
+}
+\begin{tabproof}
+  \proofstep{1}{a=b}{\rA}
+  \proofstep{1}{\IfThenElse{P}{a}{b}=a}{%
+    \FormulaRefAuto{a=b \vdash \IfThenElse{P}{a}{b}=a}}
+  \proofstep{1,2}{\IfThenElse{P}{a}{b}=b}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}}
+\end{tabproof}
 
 \PrintFormulaStack
 
