@@ -97,16 +97,17 @@ local function tokenize(s)
       i = i + 1
 
     elseif ch == "\\" then
-      -- control sequence: \word or \, \; etc.
       local j = i + 1
       if j <= n then
         local nextch = s:sub(j,j)
         if nextch:match("[%a]") then
-          while j <= n and s:sub(j,j):match("[%a]") do j = j + 1 end
-          toks[#toks+1] = s:sub(i, j-1) -- e.g. \forall
+          while j <= n and s:sub(j,j):match("[%a]") do
+            j = j + 1
+          end
+          toks[#toks+1] = s:sub(i, j-1)
           i = j
         else
-          toks[#toks+1] = s:sub(i, j)   -- e.g. \,
+          toks[#toks+1] = s:sub(i, j)
           i = j + 1
         end
       else
@@ -114,22 +115,27 @@ local function tokenize(s)
         i = i + 1
       end
 
-    elseif ch == "(" or ch == ")" or ch == "," or ch == "=" then
+    elseif ch == "(" or ch == ")" or ch == "{" or ch == "}" or ch == "," or ch == "=" then
       toks[#toks+1] = ch
       i = i + 1
 
     else
-      -- identifier chunk: letters/digits/_/:
       local j = i
       while j <= n do
         local c = s:sub(j,j)
-        if c == "\\" or is_space(c) or c == "(" or c == ")" or c == "," or c == "=" then break end
+        if c == "\\" or is_space(c)
+           or c == "(" or c == ")"
+           or c == "{" or c == "}"
+           or c == "," or c == "=" then
+          break
+        end
         j = j + 1
       end
       toks[#toks+1] = s:sub(i, j-1)
       i = j
     end
   end
+
   return toks
 end
 
