@@ -51,7 +51,7 @@
 \FormulaThmAuto[Reflexivität der Implikation]{P \rightarrow P}
 \begin{tabproof}
   \proofstep{1}{P}{\rA}
-  \proofstep{}{P \rightarrow P}{\rRE{1}}
+  \proofstep{}{P \rightarrow P}{\rRI{1}}
 \end{tabproof}
 
 \FormulaThmAuto[Reflexivität des Bikonditionals]{P \leftrightarrow P}
@@ -1229,7 +1229,7 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \DeltaRow{Aussagevariablen}{P \dsep Q\dsep R}
 \end{DeltaContext}
 
-\FormulaThmAuto[Exportationsgesetz]{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}
+\FormulaThmDelta[Exportationsgesetz]{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}{\DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}}
 \begin{tabproofsplit}
   \proofpart{$\vdash$}
     \proofstep{1}{(P \land Q) \rightarrow R}{\rA}
@@ -1253,7 +1253,7 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \end{tabproofsplit}
 
 
-\FormulaThmAuto[Exportation]{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}
+\FormulaThmDelta[Exportation]{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}{\DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}}
 \begin{tabproofsplit}
   \proofpart{$\vdash$}
     \proofstep{1}{(P \land Q) \rightarrow R}{\rA}
@@ -1281,6 +1281,88 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rA}
   \proofstep{1}{(P \land Q) \rightarrow R}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}{1}}
   \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Vertauschung der Exportation]{%
+  P \rightarrow (Q \rightarrow R) \eqvdash Q \rightarrow (P \rightarrow R)%
+}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rA}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}}
+    \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q \rightarrow (P \rightarrow R)}{\rA}
+    \proofstep{1}{(P \land Q) \rightarrow R}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash Q \rightarrow (P \rightarrow R)}}
+    \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDelta[Äquivalenz-Exportation]{%
+  (P \land Q)\leftrightarrow R \vdash P \rightarrow (Q\leftrightarrow R)%
+}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
+}
+\begin{tabproof}
+  \proofstep{1}{(P \land Q)\leftrightarrow R}{\rA}
+  \proofstep{1}{(P \land Q)\rightarrow R}{\rLREa{1}}
+  \proofstep{1}{P \rightarrow (Q\rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}}
+  \proofstep{1}{R\rightarrow (P\land Q)}{\rLREb{1}}
+  \proofstep{5}{R}{\rA}
+  \proofstep{1,5}{P\land Q}{\rRE{4,5}}
+  \proofstep{1,5}{Q}{\rAEb{6}}
+  \proofstep{1}{R\rightarrow Q}{\rRI{5,7}}
+  \proofstep{9}{P}{\rA}
+  \proofstep{1,9}{Q\rightarrow R}{\rRE{3,9}}
+  \proofstep{1,9}{Q\leftrightarrow R}{\rLRI{10,8}}
+  \proofstep{1}{P\rightarrow (Q\leftrightarrow R)}{\rRI{9,11}}
+\end{tabproof}
+
+\FormulaThmDelta[Vertauschte Äquivalenz-Exportation]{%
+  (P \land Q)\leftrightarrow R \vdash Q \rightarrow (P\leftrightarrow R)%
+}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
+}
+\begin{tabproof}
+  \proofstep{1}{(P \land Q)\leftrightarrow R}{\rA}
+  \proofstep{1}{(P \land Q)\rightarrow R}{\rLREa{1}}
+  \proofstep{1}{P \rightarrow (Q\rightarrow R)}{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}}
+  \proofstep{1}{Q \rightarrow (P\rightarrow R)}{\FormulaRefAuto{P \rightarrow (Q \rightarrow R) \eqvdash Q \rightarrow (P \rightarrow R)}}
+  \proofstep{1}{R\rightarrow (P\land Q)}{\rLREb{1}}
+  \proofstep{6}{R}{\rA}
+  \proofstep{1,6}{P\land Q}{\rRE{5,6}}
+  \proofstep{1,6}{P}{\rAEa{7}}
+  \proofstep{1}{R\rightarrow P}{\rRI{6,8}}
+  \proofstep{10}{Q}{\rA}
+  \proofstep{1,10}{P\rightarrow R}{\rRE{4,10}}
+  \proofstep{1,10}{P\leftrightarrow R}{\rLRI{11,9}}
+  \proofstep{1}{Q\rightarrow (P\leftrightarrow R)}{\rRI{10,12}}
+\end{tabproof}
+
+\FormulaThmDelta[Äquivalenz-Exportation]{%
+  R\leftrightarrow (P \land Q) \vdash P \rightarrow (Q\leftrightarrow R)%
+}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
+}
+\begin{tabproof}
+  \proofstep{1}{R\leftrightarrow (P \land Q)}{\rA}
+  \proofstep{1}{(P \land Q)\leftrightarrow R}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{1}}
+  \proofstep{1}{P \rightarrow (Q\leftrightarrow R)}{\FormulaRefAuto{(P \land Q)\leftrightarrow R \vdash P \rightarrow (Q\leftrightarrow R)}{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Vertauschte Äquivalenz-Exportation]{%
+  R\leftrightarrow (P \land Q) \vdash Q \rightarrow (P\leftrightarrow R)%
+}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
+}
+\begin{tabproof}
+  \proofstep{1}{R\leftrightarrow (P \land Q)}{\rA}
+  \proofstep{1}{(P \land Q)\leftrightarrow R}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{1}}
+  \proofstep{1}{Q \rightarrow (P\leftrightarrow R)}{\FormulaRefAuto{(P \land Q)\leftrightarrow R \vdash Q \rightarrow (P\leftrightarrow R)}{2}}
 \end{tabproof}
 
 \FormulaThmAuto{P \leftrightarrow (Q \land R), Q \rightarrow R \vdash P \leftrightarrow Q}
@@ -1345,6 +1427,49 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{6}{R}{\rA}
   \proofstep{6}{Q \lor R}{\rOIb{6}}
   \proofstep{1,2}{Q \lor R}{\rOE{2,3,5,6,7}}
+\end{tabproof}
+
+\section{Axiome Metamath}
+
+\FormulaThmDeltaK[Axiom ax-1 (Metamath)]{Q \rightarrow (P \rightarrow Q)}{ax-1}{\DeltaRow{Aussagenvariablen}{P\dsep Q}}
+\begin{tabproof}
+  \proofstep{1}{Q}{\rA}
+  \proofstep{1}{P \rightarrow Q}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{1}}
+  \proofstep{}{Q \rightarrow (P \rightarrow Q)}{\rII{1}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Axiom ax-2 (Metamath)]{%
+  (P \rightarrow (Q \rightarrow R)) \rightarrow ((P \rightarrow Q) \rightarrow (P \rightarrow R))
+}{ax-2}{%
+  \DeltaRow{Aussagevariablen}{P\dsep Q\dsep R}
+}
+\begin{tabproof}
+  \proofstep{1}{P \rightarrow (Q \rightarrow R)}{\rA}
+  \proofstep{2}{P \rightarrow Q}{\rA}
+  \proofstep{3}{P}{\rA}
+  \proofstep{1,3}{Q \rightarrow R}{\rRE{1,3}}
+  \proofstep{2,3}{Q}{\rRE{2,3}}
+  \proofstep{1,2,3}{R}{\rRE{4,5}}
+  \proofstep{1,2}{P \rightarrow R}{\rRI{3,6}}
+  \proofstep{1}{(P \rightarrow Q) \rightarrow (P \rightarrow R)}{\rRI{2,7}}
+  \proofstep{}{(P \rightarrow (Q \rightarrow R)) \rightarrow ((P \rightarrow Q) \rightarrow (P \rightarrow R))}{\rRI{1,8}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Satz ax-3 (Metamath)]{%
+  (\neg P \rightarrow \neg Q) \rightarrow (Q \rightarrow P)%
+}{ax-3}{%
+  \DeltaRow{Aussagenvariablen}{P\dsep Q}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P \rightarrow \neg Q}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{\neg P}{\rA}
+  \proofstep{1,3}{\neg Q}{\rRE{1,3}}
+  \proofstep{1,2,3}{\bot}{\rBI{2,4}}
+  \proofstep{1,2}{\neg\neg P}{\rCI{3,5}}
+  \proofstep{1,2}{P}{\FormulaRefAuto{rDN}{6}}
+  \proofstep{1}{Q \rightarrow P}{\rRI{2,7}}
+  \proofstep{}{(\neg P \rightarrow \neg Q) \rightarrow (Q \rightarrow P)}{\rRI{1,8}}
 \end{tabproof}
 
 \section{Kontradiktionen und Invarianzen}
@@ -1434,6 +1559,1623 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 
   % Zusammen: (P ↔ Q∧R) ↔ (P ↔ R)
   \proofstep{1}{(P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}{\rLRI{14,27}}
+\end{tabproof}
+
+\chapter{Exklusives Oder}
+
+\section{Definition und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q}
+\end{DeltaContext}
+
+\FormulaDefAuto[Exklusives Oder]{P \lxor Q \coloneqq \neg(P \leftrightarrow Q)}
+
+\FormulaThmAuto[Definitionsäquivalenz für \(\lxor\)]{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lxor Q}{\rA}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \coloneqq \neg(P \leftrightarrow Q)}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\rA}
+    \proofstep{1}{P \lxor Q}{\FormulaRefAuto{P \lxor Q \coloneqq \neg(P \leftrightarrow Q)}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Fallunterscheidung für \(\lxor\)]{P \lxor Q \eqvdash (\neg P\land Q)\lor(P\land \neg Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lxor Q}{\rA}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+    \proofstep{1}{(\neg P\land Q)\lor(P\land \neg Q)}{\FormulaRefAuto{\neg (P\leftrightarrow Q)\eqvdash (\neg P\land Q)\lor (P\land \neg Q)}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(\neg P\land Q)\lor(P\land \neg Q)}{\rA}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{\neg (P\leftrightarrow Q)\eqvdash (\neg P\land Q)\lor (P\land \neg Q)}{1}}
+    \proofstep{1}{P \lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Einführungsregeln}
+
+\FormulaThmAuto[Einführung von \(\lxor\), linker Fall]{P\dsep \neg Q \vdash P\lxor Q}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1,2}{P\land \neg Q}{\rAI{1,2}}
+  \proofstep{1,2}{(\neg P\land Q)\lor(P\land \neg Q)}{\rOIb{3}}
+  \proofstep{1,2}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash (\neg P\land Q)\lor(P\land \neg Q)}{4}}
+\end{tabproof}
+
+\FormulaThmAuto[Einführung von \(\lxor\), rechter Fall]{\neg P\dsep Q \vdash P\lxor Q}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1,2}{\neg P\land Q}{\rAI{1,2}}
+  \proofstep{1,2}{(\neg P\land Q)\lor(P\land \neg Q)}{\rOIa{3}}
+  \proofstep{1,2}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash (\neg P\land Q)\lor(P\land \neg Q)}{4}}
+\end{tabproof}
+
+\section{Eliminationsregeln}
+
+\FormulaThmAuto[Elimination von \(\lxor\) bei \(P\)]{P\lxor Q\dsep P\vdash \neg Q}
+\begin{tabproof}
+  \proofstep{1}{P\lxor Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+  \proofstep{4}{Q}{\rA}
+  \proofstep{4}{P\rightarrow Q}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{4}}
+  \proofstep{2}{Q\rightarrow P}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{2}}
+  \proofstep{2,4}{P\leftrightarrow Q}{\rLRI{5,6}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,7}}
+  \proofstep{1,2}{\neg Q}{\rCI{4,8}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination von \(\lxor\) bei \(Q\)]{P\lxor Q\dsep Q\vdash \neg P}
+\begin{tabproof}
+  \proofstep{1}{P\lxor Q}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+  \proofstep{4}{P}{\rA}
+  \proofstep{2}{P\rightarrow Q}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{2}}
+  \proofstep{4}{Q\rightarrow P}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{4}}
+  \proofstep{2,4}{P\leftrightarrow Q}{\rLRI{5,6}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,7}}
+  \proofstep{1,2}{\neg P}{\rCI{4,8}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination von \(\lxor\) bei \(\neg P\)]{P\lxor Q\dsep \neg P\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{P\lxor Q}{\rA}
+  \proofstep{2}{\neg P}{\rA}
+  \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+  \proofstep{4}{\neg Q}{\rA}
+  \proofstep{2}{P\rightarrow Q}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{2}}
+  \proofstep{4}{Q\rightarrow P}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{4}}
+  \proofstep{2,4}{P\leftrightarrow Q}{\rLRI{5,6}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,7}}
+  \proofstep{1,2}{Q}{\rCE{4,8}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination von \(\lxor\) bei \(\neg Q\)]{P\lxor Q\dsep \neg Q\vdash P}
+\begin{tabproof}
+  \proofstep{1}{P\lxor Q}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+  \proofstep{4}{\neg P}{\rA}
+  \proofstep{4}{P\rightarrow Q}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{4}}
+  \proofstep{2}{Q\rightarrow P}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{2}}
+  \proofstep{2,4}{P\leftrightarrow Q}{\rLRI{5,6}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,7}}
+  \proofstep{1,2}{P}{\rCE{4,8}}
+\end{tabproof}
+
+\section{Strukturgesetze}
+
+\FormulaThmAuto[Kommutativgesetz für \(\lxor\)]{P\lxor Q \eqvdash Q\lxor P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lxor Q}{\rA}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+    \proofstep{3}{Q\leftrightarrow P}{\rA}
+    \proofstep{3}{P\leftrightarrow Q}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg(Q\leftrightarrow P)}{\rCI{3,5}}
+    \proofstep{1}{Q\lxor P}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q\lxor P}{\rA}
+    \proofstep{1}{\neg(Q\leftrightarrow P)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+    \proofstep{3}{P\leftrightarrow Q}{\rA}
+    \proofstep{3}{Q\leftrightarrow P}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\rCI{3,5}}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation von \(\lxor\)]{\neg(P\lxor Q)\eqvdash P\leftrightarrow Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P\lxor Q)}{\rA}
+    \proofstep{2}{\neg(P\leftrightarrow Q)}{\rA}
+    \proofstep{2}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg\neg(P\leftrightarrow Q)}{\rCI{2,4}}
+    \proofstep{1}{P\leftrightarrow Q}{\FormulaRefAuto{rDN}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\leftrightarrow Q}{\rA}
+    \proofstep{2}{P\lxor Q}{\rA}
+    \proofstep{2}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{3,1}}
+    \proofstep{1}{\neg(P\lxor Q)}{\rCI{2,4}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Invarianz von \(\lxor\) unter doppelter Negation]{P\lxor Q \eqvdash \neg P\lxor \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lxor Q}{\rA}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+    \proofstep{3}{\neg P\leftrightarrow \neg Q}{\rA}
+    \proofstep{3}{P\leftrightarrow Q}{\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg(\neg P\leftrightarrow \neg Q)}{\rCI{3,5}}
+    \proofstep{1}{\neg P\lxor \neg Q}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{6}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P\lxor \neg Q}{\rA}
+    \proofstep{1}{\neg(\neg P\leftrightarrow \neg Q)}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+    \proofstep{3}{P\leftrightarrow Q}{\rA}
+    \proofstep{3}{\neg P\leftrightarrow \neg Q}{\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg(P\leftrightarrow Q)}{\rCI{3,5}}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Irreflexivität von \(\lxor\)]{\neg(P\lxor P)}
+\begin{tabproof}
+  \proofstep{}{P\leftrightarrow P}{\FormulaRefAuto{P \leftrightarrow P}}
+  \proofstep{}{\neg(P\lxor P)}{\FormulaRefAuto{\neg(P\lxor Q)\eqvdash P\leftrightarrow Q}{1}}
+\end{tabproof}
+
+\FormulaThmAuto[Exklusives Drittengesetz]{P\lxor \neg P}
+\begin{tabproof}
+  \proofstep{}{\neg(P\leftrightarrow \neg P)}{\FormulaRefAuto{\neg (P\leftrightarrow \neg P)}}
+  \proofstep{}{P\lxor \neg P}{\FormulaRefAuto{P \lxor Q \eqvdash \neg(P\leftrightarrow Q)}{1}}
+\end{tabproof}
+
+\chapter{NAND}
+
+\section{Definition und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q}
+\end{DeltaContext}
+
+\FormulaDefAuto[NAND]{P \lnand Q \coloneqq \neg(P \land Q)}
+
+\FormulaThmAuto[Definitionsäquivalenz für \(\lnand\)]{P \lnand Q \eqvdash \neg(P\land Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lnand Q}{\rA}
+    \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{P \lnand Q \coloneqq \neg(P \land Q)}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg(P\land Q)}{\rA}
+    \proofstep{1}{P \lnand Q}{\FormulaRefAuto{P \lnand Q \coloneqq \neg(P \land Q)}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[De-Morgan-Form für \(\lnand\)]{P \lnand Q \eqvdash \neg P \lor \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lnand Q}{\rA}
+    \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{1}}
+    \proofstep{1}{\neg P \lor \neg Q}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \lor \neg Q}{\rA}
+    \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{1}{P \lnand Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation von \(\lnand\)]{\neg(P\lnand Q)\eqvdash P\land Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P\lnand Q)}{\rA}
+    \proofstep{2}{\neg(P\land Q)}{\rA}
+    \proofstep{2}{P\lnand Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg\neg(P\land Q)}{\rCI{2,4}}
+    \proofstep{1}{P\land Q}{\FormulaRefAuto{rDN}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\land Q}{\rA}
+    \proofstep{2}{P\lnand Q}{\rA}
+    \proofstep{2}{\neg(P\land Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{3,1}}
+    \proofstep{1}{\neg(P\lnand Q)}{\rCI{2,4}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Einführungsregeln}
+
+\FormulaThmAuto[Einführung von \(\lnand\), linker Fall]{\neg P \vdash P\lnand Q}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
+  \proofstep{1}{P\lnand Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{2}}
+\end{tabproof}
+
+\FormulaThmAuto[Einführung von \(\lnand\), rechter Fall]{\neg Q \vdash P\lnand Q}
+\begin{tabproof}
+  \proofstep{1}{\neg Q}{\rA}
+  \proofstep{1}{\neg P\lor \neg Q}{\rOIb{1}}
+  \proofstep{1}{P\lnand Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{2}}
+\end{tabproof}
+
+\section{Eliminationsregeln}
+
+\FormulaThmAuto[Elimination von \(\lnand\) bei \(P\)]{P\lnand Q\dsep P\vdash \neg Q}
+\begin{tabproof}
+  \proofstep{1}{P\lnand Q}{\rA}
+  \proofstep{2}{P}{\rA}
+  \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{1}}
+  \proofstep{4}{Q}{\rA}
+  \proofstep{2,4}{P\land Q}{\rAI{2,4}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,5}}
+  \proofstep{1,2}{\neg Q}{\rCI{4,6}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination von \(\lnand\) bei \(Q\)]{P\lnand Q\dsep Q\vdash \neg P}
+\begin{tabproof}
+  \proofstep{1}{P\lnand Q}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{1}}
+  \proofstep{4}{P}{\rA}
+  \proofstep{2,4}{P\land Q}{\rAI{4,2}}
+  \proofstep{1,2,4}{\bot}{\rBI{3,5}}
+  \proofstep{1,2}{\neg P}{\rCI{4,6}}
+\end{tabproof}
+
+\section{Strukturgesetze}
+
+\FormulaThmAuto[Kommutativgesetz für \(\lnand\)]{P\lnand Q \eqvdash Q\lnand P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lnand Q}{\rA}
+    \proofstep{1}{\neg P\lor \neg Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{1}{\neg Q\lor \neg P}{\FormulaRefAuto{P \lor Q \eqvdash Q \lor P}{2}}
+    \proofstep{1}{Q\lnand P}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q\lnand P}{\rA}
+    \proofstep{1}{\neg Q\lor \neg P}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{1}{\neg P\lor \neg Q}{\FormulaRefAuto{P \lor Q \eqvdash Q \lor P}{2}}
+    \proofstep{1}{P\lnand Q}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Selbst-NAND als Negation]{P\lnand P \eqvdash \neg P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lnand P}{\rA}
+    \proofstep{1}{\neg P\lor \neg P}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{1}{\neg P}{\FormulaRefAuto{P \lor P \eqvdash P}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P}{\rA}
+    \proofstep{1}{P\lnand P}{\FormulaRefAuto{\neg P \vdash P\lnand Q}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Konjunktion durch \(\lnand\)]{P\land Q \eqvdash (P\lnand Q)\lnand(P\lnand Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\land Q}{\rA}
+    \proofstep{1}{\neg(P\lnand Q)}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{1}}
+    \proofstep{1}{(P\lnand Q)\lnand(P\lnand Q)}{\FormulaRefAuto{P\lnand P \eqvdash \neg P}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\lnand Q)\lnand(P\lnand Q)}{\rA}
+    \proofstep{1}{\neg(P\lnand Q)}{\FormulaRefAuto{P\lnand P \eqvdash \neg P}{1}}
+    \proofstep{1}{P\land Q}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Disjunktion durch \(\lnand\)]{P\lor Q \eqvdash (P\lnand P)\lnand(Q\lnand Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lor Q}{\rA}
+    \proofstep{2}{P}{\rA}
+    \proofstep{2}{P\land P}{\rAI{2,2}}
+    \proofstep{2}{\neg(P\lnand P)}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{3}}
+    \proofstep{2}{\neg(P\lnand P)\lor \neg(Q\lnand Q)}{\rOIa{4}}
+    \proofstep{6}{Q}{\rA}
+    \proofstep{6}{Q\land Q}{\rAI{6,6}}
+    \proofstep{6}{\neg(Q\lnand Q)}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{7}}
+    \proofstep{6}{\neg(P\lnand P)\lor \neg(Q\lnand Q)}{\rOIb{8}}
+    \proofstep{1}{\neg(P\lnand P)\lor \neg(Q\lnand Q)}{\rOE{1,2,5,6,9}}
+    \proofstep{1}{(P\lnand P)\lnand(Q\lnand Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{10}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\lnand P)\lnand(Q\lnand Q)}{\rA}
+    \proofstep{1}{\neg(P\lnand P)\lor \neg(Q\lnand Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{3}{\neg(P\lnand P)}{\rA}
+    \proofstep{3}{P\land P}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{3}}
+    \proofstep{3}{P}{\rAEa{4}}
+    \proofstep{3}{P\lor Q}{\rOIa{5}}
+    \proofstep{7}{\neg(Q\lnand Q)}{\rA}
+    \proofstep{7}{Q\land Q}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{7}}
+    \proofstep{7}{Q}{\rAEa{8}}
+    \proofstep{7}{P\lor Q}{\rOIb{9}}
+    \proofstep{1}{P\lor Q}{\rOE{2,3,6,7,10}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Implikation durch \(\lnand\)]{P\rightarrow Q \eqvdash P\lnand(Q\lnand Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\rightarrow Q}{\rA}
+    \proofstep{1}{\neg P\lor Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{1}}
+    \proofstep{3}{\neg P}{\rA}
+    \proofstep{3}{\neg P\lor \neg(Q\lnand Q)}{\rOIa{3}}
+    \proofstep{5}{Q}{\rA}
+    \proofstep{5}{Q\land Q}{\rAI{5,5}}
+    \proofstep{5}{\neg(Q\lnand Q)}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{6}}
+    \proofstep{5}{\neg P\lor \neg(Q\lnand Q)}{\rOIb{7}}
+    \proofstep{1}{\neg P\lor \neg(Q\lnand Q)}{\rOE{2,3,4,5,8}}
+    \proofstep{1}{P\lnand(Q\lnand Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{9}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\lnand(Q\lnand Q)}{\rA}
+    \proofstep{1}{\neg P\lor \neg(Q\lnand Q)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{3}{\neg P}{\rA}
+    \proofstep{3}{\neg P\lor Q}{\rOIa{3}}
+    \proofstep{5}{\neg(Q\lnand Q)}{\rA}
+    \proofstep{5}{Q\land Q}{\FormulaRefAuto{\neg(P\lnand Q)\eqvdash P\land Q}{5}}
+    \proofstep{5}{Q}{\rAEa{6}}
+    \proofstep{5}{\neg P\lor Q}{\rOIb{7}}
+    \proofstep{1}{\neg P\lor Q}{\rOE{2,3,4,5,8}}
+    \proofstep{1}{P\rightarrow Q}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg P \lor Q}{9}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\chapter{NOR}
+
+\section{Definition und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q}
+\end{DeltaContext}
+
+\FormulaDefAuto[NOR]{P \lnor Q \coloneqq \neg(P \lor Q)}
+
+\FormulaThmAuto[Definitionsäquivalenz für \(\lnor\)]{P \lnor Q \eqvdash \neg(P\lor Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lnor Q}{\rA}
+    \proofstep{1}{\neg(P\lor Q)}{\FormulaRefAuto{P \lnor Q \coloneqq \neg(P \lor Q)}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg(P\lor Q)}{\rA}
+    \proofstep{1}{P \lnor Q}{\FormulaRefAuto{P \lnor Q \coloneqq \neg(P \lor Q)}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[De-Morgan-Form für \(\lnor\)]{P \lnor Q \eqvdash \neg P \land \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P \lnor Q}{\rA}
+    \proofstep{1}{\neg(P\lor Q)}{\FormulaRefAuto{P \lnor Q \eqvdash \neg(P\lor Q)}{1}}
+    \proofstep{1}{\neg P \land \neg Q}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P \land \neg Q}{\rA}
+    \proofstep{1}{\neg(P\lor Q)}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{P \lnor Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg(P\lor Q)}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation von \(\lnor\)]{\neg(P\lnor Q)\eqvdash P\lor Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg(P\lnor Q)}{\rA}
+    \proofstep{2}{\neg(P\lor Q)}{\rA}
+    \proofstep{2}{P\lnor Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg(P\lor Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg\neg(P\lor Q)}{\rCI{2,4}}
+    \proofstep{1}{P\lor Q}{\FormulaRefAuto{rDN}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\lor Q}{\rA}
+    \proofstep{2}{P\lnor Q}{\rA}
+    \proofstep{2}{\neg(P\lor Q)}{\FormulaRefAuto{P \lnor Q \eqvdash \neg(P\lor Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{3,1}}
+    \proofstep{1}{\neg(P\lnor Q)}{\rCI{2,4}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Einführungsregel}
+
+\FormulaThmAuto[Einführung von \(\lnor\)]{\neg P\dsep \neg Q \vdash P\lnor Q}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1,2}{\neg P\land \neg Q}{\rAI{1,2}}
+  \proofstep{1,2}{P\lnor Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{3}}
+\end{tabproof}
+
+\section{Eliminationsregeln}
+
+\FormulaThmAuto[Elimination von \(\lnor\), linker Teil]{P\lnor Q\vdash \neg P}
+\begin{tabproof}
+  \proofstep{1}{P\lnor Q}{\rA}
+  \proofstep{1}{\neg P\land \neg Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+  \proofstep{1}{\neg P}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination von \(\lnor\), rechter Teil]{P\lnor Q\vdash \neg Q}
+\begin{tabproof}
+  \proofstep{1}{P\lnor Q}{\rA}
+  \proofstep{1}{\neg P\land \neg Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+  \proofstep{1}{\neg Q}{\rAEb{2}}
+\end{tabproof}
+
+\section{Strukturgesetze}
+
+\FormulaThmAuto[Kommutativgesetz für \(\lnor\)]{P\lnor Q \eqvdash Q\lnor P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lnor Q}{\rA}
+    \proofstep{1}{\neg P\land \neg Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{\neg Q\land \neg P}{\FormulaRefAuto{P\land Q\eqvdash Q\land P}{2}}
+    \proofstep{1}{Q\lnor P}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{Q\lnor P}{\rA}
+    \proofstep{1}{\neg Q\land \neg P}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{\neg P\land \neg Q}{\FormulaRefAuto{P\land Q\eqvdash Q\land P}{2}}
+    \proofstep{1}{P\lnor Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Selbst-NOR als Negation]{P\lnor P \eqvdash \neg P}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lnor P}{\rA}
+    \proofstep{1}{\neg P\land \neg P}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{\neg P}{\FormulaRefAuto{P \land P \eqvdash P}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P}{\rA}
+    \proofstep{1}{\neg P\land \neg P}{\rAI{1,1}}
+    \proofstep{1}{P\lnor P}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Disjunktion durch \(\lnor\)]{P\lor Q \eqvdash (P\lnor Q)\lnor(P\lnor Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\lor Q}{\rA}
+    \proofstep{1}{\neg(P\lnor Q)}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{1}}
+    \proofstep{1}{(P\lnor Q)\lnor(P\lnor Q)}{\FormulaRefAuto{P\lnor P \eqvdash \neg P}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\lnor Q)\lnor(P\lnor Q)}{\rA}
+    \proofstep{1}{\neg(P\lnor Q)}{\FormulaRefAuto{P\lnor P \eqvdash \neg P}{1}}
+    \proofstep{1}{P\lor Q}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Konjunktion durch \(\lnor\)]{P\land Q \eqvdash (P\lnor P)\lnor(Q\lnor Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\land Q}{\rA}
+    \proofstep{1}{P}{\rAEa{1}}
+    \proofstep{1}{Q}{\rAEb{1}}
+    \proofstep{1}{P\lor P}{\rOIa{2}}
+    \proofstep{1}{Q\lor Q}{\rOIa{3}}
+    \proofstep{1}{\neg(P\lnor P)}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{4}}
+    \proofstep{1}{\neg(Q\lnor Q)}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{5}}
+    \proofstep{1}{\neg(P\lnor P)\land \neg(Q\lnor Q)}{\rAI{6,7}}
+    \proofstep{1}{(P\lnor P)\lnor(Q\lnor Q)}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{8}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\lnor P)\lnor(Q\lnor Q)}{\rA}
+    \proofstep{1}{\neg(P\lnor P)\land \neg(Q\lnor Q)}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{\neg(P\lnor P)}{\rAEa{2}}
+    \proofstep{1}{\neg(Q\lnor Q)}{\rAEb{2}}
+    \proofstep{1}{P\lor P}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{3}}
+    \proofstep{1}{Q\lor Q}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{4}}
+    \proofstep{1}{P}{\FormulaRefAuto{P \lor P \eqvdash P}{5}}
+    \proofstep{1}{Q}{\FormulaRefAuto{P \lor P \eqvdash P}{6}}
+    \proofstep{1}{P\land Q}{\rAI{7,8}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation der Implikation durch \(\lnor\)]{(P\lnor P)\lnor Q \eqvdash \neg(P\rightarrow Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{(P\lnor P)\lnor Q}{\rA}
+    \proofstep{1}{\neg(P\lnor P)\land \neg Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{1}}
+    \proofstep{1}{\neg(P\lnor P)}{\rAEa{2}}
+    \proofstep{1}{\neg Q}{\rAEb{2}}
+    \proofstep{1}{P\lor P}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{3}}
+    \proofstep{1}{P}{\FormulaRefAuto{P \lor P \eqvdash P}{5}}
+    \proofstep{1}{P\land \neg Q}{\rAI{6,4}}
+    \proofstep{1}{\neg(P\rightarrow Q)}{\FormulaRefAuto{\neg(P \rightarrow Q) \eqvdash P \land \neg Q}{7}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg(P\rightarrow Q)}{\rA}
+    \proofstep{1}{P\land \neg Q}{\FormulaRefAuto{\neg(P \rightarrow Q) \eqvdash P \land \neg Q}{1}}
+    \proofstep{1}{P}{\rAEa{2}}
+    \proofstep{1}{\neg Q}{\rAEb{2}}
+    \proofstep{1}{P\lor P}{\rOIa{3}}
+    \proofstep{1}{\neg(P\lnor P)}{\FormulaRefAuto{\neg(P\lnor Q)\eqvdash P\lor Q}{5}}
+    \proofstep{1}{\neg(P\lnor P)\land \neg Q}{\rAI{6,4}}
+    \proofstep{1}{(P\lnor P)\lnor Q}{\FormulaRefAuto{P \lnor Q \eqvdash \neg P \land \neg Q}{7}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Implikation durch \(\lnor\)]{P\rightarrow Q \eqvdash ((P\lnor P)\lnor Q)\lnor((P\lnor P)\lnor Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{P\rightarrow Q}{\rA}
+    \proofstep{2}{(P\lnor P)\lnor Q}{\rA}
+    \proofstep{2}{\neg(P\rightarrow Q)}{\FormulaRefAuto{(P\lnor P)\lnor Q \eqvdash \neg(P\rightarrow Q)}{2}}
+    \proofstep{1,2}{\bot}{\rBI{3,1}}
+    \proofstep{1}{\neg((P\lnor P)\lnor Q)}{\rCI{2,4}}
+    \proofstep{1}{((P\lnor P)\lnor Q)\lnor((P\lnor P)\lnor Q)}{\FormulaRefAuto{P\lnor P \eqvdash \neg P}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{((P\lnor P)\lnor Q)\lnor((P\lnor P)\lnor Q)}{\rA}
+    \proofstep{1}{\neg((P\lnor P)\lnor Q)}{\FormulaRefAuto{P\lnor P \eqvdash \neg P}{1}}
+    \proofstep{3}{\neg(P\rightarrow Q)}{\rA}
+    \proofstep{3}{(P\lnor P)\lnor Q}{\FormulaRefAuto{(P\lnor P)\lnor Q \eqvdash \neg(P\rightarrow Q)}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg\neg(P\rightarrow Q)}{\rCI{3,5}}
+    \proofstep{1}{P\rightarrow Q}{\FormulaRefAuto{rDN}{6}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\begin{remark}
+Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lor Q \eqvdash (P\lnor Q)\lnor(P\lnor Q)}, \FormulaRefAuto{P\land Q \eqvdash (P\lnor P)\lnor(Q\lnor Q)} und \FormulaRefAuto{P\rightarrow Q \eqvdash ((P\lnor P)\lnor Q)\lnor((P\lnor P)\lnor Q)} kann man Negation, Disjunktion, Konjunktion und Implikation allein mithilfe von \(\lnor\) ausdrücken.
+\end{remark}
+
+\chapter{Halbaddierer}
+
+\section{Definitionen und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q \dsep R}
+\end{DeltaContext}
+
+\FormulaDefAuto[Summenbit des Halbaddierers]{\HAddSum{P}{Q}\coloneqq P\lxor Q}
+
+\FormulaDefAuto[Übertragsbit des Halbaddierers]{\HAddCarry{P}{Q}\coloneqq P\land Q}
+
+\FormulaThmAuto[Definitionsäquivalenz für das Summenbit]{\HAddSum{P}{Q}\eqvdash P\lxor Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\HAddSum{P}{Q}}{\rA}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{\HAddSum{P}{Q}\coloneqq P\lxor Q}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\lxor Q}{\rA}
+    \proofstep{1}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\coloneqq P\lxor Q}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Definitionsäquivalenz für das Übertragsbit]{\HAddCarry{P}{Q}\eqvdash P\land Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\HAddCarry{P}{Q}}{\rA}
+    \proofstep{1}{P\land Q}{\FormulaRefAuto{\HAddCarry{P}{Q}\coloneqq P\land Q}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\land Q}{\rA}
+    \proofstep{1}{\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddCarry{P}{Q}\coloneqq P\land Q}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Fallunterscheidung für das Summenbit]{\HAddSum{P}{Q}\eqvdash (\neg P\land Q)\lor(P\land \neg Q)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\HAddSum{P}{Q}}{\rA}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{1}}
+    \proofstep{1}{(\neg P\land Q)\lor(P\land \neg Q)}{\FormulaRefAuto{P \lxor Q \eqvdash (\neg P\land Q)\lor(P\land \neg Q)}{2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(\neg P\land Q)\lor(P\land \neg Q)}{\rA}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{P \lxor Q \eqvdash (\neg P\land Q)\lor(P\land \neg Q)}{1}}
+    \proofstep{1}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation des Summenbits]{\neg\HAddSum{P}{Q}\eqvdash P\leftrightarrow Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\HAddSum{P}{Q}}{\rA}
+    \proofstep{2}{P\lxor Q}{\rA}
+    \proofstep{2}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg(P\lxor Q)}{\rCI{2,4}}
+    \proofstep{1}{P\leftrightarrow Q}{\FormulaRefAuto{\neg(P\lxor Q)\eqvdash P\leftrightarrow Q}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{P\leftrightarrow Q}{\rA}
+    \proofstep{1}{\neg(P\lxor Q)}{\FormulaRefAuto{\neg(P\lxor Q)\eqvdash P\leftrightarrow Q}{1}}
+    \proofstep{3}{\HAddSum{P}{Q}}{\rA}
+    \proofstep{3}{P\lxor Q}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg\HAddSum{P}{Q}}{\rCI{3,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Negation des Übertragsbits]{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\HAddCarry{P}{Q}}{\rA}
+    \proofstep{2}{P\land Q}{\rA}
+    \proofstep{2}{\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{2}}
+    \proofstep{1,2}{\bot}{\rBI{1,3}}
+    \proofstep{1}{\neg(P\land Q)}{\rCI{2,4}}
+    \proofstep{1}{\neg P\lor \neg Q}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg P\lor \neg Q}{\rA}
+    \proofstep{1}{\neg(P\land Q)}{\FormulaRefAuto{\neg(P \land Q) \eqvdash \neg P \lor \neg Q}{1}}
+    \proofstep{3}{\HAddCarry{P}{Q}}{\rA}
+    \proofstep{3}{P\land Q}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{3}}
+    \proofstep{1,3}{\bot}{\rBI{2,4}}
+    \proofstep{1}{\neg\HAddCarry{P}{Q}}{\rCI{3,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Einführungsregeln}
+
+\FormulaThmAuto[Einführung des Summenbits, linker Fall]{P\dsep \neg Q\vdash \HAddSum{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1,2}{P\lxor Q}{\FormulaRefAuto{P\dsep \neg Q \vdash P\lxor Q}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{3}}
+\end{tabproof}
+
+\FormulaThmAuto[Einführung des Summenbits, rechter Fall]{\neg P\dsep Q\vdash \HAddSum{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1,2}{P\lxor Q}{\FormulaRefAuto{\neg P\dsep Q \vdash P\lxor Q}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{3}}
+\end{tabproof}
+
+\FormulaThmAuto[Einführung des Übertragsbits]{P\dsep Q\vdash \HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1,2}{P\land Q}{\rAI{1,2}}
+  \proofstep{1,2}{\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{3}}
+\end{tabproof}
+
+\section{Eliminationsregeln}
+
+\FormulaThmAuto[Elimination des Übertragsbits, linker Teil]{\HAddCarry{P}{Q}\vdash P}
+\begin{tabproof}
+  \proofstep{1}{\HAddCarry{P}{Q}}{\rA}
+  \proofstep{1}{P\land Q}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{1}}
+  \proofstep{1}{P}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmAuto[Elimination des Übertragsbits, rechter Teil]{\HAddCarry{P}{Q}\vdash Q}
+\begin{tabproof}
+  \proofstep{1}{\HAddCarry{P}{Q}}{\rA}
+  \proofstep{1}{P\land Q}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{1}}
+  \proofstep{1}{Q}{\rAEb{2}}
+\end{tabproof}
+
+\FormulaThmAuto[Summenbit schließt Übertragsbit aus]{\HAddSum{P}{Q}\vdash \neg\HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{\HAddSum{P}{Q}}{\rA}
+  \proofstep{1}{(\neg P\land Q)\lor(P\land \neg Q)}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash (\neg P\land Q)\lor(P\land \neg Q)}{1}}
+  \proofstep{3}{\neg P\land Q}{\rA}
+  \proofstep{3}{\neg P}{\rAEa{3}}
+  \proofstep{3}{\neg P\lor \neg Q}{\rOIa{4}}
+  \proofstep{6}{P\land \neg Q}{\rA}
+  \proofstep{6}{\neg Q}{\rAEb{6}}
+  \proofstep{6}{\neg P\lor \neg Q}{\rOIb{7}}
+  \proofstep{1}{\neg P\lor \neg Q}{\rOE{2,3,5,6,8}}
+  \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{9}}
+\end{tabproof}
+
+\FormulaThmAuto[Übertragsbit schließt Summenbit aus]{\HAddCarry{P}{Q}\vdash \neg\HAddSum{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{\HAddCarry{P}{Q}}{\rA}
+  \proofstep{2}{\HAddSum{P}{Q}}{\rA}
+  \proofstep{2}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\vdash \neg\HAddCarry{P}{Q}}{2}}
+  \proofstep{1,2}{\bot}{\rBI{3,1}}
+  \proofstep{1}{\neg\HAddSum{P}{Q}}{\rCI{2,4}}
+\end{tabproof}
+
+\FormulaThmAuto[Widerspruch von Summenbit und Übertragsbit]{\HAddSum{P}{Q}\land \HAddCarry{P}{Q}\vdash R}
+\begin{tabproof}
+  \proofstep{1}{\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\rA}
+  \proofstep{1}{\HAddSum{P}{Q}}{\rAEa{1}}
+  \proofstep{1}{\HAddCarry{P}{Q}}{\rAEb{1}}
+  \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\vdash \neg\HAddCarry{P}{Q}}{2}}
+  \proofstep{1}{R}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{3,4}}
+\end{tabproof}
+
+\section{Strukturgesetze}
+
+\FormulaThmAuto[Kommutativität des Summenbits]{\HAddSum{P}{Q}\eqvdash \HAddSum{Q}{P}}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\HAddSum{P}{Q}}{\rA}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{1}}
+    \proofstep{1}{Q\lxor P}{\FormulaRefAuto{P\lxor Q \eqvdash Q\lxor P}{2}}
+    \proofstep{1}{\HAddSum{Q}{P}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\HAddSum{Q}{P}}{\rA}
+    \proofstep{1}{Q\lxor P}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{1}}
+    \proofstep{1}{P\lxor Q}{\FormulaRefAuto{P\lxor Q \eqvdash Q\lxor P}{2}}
+    \proofstep{1}{\HAddSum{P}{Q}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Kommutativität des Übertragsbits]{\HAddCarry{P}{Q}\eqvdash \HAddCarry{Q}{P}}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\HAddCarry{P}{Q}}{\rA}
+    \proofstep{1}{P\land Q}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{1}}
+    \proofstep{1}{Q\land P}{\FormulaRefAuto{P\land Q\eqvdash Q\land P}{2}}
+    \proofstep{1}{\HAddCarry{Q}{P}}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\HAddCarry{Q}{P}}{\rA}
+    \proofstep{1}{Q\land P}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{1}}
+    \proofstep{1}{P\land Q}{\FormulaRefAuto{P\land Q\eqvdash Q\land P}{2}}
+    \proofstep{1}{\HAddCarry{P}{Q}}{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q}{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitstafel des Halbaddierers}
+
+\FormulaThmAuto[Halbaddierer bei zwei falschen Eingängen]{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1}{P\rightarrow Q}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{1}}
+  \proofstep{2}{Q\rightarrow P}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{2}}
+  \proofstep{1,2}{P\leftrightarrow Q}{\rLRI{3,4}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\FormulaRefAuto{\neg\HAddSum{P}{Q}\eqvdash P\leftrightarrow Q}{5}}
+  \proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
+  \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{7}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{6,8}}
+\end{tabproof}
+
+\FormulaThmAuto[Halbaddierer bei linkem wahren Eingang]{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}}{1,2}}
+  \proofstep{2}{\neg P\lor \neg Q}{\rOIb{2}}
+  \proofstep{2}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{4}}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
+\end{tabproof}
+
+\FormulaThmAuto[Halbaddierer bei rechtem wahren Eingang]{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}}{1,2}}
+  \proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
+  \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{4}}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
+\end{tabproof}
+
+\FormulaThmAuto[Halbaddierer bei zwei wahren Eingängen]{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{2}{P\rightarrow Q}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{2}}
+  \proofstep{1}{Q\rightarrow P}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{1}}
+  \proofstep{1,2}{P\leftrightarrow Q}{\rLRI{3,4}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\FormulaRefAuto{\neg\HAddSum{P}{Q}\eqvdash P\leftrightarrow Q}{5}}
+  \proofstep{1,2}{\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\rAI{6,7}}
+\end{tabproof}
+
+\chapter{Volladdierer}
+
+\section{Definitionen und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q \dsep R}
+\end{DeltaContext}
+
+\FormulaDefAuto[Summenbit des Volladdierers]{%
+  \FAddSum{P}{Q}{R}\coloneqq \HAddSum{\HAddSum{P}{Q}}{R}%
+}
+
+\FormulaDefAuto[Übertragsbit des Volladdierers]{%
+  \FAddCarry{P}{Q}{R}\coloneqq
+  \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}%
+}
+
+\FormulaThmAuto[Definitionsäquivalenz für das Summenbit des Volladdierers]{%
+  \FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\FAddSum{P}{Q}{R}}{\rA}
+    \proofstep{1}{\HAddSum{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\coloneqq \HAddSum{\HAddSum{P}{Q}}{R}}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rA}
+    \proofstep{1}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\coloneqq \HAddSum{\HAddSum{P}{Q}}{R}}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Definitionsäquivalenz für das Übertragsbit des Volladdierers]{%
+  \FAddCarry{P}{Q}{R}\eqvdash
+  \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\rA}
+    \proofstep{1}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\coloneqq \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rA}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\coloneqq \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Summenbit des Volladdierers]{%
+  \FAddSum{P}{Q}{R}\eqvdash (P\lxor Q)\lxor R%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\FAddSum{P}{Q}{R}}{\rA}
+    \proofstep{1}{\HAddSum{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{1}}
+    \proofstep{1}{\HAddSum{P}{Q}\lxor R}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{2}}
+    \proofstep{1}{(P\lxor Q)\lxor R}{\rLRS{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q},3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\lxor Q)\lxor R}{\rA}
+    \proofstep{1}{\HAddSum{P}{Q}\lxor R}{\rLRS{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q},1}}
+    \proofstep{1}{\HAddSum{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q}{2}}
+    \proofstep{1}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Übertragsbit des Volladdierers]{%
+  \FAddCarry{P}{Q}{R}\eqvdash
+  (P\land Q)\lor((P\lxor Q)\land R)%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\rA}
+    \proofstep{1}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{1}}
+    \proofstep{1}{(P\land Q)\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rLRS{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q},2}}
+    \proofstep{1}{(P\land Q)\lor(\HAddSum{P}{Q}\land R)}{\rLRS{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q},3}}
+    \proofstep{1}{(P\land Q)\lor((P\lxor Q)\land R)}{\rLRS{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q},4}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\land Q)\lor((P\lxor Q)\land R)}{\rA}
+    \proofstep{1}{(P\land Q)\lor(\HAddSum{P}{Q}\land R)}{\rLRS{\FormulaRefAuto{\HAddSum{P}{Q}\eqvdash P\lxor Q},1}}
+    \proofstep{1}{(P\land Q)\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rLRS{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q},2}}
+    \proofstep{1}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rLRS{\FormulaRefAuto{\HAddCarry{P}{Q}\eqvdash P\land Q},3}}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{4}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Metamath-Form des Übertragsbits des Volladdierers]{%
+  \FAddCarry{P}{Q}{R}\eqvdash
+  (P\land Q)\lor(R\land(P\lxor Q))%
+}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\rA}
+    \proofstep{1}{(P\land Q)\lor((P\lxor Q)\land R)}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash (P\land Q)\lor((P\lxor Q)\land R)}{1}}
+    \proofstep{1}{(P\land Q)\lor(R\land(P\lxor Q))}{\rLRS{\FormulaRefAuto{P\land Q\eqvdash Q\land P},2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{(P\land Q)\lor(R\land(P\lxor Q))}{\rA}
+    \proofstep{1}{(P\land Q)\lor((P\lxor Q)\land R)}{\rLRS{\FormulaRefAuto{P\land Q\eqvdash Q\land P},1}}
+    \proofstep{1}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash (P\land Q)\lor((P\lxor Q)\land R)}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\chapter{Wahrheitswerte}
+
+\section{Definition und Grundregeln}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Aussagevariablen}{P \dsep Q \dsep R}
+\end{DeltaContext}
+
+\FormulaDefAuto[Wahrheitswert wahr]{\top \coloneqq \neg\bot}
+
+\FormulaThmAuto[Definitionsäquivalenz für \(\top\)]{\top \eqvdash \neg\bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \coloneqq \neg\bot}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\neg\bot}{\rA}
+    \proofstep{1}{\top}{\FormulaRefAuto{\top \coloneqq \neg\bot}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Wahrheit]{\top}
+\begin{tabproof}
+  \proofstep{1}{\bot}{\rA}
+  \proofstep{}{\neg\bot}{\rCI{1,1}}
+  \proofstep{}{\top}{\FormulaRefAuto{\top \eqvdash \neg\bot}{2}}
+\end{tabproof}
+
+\FormulaThmAuto[Negation von wahr]{\neg\top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\rBI{1,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{2}{\top}{\rA}
+    \proofstep{1}{\neg\top}{\rCI{2,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Ausgeschlossenes Drittes als Wahrheit]{P\lor \neg P\vdash \top}
+\begin{tabproof}
+  \proofstep{1}{P\lor \neg P}{\rA}
+  \proofstep{}{\top}{\FormulaRefAuto{\top}}
+\end{tabproof}
+
+\section{Wahrheitswerte der Negation}
+
+\FormulaThmAuto{\neg\bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\neg\bot}{\rA}
+    \proofstep{1}{\top}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte der Konjunktion}
+
+\FormulaThmAuto{\top\land \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\land \top}{\rA}
+    \proofstep{1}{\top}{\rAEa{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\top\land \top}{\rAI{1,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\land \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\land \bot}{\rA}
+    \proofstep{1}{\bot}{\rAEb{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\top\land \bot}{\rAI{2,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\land \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\land \top}{\rA}
+    \proofstep{1}{\bot}{\rAEa{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot\land \top}{\rAI{1,2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\land \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\land \bot}{\rA}
+    \proofstep{1}{\bot}{\rAEa{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\bot\land \bot}{\rAI{1,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte der Disjunktion}
+
+\FormulaThmAuto{\top\lor \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lor \top}{\rA}
+    \proofstep{2}{\top}{\rA}
+    \proofstep{1}{\top}{\rOE{1,2,2,2,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\top\lor \top}{\rOIa{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\lor \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lor \bot}{\rA}
+    \proofstep{2}{\top}{\rA}
+    \proofstep{4}{\bot}{\rA}
+    \proofstep{4}{\top}{\rCE{4}}
+    \proofstep{1}{\top}{\rOE{1,2,2,4,5}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\top\lor \bot}{\rOIa{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lor \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lor \top}{\rA}
+    \proofstep{2}{\bot}{\rA}
+    \proofstep{2}{\top}{\rCE{2}}
+    \proofstep{4}{\top}{\rA}
+    \proofstep{1}{\top}{\rOE{1,2,3,4,4}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\bot\lor \top}{\rOIb{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lor \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lor \bot}{\rA}
+    \proofstep{2}{\bot}{\rA}
+    \proofstep{1}{\bot}{\rOE{1,2,2,2,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\bot\lor \bot}{\rOIa{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte der Implikation}
+
+\FormulaThmAuto{\top\rightarrow \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\rightarrow \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{}{\top\rightarrow \top}{\FormulaRefAuto{P\rightarrow P}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\rightarrow \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\rightarrow \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\rRE{1,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{2}{\top}{\rA}
+    \proofstep{1}{\top\rightarrow \bot}{\rRI{2,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\rightarrow \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\rightarrow \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{2}{\bot}{\rA}
+    \proofstep{1}{\bot\rightarrow \top}{\rRI{2,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\rightarrow \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\rightarrow \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{}{\bot\rightarrow \bot}{\FormulaRefAuto{P\rightarrow P}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte des Bikonditionals}
+
+\FormulaThmAuto{\top\leftrightarrow \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\leftrightarrow \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{}{\top\leftrightarrow \top}{\FormulaRefAuto{P\leftrightarrow P}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\leftrightarrow \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\leftrightarrow \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\top\leftrightarrow \bot}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\leftrightarrow \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\leftrightarrow \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{1,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\bot\leftrightarrow \top}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\leftrightarrow \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\leftrightarrow \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{}{\bot\leftrightarrow \bot}{\FormulaRefAuto{P\leftrightarrow P}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte des exklusiven Oder}
+
+\FormulaThmAuto{\top\lxor \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lxor \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\neg\top}{\FormulaRefAuto{P\lxor Q\dsep P\vdash \neg Q}{1,2}}
+    \proofstep{1}{\bot}{\rBI{3,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\top\lxor \top}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\lxor \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lxor \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\top\lxor \bot}{\FormulaRefAuto{P\dsep \neg Q \vdash P\lxor Q}{1,2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lxor \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lxor \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\bot\lxor \top}{\FormulaRefAuto{\neg P\dsep Q \vdash P\lxor Q}{2,1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lxor \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lxor \bot}{\rA}
+    \proofstep{}{\neg(\bot\lxor \bot)}{\FormulaRefAuto{\neg(P\lxor P)}}
+    \proofstep{1}{\bot}{\rBI{2,1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\bot\lxor \bot}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte von NAND}
+
+\FormulaThmAuto{\top\lnand \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lnand \top}{\rA}
+    \proofstep{1}{\neg(\top\land \top)}{\FormulaRefAuto{P \lnand Q \eqvdash \neg(P\land Q)}{1}}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{}{\top\land \top}{\rAI{3,3}}
+    \proofstep{1}{\bot}{\rBI{2,4}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\top\lnand \top}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\lnand \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lnand \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\top\lnand \bot}{\FormulaRefAuto{\neg Q \vdash P\lnand Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lnand \top \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lnand \top}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\bot\lnand \top}{\FormulaRefAuto{\neg P \vdash P\lnand Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lnand \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lnand \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\bot\lnand \bot}{\FormulaRefAuto{\neg P \vdash P\lnand Q}{2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitswerte von NOR}
+
+\FormulaThmAuto{\top\lnor \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lnor \top}{\rA}
+    \proofstep{1}{\neg\top}{\FormulaRefAuto{P\lnor Q\vdash \neg P}{1}}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\rBI{1,2}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\top\lnor \top}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\top\lnor \bot \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\top\lnor \bot}{\rA}
+    \proofstep{1}{\neg\top}{\FormulaRefAuto{P\lnor Q\vdash \neg P}{1}}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\rBI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\top\lnor \bot}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lnor \top \eqvdash \bot}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lnor \top}{\rA}
+    \proofstep{1}{\neg\top}{\FormulaRefAuto{P\lnor Q\vdash \neg Q}{1}}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+    \proofstep{1}{\bot}{\rBI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\bot}{\rA}
+    \proofstep{1}{\bot\lnor \top}{\rCE{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto{\bot\lnor \bot \eqvdash \top}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\bot\lnor \bot}{\rA}
+    \proofstep{}{\top}{\FormulaRefAuto{\top}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\top}{\rA}
+    \proofstep{1}{\neg\bot}{\FormulaRefAuto{\top \eqvdash \neg\bot}{1}}
+    \proofstep{1}{\bot\lnor \bot}{\FormulaRefAuto{\neg P\dsep \neg Q \vdash P\lnor Q}{2,2}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\section{Wahrheitstafel des Volladdierers}
+
+\FormulaThmAuto[Volladdierer bei \(000\)]{%
+  \neg P\dsep \neg Q\dsep \neg R
+  \vdash
+  \neg\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{3}{\neg R}{\rA}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
+  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
+  \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
+  \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(100\)]{%
+  P\dsep \neg Q\dsep \neg R
+  \vdash
+  \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{3}{\neg R}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
+  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
+  \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
+  \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(010\)]{%
+  \neg P\dsep Q\dsep \neg R
+  \vdash
+  \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{\neg R}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
+  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
+  \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
+  \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(001\)]{%
+  \neg P\dsep \neg Q\dsep R
+  \vdash
+  \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{3}{R}{\rA}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
+  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
+  \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
+  \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(110\)]{%
+  P\dsep Q\dsep \neg R
+  \vdash
+  \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{\neg R}{\rA}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
+  \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
+  \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{10}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(101\)]{%
+  P\dsep \neg Q\dsep R
+  \vdash
+  \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{\neg Q}{\rA}
+  \proofstep{3}{R}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
+  \proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIb{10}}
+  \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{11}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(011\)]{%
+  \neg P\dsep Q\dsep R
+  \vdash
+  \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{\neg P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{R}{\rA}
+  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\neg\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
+  \proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+  \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIb{10}}
+  \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{11}}
+  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
+\end{tabproof}
+
+\FormulaThmAuto[Volladdierer bei \(111\)]{%
+  P\dsep Q\dsep R
+  \vdash
+  \FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
+}
+\begin{tabproof}
+  \proofstep{1}{P}{\rA}
+  \proofstep{2}{Q}{\rA}
+  \proofstep{3}{R}{\rA}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{1,2}}
+  \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\rAEa{4}}
+  \proofstep{1,2}{\HAddCarry{P}{Q}}{\rAEb{4}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
+  \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
+  \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
+  \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{10}}
+  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
 \end{tabproof}
 
 \chapter{Identität und Ungleichheit}
