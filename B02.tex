@@ -4351,6 +4351,90 @@ Auch dieser Operator ist eine metasprachliche Abkürzung.
   \closeproofpart
 \end{tabproofsplit}
 
+\subsection{Allgemeine Fallterme}
+
+Die folgende Konstruktion ist die allgemeine Grundlage der Fallterme.
+Sie folgt derselben Idee, die in Metamath beim bedingten Ausdruck
+verwendet wird: Der Term wird nicht zuerst durch Rechenregeln
+eingeführt, sondern durch eine Bedingung, die seinen Wert vollständig
+charakterisiert. In Metamath geschieht das beim konditionalen
+Klassenterm über eine Elementbedingung; hier verwenden wir für Terme
+das bereits eingeführte Iota-Symbol.
+
+Für diesen allgemeinen Fallterm führen wir einen neuen Operator ein.
+Der vorhandene Operator \(\IfThenElse{P}{a}{b}\) bleibt die konkrete
+zweizweige Schreibweise. Dadurch bleibt die bestehende Notation
+lesbar und die allgemeinere Konstruktion wird nicht mit der bereits
+verwendeten Spezialnotation vermischt.
+
+\FormulaDefDeltaK[Allgemeiner Fallterm]{%
+  \CaseTerm{u}{\Theta(u)} \coloneqq \iota u\,\Theta(u)%
+}{Allgemeiner Fallterm}{%
+  \DeltaRow{Formelschema}{\Theta(u)}%
+  \DeltaRow{Variable}{u}%
+  \DeltaRow{\textbf{Voraussetzung}}{\exists! u\,\Theta(u)}%
+  \DeltaRow{\textbf{Neue Symbole}}{\CaseTerm{u}{\Theta(u)}}%
+}
+
+Die Schreibweise bindet die Variable \(u\) im zweiten Argument. Sie ist
+also schematisch zu lesen: Sobald eine Formel \(\Theta(u)\) genau ein
+Objekt \(u\) bestimmt, bezeichnet \(\CaseTerm{u}{\Theta(u)}\) dieses
+Objekt.
+
+\FormulaThmDeltaK[Charakterisierung des allgemeinen Fallterms]{%
+  \exists! u\,\Theta(u)\vdash \Theta\!\left(\CaseTerm{u}{\Theta(u)}\right)%
+}{Charakterisierung des allgemeinen Fallterms}{%
+  \DeltaRow{Formelschema}{\Theta(u)}%
+  \DeltaRow{Variable}{u}%
+}
+\begin{tabproof}
+  \proofstep{1}{\exists! u\,\Theta(u)}{\rA}
+  \proofstep{1}{\Theta\!\left(\CaseTerm{u}{\Theta(u)}\right)}{\FormulaRefAuto{Allgemeiner Fallterm}{1}}
+\end{tabproof}
+
+Die direkte Analogie zur Metamath-Form ist dabei folgende: Bei Klassen
+wird ein bedingter Ausdruck über die Elementbedingung des Kandidaten
+beschrieben. Bei Termen ersetzen wir die Elementbedingung durch die
+Gleichheit mit dem Kandidatenwert. Der zweizweige Fall kann daher auch
+durch die Fallbeschreibung
+\[
+  (P\land u=a)\lor(\neg P\land u=b)
+\]
+gelesen werden. Für die anschließenden Beweise ist die äquivalente
+Implikationsform
+\[
+  (P\rightarrow u=a)\land(\neg P\rightarrow u=b)
+\]
+praktischer, weil sie die beiden Charakterisierungsgleichungen direkt
+bereitstellt.
+
+Der binäre Fallterm entsteht als Instanz dieser allgemeinen Form, indem
+die charakterisierende Formel festlegt, welchen Wert der Term im
+\(P\)-Fall und im \(\neg P\)-Fall annimmt:
+
+\FormulaThmDeltaK[Binärer Fallterm als Instanz des allgemeinen Fallterms]{%
+  \exists! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)
+  \vdash
+  \CaseTerm{u}{(P\rightarrow u=a)\land(\neg P\rightarrow u=b)}
+  =
+  \iota u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)%
+}{Binärer Fallterm als Instanz des allgemeinen Fallterms}{%
+  \DeltaRow{Aussagenvariablen}{P}%
+  \DeltaRow{Variablen}{a\dsep b\dsep u}%
+}
+\begin{tabproof}
+  \proofstep{1}{\exists! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rA}
+  \proofstep{}{%
+    \CaseTerm{u}{(P\rightarrow u=a)\land(\neg P\rightarrow u=b)}
+    =
+    \iota u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\FormulaRefAuto{Allgemeiner Fallterm}{1}}
+\end{tabproof}
+
+Damit ist das folgende bisherige Unterkapitel eine Spezialisierung:
+Es zeigt zunächst die Wohldefiniertheit genau dieser charakterisierenden
+Formel unter der klassischen Fallunterscheidung \(P\lor\neg P\) und
+führt anschließend die vertraute zweizweige Schreibweise ein.
+
 \subsection{Fallterme}
 
 
