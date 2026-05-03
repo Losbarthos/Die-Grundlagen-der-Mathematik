@@ -4415,7 +4415,7 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \DeltaRow{Variablen}{a\dsep b\dsep u}%
 }
 \begin{tabproof}
-  \proofstep{}{\IfWff{P}{u=a}{u=b}\leftrightarrow (P\rightarrow u=a)\land(\neg P\rightarrow u=b)}{\FormulaRefAuto{if-Implikationsform}}
+  \proofstep{}{\IfWff{P}{u=a}{u=b}\eqvdash (P\rightarrow u=a)\land(\neg P\rightarrow u=b)}{\FormulaRefAuto{if-Implikationsform}}
 \end{tabproof}
 
 \section{Fallterme}
@@ -4432,48 +4432,42 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
 
   \proofstep{2}{P}{\rA}
     \proofstep{}{a=a}{\rII}
-    \proofstep{}{P\rightarrow a=a}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{3}}
+    \proofstep{2}{P\land a=a}{\rAI{2,3}}
+    \proofstep{2}{(P\land a=a)\lor(\neg P\land a=b)}{\rOIa{4}}
+    \proofstep{2}{\IfWff{P}{a=a}{a=b}}{\FormulaRefAuto{if-}{5}}
+    \proofstep{2}{(P\rightarrow a=a)\land(\neg P\rightarrow a=b)}{\FormulaRefAuto{if--Fallterm}{6}}
+    \proofstep{2}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{7}}
 
-    \proofstep{5}{\neg P}{\rA}
-    \proofstep{2,5}{a=b}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{2,5}}
-    \proofstep{2}{\neg P\rightarrow a=b}{\rRI{5,6}}
-
-    \proofstep{2}{(P\rightarrow a=a)\land(\neg P\rightarrow a=b)}{\rAI{4,7}}
-    \proofstep{2}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{8}}
-
-  \proofstep{10}{\neg P}{\rA}
-    \proofstep{11}{P}{\rA}
-    \proofstep{10,11}{b=a}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{11,10}}
-    \proofstep{10}{P\rightarrow b=a}{\rRI{11,12}}
-
+  \proofstep{9}{\neg P}{\rA}
     \proofstep{}{b=b}{\rII}
-    \proofstep{}{\neg P\rightarrow b=b}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{14}}
+    \proofstep{9}{\neg P\land b=b}{\rAI{9,10}}
+    \proofstep{9}{(P\land b=a)\lor(\neg P\land b=b)}{\rOIb{11}}
+    \proofstep{9}{\IfWff{P}{b=a}{b=b}}{\FormulaRefAuto{if-}{12}}
+    \proofstep{9}{(P\rightarrow b=a)\land(\neg P\rightarrow b=b)}{\FormulaRefAuto{if--Fallterm}{13}}
+    \proofstep{9}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{14}}
 
-    \proofstep{10}{(P\rightarrow b=a)\land(\neg P\rightarrow b=b)}{\rAI{13,15}}
-    \proofstep{10}{\exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rEI{16}}
+  \proofstep{1}{ \exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rOE{1,2,8,9,15}}
 
-  \proofstep{1}{ \exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rOE{1,2,9,10,17}}
+  \proofstep{17}{(P\rightarrow v=a)\land(\neg P\rightarrow v=b)}{\rA}
+  \proofstep{18}{(P\rightarrow w=a)\land(\neg P\rightarrow w=b)}{\rA}
 
-  \proofstep{19}{(P\rightarrow v=a)\land(\neg P\rightarrow v=b)}{\rA}
-  \proofstep{20}{(P\rightarrow w=a)\land(\neg P\rightarrow w=b)}{\rA}
+  \proofstep{19}{P}{\rA}
+    \proofstep{17}{P\rightarrow v=a}{\rAEa{17}}
+    \proofstep{17,19}{v=a}{\rRE{19,20}}
+    \proofstep{18}{P\rightarrow w=a}{\rAEa{18}}
+    \proofstep{18,19}{w=a}{\rRE{19,22}}
+    \proofstep{17,18,19}{v=w}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{21,23}}
 
-  \proofstep{21}{P}{\rA}
-    \proofstep{19}{P\rightarrow v=a}{\rAEa{19}}
-    \proofstep{19,21}{v=a}{\rRE{21,22}}
-    \proofstep{20}{P\rightarrow w=a}{\rAEa{20}}
-    \proofstep{20,21}{w=a}{\rRE{21,24}}
-    \proofstep{19,20,21}{v=w}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{23,25}}
+  \proofstep{25}{\neg P}{\rA}
+    \proofstep{17}{\neg P\rightarrow v=b}{\rAEb{17}}
+    \proofstep{17,25}{v=b}{\rRE{25,26}}
+    \proofstep{18}{\neg P\rightarrow w=b}{\rAEb{18}}
+    \proofstep{18,25}{w=b}{\rRE{25,28}}
+    \proofstep{17,18,25}{v=w}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{27,29}}
 
-  \proofstep{27}{\neg P}{\rA}
-    \proofstep{19}{\neg P\rightarrow v=b}{\rAEb{19}}
-    \proofstep{19,27}{v=b}{\rRE{27,28}}
-    \proofstep{20}{\neg P\rightarrow w=b}{\rAEb{20}}
-    \proofstep{20,27}{w=b}{\rRE{27,30}}
-    \proofstep{19,20,27}{v=w}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{29,31}}
+  \proofstep{1,17,18}{v=w}{\rOE{1,19,24,25,30}}
 
-  \proofstep{1,19,20}{v=w}{\rOE{1,21,26,27,32}}
-
-  \proofstep{1}{ \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\UEI{18,19,20,33}}
+  \proofstep{1}{ \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\UEI{16,17,18,31}}
 \end{tabproof}
 
 \FormulaDefDeltaK[Notation des Fallterms]{%
