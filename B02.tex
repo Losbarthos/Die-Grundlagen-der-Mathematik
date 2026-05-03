@@ -4188,11 +4188,103 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
     \proofstep{1,2}{\forall x\, F(x)\rightarrow Q(x)=R(x)}{\rUI{9}}
 \end{tabproof}
 
+\section{Höchstens-ein-Quantor}
+
+\begin{DeltaContext}{Im Kapitel verwendete Symbole}
+  \DeltaRow{Prädikatensymbole}{P \dsep Q}
+  \DeltaRow{Variablen}{x \dsep y \dsep z \dsep a \dsep b}
+  \DeltaRow{Quantoren}{\existsleone}
+\end{DeltaContext}
+
+Wir schreiben \(\existsleone x\,P(x)\) für
+\enquote{es existiert höchstens ein \(x\) mit \(P(x)\)}.
+Auch dieser Operator ist eine metasprachliche Abkürzung.
+
+\FormulaDefAuto[Höchstens-ein-Quantor]{\existsleone x\,P(x) \coloneqq \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}
+
+\FormulaThmAuto[Definitionsäquivalenz für \(\existsleone\)]{\existsleone x\,P(x) \eqvdash \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\existsleone x\,P(x)}{\rA}
+    \proofstep{1}{\forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{\FormulaRefAuto{\existsleone x\,P(x) \coloneqq \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{1}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{\rA}
+    \proofstep{1}{\existsleone x\,P(x)}{\FormulaRefAuto{\existsleone x\,P(x) \coloneqq \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{1}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmAuto[Elimination des Höchstens-ein-Quantors]{\existsleone x\,P(x),\; P(a),\; P(b) \vdash a=b}
+\begin{tabproof}
+  \proofstep{1}{\existsleone x\,P(x)}{\rA}
+  \proofstep{2}{P(a)}{\rA}
+  \proofstep{3}{P(b)}{\rA}
+  \proofstep{1}{\forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{\FormulaRefAuto{\existsleone x\,P(x) \eqvdash \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{1}}
+  \proofstep{1}{\forall z((P(a)\land P(z))\rightarrow a=z)}{\rUE{4}}
+  \proofstep{1}{(P(a)\land P(b))\rightarrow a=b}{\rUE{5}}
+  \proofstep{2,3}{P(a)\land P(b)}{\rAI{2,3}}
+  \proofstep{1,2,3}{a=b}{\rRE{7,6}}
+\end{tabproof}
+
+\FormulaThmAuto[Leerer Fall]{\forall x\neg P(x)\vdash \existsleone x\,P(x)}
+\begin{tabproof}
+  \proofstep{1}{\forall x\neg P(x)}{\rA}
+  \proofstep{2}{P(a)\land P(b)}{\rA}
+  \proofstep{2}{P(a)}{\rAEa{2}}
+  \proofstep{1}{\neg P(a)}{\rUE{1}}
+  \proofstep{1,2}{a=b}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{3,4}}
+  \proofstep{1}{(P(a)\land P(b))\rightarrow a=b}{\rRI{2,5}}
+  \proofstep{1}{\forall z((P(a)\land P(z))\rightarrow a=z)}{\rUI{6}}
+  \proofstep{1}{\forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{\rUI{7}}
+  \proofstep{1}{\existsleone x\,P(x)}{\FormulaRefAuto{\existsleone x\,P(x) \eqvdash \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{8}}
+\end{tabproof}
+
+\FormulaThmAuto[Kontrapositionsform]{\existsleone x\,P(x),\; a\neq b \vdash \neg(P(a)\land P(b))}
+\begin{tabproof}
+  \proofstep{1}{\existsleone x\,P(x)}{\rA}
+  \proofstep{2}{a\neq b}{\rA}
+  \proofstep{3}{P(a)\land P(b)}{\rA}
+  \proofstep{3}{P(a)}{\rAEa{3}}
+  \proofstep{3}{P(b)}{\rAEb{3}}
+  \proofstep{1,3}{a=b}{\FormulaRefAuto{\existsleone x\,P(x),\; P(a),\; P(b) \vdash a=b}{1,4,5}}
+  \proofstep{1,2,3}{\bot}{\rBI{2,6}}
+  \proofstep{1,2}{\neg(P(a)\land P(b))}{\rCI{3,7}}
+\end{tabproof}
+
+\FormulaThmAuto[Monotonie des Höchstens-ein-Quantors]{\existsleone x\,P(x),\; \forall x(Q(x)\rightarrow P(x)) \vdash \existsleone x\,Q(x)}
+\begin{tabproof}
+  \proofstep{1}{\existsleone x\,P(x)}{\rA}
+  \proofstep{2}{\forall x(Q(x)\rightarrow P(x))}{\rA}
+  \proofstep{3}{Q(a)\land Q(b)}{\rA}
+  \proofstep{3}{Q(a)}{\rAEa{3}}
+  \proofstep{3}{Q(b)}{\rAEb{3}}
+  \proofstep{2}{Q(a)\rightarrow P(a)}{\rUE{2}}
+  \proofstep{2}{Q(b)\rightarrow P(b)}{\rUE{2}}
+  \proofstep{2,3}{P(a)}{\rRE{4,6}}
+  \proofstep{2,3}{P(b)}{\rRE{5,7}}
+  \proofstep{1,2,3}{a=b}{\FormulaRefAuto{\existsleone x\,P(x),\; P(a),\; P(b) \vdash a=b}{1,8,9}}
+  \proofstep{1,2}{(Q(a)\land Q(b))\rightarrow a=b}{\rRI{3,10}}
+  \proofstep{1,2}{\forall z((Q(a)\land Q(z))\rightarrow a=z)}{\rUI{11}}
+  \proofstep{1,2}{\forall y\forall z((Q(y)\land Q(z))\rightarrow y=z)}{\rUI{12}}
+  \proofstep{1,2}{\existsleone x\,Q(x)}{\FormulaRefAuto{\existsleone x\,P(x) \eqvdash \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{13}}
+\end{tabproof}
+
+\FormulaThmAuto[Invarianz unter prädikatenlogischer Äquivalenz]{\existsleone x\,P(x),\; \forall x(P(x)\leftrightarrow Q(x)) \vdash \existsleone x\,Q(x)}
+\begin{tabproof}
+  \proofstep{1}{\existsleone x\,P(x)}{\rA}
+  \proofstep{2}{\forall x(P(x)\leftrightarrow Q(x))}{\rA}
+  \proofstep{2}{\forall x(P(x)\rightarrow Q(x)) \land \forall x(Q(x)\rightarrow P(x))}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{2}}
+  \proofstep{2}{\forall x(Q(x)\rightarrow P(x))}{\rAEb{3}}
+  \proofstep{1,2}{\existsleone x\,Q(x)}{\FormulaRefAuto{\existsleone x\,P(x),\; \forall x(Q(x)\rightarrow P(x)) \vdash \existsleone x\,Q(x)}{1,4}}
+\end{tabproof}
+
 \section{Eindeutigkeitsquantor}
 
 \begin{DeltaContext}{Im Kapitel verwendete Symbole}
   \DeltaRow{Prädikatensymbole}{P}
-  \DeltaRow{Variablen}{x \dsep a \dsep b \dsep c}
+  \DeltaRow{Variablen}{x \dsep y \dsep z \dsep a \dsep b \dsep c}
+  \DeltaRow{Quantoren}{\exists! \dsep \existsleone}
 \end{DeltaContext}
 
 \FormulaThmAuto[Eindeutigkeit des \(\exists!\)-Zeugen]{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}
@@ -4209,6 +4301,55 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{3,4,5}{a = b}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{8,9}}
   \proofstep{1,4,5}{a = b}{\UEE{1,2,3,10}}
 \end{tabproof}
+
+\FormulaThmAuto[Existenzanteil von \(\exists!\)]{\exists! x\,P(x)\vdash \exists x\,P(x)}
+\begin{tabproof}
+  \proofstep{1}{\exists! x\,P(x)}{\rA}
+  \proofstep{2}{P(a)}{\rA}
+  \proofstep{3}{\forall y(P(y)\rightarrow a=y)}{\rA}
+  \proofstep{2}{\exists x\,P(x)}{\rEI{2}}
+  \proofstep{1}{\exists x\,P(x)}{\UEE{1,2,3,4}}
+\end{tabproof}
+
+\FormulaThmAuto[Höchstens-ein-Anteil von \(\exists!\)]{\exists! x\,P(x)\vdash \existsleone x\,P(x)}
+\begin{tabproof}
+  \proofstep{1}{\exists! x\,P(x)}{\rA}
+  \proofstep{2}{P(a)\land P(b)}{\rA}
+  \proofstep{2}{P(a)}{\rAEa{2}}
+  \proofstep{2}{P(b)}{\rAEb{2}}
+  \proofstep{1,2}{a=b}{\FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}{1,3,4}}
+  \proofstep{1}{(P(a)\land P(b))\rightarrow a=b}{\rRI{2,5}}
+  \proofstep{1}{\forall z((P(a)\land P(z))\rightarrow a=z)}{\rUI{6}}
+  \proofstep{1}{\forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{\rUI{7}}
+  \proofstep{1}{\existsleone x\,P(x)}{\FormulaRefAuto{\existsleone x\,P(x) \eqvdash \forall y\forall z((P(y)\land P(z))\rightarrow y=z)}{8}}
+\end{tabproof}
+
+\FormulaThmAuto[Eindeutige Existenz aus Existenz und Höchstens-eins]{\exists x\,P(x),\; \existsleone x\,P(x)\vdash \exists! x\,P(x)}
+\begin{tabproof}
+  \proofstep{1}{\exists x\,P(x)}{\rA}
+  \proofstep{2}{\existsleone x\,P(x)}{\rA}
+  \proofstep{3}{P(a)}{\rA}
+  \proofstep{4}{P(b)}{\rA}
+  \proofstep{2,3,4}{a=b}{\FormulaRefAuto{\existsleone x\,P(x),\; P(a),\; P(b) \vdash a=b}{2,3,4}}
+  \proofstep{1,2}{\exists! x\,P(x)}{\UEI{1,3,4,5}}
+\end{tabproof}
+
+\FormulaThmAuto[Zerlegung der eindeutigen Existenz]{\exists! x\,P(x) \eqvdash \exists x\,P(x)\land \existsleone x\,P(x)}
+\begin{tabproofsplit}
+  \proofpart{$\vdash$}
+    \proofstep{1}{\exists! x\,P(x)}{\rA}
+    \proofstep{1}{\exists x\,P(x)}{\FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}{1}}
+    \proofstep{1}{\existsleone x\,P(x)}{\FormulaRefAuto{\exists! x\,P(x)\vdash \existsleone x\,P(x)}{1}}
+    \proofstep{1}{\exists x\,P(x)\land \existsleone x\,P(x)}{\rAI{2,3}}
+  \closeproofpart
+
+  \proofpart{$\dashv$}
+    \proofstep{1}{\exists x\,P(x)\land \existsleone x\,P(x)}{\rA}
+    \proofstep{1}{\exists x\,P(x)}{\rAEa{1}}
+    \proofstep{1}{\existsleone x\,P(x)}{\rAEb{1}}
+    \proofstep{1}{\exists! x\,P(x)}{\FormulaRefAuto{\exists x\,P(x),\; \existsleone x\,P(x)\vdash \exists! x\,P(x)}{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
 
 \subsection{Fallterme}
 
