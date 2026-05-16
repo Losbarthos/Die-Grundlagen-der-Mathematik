@@ -19232,6 +19232,138 @@ Aus \FormulaRefAuto{\varnothing\in\mathbb{N}} folgt, dass die Null in den natür
   \DeltaPrem{Tarski-endliche Mengen}{ }
 }
 
+\subsubsection{Endlichkeit impliziert Tarski-Endlichkeit}
+
+\FormulaThmDeltaR[Scheitern des Maximalitätsaxioms liefert eine Einbettung \(\mathbb{N}\to M\)]{%
+  \begin{aligned}[t]
+    &B\subseteq \powerset(M)\dsep B\neq\varnothing\dsep
+      \forall x\in B\,\exists y\in B\,\bigl(x\subset y\bigr)\vdash{}\\
+    &\exists H\colon \mathbb{N}\inj M
+  \end{aligned}
+}{%
+  B\subseteq \powerset(M)\dsep B\neq\varnothing\dsep
+  \forall x\in B\,\exists y\in B\,\bigl(x\subset y\bigr)\vdash
+  \exists H\colon \mathbb{N}\inj M
+}{%
+  \DeltaRow{Mengen}{M\dsep B\dsep x\dsep y\dsep x_0\dsep n\dsep m\dsep p\dsep q\dsep a}
+  \DeltaRow{Relationen}{R_B^\uparrow\dsep R_X^\Delta}
+  \DeltaRow{Funktionen}{S\dsep X\dsep H}
+}
+\begin{proof}
+  Wir setzen
+  \[
+    R_B^\uparrow\coloneqq
+    \{(x,y)\in B\times B\mid x\subset y\}.
+  \]
+  Aus \(\forall x\in B\,\exists y\in B\,(x\subset y)\) folgt,
+  dass \(R_B^\uparrow\) eine totale Relation von \(B\) nach \(B\) ist.
+  Mit der Relationsform des Auswahlprinzips erhalten wir daher eine
+  Abbildung \(S\colon B\to B\) mit
+  \[
+    \forall x\in B\,\bigl(x\subset S(x)\bigr).
+  \]
+
+  Da \(B\neq\varnothing\), wählen wir ein \(x_0\in B\).  Der Dedekindsche
+  Rekursionssatz, angewandt auf \(x_0\in B\) und \(S\colon B\to B\), liefert
+  eine rekursiv definierte Abbildung
+  \[
+    X\coloneqq \RecFun{x_0}{S}\colon \mathbb{N}\to B
+  \]
+  mit
+  \[
+    X(\varnothing)=x_0
+    \quad\text{und}\quad
+    \forall n\in\mathbb{N}\,\bigl(X(\Succ(n))=S(X(n))\bigr).
+  \]
+  Wegen \(X(n)\in B\) gilt für jedes \(n\in\mathbb{N}\)
+  \[
+    X(n)\subset X(\Succ(n)).
+  \]
+  Induktion über die natürliche Zahl \(q\) zeigt daraus die
+  Monotonie der rekursiven Kette:
+  \[
+    p\in\mathbb{N}\dsep q\in\mathbb{N}\dsep p\subseteq q
+    \vdash X(p)\subseteq X(q).
+  \]
+  Insbesondere ist für jedes \(n\in\mathbb{N}\) die Differenz
+  \(X(\Succ(n))\setminus X(n)\) nichtleer.  Da \(B\subseteq\powerset(M)\),
+  ist diese Differenz eine Teilmenge von \(M\).
+
+  Wie bei der Folgenverschiebung wird die gesuchte Abbildung zunächst
+  punktweise durch eine Vorschrift festgelegt; hier ist die Vorschrift nicht
+  eindeutig, weshalb wir sie als totale Relation formulieren.  Wir betrachten
+  also
+  \[
+    R_X^\Delta\coloneqq
+    \{(n,a)\in\mathbb{N}\times M
+      \mid a\in X(\Succ(n))\setminus X(n)\}.
+  \]
+  Nach dem vorigen Absatz ist \(R_X^\Delta\) total von \(\mathbb{N}\) nach
+  \(M\).  Die Relationsform des Auswahlprinzips liefert also eine Abbildung
+  \(H\colon\mathbb{N}\to M\) mit
+  \[
+    \forall n\in\mathbb{N}\,
+    \bigl(H(n)\in X(\Succ(n))\setminus X(n)\bigr).
+  \]
+
+  Diese Abbildung ist injektiv.  Seien dazu \(m,n\in\mathbb{N}\) und
+  \(H(m)=H(n)\).  Nach der Trichotomie der natürlichen Zahlen gilt
+  \(m\in n\), \(n\in m\) oder \(m=n\).  Im Fall \(m\in n\) folgt aus der
+  Ordnung der natürlichen Zahlen \(\Succ(m)\subseteq n\), und mit der
+  Monotonie erhalten wir \(X(\Succ(m))\subseteq X(n)\).  Also liegt
+  \(H(m)\) in \(X(n)\), während \(H(n)\notin X(n)\), ein Widerspruch zu
+  \(H(m)=H(n)\).  Der Fall \(n\in m\) ist symmetrisch.  Somit bleibt nur
+  \(m=n\).  Also gilt \(H\colon\mathbb{N}\inj M\).
+\end{proof}
+
+\FormulaThmDeltaR[Endliche Mengen erfüllen das Tarskische Maximalitätsaxiom]{%
+  \begin{aligned}[t]
+    &\Finite{M}\dsep B\subseteq \powerset(M)\dsep B\neq\varnothing\vdash{}\\
+    &\exists x\in B\,\forall y\in B\,\bigl(x\subseteq y\rightarrow y=x\bigr)
+  \end{aligned}
+}{%
+  \Finite{M}\dsep B\subseteq \powerset(M)\dsep B\neq\varnothing\vdash
+  \exists x\in B\,\forall y\in B\,\bigl(x\subseteq y\rightarrow y=x\bigr)
+}{%
+  \DeltaRow{Mengen}{M\dsep B\dsep x\dsep y\dsep n}
+  \DeltaRow{Funktionen}{H}
+}
+\begin{proof}
+  Angenommen, die behauptete Maximalitätsaussage gilt für dieses \(B\) nicht.
+  Dann gilt für jedes \(x\in B\), dass es ein \(y\in B\) mit
+  \(x\subseteq y\) und \(y\neq x\) gibt, also
+  \[
+    \forall x\in B\,\exists y\in B\,\bigl(x\subset y\bigr).
+  \]
+  Nach dem vorherigen Satz existiert daher eine Injektion
+  \(H\colon\mathbb{N}\inj M\).
+
+  Aus \(\Finite{M}\) folgt nach Definition der Endlichkeit ein
+  \(n\in\mathbb{N}\) mit \(n\EqCard M\).  Für solche \(n\) wurde bereits
+  gezeigt:
+  \[
+    n\in\mathbb{N}\dsep n\EqCard M\vdash
+    \neg\exists H\colon \mathbb{N}\inj M.
+  \]
+  Dies widerspricht der konstruierten Injektion \(H\colon\mathbb{N}\inj M\).
+  Also kann das Maximalitätsaxiom nicht scheitern, und es existiert ein
+  \(x\in B\) mit
+  \(\forall y\in B\,(x\subseteq y\rightarrow y=x)\).
+\end{proof}
+
+\FormulaThmDelta[Endlichkeit impliziert Tarski-Endlichkeit]{%
+  \Finite{M}\vdash \TarskiFinite(M)
+}{%
+  \DeltaRow{Mengen}{M\dsep B\dsep x\dsep y}
+}
+\begin{proof}
+  Sei \(\Finite{M}\).  Der vorherige Satz liefert für jedes
+  \(B\subseteq\powerset(M)\) mit \(B\neq\varnothing\) ein bezüglich
+  \(\subseteq\) maximales Element in \(B\).  Das ist genau die in der
+  Definition von \(\TarskiFinite(M)\) geforderte Instanz des Tarskischen
+  Maximalitätsaxioms.
+\end{proof}
+
 \section{Wohldefiniertheit der Kardinalität}
 
 \subsection{Eindeutigkeit der endlichen Kardinalität}
