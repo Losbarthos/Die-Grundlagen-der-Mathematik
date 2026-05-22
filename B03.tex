@@ -4629,6 +4629,26 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \DeltaPrem{Wohlordnungen}{}
 }
 
+\FormulaDefDeltaK[Begriff der Wohlordenbarkeit]{%
+  \WellOrdable(A)\coloneqq \exists R\,\WellOrd{R,A}%
+}{WellOrdable}{
+  \DeltaRow{Mengen}{A \dsep R}
+  \DeltaRow{Wohlordnung}
+           {\WellOrd{R,A}}
+           [\FormulaRefAuto{Wohlordnung}]
+  \DeltaRow{\textbf{Neue Symbole}}{}
+  \DeltaPrem{Wohlordenbare Mengen}{}
+}
+
+\FormulaDefDeltaK[Wohlordnungssatz]{%
+  \WOP\coloneqq \forall A\,\WellOrdable(A)%
+}{WOP}{
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Wohlordenbarkeit}
+           {\WellOrdable(A)}
+           [\FormulaRefAuto{WellOrdable}]
+}
+
 
 
 
@@ -11271,6 +11291,17 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \DeltaPrem{Surjektive Funktion}{G\colon B \sur A}
 }
 
+\FormulaDefDeltaK[Auswahlprinzip (globale Surjektionsform)]{%
+  \ACsur\coloneqq
+  \forall A\,\forall B\,\forall G\,
+  \bigl(G\colon B\sur A\rightarrow
+  \exists F\colon A\to B\,G\circ F=\Id_A\bigr)%
+}{ACsur}{
+  \DeltaDecl{Mengen}{A \dsep B}
+  \DeltaDecl{Funktionen}{F \dsep G}
+  \DeltaPrem{Surjektive Funktion}{G\colon B\sur A}
+}
+
 \subsection{Folgerungen}
 
 \FormulaThmDelta[AC -- Relationsform aus der Surjektionsform]{%
@@ -11326,6 +11357,257 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
     \FormulaRefAuto{\exists F\colon M\to \bigcup M\,\forall x\in M\,\bigl((x,F(x))\in \MemRel(M)\bigr)
     \vdash \exists L\,\forall X\in M\,\exists! a\in X\,\bigl(a\in L\bigr)}{2}%
   }
+\end{tabproof}
+
+\subsubsection{Wohlordnungssatz}
+
+\FormulaDefDelta[Auswahlrelation auf nichtleeren Teilmengen]{%
+  \ChoiceRel{A}\coloneqq
+  \{(X,a)\in \PowNE{A}\times A\mid a\in X\}%
+}{
+  \DeltaDecl{Mengen}{A \dsep X \dsep a}
+  \DeltaDecl{Relation}{\ChoiceRel{A}}
+}
+
+\FormulaDefDeltaK[Auswahlfunktion auf nichtleeren Teilmengen]{%
+  \ChoicePow{C}{A}\coloneqq
+  C\colon \PowNE{A}\to A
+  \land \forall X\in \PowNE{A}\,\bigl(C(X)\in X\bigr)%
+}{ChoicePow}{
+  \DeltaDecl{Mengen}{A \dsep X}
+  \DeltaDecl{Funktion}{C}
+  \DeltaRow{Definitionsbereich}{\PowNE{A}}
+  \DeltaRow{Auswahlbedingung}
+           {\forall X\in \PowNE{A}\,\bigl(C(X)\in X\bigr)}
+}
+
+\FormulaThmDeltaK[Auswahlrelation ist total]{%
+  \TotRel{\ChoiceRel{A},\PowNE{A},A}%
+}{ChoiceRelTotal}{
+  \DeltaDecl{Mengen}{A \dsep X \dsep a}
+  \DeltaDecl{Relation}{\ChoiceRel{A}}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    \ChoiceRel{A}\subseteq \PowNE{A}\times A%
+  }{%
+    \FormulaRefAuto{A=\{ x \in B \mid P(x)\}\vdash  A\subseteq B}{%
+      \FormulaRefAuto{\ChoiceRel{A}\coloneqq
+      \{(X,a)\in \PowNE{A}\times A\mid a\in X\}}}%
+  }
+
+  \proofstep{2}{X\in \PowNE{A}}{\rA}
+  \proofstep{2}{X\in \powerset(A)}{%
+    \FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
+  \proofstep{2}{X\notin \{\varnothing\}}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{2}}
+  \proofstep{2}{X\neq\varnothing}{%
+    \FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{4}}
+  \proofstep{2}{X\subseteq A}{%
+    \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}{3}}
+  \proofstep{2}{\exists a\,(a\in X)}{%
+    \FormulaRefAuto{A\neq\varnothing \eqvdash \exists x\,(x \in A)}{5}}
+
+  \proofstep{8}{a\in X}{\rA}
+  \proofstep{2,8}{a\in A}{%
+    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{6,8}}
+  \proofstep{2,8}{(X,a)\in \PowNE{A}\times A}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,9}}
+  \proofstep{2,8}{(X,a)\in \ChoiceRel{A}}{%
+    \rIE{\FormulaRefAuto{\ChoiceRel{A}\coloneqq
+      \{(X,a)\in \PowNE{A}\times A\mid a\in X\}},
+      \FormulaRefAuto{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}{10,8}}}
+  \proofstep{2,8}{\exists a\,\bigl((X,a)\in \ChoiceRel{A}\bigr)}{\rEI{11}}
+  \proofstep{2}{\exists a\,\bigl((X,a)\in \ChoiceRel{A}\bigr)}{\rEE{7,8,12}}
+
+  \proofstep{}{%
+    X\in \PowNE{A}\rightarrow \exists a\,\bigl((X,a)\in \ChoiceRel{A}\bigr)%
+  }{\rRI{2,13}}
+  \proofstep{}{%
+    \TotRel{\ChoiceRel{A},\PowNE{A},A}%
+  }{\FormulaRefAuto{Totale Relation}{1,14}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente der Auswahlrelation]{%
+  (X,a)\in \ChoiceRel{A}\vdash a\in X%
+}{ChoiceRelElim}{
+  \DeltaDecl{Mengen}{A \dsep X \dsep a}
+  \DeltaDecl{Relation}{\ChoiceRel{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{(X,a)\in \ChoiceRel{A}}{\rA}
+  \proofstep{1}{%
+    (X,a)\in \{(X,a)\in \PowNE{A}\times A\mid a\in X\}%
+  }{%
+    \rIE{\FormulaRefAuto{\ChoiceRel{A}\coloneqq
+      \{(X,a)\in \PowNE{A}\times A\mid a\in X\}},1}}
+  \proofstep{1}{(X,a)\in \PowNE{A}\times A\land a\in X}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2}}
+  \proofstep{1}{a\in X}{\rAEb{3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Auswahlrelation liefert Auswahlfunktion]{%
+  \exists C\colon \PowNE{A}\to A\,
+  \forall X\in \PowNE{A}\,\bigl((X,C(X))\in \ChoiceRel{A}\bigr)
+  \vdash \exists C\,\ChoicePow{C}{A}%
+}{ChoiceRelToChoicePow}{
+  \DeltaDecl{Mengen}{A \dsep X}
+  \DeltaDecl{Funktionen}{C}
+  \DeltaDecl{Relation}{\ChoiceRel{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{%
+    \exists C\colon \PowNE{A}\to A\,
+    \forall X\in \PowNE{A}\,\bigl((X,C(X))\in \ChoiceRel{A}\bigr)%
+  }{\rA}
+  \proofstep{2}{%
+    C\colon \PowNE{A}\to A
+    \land
+    \forall X\in \PowNE{A}\,\bigl((X,C(X))\in \ChoiceRel{A}\bigr)%
+  }{\rA}
+  \proofstep{2}{C\colon \PowNE{A}\to A}{\rAEa{2}}
+  \proofstep{2}{%
+    \forall X\in \PowNE{A}\,\bigl((X,C(X))\in \ChoiceRel{A}\bigr)%
+  }{\rAEb{2}}
+
+  \proofstep{5}{X\in \PowNE{A}}{\rA}
+  \proofstep{2,5}{(X,C(X))\in \ChoiceRel{A}}{\rRE{5,\rUE{4}}}
+  \proofstep{2,5}{C(X)\in X}{\FormulaRefAuto{ChoiceRelElim}{6}}
+  \proofstep{2}{\forall X\in \PowNE{A}\,\bigl(C(X)\in X\bigr)}{\rUI{\rRI{5,7}}}
+  \proofstep{2}{\ChoicePow{C}{A}}{%
+    \rIE{\FormulaRefAuto{ChoicePow},\rAI{3,8}}}
+  \proofstep{2}{\exists C\,\ChoicePow{C}{A}}{\rEI{9}}
+  \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\rEE{1,2,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Surjektionsform liefert Auswahlfunktion auf nichtleeren Teilmengen]{%
+  \ACsur\vdash \exists C\,\ChoicePow{C}{A}%
+}{ACsurChoicePow}{
+  \DeltaDecl{Mengen}{A \dsep X}
+  \DeltaDecl{Funktionen}{C \dsep s}
+  \DeltaDecl{Relation}{\ChoiceRel{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{\ACsur}{\rA}
+  \proofstep{1}{%
+    \forall A\,\forall B\,\forall G\,
+    \bigl(G\colon B\sur A\rightarrow
+    \exists F\colon A\to B\,G\circ F=\Id_A\bigr)%
+  }{\rIE{\FormulaRefAuto{ACsur},1}}
+  \proofstep{}{\TotRel{\ChoiceRel{A},\PowNE{A},A}}{\FormulaRefAuto{ChoiceRelTotal}}
+  \proofstep{}{\pi_1\restriction_{\ChoiceRel{A}}\colon \ChoiceRel{A}\sur \PowNE{A}}{%
+    \FormulaRefAuto{\pi_1\restriction_R\colon R\sur A}{3}}
+  \proofstep{1}{%
+    \exists s\colon \PowNE{A}\to \ChoiceRel{A}\,
+    \bigl(\pi_1\restriction_{\ChoiceRel{A}}\circ s=\Id_{\PowNE{A}}\bigr)%
+  }{\rRE{\rUE{2},4}}
+  \proofstep{1}{%
+    \exists C\colon \PowNE{A}\to A\,
+    \forall X\in \PowNE{A}\,\bigl((X,C(X))\in \ChoiceRel{A}\bigr)%
+  }{%
+    \FormulaRefAuto{\exists s\colon A\to R\,\bigl(\pi_1\restriction_R\circ s = \Id_A\bigr)
+    \vdash \exists F\colon A\to B\,\forall x\in A\,\bigl((x,F(x))\in R\bigr)}{5}}
+  \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\FormulaRefAuto{ChoiceRelToChoicePow}{6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zermelos Wohlordnungskonstruktion]{%
+  \exists C\,\ChoicePow{C}{A}\vdash \WellOrdable(A)%
+}{ZermeloWO}{
+  \DeltaDecl{Mengen}{A}
+  \DeltaDecl{Funktion}{C}
+}
+\begin{tabproof}
+  \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\rA}
+  \proofstep{2}{\ChoicePow{C}{A}}{\rA}
+  \proofstep{2}{\WellOrdable(A)}{\text{Zermelo-Konstruktion aus }2}
+  \proofstep{1}{\WellOrdable(A)}{\rEE{1,2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Auswahlaxiom impliziert Wohlordnungssatz]{%
+  \ACsur\vdash \WOP%
+}{ACsurToWOP}{
+  \DeltaDecl{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{\ACsur}{\rA}
+  \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\FormulaRefAuto{ACsurChoicePow}{1}}
+  \proofstep{1}{\WellOrdable(A)}{\FormulaRefAuto{ZermeloWO}{2}}
+  \proofstep{1}{\forall A\,\WellOrdable(A)}{\rUI{3}}
+  \proofstep{1}{\WOP}{\rIE{\FormulaRefAuto{WOP},4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Faserminima einer Wohlordnung liefern eine Rechtsinverse]{%
+  \WellOrd{R,B}\dsep G\colon B\sur A
+  \vdash \exists F\colon A\to B\,G\circ F=\Id_A%
+}{WellOrdFibersSection}{
+  \DeltaDecl{Mengen}{A \dsep B \dsep R}
+  \DeltaDecl{Funktionen}{F \dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{\WellOrd{R,B}}{\rA}
+  \proofstep{2}{G\colon B\sur A}{\rA}
+  \proofstep{1,2}{%
+    \forall x\in A\,\exists! b\in B\,
+    \bigl(G(b)=x\land
+    \forall c\in B\,(G(c)=x\rightarrow (b,c)\in R)\bigr)%
+  }{\text{\(R\)-minimale Elemente der nichtleeren Fasern}}
+  \proofstep{1,2}{\exists F\colon A\to B\,G\circ F=\Id_A}{%
+    \text{Funktion der eindeutigen Faserminima}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Wohlordnungssatz impliziert Auswahlaxiom]{%
+  \WOP\vdash \ACsur%
+}{WOPToACsur}{
+  \DeltaDecl{Mengen}{A \dsep B \dsep R}
+  \DeltaDecl{Funktionen}{F \dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{\WOP}{\rA}
+  \proofstep{1}{\forall M\,\WellOrdable(M)}{\rIE{\FormulaRefAuto{WOP},1}}
+  \proofstep{3}{G\colon B\sur A}{\rA}
+  \proofstep{1}{\WellOrdable(B)}{\rUE{2}}
+  \proofstep{1}{\exists R\,\WellOrd{R,B}}{\rIE{\FormulaRefAuto{WellOrdable},4}}
+
+  \proofstep{6}{\WellOrd{R,B}}{\rA}
+  \proofstep{3,6}{\exists F\colon A\to B\,G\circ F=\Id_A}{%
+    \FormulaRefAuto{WellOrdFibersSection}{6,3}}
+  \proofstep{1,3}{\exists F\colon A\to B\,G\circ F=\Id_A}{\rEE{5,6,7}}
+
+  \proofstep{1}{%
+    G\colon B\sur A\rightarrow
+    \exists F\colon A\to B\,G\circ F=\Id_A%
+  }{\rRI{3,8}}
+  \proofstep{1}{%
+    \forall G\,\bigl(G\colon B\sur A\rightarrow
+    \exists F\colon A\to B\,G\circ F=\Id_A\bigr)%
+  }{\rUI{9}}
+  \proofstep{1}{%
+    \forall B\,\forall G\,\bigl(G\colon B\sur A\rightarrow
+    \exists F\colon A\to B\,G\circ F=\Id_A\bigr)%
+  }{\rUI{10}}
+  \proofstep{1}{%
+    \forall A\,\forall B\,\forall G\,\bigl(G\colon B\sur A\rightarrow
+    \exists F\colon A\to B\,G\circ F=\Id_A\bigr)%
+  }{\rUI{11}}
+  \proofstep{1}{\ACsur}{\rIE{\FormulaRefAuto{ACsur},12}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Äquivalenz von Auswahlaxiom und Wohlordnungssatz]{%
+  \ACsur\eqvdash \WOP%
+}{ACsurEquivWOP}{
+  \DeltaDecl{Mengen}{A \dsep B}
+  \DeltaDecl{Funktionen}{F \dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{\ACsur}{\rA}
+  \proofstep{1}{\WOP}{\FormulaRefAuto{ACsurToWOP}{1}}
+  \proofstep{}{\ACsur\rightarrow \WOP}{\rRI{1,2}}
+
+  \proofstep{4}{\WOP}{\rA}
+  \proofstep{4}{\ACsur}{\FormulaRefAuto{WOPToACsur}{4}}
+  \proofstep{}{\WOP\rightarrow \ACsur}{\rRI{4,5}}
+
+  \proofstep{}{\ACsur\eqvdash \WOP}{\rLRI{3,6}}
 \end{tabproof}
 
 \FormulaThmDelta[Rechtsinverse surjektiver Funktionen]{%
