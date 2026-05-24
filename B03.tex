@@ -4630,7 +4630,7 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 }
 
 \FormulaDefDeltaK[Begriff der Wohlordenbarkeit]{%
-  \WellOrdable(A)\coloneqq \exists R\,\WellOrd{R,A}%
+  \WellOrdable{A}\coloneqq \exists R\,\WellOrd{R,A}%
 }{WellOrdable}{
   \DeltaRow{Mengen}{A \dsep R}
   \DeltaRow{Wohlordnung}
@@ -4641,11 +4641,11 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 }
 
 \FormulaDefDeltaK[Wohlordnungssatz]{%
-  \WOP\coloneqq \forall A\,\WellOrdable(A)%
+  \WOP\coloneqq \forall A\,\WellOrdable{A}%
 }{WOP}{
   \DeltaRow{Mengen}{A}
   \DeltaRow{Wohlordenbarkeit}
-           {\WellOrdable(A)}
+           {\WellOrdable{A}}
            [\FormulaRefAuto{WellOrdable}]
 }
 
@@ -11510,8 +11510,20 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\FormulaRefAuto{ChoiceRelToChoicePow}{6}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Zermelos Konstruktionssatz]{%
+  \ChoicePow{C}{A}\vdash \exists R\,\WellOrd{R,A}%
+}{ZermeloConstruction}{
+  \DeltaDecl{Mengen}{A}
+  \DeltaDecl{Funktion}{C}
+  \DeltaRow{Auswahlfunktion}
+           {\ChoicePow{C}{A}}
+           [\FormulaRefAuto{ChoicePow}]
+  \DeltaRow{Konstruktionsresultat}
+           {\exists R\,\WellOrd{R,A}}
+}
+
 \FormulaThmDeltaK[Zermelos Wohlordnungskonstruktion]{%
-  \exists C\,\ChoicePow{C}{A}\vdash \WellOrdable(A)%
+  \exists C\,\ChoicePow{C}{A}\vdash \WellOrdable{A}%
 }{ZermeloWO}{
   \DeltaDecl{Mengen}{A}
   \DeltaDecl{Funktion}{C}
@@ -11519,8 +11531,9 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 \begin{tabproof}
   \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\rA}
   \proofstep{2}{\ChoicePow{C}{A}}{\rA}
-  \proofstep{2}{\WellOrdable(A)}{\text{Zermelo-Konstruktion aus }2}
-  \proofstep{1}{\WellOrdable(A)}{\rEE{1,2,3}}
+  \proofstep{2}{\exists R\,\WellOrd{R,A}}{\FormulaRefAuto{ZermeloConstruction}{2}}
+  \proofstep{2}{\WellOrdable{A}}{\rIE{\FormulaRefAuto{WellOrdable},3}}
+  \proofstep{1}{\WellOrdable{A}}{\rEE{1,2,4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Auswahlaxiom impliziert Wohlordnungssatz]{%
@@ -11531,10 +11544,30 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 \begin{tabproof}
   \proofstep{1}{\ACsur}{\rA}
   \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\FormulaRefAuto{ACsurChoicePow}{1}}
-  \proofstep{1}{\WellOrdable(A)}{\FormulaRefAuto{ZermeloWO}{2}}
-  \proofstep{1}{\forall A\,\WellOrdable(A)}{\rUI{3}}
+  \proofstep{1}{\WellOrdable{A}}{\FormulaRefAuto{ZermeloWO}{2}}
+  \proofstep{1}{\forall A\,\WellOrdable{A}}{\rUI{3}}
   \proofstep{1}{\WOP}{\rIE{\FormulaRefAuto{WOP},4}}
 \end{tabproof}
+
+\FormulaDefDeltaK[Faserminimenge zu einer Wohlordnung]{%
+  L_{G,R}\coloneqq
+  \{\,b\in B\mid
+    \forall c\in B\,\bigl(G(c)=G(b)\rightarrow (b,c)\in R\bigr)\,\}%
+}{FiberMinSet}{
+  \DeltaDecl{Mengen}{A \dsep B \dsep R \dsep b \dsep c}
+  \DeltaDecl{Funktion}{G}
+  \DeltaDecl{Mengen}{L_{G,R}}
+}
+
+\FormulaThmDeltaK[Wohlgeordnete Fasern liefern eine Auswahlmenge]{%
+  \WellOrd{R,B}\dsep G\colon B\sur A
+  \vdash
+  \forall X\in \Fib_G[A]\,\exists! b\,(b\in X\land b\in L_{G,R})%
+}{WellOrdFiberChoiceSet}{
+  \DeltaDecl{Mengen}{A \dsep B \dsep R \dsep X \dsep b}
+  \DeltaDecl{Funktion}{G}
+  \DeltaRow{Faserminimenge}{L_{G,R}}[\FormulaRefAuto{FiberMinSet}]
+}
 
 \FormulaThmDeltaK[Faserminima einer Wohlordnung liefern eine Rechtsinverse]{%
   \WellOrd{R,B}\dsep G\colon B\sur A
@@ -11547,12 +11580,10 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
   \proofstep{1}{\WellOrd{R,B}}{\rA}
   \proofstep{2}{G\colon B\sur A}{\rA}
   \proofstep{1,2}{%
-    \forall x\in A\,\exists! b\in B\,
-    \bigl(G(b)=x\land
-    \forall c\in B\,(G(c)=x\rightarrow (b,c)\in R)\bigr)%
-  }{\text{\(R\)-minimale Elemente der nichtleeren Fasern}}
+    \forall X\in \Fib_G[A]\,\exists! b\,(b\in X\land b\in L_{G,R})%
+  }{\FormulaRefAuto{WellOrdFiberChoiceSet}{1,2}}
   \proofstep{1,2}{\exists F\colon A\to B\,G\circ F=\Id_A}{%
-    \text{Funktion der eindeutigen Faserminima}}
+    \FormulaRefAuto{Auswahlmenge liefert Rechtsinverse}{3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Wohlordnungssatz impliziert Auswahlaxiom]{%
@@ -11563,9 +11594,9 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 }
 \begin{tabproof}
   \proofstep{1}{\WOP}{\rA}
-  \proofstep{1}{\forall M\,\WellOrdable(M)}{\rIE{\FormulaRefAuto{WOP},1}}
+  \proofstep{1}{\forall M\,\WellOrdable{M}}{\rIE{\FormulaRefAuto{WOP},1}}
   \proofstep{3}{G\colon B\sur A}{\rA}
-  \proofstep{1}{\WellOrdable(B)}{\rUE{2}}
+  \proofstep{1}{\WellOrdable{B}}{\rUE{2}}
   \proofstep{1}{\exists R\,\WellOrd{R,B}}{\rIE{\FormulaRefAuto{WellOrdable},4}}
 
   \proofstep{6}{\WellOrd{R,B}}{\rA}
