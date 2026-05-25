@@ -22304,6 +22304,274 @@ d_k\in F_n\land d_n\notin F_n
   \proofstep{1}{\TarskiFinite(M)}{\FormulaRefAuto{Tarski-endliche Menge}{9}}
 \end{tabproof}
 
+\subsubsection{Tarski-Endlichkeit impliziert Endlichkeit}
+
+\paragraph{Beweisskizze}
+
+\begingroup
+\newcommand{\sketchref}[1]{\text{\scriptsize(\FormulaRefAutoFwd{#1})}}
+\newcommand{\sketchdefref}[1]{\text{\scriptsize(\FormulaRefAutoFwd[env=definition]{#1})}}
+\[
+\begin{array}{c}
+\text{\small Symbollegende}
+\\[-.1ex]
+\boxed{\FinSubsets{M}\coloneq \{F\in\powerset(M)\mid \Finite{F}\}}
+\quad
+\sketchdefref{\FinSubsets{M}\coloneq \{F\in\powerset(M)\mid \Finite{F}\}}
+\\[1.1ex]
+\text{\small Kernbeweis}
+\\[-.1ex]
+\boxed{\begin{array}{@{}c@{}}
+\TarskiFinite(M)
+\\[.4ex]
+\FinSubsets{M}\subseteq \powerset(M),
+\qquad
+\FinSubsets{M}\neq\varnothing
+\\[-.2ex]
+\sketchref{\FinSubsets{M}\subseteq \powerset(M)}
+\qquad
+\sketchref{\FinSubsets{M}\neq\varnothing}
+\\[.4ex]
+\Downarrow
+\\[-.2ex]
+\exists F\in\FinSubsets{M}\,
+  \forall G\in\FinSubsets{M}\,
+  \bigl(F\subseteq G\rightarrow G=F\bigr)
+\\[-.2ex]
+\sketchref{\TarskiFinite(M)\dsep B\subseteq \powerset(M)\dsep B\neq\varnothing
+\vdash \exists F\in B\,\forall G\in B\,\bigl(F\subseteq G\rightarrow G=F\bigr)}
+\\[.4ex]
+\Downarrow
+\\[-.2ex]
+F=M
+\\[-.2ex]
+\sketchref{F\in\FinSubsets{M}\dsep
+\forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)\vdash F=M}
+\\[.4ex]
+\Downarrow
+\\[-.2ex]
+\boxed{\Finite{M}}
+\end{array}}
+\\[1.1ex]
+\text{\small Widerspruchsschritt}
+\\[-.1ex]
+\boxed{\begin{array}{@{}c@{}}
+F\neq M
+\quad\Longrightarrow\quad
+\exists x\in M\setminus F
+\\[.4ex]
+x\in M\setminus F
+\quad\Longrightarrow\quad
+F\cup\{x\}\in\FinSubsets{M}
+\ \land\
+F\subset F\cup\{x\}
+\\[-.2ex]
+\sketchref{F\in\FinSubsets{M}\dsep x\in M\setminus F
+\vdash F\cup\{x\}\in\FinSubsets{M}\land F\subset F\cup\{x\}}
+\\[.4ex]
+\Downarrow
+\\[-.2ex]
+F\cup\{x\}=F
+\quad\text{und}\quad
+F\cup\{x\}\neq F
+\end{array}}
+\end{array}
+\]
+\endgroup
+
+\paragraph{Endliche Teilmengen}
+
+\FormulaDefDelta[Familie der endlichen Teilmengen]{%
+  \FinSubsets{M}\coloneq \{F\in\powerset(M)\mid \Finite{F}\}
+}{%
+  \DeltaDecl{Mengen}{M\dsep F}%
+}
+
+\FormulaThmDelta[Charakterisierung der Familie der endlichen Teilmengen]{%
+  F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}
+}{%
+  \DeltaDecl{Mengen}{M\dsep F}%
+}
+\begin{tabproof}
+  \proofstep{}{F\in\FinSubsets{M}\eqvdash F\in\powerset(M)\land \Finite{F}}{%
+    \FormulaRefAuto{\FinSubsets{M}\coloneq \{F\in\powerset(M)\mid \Finite{F}\}}}
+  \proofstep{}{F\in\powerset(M)\eqvdash F\subseteq M}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}}
+  \proofstep{}{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{\rChain{1,2}}
+\end{tabproof}
+
+\FormulaThmDelta[Endliche Teilmengen bilden eine Potenzmengenfamilie]{%
+  \FinSubsets{M}\subseteq \powerset(M)
+}{%
+  \DeltaDecl{Mengen}{M\dsep F}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\in\FinSubsets{M}}{\rA}
+  \proofstep{1}{F\subseteq M\land \Finite{F}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{1}}
+  \proofstep{1}{F\subseteq M}{\rAEa{2}}
+  \proofstep{1}{F\in\powerset(M)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{3}}
+  \proofstep{}{\FinSubsets{M}\subseteq \powerset(M)}{%
+    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,4}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Die Familie der endlichen Teilmengen ist nichtleer]{%
+  \FinSubsets{M}\neq\varnothing
+}{%
+  \DeltaDecl{Mengen}{M}%
+}
+\begin{tabproof}
+  \proofstep{}{\varnothing\subseteq M}{\FormulaRefAuto{\varnothing\subseteq A}}
+  \proofstep{}{\Finite{\varnothing}}{\FormulaRefAuto{\Finite{\varnothing}}}
+  \proofstep{}{\varnothing\in\FinSubsets{M}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{\rAI{1,2}}}
+  \proofstep{}{\FinSubsets{M}\neq\varnothing}{%
+    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{3}}
+\end{tabproof}
+
+\FormulaThmDelta[Adjunktion eines frischen Elements ist echt]{%
+  a\notin A \vdash A\subset A\cup\{a\}
+}{%
+  \DeltaDecl{Mengen}{A\dsep a}%
+}
+\begin{tabproof}
+  \proofstep{1}{a\notin A}{\rA}
+  \proofstep{}{A\subseteq A\cup\{a\}}{\FormulaRefAuto{A\subseteq A\cup B}}
+  \proofstep{}{a\in\{a\}}{\FormulaRefAuto{a\in\{a\}}}
+  \proofstep{}{a\in A\cup\{a\}}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{3}}
+  \proofstep{1}{A\cup\{a\}\neq A}{%
+    \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{4,1}}
+  \proofstep{1}{A\neq A\cup\{a\}}{\FormulaRefAuto{a \neq b \vdash b \neq a}{5}}
+  \proofstep{1}{A\subset A\cup\{a\}}{%
+    \FormulaRefAuto{A \subset B \coloneq A \subseteq B \land A\neq B}{\rAI{2,6}}}
+\end{tabproof}
+
+\FormulaThmDelta[Frische Adjunktion endlicher Teilmengen]{%
+  F\in\FinSubsets{M}\dsep x\in M\setminus F
+  \vdash F\cup\{x\}\in\FinSubsets{M}\land F\subset F\cup\{x\}
+}{%
+  \DeltaDecl{Mengen}{M\dsep F\dsep x}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\in\FinSubsets{M}}{\rA}
+  \proofstep{2}{x\in M\setminus F}{\rA}
+  \proofstep{1}{F\subseteq M\land \Finite{F}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{1}}
+  \proofstep{1}{F\subseteq M}{\rAEa{3}}
+  \proofstep{1}{\Finite{F}}{\rAEb{3}}
+  \proofstep{2}{x\in M}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
+  \proofstep{2}{x\notin F}{\FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{2}}
+  \proofstep{2}{\{x\}\subseteq M}{\FormulaRefAuto{a\in A \vdash \{a\}\subseteq A}{6}}
+  \proofstep{1,2}{F\cup\{x\}\subseteq M}{%
+    \FormulaRefAuto{A\subseteq M\dsep B\subseteq M \vdash A\cup B\subseteq M}{4,8}}
+  \proofstep{1,2}{\Finite{F\cup\{x\}}}{%
+    \FormulaRefAuto{a\notin A \dsep \Finite{A} \vdash \Finite{A\cup\{a\}}}{7,5}}
+  \proofstep{1,2}{F\cup\{x\}\in\FinSubsets{M}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{\rAI{9,10}}}
+  \proofstep{2}{F\subset F\cup\{x\}}{%
+    \FormulaRefAuto{a\notin A \vdash A\subset A\cup\{a\}}{7}}
+  \proofstep{1,2}{F\cup\{x\}\in\FinSubsets{M}\land F\subset F\cup\{x\}}{\rAI{11,12}}
+\end{tabproof}
+
+\paragraph{Maximalität}
+
+\FormulaThmDelta[Tarski-Endlichkeit liefert ein Maximum]{%
+  \TarskiFinite(M)\dsep B\subseteq \powerset(M)\dsep B\neq\varnothing
+  \vdash \exists F\in B\,\forall G\in B\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+}{%
+  \DeltaDecl{Mengen}{M\dsep B\dsep F\dsep G}%
+}
+\begin{tabproof}
+  \proofstep{1}{\TarskiFinite(M)}{\rA}
+  \proofstep{2}{B\subseteq \powerset(M)}{\rA}
+  \proofstep{3}{B\neq\varnothing}{\rA}
+  \proofstep{1}{%
+    \bigl(B\subseteq \powerset(M)\land B\neq\varnothing\bigr)\rightarrow
+    \exists F\in B\,\forall G\in B\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+  }{\FormulaRefAuto{Tarski-endliche Menge}{1}}
+  \proofstep{2,3}{B\subseteq \powerset(M)\land B\neq\varnothing}{\rAI{2,3}}
+  \proofstep{1,2,3}{\exists F\in B\,\forall G\in B\,\bigl(F\subseteq G\rightarrow G=F\bigr)}{\rIE{5,4}}
+\end{tabproof}
+
+\FormulaThmDelta[Maximale endliche Teilmenge ist die ganze Menge]{%
+  F\in\FinSubsets{M}\dsep
+  \forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+  \vdash F=M
+}{%
+  \DeltaDecl{Mengen}{M\dsep F\dsep G\dsep x}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\in\FinSubsets{M}}{\rA}
+  \proofstep{2}{\forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)}{\rA}
+  \proofstep{1}{F\subseteq M\land \Finite{F}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{1}}
+  \proofstep{1}{F\subseteq M}{\rAEa{3}}
+  \proofstep{5}{F\neq M}{\rA}
+  \proofstep{1,5}{\exists x\in M\setminus F}{%
+    \FormulaRefAuto{A\subseteq B\dsep A\neq B\vdash \exists x\in B\setminus A}{4,5}}
+  \proofstep{7}{x\in M\setminus F}{\rA}
+  \proofstep{1,7}{F\cup\{x\}\in\FinSubsets{M}\land F\subset F\cup\{x\}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\dsep x\in M\setminus F
+    \vdash F\cup\{x\}\in\FinSubsets{M}\land F\subset F\cup\{x\}}{1,7}}
+  \proofstep{1,7}{F\cup\{x\}\in\FinSubsets{M}}{\rAEa{8}}
+  \proofstep{1,7}{F\subset F\cup\{x\}}{\rAEb{8}}
+  \proofstep{1,7}{F\subseteq F\cup\{x\}}{\FormulaRefAuto{A\subset B\vdash A\subseteq B}{10}}
+  \proofstep{2,7}{F\subseteq F\cup\{x\}\rightarrow F\cup\{x\}=F}{\rUE{2}}
+  \proofstep{1,2,7}{F\cup\{x\}=F}{\rIE{11,12}}
+  \proofstep{1,7}{F\neq F\cup\{x\}}{\FormulaRefAuto{A\subset B \vdash A\neq B}{10}}
+  \proofstep{1,7}{F\cup\{x\}\neq F}{\FormulaRefAuto{a \neq b \vdash b \neq a}{14}}
+  \proofstep{1,2,7}{\bot}{\rBI{13,15}}
+  \proofstep{1,2,5}{\bot}{\rEE{6,7,16}}
+  \proofstep{1,2}{F=M}{\rCE{5,17}}
+\end{tabproof}
+
+\paragraph{Schluss: Tarski-Endlichkeit impliziert Endlichkeit}
+
+\FormulaThmDelta[Tarski-Endlichkeit impliziert Endlichkeit]{%
+  \TarskiFinite(M)\vdash \Finite{M}
+}{%
+  \DeltaDecl{Mengen}{M\dsep F\dsep G}%
+}
+\begin{tabproof}
+  \proofstep{1}{\TarskiFinite(M)}{\rA}
+  \proofstep{}{\FinSubsets{M}\subseteq \powerset(M)}{%
+    \FormulaRefAuto{\FinSubsets{M}\subseteq \powerset(M)}}
+  \proofstep{}{\FinSubsets{M}\neq\varnothing}{%
+    \FormulaRefAuto{\FinSubsets{M}\neq\varnothing}}
+  \proofstep{1}{%
+    \exists F\in\FinSubsets{M}\,
+    \forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+  }{%
+    \FormulaRefAuto{\TarskiFinite(M)\dsep B\subseteq \powerset(M)\dsep B\neq\varnothing
+    \vdash \exists F\in B\,\forall G\in B\,\bigl(F\subseteq G\rightarrow G=F\bigr)}{1,2,3}}
+  \proofstep{5}{%
+    F\in\FinSubsets{M}\land
+    \forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+  }{\rA}
+  \proofstep{5}{F\in\FinSubsets{M}}{\rAEa{5}}
+  \proofstep{5}{\forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)}{\rAEb{5}}
+  \proofstep{5}{F=M}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\dsep
+    \forall G\in\FinSubsets{M}\,\bigl(F\subseteq G\rightarrow G=F\bigr)
+    \vdash F=M}{6,7}}
+  \proofstep{5}{F\subseteq M\land \Finite{F}}{%
+    \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land \Finite{F}}{6}}
+  \proofstep{5}{\Finite{F}}{\rAEb{9}}
+  \proofstep{5}{\Finite{M}}{\rIE{8,10}}
+  \proofstep{1}{\Finite{M}}{\rEE{4,5,11}}
+\end{tabproof}
+
+\paragraph{Bemerkung zur Auswahl}
+
+Der vorstehende Schluss benutzt keine Auswahlannahme. Die einzige Auswahl eines
+Elements erfolgt indirekt über das durch Tarski-Endlichkeit gelieferte
+maximale Element der Familie \(\FinSubsets{M}\). Ein direkter Schluss von
+Dedekind-Endlichkeit auf Endlichkeit ist dagegen eine eigene Aussage und darf
+ohne eine entsprechende Auswahlannahme nicht mit diesem Argument identifiziert
+werden.
+
 \FormulaThmDelta[Endliche Mengen sind Dedekind-endlich]{%
   \Finite{M}\vdash \neg\exists H\colon \mathbb{N}\inj M
 }{%
