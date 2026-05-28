@@ -88,9 +88,12 @@
     \def\mxStar{false}%
     \IfBooleanT{#1}{\def\mxStar{true}}%
 
-    % KEINE Expansion: sonst wird z.B. \bigcup -> \DOTSB\bigcup@\slimits@ ...
+    % KEINE Expansion der Formel: sonst wird z.B. \bigcup -> \DOTSB\bigcup@\slimits@ ...
     \edef\mxExprStr{\detokenize{#3}}%
-    \edef\mxOptsStr{\detokenize{#2}}%
+    % Optionen duerfen expandieren; \FormulaRefAuto uebergibt hier expl3-Tokens
+    % wie \tl_use:N, die nicht in .aux/Lookup-Strings landen duerfen.
+    \edef\mxOptsExpanded{#2}%
+    \edef\mxOptsStr{\expandafter\detokenize\expandafter{\mxOptsExpanded}}%
 
     \edef\mxLuaCode{%
       thmlookup.ref_by_structure(
@@ -129,7 +132,10 @@
 
     \edef\mxExpr{\unexpanded\expandafter{#3}}%
     \edef\mxExprStr{\expandafter\detokenize\expandafter{\mxExpr}}%
-    \edef\mxOptsStr{\detokenize{#2}}%
+    % Optionen duerfen expandieren; \FormulaRefAutoFwd uebergibt hier expl3-Tokens
+    % wie \tl_use:N, die in der .aux beim naechsten Lauf undefiniert waeren.
+    \edef\mxOptsExpanded{#2}%
+    \edef\mxOptsStr{\expandafter\detokenize\expandafter{\mxOptsExpanded}}%
 
     % Query-Key in \mxFwdQKey schreiben lassen
     \directlua{
