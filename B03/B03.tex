@@ -44,9 +44,33 @@
 \def\BThreeInputPath{B03/}
 \newcommand{\BThreeInput}[1]{\input{\BThreeInputPath#1}}
 
-\BThreeInput{01-grundlagen-der-mengenlehre.tex}
-\BThreeInput{02-relationen-und-funktionen.tex}
-\BThreeInput{03-auswahlaxiom.tex}
-\BThreeInput{04-natuerliche-zahlen.tex}
-\BThreeInput{05-endliche-mengen-und-kardinalitaet.tex}
+% Fuer schnelle Teilbandtests:
+%   all = ganzer Band
+%   01  = Grundlagen der Mengenlehre
+%   02  = Relationen und Funktionen
+%   03  = Auswahlaxiom
+%   04  = Natuerliche Zahlen
+%   05  = Endliche Mengen und Kardinalitaet
+\providecommand{\BThreeOnly}{all}
+%\renewcommand{\BThreeOnly}{01}
+
+\def\BThreeAll{all}
+\newcommand{\BThreeMaybeInput}[3]{%
+  \edef\BThreeSelected{\BThreeOnly}%
+  \edef\BThreeThis{#1}%
+  \ifx\BThreeSelected\BThreeAll
+    \BThreeInput{#3}%
+  \else
+    \ifx\BThreeSelected\BThreeThis
+      \setcounter{chapter}{#2}%
+      \BThreeInput{#3}%
+    \fi
+  \fi
+}
+
+\BThreeMaybeInput{01}{0}{01-grundlagen-der-mengenlehre.tex}
+\BThreeMaybeInput{02}{16}{02-relationen-und-funktionen.tex}
+\BThreeMaybeInput{03}{17}{03-auswahlaxiom.tex}
+\BThreeMaybeInput{04}{18}{04-natuerliche-zahlen.tex}
+\BThreeMaybeInput{05}{19}{05-endliche-mengen-und-kardinalitaet.tex}
 \end{document}

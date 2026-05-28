@@ -108,18 +108,21 @@
 
 
 % -------------------------
-% Forward-Ref-Variante (auflösbar ab dem 2. Lauf via .aux)
+% Forward-Ref-Variante (aufloesbar ab dem 2. Lauf via Registry)
 % -------------------------
 \makeatletter
 
-% Wird aus der .aux gelesen und definiert die gecachte Referenz
+% Alte .aux-Dateien koennen noch \mxFwdNeed-Zeilen enthalten.
+% Deshalb bleibt der Leser erhalten, aber neue Forward-Refs schreiben
+% keine solchen Zeilen mehr in die .aux.
 \NewDocumentCommand{\mxFwdNeed}{m m m m}{%
   \directlua{
+    local starred = tonumber("\luaescapestring{\detokenize{#4}}") or 0
     thmlookup.define_ref_macro(
       "\luaescapestring{\detokenize{#1}}",
       "\luaescapestring{\detokenize{#2}}",
       "\luaescapestring{\detokenize{#3}}",
-      #4
+      starred
     )
   }%
 }
@@ -143,16 +146,17 @@
       tex.sprint("\\gdef\\mxFwdQKey{" .. q .. "}")
     }%
 
-    % immer in .aux schreiben; die Hilfsmakros vorher vollständig auswerten,
-    % damit keine lokalen \mx...-Namen in einer halb geschriebenen .aux landen.
-    \edef\mxFwdAuxLine{%
-      \string\mxFwdNeed{\mxFwdQKey}{\mxOptsStr}{\mxExprStr}{\mxStarNum}%
-    }%
-    \protected@write\@auxout{}{\mxFwdAuxLine}%
-    
     % nur falls noch nicht definiert: sofort versuchen
     \expandafter\ifx\csname mxFwdRef@\mxFwdQKey\endcsname\relax
-      \mxFwdNeed{\mxFwdQKey}{\mxOptsStr}{\mxExprStr}{\mxStarNum}%
+      \edef\mxLuaCode{%
+        thmlookup.define_ref_macro(
+          "\luaescapestring{\mxFwdQKey}",
+          "\luaescapestring{\mxOptsStr}",
+          "\luaescapestring{\mxExprStr}",
+          \mxStarNum
+        )%
+      }%
+      \directlua{\mxLuaCode}%
     \fi
     
     \csname mxFwdRef@\mxFwdQKey\endcsname
