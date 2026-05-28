@@ -137,10 +137,12 @@
       tex.sprint("\\gdef\\mxFwdQKey{" .. q .. "}")
     }%
 
-    % immer in .aux schreiben
-    \protected@write\@auxout{}{%
+    % immer in .aux schreiben; die Hilfsmakros vorher vollständig auswerten,
+    % damit keine lokalen \mx...-Namen in einer halb geschriebenen .aux landen.
+    \edef\mxFwdAuxLine{%
       \string\mxFwdNeed{\mxFwdQKey}{\mxOptsStr}{\mxExprStr}{\mxStarNum}%
     }%
+    \protected@write\@auxout{}{\mxFwdAuxLine}%
     
     % nur falls noch nicht definiert: sofort versuchen
     \expandafter\ifx\csname mxFwdRef@\mxFwdQKey\endcsname\relax
