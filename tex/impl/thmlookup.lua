@@ -18,7 +18,6 @@ M.duplicate_policy = M.duplicate_policy or "error"       -- "error" | "warn" | "
 -- in-memory index (für Lookup im selben Compile)
 M.by_key = M.by_key or {}   -- key -> { record, record, ... }
 M.by_id  = M.by_id  or {}   -- id -> { env=..., label=... }
-M.by_label = M.by_label or {} -- label -> record
 
 
 -- ---------- helpers ----------
@@ -42,13 +41,6 @@ local function append_line(path, line)
   f:write(line)
   f:write("\n")
   f:close()
-end
-
-local function emit_ref(env, label, number)
-  tex.sprint("\\ThmLookupEmitRefResolved{" ..
-    (env or "") .. "}{" ..
-    (label or "") .. "}{" ..
-    (number or "") .. "}")
 end
 
 local function write_debug_block(raw, canon, key, status, candidates)
@@ -479,9 +471,6 @@ function M.register(label, env, number, statement, title)
   end
 
   table.insert(M.by_key[key], record)
-  if label ~= "" then
-    M.by_label[label] = record
-  end
   append_line(M.registry_path, line)
 end
 
@@ -504,14 +493,7 @@ function M.register_id(id, env, label)
   end
 
   -- in-memory (fresh)
-  local by_label = M.by_label[label] or {}
-  M.by_id[id] = {
-    env = env,
-    label = label,
-    number = by_label.number,
-    loaded = false,
-    self_loaded = false,
-  }
+  M.by_id[id] = { env = env, label = label, loaded = false, self_loaded = false }
 
   -- persistieren in TSV
   local line = table.concat({
@@ -532,7 +514,7 @@ function M.ref_by_id(id)
     tex.sprint("\\textbf{[Theorem nicht gefunden]}")
     return
   end
-  emit_ref(r.env, r.label, r.number)
+  tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
 end
 
 
@@ -586,14 +568,14 @@ function M.ref_by_structure(opts, expr, starred)
   -- 1) frischer Treffer
   if #candidates == 1 then
     local r = candidates[1]
-    emit_ref(r.env, r.label, r.number)
+    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
     return
   end
 
   -- 2) Fallback: genau ein self_loaded Treffer
   if #candidates == 0 and #self_candidates == 1 then
     local r = self_candidates[1]
-    emit_ref(r.env, r.label, r.number)
+    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
     return
   end
 
@@ -629,7 +611,6 @@ function M.reset_files()
 
   M.by_key = {}
   M.by_id  = {}
-  M.by_label = {}
 end
 
 -- --------- load previous registry (for forward references across runs) ---------
@@ -671,15 +652,8 @@ function M.load_registry()
         local env   = unescape_field(c[3] or "")
         local label = unescape_field(c[4] or "")
         if id ~= "" then
-          local by_label = M.by_label[label] or {}
           -- self-registry => self_loaded = true
-          M.by_id[id] = {
-            env = env,
-            label = label,
-            number = by_label.number,
-            loaded = true,
-            self_loaded = true,
-          }
+          M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = true }
         end
 
       else
@@ -692,16 +666,12 @@ function M.load_registry()
 
         if key ~= "" then
           M.by_key[key] = M.by_key[key] or {}
-          local rec = {
+          table.insert(M.by_key[key], {
             label = label, env = env, number = number,
             key = key, canon = canon, title = title,
             loaded = true,
             self_loaded = true, -- self-registry
-          }
-          table.insert(M.by_key[key], rec)
-          if label ~= "" then
-            M.by_label[label] = rec
-          end
+          })
         end
       end
     end
@@ -717,7 +687,6 @@ end
 function M.prepare_run()
   M.by_key = {}
   M.by_id  = {}
-  M.by_label = {}
   M.load_registry()
 
   local f = io.open(M.registry_path, "w")
@@ -747,17 +716,10 @@ function M.load_registry_file(path)
         local label = unescape_field(cols[4] or "")
 
         if id ~= "" then
-          local by_label = M.by_label[label] or {}
           local existing = M.by_id[id]
           -- Cross-band darf self-loaded überschreiben; echte Konflikte nicht
           if (not existing) or (existing.self_loaded == true) then
-            M.by_id[id] = {
-              env = env,
-              label = label,
-              number = by_label.number,
-              loaded = true,
-              self_loaded = false,
-            }
+            M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = false }
           end
         end
 
@@ -776,9 +738,6 @@ function M.load_registry_file(path)
           loaded = true,
           self_loaded = false,
         }
-        if label ~= "" then
-          M.by_label[label] = rec
-        end
 
         -- 1) unter dem Key aus der TSV ablegen (falls vorhanden)
         if key_in ~= "" then
@@ -835,13 +794,6 @@ function M.define_ref_macro(qkey, opts, expr, starred)
   expr = expr or ""
   starred = (starred == 1) or (starred == true)
 
-  -- Ignore stale/broken .aux entries that contain unexpanded TeX helper macros
-  -- such as \mxFwdQKey. Valid query keys are generated by M.query_key.
-  if not qkey:match("^q[%da-fA-F]+$") then
-    texio.write_nl("thmlookup: ignored invalid forward-ref key: " .. tostring(qkey))
-    return
-  end
-
   local o = parse_opts(opts)
   local canon = alpha_normalize(expr)
   local key = make_key(canon)
@@ -860,10 +812,7 @@ function M.define_ref_macro(qkey, opts, expr, starred)
   local texcode
   if #candidates == 1 then
     local r = candidates[1]
-    texcode = "\\ThmLookupEmitRefResolved{" ..
-      (r.env or "") .. "}{" ..
-      (r.label or "") .. "}{" ..
-      (r.number or "") .. "}"
+    texcode = "\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}"
   elseif #candidates == 0 then
     texcode = "\\textbf{[Theorem nicht gefunden]}"
   else
