@@ -23473,6 +23473,239 @@ das gefundene Extremum zurück.
   \DeltaRow{Termsymbol}{\tCard}
 }
 
+\section{Fränkelsche Vermutung}
+
+Die Fränkelsche Vermutung betrifft endliche vereinigungsabgeschlossene
+Mengenfamilien. In der folgenden Formulierung ist \(M\) eine Menge von Mengen.
+Für ein Element \(a\) zerlegen wir \(M\) in die Teilfamilie der Mengen, die
+\(a\) enthalten, und die Teilfamilie der Mengen, die \(a\) vermeiden.
+
+\FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
+  M_a \coloneqq \{X\in M\mid a\in X\}
+}{Enthaltende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{M_a}
+}
+
+\FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
+  M_{\bar a} \coloneqq \{X\in M\mid a\notin X\}
+}{Vermeidende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{M_{\bar a}}
+}
+
+\FormulaDefDeltaK[Halbhäufiges Element einer endlichen Familie]{%
+  \mathsf{HalfOcc}(a,M)\coloneqq
+  a\in\bigcup M\land \exists F\colon M_{\bar a}\inj M_a
+}{Halbhäufiges Element}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Teilmengenfamilien}{M_a\dsep M_{\bar a}}
+}
+
+Für endliche \(M\) bedeutet \(\mathsf{HalfOcc}(a,M)\), dass höchstens so
+viele Mengen aus \(M\) das Element \(a\) vermeiden wie enthalten. Da
+\(M_a\) und \(M_{\bar a}\) zusammen \(M\) zerlegen, ist dies die
+injektive Form der Aussage, dass \(a\) in mindestens der Hälfte der Mengen
+aus \(M\) enthalten ist.
+
+\FormulaDefDeltaK[Fränkelsche Eigenschaft einer Familie]{%
+  \mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)
+}{Fränkelsche Eigenschaft}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Neue Symbole}{\mathsf{Frankl}}
+}
+
+Die Fränkelsche Vermutung lautet damit:
+\[
+  M\neq\varnothing\dsep \Finite{M}\dsep \UnionClosedFam(M)
+  \vdash \mathsf{Frankl}(M).
+\]
+Sie wird hier nicht als bewiesener Satz verwendet. Wir zeigen zunächst zwei
+einfache Spezialfälle.
+
+\subsection{Vorbereitende Adjunktionsabbildung}
+
+\FormulaThmDelta[Kürzung einer frischen Adjunktion]{%
+  a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y
+}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep a\dsep z}
+}
+\begin{tabproof}
+  \proofstep{1}{a\notin X}{\rA}
+  \proofstep{2}{a\notin Y}{\rA}
+  \proofstep{3}{X\cup\{a\}=Y\cup\{a\}}{\rA}
+
+  \proofstep{4}{z\in X}{\rA}
+  \proofstep{4}{z\in X\cup\{a\}}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{4}}
+  \proofstep{3,4}{z\in Y\cup\{a\}}{\rIE{3,5}}
+  \proofstep{3,4}{z\in Y\lor z=a}{%
+    \FormulaRefAuto{x\in A\cup\{a\} \vdash x\in A\lor x=a}{6}}
+  \proofstep{8}{z\in Y}{\rA}
+  \proofstep{9}{z=a}{\rA}
+  \proofstep{4,9}{a\in X}{\rIE{9,4}}
+  \proofstep{1,4,9}{\bot}{\rBI{10,1}}
+  \proofstep{1,4,9}{z\in Y}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{10,1}}
+  \proofstep{1,3,4}{z\in Y}{\rOE{7,8,8,9,12}}
+  \proofstep{1,3}{X\subseteq Y}{%
+    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{4,13}}}}
+
+  \proofstep{15}{z\in Y}{\rA}
+  \proofstep{15}{z\in Y\cup\{a\}}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{15}}
+  \proofstep{3,15}{z\in X\cup\{a\}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{3},16}}
+  \proofstep{3,15}{z\in X\lor z=a}{%
+    \FormulaRefAuto{x\in A\cup\{a\} \vdash x\in A\lor x=a}{17}}
+  \proofstep{19}{z\in X}{\rA}
+  \proofstep{20}{z=a}{\rA}
+  \proofstep{15,20}{a\in Y}{\rIE{20,15}}
+  \proofstep{2,15,20}{\bot}{\rBI{21,2}}
+  \proofstep{2,15,20}{z\in X}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{21,2}}
+  \proofstep{2,3,15}{z\in X}{\rOE{18,19,19,20,23}}
+  \proofstep{2,3}{Y\subseteq X}{%
+    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{15,24}}}}
+
+  \proofstep{1,2,3}{X=Y}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{14,25}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Adjunktionsabbildung zur Einermenge]{%
+  J^M_a\coloneqq \{(X,X\cup\{a\})\mid X\in M_{\bar a}\}
+}{Adjunktionsabbildung der Fränkelschen Vermutung}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Teilmengenfamilien}{M_a\dsep M_{\bar a}}
+  \DeltaRow{Neue Symbole}{J^M_a}
+}
+
+\FormulaThmDelta[Adjunktionsabbildung trifft die enthaltende Teilfamilie]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in M_{\bar a}
+  \vdash X\cup\{a\}\in M_a
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{3}{X\in M_{\bar a}}{\rA}
+  \proofstep{3}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{Vermeidende Teilfamilie}[def]{3}}
+  \proofstep{3}{X\in M}{\rAEa{4}}
+  \proofstep{1,2,3}{X\cup\{a\}\in M}{%
+    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,2}}
+  \proofstep{}{a\in X\cup\{a\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
+  \proofstep{1,2,3}{X\cup\{a\}\in M\land a\in X\cup\{a\}}{\rAI{6,7}}
+  \proofstep{1,2,3}{X\cup\{a\}\in M_a}{%
+    \FormulaRefAuto{Enthaltende Teilfamilie}[def]{8}}
+\end{tabproof}
+
+\FormulaThmDelta[Adjunktionsabbildung ist injektiv]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\vdash J^M_a\colon M_{\bar a}\inj M_a
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionen}{J^M_a}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{3}{X\in M_{\bar a}}{\rA}
+  \proofstep{1,2,3}{X\cup\{a\}\in M_a}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in M_{\bar a}\vdash X\cup\{a\}\in M_a}{1,2,3}}
+  \proofstep{1,2}{J^M_a\colon M_{\bar a}\to M_a}{%
+    \text{Df. }J^M_a\text{ und Zeile }4}
+
+  \proofstep{6}{X\in M_{\bar a}}{\rA}
+  \proofstep{7}{Y\in M_{\bar a}}{\rA}
+  \proofstep{8}{J^M_a(X)=J^M_a(Y)}{\rA}
+  \proofstep{6}{a\notin X}{\rAEb{\FormulaRefAuto{Vermeidende Teilfamilie}[def]{6}}}
+  \proofstep{7}{a\notin Y}{\rAEb{\FormulaRefAuto{Vermeidende Teilfamilie}[def]{7}}}
+  \proofstep{6,7,8}{X\cup\{a\}=Y\cup\{a\}}{\text{Df. }J^M_a}
+  \proofstep{6,7,8}{X=Y}{%
+    \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{9,10,11}}
+
+  \proofstep{1,2}{J^M_a\colon M_{\bar a}\inj M_a}{%
+    \FormulaRefAuto{Injektive Funktion}{5,\rUI{\rRI{6,\rRI{7,\rRI{8,12}}}}}}
+\end{tabproof}
+
+\subsection{Fall einer enthaltenen Einermenge}
+
+\FormulaThmDelta[Fränkelsche Vermutung bei enthaltener Einermenge]{%
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep \{a\}\in M\vdash \mathsf{Frankl}(M)
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Funktionen}{J^M_a}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\UnionClosedFam(M)}{\rA}
+  \proofstep{3}{\{a\}\in M}{\rA}
+  \proofstep{2,3}{J^M_a\colon M_{\bar a}\inj M_a}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\vdash J^M_a\colon M_{\bar a}\inj M_a}{2,3}}
+  \proofstep{2,3}{\exists F\colon M_{\bar a}\inj M_a}{\rEI{4}}
+  \proofstep{}{a\in\{a\}}{\FormulaRefAuto{a\in\{a\}}}
+  \proofstep{3}{a\in\bigcup M}{%
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{3,6}}
+  \proofstep{2,3}{\mathsf{HalfOcc}(a,M)}{%
+    \FormulaRefAuto{Halbhäufiges Element}[def]{\rAI{7,5}}}
+  \proofstep{2,3}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{8}}
+  \proofstep{1,2,3}{\mathsf{Frankl}(M)}{%
+    \FormulaRefAuto{Fränkelsche Eigenschaft}[def]{9}}
+\end{tabproof}
+
+\subsection{Fall eines nichtleeren Durchschnitts}
+
+Ein nichtleerer Durchschnitt der Familie wird in der folgenden Aussage durch
+einen gemeinsamen Zeugen \(a\) notiert:
+\[
+  \exists a\,\forall X\in M\,(a\in X).
+\]
+Zusammen mit \(M\neq\varnothing\) liegt ein solches \(a\) auch in
+\(\bigcup M\).
+
+\FormulaThmDelta[Fränkelsche Vermutung bei nichtleerem Durchschnitt]{%
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep M\neq\varnothing\dsep
+  \exists a\,\forall X\in M\,(a\in X)\vdash \mathsf{Frankl}(M)
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\UnionClosedFam(M)}{\rA}
+  \proofstep{3}{M\neq\varnothing}{\rA}
+  \proofstep{4}{\exists a\,\forall X\in M\,(a\in X)}{\rA}
+
+  \proofstep{5}{\forall X\in M\,(a\in X)}{\rA}
+  \proofstep{3}{\exists X\in M}{\FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{3}}
+  \proofstep{7}{X\in M}{\rA}
+  \proofstep{5,7}{a\in X}{\rRE{7,\rUE{5}}}
+  \proofstep{5,7}{a\in\bigcup M}{%
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{7,8}}
+  \proofstep{3,5}{a\in\bigcup M}{\rEE{6,7,9}}
+
+  \proofstep{11}{Y\in M_{\bar a}}{\rA}
+  \proofstep{11}{Y\in M\land a\notin Y}{%
+    \FormulaRefAuto{Vermeidende Teilfamilie}[def]{11}}
+  \proofstep{11}{Y\in M}{\rAEa{12}}
+  \proofstep{11}{a\notin Y}{\rAEb{12}}
+  \proofstep{5,11}{a\in Y}{\rRE{13,\rUE{5}}}
+  \proofstep{5,11}{\bot}{\rBI{15,14}}
+  \proofstep{5}{Y\notin M_{\bar a}}{\rCI{11,16}}
+  \proofstep{5}{\forall Y\,Y\notin M_{\bar a}}{\rUI{17}}
+  \proofstep{5}{M_{\bar a}=\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{18}}
+
+  \proofstep{}{\varnothing\colon\varnothing\inj M_a}{%
+    \FormulaRefAuto{\varnothing\colon \varnothing\inj M}}
+  \proofstep{5}{\varnothing\colon M_{\bar a}\inj M_a}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{19},20}}
+  \proofstep{5}{\exists F\colon M_{\bar a}\inj M_a}{\rEI{21}}
+  \proofstep{3,5}{\mathsf{HalfOcc}(a,M)}{%
+    \FormulaRefAuto{Halbhäufiges Element}[def]{\rAI{10,22}}}
+  \proofstep{3,5}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{23}}
+  \proofstep{1,2,3,5}{\mathsf{Frankl}(M)}{%
+    \FormulaRefAuto{Fränkelsche Eigenschaft}[def]{24}}
+
+  \proofstep{1,2,3,4}{\mathsf{Frankl}(M)}{\rEE{4,5,25}}
+\end{tabproof}
+
 \chapter{Ende}
 
 %\PrintFormulaStack
