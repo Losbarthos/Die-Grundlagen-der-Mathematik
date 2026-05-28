@@ -130,38 +130,24 @@
 % \ThmRefByStructureFwd{<expr>} bzw. \ThmRefByStructureFwd*{<expr>}
 \NewDocumentCommand{\ThmRefByStructureFwd}{s O{} m}{%
   \begingroup
-    \def\mxStarNum{0}%
-    \IfBooleanT{#1}{\def\mxStarNum{1}}%
+    \def\mxStar{false}%
+    \IfBooleanT{#1}{\def\mxStar{true}}%
 
     \edef\mxExpr{\unexpanded\expandafter{#3}}%
     \edef\mxExprStr{\expandafter\detokenize\expandafter{\mxExpr}}%
     % Optionen duerfen expandieren; \FormulaRefAutoFwd uebergibt hier expl3-Tokens
-    % wie \tl_use:N, die in der .aux beim naechsten Lauf undefiniert waeren.
+    % wie \tl_use:N, die nicht in Lookup-Strings landen duerfen.
     \edef\mxOptsExpanded{#2}%
     \edef\mxOptsStr{\expandafter\detokenize\expandafter{\mxOptsExpanded}}%
 
-    % Query-Key in \mxFwdQKey schreiben lassen
-    \directlua{
-      local q = thmlookup.query_key("\luaescapestring{\mxOptsStr}", "\luaescapestring{\mxExprStr}")
-      tex.sprint("\\gdef\\mxFwdQKey{" .. q .. "}")
+    \edef\mxLuaCode{%
+      thmlookup.ref_by_structure(
+        "\luaescapestring{\mxOptsStr}",
+        "\luaescapestring{\mxExprStr}",
+        \mxStar
+      )%
     }%
-
-    % nur falls noch nicht definiert: sofort versuchen
-    \expandafter\ifx\csname mxFwdRef@\mxFwdQKey\endcsname\relax
-      \edef\mxLuaCode{%
-        thmlookup.define_ref_macro(
-          "\luaescapestring{\mxFwdQKey}",
-          "\luaescapestring{\mxOptsStr}",
-          "\luaescapestring{\mxExprStr}",
-          \mxStarNum
-        )%
-      }%
-      \directlua{\mxLuaCode}%
-    \fi
-    
-    \csname mxFwdRef@\mxFwdQKey\endcsname
-
-
+    \directlua{\mxLuaCode}%
   \endgroup
 }
 
