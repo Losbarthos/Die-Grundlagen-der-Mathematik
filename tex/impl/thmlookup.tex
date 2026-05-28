@@ -18,15 +18,33 @@
 \providecommand{\ThmLookupPrefix@fallback}{Ref.}
 \makeatother
 
-% \ThmLookupEmitRef{<env>}{<label>} -> "Th. 1.1" (verlinkt via \ref)
-\NewDocumentCommand{\ThmLookupEmitRef}{m m}{%
+\makeatletter
+% \ThmLookupEmitRefResolved{<env>}{<label>}{<number>}
+% Gibt die Nummer aus der Registry aus und verlinkt nur dann, wenn das Label
+% in den geladenen .aux-Dateien bekannt ist. Damit bleiben Subfile-Referenzen
+% auch bei fehlender/veralteter Cross-Band-.aux lesbar.
+\NewDocumentCommand{\ThmLookupEmitRefResolved}{m m m}{%
   \ifcsname ThmLookupPrefix@#1\endcsname
     \csname ThmLookupPrefix@#1\endcsname
   \else
     \ThmLookupPrefix@fallback
   \fi
-  ~\ref{#2}%
+  ~%
+  \begingroup
+    \def\mxRefNumber{#3}%
+    \ifx\mxRefNumber\@empty
+      \ref{#2}%
+    \else
+      \@ifundefined{r@#2}{#3}{\hyperref[#2]{#3}}%
+    \fi
+  \endgroup
 }
+
+% \ThmLookupEmitRef{<env>}{<label>} -> "Th. 1.1" (verlinkt via \ref)
+\NewDocumentCommand{\ThmLookupEmitRef}{m m}{%
+  \ThmLookupEmitRefResolved{#1}{#2}{}%
+}
+\makeatother
 
 % \ThmLookupRegister{<label>}{<env>}{<number>}{<statement>}{<title>}
 \NewDocumentCommand{\ThmLookupRegister}{m m m m g}{%
