@@ -23481,31 +23481,33 @@ Für ein Element \(a\) zerlegen wir \(M\) in die Teilfamilie der Mengen, die
 \(a\) enthalten, und die Teilfamilie der Mengen, die \(a\) vermeiden.
 
 \FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
-  M_a \coloneqq \{X\in M\mid a\in X\}
+  \FamContaining{M}{a} \coloneqq \{X\in M\mid a\in X\}
 }{Enthaltende Teilfamilie}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{M_a}
+  \DeltaRow{Neue Symbole}{\FamContaining{M}{a}}
 }
 
 \FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
-  M_{\bar a} \coloneqq \{X\in M\mid a\notin X\}
+  \FamAvoiding{M}{a} \coloneqq \{X\in M\mid a\notin X\}
 }{Vermeidende Teilfamilie}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{M_{\bar a}}
+  \DeltaRow{Neue Symbole}{\FamAvoiding{M}{a}}
 }
 
 \FormulaDefDeltaK[Halbhäufiges Element einer endlichen Familie]{%
   \mathsf{HalfOcc}(a,M)\coloneqq
-  a\in\bigcup M\land \exists F\colon M_{\bar a}\inj M_a
+  a\in\bigcup M\land
+  \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
 }{Halbhäufiges Element}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
   \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{M_a\dsep M_{\bar a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
 }
 
 Für endliche \(M\) bedeutet \(\mathsf{HalfOcc}(a,M)\), dass höchstens so
 viele Mengen aus \(M\) das Element \(a\) vermeiden wie enthalten. Da
-\(M_a\) und \(M_{\bar a}\) zusammen \(M\) zerlegen, ist dies die
+\(\FamContaining{M}{a}\) und \(\FamAvoiding{M}{a}\) zusammen \(M\)
+zerlegen, ist dies die
 injektive Form der Aussage, dass \(a\) in mindestens der Hälfte der Mengen
 aus \(M\) enthalten ist.
 
@@ -23569,36 +23571,37 @@ einfache Spezialfälle.
 \end{tabproof}
 
 \FormulaDefDeltaK[Adjunktionsabbildung zur Einermenge]{%
-  J^M_a\coloneqq \{(X,X\cup\{a\})\mid X\in M_{\bar a}\}
+  J^M_a\coloneqq \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}
 }{Adjunktionsabbildung der Fränkelschen Vermutung}{%
   \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{M_a\dsep M_{\bar a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
   \DeltaRow{Neue Symbole}{J^M_a}
 }
 
 \FormulaThmDelta[Adjunktionsabbildung trifft die enthaltende Teilfamilie]{%
-  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in M_{\bar a}
-  \vdash X\cup\{a\}\in M_a
+  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
+  \vdash X\cup\{a\}\in \FamContaining{M}{a}
 }{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
 }
 \begin{tabproof}
   \proofstep{1}{\UnionClosedFam(M)}{\rA}
   \proofstep{2}{\{a\}\in M}{\rA}
-  \proofstep{3}{X\in M_{\bar a}}{\rA}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
   \proofstep{3}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{Vermeidende Teilfamilie}[def]{3}}
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{3}}
   \proofstep{3}{X\in M}{\rAEa{4}}
   \proofstep{1,2,3}{X\cup\{a\}\in M}{%
     \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,2}}
   \proofstep{}{a\in X\cup\{a\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
   \proofstep{1,2,3}{X\cup\{a\}\in M\land a\in X\cup\{a\}}{\rAI{6,7}}
-  \proofstep{1,2,3}{X\cup\{a\}\in M_a}{%
-    \FormulaRefAuto{Enthaltende Teilfamilie}[def]{8}}
+  \proofstep{1,2,3}{X\cup\{a\}\in \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{8}}
 \end{tabproof}
 
 \FormulaThmDelta[Adjunktionsabbildung ist injektiv]{%
-  \UnionClosedFam(M)\dsep \{a\}\in M\vdash J^M_a\colon M_{\bar a}\inj M_a
+  \UnionClosedFam(M)\dsep \{a\}\in M
+  \vdash J^M_a\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
 }{%
   \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
   \DeltaRow{Funktionen}{J^M_a}
@@ -23606,22 +23609,28 @@ einfache Spezialfälle.
 \begin{tabproof}
   \proofstep{1}{\UnionClosedFam(M)}{\rA}
   \proofstep{2}{\{a\}\in M}{\rA}
-  \proofstep{3}{X\in M_{\bar a}}{\rA}
-  \proofstep{1,2,3}{X\cup\{a\}\in M_a}{%
-    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in M_{\bar a}\vdash X\cup\{a\}\in M_a}{1,2,3}}
-  \proofstep{1,2}{J^M_a\colon M_{\bar a}\to M_a}{%
-    \text{Df. }J^M_a\text{ und Zeile }4}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{1,2,3}{X\cup\{a\}\in \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
+    \vdash X\cup\{a\}\in \FamContaining{M}{a}}{1,2,3}}
+  \proofstep{1,2}{J^M_a\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
+    \FormulaRefAuto{J^M_a\coloneqq
+    \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}}{3,4}}
 
-  \proofstep{6}{X\in M_{\bar a}}{\rA}
-  \proofstep{7}{Y\in M_{\bar a}}{\rA}
+  \proofstep{6}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{7}{Y\in \FamAvoiding{M}{a}}{\rA}
   \proofstep{8}{J^M_a(X)=J^M_a(Y)}{\rA}
-  \proofstep{6}{a\notin X}{\rAEb{\FormulaRefAuto{Vermeidende Teilfamilie}[def]{6}}}
-  \proofstep{7}{a\notin Y}{\rAEb{\FormulaRefAuto{Vermeidende Teilfamilie}[def]{7}}}
-  \proofstep{6,7,8}{X\cup\{a\}=Y\cup\{a\}}{\text{Df. }J^M_a}
+  \proofstep{6}{a\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{6}}}
+  \proofstep{7}{a\notin Y}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{7}}}
+  \proofstep{6,7,8}{X\cup\{a\}=Y\cup\{a\}}{%
+    \FormulaRefAuto{J^M_a\coloneqq
+    \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}}{6,7,8}}
   \proofstep{6,7,8}{X=Y}{%
     \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{9,10,11}}
 
-  \proofstep{1,2}{J^M_a\colon M_{\bar a}\inj M_a}{%
+  \proofstep{1,2}{J^M_a\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
     \FormulaRefAuto{Injektive Funktion}{5,\rUI{\rRI{6,\rRI{7,\rRI{8,12}}}}}}
 \end{tabproof}
 
@@ -23637,17 +23646,20 @@ einfache Spezialfälle.
   \proofstep{1}{\Finite{M}}{\rA}
   \proofstep{2}{\UnionClosedFam(M)}{\rA}
   \proofstep{3}{\{a\}\in M}{\rA}
-  \proofstep{2,3}{J^M_a\colon M_{\bar a}\inj M_a}{%
-    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\vdash J^M_a\colon M_{\bar a}\inj M_a}{2,3}}
-  \proofstep{2,3}{\exists F\colon M_{\bar a}\inj M_a}{\rEI{4}}
+  \proofstep{2,3}{J^M_a\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M
+    \vdash J^M_a\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{2,3}}
+  \proofstep{2,3}{\exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rEI{4}}
   \proofstep{}{a\in\{a\}}{\FormulaRefAuto{a\in\{a\}}}
   \proofstep{3}{a\in\bigcup M}{%
     \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{3,6}}
   \proofstep{2,3}{\mathsf{HalfOcc}(a,M)}{%
-    \FormulaRefAuto{Halbhäufiges Element}[def]{\rAI{7,5}}}
+    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+    a\in\bigcup M\land
+    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{7,5}}}
   \proofstep{2,3}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{8}}
   \proofstep{1,2,3}{\mathsf{Frankl}(M)}{%
-    \FormulaRefAuto{Fränkelsche Eigenschaft}[def]{9}}
+    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)}{9}}
 \end{tabproof}
 
 \subsection{Fall eines nichtleeren Durchschnitts}
@@ -23681,27 +23693,30 @@ Zusammen mit \(M\neq\varnothing\) liegt ein solches \(a\) auch in
     \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{7,8}}
   \proofstep{3,5}{a\in\bigcup M}{\rEE{6,7,9}}
 
-  \proofstep{11}{Y\in M_{\bar a}}{\rA}
+  \proofstep{11}{Y\in \FamAvoiding{M}{a}}{\rA}
   \proofstep{11}{Y\in M\land a\notin Y}{%
-    \FormulaRefAuto{Vermeidende Teilfamilie}[def]{11}}
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{11}}
   \proofstep{11}{Y\in M}{\rAEa{12}}
   \proofstep{11}{a\notin Y}{\rAEb{12}}
   \proofstep{5,11}{a\in Y}{\rRE{13,\rUE{5}}}
   \proofstep{5,11}{\bot}{\rBI{15,14}}
-  \proofstep{5}{Y\notin M_{\bar a}}{\rCI{11,16}}
-  \proofstep{5}{\forall Y\,Y\notin M_{\bar a}}{\rUI{17}}
-  \proofstep{5}{M_{\bar a}=\varnothing}{%
+  \proofstep{5}{Y\notin \FamAvoiding{M}{a}}{\rCI{11,16}}
+  \proofstep{5}{\forall Y\,Y\notin \FamAvoiding{M}{a}}{\rUI{17}}
+  \proofstep{5}{\FamAvoiding{M}{a}=\varnothing}{%
     \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{18}}
 
-  \proofstep{}{\varnothing\colon\varnothing\inj M_a}{%
+  \proofstep{}{\varnothing\colon\varnothing\inj \FamContaining{M}{a}}{%
     \FormulaRefAuto{\varnothing\colon \varnothing\inj M}}
-  \proofstep{5}{\varnothing\colon M_{\bar a}\inj M_a}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{19},20}}
-  \proofstep{5}{\exists F\colon M_{\bar a}\inj M_a}{\rEI{21}}
+  \proofstep{5}{\varnothing\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}{19},20}}
+  \proofstep{5}{\exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rEI{21}}
   \proofstep{3,5}{\mathsf{HalfOcc}(a,M)}{%
-    \FormulaRefAuto{Halbhäufiges Element}[def]{\rAI{10,22}}}
+    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+    a\in\bigcup M\land
+    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{10,22}}}
   \proofstep{3,5}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{23}}
   \proofstep{1,2,3,5}{\mathsf{Frankl}(M)}{%
-    \FormulaRefAuto{Fränkelsche Eigenschaft}[def]{24}}
+    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)}{24}}
 
   \proofstep{1,2,3,4}{\mathsf{Frankl}(M)}{\rEE{4,5,25}}
 \end{tabproof}
@@ -23715,11 +23730,11 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
 \FormulaDefDeltaK[Doppelte Vereinigung über jedem Element]{%
   \mathsf{DupCov}(M)\coloneqq
   \forall A\in M\,\forall a\in A\,
-  \exists I_1\in M_{\bar a}\,\exists I_2\in M_{\bar a}\,
+  \exists I_1\in \FamAvoiding{M}{a}\,\exists I_2\in \FamAvoiding{M}{a}\,
   \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
 }{Doppelte Vereinigung}{%
   \DeltaRow{Mengen}{M\dsep A\dsep a\dsep I_1\dsep I_2}
-  \DeltaRow{Teilmengenfamilien}{M_{\bar a}}
+  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}}
   \DeltaRow{Neue Symbole}{\mathsf{DupCov}}
 }
 
@@ -23741,6 +23756,23 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
   \DeltaRow{Neue Symbole}{M_4}
 }
 
+\FormulaThmDeltaR[Ausgesparte Einermengen auf vier Punkten]{%
+  \begin{aligned}[t]
+    X\in\powerset(\{1,2,3,4\})\land{}&
+    X\notin\{\{1\},\{2\},\{3\},\{4\}\}\\
+    \eqvdash{}&
+    X\subseteq\{1,2,3,4\}\land{}\\
+    &\bigl(X=\varnothing\lor
+    \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
+  \end{aligned}
+}{%
+  X\in\powerset(\{1,2,3,4\})\land
+  X\notin\{\{1\},\{2\},\{3\},\{4\}\}
+  \eqvdash X\subseteq\{1,2,3,4\}\land
+  \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
+}{%
+  \DeltaRow{Mengen}{X\dsep b\dsep c}
+}
 \FormulaThmDeltaR[Charakterisierung der Fränkelschen Vierpunktfamilie]{%
   \begin{aligned}[t]
     X\in M_4\eqvdash{}&
@@ -23752,36 +23784,41 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
   X\in M_4\eqvdash X\subseteq\{1,2,3,4\}\land
   \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
 }{%
-  \DeltaRow{Mengen}{S\dsep E\dsep X\dsep b\dsep c}
+  \DeltaRow{Mengen}{X\dsep b\dsep c}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[]{S=\{1,2,3,4\}}{\text{Abk.}}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      E={}&\{\{1\},\{2\},\\
-      &\{3\},\{4\}\}
-    \end{aligned}}{\text{Abk.}}
   \proofstepwidestar[]{%
     \begin{aligned}[t]
       &X\in M_4\eqvdash{}\\
-      &X\in\powerset(S)\land X\notin E
+      &X\in\powerset(\{1,2,3,4\})\land{}\\
+      &X\notin\{\{1\},\{2\},\{3\},\{4\}\}
     \end{aligned}}{%
-    \FormulaRefAuto{Fränkelsche Vierpunktfamilie}[def]\text{, Zeilen }1,2}
+    \FormulaRefAuto{M_4\coloneqq
+    \powerset(\{1,2,3,4\})\setminus
+    \{\{1\},\{2\},\{3\},\{4\}\}}\text{ und }
+    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}}
   \proofstepwidestar[]{%
     \begin{aligned}[t]
-      &X\in\powerset(S)\land X\notin E\eqvdash{}\\
-      &X\subseteq S\land{}\\
+      &X\in\powerset(\{1,2,3,4\})\land{}\\
+      &X\notin\{\{1\},\{2\},\{3\},\{4\}\}\eqvdash{}\\
+      &X\subseteq\{1,2,3,4\}\land{}\\
       &\bigl(X=\varnothing\lor
       \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
     \end{aligned}}{%
-    \text{Potenzmenge und endliche Auswertung}}
+    \FormulaRefAuto{%
+      X\in\powerset(\{1,2,3,4\})\land
+      X\notin\{\{1\},\{2\},\{3\},\{4\}\}
+      \eqvdash X\subseteq\{1,2,3,4\}\land
+      \bigl(X=\varnothing\lor
+      \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
+    }}
   \proofstepwidestar[]{%
     \begin{aligned}[t]
       &X\in M_4\eqvdash{}\\
       &X\subseteq\{1,2,3,4\}\land{}\\
       &\bigl(X=\varnothing\lor
       \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
-    \end{aligned}}{\text{Zeilen }1,3,4}
+    \end{aligned}}{\rChain{1,2}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Die Vierpunktmenge ist endlich]{%
@@ -23850,15 +23887,40 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
     \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{7,2}}
 \end{tabproof}
 
+\FormulaThmDeltaR[Vierpunktbedingung ist vereinigungsstabil]{%
+  \begin{aligned}[t]
+    &X\subseteq\{1,2,3,4\}\land
+    \bigl(X=\varnothing\lor
+    \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)\\
+    &\dsep
+    Y\subseteq\{1,2,3,4\}\land
+    \bigl(Y=\varnothing\lor
+    \exists b\in Y\,\exists c\in Y\,(b\neq c)\bigr)\\
+    &\vdash
+    X\cup Y=\varnothing\lor
+    \exists b\in X\cup Y\,\exists c\in X\cup Y\,(b\neq c)
+  \end{aligned}
+}{%
+  X\subseteq\{1,2,3,4\}\land
+  \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
+  \dsep
+  Y\subseteq\{1,2,3,4\}\land
+  \bigl(Y=\varnothing\lor \exists b\in Y\,\exists c\in Y\,(b\neq c)\bigr)
+  \vdash
+  X\cup Y=\varnothing\lor
+  \exists b\in X\cup Y\,\exists c\in X\cup Y\,(b\neq c)
+}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep b\dsep c}
+}
 \FormulaThmDelta[Fränkelsche Vierpunktfamilie ist vereinigungsabgeschlossen]{%
   \UnionClosedFam(M_4)
 }{%
   \DeltaRow{Mengen}{M_4\dsep X\dsep Y\dsep b\dsep c}
 }
-\begin{tabproof}
-  \proofstep{1}{X\in M_4}{\rA}
-  \proofstep{2}{Y\in M_4}{\rA}
-  \proofstep{1}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in M_4}{\rA}
+  \proofstepwidestar[2]{Y\in M_4}{\rA}
+  \proofstepwidestar[1]{%
     \begin{aligned}[t]
       &X\subseteq\{1,2,3,4\}\land{}\\
       &\bigl(X=\varnothing\lor
@@ -23868,7 +23930,7 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
       X\in M_4\eqvdash X\subseteq\{1,2,3,4\}\land
       \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
     }{1}}
-  \proofstep{2}{%
+  \proofstepwidestar[2]{%
     \begin{aligned}[t]
       &Y\subseteq\{1,2,3,4\}\land{}\\
       &\bigl(Y=\varnothing\lor
@@ -23878,24 +23940,34 @@ besitzen, die \(A\) durch Vereinigung gleich treffen.
       X\in M_4\eqvdash X\subseteq\{1,2,3,4\}\land
       \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
     }{2}}
-  \proofstep{1}{X\subseteq\{1,2,3,4\}}{\rAEa{3}}
-  \proofstep{2}{Y\subseteq\{1,2,3,4\}}{\rAEa{4}}
-  \proofstep{1,2}{X\cup Y\subseteq\{1,2,3,4\}}{%
+  \proofstepwidestar[1]{X\subseteq\{1,2,3,4\}}{\rAEa{3}}
+  \proofstepwidestar[2]{Y\subseteq\{1,2,3,4\}}{\rAEa{4}}
+  \proofstepwidestar[1,2]{X\cup Y\subseteq\{1,2,3,4\}}{%
     \FormulaRefAuto{A \subseteq C,\, B \subseteq C \vdash A \cup B \subseteq C}{5,6}}
-  \proofstep{1,2}{%
+  \proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &X\cup Y=\varnothing\lor{}\\
-      &\exists b\in X\cup Y\,\exists c\in X\cup Y\,(b\neq c)
+      &\exists b\in X\cup Y\,\exists c\in X\cup Y\\
+      &\quad(b\neq c)
     \end{aligned}}{%
-    \text{Fallunterscheidung mit Zeilen }3\text{ und }4}
-  \proofstep{1,2}{X\cup Y\in M_4}{%
+    \FormulaRefAuto{%
+      X\subseteq\{1,2,3,4\}\land
+      \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
+      \dsep
+      Y\subseteq\{1,2,3,4\}\land
+      \bigl(Y=\varnothing\lor \exists b\in Y\,\exists c\in Y\,(b\neq c)\bigr)
+      \vdash
+      X\cup Y=\varnothing\lor
+      \exists b\in X\cup Y\,\exists c\in X\cup Y\,(b\neq c)
+    }{3,4}}
+  \proofstepwidestar[1,2]{X\cup Y\in M_4}{%
     \FormulaRefAuto{%
       X\in M_4\eqvdash X\subseteq\{1,2,3,4\}\land
       \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
     }{\rAI{7,8}}}
-  \proofstep{}{\UnionClosedFam(M_4)}{%
-    \FormulaRefAuto{Vereinigungsabgeschlossene Familie}[def]{\rUI{\rRI{1,\rRI{2,9}}}}}
-\end{tabproof}
+  \proofstepwidestar[]{\UnionClosedFam(M_4)}{%
+    \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{1,\rRI{2,9}}}}}
+\end{tabproofwide}
 
 Für die doppelte Vereinigung verwenden wir die folgende Zeugenwahl. Sie ist
 vollständig, weil jedes nichtleere Element von \(M_4\) entweder mindestens
@@ -23914,20 +23986,40 @@ zwei Punkte außer \(a\) enthält oder eine Zweiermenge \(\{a,b\}\) ist.
   \end{array}
 \]
 
+\FormulaThmDeltaR[Zeugenwahl aus der Vierpunktbedingung]{%
+  \begin{aligned}[t]
+    &A\subseteq\{1,2,3,4\}\land
+    \bigl(A=\varnothing\lor
+    \exists b\in A\,\exists c\in A\,(b\neq c)\bigr)\\
+    &\dsep a\in A\vdash
+    \exists I_1\in \FamAvoiding{M_4}{a}\,
+    \exists I_2\in \FamAvoiding{M_4}{a}\\
+    &\bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
+  \end{aligned}
+}{%
+  A\subseteq\{1,2,3,4\}\land
+  \bigl(A=\varnothing\lor \exists b\in A\,\exists c\in A\,(b\neq c)\bigr)
+  \dsep a\in A\vdash
+  \exists I_1\in \FamAvoiding{M_4}{a}\,\exists I_2\in \FamAvoiding{M_4}{a}\,
+  \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
+}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep d\dsep I_1\dsep I_2}
+  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M_4}{a}}
+}
 \FormulaThmDeltaR[Zeugentabelle der Fränkelschen Vierpunktfamilie]{%
   \begin{aligned}[t]
     A\in M_4\dsep a\in A\vdash{}&
-    \exists I_1\in (M_4)_{\bar a}\,
-    \exists I_2\in (M_4)_{\bar a}\\
+    \exists I_1\in \FamAvoiding{M_4}{a}\,
+    \exists I_2\in \FamAvoiding{M_4}{a}\\
     &\bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
   \end{aligned}
 }{%
   A\in M_4\dsep a\in A\vdash
-  \exists I_1\in (M_4)_{\bar a}\,\exists I_2\in (M_4)_{\bar a}\,
+  \exists I_1\in \FamAvoiding{M_4}{a}\,\exists I_2\in \FamAvoiding{M_4}{a}\,
   \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
 }{%
   \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep d\dsep I_1\dsep I_2}
-  \DeltaRow{Teilmengenfamilien}{(M_4)_{\bar a}}
+  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M_4}{a}}
 }
 \begin{tabproof}
   \proofstep{1}{A\in M_4}{\rA}
@@ -23942,41 +24034,47 @@ zwei Punkte außer \(a\) enthält oder eine Zweiermenge \(\{a,b\}\) ist.
       X\in M_4\eqvdash X\subseteq\{1,2,3,4\}\land
       \bigl(X=\varnothing\lor \exists b\in X\,\exists c\in X\,(b\neq c)\bigr)
     }{1}}
-  \proofstep{2}{A\neq\varnothing}{%
-    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{2}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
-      &\exists I_1\in (M_4)_{\bar a}\\
-      &\exists I_2\in (M_4)_{\bar a}\,
+      &\exists I_1\in \FamAvoiding{M_4}{a}\\
+      &\exists I_2\in \FamAvoiding{M_4}{a}\,
       \bigl(I_1\neq I_2\\
       &\land I_1\cup A=I_2\cup A\bigr)
     \end{aligned}}{%
-    \text{Tabelle, Zeilen }3,4\text{ und }
-    \FormulaRefAuto{Vermeidende Teilfamilie}[def]}
+    \FormulaRefAuto{%
+      A\subseteq\{1,2,3,4\}\land
+      \bigl(A=\varnothing\lor \exists b\in A\,\exists c\in A\,(b\neq c)\bigr)
+      \dsep a\in A\vdash
+      \exists I_1\in \FamAvoiding{M_4}{a}\,\exists I_2\in \FamAvoiding{M_4}{a}\,
+      \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
+    }{3,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Fränkelsche Vierpunktfamilie besitzt doppelte Vereinigung]{%
   \mathsf{DupCov}(M_4)
 }{%
   \DeltaRow{Mengen}{M_4\dsep A\dsep a\dsep I_1\dsep I_2}
-  \DeltaRow{Teilmengenfamilien}{(M_4)_{\bar a}}
+  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M_4}{a}}
 }
 \begin{tabproof}
   \proofstep{1}{A\in M_4}{\rA}
   \proofstep{2}{a\in A}{\rA}
   \proofstep{1,2}{%
     \begin{aligned}[t]
-      &\exists I_1\in (M_4)_{\bar a}\,
-      \exists I_2\in (M_4)_{\bar a}\\
+      &\exists I_1\in \FamAvoiding{M_4}{a}\,
+      \exists I_2\in \FamAvoiding{M_4}{a}\\
       &\bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
     \end{aligned}}{%
     \FormulaRefAuto{%
       A\in M_4\dsep a\in A\vdash
-      \exists I_1\in (M_4)_{\bar a}\,\exists I_2\in (M_4)_{\bar a}\,
+      \exists I_1\in \FamAvoiding{M_4}{a}\,\exists I_2\in \FamAvoiding{M_4}{a}\,
       \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
     }{1,2}}
   \proofstep{}{\mathsf{DupCov}(M_4)}{%
-    \FormulaRefAuto{Doppelte Vereinigung}[def]{\rUI{\rRI{1,\rUI{\rRI{2,3}}}}}}
+    \FormulaRefAuto{\mathsf{DupCov}(M)\coloneqq
+    \forall A\in M\,\forall a\in A\,
+    \exists I_1\in \FamAvoiding{M}{a}\,\exists I_2\in \FamAvoiding{M}{a}\,
+    \bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)}{\rUI{\rRI{1,\rUI{\rRI{2,3}}}}}}
 \end{tabproof}
 
 \FormulaThmDelta[Fränkelsche Vierpunktfamilie mit doppelter Vereinigung]{%
@@ -23999,7 +24097,9 @@ zwei Punkte außer \(a\) enthält oder eine Zweiermenge \(\{a,b\}\) ist.
       &\UnionClosedFam(M_4)\land \mathsf{DupCov}(M_4)
     \end{aligned}}{\rAI{1,\rAI{2,\rAI{3,4}}}}
   \proofstep{}{\mathsf{DupUCF}(M_4)}{%
-    \FormulaRefAuto{Doppelt überdeckende Vereinigungsfamilie}[def]{5}}
+    \FormulaRefAuto{\mathsf{DupUCF}(M)\coloneqq
+    M\neq\varnothing\land \Finite{M}\land \UnionClosedFam(M)\land
+    \mathsf{DupCov}(M)}{5}}
   \proofstep{}{\exists M\,\mathsf{DupUCF}(M)}{\rEI{6}}
 \end{tabproof}
 
@@ -24010,7 +24110,7 @@ Ausgeschrieben liefert dieses \(M_4=\powerset(\{1,2,3,4\})\setminus
     \exists M\Bigl(&
       M\neq\varnothing\land \Finite{M}\land \UnionClosedFam(M)\land{}\\
     &\forall A\in M\,\forall a\in A\,
-      \exists I_1\in M_{\bar a}\,\exists I_2\in M_{\bar a}\\
+      \exists I_1\in \FamAvoiding{M}{a}\,\exists I_2\in \FamAvoiding{M}{a}\\
     &\bigl(I_1\neq I_2\land I_1\cup A=I_2\cup A\bigr)
     \Bigr).
   \end{aligned}
