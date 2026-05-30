@@ -10573,6 +10573,255 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 
 
 
+\subsection{Die Adjunktionsabbildung einer Mengenfamilie}
+
+Für eine Familie \(M\) und ein Element \(a\) zerlegen die beiden folgenden
+Teilmengenfamilien \(M\) danach, ob ihre Elemente \(a\) enthalten oder
+vermeiden. Unter Vereinigungsschließung und \(\{a\}\in M\) wird daraus die
+punktweise Adjunktion \(X\mapsto X\cup\{a\}\) als Funktion zwischen diesen
+Teilmengenfamilien.
+
+\FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
+  \FamContaining{M}{a} \coloneqq \{X\in M\mid a\in X\}
+}{Enthaltende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{\FamContaining{M}{a}}
+}
+
+\FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
+  \FamAvoiding{M}{a} \coloneqq \{X\in M\mid a\notin X\}
+}{Vermeidende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{\FamAvoiding{M}{a}}
+}
+
+\FormulaDefDeltaK[Funktionsvorschrift der Adjunktionsabbildung]{%
+  X\in \FamAvoiding{M}{a}\vdash
+  \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}
+}{Funktionsvorschrift der Adjunktionsabbildung}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+
+\FormulaThmDelta[Funktionsvorschrift der Adjunktionsabbildung ist injektiv]{%
+  X\in \FamAvoiding{M}{a}\dsep Y\in \FamAvoiding{M}{a}\dsep
+  \tFranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(Y)\vdash X=Y
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{2}{Y\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{3}{\tFranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(Y)}{\rA}
+  \proofstep{1}{a\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{1}}}
+  \proofstep{2}{a\notin Y}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{2}}}
+  \proofstep{1}{\tFranklAdj{M}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{1}}
+  \proofstep{2}{\tFranklAdj{M}{a}(Y)=Y\cup\{a\}}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{2}}
+  \proofstep{1}{X\cup\{a\}=\tFranklAdj{M}{a}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
+  \proofstep{1,3}{X\cup\{a\}=\tFranklAdj{M}{a}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,3}}
+  \proofstep{1,2,3}{X\cup\{a\}=Y\cup\{a\}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,7}}
+  \proofstep{1,2,3}{X=Y}{%
+    \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{4,5,10}}
+\end{tabproof}
+
+\FormulaThmDelta[Typisierung der Funktionsvorschrift der Adjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
+  \vdash \tFranklAdj{M}{a}(X)\in \FamContaining{M}{a}
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{3}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{3}}
+  \proofstep{3}{X\in M}{\rAEa{4}}
+  \proofstep{1,2,3}{X\cup\{a\}\in M}{%
+    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,2}}
+  \proofstep{}{a\in X\cup\{a\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
+  \proofstep{1,2,3}{X\cup\{a\}\in M\land a\in X\cup\{a\}}{\rAI{6,7}}
+  \proofstep{1,2,3}{X\cup\{a\}\in \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{8}}
+  \proofstep{3}{\tFranklAdj{M}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
+  \proofstep{1,2,3}{\tFranklAdj{M}{a}(X)\in \FamContaining{M}{a}}{\rIE{10,9}}
+\end{tabproof}
+
+\FormulaThmDeltaR[Existenz der Adjunktionsabbildung]{%
+  \begin{aligned}[t]
+    &\UnionClosedFam(M)\dsep \{a\}\in M\vdash{}\\
+    &\exists! J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}\,{}\\
+    &\forall X\in \FamAvoiding{M}{a}\,
+      J(X)=\tFranklAdj{M}{a}(X)
+  \end{aligned}
+}{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\vdash
+  \exists! J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}\,
+  \forall X\in \FamAvoiding{M}{a}\,J(X)=\tFranklAdj{M}{a}(X)
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{1,2}{%
+    \begin{aligned}[t]
+      &\exists! J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}\,{}\\
+      &\forall X\in \FamAvoiding{M}{a}\,
+      J(X)=\tFranklAdj{M}{a}(X)
+    \end{aligned}}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y \dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
+    }{%
+      \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+      \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}},%
+      \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep
+      X\in \FamAvoiding{M}{a}
+      \vdash \tFranklAdj{M}{a}(X)\in \FamContaining{M}{a}}{1,2}}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Adjunktionsabbildung zur Einermenge]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\vdash
+  \FranklAdj{M}{a}\coloneqq \iota J\Bigl(
+    J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}
+    \land
+    \forall X\in \FamAvoiding{M}{a}\,
+      J(X)=\tFranklAdj{M}{a}(X)
+  \Bigr)
+}{Adjunktionsabbildung einer Mengenfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionen}{J\dsep \FranklAdj{M}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
+  \DeltaRow{Neue Symbole}{\FranklAdj{M}{a}}
+}
+
+\FormulaThmDelta[Typisierung der Adjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M
+  \vdash \FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{1,2}{\FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
+    \rAEa{\FormulaRefAuto{%
+      \UnionClosedFam(M)\dsep \{a\}\in M\vdash
+      \FranklAdj{M}{a}\coloneqq \iota J\Bigl(
+        J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}
+        \land
+        \forall X\in \FamAvoiding{M}{a}\,
+          J(X)=\tFranklAdj{M}{a}(X)
+      \Bigr)
+    }{1,2}}}
+\end{tabproof}
+
+\FormulaThmDelta[Werte der Adjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
+  \vdash \FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{1,2}{%
+    \forall X\in \FamAvoiding{M}{a}\,
+    \FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{%
+    \rAEb{\FormulaRefAuto{%
+      \UnionClosedFam(M)\dsep \{a\}\in M\vdash
+      \FranklAdj{M}{a}\coloneqq \iota J\Bigl(
+        J\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}
+        \land
+        \forall X\in \FamAvoiding{M}{a}\,
+          J(X)=\tFranklAdj{M}{a}(X)
+      \Bigr)
+    }{1,2}}}
+  \proofstep{1,2,3}{\FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{\rUE{4}}
+\end{tabproof}
+
+\FormulaThmDelta[Explizite Werte der Adjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
+  \vdash \FranklAdj{M}{a}(X)=X\cup\{a\}
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{1,2,3}{\FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep
+    X\in \FamAvoiding{M}{a}
+    \vdash \FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{1,2,3}}
+  \proofstep{3}{\tFranklAdj{M}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
+  \proofstep{1,2,3}{\FranklAdj{M}{a}(X)=X\cup\{a\}}{\rIE{4,5}}
+\end{tabproof}
+
+\FormulaThmDelta[Adjunktionsabbildung ist injektiv]{%
+  \UnionClosedFam(M)\dsep \{a\}\in M
+  \vdash \FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a\}\in M}{\rA}
+  \proofstep{1,2}{\FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M
+    \vdash \FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{1,2}}
+
+  \proofstep{4}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{5}{Y\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{6}{\FranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)}{\rA}
+  \proofstep{1,2,4}{\FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep
+    X\in \FamAvoiding{M}{a}
+    \vdash \FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{1,2,4}}
+  \proofstep{1,2,5}{\FranklAdj{M}{a}(Y)=\tFranklAdj{M}{a}(Y)}{%
+    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep
+    X\in \FamAvoiding{M}{a}
+    \vdash \FranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(X)}{1,2,5}}
+  \proofstep{1,2,4}{\tFranklAdj{M}{a}(X)=\FranklAdj{M}{a}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstep{1,2,4,6}{\tFranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,6}}
+  \proofstep{1,2,4,5,6}{\tFranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,8}}
+  \proofstep{1,2,4,5,6}{X=Y}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\dsep Y\in \FamAvoiding{M}{a}\dsep
+    \tFranklAdj{M}{a}(X)=\tFranklAdj{M}{a}(Y)\vdash X=Y}{4,5,11}}
+
+  \proofstep{1,2}{\FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
+    \FormulaRefAuto{Injektive Funktion}{3,\rUI{\rRI{4,\rRI{5,\rRI{6,12}}}}}}
+\end{tabproof}
+
 \subsection{Abbildungen mit leerem Definitions- oder Zielbereich}
 
 \FormulaThmDelta[Jede Funktion aus $\varnothing$ ist leer]{%
@@ -23518,22 +23767,8 @@ das gefundene Extremum zurück.
 
 Die Fränkelsche Vermutung betrifft endliche vereinigungsabgeschlossene
 Mengenfamilien. In der folgenden Formulierung ist \(M\) eine Menge von Mengen.
-Für ein Element \(a\) zerlegen wir \(M\) in die Teilfamilie der Mengen, die
-\(a\) enthalten, und die Teilfamilie der Mengen, die \(a\) vermeiden.
-
-\FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
-  \FamContaining{M}{a} \coloneqq \{X\in M\mid a\in X\}
-}{Enthaltende Teilfamilie}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{\FamContaining{M}{a}}
-}
-
-\FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
-  \FamAvoiding{M}{a} \coloneqq \{X\in M\mid a\notin X\}
-}{Vermeidende Teilfamilie}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{\FamAvoiding{M}{a}}
-}
+Für ein Element \(a\) verwenden wir die zuvor eingeführte Zerlegung in die
+Teilmengenfamilien \(\FamContaining{M}{a}\) und \(\FamAvoiding{M}{a}\).
 
 \FormulaDefDeltaK[Halbhäufiges Element einer endlichen Familie]{%
   \mathsf{HalfOcc}(a,M)\coloneqq
@@ -23566,94 +23801,6 @@ Die Fränkelsche Vermutung lautet damit:
 \]
 Sie wird hier nicht als bewiesener Satz verwendet. Wir zeigen zunächst zwei
 einfache Spezialfälle.
-
-\subsection{Vorbereitende Adjunktionsabbildung}
-
-\FormulaDefDeltaK[Adjunktionsabbildung zur Einermenge]{%
-  \FranklAdj{M}{a}\coloneqq \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}
-}{Adjunktionsabbildung der Fränkelschen Vermutung}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
-  \DeltaRow{Neue Symbole}{\FranklAdj{M}{a}}
-}
-
-\FormulaThmDelta[Adjunktionsvorschrift ist auf vermeidenden Mengen injektiv]{%
-  X\in \FamAvoiding{M}{a}\dsep Y\in \FamAvoiding{M}{a}\dsep
-  \FranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)\vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{2}{Y\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{3}{\FranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)}{\rA}
-  \proofstep{1}{a\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{1}}}
-  \proofstep{2}{a\notin Y}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{2}}}
-  \proofstep{1,2,3}{X\cup\{a\}=Y\cup\{a\}}{%
-    \FormulaRefAuto{\FranklAdj{M}{a}\coloneqq
-    \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}}{1,2,3}}
-  \proofstep{1,2,3}{X=Y}{%
-    \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{4,5,6}}
-\end{tabproof}
-
-\FormulaThmDelta[Adjunktionsabbildung trifft die enthaltende Teilfamilie]{%
-  \UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
-  \vdash X\cup\{a\}\in \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-}
-\begin{tabproof}
-  \proofstep{1}{\UnionClosedFam(M)}{\rA}
-  \proofstep{2}{\{a\}\in M}{\rA}
-  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{3}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{3}}
-  \proofstep{3}{X\in M}{\rAEa{4}}
-  \proofstep{1,2,3}{X\cup\{a\}\in M}{%
-    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,2}}
-  \proofstep{}{a\in X\cup\{a\}}{\FormulaRefAuto{a \in A \cup \{a\}}}
-  \proofstep{1,2,3}{X\cup\{a\}\in M\land a\in X\cup\{a\}}{\rAI{6,7}}
-  \proofstep{1,2,3}{X\cup\{a\}\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{8}}
-\end{tabproof}
-
-\FormulaThmDelta[Adjunktionsabbildung ist injektiv]{%
-  \UnionClosedFam(M)\dsep \{a\}\in M
-  \vdash \FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{\UnionClosedFam(M)}{\rA}
-  \proofstep{2}{\{a\}\in M}{\rA}
-  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{1,2,3}{X\cup\{a\}\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\UnionClosedFam(M)\dsep \{a\}\in M\dsep X\in \FamAvoiding{M}{a}
-    \vdash X\cup\{a\}\in \FamContaining{M}{a}}{1,2,3}}
-  \proofstep{1,2}{\FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FranklAdj{M}{a}\coloneqq
-    \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}}{3,4}}
-
-  \proofstep{6}{X\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{7}{Y\in \FamAvoiding{M}{a}}{\rA}
-  \proofstep{8}{\FranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)}{\rA}
-  \proofstep{6}{a\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{6}}}
-  \proofstep{7}{a\notin Y}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{7}}}
-  \proofstep{6,7,8}{X\cup\{a\}=Y\cup\{a\}}{%
-    \FormulaRefAuto{\FranklAdj{M}{a}\coloneqq
-    \{(X,X\cup\{a\})\mid X\in \FamAvoiding{M}{a}\}}{6,7,8}}
-  \proofstep{6,7,8}{X=Y}{%
-    \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{9,10,11}}
-
-  \proofstep{1,2}{\FranklAdj{M}{a}\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{Injektive Funktion}{5,\rUI{\rRI{6,\rRI{7,\rRI{8,12}}}}}}
-\end{tabproof}
 
 \subsection{Fall einer enthaltenen Einermenge}
 
@@ -23986,9 +24133,10 @@ die folgende endliche vereinigungsabgeschlossene Familie.
 
 \FormulaThmDelta[Adjunktion der Vierpunktfamilie verfehlt die Zielteilfamilie]{%
   \exists X\in \FamAvoiding{M_4}{1}\,
-  \bigl(X\cup\{1\}\notin \FamContaining{M_4}{1}\bigr)
+  \bigl(\tFranklAdj{M_4}{1}(X)\notin \FamContaining{M_4}{1}\bigr)
 }{%
   \DeltaRow{Mengen}{M_4\dsep X}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M_4}{1}}
   \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M_4}{1}\dsep \FamContaining{M_4}{1}}
 }
 \begin{tabproof}
@@ -24013,18 +24161,23 @@ die folgende endliche vereinigungsabgeschlossene Familie.
   \proofstep{}{\varnothing\cup\{1\}=\{1\}}{%
     \FormulaRefAuto{a=b\vdash b=a}{10}}
   \proofstep{}{\varnothing\cup\{1\}\notin \FamContaining{M_4}{1}}{\rIE{11,9}}
+  \proofstep{}{\tFranklAdj{M_4}{1}(\varnothing)=\varnothing\cup\{1\}}{%
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
+  \proofstep{}{\tFranklAdj{M_4}{1}(\varnothing)\notin \FamContaining{M_4}{1}}{\rIE{13,12}}
   \proofstep{}{%
     \exists X\in \FamAvoiding{M_4}{1}\,
-    \bigl(X\cup\{1\}\notin \FamContaining{M_4}{1}\bigr)}{\rEI{\rAI{3,12}}}
+    \bigl(\tFranklAdj{M_4}{1}(X)\notin \FamContaining{M_4}{1}\bigr)}{\rEI{\rAI{3,14}}}
 \end{tabproof}
 
 \FormulaThmDelta[Endliches Vereinigungsbeispiel mit Zielverfehlung]{%
   \vdash \exists M\,\exists a\,
   \Bigl(M\neq\varnothing\land \Finite{M}\land \UnionClosedFam(M)\land
   \exists X\in \FamAvoiding{M}{a}\,
-  \bigl(X\cup\{a\}\notin \FamContaining{M}{a}\bigr)\Bigr)
+  \bigl(\tFranklAdj{M}{a}(X)\notin \FamContaining{M}{a}\bigr)\Bigr)
 }{%
   \DeltaRow{Mengen}{M\dsep M_4\dsep a\dsep X}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
 }
 \begin{tabproof}
   \proofstep{}{M_4\neq\varnothing}{%
@@ -24035,25 +24188,25 @@ die folgende endliche vereinigungsabgeschlossene Familie.
     \FormulaRefAuto{\UnionClosedFam(M_4)}}
   \proofstep{}{%
     \exists X\in \FamAvoiding{M_4}{1}\,
-    \bigl(X\cup\{1\}\notin \FamContaining{M_4}{1}\bigr)}{%
+    \bigl(\tFranklAdj{M_4}{1}(X)\notin \FamContaining{M_4}{1}\bigr)}{%
     \FormulaRefAuto{\exists X\in \FamAvoiding{M_4}{1}\,
-    \bigl(X\cup\{1\}\notin \FamContaining{M_4}{1}\bigr)}}
+    \bigl(\tFranklAdj{M_4}{1}(X)\notin \FamContaining{M_4}{1}\bigr)}}
   \proofstep{}{%
     \begin{aligned}[t]
       &M_4\neq\varnothing\land \Finite{M_4}\land \UnionClosedFam(M_4)\land{}\\
       &\exists X\in \FamAvoiding{M_4}{1}\,
-      \bigl(X\cup\{1\}\notin \FamContaining{M_4}{1}\bigr)
+      \bigl(\tFranklAdj{M_4}{1}(X)\notin \FamContaining{M_4}{1}\bigr)
     \end{aligned}}{\rAI{1,\rAI{2,\rAI{3,4}}}}
   \proofstep{}{\exists a\,
     \begin{aligned}[t]
       (&M_4\neq\varnothing\land \Finite{M_4}\land \UnionClosedFam(M_4)\land{}\\
       &\exists X\in \FamAvoiding{M_4}{a}\,
-      \bigl(X\cup\{a\}\notin \FamContaining{M_4}{a}\bigr))
+      \bigl(\tFranklAdj{M_4}{a}(X)\notin \FamContaining{M_4}{a}\bigr))
     \end{aligned}}{\rEI{5}}
   \proofstep{}{\exists M\,\exists a\,
     \Bigl(M\neq\varnothing\land \Finite{M}\land \UnionClosedFam(M)\land
     \exists X\in \FamAvoiding{M}{a}\,
-    \bigl(X\cup\{a\}\notin \FamContaining{M}{a}\bigr)\Bigr)}{\rEI{6}}
+    \bigl(\tFranklAdj{M}{a}(X)\notin \FamContaining{M}{a}\bigr)\Bigr)}{\rEI{6}}
 \end{tabproof}
 
 \subsection{Eine allgemeine korrigierte Adjunktion}
