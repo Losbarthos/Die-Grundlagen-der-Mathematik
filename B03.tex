@@ -24839,14 +24839,155 @@ Summenschritt ist diejenige Abbildung auf
 \(\mathbb{N}\times\mathbb{N}\), die aus einem Zustand \((k,x)\) den Zustand
 \((\Succ(k),x + u(k))\) bildet.
 
-\FormulaDefDeltaK[Summenschritt einer Folge natürlicher Zahlen]{%
+\FormulaDefDeltaK[Funktionsvorschrift des Summenschritts]{%
   u\colon\mathbb{N}\to\mathbb{N}\dsep
   k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
-  \SumStep{u}(k,x)\coloneqq(\Succ(k),x + u(k))%
-}{Summenschritt}{%
+  \tSumStep{u}(k,x)\coloneqq(\Succ(k),x + u(k))%
+}{Funktionsvorschrift des Summenschritts}{%
   \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tSumStep{u}}%
+}
+
+\FormulaThmDelta[Typisierung des Summenschrittterms]{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep
+  k\in\mathbb{N}\dsep x\in\mathbb{N}
+  \vdash \tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tSumStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{2}{\Succ(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{2}}
+  \proofstep{1,2}{u(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{1,2}}
+  \proofstep{1,2,3}{x + u(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{3,5}}
+  \proofstep{1,2,3}{\tSumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tSumStep{u}(k,x)\coloneqq(\Succ(k),x + u(k))}{1,2,3}}
+  \proofstep{1,2,3}{(\Succ(k),x + u(k))\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{4,6}}
+  \proofstep{1,2,3}{\tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{\rIE{7,8}}
+\end{tabproof}
+
+\FormulaThmDelta[Existenz des Summenschritts]{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \exists! F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\,
+  \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+  F(k,x)=\tSumStep{u}(k,x)%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tSumStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{1,2,3}{\tSumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tSumStep{u}(k,x)\coloneqq(\Succ(k),x + u(k))}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall x\in\mathbb{N}\,\tSumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \rUI{\rRI{3,4}}}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \tSumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \rUI{\rRI{2,5}}}
+  \proofstep{1,2,3}{\tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}
+      \vdash \tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall x\in\mathbb{N}\,
+    \tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \rUI{\rRI{3,7}}}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \tSumStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \rUI{\rRI{2,8}}}
+  \proofstep{1}{%
+    \exists! F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\,
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    F(k,x)=\tSumStep{u}(k,x)}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{6,9}}
+\end{tabproof}
+
+\FormulaDefDeltaR[Summenschritt einer Folge natürlicher Zahlen]{%
+  \begin{aligned}[t]
+    &u\colon\mathbb{N}\to\mathbb{N}\vdash{}\\
+    &\SumStep{u}\coloneqq \iota F\Bigl(
+      F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land{}\\
+    &\qquad \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+      F(k,x)=\tSumStep{u}(k,x)
+    \Bigr)
+  \end{aligned}
+}{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \SumStep{u}\coloneqq \iota F\Bigl(
+    F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    F(k,x)=\tSumStep{u}(k,x)
+  \Bigr)
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbole}{\SumStep{u}\dsep \tSumStep{u}\dsep F}%
+}
+
+\FormulaThmDelta[Summenschritt ist eine Abbildung]{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{u}%
   \DeltaRow{Funktionensymbol}{\SumStep{u}}%
 }
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{1}{\SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \SumStep{u}\coloneqq \iota F\Bigl(
+        F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+        \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+        F(k,x)=\tSumStep{u}(k,x)
+      \Bigr)}{1}}}
+\end{tabproof}
+
+\FormulaThmDelta[Wert des Summenschritts]{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep
+  k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+  \SumStep{u}(k,x)=(\Succ(k),x + u(k))%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbole}{\SumStep{u}\dsep \tSumStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \SumStep{u}(k,x)=\tSumStep{u}(k,x)}{%
+    \rAEb{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \SumStep{u}\coloneqq \iota F\Bigl(
+        F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+        \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+        F(k,x)=\tSumStep{u}(k,x)
+      \Bigr)}{1}}}
+  \proofstep{1,2,3}{\SumStep{u}(k,x)=\tSumStep{u}(k,x)}{\rRE{3,\rRE{2,\rUE{4}}}}
+  \proofstep{1,2,3}{\tSumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tSumStep{u}(k,x)\coloneqq(\Succ(k),x + u(k))}{1,2,3}}
+  \proofstep{1,2,3}{\SumStep{u}(k,x)=(\Succ(k),x + u(k))}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
+\end{tabproof}
 
 Die endliche Summe über den Anfangsabschnitt der Länge \(n\) ist die zweite
 Komponente der durch diesen Schritt erzeugten Rekursionsfolge. Der erste
@@ -24883,14 +25024,155 @@ also \(\Succ(\varnothing)\). Die spätere Einseigenschaft dieses Elements ist
 eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
 \(\Succ(\varnothing)\in\mathbb{N}\) gilt.
 
-\FormulaDefDeltaK[Produktschritt einer Folge natürlicher Zahlen]{%
+\FormulaDefDeltaK[Funktionsvorschrift des Produktschritts]{%
   u\colon\mathbb{N}\to\mathbb{N}\dsep
   k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
-  \ProdStep{u}(k,x)\coloneqq(\Succ(k),x\cdot u(k))%
-}{Produktschritt}{%
+  \tProdStep{u}(k,x)\coloneqq(\Succ(k),x \cdot u(k))%
+}{Funktionsvorschrift des Produktschritts}{%
   \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tProdStep{u}}%
+}
+
+\FormulaThmDelta[Typisierung des Produktschrittterms]{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep
+  k\in\mathbb{N}\dsep x\in\mathbb{N}
+  \vdash \tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tProdStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{2}{\Succ(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{2}}
+  \proofstep{1,2}{u(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{1,2}}
+  \proofstep{1,2,3}{x \cdot u(k)\in\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\cdot b\in\mathbb{N}}{3,5}}
+  \proofstep{1,2,3}{\tProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tProdStep{u}(k,x)\coloneqq(\Succ(k),x \cdot u(k))}{1,2,3}}
+  \proofstep{1,2,3}{(\Succ(k),x \cdot u(k))\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{4,6}}
+  \proofstep{1,2,3}{\tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{\rIE{7,8}}
+\end{tabproof}
+
+\FormulaThmDelta[Existenz des Produktschritts]{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \exists! F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\,
+  \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+  F(k,x)=\tProdStep{u}(k,x)%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tProdStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{1,2,3}{\tProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tProdStep{u}(k,x)\coloneqq(\Succ(k),x \cdot u(k))}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall x\in\mathbb{N}\,\tProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \rUI{\rRI{3,4}}}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \tProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \rUI{\rRI{2,5}}}
+  \proofstep{1,2,3}{\tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}
+      \vdash \tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall x\in\mathbb{N}\,
+    \tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \rUI{\rRI{3,7}}}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \tProdStep{u}(k,x)\in\mathbb{N}\times\mathbb{N}}{%
+    \rUI{\rRI{2,8}}}
+  \proofstep{1}{%
+    \exists! F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\,
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    F(k,x)=\tProdStep{u}(k,x)}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{6,9}}
+\end{tabproof}
+
+\FormulaDefDeltaR[Produktschritt einer Folge natürlicher Zahlen]{%
+  \begin{aligned}[t]
+    &u\colon\mathbb{N}\to\mathbb{N}\vdash{}\\
+    &\ProdStep{u}\coloneqq \iota F\Bigl(
+      F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land{}\\
+    &\qquad \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+      F(k,x)=\tProdStep{u}(k,x)
+    \Bigr)
+  \end{aligned}
+}{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \ProdStep{u}\coloneqq \iota F\Bigl(
+    F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    F(k,x)=\tProdStep{u}(k,x)
+  \Bigr)
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbole}{\ProdStep{u}\dsep \tProdStep{u}\dsep F}%
+}
+
+\FormulaThmDelta[Produktschritt ist eine Abbildung]{%
+  u\colon\mathbb{N}\to\mathbb{N}\vdash
+  \ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{u}%
   \DeltaRow{Funktionensymbol}{\ProdStep{u}}%
 }
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{1}{\ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \ProdStep{u}\coloneqq \iota F\Bigl(
+        F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+        \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+        F(k,x)=\tProdStep{u}(k,x)
+      \Bigr)}{1}}}
+\end{tabproof}
+
+\FormulaThmDelta[Wert des Produktschritts]{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep
+  k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+  \ProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))%
+}{%
+  \DeltaRow{Mengen}{u\dsep k\dsep x}%
+  \DeltaRow{Funktionensymbole}{\ProdStep{u}\dsep \tProdStep{u}}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{x\in\mathbb{N}}{\rA}
+  \proofstep{1}{%
+    \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+    \ProdStep{u}(k,x)=\tProdStep{u}(k,x)}{%
+    \rAEb{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \ProdStep{u}\coloneqq \iota F\Bigl(
+        F\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}\land
+        \forall k\in\mathbb{N}\,\forall x\in\mathbb{N}\,
+        F(k,x)=\tProdStep{u}(k,x)
+      \Bigr)}{1}}}
+  \proofstep{1,2,3}{\ProdStep{u}(k,x)=\tProdStep{u}(k,x)}{\rRE{3,\rRE{2,\rUE{4}}}}
+  \proofstep{1,2,3}{\tProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tProdStep{u}(k,x)\coloneqq(\Succ(k),x \cdot u(k))}{1,2,3}}
+  \proofstep{1,2,3}{\ProdStep{u}(k,x)=(\Succ(k),x \cdot u(k))}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
+\end{tabproof}
 
 \FormulaDefDeltaK[Produktzeichen über Anfangsabschnitten]{%
   u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
