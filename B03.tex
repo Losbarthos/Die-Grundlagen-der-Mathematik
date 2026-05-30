@@ -24610,57 +24610,116 @@ Die Multiplikation wird im zweiten Argument rekursiv definiert. Für ein
 festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
 \(a\) auf der rechten Seite.
 
-\FormulaDefDeltaK[Additiver Schritt zu \(a\)]{%
-  a\in\mathbb{N}\vdash
-  \sigma_a\coloneqq \iota F\Bigl(
-    F\colon\mathbb{N}\to\mathbb{N}\land
-    \forall x\in\mathbb{N}\,F(x)=x+a
-  \Bigr)%
-}{Additiver Schritt}{%
+\FormulaDefDeltaK[Funktionsvorschrift des additiven Schritts]{%
+  a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+  \tAddStep{a}(x)\coloneqq x+a%
+}{Funktionsvorschrift des additiven Schritts}{%
   \DeltaRow{Mengen}{a\dsep x}%
-  \DeltaRow{Funktionensymbole}{\sigma_a\dsep F}%
+  \DeltaRow{Funktionensymbol}{\tAddStep{a}}%
 }
 
-\FormulaThmDelta[Additiver Schritt ist eine Abbildung]{%
-  a\in\mathbb{N}\vdash \sigma_a\colon\mathbb{N}\to\mathbb{N}%
-}{%
-  \DeltaRow{Mengen}{a}%
-  \DeltaRow{Funktionensymbol}{\sigma_a}%
-}
-\begin{tabproof}
-  \proofstep{1}{a\in\mathbb{N}}{\rA}
-  \proofstep{1}{\sigma_a\colon\mathbb{N}\to\mathbb{N}}{%
-    \rAEa{\FormulaRefAuto{a\in\mathbb{N}\vdash
-      \sigma_a\coloneqq \iota F\Bigl(
-        F\colon\mathbb{N}\to\mathbb{N}\land
-        \forall x\in\mathbb{N}\,F(x)=x+a
-      \Bigr)}{1}}}
-\end{tabproof}
-
-\FormulaThmDelta[Wert des additiven Schritts]{%
-  a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash \sigma_a(x)=x+a%
+\FormulaThmDelta[Typisierung des additiven Schrittterms]{%
+  a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash \tAddStep{a}(x)\in\mathbb{N}%
 }{%
   \DeltaRow{Mengen}{a\dsep x}%
-  \DeltaRow{Funktionensymbol}{\sigma_a}%
+  \DeltaRow{Funktionensymbol}{\tAddStep{a}}%
 }
 \begin{tabproof}
   \proofstep{1}{a\in\mathbb{N}}{\rA}
   \proofstep{2}{x\in\mathbb{N}}{\rA}
-  \proofstep{1}{\forall x\in\mathbb{N}\,\sigma_a(x)=x+a}{%
-    \rAEb{\FormulaRefAuto{a\in\mathbb{N}\vdash
-      \sigma_a\coloneqq \iota F\Bigl(
+  \proofstep{1,2}{x+a\in\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{2,1}}
+  \proofstep{1,2}{\tAddStep{a}(x)=x+a}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tAddStep{a}(x)\coloneqq x+a}{1,2}}
+  \proofstep{1,2}{\tAddStep{a}(x)\in\mathbb{N}}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmDelta[Existenz des additiven Schritts]{%
+  a\in\mathbb{N}\vdash
+  \exists! F\colon\mathbb{N}\to\mathbb{N}\,
+  \forall x\in\mathbb{N}\,F(x)=\tAddStep{a}(x)%
+}{%
+  \DeltaRow{Mengen}{a\dsep x}%
+  \DeltaRow{Funktionensymbol}{\tAddStep{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{a\in\mathbb{N}}{\rA}
+  \proofstep{2}{x\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{\tAddStep{a}(x)=x+a}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tAddStep{a}(x)\coloneqq x+a}{1,2}}
+  \proofstep{1}{\forall x\in\mathbb{N}\,\tAddStep{a}(x)=x+a}{%
+    \rUI{\rRI{2,3}}}
+  \proofstep{1,2}{\tAddStep{a}(x)\in\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tAddStep{a}(x)\in\mathbb{N}}{1,2}}
+  \proofstep{1}{\forall x\in\mathbb{N}\,\tAddStep{a}(x)\in\mathbb{N}}{%
+    \rUI{\rRI{2,5}}}
+  \proofstep{1}{%
+    \exists! F\colon\mathbb{N}\to\mathbb{N}\,
+    \forall x\in\mathbb{N}\,F(x)=\tAddStep{a}(x)}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{4,6}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Additiver Schritt zu \(a\)]{%
+  a\in\mathbb{N}\vdash
+  \AddStep{a}\coloneqq \iota F\Bigl(
+    F\colon\mathbb{N}\to\mathbb{N}\land
+    \forall x\in\mathbb{N}\,F(x)=\tAddStep{a}(x)
+  \Bigr)%
+}{Additiver Schritt}{%
+  \DeltaRow{Mengen}{a\dsep x}%
+  \DeltaRow{Funktionensymbole}{\AddStep{a}\dsep \tAddStep{a}\dsep F}%
+}
+
+\FormulaThmDelta[Additiver Schritt ist eine Abbildung]{%
+  a\in\mathbb{N}\vdash \AddStep{a}\colon\mathbb{N}\to\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{a}%
+  \DeltaRow{Funktionensymbol}{\AddStep{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{a\in\mathbb{N}}{\rA}
+  \proofstep{1}{\AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{a\in\mathbb{N}\vdash
+      \AddStep{a}\coloneqq \iota F\Bigl(
         F\colon\mathbb{N}\to\mathbb{N}\land
-        \forall x\in\mathbb{N}\,F(x)=x+a
+        \forall x\in\mathbb{N}\,F(x)=\tAddStep{a}(x)
       \Bigr)}{1}}}
-  \proofstep{1,2}{\sigma_a(x)=x+a}{\rRE{2,\rUE{3}}}
+\end{tabproof}
+
+\FormulaThmDelta[Wert des additiven Schritts]{%
+  a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash \AddStep{a}(x)=x+a%
+}{%
+  \DeltaRow{Mengen}{a\dsep x}%
+  \DeltaRow{Funktionensymbole}{\AddStep{a}\dsep \tAddStep{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{a\in\mathbb{N}}{\rA}
+  \proofstep{2}{x\in\mathbb{N}}{\rA}
+  \proofstep{1}{\forall x\in\mathbb{N}\,\AddStep{a}(x)=\tAddStep{a}(x)}{%
+    \rAEb{\FormulaRefAuto{a\in\mathbb{N}\vdash
+      \AddStep{a}\coloneqq \iota F\Bigl(
+        F\colon\mathbb{N}\to\mathbb{N}\land
+        \forall x\in\mathbb{N}\,F(x)=\tAddStep{a}(x)
+      \Bigr)}{1}}}
+  \proofstep{1,2}{\AddStep{a}(x)=\tAddStep{a}(x)}{\rRE{2,\rUE{3}}}
+  \proofstep{1,2}{\tAddStep{a}(x)=x+a}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
+      \tAddStep{a}(x)\coloneqq x+a}{1,2}}
+  \proofstep{1,2}{\AddStep{a}(x)=x+a}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproof}
 
 \FormulaDefDeltaK[Multiplikation natürlicher Zahlen]{%
   a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-  a\cdot b\coloneqq \RecFun{\varnothing}{\sigma_a}(b)%
+  a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)%
 }{Multiplikation auf \(\mathbb{N}\)}{%
   \DeltaRow{Mengen}{a\dsep b}%
-  \DeltaRow{Funktionensymbole}{\sigma_a\dsep \RecFun{\varnothing}{\sigma_a}}%
+  \DeltaRow{Funktionensymbole}{\AddStep{a}\dsep \RecFun{\varnothing}{\AddStep{a}}}%
   \DeltaRow{Neue Symbole}{\cdot}%
 }
 
@@ -24674,14 +24733,14 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
   \proofstep{2}{b\in\mathbb{N}}{\rA}
   \proofstep{}{\varnothing\in\mathbb{N}}{%
     \FormulaRefAuto{\varnothing\in\mathbb{N}}}
-  \proofstep{1}{\sigma_a\colon\mathbb{N}\to\mathbb{N}}{%
-    \FormulaRefAuto{a\in\mathbb{N}\vdash \sigma_a\colon\mathbb{N}\to\mathbb{N}}{1}}
-  \proofstep{1,2}{\RecFun{\varnothing}{\sigma_a}(b)\in\mathbb{N}}{%
+  \proofstep{1}{\AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\vdash \AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{1}}
+  \proofstep{1,2}{\RecFun{\varnothing}{\AddStep{a}}(b)\in\mathbb{N}}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
       \RecFun{m_0}{f}(n)\in M}{3,4,2}}
-  \proofstep{1,2}{a\cdot b=\RecFun{\varnothing}{\sigma_a}(b)}{%
+  \proofstep{1,2}{a\cdot b=\RecFun{\varnothing}{\AddStep{a}}(b)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\sigma_a}(b)}{1,2}}
+      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
   \proofstep{1,2}{a\cdot b\in\mathbb{N}}{\rIE{6,5}}
 \end{tabproof}
 
@@ -24694,12 +24753,12 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
   \proofstep{1}{a\in\mathbb{N}}{\rA}
   \proofstep{}{\varnothing\in\mathbb{N}}{%
     \FormulaRefAuto{\varnothing\in\mathbb{N}}}
-  \proofstep{1}{\sigma_a\colon\mathbb{N}\to\mathbb{N}}{%
-    \FormulaRefAuto{a\in\mathbb{N}\vdash \sigma_a\colon\mathbb{N}\to\mathbb{N}}{1}}
-  \proofstep{1}{a\cdot\varnothing=\RecFun{\varnothing}{\sigma_a}(\varnothing)}{%
+  \proofstep{1}{\AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\vdash \AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{1}}
+  \proofstep{1}{a\cdot\varnothing=\RecFun{\varnothing}{\AddStep{a}}(\varnothing)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\sigma_a}(b)}{1,2}}
-  \proofstep{1}{\RecFun{\varnothing}{\sigma_a}(\varnothing)=\varnothing}{%
+      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
+  \proofstep{1}{\RecFun{\varnothing}{\AddStep{a}}(\varnothing)=\varnothing}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
       \RecFun{m_0}{f}(\varnothing)=m_0}{2,3}}
   \proofstep{1}{a\cdot\varnothing=\varnothing}{%
@@ -24715,46 +24774,46 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
   a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\cdot\Succ(b)=(a\cdot b)+a
 }{%
   \DeltaRow{Mengen}{a\dsep b}%
-  \DeltaRow{Funktionensymbole}{\sigma_a\dsep \RecFun{\varnothing}{\sigma_a}}%
+  \DeltaRow{Funktionensymbole}{\AddStep{a}\dsep \RecFun{\varnothing}{\AddStep{a}}}%
 }
 \begin{tabproof}
   \proofstep{1}{a\in\mathbb{N}}{\rA}
   \proofstep{2}{b\in\mathbb{N}}{\rA}
   \proofstep{}{\varnothing\in\mathbb{N}}{%
     \FormulaRefAuto{\varnothing\in\mathbb{N}}}
-  \proofstep{1}{\sigma_a\colon\mathbb{N}\to\mathbb{N}}{%
-    \FormulaRefAuto{a\in\mathbb{N}\vdash \sigma_a\colon\mathbb{N}\to\mathbb{N}}{1}}
+  \proofstep{1}{\AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\vdash \AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{1}}
   \proofstep{2}{\Succ(b)\in\mathbb{N}}{%
     \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{2}}
   \proofstep{1,2}{a\cdot\Succ(b)=
-    \RecFun{\varnothing}{\sigma_a}(\Succ(b))}{%
+    \RecFun{\varnothing}{\AddStep{a}}(\Succ(b))}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\sigma_a}(b)}{1,5}}
+      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,5}}
   \proofstep{1,2}{%
-    \RecFun{\varnothing}{\sigma_a}(\Succ(b))=
-    \sigma_a(\RecFun{\varnothing}{\sigma_a}(b))}{%
+    \RecFun{\varnothing}{\AddStep{a}}(\Succ(b))=
+    \AddStep{a}(\RecFun{\varnothing}{\AddStep{a}}(b))}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
       \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{3,4,2}}
   \proofstep{1,2}{a\cdot\Succ(b)=
-    \sigma_a(\RecFun{\varnothing}{\sigma_a}(b))}{%
+    \AddStep{a}(\RecFun{\varnothing}{\AddStep{a}}(b))}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7}}
-  \proofstep{1,2}{\RecFun{\varnothing}{\sigma_a}(b)\in\mathbb{N}}{%
+  \proofstep{1,2}{\RecFun{\varnothing}{\AddStep{a}}(b)\in\mathbb{N}}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
       \RecFun{m_0}{f}(n)\in M}{3,4,2}}
   \proofstep{1,2}{%
-    \sigma_a(\RecFun{\varnothing}{\sigma_a}(b))=
-    \RecFun{\varnothing}{\sigma_a}(b)+a}{%
+    \AddStep{a}(\RecFun{\varnothing}{\AddStep{a}}(b))=
+    \RecFun{\varnothing}{\AddStep{a}}(b)+a}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep x\in\mathbb{N}\vdash
-      \sigma_a(x)=x+a}{1,9}}
+      \AddStep{a}(x)=x+a}{1,9}}
   \proofstep{1,2}{a\cdot\Succ(b)=
-    \RecFun{\varnothing}{\sigma_a}(b)+a}{%
+    \RecFun{\varnothing}{\AddStep{a}}(b)+a}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,10}}
-  \proofstep{1,2}{a\cdot b=\RecFun{\varnothing}{\sigma_a}(b)}{%
+  \proofstep{1,2}{a\cdot b=\RecFun{\varnothing}{\AddStep{a}}(b)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\sigma_a}(b)}{1,2}}
+      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
   \proofstep{1,2}{(a\cdot b)+a=
-    \RecFun{\varnothing}{\sigma_a}(b)+a}{\rIE{12}}
-  \proofstep{1,2}{\RecFun{\varnothing}{\sigma_a}(b)+a=
+    \RecFun{\varnothing}{\AddStep{a}}(b)+a}{\rIE{12}}
+  \proofstep{1,2}{\RecFun{\varnothing}{\AddStep{a}}(b)+a=
     (a\cdot b)+a}{%
     \FormulaRefAuto{a=b\vdash b=a}{13}}
   \proofstep{1,2}{a\cdot\Succ(b)=(a\cdot b)+a}{%
