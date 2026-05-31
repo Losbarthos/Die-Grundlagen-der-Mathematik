@@ -25319,6 +25319,68 @@ Für den Beweis schreiben wir abkürzend
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+Die zweite Komponente des Summenzustands erfüllt damit unmittelbar die
+Rekursionsgleichung des Akkumulators.
+
+\FormulaThmDeltaR[Nachfolgerregel der Summenakkumulation]{%
+  \begin{aligned}[t]
+    &u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash{}\\
+    &\pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(\Succ(n))\Bigr)
+      =
+      \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr) + u(n)
+  \end{aligned}
+}{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(\Succ(n))\Bigr)
+  =
+  \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr) + u(n)
+}{%
+  \DeltaRow{Mengen}{u\dsep n\dsep m}%
+  \DeltaRow{Funktionensymbole}{\SumStep{u}\dsep
+    \RecFun{(\varnothing,\varnothing)}{\SumStep{u}}}%
+  \DeltaRow{Abkürzungen}{R_u}%
+}
+Für den Beweis schreiben wir wieder
+\[
+  R_u(m)\coloneqq\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(m).
+\]
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{\varnothing\in\mathbb{N}}{\FormulaRefAuto{\varnothing\in\mathbb{N}}}
+  \proofstepwidestar[]{(\varnothing,\varnothing)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,3}}
+  \proofstepwidestar[1]{\SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to
+    \mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{1}}
+  \proofstepwidestar[1,2]{R_u(n)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+      \RecFun{m_0}{f}(n)\in M}{4,5,2}}
+  \proofstepwidestar[1,2]{R_u(\Succ(n))=\SumStep{u}(R_u(n))}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{4,5,2}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(R_u(\Succ(n))\bigr)=
+    \pi_2(\SumStep{u}(R_u(n)))}{\rIE{7}}
+  \proofstepwidestar[1,2]{%
+    \pi_2(\SumStep{u}(R_u(n)))=\pi_2(R_u(n)) + u(\pi_1(R_u(n)))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep z\in\mathbb{N}\times\mathbb{N}\vdash
+      \pi_2(\SumStep{u}(z))=\pi_2(z) + u(\pi_1(z))}{1,6}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(R_u(\Succ(n))\bigr)=\pi_2(R_u(n)) + u(\pi_1(R_u(n)))}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,9}}
+  \proofstepwidestar[1,2]{\pi_1(R_u(n))=n}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \pi_1\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr)=n}{1,2}}
+  \proofstepwidestar[1,2]{u(\pi_1(R_u(n)))=u(n)}{\rIE{11}}
+  \proofstepwidestar[1,2]{%
+    \pi_2(R_u(n)) + u(\pi_1(R_u(n)))=\pi_2(R_u(n)) + u(n)}{\rIE{12}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(R_u(\Succ(n))\bigr)=\pi_2(R_u(n)) + u(n)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,13}}
+\end{tabproofwide}
+
 \FormulaThmDelta[Nullregel des Summenzeichens]{%
   u\colon\mathbb{N}\to\mathbb{N}\vdash
   \sum_{i<\varnothing}u(i)=\varnothing%
@@ -25380,59 +25442,36 @@ Für den Beweis schreiben wir wieder
 \begin{tabproofwide}
   \proofstepwidestar[1]{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
   \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
-  \proofstepwidestar[]{\varnothing\in\mathbb{N}}{\FormulaRefAuto{\varnothing\in\mathbb{N}}}
-  \proofstepwidestar[]{(\varnothing,\varnothing)\in\mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,3}}
-  \proofstepwidestar[1]{\SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to
-    \mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-      \SumStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{1}}
   \proofstepwidestar[2]{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{2}}
-  \proofstepwidestar[1,2]{R_u(n)\in\mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(n)\in M}{4,5,2}}
   \proofstepwidestar[1,2]{%
     \sum_{i<\Succ(n)}u(i)=\pi_2\bigl(R_u(\Succ(n))\bigr)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
       \sum_{i<n}u(i)\coloneqq
-      \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr)}{1,6}}
-  \proofstepwidestar[1,2]{R_u(\Succ(n))=\SumStep{u}(R_u(n))}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{4,5,2}}
-  \proofstepwidestar[1,2]{%
-    \pi_2\bigl(R_u(\Succ(n))\bigr)=
-    \pi_2(\SumStep{u}(R_u(n)))}{\rIE{9}}
-  \proofstepwidestar[1,2]{%
-    \pi_2(\SumStep{u}(R_u(n)))=\pi_2(R_u(n)) + u(\pi_1(R_u(n)))}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep z\in\mathbb{N}\times\mathbb{N}\vdash
-      \pi_2(\SumStep{u}(z))=\pi_2(z) + u(\pi_1(z))}{1,7}}
-  \proofstepwidestar[1,2]{%
-    \pi_2\bigl(R_u(\Succ(n))\bigr)=\pi_2(R_u(n)) + u(\pi_1(R_u(n)))}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,11}}
-  \proofstepwidestar[1,2]{\pi_1(R_u(n))=n}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
-      \pi_1\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr)=n}{1,2}}
-  \proofstepwidestar[1,2]{u(\pi_1(R_u(n)))=u(n)}{\rIE{13}}
-  \proofstepwidestar[1,2]{%
-    \pi_2(R_u(n)) + u(\pi_1(R_u(n)))=\pi_2(R_u(n)) + u(n)}{\rIE{14}}
+      \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr)}{1,3}}
   \proofstepwidestar[1,2]{%
     \pi_2\bigl(R_u(\Succ(n))\bigr)=\pi_2(R_u(n)) + u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{12,15}}
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(\Succ(n))\Bigr)
+      =
+      \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr) + u(n)}{1,2}}
+  \proofstepwidestar[1,2]{%
+    \sum_{i<\Succ(n)}u(i)=\pi_2(R_u(n)) + u(n)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
   \proofstepwidestar[1,2]{\sum_{i<n}u(i)=\pi_2(R_u(n))}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
       \sum_{i<n}u(i)\coloneqq
       \pi_2\Bigl(\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(n)\Bigr)}{1,2}}
   \proofstepwidestar[1,2]{\pi_2(R_u(n))=\sum_{i<n}u(i)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{17}}
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
   \proofstepwidestar[1,2]{%
-    \pi_2(R_u(n)) + u(n)=\left(\sum_{i<n}u(i)\right) + u(n)}{\rIE{18}}
+    \pi_2(R_u(n)) + u(n)=\left(\sum_{i<n}u(i)\right) + u(n)}{\rIE{8}}
   \proofstepwidestar[1,2]{%
     \pi_2\bigl(R_u(\Succ(n))\bigr)=\left(\sum_{i<n}u(i)\right) + u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{16,19}}
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,9}}
   \proofstepwidestar[1,2]{%
     \sum_{i<\Succ(n)}u(i)=\left(\sum_{i<n}u(i)\right) + u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,20}}
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,10}}
 \end{tabproofwide}
 
 Die übliche Schreibweise mit oberer Grenze ist eine abgeleitete Notation:
@@ -25812,6 +25851,68 @@ Für den Beweis schreiben wir abkürzend
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\FormulaThmDeltaR[Nachfolgerregel der Produktakkumulation]{%
+  \begin{aligned}[t]
+    &u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash{}\\
+    &\pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(\Succ(n))\Bigr)
+      =
+      \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)\cdot u(n)
+  \end{aligned}
+}{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(\Succ(n))\Bigr)
+  =
+  \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)\cdot u(n)
+}{%
+  \DeltaRow{Mengen}{u\dsep n\dsep m}%
+  \DeltaRow{Funktionensymbole}{\ProdStep{u}\dsep
+    \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}}%
+  \DeltaRow{Abkürzungen}{P_u}%
+}
+Für den Beweis schreiben wir wieder
+\[
+  P_u(m)\coloneqq
+  \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(m).
+\]
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{\varnothing\in\mathbb{N}}{\FormulaRefAuto{\varnothing\in\mathbb{N}}}
+  \proofstepwidestar[]{\Succ(\varnothing)\in\mathbb{N}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{3}}
+  \proofstepwidestar[]{(\varnothing,\Succ(\varnothing))\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}}
+  \proofstepwidestar[1]{\ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to
+    \mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+      \ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{1}}
+  \proofstepwidestar[1,2]{P_u(n)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+      \RecFun{m_0}{f}(n)\in M}{5,6,2}}
+  \proofstepwidestar[1,2]{P_u(\Succ(n))=\ProdStep{u}(P_u(n))}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{5,6,2}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(P_u(\Succ(n))\bigr)=
+    \pi_2(\ProdStep{u}(P_u(n)))}{\rIE{8}}
+  \proofstepwidestar[1,2]{%
+    \pi_2(\ProdStep{u}(P_u(n)))=\pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep z\in\mathbb{N}\times\mathbb{N}\vdash
+      \pi_2(\ProdStep{u}(z))=\pi_2(z)\cdot u(\pi_1(z))}{1,7}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(P_u(\Succ(n))\bigr)=\pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,10}}
+  \proofstepwidestar[1,2]{\pi_1(P_u(n))=n}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \pi_1\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)=n}{1,2}}
+  \proofstepwidestar[1,2]{u(\pi_1(P_u(n)))=u(n)}{\rIE{12}}
+  \proofstepwidestar[1,2]{%
+    \pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))=\pi_2(P_u(n))\cdot u(n)}{\rIE{13}}
+  \proofstepwidestar[1,2]{%
+    \pi_2\bigl(P_u(\Succ(n))\bigr)=\pi_2(P_u(n))\cdot u(n)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{11,14}}
+\end{tabproofwide}
+
 \FormulaThmDelta[Nullregel des Produktzeichens]{%
   u\colon\mathbb{N}\to\mathbb{N}\vdash
   \prod_{i<\varnothing}u(i)=\Succ(\varnothing)%
@@ -25877,61 +25978,36 @@ Für den Beweis schreiben wir wieder
 \begin{tabproofwide}
   \proofstepwidestar[1]{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
   \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
-  \proofstepwidestar[]{\varnothing\in\mathbb{N}}{\FormulaRefAuto{\varnothing\in\mathbb{N}}}
-  \proofstepwidestar[]{\Succ(\varnothing)\in\mathbb{N}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{3}}
-  \proofstepwidestar[]{(\varnothing,\Succ(\varnothing))\in\mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}}
-  \proofstepwidestar[1]{\ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to
-    \mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-      \ProdStep{u}\colon\mathbb{N}\times\mathbb{N}\to\mathbb{N}\times\mathbb{N}}{1}}
   \proofstepwidestar[2]{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}{2}}
-  \proofstepwidestar[1,2]{P_u(n)\in\mathbb{N}\times\mathbb{N}}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(n)\in M}{5,6,2}}
   \proofstepwidestar[1,2]{%
     \prod_{i<\Succ(n)}u(i)=\pi_2\bigl(P_u(\Succ(n))\bigr)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
       \prod_{i<n}u(i)\coloneqq
-      \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)}{1,7}}
-  \proofstepwidestar[1,2]{P_u(\Succ(n))=\ProdStep{u}(P_u(n))}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{5,6,2}}
-  \proofstepwidestar[1,2]{%
-    \pi_2\bigl(P_u(\Succ(n))\bigr)=
-    \pi_2(\ProdStep{u}(P_u(n)))}{\rIE{10}}
-  \proofstepwidestar[1,2]{%
-    \pi_2(\ProdStep{u}(P_u(n)))=\pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep z\in\mathbb{N}\times\mathbb{N}\vdash
-      \pi_2(\ProdStep{u}(z))=\pi_2(z)\cdot u(\pi_1(z))}{1,8}}
-  \proofstepwidestar[1,2]{%
-    \pi_2\bigl(P_u(\Succ(n))\bigr)=\pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{11,12}}
-  \proofstepwidestar[1,2]{\pi_1(P_u(n))=n}{%
-    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
-      \pi_1\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)=n}{1,2}}
-  \proofstepwidestar[1,2]{u(\pi_1(P_u(n)))=u(n)}{\rIE{14}}
-  \proofstepwidestar[1,2]{%
-    \pi_2(P_u(n))\cdot u(\pi_1(P_u(n)))=\pi_2(P_u(n))\cdot u(n)}{\rIE{15}}
+      \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)}{1,3}}
   \proofstepwidestar[1,2]{%
     \pi_2\bigl(P_u(\Succ(n))\bigr)=\pi_2(P_u(n))\cdot u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{13,16}}
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(\Succ(n))\Bigr)
+      =
+      \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)\cdot u(n)}{1,2}}
+  \proofstepwidestar[1,2]{%
+    \prod_{i<\Succ(n)}u(i)=\pi_2(P_u(n))\cdot u(n)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
   \proofstepwidestar[1,2]{\prod_{i<n}u(i)=\pi_2(P_u(n))}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
       \prod_{i<n}u(i)\coloneqq
       \pi_2\Bigl(\RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(n)\Bigr)}{1,2}}
   \proofstepwidestar[1,2]{\pi_2(P_u(n))=\prod_{i<n}u(i)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{18}}
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
   \proofstepwidestar[1,2]{%
-    \pi_2(P_u(n))\cdot u(n)=\left(\prod_{i<n}u(i)\right)\cdot u(n)}{\rIE{19}}
+    \pi_2(P_u(n))\cdot u(n)=\left(\prod_{i<n}u(i)\right)\cdot u(n)}{\rIE{8}}
   \proofstepwidestar[1,2]{%
     \pi_2\bigl(P_u(\Succ(n))\bigr)=\left(\prod_{i<n}u(i)\right)\cdot u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{17,20}}
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,9}}
   \proofstepwidestar[1,2]{%
     \prod_{i<\Succ(n)}u(i)=\left(\prod_{i<n}u(i)\right)\cdot u(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,21}}
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,10}}
 \end{tabproofwide}
 
 Für die Schreibweise mit oberer Grenze setzen wir entsprechend
