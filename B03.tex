@@ -3818,6 +3818,118 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
   \DeltaRow{\makecell[l]{Vereinigungs-\\abgeschlossene\\ Familie}}{}%
 }
 
+\subsection{Elementbezogene Teilfamilien}
+
+Für eine Familie \(M\) und ein Element \(a\) zerlegen die folgenden beiden
+Teilmengenfamilien \(M\) danach, ob ihre Elemente \(a\) enthalten oder
+vermeiden.
+
+\FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
+  \FamContaining{M}{a} \coloneqq \{X\in M\mid a\in X\}
+}{Enthaltende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{\FamContaining{M}{a}}
+}
+
+\FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
+  \FamAvoiding{M}{a} \coloneqq \{X\in M\mid a\notin X\}
+}{Vermeidende Teilfamilie}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Neue Symbole}{\FamAvoiding{M}{a}}
+}
+
+\FormulaThmDelta[Enthaltende Teilfamilie ist Teilfamilie]{%
+  \FamContaining{M}{a}\subseteq M
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \FamContaining{M}{a}}{\rA}
+  \proofstep{1}{X\in M\land a\in X}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{1}}
+  \proofstep{1}{X\in M}{\rAEa{2}}
+  \proofstep{}{\FamContaining{M}{a}\subseteq M}{%
+    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,3}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Vermeidende Teilfamilie ist Teilfamilie]{%
+  \FamAvoiding{M}{a}\subseteq M
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{1}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{1}}
+  \proofstep{1}{X\in M}{\rAEa{2}}
+  \proofstep{}{\FamAvoiding{M}{a}\subseteq M}{%
+    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,3}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Enthaltende Teilfamilie ist vereinigungsabgeschlossen]{%
+  \UnionClosedFam(M)\vdash \UnionClosedFam(\FamContaining{M}{a})
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{X\in \FamContaining{M}{a}}{\rA}
+  \proofstep{3}{Y\in \FamContaining{M}{a}}{\rA}
+  \proofstep{2}{X\in M\land a\in X}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{2}}
+  \proofstep{2}{X\in M}{\rAEa{4}}
+  \proofstep{2}{a\in X}{\rAEb{4}}
+  \proofstep{3}{Y\in M\land a\in Y}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{3}}
+  \proofstep{3}{Y\in M}{\rAEa{7}}
+  \proofstep{1,2,3}{X\cup Y\in M}{%
+    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,8}}
+  \proofstep{2}{a\in X\cup Y}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{6}}
+  \proofstep{1,2,3}{X\cup Y\in M\land a\in X\cup Y}{\rAI{9,10}}
+  \proofstep{1,2,3}{X\cup Y\in \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{11}}
+  \proofstep{1}{\UnionClosedFam(\FamContaining{M}{a})}{%
+    \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{2,\rRI{3,12}}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Vermeidende Teilfamilie ist vereinigungsabgeschlossen]{%
+  \UnionClosedFam(M)\vdash \UnionClosedFam(\FamAvoiding{M}{a})
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{X\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{3}{Y\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{2}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{2}}
+  \proofstep{2}{X\in M}{\rAEa{4}}
+  \proofstep{2}{a\notin X}{\rAEb{4}}
+  \proofstep{3}{Y\in M\land a\notin Y}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{3}}
+  \proofstep{3}{Y\in M}{\rAEa{7}}
+  \proofstep{3}{a\notin Y}{\rAEb{7}}
+  \proofstep{1,2,3}{X\cup Y\in M}{%
+    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{5,8}}
+
+  \proofstep{11}{a\in X\cup Y}{\rA}
+  \proofstep{11}{a\in X\lor a\in Y}{%
+    \FormulaRefAuto{z\in A\cup B \eqvdash z\in A\lor z\in B}{11}}
+  \proofstep{13}{a\in X}{\rA}
+  \proofstep{2,13}{\bot}{\rBI{13,6}}
+  \proofstep{15}{a\in Y}{\rA}
+  \proofstep{3,15}{\bot}{\rBI{15,9}}
+  \proofstep{2,3,11}{\bot}{\rOE{12,13,14,15,16}}
+  \proofstep{2,3}{a\notin X\cup Y}{\rCI{11,17}}
+
+  \proofstep{1,2,3}{X\cup Y\in M\land a\notin X\cup Y}{\rAI{10,18}}
+  \proofstep{1,2,3}{X\cup Y\in \FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{19}}
+  \proofstep{1}{\UnionClosedFam(\FamAvoiding{M}{a})}{%
+    \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{2,\rRI{3,20}}}}}
+\end{tabproof}
+
 
 \chapter{Regularität}
 
@@ -10827,25 +10939,11 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
 
 \subsection{Die Adjunktionsabbildung einer Mengenfamilie}
 
-Für eine Familie \(M\) und ein Element \(a\) zerlegen die beiden folgenden
-Teilmengenfamilien \(M\) danach, ob ihre Elemente \(a\) enthalten oder
-vermeiden. Unter Vereinigungsschließung und \(\{a\}\in M\) wird daraus die
-punktweise Adjunktion \(X\mapsto X\cup\{a\}\) als Funktion zwischen diesen
-Teilmengenfamilien.
-
-\FormulaDefDeltaK[Enthaltende Teilfamilie zu einem Element]{%
-  \FamContaining{M}{a} \coloneqq \{X\in M\mid a\in X\}
-}{Enthaltende Teilfamilie}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{\FamContaining{M}{a}}
-}
-
-\FormulaDefDeltaK[Vermeidende Teilfamilie zu einem Element]{%
-  \FamAvoiding{M}{a} \coloneqq \{X\in M\mid a\notin X\}
-}{Vermeidende Teilfamilie}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Neue Symbole}{\FamAvoiding{M}{a}}
-}
+Die zuvor eingeführten Teilfamilien \(\FamContaining{M}{a}\) und
+\(\FamAvoiding{M}{a}\) bilden den natürlichen Definitions- und Zielbereich
+für die punktweise Adjunktion \(X\mapsto X\cup\{a\}\). Unter
+Vereinigungsschließung und \(\{a\}\in M\) wird diese Vorschrift zu einer
+Funktion zwischen den beiden Teilfamilien.
 
 \FormulaDefDeltaK[Funktionsvorschrift der Adjunktionsabbildung]{%
   X\in \FamAvoiding{M}{a}\vdash
@@ -21123,6 +21221,32 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2}{\Finite{T}}{\rEE{3,4,12}}
 \end{tabproof}
 
+\FormulaThmDelta[Enthaltende Teilfamilie einer endlichen Familie ist endlich]{%
+  \Finite{M}\vdash \Finite{\FamContaining{M}{a}}
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{}{\FamContaining{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\subseteq M}}
+  \proofstep{1}{\Finite{\FamContaining{M}{a}}}{%
+    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{2,1}}
+\end{tabproof}
+
+\FormulaThmDelta[Vermeidende Teilfamilie einer endlichen Familie ist endlich]{%
+  \Finite{M}\vdash \Finite{\FamAvoiding{M}{a}}
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{}{\FamAvoiding{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\subseteq M}}
+  \proofstep{1}{\Finite{\FamAvoiding{M}{a}}}{%
+    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{2,1}}
+\end{tabproof}
+
 \subsection{Bilder endlicher Mengen sind endlich}
 
 \FormulaThmDelta[Bilder endlicher Mengen sind endlich]{%
@@ -24014,6 +24138,144 @@ das gefundene Extremum zurück.
   \DeltaRow{Mengen}{M\dsep n}
   \DeltaRow{Termsymbol}{\tCard}
 }
+
+\subsection{Vergleich endlicher Mengen}
+
+\FormulaThmDelta[Kardinalität einer endlichen Menge ist natürlich]{%
+  \Finite{M}\vdash \tCard(M)\in\mathbb{N}
+}{%
+  \DeltaRow{Mengen}{M}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \tCard(M)\EqCard M}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M) \coloneqq \iota n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{1}}
+  \proofstep{1}{\tCard(M)\in\mathbb{N}}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Kardinalität einer endlichen Menge zählt die Menge]{%
+  \Finite{M}\vdash \tCard(M)\EqCard M
+}{%
+  \DeltaRow{Mengen}{M}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \tCard(M)\EqCard M}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M) \coloneqq \iota n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{1}}
+  \proofstep{1}{\tCard(M)\EqCard M}{\rAEb{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Injektion aus kleinerer endlicher Kardinalität]{%
+  \Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
+  \vdash \exists F\colon M\inj N
+}{%
+  \DeltaRow{Mengen}{M\dsep N}
+  \DeltaRow{Funktionen}{F\dsep H\dsep K}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\Finite{N}}{\rA}
+  \proofstep{3}{\tCard(M)\leq \tCard(N)}{\rA}
+  \proofstep{1}{\tCard(M)\in\mathbb{N}}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{1}}
+  \proofstep{2}{\tCard(N)\in\mathbb{N}}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
+  \proofstep{1,2,3}{\tCard(M)\subseteq \tCard(N)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n \leftrightarrow m\subseteq n}{4,5,3}}
+  \proofstep{1,2,3}{\iota_{\tCard(M),\tCard(N)}\colon \tCard(M)\inj \tCard(N)}{%
+    \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{6}}
+  \proofstep{1}{\tCard(M)\EqCard M}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\EqCard M}{1}}
+  \proofstep{2}{\tCard(N)\EqCard N}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\EqCard M}{2}}
+  \proofstep{1}{\exists H\colon \tCard(M)\bij M}{%
+    \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{8}}
+  \proofstep{2}{\exists K\colon \tCard(N)\bij N}{%
+    \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{9}}
+
+  \proofstep{12}{H\colon \tCard(M)\bij M}{\rA}
+  \proofstep{13}{K\colon \tCard(N)\bij N}{\rA}
+  \proofstep{12}{H^{-1}\colon M\bij \tCard(M)}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}{12}}
+  \proofstep{12}{H^{-1}\colon M\inj \tCard(M)}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{14}}
+  \proofstep{13}{K\colon \tCard(N)\inj N}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{13}}
+  \proofstep{1,2,3,12}{\iota_{\tCard(M),\tCard(N)}\circ H^{-1}\colon M\inj \tCard(N)}{%
+    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{15,7}}
+  \proofstep{1,2,3,12,13}{K\circ(\iota_{\tCard(M),\tCard(N)}\circ H^{-1})\colon M\inj N}{%
+    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{17,16}}
+  \proofstep{1,2,3,12,13}{\exists F\colon M\inj N}{\rEI{18}}
+  \proofstep{1,2,3,12}{\exists F\colon M\inj N}{\rEE{11,13,19}}
+  \proofstep{1,2,3}{\exists F\colon M\inj N}{\rEE{10,12,20}}
+\end{tabproof}
+
+\FormulaThmDelta[Vergleich endlicher Mengen durch Injektionen]{%
+  \Finite{M}\dsep \Finite{N}\dsep
+  \neg\exists F\colon M\inj N
+  \vdash \exists G\colon N\inj M
+}{%
+  \DeltaRow{Mengen}{M\dsep N}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\Finite{N}}{\rA}
+  \proofstep{3}{\neg\exists F\colon M\inj N}{\rA}
+  \proofstep{1}{\tCard(M)\in\mathbb{N}}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{1}}
+  \proofstep{2}{\tCard(N)\in\mathbb{N}}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
+  \proofstep{1,2}{\tCard(M)\leq \tCard(N)\lor \tCard(N)\leq \tCard(M)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}{4,5}}
+
+  \proofstep{7}{\tCard(M)\leq \tCard(N)}{\rA}
+  \proofstep{1,2,7}{\exists F\colon M\inj N}{%
+    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)\vdash \exists F\colon M\inj N}{1,2,7}}
+  \proofstep{1,2,3,7}{\exists G\colon N\inj M}{%
+    \FormulaRefAuto{P,\,\neg P \vdash Q}{8,3}}
+
+  \proofstep{10}{\tCard(N)\leq \tCard(M)}{\rA}
+  \proofstep{1,2,10}{\exists G\colon N\inj M}{%
+    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)\vdash \exists F\colon M\inj N}{2,1,10}}
+
+  \proofstep{1,2,3}{\exists G\colon N\inj M}{\rOE{6,7,9,10,11}}
+\end{tabproof}
+
+Die entsprechende Aussage für Surjektionen braucht Nichtleerheit auf beiden
+Seiten: Aus einer Injektion \(A\to B\) erhalten wir hier eine Surjektion
+\(B\to A\) nur unter \(A\neq\varnothing\).
+
+\FormulaThmDelta[Vergleich nichtleerer endlicher Mengen durch Surjektionen]{%
+  \Finite{M}\dsep \Finite{N}\dsep M\neq\varnothing\dsep N\neq\varnothing\dsep
+  \neg\exists F\colon M\sur N
+  \vdash \exists G\colon N\sur M
+}{%
+  \DeltaRow{Mengen}{M\dsep N}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H\dsep K}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\Finite{N}}{\rA}
+  \proofstep{3}{M\neq\varnothing}{\rA}
+  \proofstep{4}{N\neq\varnothing}{\rA}
+  \proofstep{5}{\neg\exists F\colon M\sur N}{\rA}
+
+  \proofstep{6}{\exists H\colon N\inj M}{\rA}
+  \proofstep{7}{H\colon N\inj M}{\rA}
+  \proofstep{4,7}{\exists F\colon M\sur N}{%
+    \FormulaRefAuto{F\colon A\inj B \dsep A\neq \varnothing \vdash \exists G\colon B\sur A}{7,4}}
+  \proofstep{4,5,7}{\bot}{\rBI{8,5}}
+  \proofstep{4,5,6}{\bot}{\rEE{6,7,9}}
+  \proofstep{4,5}{\neg\exists H\colon N\inj M}{\rCI{6,10}}
+
+  \proofstep{1,2,4,5}{\exists K\colon M\inj N}{%
+    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \neg\exists F\colon M\inj N\vdash \exists G\colon N\inj M}{2,1,11}}
+  \proofstep{13}{K\colon M\inj N}{\rA}
+  \proofstep{3,13}{\exists G\colon N\sur M}{%
+    \FormulaRefAuto{F\colon A\inj B \dsep A\neq \varnothing \vdash \exists G\colon B\sur A}{13,3}}
+  \proofstep{1,2,3,4,5}{\exists G\colon N\sur M}{\rEE{12,13,14}}
+\end{tabproof}
 
 \section{Fränkelsche Vermutung}
 
