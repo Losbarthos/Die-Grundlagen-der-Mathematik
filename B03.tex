@@ -24000,6 +24000,58 @@ das gefundene Extremum zurück.
   \proofstep{1,2}{F\colon n\bij n}{\rUE{5}}
 \end{tabproof}
 
+\subsubsection{Schubfachkern}
+
+\FormulaThmDelta[Keine Injektion in kleinere natürliche Zahl]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\dsep F\colon n\inj m \vdash \bot
+}{%
+  \DeltaRow{Mengen}{m\dsep n\dsep x}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Relationen}{<_{\mathbb{N}}}
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{3}{m < n}{\rA}
+  \proofstep{4}{F\colon n\inj m}{\rA}
+
+  \proofstep{1,2,3}{m\in n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in n}{1,2,3}}
+  \proofstep{1,2,3}{m\subseteq n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{1,2,5}}
+  \proofstep{1,2,3}{\iota_{m,n}\colon m\inj n}{%
+    \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{6}}
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\inj n}{%
+    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{4,7}}
+
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\bij n}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\inj n \vdash F\colon n\bij n}{2,8}}
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\sur n}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}{9}}
+  \proofstep{1,2,3,4}{\exists x\in n\,(\iota_{m,n}\circ F)(x)=m}{%
+    \FormulaRefAuto{Surjektivität}{10,5}}
+
+  \proofstep{12}{x\in n\land (\iota_{m,n}\circ F)(x)=m}{\rA}
+  \proofstep{12}{x\in n}{\rAEa{12}}
+  \proofstep{12}{(\iota_{m,n}\circ F)(x)=m}{\rAEb{12}}
+
+  \proofstep{4,12}{F(x)\in m}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{4,13}}
+  \proofstep{12}{(\iota_{m,n}\circ F)(x)=\iota_{m,n}(F(x))}{%
+    \FormulaRefAuto{x\in A \vdash (F\circ G)(x)=F(G(x))}{13}}
+  \proofstep{1,2,3,4,12}{\iota_{m,n}(F(x))=F(x)}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{6,15}}
+  \proofstep{1,2,3,4,12}{(\iota_{m,n}\circ F)(x)=F(x)}{\rIE{16,17}}
+  \proofstep{1,2,3,4,12}{F(x)=m}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{18},14}}
+  \proofstep{1,2,3,4,12}{m\in m}{\rIE{19,15}}
+  \proofstep{1}{m\notin m}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
+  \proofstep{1,2,3,4,12}{\bot}{\rBI{20,21}}
+
+  \proofstep{1,2,3,4}{\bot}{\rEE{11,12,22}}
+\end{tabproof}
+
+\subsubsection{Ausschluss gleicher Mächtigkeit}
+
 \FormulaThmDeltaR[Keine größere natürliche Zahl ist gleichmächtig]{%
   \begin{aligned}[t]
     &m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash {}\\
@@ -24008,57 +24060,26 @@ das gefundene Extremum zurück.
 }{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash \neg(m \EqCard n)
 }{%
-  \DeltaRow{Mengen}{m\dsep n\dsep x}
-  \DeltaRow{Funktionen}{F\dsep G}
+  \DeltaRow{Mengen}{m\dsep n}
+  \DeltaRow{Funktionen}{F}
   \DeltaRow{Relationen}{<_{\mathbb{N}}}
 }
 \begin{tabproof}
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{3}{m < n}{\rA}
-  \proofstep{1,2,3}{m\in n}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in n}{1,2,3}}
+  \proofstep{4}{m \EqCard n}{\rA}
+  \proofstep{4}{n \EqCard m}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{4}}
+  \proofstep{4}{\exists F\colon n\bij m}{%
+    \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{5}}
 
-  \proofstep{5}{m \EqCard n}{\rA}
-  \proofstep{5}{n \EqCard m}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{5}}
-  \proofstep{5}{\exists F\colon n\bij m}{%
-    \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{6}}
+  \proofstep{7}{F\colon n\bij m}{\rA}
+  \proofstep{7}{F\colon n\inj m}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{7}}
+  \proofstep{1,2,3,7}{\bot}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\dsep F\colon n\inj m \vdash \bot}{1,2,3,8}}
 
-  \proofstep{8}{F\colon n\bij m}{\rA}
-  \proofstep{8}{F\colon n\inj m}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{8}}
-  \proofstep{1,2,3}{m\subseteq n}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{1,2,4}}
-  \proofstep{1,2,3}{\iota_{m,n}\colon m\inj n}{%
-    \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{10}}
-  \proofstep{1,2,3,8}{\iota_{m,n}\circ F\colon n\inj n}{%
-    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{9,11}}
-
-  \proofstep{1,2,3,8}{\iota_{m,n}\circ F\colon n\bij n}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\inj n \vdash F\colon n\bij n}{2,12}}
-  \proofstep{1,2,3,8}{\iota_{m,n}\circ F\colon n\sur n}{%
-    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}{13}}
-
-  \proofstep{1,2,3,8}{\exists x\in n\,(\iota_{m,n}\circ F)(x)=m}{%
-    \FormulaRefAuto{Surjektivität}{14,4}}
-
-  \proofstep{16}{x\in n\land (\iota_{m,n}\circ F)(x)=m}{\rA}
-  \proofstep{16}{x\in n}{\rAEa{16}}
-  \proofstep{16}{(\iota_{m,n}\circ F)(x)=m}{\rAEb{16}}
-
-  \proofstep{8,16}{F(x)\in m}{\FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{9,17}}
-  \proofstep{16}{(\iota_{m,n}\circ F)(x)=\iota_{m,n}(F(x))}{%
-    \FormulaRefAuto{x\in A \vdash (F\circ G)(x)=F(G(x))}{17}}
-  \proofstep{1,2,3,8,16}{\iota_{m,n}(F(x))=F(x)}{%
-    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{10,19}}
-  \proofstep{1,2,3,8,16}{(\iota_{m,n}\circ F)(x)=F(x)}{\rIE{20,21}}
-  \proofstep{1,2,3,8,16}{F(x)=m}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{22},18}}
-  \proofstep{1,2,3,8,16}{m\in m}{\rIE{23,19}}
-  \proofstep{1}{m\notin m}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
-  \proofstep{1,2,3,8,16}{\bot}{\rBI{24,25}}
-
-  \proofstep{1,2,3,8}{\bot}{\rEE{15,16,26}}
-  \proofstep{1,2,3,5}{\bot}{\rEE{7,8,27}}
-  \proofstep{1,2,3}{\neg(m \EqCard n)}{\rCI{5,28}}
+  \proofstep{1,2,3,4}{\bot}{\rEE{6,7,9}}
+  \proofstep{1,2,3}{\neg(m \EqCard n)}{\rCI{4,10}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Eindeutigkeit der endlichen Kardinalität]{%
