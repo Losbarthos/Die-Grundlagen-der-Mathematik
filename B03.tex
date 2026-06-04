@@ -24002,10 +24002,99 @@ das gefundene Extremum zurück.
 
 \subsubsection{Schubfachkern}
 
+\paragraph{Allgemeine Hilfssätze}
+
+\FormulaThmDelta[Werte der Inklusionskomposition liegen im kleineren Ziel]{%
+  A\subseteq B\dsep F\colon C\to A
+  \vdash
+  \forall x\in C\,(\iota_{A,B}\circ F)(x)\in A
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{F\colon C\to A}{\rA}
+  \proofstep{3}{x\in C}{\rA}
+
+  \proofstep{2,3}{F(x)\in A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,3}}
+  \proofstep{3}{(\iota_{A,B}\circ F)(x)=\iota_{A,B}(F(x))}{%
+    \FormulaRefAuto{x\in A \vdash (F\circ G)(x)=F(G(x))}{3}}
+  \proofstep{1,2,3}{\iota_{A,B}(F(x))=F(x)}{%
+    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{1,4}}
+  \proofstep{1,2,3}{(\iota_{A,B}\circ F)(x)=F(x)}{%
+    \FormulaRefAuto{a=b,\, b=c \vdash a=c}{5,6}}
+  \proofstep{1,2,3}{F(x)=(\iota_{A,B}\circ F)(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstep{1,2,3}{(\iota_{A,B}\circ F)(x)\in A}{\rIE{8,4}}
+  \proofstep{1,2}{\forall x\in C\,(\iota_{A,B}\circ F)(x)\in A}{%
+    \rUI{\rRI{3,9}}}
+\end{tabproof}
+
+\FormulaThmDelta[Surjektive Selbstabbildung vermeidet kein Element]{%
+  b\in B\dsep b\notin A\dsep
+  G\colon B\sur B\dsep
+  \forall x\in B\,G(x)\in A
+  \vdash \bot
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep x}
+  \DeltaRow{Funktionen}{G}
+}
+\begin{tabproof}
+  \proofstep{1}{b\in B}{\rA}
+  \proofstep{2}{b\notin A}{\rA}
+  \proofstep{3}{G\colon B\sur B}{\rA}
+  \proofstep{4}{\forall x\in B\,G(x)\in A}{\rA}
+
+  \proofstep{1,3}{\exists x\in B\,G(x)=b}{%
+    \FormulaRefAuto{Surjektivität}{3,1}}
+  \proofstep{6}{x\in B\land G(x)=b}{\rA}
+  \proofstep{6}{x\in B}{\rAEa{6}}
+  \proofstep{6}{G(x)=b}{\rAEb{6}}
+  \proofstep{4,6}{G(x)\in A}{\rRE{4,7}}
+  \proofstep{4,6}{b\in A}{\rIE{8,9}}
+  \proofstep{2,4,6}{\bot}{\rBI{10,2}}
+
+  \proofstep{1,2,3,4}{\bot}{\rEE{5,6,11}}
+\end{tabproof}
+
+\FormulaThmDelta[Inklusionskomposition in echte Teilmenge ist nicht surjektiv]{%
+  A\subseteq B\dsep b\in B\dsep b\notin A\dsep
+  F\colon B\to A\dsep
+  \iota_{A,B}\circ F\colon B\sur B
+  \vdash \bot
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{3}{b\notin A}{\rA}
+  \proofstep{4}{F\colon B\to A}{\rA}
+  \proofstep{5}{\iota_{A,B}\circ F\colon B\sur B}{\rA}
+  \proofstep{1,4}{\forall x\in B\,(\iota_{A,B}\circ F)(x)\in A}{%
+    \FormulaRefAuto{%
+      A\subseteq B\dsep F\colon C\to A
+      \vdash
+      \forall x\in C\,(\iota_{A,B}\circ F)(x)\in A
+    }{1,4}}
+  \proofstep{1,2,3,4,5}{\bot}{%
+    \FormulaRefAuto{%
+      b\in B\dsep b\notin A\dsep
+      G\colon B\sur B\dsep
+      \forall x\in B\,G(x)\in A
+      \vdash \bot
+    }{2,3,5,6}}
+\end{tabproof}
+
+\paragraph{Anwendung auf natürliche Zahlen}
+
 \FormulaThmDelta[Keine Injektion in kleinere natürliche Zahl]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\dsep F\colon n\inj m \vdash \bot
 }{%
-  \DeltaRow{Mengen}{m\dsep n\dsep x}
+  \DeltaRow{Mengen}{m\dsep n}
   \DeltaRow{Funktionen}{F}
   \DeltaRow{Relationen}{<_{\mathbb{N}}}
 }
@@ -24019,35 +24108,26 @@ das gefundene Extremum zurück.
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in n}{1,2,3}}
   \proofstep{1,2,3}{m\subseteq n}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{1,2,5}}
+  \proofstep{1}{m\notin m}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
   \proofstep{1,2,3}{\iota_{m,n}\colon m\inj n}{%
     \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{6}}
   \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\inj n}{%
-    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{4,7}}
+    \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{4,8}}
 
   \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\bij n}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\inj n \vdash F\colon n\bij n}{2,8}}
+    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\inj n \vdash F\colon n\bij n}{2,9}}
   \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\sur n}{%
-    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}{9}}
-  \proofstep{1,2,3,4}{\exists x\in n\,(\iota_{m,n}\circ F)(x)=m}{%
-    \FormulaRefAuto{Surjektivität}{10,5}}
-
-  \proofstep{12}{x\in n\land (\iota_{m,n}\circ F)(x)=m}{\rA}
-  \proofstep{12}{x\in n}{\rAEa{12}}
-  \proofstep{12}{(\iota_{m,n}\circ F)(x)=m}{\rAEb{12}}
-
-  \proofstep{4,12}{F(x)\in m}{%
-    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{4,13}}
-  \proofstep{12}{(\iota_{m,n}\circ F)(x)=\iota_{m,n}(F(x))}{%
-    \FormulaRefAuto{x\in A \vdash (F\circ G)(x)=F(G(x))}{13}}
-  \proofstep{1,2,3,4,12}{\iota_{m,n}(F(x))=F(x)}{%
-    \FormulaRefAuto{A\subseteq B \dsep x\in A \vdash \iota_{A,B}(x)=x}{6,15}}
-  \proofstep{1,2,3,4,12}{(\iota_{m,n}\circ F)(x)=F(x)}{\rIE{16,17}}
-  \proofstep{1,2,3,4,12}{F(x)=m}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{18},14}}
-  \proofstep{1,2,3,4,12}{m\in m}{\rIE{19,15}}
-  \proofstep{1}{m\notin m}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
-  \proofstep{1,2,3,4,12}{\bot}{\rBI{20,21}}
-
-  \proofstep{1,2,3,4}{\bot}{\rEE{11,12,22}}
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}{10}}
+  \proofstep{4}{F\colon n\to m}{%
+    \FormulaRefAuto{Injektive Funktion}{4}}
+  \proofstep{1,2,3,4}{\bot}{%
+    \FormulaRefAuto{%
+      A\subseteq B\dsep b\in B\dsep b\notin A\dsep
+      F\colon B\to A\dsep
+      \iota_{A,B}\circ F\colon B\sur B
+      \vdash \bot
+    }{6,5,7,12,11}}
 \end{tabproof}
 
 \subsubsection{Ausschluss gleicher Mächtigkeit}
