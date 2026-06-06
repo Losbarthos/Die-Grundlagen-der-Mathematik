@@ -7703,6 +7703,230 @@ Funktionsvorschrift vom eigentlichen Funktionssymbol.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproof}
 
+\subsection{Fallunterscheidungsabbildungen}
+
+Eine Fallabbildung wird aus zwei bereits typisierten Zweigen gebildet. Der
+Fallterm aus B02 liefert die punktweise Vorschrift; die Typisierung sorgt
+dann für die eigentliche Funktion.
+
+\FormulaDefDeltaK[Funktionsvorschrift der Fallabbildung]{%
+  x\in A\cup B\vdash
+  \tCaseFun{A}{B}{f}{g}(x)\coloneqq
+  \IfThenElse{x\in A}{f(x)}{g(x)}
+}{Funktionsvorschrift der Fallabbildung}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbol}{\tCaseFun{A}{B}{f}{g}}
+}
+
+\FormulaThmDelta[Typisierung der Funktionsvorschrift der Fallabbildung]{%
+  f\colon A\to C\dsep g\colon B\to C\dsep x\in A\cup B
+  \vdash \tCaseFun{A}{B}{f}{g}(x)\in C
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbol}{\tCaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{f\colon A\to C}{\rA}
+  \proofstep{2}{g\colon B\to C}{\rA}
+  \proofstep{3}{x\in A\cup B}{\rA}
+  \proofstep{3}{\tCaseFun{A}{B}{f}{g}(x)=
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{%
+    \FormulaRefAuto{x\in A\cup B\vdash
+    \tCaseFun{A}{B}{f}{g}(x)\coloneqq
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{3}}
+  \proofstep{}{x\in A\lor x\notin A}{\FormulaRefAuto{P \lor \neg P}}
+  \proofstep{6}{x\in A}{\rA}
+  \proofstep{1,6}{f(x)\in C}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{1,6}}
+  \proofstep{6}{\IfThenElse{x\in A}{f(x)}{g(x)}=f(x)}{%
+    \FormulaRefAuto{P \vdash \IfThenElse{P}{a}{b}=a}{6}}
+  \proofstep{1,3,6}{\tCaseFun{A}{B}{f}{g}(x)\in C}{%
+    \rIE{4,\rIE{8,7}}}
+  \proofstep{10}{x\notin A}{\rA}
+  \proofstep{3}{x\in A\lor x\in B}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{3}}
+  \proofstep{3,10}{x\in B}{%
+    \FormulaRefAuto{P \lor Q,\neg P \vdash Q}{11,10}}
+  \proofstep{2,3,10}{g(x)\in C}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,12}}
+  \proofstep{10}{\IfThenElse{x\in A}{f(x)}{g(x)}=g(x)}{%
+    \FormulaRefAuto{\neg P \vdash \IfThenElse{P}{a}{b}=b}{10}}
+  \proofstep{2,3,10}{\tCaseFun{A}{B}{f}{g}(x)\in C}{%
+    \rIE{4,\rIE{14,13}}}
+  \proofstep{1,2,3}{\tCaseFun{A}{B}{f}{g}(x)\in C}{%
+    \rOE{5,6,9,10,15}}
+\end{tabproof}
+
+\FormulaThmDeltaR[Fallabbildung als Funktion zur Vorschrift]{%
+  \begin{aligned}[t]
+    &f\colon A\to C\dsep g\colon B\to C\vdash{}\\
+    &\exists! H\colon A\cup B\to C\,
+    \forall x\in A\cup B\,
+    H(x)=\tCaseFun{A}{B}{f}{g}(x)
+  \end{aligned}
+}{%
+  f\colon A\to C\dsep g\colon B\to C\vdash
+  \exists! H\colon A\cup B\to C\,
+  \forall x\in A\cup B\,
+  H(x)=\tCaseFun{A}{B}{f}{g}(x)
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g\dsep H}
+  \DeltaRow{Funktionensymbol}{\tCaseFun{A}{B}{f}{g}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{f\colon A\to C}{\rA}
+  \proofstepwidestar[2]{g\colon B\to C}{\rA}
+  \proofstepwidestar[3]{x\in A\cup B}{\rA}
+  \proofstepwidestar[1,2,3]{\tCaseFun{A}{B}{f}{g}(x)\in C}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A\cup B
+    \vdash \tCaseFun{A}{B}{f}{g}(x)\in C}{1,2,3}}
+  \proofstepwidestar[1,2]{\forall x\in A\cup B\,
+    \tCaseFun{A}{B}{f}{g}(x)\in C}{\rUI{\rRI{3,4}}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\exists! H\colon A\cup B\to C\,\\
+      &\forall x\in A\cup B\,
+      H(x)=\tCaseFun{A}{B}{f}{g}(x)
+    \end{aligned}}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
+    }{5}}
+\end{tabproofwide}
+
+\FormulaDefDeltaR[Fallabbildung]{%
+  \begin{aligned}[t]
+    &f\colon A\to C\dsep g\colon B\to C\vdash{}\\
+    &\CaseFun{A}{B}{f}{g}\coloneqq
+    \iota H\Bigl(H\colon A\cup B\to C\land{}\\
+    &\forall x\in A\cup B\,
+    H(x)=\tCaseFun{A}{B}{f}{g}(x)\Bigr)
+  \end{aligned}
+}{%
+  f\colon A\to C\dsep g\colon B\to C\vdash
+  \CaseFun{A}{B}{f}{g}\coloneqq
+  \iota H\Bigl(H\colon A\cup B\to C\land
+  \forall x\in A\cup B\,
+  H(x)=\tCaseFun{A}{B}{f}{g}(x)\Bigr)
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g\dsep H}
+  \DeltaRow{Funktionensymbole}{\tCaseFun{A}{B}{f}{g}\dsep
+    \CaseFun{A}{B}{f}{g}}
+}
+
+\FormulaThmDelta[Fallabbildung ist eine Funktion]{%
+  f\colon A\to C\dsep g\colon B\to C
+  \vdash \CaseFun{A}{B}{f}{g}\colon A\cup B\to C
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbol}{\CaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{f\colon A\to C}{\rA}
+  \proofstep{2}{g\colon B\to C}{\rA}
+  \proofstep{1,2}{\CaseFun{A}{B}{f}{g}\colon A\cup B\to C}{%
+    \rAEa{\FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\vdash
+    \CaseFun{A}{B}{f}{g}\coloneqq
+    \iota H\Bigl(H\colon A\cup B\to C\land
+    \forall x\in A\cup B\,
+    H(x)=\tCaseFun{A}{B}{f}{g}(x)\Bigr)}{1,2}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Fallabbildung]{%
+  f\colon A\to C\dsep g\colon B\to C\dsep x\in A\cup B
+  \vdash
+  \CaseFun{A}{B}{f}{g}(x)=\tCaseFun{A}{B}{f}{g}(x)
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbole}{\tCaseFun{A}{B}{f}{g}\dsep
+    \CaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{f\colon A\to C}{\rA}
+  \proofstep{2}{g\colon B\to C}{\rA}
+  \proofstep{3}{x\in A\cup B}{\rA}
+  \proofstep{1,2}{\forall x\in A\cup B\,
+    \CaseFun{A}{B}{f}{g}(x)=\tCaseFun{A}{B}{f}{g}(x)}{%
+    \rAEb{\FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\vdash
+    \CaseFun{A}{B}{f}{g}\coloneqq
+    \iota H\Bigl(H\colon A\cup B\to C\land
+    \forall x\in A\cup B\,
+    H(x)=\tCaseFun{A}{B}{f}{g}(x)\Bigr)}{1,2}}}
+  \proofstep{1,2,3}{\CaseFun{A}{B}{f}{g}(x)=
+    \tCaseFun{A}{B}{f}{g}(x)}{\rRE{3,\rUE{4}}}
+\end{tabproof}
+
+\FormulaThmDelta[Fallabbildung im linken Fall]{%
+  f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+  \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbole}{\tCaseFun{A}{B}{f}{g}\dsep
+    \CaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{f\colon A\to C}{\rA}
+  \proofstep{2}{g\colon B\to C}{\rA}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{3}{x\in A\cup B}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{3}}
+  \proofstep{1,2,3}{\CaseFun{A}{B}{f}{g}(x)=
+    \tCaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A\cup B
+    \vdash
+    \CaseFun{A}{B}{f}{g}(x)=\tCaseFun{A}{B}{f}{g}(x)}{1,2,4}}
+  \proofstep{3}{\tCaseFun{A}{B}{f}{g}(x)=
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{%
+    \FormulaRefAuto{x\in A\cup B\vdash
+    \tCaseFun{A}{B}{f}{g}(x)\coloneqq
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{4}}
+  \proofstep{3}{\IfThenElse{x\in A}{f(x)}{g(x)}=f(x)}{%
+    \FormulaRefAuto{P \vdash \IfThenElse{P}{a}{b}=a}{3}}
+  \proofstep{1,2,3}{\CaseFun{A}{B}{f}{g}(x)=f(x)}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{5,6,7}}
+\end{tabproof}
+
+\FormulaThmDelta[Fallabbildung im rechten Fall]{%
+  A\cap B=\varnothing\dsep f\colon A\to C\dsep g\colon B\to C\dsep x\in B
+  \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)
+}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+  \DeltaRow{Funktionen}{f\dsep g}
+  \DeltaRow{Funktionensymbole}{\tCaseFun{A}{B}{f}{g}\dsep
+    \CaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{A\cap B=\varnothing}{\rA}
+  \proofstep{2}{f\colon A\to C}{\rA}
+  \proofstep{3}{g\colon B\to C}{\rA}
+  \proofstep{4}{x\in B}{\rA}
+  \proofstep{4}{x\in A\cup B}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{4}}
+  \proofstep{1,4}{x\notin A}{%
+    \FormulaRefAuto{A \cap B = \varnothing,\ x \in B \vdash x \notin A}{1,4}}
+  \proofstep{2,3,4}{\CaseFun{A}{B}{f}{g}(x)=
+    \tCaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A\cup B
+    \vdash
+    \CaseFun{A}{B}{f}{g}(x)=\tCaseFun{A}{B}{f}{g}(x)}{2,3,5}}
+  \proofstep{4}{\tCaseFun{A}{B}{f}{g}(x)=
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{%
+    \FormulaRefAuto{x\in A\cup B\vdash
+    \tCaseFun{A}{B}{f}{g}(x)\coloneqq
+    \IfThenElse{x\in A}{f(x)}{g(x)}}{5}}
+  \proofstep{1,4}{\IfThenElse{x\in A}{f(x)}{g(x)}=g(x)}{%
+    \FormulaRefAuto{\neg P \vdash \IfThenElse{P}{a}{b}=b}{6}}
+  \proofstep{1,2,3,4}{\CaseFun{A}{B}{f}{g}(x)=g(x)}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{7,8,9}}
+\end{tabproof}
+
 \subsection{Die Identitätsfunktion}
 
 \subsubsection{Definition der Identitätsfunktion}
@@ -25066,16 +25290,6 @@ Adjunktion von den defekten Stellen.
   \DeltaRow{Neue Symbole}{\AdjDefect{\mathcal I}{a}}
 }
 
-\FormulaDefDeltaK[Freie Ziele nach der guten Adjunktion]{%
-  \AdjFree{\mathcal I}{a}\coloneqq
-  \FamContaining{\mathcal I}{a}\setminus
-  \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}
-}{Freie Adjunktionsziele}{%
-  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}}
-  \DeltaRow{Neue Symbole}{\AdjFree{\mathcal I}{a}}
-}
-
 \FormulaThmDelta[Gute Adjunktionsstellen liegen im Definitionsbereich]{%
   X\in \AdjGood{\mathcal I}{a}\vdash X\in \FamAvoiding{\mathcal I}{a}
 }{%
@@ -25130,6 +25344,159 @@ Adjunktion von den defekten Stellen.
     \rAI{3,4}}}
 \end{tabproof}
 
+\FormulaDefDeltaK[Funktionsvorschrift der guten Adjunktion]{%
+  X\in \AdjGood{\mathcal I}{a}\vdash
+  \tAdjGoodMap{\mathcal I}{a}(X)\coloneqq X\cup\{a\}
+}{Funktionsvorschrift der guten Adjunktion}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}}
+}
+
+\FormulaThmDelta[Typisierung der guten Adjunktionsvorschrift]{%
+  X\in \AdjGood{\mathcal I}{a}\vdash
+  \tAdjGoodMap{\mathcal I}{a}(X)\in \FamContaining{\mathcal I}{a}
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+  \AdjGood{\mathcal I}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{1}{\tAdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \tAdjGoodMap{\mathcal I}{a}(X)\coloneqq X\cup\{a\}}{1}}
+  \proofstep{1}{X\cup\{a\}\in \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    X\cup\{a\}\in \FamContaining{\mathcal I}{a}}{1}}
+  \proofstep{1}{\tAdjGoodMap{\mathcal I}{a}(X)\in
+    \FamContaining{\mathcal I}{a}}{\rIE{2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaR[Gute Adjunktion als Funktion zur Vorschrift]{%
+  \begin{aligned}[t]
+    \vdash{}& \exists! F\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\,\\
+    &\forall X\in \AdjGood{\mathcal I}{a}\,
+    F(X)=\tAdjGoodMap{\mathcal I}{a}(X)
+  \end{aligned}
+}{%
+  \vdash \exists! F\colon
+  \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\,
+  \forall X\in \AdjGood{\mathcal I}{a}\,
+  F(X)=\tAdjGoodMap{\mathcal I}{a}(X)
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+  \AdjGood{\mathcal I}{a}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1]{\tAdjGoodMap{\mathcal I}{a}(X)\in
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \tAdjGoodMap{\mathcal I}{a}(X)\in
+    \FamContaining{\mathcal I}{a}}{1}}
+  \proofstepwidestar[]{\forall X\in \AdjGood{\mathcal I}{a}\,
+    \tAdjGoodMap{\mathcal I}{a}(X)\in
+    \FamContaining{\mathcal I}{a}}{\rUI{\rRI{1,2}}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\exists! F\colon
+      \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\,\\
+      &\forall X\in \AdjGood{\mathcal I}{a}\,
+      F(X)=\tAdjGoodMap{\mathcal I}{a}(X)
+    \end{aligned}}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
+    }{3}}
+\end{tabproofwide}
+
+\FormulaDefDeltaR[Gute Adjunktionsabbildung]{%
+  \begin{aligned}[t]
+    \AdjGoodMap{\mathcal I}{a}\coloneqq
+    \iota F\Bigl(&F\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\land{}\\
+    &\forall X\in \AdjGood{\mathcal I}{a}\,
+    F(X)=\tAdjGoodMap{\mathcal I}{a}(X)\Bigr)
+  \end{aligned}
+}{%
+  \AdjGoodMap{\mathcal I}{a}\coloneqq
+  \iota F\Bigl(F\colon
+  \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\land
+  \forall X\in \AdjGood{\mathcal I}{a}\,
+  F(X)=\tAdjGoodMap{\mathcal I}{a}(X)\Bigr)
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Funktionensymbole}{\tAdjGoodMap{\mathcal I}{a}\dsep
+    \AdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Neue Symbole}{\AdjGoodMap{\mathcal I}{a}}
+}
+
+\FormulaThmDelta[Gute Adjunktionsabbildung ist eine Funktion]{%
+  \AdjGoodMap{\mathcal I}{a}\colon
+  \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+  \AdjGood{\mathcal I}{a}}
+}
+\begin{tabproof}
+  \proofstep{}{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
+    \rAEa{\FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\coloneqq
+    \iota F\Bigl(F\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\land
+    \forall X\in \AdjGood{\mathcal I}{a}\,
+    F(X)=\tAdjGoodMap{\mathcal I}{a}(X)\Bigr)}}}
+\end{tabproof}
+
+\FormulaThmDelta[Wert der guten Adjunktionsabbildung]{%
+  X\in \AdjGood{\mathcal I}{a}\vdash
+  \AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionensymbole}{\tAdjGoodMap{\mathcal I}{a}\dsep
+    \AdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{}{\forall X\in \AdjGood{\mathcal I}{a}\,
+    \AdjGoodMap{\mathcal I}{a}(X)=
+    \tAdjGoodMap{\mathcal I}{a}(X)}{%
+    \rAEb{\FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\coloneqq
+    \iota F\Bigl(F\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}\land
+    \forall X\in \AdjGood{\mathcal I}{a}\,
+    F(X)=\tAdjGoodMap{\mathcal I}{a}(X)\Bigr)}}}
+  \proofstep{1}{\AdjGoodMap{\mathcal I}{a}(X)=
+    \tAdjGoodMap{\mathcal I}{a}(X)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{\tAdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \tAdjGoodMap{\mathcal I}{a}(X)\coloneqq X\cup\{a\}}{1}}
+  \proofstep{1}{\AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{3,4}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Freie Ziele nach der guten Adjunktion]{%
+  \AdjFree{\mathcal I}{a}\coloneqq
+  \FamContaining{\mathcal I}{a}\setminus
+  \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
+}{Freie Adjunktionsziele}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+    \AdjGood{\mathcal I}{a}}
+  \DeltaRow{Neue Symbole}{\AdjFree{\mathcal I}{a}}
+}
+
 \FormulaThmDelta[Defekte Adjunktionsstellen liegen im Definitionsbereich]{%
   X\in \AdjDefect{\mathcal I}{a}\vdash X\in \FamAvoiding{\mathcal I}{a}
 }{%
@@ -25163,23 +25530,35 @@ Adjunktion von den defekten Stellen.
   \proofstep{1}{a\notin X}{\rAEb{3}}
 \end{tabproof}
 
-\FormulaThmDelta[Gute Adjunktionsbilder liegen in der Bildfamilie]{%
+\FormulaThmDelta[Gute Adjunktionsbilder liegen im Bild der guten Adjunktion]{%
   X\in \AdjGood{\mathcal I}{a}\vdash
   X\cup\{a\}\in
-  \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}
+  \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
 }{%
-  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}}
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+    \AdjGood{\mathcal I}{a}}
 }
 \begin{tabproof}
   \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
-  \proofstep{1}{\exists Y\in \AdjGood{\mathcal I}{a}\,
-    \bigl(X\cup\{a\}=Y\cup\{a\}\bigr)}{\rEI{\rAI{1,\rII}}}
+  \proofstep{}{\AdjGood{\mathcal I}{a}\subseteq
+    \AdjGood{\mathcal I}{a}}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{}{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}}
+  \proofstep{1}{\AdjGoodMap{\mathcal I}{a}(X)\in
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C
+    \vdash F(x)\in F[C]}{2,3,1}}
+  \proofstep{1}{\AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{1}}
+  \proofstep{1}{X\cup\{a\}=\AdjGoodMap{\mathcal I}{a}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
   \proofstep{1}{X\cup\{a\}\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{%
-    \FormulaRefAuto{Z\in\{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}
-    \eqvdash \exists Y\in \AdjGood{\mathcal I}{a}\,
-    \bigl(Z=Y\cup\{a\}\bigr)}{2}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rIE{6,4}}
 \end{tabproof}
 
 \FormulaThmDelta[Zerlegung der vermeidenden Teilfamilie]{%
@@ -25191,31 +25570,52 @@ Adjunktion von den defekten Stellen.
   \AdjGood{\mathcal I}{a}\dsep \AdjDefect{\mathcal I}{a}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[]{%
-    X\in \AdjDefect{\mathcal I}{a}\eqvdash
-    X\in \FamAvoiding{\mathcal I}{a}\land
-    X\notin \AdjGood{\mathcal I}{a}}{%
-    \makecell[l]{%
+  \proofstepwidestar[1]{X\in \FamAvoiding{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[]{X\in \AdjGood{\mathcal I}{a}\lor
+    X\notin \AdjGood{\mathcal I}{a}}{\FormulaRefAuto{P \lor \neg P}}
+  \proofstepwidestar[3]{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[3]{X\in
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{3}}
+  \proofstepwidestar[5]{X\notin \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1,5]{X\in \AdjDefect{\mathcal I}{a}}{%
     \FormulaRefAuto{\AdjDefect{\mathcal I}{a}\coloneqq
-    \FamAvoiding{\mathcal I}{a}\setminus \AdjGood{\mathcal I}{a}}\text{, }\\
-    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}}}
-  \proofstepwidestar[]{%
-    X\in \AdjGood{\mathcal I}{a}\vdash
-    X\in \FamAvoiding{\mathcal I}{a}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    X\in \FamAvoiding{\mathcal I}{a}}}
-  \proofstepwidestar[]{%
-    X\in \FamAvoiding{\mathcal I}{a}\eqvdash
-    X\in \AdjGood{\mathcal I}{a}\lor
+    \FamAvoiding{\mathcal I}{a}\setminus \AdjGood{\mathcal I}{a}}{%
+    \rAI{1,5}}}
+  \proofstepwidestar[1,5]{X\in
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{6}}
+  \proofstepwidestar[1]{X\in
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
+    \rOE{2,3,4,5,7}}
+
+  \proofstepwidestar[9]{X\in
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[9]{X\in \AdjGood{\mathcal I}{a}\lor
     X\in \AdjDefect{\mathcal I}{a}}{%
-    \text{Aussagenlogik mit Schritten 1 und 2}}
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{9}}
+  \proofstepwidestar[11]{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[11]{X\in \FamAvoiding{\mathcal I}{a}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    X\in \FamAvoiding{\mathcal I}{a}}{11}}
+  \proofstepwidestar[13]{X\in \AdjDefect{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[13]{X\in \FamAvoiding{\mathcal I}{a}}{%
+    \FormulaRefAuto{X\in \AdjDefect{\mathcal I}{a}\vdash
+    X\in \FamAvoiding{\mathcal I}{a}}{13}}
+  \proofstepwidestar[9]{X\in \FamAvoiding{\mathcal I}{a}}{%
+    \rOE{10,11,12,13,14}}
+  \proofstepwidestar[]{X\in \FamAvoiding{\mathcal I}{a}\leftrightarrow
+    X\in \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
+    \rLRI{8,15}}
+  \proofstepwidestar[]{\forall X\,\bigl(X\in \FamAvoiding{\mathcal I}{a}
+    \leftrightarrow
+    X\in \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}\bigr)}{%
+    \rUI{16}}
   \proofstepwidestar[]{%
     \FamAvoiding{\mathcal I}{a}=
     \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
-    \makecell[l]{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}\text{, }\\
-    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}
-    \text{ mit Schritt 3}}}
+    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B)
+    \eqvdash A = B}{17}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Gute und defekte Adjunktionsstellen sind disjunkt]{%
@@ -25255,57 +25655,82 @@ Adjunktion von den defekten Stellen.
 \begin{tabproof}
   \proofstep{1}{Y\in \AdjFree{\mathcal I}{a}}{\rA}
   \proofstep{1}{Y\in \FamContaining{\mathcal I}{a}\land
-    Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{%
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{\AdjFree{\mathcal I}{a}\coloneqq
     \FamContaining{\mathcal I}{a}\setminus
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{1}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{1}}
   \proofstep{1}{Y\in \FamContaining{\mathcal I}{a}}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Freie Adjunktionsziele bilden Teilfamilie der Zielteilfamilie]{%
+  \AdjFree{\mathcal I}{a}\subseteq \FamContaining{\mathcal I}{a}
+}{%
+  \DeltaRow{Mengen}{\mathcal I\dsep Y\dsep a}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
+  \AdjFree{\mathcal I}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{Y\in \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstep{1}{Y\in \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{Y\in \AdjFree{\mathcal I}{a}\vdash
+    Y\in \FamContaining{\mathcal I}{a}}{1}}
+  \proofstep{}{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,2}}}}
 \end{tabproof}
 
 \FormulaThmDelta[Freie Adjunktionsziele vermeiden gute Bilder]{%
   Y\in \AdjFree{\mathcal I}{a}\vdash
-  Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}
+  Y\notin \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
   \DeltaRow{Teilmengenfamilien}{\FamContaining{\mathcal I}{a}\dsep
   \AdjGood{\mathcal I}{a}\dsep \AdjFree{\mathcal I}{a}}
 }
 \begin{tabproof}
   \proofstep{1}{Y\in \AdjFree{\mathcal I}{a}}{\rA}
   \proofstep{1}{Y\in \FamContaining{\mathcal I}{a}\land
-    Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{%
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{\AdjFree{\mathcal I}{a}\coloneqq
     \FamContaining{\mathcal I}{a}\setminus
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{1}}
-  \proofstep{1}{Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{\rAEb{2}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{1}}
+  \proofstep{1}{Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rAEb{2}}
 \end{tabproof}
 
 \FormulaThmDelta[Freie Adjunktionsziele sind von guten Bildern getrennt]{%
   \AdjFree{\mathcal I}{a}\cap
-  \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}=\varnothing
+  \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]=\varnothing
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
   \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}\dsep
   \AdjFree{\mathcal I}{a}}
 }
 \begin{tabproof}
   \proofstep{1}{Y\in \AdjFree{\mathcal I}{a}\cap
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{\rA}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rA}
   \proofstep{1}{Y\in \AdjFree{\mathcal I}{a}}{%
     \FormulaRefAuto{x \in A \cap B \vdash x \in A}{1}}
-  \proofstep{1}{Y\in \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{%
+  \proofstep{1}{Y\in
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{x \in A \cap B \vdash x \in B}{1}}
   \proofstep{1}{Y\notin
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{%
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{Y\in \AdjFree{\mathcal I}{a}\vdash
-    Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{2}}
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{2}}
   \proofstep{1}{\bot}{\rBI{3,4}}
   \proofstep{}{Y\notin \AdjFree{\mathcal I}{a}\cap
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{\rCI{1,5}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rCI{1,5}}
   \proofstep{}{\forall Y\,Y\notin \AdjFree{\mathcal I}{a}\cap
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{\rUI{6}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rUI{6}}
   \proofstep{}{\AdjFree{\mathcal I}{a}\cap
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}=\varnothing}{%
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]=\varnothing}{%
     \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{7}}
 \end{tabproof}
 
@@ -25314,77 +25739,151 @@ gegeben, so ergänzt sie die natürliche Adjunktion zu einer Abbildung auf der
 ganzen \(a\)-vermeidenden Teilfamilie.
 
 \FormulaDefDeltaK[Korrigierte Adjunktionsabbildung]{%
-  \FranklAdjCorr{\mathcal I}{a}{h}(X)\coloneqq
-  \begin{cases}
-    X\cup\{a\}, & X\in \AdjGood{\mathcal I}{a},\\
-    h_a(X), & X\in \AdjDefect{\mathcal I}{a}.
-  \end{cases}
+  h_a\colon \AdjDefect{\mathcal I}{a}\to \AdjFree{\mathcal I}{a}
+  \vdash
+  \FranklAdjCorr{\mathcal I}{a}{h}\coloneqq
+  \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}
 }{Korrigierte Adjunktionsabbildung}{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
+  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{\mathcal I}{a}\dsep
+    \FranklAdjCorr{\mathcal I}{a}{h}}
   \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}\dsep \AdjDefect{\mathcal I}{a}}
   \DeltaRow{Neue Symbole}{\FranklAdjCorr{\mathcal I}{a}{h}}
 }
 
 \FormulaThmDelta[Wert der korrigierten Adjunktion auf guten Stellen]{%
-  X\in \AdjGood{\mathcal I}{a}\vdash
+  h_a\colon \AdjDefect{\mathcal I}{a}\to \AdjFree{\mathcal I}{a}
+  \dsep X\in \AdjGood{\mathcal I}{a}\vdash
   \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
+  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{\mathcal I}{a}\dsep
+    \FranklAdjCorr{\mathcal I}{a}{h}}
   \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}\dsep
-  \AdjDefect{\mathcal I}{a}}
+  \AdjDefect{\mathcal I}{a}\dsep \AdjFree{\mathcal I}{a}\dsep
+  \FamContaining{\mathcal I}{a}}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
-  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{\FranklAdjCorr{\mathcal I}{a}{h}(X)\coloneqq
-    \begin{cases}
-      X\cup\{a\}, & X\in \AdjGood{\mathcal I}{a},\\
-      h_a(X), & X\in \AdjDefect{\mathcal I}{a}.
-    \end{cases}}{1}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstep{2}{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{}{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
+    F\colon A\to C}{1,3}}
+  \proofstep{}{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}}
+  \proofstep{1,2}{%
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}(X)=
+    \AdjGoodMap{\mathcal I}{a}(X)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,4,2}}
+  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}=
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}\coloneqq
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+      {\AdjGoodMap{\mathcal I}{a}}{h_a}}{1}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=
+    \AdjGoodMap{\mathcal I}{a}(X)}{\rIE{7,6}}
+  \proofstep{2}{\AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \AdjGoodMap{\mathcal I}{a}(X)=X\cup\{a\}}{2}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{8,9}}
 \end{tabproof}
 
 \FormulaThmDelta[Wert der korrigierten Adjunktion auf defekten Stellen]{%
-  X\in \AdjDefect{\mathcal I}{a}\vdash
+  h_a\colon \AdjDefect{\mathcal I}{a}\to \AdjFree{\mathcal I}{a}
+  \dsep X\in \AdjDefect{\mathcal I}{a}\vdash
   \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
+  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{\mathcal I}{a}\dsep
+    \FranklAdjCorr{\mathcal I}{a}{h}}
   \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}\dsep
-  \AdjDefect{\mathcal I}{a}}
+  \AdjDefect{\mathcal I}{a}\dsep \AdjFree{\mathcal I}{a}\dsep
+  \FamContaining{\mathcal I}{a}}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in \AdjDefect{\mathcal I}{a}}{\rA}
-  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
-    \FormulaRefAuto{\FranklAdjCorr{\mathcal I}{a}{h}(X)\coloneqq
-    \begin{cases}
-      X\cup\{a\}, & X\in \AdjGood{\mathcal I}{a},\\
-      h_a(X), & X\in \AdjDefect{\mathcal I}{a}.
-    \end{cases}}{1}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstep{2}{X\in \AdjDefect{\mathcal I}{a}}{\rA}
+  \proofstep{}{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
+    F\colon A\to C}{1,3}}
+  \proofstep{}{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}}
+  \proofstep{}{\AdjGood{\mathcal I}{a}\cap
+    \AdjDefect{\mathcal I}{a}=\varnothing}{%
+    \FormulaRefAuto{\AdjGood{\mathcal I}{a}\cap
+    \AdjDefect{\mathcal I}{a}=\varnothing}}
+  \proofstep{1,2}{%
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}(X)=h_a(X)}{%
+    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C
+    \dsep g\colon B\to C\dsep x\in B
+    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{6,5,4,2}}
+  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}=
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}\coloneqq
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+      {\AdjGoodMap{\mathcal I}{a}}{h_a}}{1}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
+    \rIE{8,7}}
 \end{tabproof}
 
 \FormulaThmDelta[Korrigierte Werte guter Stellen sind gute Adjunktionsbilder]{%
-  X\in \AdjGood{\mathcal I}{a}\vdash
+  h_a\colon \AdjDefect{\mathcal I}{a}\to \AdjFree{\mathcal I}{a}
+  \dsep X\in \AdjGood{\mathcal I}{a}\vdash
   \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-  \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}
+  \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
 }{%
-  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}}
+  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep a}
+  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{\mathcal I}{a}\dsep
+    \FranklAdjCorr{\mathcal I}{a}{h}}
+  \DeltaRow{Teilmengenfamilien}{%
+    \AdjGood{\mathcal I}{a}\dsep \AdjDefect{\mathcal I}{a}\dsep
+    \AdjFree{\mathcal I}{a}}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
-  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{1}}
-  \proofstep{1}{X\cup\{a\}\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{%
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstep{2}{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{1,2}}
+  \proofstep{2}{X\cup\{a\}\in
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
     X\cup\{a\}\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{1}}
-  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{\rIE{2,3}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{2}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)\in
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDelta[Korrigierte Werte defekter Stellen sind freie Ziele]{%
@@ -25402,13 +25901,17 @@ ganzen \(a\)-vermeidenden Teilfamilie.
   \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\inj
     \AdjFree{\mathcal I}{a}}{\rA}
   \proofstep{2}{X\in \AdjDefect{\mathcal I}{a}}{\rA}
-  \proofstep{2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
-    \FormulaRefAuto{X\in \AdjDefect{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{2}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjDefect{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{3,2}}
   \proofstep{1,2}{h_a(X)\in \AdjFree{\mathcal I}{a}}{%
     \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{1,2}}
   \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \AdjFree{\mathcal I}{a}}{\rIE{3,4}}
+    \AdjFree{\mathcal I}{a}}{\rIE{4,5}}
 \end{tabproof}
 
 \FormulaThmDelta[Korrigierte Adjunktion ist wohldefiniert]{%
@@ -25427,40 +25930,52 @@ ganzen \(a\)-vermeidenden Teilfamilie.
 \begin{tabproofwide}
   \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\inj
     \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstepwidestar[]{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjFree{\mathcal I}{a}\subseteq
+    \FamContaining{\mathcal I}{a}}}
+  \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash F\colon A\to C}{2,3}}
+  \proofstepwidestar[]{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjGoodMap{\mathcal I}{a}\colon
+    \AdjGood{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}}
+  \proofstepwidestar[1]{%
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}\colon
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}
+    \to \FamContaining{\mathcal I}{a}}{%
+    \FormulaRefAuto{Fallabbildung ist eine Funktion}{5,4}}
+  \proofstepwidestar[1]{\FranklAdjCorr{\mathcal I}{a}{h}=
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+    {\AdjGoodMap{\mathcal I}{a}}{h_a}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}\coloneqq
+    \CaseFun{\AdjGood{\mathcal I}{a}}{\AdjDefect{\mathcal I}{a}}
+      {\AdjGoodMap{\mathcal I}{a}}{h_a}}{2}}
   \proofstepwidestar[]{%
     \FamAvoiding{\mathcal I}{a}=
     \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
     \FormulaRefAuto{\FamAvoiding{\mathcal I}{a}=
     \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}}
-  \proofstepwidestar[]{%
-    X\in \AdjGood{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \FamContaining{\mathcal I}{a}}{%
-    \makecell[l]{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}\text{, }\\
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    X\cup\{a\}\in \FamContaining{\mathcal I}{a}}}}
   \proofstepwidestar[1]{%
-    X\in \AdjDefect{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \FamContaining{\mathcal I}{a}}{%
-    \makecell[l]{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\inj
-    \AdjFree{\mathcal I}{a}\dsep X\in \AdjDefect{\mathcal I}{a}
-    \vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)\in \AdjFree{\mathcal I}{a}}{1}
-    \text{, }\\
-    \FormulaRefAuto{Y\in \AdjFree{\mathcal I}{a}\vdash
-    Y\in \FamContaining{\mathcal I}{a}}}}
+    \FranklAdjCorr{\mathcal I}{a}{h}\colon
+    \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}
+    \to \FamContaining{\mathcal I}{a}}{\rIE{7,6}}
   \proofstepwidestar[1]{%
     \FranklAdjCorr{\mathcal I}{a}{h}\colon
     \FamAvoiding{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{%
-    \text{Fallunterscheidung nach Schritt 2 mit Schritten 3 und 4}}
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}{8},9}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Korrigierte Adjunktion ist auf guten Stellen injektiv]{%
-  X\in \AdjGood{\mathcal I}{a}\dsep
+  h_a\colon \AdjDefect{\mathcal I}{a}\to \AdjFree{\mathcal I}{a}
+  \dsep X\in \AdjGood{\mathcal I}{a}\dsep
   Y\in \AdjGood{\mathcal I}{a}\dsep
   \FranklAdjCorr{\mathcal I}{a}{h}(X)=
   \FranklAdjCorr{\mathcal I}{a}{h}(Y)
@@ -25468,27 +25983,42 @@ ganzen \(a\)-vermeidenden Teilfamilie.
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
   \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{\mathcal I}{a}}
+  \DeltaRow{Teilmengenfamilien}{%
+    \AdjGood{\mathcal I}{a}\dsep \AdjDefect{\mathcal I}{a}\dsep
+    \AdjFree{\mathcal I}{a}}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{\mathcal I}{a}}{\rA}
-  \proofstep{2}{Y\in \AdjGood{\mathcal I}{a}}{\rA}
-  \proofstep{3}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstep{2}{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{3}{Y\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstep{4}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{\rA}
-  \proofstep{1}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{1}}
-  \proofstep{2}{\FranklAdjCorr{\mathcal I}{a}{h}(Y)=Y\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{2}}
-  \proofstep{1,2,3}{X\cup\{a\}=Y\cup\{a\}}{\text{Schritte 3--5}}
-  \proofstep{1}{a\notin X}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash a\notin X}{1}}
-  \proofstep{2}{a\notin Y}{%
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{1,2}}
+  \proofstep{1,3}{\FranklAdjCorr{\mathcal I}{a}{h}(Y)=Y\cup\{a\}}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=X\cup\{a\}}{1,3}}
+  \proofstep{1,2}{X\cup\{a\}=
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{1,2,4}{X\cup\{a\}=
+    \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{%
+    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{7,4}}
+  \proofstep{1,2,3,4}{X\cup\{a\}=Y\cup\{a\}}{%
+    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{8,6}}
+  \proofstep{2}{a\notin X}{%
     \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash a\notin X}{2}}
-  \proofstep{1,2,3}{X=Y}{%
+  \proofstep{3}{a\notin Y}{%
+    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash a\notin X}{3}}
+  \proofstep{1,2,3,4}{X=Y}{%
     \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep
-    X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{7,8,6}}
+    X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{10,11,9}}
 \end{tabproof}
 
 \FormulaThmDelta[Korrigierte Adjunktion ist auf defekten Stellen injektiv]{%
@@ -25511,14 +26041,27 @@ ganzen \(a\)-vermeidenden Teilfamilie.
   \proofstep{3}{Y\in \AdjDefect{\mathcal I}{a}}{\rA}
   \proofstep{4}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{\rA}
-  \proofstep{2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
-    \FormulaRefAuto{X\in \AdjDefect{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{2}}
-  \proofstep{3}{\FranklAdjCorr{\mathcal I}{a}{h}(Y)=h_a(Y)}{%
-    \FormulaRefAuto{X\in \AdjDefect{\mathcal I}{a}\vdash
-    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{3}}
-  \proofstep{2,3,4}{h_a(X)=h_a(Y)}{\text{Schritte 4--6}}
-  \proofstep{1,2,3,4}{X=Y}{\FormulaRefAuto{Injektive Funktion}{1,2,3,7}}
+  \proofstep{1}{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstep{1,2}{\FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjDefect{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{5,2}}
+  \proofstep{1,3}{\FranklAdjCorr{\mathcal I}{a}{h}(Y)=h_a(Y)}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjDefect{\mathcal I}{a}\vdash
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)=h_a(X)}{5,3}}
+  \proofstep{1,2}{h_a(X)=
+    \FranklAdjCorr{\mathcal I}{a}{h}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
+  \proofstep{1,2,4}{h_a(X)=
+    \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{%
+    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{8,4}}
+  \proofstep{1,2,3,4}{h_a(X)=h_a(Y)}{%
+    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{9,7}}
+  \proofstep{1,2,3,4}{X=Y}{\FormulaRefAuto{Injektive Funktion}{1,2,3,10}}
 \end{tabproof}
 
 \FormulaThmDelta[Korrigierte Adjunktion trennt gute von defekten Stellen]{%
@@ -25542,12 +26085,16 @@ ganzen \(a\)-vermeidenden Teilfamilie.
   \proofstepwidestar[4]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)=
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{\rA}
-  \proofstepwidestar[2]{%
+  \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstepwidestar[1,2]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\vdash
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{2}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{5,2}}
   \proofstepwidestar[1,3]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)\in \AdjFree{\mathcal I}{a}}{%
     \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\inj
@@ -25556,15 +26103,15 @@ ganzen \(a\)-vermeidenden Teilfamilie.
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in \AdjFree{\mathcal I}{a}}{1,3}}
   \proofstepwidestar[1,3]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)\notin
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{Y\in \AdjFree{\mathcal I}{a}\vdash
-    Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{6}}
-  \proofstepwidestar[2,4]{%
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{7}}
+  \proofstepwidestar[1,2,4]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)\in
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
-    \text{Substitution mit Schritten 4 und 5}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rIE{4,6}}
   \proofstepwidestar[1,2,3,4]{X=Y}{%
-    \FormulaRefAuto{P,\,\neg P \vdash Q}{8,7}}
+    \FormulaRefAuto{P,\,\neg P \vdash Q}{9,8}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Korrigierte Adjunktion trennt defekte von guten Stellen]{%
@@ -25588,12 +26135,16 @@ ganzen \(a\)-vermeidenden Teilfamilie.
   \proofstepwidestar[4]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)=
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)}{\rA}
-  \proofstepwidestar[3]{%
+  \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstepwidestar[1,3]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)\in
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\vdash
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\vdash
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \{Y\cup\{a\}\mid Y\in \AdjGood{\mathcal I}{a}\}}{3}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{5,3}}
   \proofstepwidestar[1,2]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in \AdjFree{\mathcal I}{a}}{%
     \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\inj
@@ -25602,15 +26153,16 @@ ganzen \(a\)-vermeidenden Teilfamilie.
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in \AdjFree{\mathcal I}{a}}{1,2}}
   \proofstepwidestar[1,2]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\notin
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{Y\in \AdjFree{\mathcal I}{a}\vdash
-    Y\notin \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{6}}
-  \proofstepwidestar[3,4]{%
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{7}}
+  \proofstepwidestar[1,3,4]{%
     \FranklAdjCorr{\mathcal I}{a}{h}(X)\in
-    \{Z\cup\{a\}\mid Z\in \AdjGood{\mathcal I}{a}\}}{%
-    \text{Substitution mit Schritten 4 und 5}}
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}{4},6}}
   \proofstepwidestar[1,2,3,4]{X=Y}{%
-    \FormulaRefAuto{P,\,\neg P \vdash Q}{8,7}}
+    \FormulaRefAuto{P,\,\neg P \vdash Q}{9,8}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Korrigierte Adjunktionsabbildung ist injektiv]{%
@@ -25626,6 +26178,8 @@ ganzen \(a\)-vermeidenden Teilfamilie.
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\inj \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1]{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
   \proofstepwidestar[]{%
     \FamAvoiding{\mathcal I}{a}=
     \AdjGood{\mathcal I}{a}\cup \AdjDefect{\mathcal I}{a}}{%
@@ -25643,17 +26197,19 @@ ganzen \(a\)-vermeidenden Teilfamilie.
     \vdash
     \FranklAdjCorr{\mathcal I}{a}{h}\colon
     \FamAvoiding{\mathcal I}{a}\to \FamContaining{\mathcal I}{a}}{1}}
-  \proofstepwidestar[]{%
+  \proofstepwidestar[1]{%
     \begin{aligned}[t]
       &X\in \AdjGood{\mathcal I}{a}\dsep Y\in \AdjGood{\mathcal I}{a}\\
       &\dsep \FranklAdjCorr{\mathcal I}{a}{h}(X)=\FranklAdjCorr{\mathcal I}{a}{h}(Y)
       \vdash X=Y
     \end{aligned}}{%
-    \FormulaRefAuto{X\in \AdjGood{\mathcal I}{a}\dsep
+    \FormulaRefAuto{h_a\colon \AdjDefect{\mathcal I}{a}\to
+    \AdjFree{\mathcal I}{a}
+    \dsep X\in \AdjGood{\mathcal I}{a}\dsep
     Y\in \AdjGood{\mathcal I}{a}\dsep
     \FranklAdjCorr{\mathcal I}{a}{h}(X)=
     \FranklAdjCorr{\mathcal I}{a}{h}(Y)
-    \vdash X=Y}}
+    \vdash X=Y}{2}}
   \proofstepwidestar[1]{%
     \begin{aligned}[t]
       &X\in \AdjDefect{\mathcal I}{a}\dsep Y\in \AdjDefect{\mathcal I}{a}\\
@@ -25693,7 +26249,7 @@ ganzen \(a\)-vermeidenden Teilfamilie.
   \proofstepwidestar[1]{%
     \FranklAdjCorr{\mathcal I}{a}{h}\colon
     \FamAvoiding{\mathcal I}{a}\inj \FamContaining{\mathcal I}{a}}{%
-    \FormulaRefAuto{Injektive Funktion}{4,2,3,5,6,7,8}}
+    \FormulaRefAuto{Injektive Funktion}{5,3,4,6,7,8,9}}
 \end{tabproofwide}
 
 Im Fall einer enthaltenen Einermenge gibt es keine defekten Stellen. Damit
@@ -25813,11 +26369,13 @@ einzubetten.
 Damit genügt für einen Beweis der korrigierten Fränkelschen Vermutung das
 folgende Reparaturziel:
 \[
-  M\neq\varnothing\dsep \bigcup M\neq\varnothing\dsep
-  \Finite{M}\dsep \UnionClosedFam(M)
-  \vdash
-  \exists a\,\Bigl(a\in\bigcup M\land
-  \exists h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}\Bigr).
+  \begin{aligned}[t]
+    &M\neq\varnothing\dsep \bigcup M\neq\varnothing\dsep
+    \Finite{M}\dsep \UnionClosedFam(M)\\
+    &\vdash
+    \exists a\,\Bigl(a\in\bigcup M\land
+    \exists h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}\Bigr).
+  \end{aligned}
 \]
 Zusammen mit dem vorigen Korollar folgt daraus unmittelbar
 \(\mathsf{Frankl}(M)\). Es wird hier nur als hinreichendes Beweisziel
@@ -25828,7 +26386,8 @@ reparierten Adjunktionsform gegeben sein.
 Die beiden Hilfsfamilien haben dabei die folgende anschauliche Bedeutung:
 \(\AdjDefect{\mathcal I}{a}\) besteht aus den \(a\)-vermeidenden Mengen, deren
 \(a\)-Adjunktion fehlt; \(\AdjFree{\mathcal I}{a}\) besteht aus den
-\(a\)-enthaltenden Mengen, deren \(a\)-Deletion fehlt.
+\(a\)-enthaltenden Mengen, die noch nicht als Bild einer guten Adjunktion
+verbraucht sind.
 
 \FormulaThmDeltaR[Charakterisierung defekter Adjunktionsstellen]{%
   \begin{aligned}[t]
@@ -25847,80 +26406,85 @@ Die beiden Hilfsfamilien haben dabei die folgende anschauliche Bedeutung:
     \AdjDefect{\mathcal I}{a}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[]{%
-    X\in \AdjDefect{\mathcal I}{a}\eqvdash
-    X\in \FamAvoiding{\mathcal I}{a}\land
+  \proofstepwidestar[1]{X\in \AdjDefect{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1]{X\in \FamAvoiding{\mathcal I}{a}\land
     X\notin \AdjGood{\mathcal I}{a}}{%
     \FormulaRefAuto{\AdjDefect{\mathcal I}{a}\coloneqq
-    \FamAvoiding{\mathcal I}{a}\setminus \AdjGood{\mathcal I}{a}}
-    \text{ und }
-    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}}
-  \proofstepwidestar[]{%
-    X\in \AdjGood{\mathcal I}{a}\eqvdash
-    X\in \FamAvoiding{\mathcal I}{a}\land X\cup\{a\}\in\mathcal I}{%
+    \FamAvoiding{\mathcal I}{a}\setminus \AdjGood{\mathcal I}{a}}{1}}
+  \proofstepwidestar[1]{X\in \FamAvoiding{\mathcal I}{a}}{\rAEa{2}}
+  \proofstepwidestar[1]{X\notin \AdjGood{\mathcal I}{a}}{\rAEb{2}}
+  \proofstepwidestar[5]{X\cup\{a\}\in\mathcal I}{\rA}
+  \proofstepwidestar[1,5]{X\in \AdjGood{\mathcal I}{a}}{%
     \FormulaRefAuto{\AdjGood{\mathcal I}{a}\coloneqq
-    \{X\in \FamAvoiding{\mathcal I}{a}\mid X\cup\{a\}\in\mathcal I\}}}
-  \proofstepwidestar[]{%
-    X\in \FamAvoiding{\mathcal I}{a}\land
-    X\notin \AdjGood{\mathcal I}{a}\eqvdash
-    X\in \FamAvoiding{\mathcal I}{a}\land
-    X\cup\{a\}\notin\mathcal I}{%
-    \text{Aussagenlogik mit Schritt 2}}
+    \{X\in \FamAvoiding{\mathcal I}{a}\mid X\cup\{a\}\in\mathcal I\}}{3,5}}
+  \proofstepwidestar[1,5]{\bot}{\rBI{6,4}}
+  \proofstepwidestar[1]{X\cup\{a\}\notin\mathcal I}{\rCI{5,7}}
+  \proofstepwidestar[1]{X\in \FamAvoiding{\mathcal I}{a}\land
+    X\cup\{a\}\notin\mathcal I}{\rAI{3,8}}
+  \proofstepwidestar[10]{X\in \FamAvoiding{\mathcal I}{a}\land
+    X\cup\{a\}\notin\mathcal I}{\rA}
+  \proofstepwidestar[10]{X\in \FamAvoiding{\mathcal I}{a}}{\rAEa{10}}
+  \proofstepwidestar[10]{X\cup\{a\}\notin\mathcal I}{\rAEb{10}}
+  \proofstepwidestar[13]{X\in \AdjGood{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[13]{X\in \FamAvoiding{\mathcal I}{a}\land
+    X\cup\{a\}\in\mathcal I}{%
+    \FormulaRefAuto{\AdjGood{\mathcal I}{a}\coloneqq
+    \{X\in \FamAvoiding{\mathcal I}{a}\mid X\cup\{a\}\in\mathcal I\}}{13}}
+  \proofstepwidestar[13]{X\cup\{a\}\in\mathcal I}{\rAEb{14}}
+  \proofstepwidestar[10,13]{\bot}{\rBI{15,12}}
+  \proofstepwidestar[10]{X\notin \AdjGood{\mathcal I}{a}}{\rCI{13,16}}
+  \proofstepwidestar[10]{X\in \FamAvoiding{\mathcal I}{a}\land
+    X\notin \AdjGood{\mathcal I}{a}}{\rAI{11,17}}
+  \proofstepwidestar[10]{X\in \AdjDefect{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjDefect{\mathcal I}{a}\coloneqq
+    \FamAvoiding{\mathcal I}{a}\setminus \AdjGood{\mathcal I}{a}}{18}}
   \proofstepwidestar[]{%
     X\in \AdjDefect{\mathcal I}{a}\eqvdash
     X\in \FamAvoiding{\mathcal I}{a}\land
-    X\cup\{a\}\notin\mathcal I}{\rChain{1,3}}
+    X\cup\{a\}\notin\mathcal I}{\rLRI{9,19}}
 \end{tabproofwide}
 
 \FormulaThmDeltaR[Charakterisierung freier Adjunktionsziele]{%
   \begin{aligned}[t]
     Y\in \AdjFree{\mathcal I}{a}\eqvdash{}&
     Y\in \FamContaining{\mathcal I}{a}\land{}\\
-    &Y\setminus\{a\}\notin\mathcal I
+    &Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
   \end{aligned}
 }{%
   Y\in \AdjFree{\mathcal I}{a}\eqvdash
   Y\in \FamContaining{\mathcal I}{a}\land
-  Y\setminus\{a\}\notin\mathcal I
+  Y\notin
+  \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]
 }{%
-  \DeltaRow{Mengen}{\mathcal I\dsep X\dsep Y\dsep a}
+  \DeltaRow{Mengen}{\mathcal I\dsep Y\dsep a}
+  \DeltaRow{Funktionensymbol}{\AdjGoodMap{\mathcal I}{a}}
   \DeltaRow{Teilmengenfamilien}{%
     \FamContaining{\mathcal I}{a}\dsep \AdjGood{\mathcal I}{a}\dsep
     \AdjFree{\mathcal I}{a}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[]{%
-    Y\in \AdjFree{\mathcal I}{a}\eqvdash
+  \proofstepwidestar[1]{Y\in \AdjFree{\mathcal I}{a}}{\rA}
+  \proofstepwidestar[1]{%
     Y\in \FamContaining{\mathcal I}{a}\land
-    Y\notin\{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}{%
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{%
     \FormulaRefAuto{\AdjFree{\mathcal I}{a}\coloneqq
     \FamContaining{\mathcal I}{a}\setminus
-    \{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}}
-    \text{ und }
-    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}}
-  \proofstepwidestar[]{%
-    Y\in \FamContaining{\mathcal I}{a}\vdash
-    \bigl(
-    Y\in\{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}
-    \eqvdash Y\setminus\{a\}\in\mathcal I\bigr)}{%
-    \makecell[l]{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}
-    \text{, }\\
-    \FormulaRefAuto{\AdjGood{\mathcal I}{a}\coloneqq
-    \{X\in \FamAvoiding{\mathcal I}{a}\mid X\cup\{a\}\in\mathcal I\}}
-    \text{ und }
-    Y=(Y\setminus\{a\})\cup\{a\}}}
-  \proofstepwidestar[]{%
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{1}}
+  \proofstepwidestar[3]{%
     Y\in \FamContaining{\mathcal I}{a}\land
-    Y\notin\{X\cup\{a\}\mid X\in \AdjGood{\mathcal I}{a}\}
-    \eqvdash
-    Y\in \FamContaining{\mathcal I}{a}\land
-    Y\setminus\{a\}\notin\mathcal I}{%
-    \text{Aussagenlogik mit Schritt 2}}
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rA}
+  \proofstepwidestar[3]{Y\in \AdjFree{\mathcal I}{a}}{%
+    \FormulaRefAuto{\AdjFree{\mathcal I}{a}\coloneqq
+    \FamContaining{\mathcal I}{a}\setminus
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{3}}
   \proofstepwidestar[]{%
     Y\in \AdjFree{\mathcal I}{a}\eqvdash
     Y\in \FamContaining{\mathcal I}{a}\land
-    Y\setminus\{a\}\notin\mathcal I}{\rChain{1,3}}
+    Y\notin
+    \AdjGoodMap{\mathcal I}{a}[\AdjGood{\mathcal I}{a}]}{\rLRI{2,4}}
 \end{tabproofwide}
 
 \chapter{Addition und Multiplikation auf \(\mathbb{N}\)}
