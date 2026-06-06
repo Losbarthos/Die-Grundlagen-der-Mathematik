@@ -24501,6 +24501,37 @@ verwendet. Wir zeigen zunächst zwei einfache Spezialfälle.
 Mit der Notation für Durchschnitte von Mengenfamilien kann der zweite
 Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
 
+\FormulaThmDelta[Leere vermeidende Teilfamilie liefert Frankl]{%
+  a\in\bigcup M\dsep \FamAvoiding{M}{a}=\varnothing
+  \vdash \mathsf{Frankl}(M)
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Teilmengenfamilien}{%
+    \FamAvoiding{M}{a}\dsep \FamContaining{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{a\in\bigcup M}{\rA}
+  \proofstep{2}{\FamAvoiding{M}{a}=\varnothing}{\rA}
+  \proofstep{}{\varnothing\colon\varnothing\inj \FamContaining{M}{a}}{%
+    \FormulaRefAuto{\varnothing\colon \varnothing\inj M}}
+  \proofstep{2}{\varnothing\colon
+    \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}{2},3}}
+  \proofstep{2}{%
+    \exists F\colon \FamAvoiding{M}{a}\inj
+    \FamContaining{M}{a}}{\rEI{4}}
+  \proofstep{1,2}{\mathsf{HalfOcc}(a,M)}{%
+    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+    a\in\bigcup M\land
+    \exists F\colon \FamAvoiding{M}{a}\inj
+    \FamContaining{M}{a}}{\rAI{1,5}}}
+  \proofstep{1,2}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{6}}
+  \proofstep{1,2}{\mathsf{Frankl}(M)}{%
+    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq
+    \exists a\,\mathsf{HalfOcc}(a,M)}{7}}
+\end{tabproof}
+
 \FormulaThmDelta[Fränkelsche Vermutung bei nichtleerem Durchschnitt]{%
   \Finite{M}\dsep \UnionClosedFam(M)\dsep M\neq\varnothing\dsep
   \bigcap M\neq\varnothing\vdash \mathsf{Frankl}(M)
@@ -24535,20 +24566,12 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
   \proofstep{3,6}{\FamAvoiding{M}{a}=\varnothing}{%
     \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{15}}
 
-  \proofstep{}{\varnothing\colon\varnothing\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\varnothing\colon \varnothing\inj M}}
-  \proofstep{3,6}{\varnothing\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
-    \rIE{\FormulaRefAuto{a=b\vdash b=a}{16},17}}
-  \proofstep{3,6}{\exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rEI{18}}
-  \proofstep{3,6}{\mathsf{HalfOcc}(a,M)}{%
-    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
-    a\in\bigcup M\land
-    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{7,19}}}
-  \proofstep{3,6}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{20}}
-  \proofstep{1,2,3,6}{\mathsf{Frankl}(M)}{%
-    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)}{21}}
+  \proofstep{3,6}{\mathsf{Frankl}(M)}{%
+    \FormulaRefAuto{a\in\bigcup M\dsep
+    \FamAvoiding{M}{a}=\varnothing
+    \vdash \mathsf{Frankl}(M)}{7,16}}
 
-  \proofstep{1,2,3,4}{\mathsf{Frankl}(M)}{\rEE{5,6,22}}
+  \proofstep{1,2,3,4}{\mathsf{Frankl}(M)}{\rEE{5,6,17}}
 \end{tabproof}
 
 \subsection{Ein Beispiel zur fehlenden Wohldefiniertheit}
@@ -24573,6 +24596,42 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \DeltaRow{Neue Symbole}{M_{\mathrm{ex}}}
 }
 
+\FormulaThmDelta[Einermengen sind endlich]{%
+  \Finite{\{A\}}
+}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{}{\Finite{\varnothing}}{\FormulaRefAuto{\Finite{\varnothing}}}
+  \proofstep{}{A\notin\varnothing}{\FormulaRefAuto{x \not\in \varnothing}}
+  \proofstep{}{\Finite{\varnothing\cup\{A\}}}{%
+    \FormulaRefAuto{a\notin A \dsep \Finite{A}
+    \vdash \Finite{A\cup\{a\}}}{2,1}}
+  \proofstep{}{\{A\}=\varnothing\cup\{A\}}{%
+    \FormulaRefAuto{A = \varnothing \cup A}}
+  \proofstep{}{\varnothing\cup\{A\}=\{A\}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{4}}
+  \proofstep{}{\Finite{\{A\}}}{\rIE{5,3}}
+\end{tabproof}
+
+\FormulaThmDelta[Paarmengen sind endlich]{%
+  \Finite{\{A,B\}}
+}{%
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\Finite{\{A\}}}{\FormulaRefAuto{\Finite{\{A\}}}}
+  \proofstep{}{\Finite{\{B\}}}{\FormulaRefAuto{\Finite{\{A\}}}}
+  \proofstep{}{\Finite{\{A\}\cup\{B\}}}{%
+    \FormulaRefAuto{\Finite{A}\dsep \Finite{B}
+    \vdash \Finite{A\cup B}}{1,2}}
+  \proofstep{}{\{A,B\}=\{A\}\cup\{B\}}{%
+    \FormulaRefAuto{\{a,b\} = \{a\} \cup \{b\}}}
+  \proofstep{}{\{A\}\cup\{B\}=\{A,B\}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{4}}
+  \proofstep{}{\Finite{\{A,B\}}}{\rIE{5,3}}
+\end{tabproof}
+
 \FormulaThmDelta[Mitgliedschaften im Beispielträger]{%
   \varnothing\in U_{\mathrm{ex}}\dsep
   \{\varnothing\}\in U_{\mathrm{ex}}
@@ -24582,12 +24641,10 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
 \begin{tabproof}
   \proofstep{}{\varnothing\in U_{\mathrm{ex}}}{%
     \FormulaRefAuto{U_{\mathrm{ex}}\coloneqq
-    \{\varnothing,\{\varnothing\}\}}\text{ und }
-    \FormulaRefAuto{a\in\{a,b\}}}
+    \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{a\in\{a,b\}}}}
   \proofstep{}{\{\varnothing\}\in U_{\mathrm{ex}}}{%
     \FormulaRefAuto{U_{\mathrm{ex}}\coloneqq
-    \{\varnothing,\{\varnothing\}\}}\text{ und }
-    \FormulaRefAuto{b\in\{a,b\}}}
+    \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{b\in\{a,b\}}}}
 \end{tabproof}
 
 \FormulaThmDelta[Mitgliedschaften in der Beispielfamilie]{%
@@ -24599,12 +24656,10 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
 \begin{tabproof}
   \proofstep{}{\varnothing\in M_{\mathrm{ex}}}{%
     \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}\text{ und }
-    \FormulaRefAuto{a\in\{a,b\}}}
+    \{\varnothing,U_{\mathrm{ex}}\}}{\FormulaRefAuto{a\in\{a,b\}}}}
   \proofstep{}{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
     \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}\text{ und }
-    \FormulaRefAuto{b\in\{a,b\}}}
+    \{\varnothing,U_{\mathrm{ex}}\}}{\FormulaRefAuto{b\in\{a,b\}}}}
 \end{tabproof}
 
 \FormulaThmDelta[Beispielfamilie ist nichtleer]{%
@@ -24617,7 +24672,7 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
     \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
     U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
   \proofstep{}{M_{\mathrm{ex}}\neq\varnothing}{%
-    \text{aus Schritt 1}}
+    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{1}}
 \end{tabproof}
 
 \FormulaThmDelta[Beispielfamilie ist endlich]{%
@@ -24626,9 +24681,176 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
 }
 \begin{tabproof}
+  \proofstep{}{\Finite{\{\varnothing,U_{\mathrm{ex}}\}}}{%
+    \FormulaRefAuto{\Finite{\{A,B\}}}}
+  \proofstep{}{M_{\mathrm{ex}}=\{\varnothing,U_{\mathrm{ex}}\}}{%
+    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
+    \{\varnothing,U_{\mathrm{ex}}\}}}
+  \proofstep{}{\{\varnothing,U_{\mathrm{ex}}\}=M_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{2}}
   \proofstep{}{\Finite{M_{\mathrm{ex}}}}{%
-    \FormulaRefAuto{\Finite{\varnothing}}\text{, zweimal adjungiert}}
+    \rIE{3,1}}
 \end{tabproof}
+
+\FormulaThmDelta[Elemente der Beispielfamilie sind die beiden Beispielelemente]{%
+  X\in M_{\mathrm{ex}}\vdash X=\varnothing\lor X=U_{\mathrm{ex}}
+}{%
+  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}\dsep X}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in M_{\mathrm{ex}}}{\rA}
+  \proofstep{1}{X\in\{\varnothing,U_{\mathrm{ex}}\}}{%
+    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
+    \{\varnothing,U_{\mathrm{ex}}\}}{1}}
+  \proofstep{1}{X=\varnothing\lor X=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{2}}
+\end{tabproof}
+
+\FormulaThmDelta[Leere Vereinigung mit leerem Beispielwert]{%
+  \varnothing\cup\varnothing=\varnothing
+}{%
+  \DeltaRow{Mengen}{}
+}
+\begin{tabproof}
+  \proofstep{}{\varnothing=\varnothing\cup\varnothing}{%
+    \FormulaRefAuto{A = \varnothing \cup A}}
+  \proofstep{}{\varnothing\cup\varnothing=\varnothing}{%
+    \FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Leere Vereinigung mit Beispielträger]{%
+  \varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}
+}{%
+  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
+}
+\begin{tabproof}
+  \proofstep{}{U_{\mathrm{ex}}=\varnothing\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{A = \varnothing \cup A}}
+  \proofstep{}{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Beispielträger vereinigt mit leerer Menge]{%
+  U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}
+}{%
+  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
+}
+\begin{tabproof}
+  \proofstep{}{U_{\mathrm{ex}}=U_{\mathrm{ex}}\cup\varnothing}{%
+    \FormulaRefAuto{A = A \cup \varnothing}}
+  \proofstep{}{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Idempotente Beispielträgervereinigung]{%
+  U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}
+}{%
+  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
+}
+\begin{tabproof}
+  \proofstep{}{U_{\mathrm{ex}}=U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{A = A \cup A}}
+  \proofstep{}{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Beispielfamilie ist unter paarweiser Vereinigung abgeschlossen]{%
+  X\in M_{\mathrm{ex}}\dsep Y\in M_{\mathrm{ex}}
+  \vdash X\cup Y\in M_{\mathrm{ex}}
+}{%
+  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}\dsep X\dsep Y}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in M_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[2]{Y\in M_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[1]{X=\varnothing\lor X=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
+    X=\varnothing\lor X=U_{\mathrm{ex}}}{1}}
+  \proofstepwidestar[2]{Y=\varnothing\lor Y=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
+    X=\varnothing\lor X=U_{\mathrm{ex}}}{2}}
+
+  \proofstepwidestar[5]{X=\varnothing}{\rA}
+  \proofstepwidestar[6]{Y=\varnothing}{\rA}
+  \proofstepwidestar[5]{X\cup Y=\varnothing\cup Y}{%
+    \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{5}}
+  \proofstepwidestar[6]{\varnothing\cup Y=\varnothing\cup\varnothing}{%
+    \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{6}}
+  \proofstepwidestar[5,6]{X\cup Y=\varnothing\cup\varnothing}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,8}}
+  \proofstepwidestar[]{\varnothing\cup\varnothing=\varnothing}{%
+    \FormulaRefAuto{\varnothing\cup\varnothing=\varnothing}}
+  \proofstepwidestar[5,6]{X\cup Y=\varnothing}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,10}}
+  \proofstepwidestar[5,6]{\varnothing=X\cup Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{11}}
+  \proofstepwidestar[]{\varnothing\in M_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
+    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
+  \proofstepwidestar[5,6]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{12,13}}
+
+  \proofstepwidestar[15]{Y=U_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[5]{X\cup Y=\varnothing\cup Y}{%
+    \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{5}}
+  \proofstepwidestar[15]{\varnothing\cup Y=\varnothing\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{15}}
+  \proofstepwidestar[5,15]{X\cup Y=\varnothing\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{16,17}}
+  \proofstepwidestar[]{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}}
+  \proofstepwidestar[5,15]{X\cup Y=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{18,19}}
+  \proofstepwidestar[5,15]{U_{\mathrm{ex}}=X\cup Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{20}}
+  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
+    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
+  \proofstepwidestar[5,15]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{21,22}}
+  \proofstepwidestar[2,5]{X\cup Y\in M_{\mathrm{ex}}}{%
+    \rOE{4,6,14,15,23}}
+
+  \proofstepwidestar[25]{X=U_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[26]{Y=\varnothing}{\rA}
+  \proofstepwidestar[25]{X\cup Y=U_{\mathrm{ex}}\cup Y}{%
+    \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{25}}
+  \proofstepwidestar[26]{U_{\mathrm{ex}}\cup Y=U_{\mathrm{ex}}\cup\varnothing}{%
+    \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{26}}
+  \proofstepwidestar[25,26]{X\cup Y=U_{\mathrm{ex}}\cup\varnothing}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{27,28}}
+  \proofstepwidestar[]{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}}
+  \proofstepwidestar[25,26]{X\cup Y=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{29,30}}
+  \proofstepwidestar[25,26]{U_{\mathrm{ex}}=X\cup Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{31}}
+  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
+    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
+  \proofstepwidestar[25,26]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{32,33}}
+
+  \proofstepwidestar[35]{Y=U_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[25]{X\cup Y=U_{\mathrm{ex}}\cup Y}{%
+    \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{25}}
+  \proofstepwidestar[35]{U_{\mathrm{ex}}\cup Y=
+    U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{35}}
+  \proofstepwidestar[25,35]{X\cup Y=U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{36,37}}
+  \proofstepwidestar[]{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}}
+  \proofstepwidestar[25,35]{X\cup Y=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{38,39}}
+  \proofstepwidestar[25,35]{U_{\mathrm{ex}}=X\cup Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{40}}
+  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
+    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
+  \proofstepwidestar[25,35]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{41,42}}
+  \proofstepwidestar[2,25]{X\cup Y\in M_{\mathrm{ex}}}{%
+    \rOE{4,26,34,35,43}}
+  \proofstepwidestar[1,2]{X\cup Y\in M_{\mathrm{ex}}}{%
+    \rOE{3,5,24,25,44}}
+\end{tabproofwide}
 
 \FormulaThmDelta[Beispielfamilie ist vereinigungsabgeschlossen]{%
   \UnionClosedFam(M_{\mathrm{ex}})
@@ -24639,13 +24861,8 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \proofstepwidestar[1]{X\in M_{\mathrm{ex}}}{\rA}
   \proofstepwidestar[2]{Y\in M_{\mathrm{ex}}}{\rA}
   \proofstepwidestar[1,2]{X\cup Y\in M_{\mathrm{ex}}}{%
-    \makecell[l]{%
-    \text{Fallunterscheidung nach }
-    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}\text{:}\\
-    \(\varnothing\cup\varnothing=\varnothing\),\quad
-    \(\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}\),\quad
-    \(U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}\).}}
+    \FormulaRefAuto{X\in M_{\mathrm{ex}}\dsep Y\in M_{\mathrm{ex}}
+    \vdash X\cup Y\in M_{\mathrm{ex}}}{1,2}}
   \proofstepwidestar[]{\UnionClosedFam(M_{\mathrm{ex}})}{%
     \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{1,\rRI{2,3}}}}}
 \end{tabproofwide}
@@ -24656,17 +24873,38 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
 }
 \begin{tabproof}
-  \proofstep{}{\{\varnothing\}\neq\varnothing}{%
-    \text{denn }\varnothing\in\{\varnothing\}\text{, aber }
+  \proofstep{}{\varnothing\in\{\varnothing\}}{\FormulaRefAuto{a\in\{a\}}}
+  \proofstep{}{\varnothing\notin\varnothing}{%
     \FormulaRefAuto{x \not\in \varnothing}}
-  \proofstep{}{\{\varnothing\}\notin\{\varnothing\}}{%
-    \text{sonst ergäbe die Einermengenregel einen Widerspruch zu Schritt 1}}
-  \proofstep{}{\{\varnothing\}\neq U_{\mathrm{ex}}}{%
-    \text{denn }\{\varnothing\}\in U_{\mathrm{ex}}\text{, aber Schritt 2}}
-  \proofstep{}{\{\varnothing\}\notin M_{\mathrm{ex}}}{%
-    \text{Definition von }M_{\mathrm{ex}}\text{ mit Schritten 1 und 3}}
-\end{tabproof}
+  \proofstep{}{\{\varnothing\}\neq\varnothing}{%
+    \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{1,2}}
 
+  \proofstep{4}{\{\varnothing\}\in\{\varnothing\}}{\rA}
+  \proofstep{4}{\{\varnothing\}=\varnothing}{%
+    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{4}}
+  \proofstep{4}{\bot}{\rBI{5,3}}
+  \proofstep{}{\{\varnothing\}\notin\{\varnothing\}}{\rCI{4,6}}
+
+  \proofstep{}{\{\varnothing\}\in U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{\varnothing\in U_{\mathrm{ex}}\dsep
+    \{\varnothing\}\in U_{\mathrm{ex}}}}
+  \proofstep{}{U_{\mathrm{ex}}\neq\{\varnothing\}}{%
+    \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{8,7}}
+  \proofstep{}{\{\varnothing\}\neq U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{a \neq b \vdash b \neq a}{9}}
+
+  \proofstep{11}{\{\varnothing\}\in M_{\mathrm{ex}}}{\rA}
+  \proofstep{11}{\{\varnothing\}=\varnothing
+    \lor \{\varnothing\}=U_{\mathrm{ex}}}{%
+    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
+    X=\varnothing\lor X=U_{\mathrm{ex}}}{11}}
+  \proofstep{13}{\{\varnothing\}=\varnothing}{\rA}
+  \proofstep{13}{\bot}{\rBI{13,3}}
+  \proofstep{15}{\{\varnothing\}=U_{\mathrm{ex}}}{\rA}
+  \proofstep{15}{\bot}{\rBI{15,10}}
+  \proofstep{11}{\bot}{\rOE{12,13,14,15,16}}
+  \proofstep{}{\{\varnothing\}\notin M_{\mathrm{ex}}}{\rCI{11,17}}
+\end{tabproof}
 \FormulaThmDelta[Leerer Grundpunkt liegt im Vereinigungsbereich]{%
   \varnothing\in\bigcup M_{\mathrm{ex}}
 }{%
@@ -24680,7 +24918,7 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
     \FormulaRefAuto{\varnothing\in U_{\mathrm{ex}}\dsep
     \{\varnothing\}\in U_{\mathrm{ex}}}}
   \proofstep{}{\varnothing\in\bigcup M_{\mathrm{ex}}}{%
-    \text{Definition der Vereinigung mit Schritten 1 und 2}}
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Adjunktion der Beispielfamilie verfehlt die Zielteilfamilie]{%
@@ -24718,12 +24956,13 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \proofstep{}{\{\varnothing\}=\varnothing\cup\{\varnothing\}}{%
     \FormulaRefAuto{A = \varnothing \cup A}}
   \proofstep{}{\varnothing\cup\{\varnothing\}=\{\varnothing\}}{%
-    \text{Symmetrie der Gleichheit aus Schritt 10}}
+    \FormulaRefAuto{a=b\vdash b=a}{10}}
   \proofstep{}{\varnothing\cup\{\varnothing\}\notin
     \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rIE{11,9}}
   \proofstep{}{\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(\varnothing)=
     \varnothing\cup\{\varnothing\}}{%
-    \FormulaRefAuto{Funktionsvorschrift der Adjunktionsabbildung}{3}}
+    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
+    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
   \proofstep{}{\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(\varnothing)\notin
     \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rIE{13,12}}
   \proofstep{}{%
@@ -24760,7 +24999,7 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \proofstep{}{\varnothing\in\bigcup M_{\mathrm{ex}}}{%
     \FormulaRefAuto{\varnothing\in\bigcup M_{\mathrm{ex}}}}
   \proofstep{}{\bigcup M_{\mathrm{ex}}\neq\varnothing}{%
-    \text{aus Schritt 4}}
+    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{4}}
   \proofstep{}{%
     \exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
     \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
