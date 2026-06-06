@@ -3914,6 +3914,40 @@ vermeiden.
     \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,3}}}}
 \end{tabproof}
 
+\FormulaThmDelta[Außenstehende Mengen sind nicht enthaltend]{%
+  A\notin M\vdash A\notin \FamContaining{M}{a}
+}{%
+  \DeltaRow{Mengen}{M\dsep A\dsep a}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{A\notin M}{\rA}
+  \proofstep{2}{A\in \FamContaining{M}{a}}{\rA}
+  \proofstep{2}{A\in M\land a\in A}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
+    \{X\in M\mid a\in X\}}{2}}
+  \proofstep{2}{A\in M}{\rAEa{3}}
+  \proofstep{1,2}{\bot}{\rBI{4,1}}
+  \proofstep{1}{A\notin \FamContaining{M}{a}}{\rCI{2,5}}
+\end{tabproof}
+
+\FormulaThmDelta[Außenstehende Mengen sind nicht vermeidend]{%
+  A\notin M\vdash A\notin \FamAvoiding{M}{a}
+}{%
+  \DeltaRow{Mengen}{M\dsep A\dsep a}
+  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{A\notin M}{\rA}
+  \proofstep{2}{A\in \FamAvoiding{M}{a}}{\rA}
+  \proofstep{2}{A\in M\land a\notin A}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{2}}
+  \proofstep{2}{A\in M}{\rAEa{3}}
+  \proofstep{1,2}{\bot}{\rBI{4,1}}
+  \proofstep{1}{A\notin \FamAvoiding{M}{a}}{\rCI{2,5}}
+\end{tabproof}
+
 \FormulaThmDelta[Enthaltende Teilfamilie ist vereinigungsabgeschlossen]{%
   \UnionClosedFam(M)\vdash \UnionClosedFam(\FamContaining{M}{a})
 }{%
@@ -25285,7 +25319,16 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
     \FormulaRefAuto{Frankl-Familie}{1,3,4,5}}
 \end{tabproof}
 
-\FormulaThmDelta[Adjunktion der Beispielfamilie verfehlt die Zielteilfamilie]{%
+In der folgenden Aussage wird bewusst die Vorschrift
+\(\tFranklAdj{\FranklExFamily}{\varnothing}\) betrachtet und nicht die
+eigentliche Funktion \(\FranklAdj{\FranklExFamily}{\varnothing}\). Denn die
+eigentliche Adjunktionsabbildung ist nur unter der Voraussetzung
+\(\{\varnothing\}\in\FranklExFamily\) eingeführt; zuvor wurde jedoch
+\(\{\varnothing\}\notin \FranklExFamily\) gezeigt. Das Beispiel zeigt also
+gerade, dass die naive Vorschrift \(X\mapsto X\cup\{\varnothing\}\) die
+Zielteilfamilie verfehlt.
+
+\FormulaThmDelta[Adjunktionsvorschrift verfehlt Beispielziel]{%
   \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
   \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
   \FamContaining{\FranklExFamily}{\varnothing}\bigr)
@@ -25306,35 +25349,28 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
     \{X\in M\mid a\notin X\}}{\rAI{1,2}}}
   \proofstep{}{\{\varnothing\}\notin \FranklExFamily}{%
     \FormulaRefAuto{\{\varnothing\}\notin \FranklExFamily}}
-  \proofstep{5}{\{\varnothing\}\in
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rA}
-  \proofstep{5}{\{\varnothing\}\in \FranklExFamily\land
-    \varnothing\in\{\varnothing\}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{5}}
-  \proofstep{5}{\{\varnothing\}\in \FranklExFamily}{\rAEa{6}}
-  \proofstep{5}{\bot}{\rBI{7,4}}
   \proofstep{}{\{\varnothing\}\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rCI{5,8}}
+    \FamContaining{\FranklExFamily}{\varnothing}}{%
+    \FormulaRefAuto{A\notin M\vdash A\notin \FamContaining{M}{a}}{4}}
   \proofstep{}{\{\varnothing\}=\varnothing\cup\{\varnothing\}}{%
     \FormulaRefAuto{A = \varnothing \cup A}}
   \proofstep{}{\varnothing\cup\{\varnothing\}=\{\varnothing\}}{%
-    \FormulaRefAuto{a=b\vdash b=a}{10}}
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
   \proofstep{}{\varnothing\cup\{\varnothing\}\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{11,9}}
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{7,5}}
   \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)=
     \varnothing\cup\{\varnothing\}}{%
     \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
     \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
   \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{13,12}}
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{9,8}}
   \proofstep{}{%
     \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
     \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{\rEI{\rAI{3,14}}}
+    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{\rEI{\rAI{3,10}}}
 \end{tabproof}
 
-\FormulaThmDeltaR[Endliches Vereinigungsbeispiel mit Zielverfehlung]{%
+\FormulaThmDeltaR[Endliches Vorschriftsbeispiel mit Zielverfehlung]{%
   \begin{aligned}[t]
     \vdash{}& \exists M\,\exists a\,\Bigl(
     \FranklFam{M}\land a\in\bigcup M\land{}\\
