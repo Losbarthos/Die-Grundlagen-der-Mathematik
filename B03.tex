@@ -3210,6 +3210,12 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
 
+\FormulaThmAuto[Idempotenz der Vereinigung]{A \cup A = A}
+\begin{tabproof}
+  \proofstep{}{A = A \cup A}{\FormulaRefAuto{A = A \cup A}}
+  \proofstep{}{A \cup A = A}{\FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
 \FormulaThmAuto{x \in A \cup B \eqvdash x \in B \cup A}
 \begin{tabproofwide}
   \proofstepwide{x \in A \cup B}{\leftrightarrow}{x \in A \lor x \in B}%
@@ -3248,6 +3254,12 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
 
+\FormulaThmAuto{A \cup \varnothing = A}
+\begin{tabproof}
+  \proofstep{}{A = A \cup \varnothing}{\FormulaRefAuto{A = A \cup \varnothing}}
+  \proofstep{}{A \cup \varnothing = A}{\FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
 \FormulaThmAuto{A = \varnothing \cup A}
 \begin{tabproofwide}
   \proofstepwide{A}{=}{A \cup \varnothing}%
@@ -3257,6 +3269,24 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
   \proofstepwide{A}{=}{\varnothing \cup A}%
     {\rIE{2,1}}
 \end{tabproofwide}
+
+\FormulaThmAuto{\varnothing \cup A = A}
+\begin{tabproof}
+  \proofstep{}{A = \varnothing \cup A}{\FormulaRefAuto{A = \varnothing \cup A}}
+  \proofstep{}{\varnothing \cup A = A}{\FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Vereinigung der leeren Menge mit sich selbst]{%
+  \varnothing\cup\varnothing=\varnothing
+}{%
+  \DeltaRow{Mengen}{}
+}
+\begin{tabproof}
+  \proofstep{}{\varnothing=\varnothing\cup\varnothing}{%
+    \FormulaRefAuto{A = \varnothing \cup A}}
+  \proofstep{}{\varnothing\cup\varnothing=\varnothing}{%
+    \FormulaRefAuto{a=b\vdash b=a}{1}}
+\end{tabproof}
 
 \FormulaThmAuto{A \cup \{A\} = \{\varnothing\} \eqvdash A = \varnothing}
 \begin{tabproofsplit}
@@ -24694,16 +24724,17 @@ Für ein Element \(a\) verwenden wir die zuvor eingeführte Zerlegung in die
 Teilmengenfamilien \(\FamContaining{M}{a}\) und \(\FamAvoiding{M}{a}\).
 
 \FormulaDefDeltaK[Halbhäufiges Element einer endlichen Familie]{%
-  \mathsf{HalfOcc}(a,M)\coloneqq
+  \HalfOcc{a}{M}\coloneqq
   a\in\bigcup M\land
   \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
 }{Halbhäufiges Element}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
   \DeltaRow{Funktionen}{F}
   \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
+  \DeltaRow{Neue Symbole}{\HalfOcc}
 }
 
-Für endliche \(M\) bedeutet \(\mathsf{HalfOcc}(a,M)\), dass höchstens so
+Für endliche \(M\) bedeutet \(\HalfOcc{a}{M}\), dass höchstens so
 viele Mengen aus \(M\) das Element \(a\) vermeiden wie enthalten. Da
 \(\FamContaining{M}{a}\) und \(\FamAvoiding{M}{a}\) zusammen \(M\)
 zerlegen, ist dies die
@@ -24711,10 +24742,10 @@ injektive Form der Aussage, dass \(a\) in mindestens der Hälfte der Mengen
 aus \(M\) enthalten ist.
 
 \FormulaDefDeltaK[Fränkelsche Eigenschaft einer Familie]{%
-  \mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)
+  \Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}
 }{Fränkelsche Eigenschaft}{%
   \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Neue Symbole}{\mathsf{Frankl}}
+  \DeltaRow{Neue Symbole}{\Frankl}
 }
 
 \FormulaDefDeltaK[Voraussetzung der Fränkelschen Vermutung]{%
@@ -24781,10 +24812,10 @@ aus \(M\) enthalten ist.
 \end{tabproof}
 
 Wegen der Bedingung \(a\in\bigcup M\) in der Definition von
-\(\mathsf{HalfOcc}(a,M)\) muss die Trägervereinigung nichtleer sein. Die
+\(\HalfOcc{a}{M}\) muss die Trägervereinigung nichtleer sein. Die
 Fränkelsche Vermutung lautet in dieser Form daher:
 \[
-  \FranklFam{M}\vdash \mathsf{Frankl}(M).
+  \FranklFam{M}\vdash \Frankl{M}.
 \]
 Ohne die Zusatzannahme \(\bigcup M\neq\varnothing\) wäre bereits
 \(M=\{\varnothing\}\) ein Gegenbeispiel zur Formulierung, denn dann gibt es
@@ -24794,7 +24825,7 @@ verwendet. Wir zeigen zunächst zwei einfache Spezialfälle.
 \subsection{Fall einer enthaltenen Einermenge}
 
 \FormulaThmDelta[Fränkelsche Vermutung bei enthaltener Einermenge]{%
-  \Finite{M}\dsep \UnionClosedFam(M)\dsep \{a\}\in M\vdash \mathsf{Frankl}(M)
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep \{a\}\in M\vdash \Frankl{M}
 }{%
   \DeltaRow{Mengen}{M\dsep a}
   \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
@@ -24810,13 +24841,13 @@ verwendet. Wir zeigen zunächst zwei einfache Spezialfälle.
   \proofstep{}{a\in\{a\}}{\FormulaRefAuto{a\in\{a\}}}
   \proofstep{3}{a\in\bigcup M}{%
     \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{3,6}}
-  \proofstep{2,3}{\mathsf{HalfOcc}(a,M)}{%
-    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+  \proofstep{2,3}{\HalfOcc{a}{M}}{%
+    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
     a\in\bigcup M\land
     \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{7,5}}}
-  \proofstep{2,3}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{8}}
-  \proofstep{1,2,3}{\mathsf{Frankl}(M)}{%
-    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)}{9}}
+  \proofstep{2,3}{\exists a\,\HalfOcc{a}{M}}{\rEI{8}}
+  \proofstep{1,2,3}{\Frankl{M}}{%
+    \FormulaRefAuto{\Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}}{9}}
 \end{tabproof}
 
 \subsection{Fall eines nichtleeren Durchschnitts}
@@ -24826,7 +24857,7 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
 
 \FormulaThmDelta[Leere vermeidende Teilfamilie liefert Frankl]{%
   a\in\bigcup M\dsep \FamAvoiding{M}{a}=\varnothing
-  \vdash \mathsf{Frankl}(M)
+  \vdash \Frankl{M}
 }{%
   \DeltaRow{Mengen}{M\dsep a}
   \DeltaRow{Funktionen}{F}
@@ -24844,20 +24875,20 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
   \proofstep{2}{%
     \exists F\colon \FamAvoiding{M}{a}\inj
     \FamContaining{M}{a}}{\rEI{4}}
-  \proofstep{1,2}{\mathsf{HalfOcc}(a,M)}{%
-    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+  \proofstep{1,2}{\HalfOcc{a}{M}}{%
+    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
     a\in\bigcup M\land
     \exists F\colon \FamAvoiding{M}{a}\inj
     \FamContaining{M}{a}}{\rAI{1,5}}}
-  \proofstep{1,2}{\exists a\,\mathsf{HalfOcc}(a,M)}{\rEI{6}}
-  \proofstep{1,2}{\mathsf{Frankl}(M)}{%
-    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq
-    \exists a\,\mathsf{HalfOcc}(a,M)}{7}}
+  \proofstep{1,2}{\exists a\,\HalfOcc{a}{M}}{\rEI{6}}
+  \proofstep{1,2}{\Frankl{M}}{%
+    \FormulaRefAuto{\Frankl{M}\coloneqq
+    \exists a\,\HalfOcc{a}{M}}{7}}
 \end{tabproof}
 
 \FormulaThmDelta[Fränkelsche Vermutung bei nichtleerem Durchschnitt]{%
   \FranklFam{M}\dsep
-  \bigcap M\neq\varnothing\vdash \mathsf{Frankl}(M)
+  \bigcap M\neq\varnothing\vdash \Frankl{M}
 }{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
   \DeltaRow{Funktionen}{F}
@@ -24889,12 +24920,12 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
   \proofstep{1,5}{\FamAvoiding{M}{a}=\varnothing}{%
     \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{14}}
 
-  \proofstep{1,5}{\mathsf{Frankl}(M)}{%
+  \proofstep{1,5}{\Frankl{M}}{%
     \FormulaRefAuto{a\in\bigcup M\dsep
     \FamAvoiding{M}{a}=\varnothing
-    \vdash \mathsf{Frankl}(M)}{6,15}}
+    \vdash \Frankl{M}}{6,15}}
 
-  \proofstep{1,2}{\mathsf{Frankl}(M)}{\rEE{4,5,16}}
+  \proofstep{1,2}{\Frankl{M}}{\rEE{4,5,16}}
 \end{tabproof}
 
 \subsection{Ein Beispiel zur fehlenden Wohldefiniertheit}
@@ -24906,156 +24937,121 @@ dass der Wert nicht wieder in der enthaltenden Teilfamilie liegt. Das zeigt
 bereits die folgende aus Paar- und Einermengen gebaute Familie.
 
 \FormulaDefDeltaK[Träger des Wohldefiniertheitsbeispiels]{%
-  U_{\mathrm{ex}}\coloneqq \{\varnothing,\{\varnothing\}\}
+  \FranklExCarrier\coloneqq \{\varnothing,\{\varnothing\}\}
 }{Träger des Wohldefiniertheitsbeispiels}{%
-  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
-  \DeltaRow{Neue Symbole}{U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExCarrier}
+  \DeltaRow{Neue Symbole}{\FranklExCarrier}
 }
 
 \FormulaDefDeltaK[Beispielfamilie zur Zielverfehlung]{%
-  M_{\mathrm{ex}}\coloneqq \{\varnothing,U_{\mathrm{ex}}\}
+  \FranklExFamily\coloneqq \{\varnothing,\FranklExCarrier\}
 }{Beispielfamilie zur Zielverfehlung}{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
-  \DeltaRow{Neue Symbole}{M_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
+  \DeltaRow{Neue Symbole}{\FranklExFamily}
 }
 
-\FormulaThmDelta[Mitgliedschaften im Beispielträger]{%
-  \varnothing\in U_{\mathrm{ex}}\dsep
-  \{\varnothing\}\in U_{\mathrm{ex}}
+\FormulaThmDelta[Leere Menge liegt im Beispielträger]{%
+  \varnothing\in \FranklExCarrier
 }{%
-  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExCarrier}
 }
 \begin{tabproof}
-  \proofstep{}{\varnothing\in U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{U_{\mathrm{ex}}\coloneqq
+  \proofstep{}{\varnothing\in \FranklExCarrier}{%
+    \FormulaRefAuto{\FranklExCarrier\coloneqq
     \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{a\in\{a,b\}}}}
-  \proofstep{}{\{\varnothing\}\in U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{U_{\mathrm{ex}}\coloneqq
+\end{tabproof}
+
+\FormulaThmDelta[Leere Einermenge liegt im Beispielträger]{%
+  \{\varnothing\}\in \FranklExCarrier
+}{%
+  \DeltaRow{Mengen}{\FranklExCarrier}
+}
+\begin{tabproof}
+  \proofstep{}{\{\varnothing\}\in \FranklExCarrier}{%
+    \FormulaRefAuto{\FranklExCarrier\coloneqq
     \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{b\in\{a,b\}}}}
 \end{tabproof}
 
-\FormulaThmDelta[Mitgliedschaften in der Beispielfamilie]{%
-  \varnothing\in M_{\mathrm{ex}}\dsep
-  U_{\mathrm{ex}}\in M_{\mathrm{ex}}
+\FormulaThmDelta[Leere Menge liegt in der Beispielfamilie]{%
+  \varnothing\in \FranklExFamily
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
 }
 \begin{tabproof}
-  \proofstep{}{\varnothing\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}{\FormulaRefAuto{a\in\{a,b\}}}}
-  \proofstep{}{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}{\FormulaRefAuto{b\in\{a,b\}}}}
+  \proofstep{}{\varnothing\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExFamily\coloneqq
+    \{\varnothing,\FranklExCarrier\}}{\FormulaRefAuto{a\in\{a,b\}}}}
+\end{tabproof}
+
+\FormulaThmDelta[Beispielträger liegt in der Beispielfamilie]{%
+  \FranklExCarrier\in \FranklExFamily
+}{%
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
+}
+\begin{tabproof}
+  \proofstep{}{\FranklExCarrier\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExFamily\coloneqq
+    \{\varnothing,\FranklExCarrier\}}{\FormulaRefAuto{b\in\{a,b\}}}}
 \end{tabproof}
 
 \FormulaThmDelta[Beispielfamilie ist nichtleer]{%
-  M_{\mathrm{ex}}\neq\varnothing
+  \FranklExFamily\neq\varnothing
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily}
 }
 \begin{tabproof}
-  \proofstep{}{\varnothing\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstep{}{M_{\mathrm{ex}}\neq\varnothing}{%
+  \proofstep{}{\varnothing\in \FranklExFamily}{%
+    \FormulaRefAuto{\varnothing\in \FranklExFamily}}
+  \proofstep{}{\FranklExFamily\neq\varnothing}{%
     \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{1}}
 \end{tabproof}
 
 \FormulaThmDelta[Beispielfamilie ist endlich]{%
-  \Finite{M_{\mathrm{ex}}}
+  \Finite{\FranklExFamily}
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
 }
 \begin{tabproof}
-  \proofstep{}{\Finite{\{\varnothing,U_{\mathrm{ex}}\}}}{%
+  \proofstep{}{\Finite{\{\varnothing,\FranklExCarrier\}}}{%
     \FormulaRefAuto{\Finite{\{A,B\}}}}
-  \proofstep{}{M_{\mathrm{ex}}=\{\varnothing,U_{\mathrm{ex}}\}}{%
-    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}}
-  \proofstep{}{\{\varnothing,U_{\mathrm{ex}}\}=M_{\mathrm{ex}}}{%
+  \proofstep{}{\FranklExFamily=\{\varnothing,\FranklExCarrier\}}{%
+    \FormulaRefAuto{\FranklExFamily\coloneqq
+    \{\varnothing,\FranklExCarrier\}}}
+  \proofstep{}{\{\varnothing,\FranklExCarrier\}=\FranklExFamily}{%
     \FormulaRefAuto{a=b\vdash b=a}{2}}
-  \proofstep{}{\Finite{M_{\mathrm{ex}}}}{%
+  \proofstep{}{\Finite{\FranklExFamily}}{%
     \rIE{3,1}}
 \end{tabproof}
 
 \FormulaThmDelta[Elemente der Beispielfamilie sind die beiden Beispielelemente]{%
-  X\in M_{\mathrm{ex}}\vdash X=\varnothing\lor X=U_{\mathrm{ex}}
+  X\in \FranklExFamily\vdash X=\varnothing\lor X=\FranklExCarrier
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}\dsep X}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in M_{\mathrm{ex}}}{\rA}
-  \proofstep{1}{X\in\{\varnothing,U_{\mathrm{ex}}\}}{%
-    \FormulaRefAuto{M_{\mathrm{ex}}\coloneqq
-    \{\varnothing,U_{\mathrm{ex}}\}}{1}}
-  \proofstep{1}{X=\varnothing\lor X=U_{\mathrm{ex}}}{%
+  \proofstep{1}{X\in \FranklExFamily}{\rA}
+  \proofstep{1}{X\in\{\varnothing,\FranklExCarrier\}}{%
+    \FormulaRefAuto{\FranklExFamily\coloneqq
+    \{\varnothing,\FranklExCarrier\}}{1}}
+  \proofstep{1}{X=\varnothing\lor X=\FranklExCarrier}{%
     \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{2}}
 \end{tabproof}
 
-\FormulaThmDelta[Leere Vereinigung mit leerem Beispielwert]{%
-  \varnothing\cup\varnothing=\varnothing
-}{%
-  \DeltaRow{Mengen}{}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing=\varnothing\cup\varnothing}{%
-    \FormulaRefAuto{A = \varnothing \cup A}}
-  \proofstep{}{\varnothing\cup\varnothing=\varnothing}{%
-    \FormulaRefAuto{a=b\vdash b=a}{1}}
-\end{tabproof}
-
-\FormulaThmDelta[Leere Vereinigung mit Beispielträger]{%
-  \varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}
-}{%
-  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
-}
-\begin{tabproof}
-  \proofstep{}{U_{\mathrm{ex}}=\varnothing\cup U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{A = \varnothing \cup A}}
-  \proofstep{}{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{a=b\vdash b=a}{1}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielträger vereinigt mit leerer Menge]{%
-  U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}
-}{%
-  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
-}
-\begin{tabproof}
-  \proofstep{}{U_{\mathrm{ex}}=U_{\mathrm{ex}}\cup\varnothing}{%
-    \FormulaRefAuto{A = A \cup \varnothing}}
-  \proofstep{}{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{a=b\vdash b=a}{1}}
-\end{tabproof}
-
-\FormulaThmDelta[Idempotente Beispielträgervereinigung]{%
-  U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}
-}{%
-  \DeltaRow{Mengen}{U_{\mathrm{ex}}}
-}
-\begin{tabproof}
-  \proofstep{}{U_{\mathrm{ex}}=U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{A = A \cup A}}
-  \proofstep{}{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{a=b\vdash b=a}{1}}
-\end{tabproof}
-
 \FormulaThmDelta[Beispielfamilie ist unter paarweiser Vereinigung abgeschlossen]{%
-  X\in M_{\mathrm{ex}}\dsep Y\in M_{\mathrm{ex}}
-  \vdash X\cup Y\in M_{\mathrm{ex}}
+  X\in \FranklExFamily\dsep Y\in \FranklExFamily
+  \vdash X\cup Y\in \FranklExFamily
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}\dsep X\dsep Y}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X\dsep Y}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{X\in M_{\mathrm{ex}}}{\rA}
-  \proofstepwidestar[2]{Y\in M_{\mathrm{ex}}}{\rA}
-  \proofstepwidestar[1]{X=\varnothing\lor X=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
-    X=\varnothing\lor X=U_{\mathrm{ex}}}{1}}
-  \proofstepwidestar[2]{Y=\varnothing\lor Y=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
-    X=\varnothing\lor X=U_{\mathrm{ex}}}{2}}
+  \proofstepwidestar[1]{X\in \FranklExFamily}{\rA}
+  \proofstepwidestar[2]{Y\in \FranklExFamily}{\rA}
+  \proofstepwidestar[1]{X=\varnothing\lor X=\FranklExCarrier}{%
+    \FormulaRefAuto{X\in \FranklExFamily\vdash
+    X=\varnothing\lor X=\FranklExCarrier}{1}}
+  \proofstepwidestar[2]{Y=\varnothing\lor Y=\FranklExCarrier}{%
+    \FormulaRefAuto{X\in \FranklExFamily\vdash
+    X=\varnothing\lor X=\FranklExCarrier}{2}}
 
   \proofstepwidestar[5]{X=\varnothing}{\rA}
   \proofstepwidestar[6]{Y=\varnothing}{\rA}
@@ -25071,93 +25067,89 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,10}}
   \proofstepwidestar[5,6]{\varnothing=X\cup Y}{%
     \FormulaRefAuto{a=b\vdash b=a}{11}}
-  \proofstepwidestar[]{\varnothing\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstepwidestar[5,6]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{12,13}}
+  \proofstepwidestar[]{\varnothing\in \FranklExFamily}{%
+    \FormulaRefAuto{\varnothing\in \FranklExFamily}}
+  \proofstepwidestar[5,6]{X\cup Y\in \FranklExFamily}{\rIE{12,13}}
 
-  \proofstepwidestar[15]{Y=U_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[15]{Y=\FranklExCarrier}{\rA}
   \proofstepwidestar[5]{X\cup Y=\varnothing\cup Y}{%
     \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{5}}
-  \proofstepwidestar[15]{\varnothing\cup Y=\varnothing\cup U_{\mathrm{ex}}}{%
+  \proofstepwidestar[15]{\varnothing\cup Y=\varnothing\cup \FranklExCarrier}{%
     \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{15}}
-  \proofstepwidestar[5,15]{X\cup Y=\varnothing\cup U_{\mathrm{ex}}}{%
+  \proofstepwidestar[5,15]{X\cup Y=\varnothing\cup \FranklExCarrier}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{16,17}}
-  \proofstepwidestar[]{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}}
-  \proofstepwidestar[5,15]{X\cup Y=U_{\mathrm{ex}}}{%
+  \proofstepwidestar[]{\varnothing\cup \FranklExCarrier=\FranklExCarrier}{%
+    \FormulaRefAuto{\varnothing\cup \FranklExCarrier=\FranklExCarrier}}
+  \proofstepwidestar[5,15]{X\cup Y=\FranklExCarrier}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{18,19}}
-  \proofstepwidestar[5,15]{U_{\mathrm{ex}}=X\cup Y}{%
+  \proofstepwidestar[5,15]{\FranklExCarrier=X\cup Y}{%
     \FormulaRefAuto{a=b\vdash b=a}{20}}
-  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstepwidestar[5,15]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{21,22}}
-  \proofstepwidestar[2,5]{X\cup Y\in M_{\mathrm{ex}}}{%
+  \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
+  \proofstepwidestar[5,15]{X\cup Y\in \FranklExFamily}{\rIE{21,22}}
+  \proofstepwidestar[2,5]{X\cup Y\in \FranklExFamily}{%
     \rOE{4,6,14,15,23}}
 
-  \proofstepwidestar[25]{X=U_{\mathrm{ex}}}{\rA}
+  \proofstepwidestar[25]{X=\FranklExCarrier}{\rA}
   \proofstepwidestar[26]{Y=\varnothing}{\rA}
-  \proofstepwidestar[25]{X\cup Y=U_{\mathrm{ex}}\cup Y}{%
+  \proofstepwidestar[25]{X\cup Y=\FranklExCarrier\cup Y}{%
     \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{25}}
-  \proofstepwidestar[26]{U_{\mathrm{ex}}\cup Y=U_{\mathrm{ex}}\cup\varnothing}{%
+  \proofstepwidestar[26]{\FranklExCarrier\cup Y=\FranklExCarrier\cup\varnothing}{%
     \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{26}}
-  \proofstepwidestar[25,26]{X\cup Y=U_{\mathrm{ex}}\cup\varnothing}{%
+  \proofstepwidestar[25,26]{X\cup Y=\FranklExCarrier\cup\varnothing}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{27,28}}
-  \proofstepwidestar[]{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{U_{\mathrm{ex}}\cup\varnothing=U_{\mathrm{ex}}}}
-  \proofstepwidestar[25,26]{X\cup Y=U_{\mathrm{ex}}}{%
+  \proofstepwidestar[]{\FranklExCarrier\cup\varnothing=\FranklExCarrier}{%
+    \FormulaRefAuto{\FranklExCarrier\cup\varnothing=\FranklExCarrier}}
+  \proofstepwidestar[25,26]{X\cup Y=\FranklExCarrier}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{29,30}}
-  \proofstepwidestar[25,26]{U_{\mathrm{ex}}=X\cup Y}{%
+  \proofstepwidestar[25,26]{\FranklExCarrier=X\cup Y}{%
     \FormulaRefAuto{a=b\vdash b=a}{31}}
-  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstepwidestar[25,26]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{32,33}}
+  \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
+  \proofstepwidestar[25,26]{X\cup Y\in \FranklExFamily}{\rIE{32,33}}
 
-  \proofstepwidestar[35]{Y=U_{\mathrm{ex}}}{\rA}
-  \proofstepwidestar[25]{X\cup Y=U_{\mathrm{ex}}\cup Y}{%
+  \proofstepwidestar[35]{Y=\FranklExCarrier}{\rA}
+  \proofstepwidestar[25]{X\cup Y=\FranklExCarrier\cup Y}{%
     \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{25}}
-  \proofstepwidestar[35]{U_{\mathrm{ex}}\cup Y=
-    U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
+  \proofstepwidestar[35]{\FranklExCarrier\cup Y=
+    \FranklExCarrier\cup \FranklExCarrier}{%
     \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{35}}
-  \proofstepwidestar[25,35]{X\cup Y=U_{\mathrm{ex}}\cup U_{\mathrm{ex}}}{%
+  \proofstepwidestar[25,35]{X\cup Y=\FranklExCarrier\cup \FranklExCarrier}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{36,37}}
-  \proofstepwidestar[]{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{U_{\mathrm{ex}}\cup U_{\mathrm{ex}}=U_{\mathrm{ex}}}}
-  \proofstepwidestar[25,35]{X\cup Y=U_{\mathrm{ex}}}{%
+  \proofstepwidestar[]{\FranklExCarrier\cup \FranklExCarrier=\FranklExCarrier}{%
+    \FormulaRefAuto{\FranklExCarrier\cup \FranklExCarrier=\FranklExCarrier}}
+  \proofstepwidestar[25,35]{X\cup Y=\FranklExCarrier}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{38,39}}
-  \proofstepwidestar[25,35]{U_{\mathrm{ex}}=X\cup Y}{%
+  \proofstepwidestar[25,35]{\FranklExCarrier=X\cup Y}{%
     \FormulaRefAuto{a=b\vdash b=a}{40}}
-  \proofstepwidestar[]{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstepwidestar[25,35]{X\cup Y\in M_{\mathrm{ex}}}{\rIE{41,42}}
-  \proofstepwidestar[2,25]{X\cup Y\in M_{\mathrm{ex}}}{%
+  \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
+  \proofstepwidestar[25,35]{X\cup Y\in \FranklExFamily}{\rIE{41,42}}
+  \proofstepwidestar[2,25]{X\cup Y\in \FranklExFamily}{%
     \rOE{4,26,34,35,43}}
-  \proofstepwidestar[1,2]{X\cup Y\in M_{\mathrm{ex}}}{%
+  \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{%
     \rOE{3,5,24,25,44}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Beispielfamilie ist vereinigungsabgeschlossen]{%
-  \UnionClosedFam(M_{\mathrm{ex}})
+  \UnionClosedFam(\FranklExFamily)
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}\dsep X\dsep Y}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X\dsep Y}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{X\in M_{\mathrm{ex}}}{\rA}
-  \proofstepwidestar[2]{Y\in M_{\mathrm{ex}}}{\rA}
-  \proofstepwidestar[1,2]{X\cup Y\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{X\in M_{\mathrm{ex}}\dsep Y\in M_{\mathrm{ex}}
-    \vdash X\cup Y\in M_{\mathrm{ex}}}{1,2}}
-  \proofstepwidestar[]{\UnionClosedFam(M_{\mathrm{ex}})}{%
+  \proofstepwidestar[1]{X\in \FranklExFamily}{\rA}
+  \proofstepwidestar[2]{Y\in \FranklExFamily}{\rA}
+  \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{%
+    \FormulaRefAuto{X\in \FranklExFamily\dsep Y\in \FranklExFamily
+    \vdash X\cup Y\in \FranklExFamily}{1,2}}
+  \proofstepwidestar[]{\UnionClosedFam(\FranklExFamily)}{%
     \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{1,\rRI{2,3}}}}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Ausgesparte Einermenge der Beispielfamilie]{%
-  \{\varnothing\}\notin M_{\mathrm{ex}}
+  \{\varnothing\}\notin \FranklExFamily
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
 }
 \begin{tabproof}
   \proofstep{}{\varnothing\in\{\varnothing\}}{\FormulaRefAuto{a\in\{a\}}}
@@ -25172,110 +25164,106 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \proofstep{4}{\bot}{\rBI{5,3}}
   \proofstep{}{\{\varnothing\}\notin\{\varnothing\}}{\rCI{4,6}}
 
-  \proofstep{}{\{\varnothing\}\in U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in U_{\mathrm{ex}}\dsep
-    \{\varnothing\}\in U_{\mathrm{ex}}}}
-  \proofstep{}{U_{\mathrm{ex}}\neq\{\varnothing\}}{%
+  \proofstep{}{\{\varnothing\}\in \FranklExCarrier}{%
+    \FormulaRefAuto{\{\varnothing\}\in \FranklExCarrier}}
+  \proofstep{}{\FranklExCarrier\neq\{\varnothing\}}{%
     \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{8,7}}
-  \proofstep{}{\{\varnothing\}\neq U_{\mathrm{ex}}}{%
+  \proofstep{}{\{\varnothing\}\neq \FranklExCarrier}{%
     \FormulaRefAuto{a \neq b \vdash b \neq a}{9}}
 
-  \proofstep{11}{\{\varnothing\}\in M_{\mathrm{ex}}}{\rA}
+  \proofstep{11}{\{\varnothing\}\in \FranklExFamily}{\rA}
   \proofstep{11}{\{\varnothing\}=\varnothing
-    \lor \{\varnothing\}=U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{X\in M_{\mathrm{ex}}\vdash
-    X=\varnothing\lor X=U_{\mathrm{ex}}}{11}}
+    \lor \{\varnothing\}=\FranklExCarrier}{%
+    \FormulaRefAuto{X\in \FranklExFamily\vdash
+    X=\varnothing\lor X=\FranklExCarrier}{11}}
   \proofstep{13}{\{\varnothing\}=\varnothing}{\rA}
   \proofstep{13}{\bot}{\rBI{13,3}}
-  \proofstep{15}{\{\varnothing\}=U_{\mathrm{ex}}}{\rA}
+  \proofstep{15}{\{\varnothing\}=\FranklExCarrier}{\rA}
   \proofstep{15}{\bot}{\rBI{15,10}}
   \proofstep{11}{\bot}{\rOE{12,13,14,15,16}}
-  \proofstep{}{\{\varnothing\}\notin M_{\mathrm{ex}}}{\rCI{11,17}}
+  \proofstep{}{\{\varnothing\}\notin \FranklExFamily}{\rCI{11,17}}
 \end{tabproof}
 \FormulaThmDelta[Leerer Grundpunkt liegt im Vereinigungsbereich]{%
-  \varnothing\in\bigcup M_{\mathrm{ex}}
+  \varnothing\in\bigcup \FranklExFamily
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep U_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
 }
 \begin{tabproof}
-  \proofstep{}{U_{\mathrm{ex}}\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
-  \proofstep{}{\varnothing\in U_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in U_{\mathrm{ex}}\dsep
-    \{\varnothing\}\in U_{\mathrm{ex}}}}
-  \proofstep{}{\varnothing\in\bigcup M_{\mathrm{ex}}}{%
+  \proofstep{}{\FranklExCarrier\in \FranklExFamily}{%
+    \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
+  \proofstep{}{\varnothing\in \FranklExCarrier}{%
+    \FormulaRefAuto{\varnothing\in \FranklExCarrier}}
+  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
     \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Beispielfamilie hat Frankl-Voraussetzung]{%
-  \FranklFam{M_{\mathrm{ex}}}
+  \FranklFam{\FranklExFamily}
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}}
+  \DeltaRow{Mengen}{\FranklExFamily}
 }
 \begin{tabproof}
-  \proofstep{}{M_{\mathrm{ex}}\neq\varnothing}{%
-    \FormulaRefAuto{M_{\mathrm{ex}}\neq\varnothing}}
-  \proofstep{}{\varnothing\in\bigcup M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in\bigcup M_{\mathrm{ex}}}}
-  \proofstep{}{\bigcup M_{\mathrm{ex}}\neq\varnothing}{%
+  \proofstep{}{\FranklExFamily\neq\varnothing}{%
+    \FormulaRefAuto{\FranklExFamily\neq\varnothing}}
+  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
+    \FormulaRefAuto{\varnothing\in\bigcup \FranklExFamily}}
+  \proofstep{}{\bigcup \FranklExFamily\neq\varnothing}{%
     \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{2}}
-  \proofstep{}{\Finite{M_{\mathrm{ex}}}}{%
-    \FormulaRefAuto{\Finite{M_{\mathrm{ex}}}}}
-  \proofstep{}{\UnionClosedFam(M_{\mathrm{ex}})}{%
-    \FormulaRefAuto{\UnionClosedFam(M_{\mathrm{ex}})}}
-  \proofstep{}{\FranklFam{M_{\mathrm{ex}}}}{%
+  \proofstep{}{\Finite{\FranklExFamily}}{%
+    \FormulaRefAuto{\Finite{\FranklExFamily}}}
+  \proofstep{}{\UnionClosedFam(\FranklExFamily)}{%
+    \FormulaRefAuto{\UnionClosedFam(\FranklExFamily)}}
+  \proofstep{}{\FranklFam{\FranklExFamily}}{%
     \FormulaRefAuto{Frankl-Familie}{1,3,4,5}}
 \end{tabproof}
 
 \FormulaThmDelta[Adjunktion der Beispielfamilie verfehlt die Zielteilfamilie]{%
-  \exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
-  \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
-  \FamContaining{M_{\mathrm{ex}}}{\varnothing}\bigr)
+  \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
+  \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
+  \FamContaining{\FranklExFamily}{\varnothing}\bigr)
 }{%
-  \DeltaRow{Mengen}{M_{\mathrm{ex}}\dsep X}
-  \DeltaRow{Funktionensymbol}{\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}}
+  \DeltaRow{Mengen}{\FranklExFamily\dsep X}
+  \DeltaRow{Funktionensymbol}{\tFranklAdj{\FranklExFamily}{\varnothing}}
   \DeltaRow{Teilmengenfamilien}{%
-    \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\dsep
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}}
+    \FamAvoiding{\FranklExFamily}{\varnothing}\dsep
+    \FamContaining{\FranklExFamily}{\varnothing}}
 }
 \begin{tabproof}
-  \proofstep{}{\varnothing\in M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in M_{\mathrm{ex}}\dsep
-    U_{\mathrm{ex}}\in M_{\mathrm{ex}}}}
+  \proofstep{}{\varnothing\in \FranklExFamily}{%
+    \FormulaRefAuto{\varnothing\in \FranklExFamily}}
   \proofstep{}{\varnothing\notin\varnothing}{%
     \FormulaRefAuto{x \not\in \varnothing}}
-  \proofstep{}{\varnothing\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}}{%
+  \proofstep{}{\varnothing\in \FamAvoiding{\FranklExFamily}{\varnothing}}{%
     \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
     \{X\in M\mid a\notin X\}}{\rAI{1,2}}}
-  \proofstep{}{\{\varnothing\}\notin M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\{\varnothing\}\notin M_{\mathrm{ex}}}}
+  \proofstep{}{\{\varnothing\}\notin \FranklExFamily}{%
+    \FormulaRefAuto{\{\varnothing\}\notin \FranklExFamily}}
   \proofstep{5}{\{\varnothing\}\in
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rA}
-  \proofstep{5}{\{\varnothing\}\in M_{\mathrm{ex}}\land
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rA}
+  \proofstep{5}{\{\varnothing\}\in \FranklExFamily\land
     \varnothing\in\{\varnothing\}}{%
     \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
     \{X\in M\mid a\in X\}}{5}}
-  \proofstep{5}{\{\varnothing\}\in M_{\mathrm{ex}}}{\rAEa{6}}
+  \proofstep{5}{\{\varnothing\}\in \FranklExFamily}{\rAEa{6}}
   \proofstep{5}{\bot}{\rBI{7,4}}
   \proofstep{}{\{\varnothing\}\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rCI{5,8}}
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rCI{5,8}}
   \proofstep{}{\{\varnothing\}=\varnothing\cup\{\varnothing\}}{%
     \FormulaRefAuto{A = \varnothing \cup A}}
   \proofstep{}{\varnothing\cup\{\varnothing\}=\{\varnothing\}}{%
     \FormulaRefAuto{a=b\vdash b=a}{10}}
   \proofstep{}{\varnothing\cup\{\varnothing\}\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rIE{11,9}}
-  \proofstep{}{\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(\varnothing)=
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{11,9}}
+  \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)=
     \varnothing\cup\{\varnothing\}}{%
     \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
     \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
-  \proofstep{}{\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(\varnothing)\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}}{\rIE{13,12}}
+  \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)\notin
+    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{13,12}}
   \proofstep{}{%
-    \exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
-    \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}\bigr)}{\rEI{\rAI{3,14}}}
+    \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
+    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
+    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{\rEI{\rAI{3,14}}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Endliches Vereinigungsbeispiel mit Zielverfehlung]{%
@@ -25291,36 +25279,36 @@ bereits die folgende aus Paar- und Einermengen gebaute Familie.
   \exists X\in \FamAvoiding{M}{a}\,
   \bigl(\tFranklAdj{M}{a}(X)\notin \FamContaining{M}{a}\bigr)\Bigr)
 }{%
-  \DeltaRow{Mengen}{M\dsep M_{\mathrm{ex}}\dsep a\dsep X}
+  \DeltaRow{Mengen}{M\dsep \FranklExFamily\dsep a\dsep X}
   \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
 }
 \begin{tabproof}
-  \proofstep{}{\FranklFam{M_{\mathrm{ex}}}}{%
-    \FormulaRefAuto{\FranklFam{M_{\mathrm{ex}}}}}
-  \proofstep{}{\varnothing\in\bigcup M_{\mathrm{ex}}}{%
-    \FormulaRefAuto{\varnothing\in\bigcup M_{\mathrm{ex}}}}
+  \proofstep{}{\FranklFam{\FranklExFamily}}{%
+    \FormulaRefAuto{\FranklFam{\FranklExFamily}}}
+  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
+    \FormulaRefAuto{\varnothing\in\bigcup \FranklExFamily}}
   \proofstep{}{%
-    \exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
-    \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}\bigr)}{%
-    \FormulaRefAuto{\exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
-    \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
-    \FamContaining{M_{\mathrm{ex}}}{\varnothing}\bigr)}}
+    \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
+    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
+    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{%
+    \FormulaRefAuto{\exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
+    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
+    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}}
   \proofstep{}{%
     \begin{aligned}[t]
-      &\FranklFam{M_{\mathrm{ex}}}\land
-      \varnothing\in\bigcup M_{\mathrm{ex}}\land{}\\
-      &\exists X\in \FamAvoiding{M_{\mathrm{ex}}}{\varnothing}\,
-      \bigl(\tFranklAdj{M_{\mathrm{ex}}}{\varnothing}(X)\notin
-      \FamContaining{M_{\mathrm{ex}}}{\varnothing}\bigr)
+      &\FranklFam{\FranklExFamily}\land
+      \varnothing\in\bigcup \FranklExFamily\land{}\\
+      &\exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
+      \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
+      \FamContaining{\FranklExFamily}{\varnothing}\bigr)
     \end{aligned}}{\rAI{1,\rAI{2,3}}}
   \proofstep{}{\exists a\,
     \begin{aligned}[t]
-      (&\FranklFam{M_{\mathrm{ex}}}\land
-      a\in\bigcup M_{\mathrm{ex}}\land{}\\
-      &\exists X\in \FamAvoiding{M_{\mathrm{ex}}}{a}\,
-      \bigl(\tFranklAdj{M_{\mathrm{ex}}}{a}(X)\notin
-      \FamContaining{M_{\mathrm{ex}}}{a}\bigr))
+      (&\FranklFam{\FranklExFamily}\land
+      a\in\bigcup \FranklExFamily\land{}\\
+      &\exists X\in \FamAvoiding{\FranklExFamily}{a}\,
+      \bigl(\tFranklAdj{\FranklExFamily}{a}(X)\notin
+      \FamContaining{\FranklExFamily}{a}\bigr))
     \end{aligned}}{\rEI{4}}
   \proofstep{}{%
     \begin{aligned}[t]
@@ -26365,7 +26353,7 @@ einzubetten.
 \FormulaThmDelta[Reparaturkriterium für Halbhäufigkeit]{%
   a\in\bigcup \mathcal I\dsep
   \exists h_a\colon \AdjDefect{\mathcal I}{a}\inj \AdjFree{\mathcal I}{a}
-  \vdash \mathsf{HalfOcc}(a,\mathcal I)
+  \vdash \HalfOcc{a}{\mathcal I}
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep a}
   \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{\mathcal I}{a}{h}}
@@ -26391,18 +26379,18 @@ einzubetten.
   \proofstep{3}{%
     \exists F\colon \FamAvoiding{\mathcal I}{a}\inj
     \FamContaining{\mathcal I}{a}}{\rEI{4}}
-  \proofstep{1,3}{\mathsf{HalfOcc}(a,\mathcal I)}{%
-    \FormulaRefAuto{\mathsf{HalfOcc}(a,M)\coloneqq
+  \proofstep{1,3}{\HalfOcc{a}{\mathcal I}}{%
+    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
     a\in\bigcup M\land
     \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{1,5}}}
-  \proofstep{1,2}{\mathsf{HalfOcc}(a,\mathcal I)}{\rEE{2,3,6}}
+  \proofstep{1,2}{\HalfOcc{a}{\mathcal I}}{\rEE{2,3,6}}
 \end{tabproof}
 
 \FormulaThmDelta[Reparaturkriterium für die fränkelsche Eigenschaft]{%
   \exists a\,\Bigl(a\in\bigcup \mathcal I\land
   \exists h_a\colon \AdjDefect{\mathcal I}{a}\inj
   \AdjFree{\mathcal I}{a}\Bigr)
-  \vdash \mathsf{Frankl}(\mathcal I)
+  \vdash \Frankl{\mathcal I}
 }{%
   \DeltaRow{Mengen}{\mathcal I\dsep a}
   \DeltaRow{Funktionen}{h_a}
@@ -26421,15 +26409,15 @@ einzubetten.
   \proofstep{2}{%
     \exists h_a\colon \AdjDefect{\mathcal I}{a}\inj
     \AdjFree{\mathcal I}{a}}{\rAEb{2}}
-  \proofstep{2}{\mathsf{HalfOcc}(a,\mathcal I)}{%
+  \proofstep{2}{\HalfOcc{a}{\mathcal I}}{%
     \FormulaRefAuto{%
       a\in\bigcup \mathcal I\dsep
       \exists h_a\colon \AdjDefect{\mathcal I}{a}\inj \AdjFree{\mathcal I}{a}
-      \vdash \mathsf{HalfOcc}(a,\mathcal I)}{3,4}}
-  \proofstep{2}{\exists a\,\mathsf{HalfOcc}(a,\mathcal I)}{\rEI{5}}
-  \proofstep{2}{\mathsf{Frankl}(\mathcal I)}{%
-    \FormulaRefAuto{\mathsf{Frankl}(M)\coloneqq \exists a\,\mathsf{HalfOcc}(a,M)}{6}}
-  \proofstep{1}{\mathsf{Frankl}(\mathcal I)}{\rEE{1,2,7}}
+      \vdash \HalfOcc{a}{\mathcal I}}{3,4}}
+  \proofstep{2}{\exists a\,\HalfOcc{a}{\mathcal I}}{\rEI{5}}
+  \proofstep{2}{\Frankl{\mathcal I}}{%
+    \FormulaRefAuto{\Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}}{6}}
+  \proofstep{1}{\Frankl{\mathcal I}}{\rEE{1,2,7}}
 \end{tabproof}
 
 Damit genügt für einen Beweis der korrigierten Fränkelschen Vermutung das
@@ -26442,7 +26430,7 @@ folgende Reparaturziel:
   \end{aligned}
 \]
 Zusammen mit dem vorigen Korollar folgt daraus unmittelbar
-\(\mathsf{Frankl}(M)\). Es wird hier nur als hinreichendes Beweisziel
+\(\Frankl{M}\). Es wird hier nur als hinreichendes Beweisziel
 verwendet; eine beliebige Injektion
 \(\FamAvoiding{M}{a}\inj \FamContaining{M}{a}\) muss nicht schon in dieser
 reparierten Adjunktionsform gegeben sein.
