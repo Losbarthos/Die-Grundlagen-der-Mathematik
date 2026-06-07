@@ -28675,12 +28675,14 @@ Rekursionsform der Potenznotation festhalten.
 \chapter{\(b\)-adische Stellenwertsysteme für natürliche Zahlen}
 
 Die zuvor eingeführten endlichen Summen und Potenzen erlauben nun eine
-einheitliche Definition von Stellenwertdarstellungen natürlicher Zahlen. Die
-Idee ist, dass eine endliche Folge von Ziffern nicht selbst die Zahl ist,
-sondern durch eine Auswertungsformel einen Wert in \(\mathbb{N}\) erhält. Die
-Stellenwerte werden durch Potenzen einer festen Basis \(b\) bestimmt.
+einheitliche Definition von Stellenwertdarstellungen natürlicher Zahlen. Eine
+endliche Ziffernfolge ist dabei nicht selbst die natürliche Zahl, sondern ein
+Zahlzeichen, dessen Wert durch eine Auswertungsfunktion bestimmt wird. Damit
+die späteren Beweise eindeutig auf die hier eingeführten Begriffe verweisen
+können, werden Basisbedingung, Ziffernmenge, Ziffernfolge, Auswertung und
+Zahlzeichen als eigene Symbole festgelegt.
 
-\section{Zahlzeichen und Ziffern}
+\section{Zahlzeichen, Basen und Ziffern}
 
 Zunächst führen wir die vertrauten kleinen Zahlzeichen als Abkürzungen für
 die entsprechenden natürlichen Zahlen ein. Dabei ist \(0\) die leere Menge,
@@ -28705,88 +28707,191 @@ und jedes folgende Zahlzeichen bezeichnet den Nachfolger des vorherigen.
   \DeltaRow{Funktionensymbol}{\Succ}%
 }
 
-Eine Basis eines Stellenwertsystems ist eine natürliche Zahl \(b\) mit
-\(2\leq b\). Die zulässigen Ziffern zur Basis \(b\) sind genau die
-natürlichen Zahlen, die echt kleiner als \(b\) sind.
+Eine Basis eines Stellenwertsystems ist eine natürliche Zahl, die mindestens
+\(2\) ist. Diese Bedingung wird als eigenes Prädikat notiert.
 
-\FormulaDefDeltaK[Ziffernmenge zur Basis \(b\)]{%
-  b\in\mathbb{N}\dsep 2\leq b\vdash
-  \mathcal D_b\coloneqq \{d\in\mathbb{N}\mid d<b\}%
-}{Ziffernmenge zur Basis \(b\)}{%
-  \DeltaRow{Mengen}{b\dsep d}%
-  \DeltaRow{Neue Symbole}{\mathcal D_b}%
+\FormulaDefDeltaK[Basis eines Stellenwertsystems]{%
+  \BaseOK{b}\coloneqq b\in\mathbb{N}\land 2\leq b%
+}{Basis eines Stellenwertsystems}{%
+  \DeltaRow{Mengen}{b}%
+  \DeltaRow{Neue Symbole}{\BaseOK{b}}%
 }
 
-\section{Allgemeine \(b\)-adische Stellenwertformel}
+Die zulässigen Ziffern zur Basis \(b\) sind genau die natürlichen Zahlen, die
+echt kleiner als \(b\) sind.
 
-Sei \(b\in\mathbb{N}\) mit \(2\leq b\). Eine endliche Ziffernfolge zur Basis
-\(b\) ist eine Folge \(a\colon\mathbb{N}\to\mathbb{N}\), deren betrachtete
-Anfangswerte \(a(i)\) Ziffern aus \(\mathcal D_b\) sind. Hat die Darstellung die
-Länge \(n\), so wird ihr Wert durch die folgende endliche Summe festgelegt.
+\FormulaDefDeltaK[Ziffernmenge zur Basis \(b\)]{%
+  \BaseOK{b}\vdash
+  \DigitSet{b}\coloneqq \{d\in\mathbb{N}\mid d<b\}%
+}{Ziffernmenge zur Basis \(b\)}{%
+  \DeltaRow{Mengen}{b\dsep d}%
+  \DeltaRow{Neue Symbole}{\DigitSet{b}}%
+}
+
+\section{Ziffernfolgen und Stellenwertauswertung}
+
+Eine Ziffernfolge zur Basis \(b\) wird als Funktion
+\(a\colon\mathbb{N}\to\mathbb{N}\) behandelt. Das Symbol
+\(\DigitSeq{b}{a}{\ell}\) bedeutet, dass die Anfangswerte
+\(a(0),\ldots,a(\ell)\) zulässige Ziffern zur Basis \(b\) sind. Der letzte
+Parameter \(\ell\) bezeichnet also die höchste Stelle, nicht die Länge.
+
+\FormulaDefDeltaR[Ziffernfolge zur Basis \(b\)]{%
+  \begin{aligned}[t]
+    &\BaseOK{b}\dsep \ell\in\mathbb{N}\vdash{}\\
+    &\DigitSeq{b}{a}{\ell}\coloneqq
+      \bigl(a\colon\mathbb{N}\to\mathbb{N}\land
+      \forall i<\Succ(\ell)\,a(i)\in\DigitSet{b}\bigr)
+  \end{aligned}
+}{%
+  \BaseOK{b}\dsep \ell\in\mathbb{N}\vdash
+  \DigitSeq{b}{a}{\ell}\coloneqq
+  \bigl(a\colon\mathbb{N}\to\mathbb{N}\land
+  \forall i<\Succ(\ell)\,a(i)\in\DigitSet{b}\bigr)
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep \ell\dsep i}%
+  \DeltaRow{Neue Symbole}{\DigitSeq{b}{a}{\ell}}%
+  \DeltaRow{Funktionensymbol}{\Succ}%
+}
+
+Hat eine solche Folge die betrachtete Länge \(n\), so wird ihr Wert durch die
+endliche Summe über die Stellenwerte bestimmt.
 
 \FormulaDefDeltaR[\(b\)-adische Stellenwertauswertung]{%
   \begin{aligned}[t]
-    &b\in\mathbb{N}\dsep 2\leq b\dsep n\in\mathbb{N}\dsep
+    &\BaseOK{b}\dsep n\in\mathbb{N}\dsep
       a\colon\mathbb{N}\to\mathbb{N}\dsep
-      \forall i<n\,a(i)\in\mathcal D_b\vdash{}\\
-    &\operatorname{val}_b(a,n)\coloneqq
+      \forall i<n\,a(i)\in\DigitSet{b}\vdash{}\\
+    &\PlaceVal{b}{a}{n}\coloneqq
       \sum_{i<n} a(i)\cdot b^i
   \end{aligned}
 }{%
-  b\in\mathbb{N}\dsep 2\leq b\dsep n\in\mathbb{N}\dsep
+  \BaseOK{b}\dsep n\in\mathbb{N}\dsep
   a\colon\mathbb{N}\to\mathbb{N}\dsep
-  \forall i<n\,a(i)\in\mathcal D_b\vdash
-  \operatorname{val}_b(a,n)\coloneqq
+  \forall i<n\,a(i)\in\DigitSet{b}\vdash
+  \PlaceVal{b}{a}{n}\coloneqq
   \sum_{i<n} a(i)\cdot b^i
 }{%
   \DeltaRow{Mengen}{a\dsep b\dsep n\dsep i}%
-  \DeltaRow{Funktionensymbol}{\operatorname{val}_b}%
-  \DeltaRow{Neue Symbole}{(\,\cdot\,)_b}%
+  \DeltaRow{Funktionensymbol}{\PlaceVal{b}{a}{n}}%
 }
 
 In der üblichen Schreibweise werden die Ziffern von links nach rechts
 notiert, während die Summe von der niedrigsten Stelle \(i=0\) ausgeht. Für
-Ziffern \(a_0,\ldots,a_\ell\in\mathcal D_b\) vereinbaren wir daher:
-\[
-  (a_\ell a_{\ell-1}\cdots a_0)_b
-  \quad\coloneqq\quad
-  \sum_{i<\Succ(\ell)} a_i\cdot b^i.
-\]
+eine Ziffernfolge \(\DigitSeq{b}{a}{\ell}\) wird das zugehörige
+\(b\)-adische Zahlzeichen deshalb mit einem Überstrich notiert.
+
+\FormulaDefDeltaR[\(b\)-adisches Zahlzeichen]{%
+  \begin{aligned}[t]
+    &\BaseOK{b}\dsep \ell\in\mathbb{N}\dsep
+      \DigitSeq{b}{a}{\ell}\vdash{}\\
+    &\BaseNum{b}{a}{\ell}\coloneqq
+      \PlaceVal{b}{a}{\Succ(\ell)}
+  \end{aligned}
+}{%
+  \BaseOK{b}\dsep \ell\in\mathbb{N}\dsep
+  \DigitSeq{b}{a}{\ell}\vdash
+  \BaseNum{b}{a}{\ell}\coloneqq
+  \PlaceVal{b}{a}{\Succ(\ell)}
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep \ell}%
+  \DeltaRow{Funktionensymbol}{\PlaceVal{b}{a}{\Succ(\ell)}}%
+  \DeltaRow{Neue Schreibweise}{\BaseNum{b}{a}{\ell}}%
+}
+
 Die rechte Ziffer \(a_0\) ist also die Einerstelle, \(a_1\) die \(b\)-Stelle,
-\(a_2\) die \(b^2\)-Stelle und so weiter. Eine Darstellung heißt
-\emph{normalisiert}, wenn entweder nur die einzelne Ziffer \(0\) auftritt
-oder die äußerste linke Ziffer von \(0\) verschieden ist. Führende Nullen
-ändern den Wert der Summe nicht und werden in normalisierten Darstellungen
-weggelassen.
+\(a_2\) die \(b^2\)-Stelle und so weiter. In formalen Beweisen steht
+\(\BaseNum{b}{a}{\ell}\) immer für die durch \(a\), \(b\) und \(\ell\)
+festgelegte Auswertung, nicht für eine unabhängige Zeichenkette.
+
+\section{Normalisierte Darstellungen}
+
+Eine Darstellung ist normalisiert, wenn vor der höchsten Stelle keine
+führende Null steht. Bei einer Darstellung mit nur einer Stelle ist auch die
+Ziffer \(0\) normalisiert.
+
+\FormulaDefDeltaR[Normalisierte Ziffernfolge]{%
+  \begin{aligned}[t]
+    &\BaseOK{b}\dsep \ell\in\mathbb{N}\vdash{}\\
+    &\NormDigitSeq{b}{a}{\ell}\coloneqq
+      \bigl(\DigitSeq{b}{a}{\ell}\land
+      (\ell=0\lor a(\ell)\neq 0)\bigr)
+  \end{aligned}
+}{%
+  \BaseOK{b}\dsep \ell\in\mathbb{N}\vdash
+  \NormDigitSeq{b}{a}{\ell}\coloneqq
+  \bigl(\DigitSeq{b}{a}{\ell}\land
+  (\ell=0\lor a(\ell)\neq 0)\bigr)
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep \ell}%
+  \DeltaRow{Neue Symbole}{\NormDigitSeq{b}{a}{\ell}}%
+}
+
+Führende Nullen ändern den Wert der Stellenwertsumme nicht; sie gehören
+deshalb nicht zu normalisierten Darstellungen mit mehr als einer Stelle.
 
 \section{Dualsystem}
 
 Das Dualsystem ist das \(b\)-adische Stellenwertsystem zur Basis \(2\). Seine
 Ziffernmenge ist
 \[
-  \mathcal D_2=\{d\in\mathbb{N}\mid d<2\}=\{0,1\}.
-\]
-Die beiden Ziffern \(0\) und \(1\) heißen im Dualsystem auch \emph{Bits}.
-Für jede endliche Bitfolge \(a_0,\ldots,a_\ell\in\{0,1\}\) gilt
-\[
-  (a_\ell a_{\ell-1}\cdots a_0)_2
+  \BinDigitSet
   =
-  \sum_{i<\Succ(\ell)} a_i\cdot 2^i.
+  \{d\in\mathbb{N}\mid d<2\}
+  =
+  \{0,1\}.
 \]
-Damit sind zum Beispiel
+Die beiden Ziffern \(0\) und \(1\) heißen im Dualsystem auch \emph{Bits}. Für
+binäre Ziffernfolgen verwenden wir das basisindizierte Symbol
+\(\BinDigitSeq{a}{\ell}\).
+
+\FormulaDefDeltaK[Binäre Ziffernfolge]{%
+  \ell\in\mathbb{N}\vdash
+  \BinDigitSeq{a}{\ell}\coloneqq \DigitSeq{2}{a}{\ell}%
+}{Binäre Ziffernfolge}{%
+  \DeltaRow{Mengen}{a\dsep \ell}%
+  \DeltaRow{Neue Symbole}{\BinDigitSeq{a}{\ell}}%
+}
+
+\FormulaDefDeltaK[Binäres Zahlzeichen]{%
+  \ell\in\mathbb{N}\dsep \BinDigitSeq{a}{\ell}\vdash
+  \BinNum{a}{\ell}\coloneqq \BaseNum{2}{a}{\ell}%
+}{Binäres Zahlzeichen}{%
+  \DeltaRow{Mengen}{a\dsep \ell}%
+  \DeltaRow{Neue Schreibweise}{\BinNum{a}{\ell}}%
+}
+
+Damit gilt für jede binäre Ziffernfolge \(\BinDigitSeq{a}{\ell}\):
 \[
-  (0)_2=0,\qquad
-  (1)_2=1,\qquad
-  (10)_2=2,\qquad
-  (101)_2=1\cdot 2^2+0\cdot 2^1+1\cdot 2^0.
+  \BinNum{a}{\ell}
+  =
+  \sum_{i<\Succ(\ell)} a(i)\cdot 2^i.
+\]
+Zum Beispiel sind
+\[
+  \BinDigitString{0}=0,\qquad
+  \BinDigitString{1}=1,\qquad
+  \BinDigitString{10}=2,\qquad
+  \BinDigitString{101}=1\cdot 2^2+0\cdot 2^1+1\cdot 2^0.
 \]
 
 \section{Dezimalsystem}
 
 Das Dezimalsystem ist das \(b\)-adische Stellenwertsystem zur Basis \(10\).
-Seine Ziffernmenge ist
+Da dieses System im Folgenden das Standardsystem für die gewöhnliche
+Schreibweise natürlicher Zahlen ist, erhalten seine Ziffernmenge,
+Ziffernfolgen und Zahlzeichen Symbole ohne Basisindex \(10\).
+
+\FormulaDefDeltaK[Dezimale Ziffernmenge]{%
+  \DecDigitSet\coloneqq \DigitSet{10}%
+}{Dezimale Ziffernmenge}{%
+  \DeltaRow{Mengen}{10}%
+  \DeltaRow{Neue Symbole}{\DecDigitSet}%
+}
+
+Damit ist
 \[
-  \mathcal D_{10}
+  \DecDigitSet
   =
   \{d\in\mathbb{N}\mid d<10\}
   =
@@ -28796,19 +28901,43 @@ Die Ziffern des Dezimalsystems sind also genau die zehn Zeichen
 \[
   0,\ 1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9.
 \]
-Für Dezimalziffern \(a_0,\ldots,a_\ell\in\mathcal D_{10}\) gilt
+
+\FormulaDefDeltaK[Dezimale Ziffernfolge]{%
+  \ell\in\mathbb{N}\vdash
+  \DecDigitSeq{a}{\ell}\coloneqq \DigitSeq{10}{a}{\ell}%
+}{Dezimale Ziffernfolge}{%
+  \DeltaRow{Mengen}{a\dsep \ell}%
+  \DeltaRow{Neue Symbole}{\DecDigitSeq{a}{\ell}}%
+}
+
+\FormulaDefDeltaK[Dezimale Stellenwertauswertung]{%
+  n\in\mathbb{N}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep
+  \forall i<n\,a(i)\in\DecDigitSet\vdash
+  \DecPlaceVal{a}{n}\coloneqq \PlaceVal{10}{a}{n}%
+}{Dezimale Stellenwertauswertung}{%
+  \DeltaRow{Mengen}{a\dsep n\dsep i}%
+  \DeltaRow{Funktionensymbol}{\DecPlaceVal{a}{n}}%
+}
+
+\FormulaDefDeltaK[Dezimales Zahlzeichen]{%
+  \ell\in\mathbb{N}\dsep \DecDigitSeq{a}{\ell}\vdash
+  \DecNum{a}{\ell}\coloneqq \BaseNum{10}{a}{\ell}%
+}{Dezimales Zahlzeichen}{%
+  \DeltaRow{Mengen}{a\dsep \ell}%
+  \DeltaRow{Neue Schreibweise}{\DecNum{a}{\ell}}%
+}
+
+Für jede dezimale Ziffernfolge \(\DecDigitSeq{a}{\ell}\) gilt folglich
 \[
-  (a_\ell a_{\ell-1}\cdots a_0)_{10}
+  \DecNum{a}{\ell}
   =
-  \sum_{i<\Succ(\ell)} a_i\cdot 10^i.
+  \sum_{i<\Succ(\ell)} a(i)\cdot 10^i.
 \]
-Da dieses System im Folgenden das natürliche Zahlensystem für die gewöhnliche
-Schreibweise natürlicher Zahlen ist, lassen wir den Index \(10\) weg, sobald
-keine Verwechslungsgefahr besteht:
+Das sichtbare Zahlzeichen trägt im Dezimalsystem keinen Basisindex:
 \[
-  a_\ell a_{\ell-1}\cdots a_0
-  \quad\coloneqq\quad
-  (a_\ell a_{\ell-1}\cdots a_0)_{10}.
+  \DecNum{a}{\ell}
+  \quad\text{steht für}\quad
+  \BaseNum{10}{a}{\ell}.
 \]
 
 \chapter{Ende}
