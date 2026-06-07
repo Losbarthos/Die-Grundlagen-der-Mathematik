@@ -28264,6 +28264,29 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
   \DeltaRow{Neue Symbole}{\prod}%
 }
 
+\FormulaThmDelta[Abgeschlossenheit des Produktzeichens]{%
+  u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  \prod_{i<n}u(i)\in\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{u\dsep n\dsep i}%
+  \DeltaRow{Funktionensymbole}{\ProdStep{u}\dsep P_u}%
+}
+\begin{tabproof}
+  \proofstep{1}{u\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{P_u(n)\in\mathbb{N}\times\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
+      P_u(m)\in\mathbb{N}\times\mathbb{N}}{1,2}}
+  \proofstep{1,2}{\pi_2\bigl(P_u(n)\bigr)\in\mathbb{N}}{%
+    \FormulaRefAuto{z\in A\times B \vdash \pi_2(z)\in B}{3}}
+  \proofstep{1,2}{%
+    \prod_{i<n}u(i)=\pi_2\bigl(P_u(n)\bigr)}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \prod_{i<n}u(i)\coloneqq
+      \pi_2\bigl(P_u(n)\bigr)}{1,2}}
+  \proofstep{1,2}{\prod_{i<n}u(i)\in\mathbb{N}}{\rIE{5,4}}
+\end{tabproof}
+
 \FormulaThmDelta[Wert des Produktschritts am Zustand]{%
   u\colon\mathbb{N}\to\mathbb{N}\dsep z\in\mathbb{N}\times\mathbb{N}\vdash
   \ProdStep{u}(z)=
@@ -28580,6 +28603,29 @@ Anfangsabschnitten natürlicher Folgen beruhen. Als konstante Folge mit Wert
   \DeltaRow{Neue Symbole}{(\,\cdot\,)^{(\,\cdot\,)}}%
 }
 
+\FormulaThmDelta[Abgeschlossenheit der Potenz natürlicher Zahlen]{%
+  b\in\mathbb{N}\dsep n\in\mathbb{N}\vdash b^n\in\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{b\dsep n\dsep i}%
+  \DeltaRow{Funktionensymbol}{\ConstFun{\mathbb{N}}{\mathbb{N}}{b}}%
+}
+\begin{tabproof}
+  \proofstep{1}{b\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{%
+    \ConstFun{\mathbb{N}}{\mathbb{N}}{b}\colon\mathbb{N}\to\mathbb{N}}{%
+    \FormulaRefAuto{b\in B\vdash \ConstFun{A}{B}{b}\colon A\to B}{1}}
+  \proofstep{1,2}{%
+    b^n=\prod_{i<n}\ConstFun{\mathbb{N}}{\mathbb{N}}{b}(i)}{%
+    \FormulaRefAuto{b\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      b^n\coloneqq \prod_{i<n}\ConstFun{\mathbb{N}}{\mathbb{N}}{b}(i)}{1,2}}
+  \proofstep{1,2}{%
+    \prod_{i<n}\ConstFun{\mathbb{N}}{\mathbb{N}}{b}(i)\in\mathbb{N}}{%
+    \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      \prod_{i<n}u(i)\in\mathbb{N}}{3,2}}
+  \proofstep{1,2}{b^n\in\mathbb{N}}{\rIE{4,5}}
+\end{tabproof}
+
 Damit sind die Rekursionsgleichungen für Potenzen nur die Produktgleichungen
 für konstante Folgen. Wir formulieren sie als eigene Sätze, weil sie die
 Rekursionsform der Potenznotation festhalten.
@@ -28717,6 +28763,19 @@ Eine Basis eines Stellenwertsystems ist eine natürliche Zahl, die mindestens
   \DeltaRow{Neue Symbole}{\BaseOK{b}}%
 }
 
+\FormulaThmDelta[Basis ist natürliche Zahl]{%
+  \BaseOK{b}\vdash b\in\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{b}%
+  \DeltaRow{Symbol}{\BaseOK{b}}%
+}
+\begin{tabproof}
+  \proofstep{1}{\BaseOK{b}}{\rA}
+  \proofstep{1}{b\in\mathbb{N}\land 2\leq b}{%
+    \FormulaRefAuto{\BaseOK{b}\coloneqq b\in\mathbb{N}\land 2\leq b}{1}}
+  \proofstep{1}{b\in\mathbb{N}}{\rAEa{2}}
+\end{tabproof}
+
 Die zulässigen Ziffern zur Basis \(b\) sind genau die natürlichen Zahlen, die
 echt kleiner als \(b\) sind.
 
@@ -28755,9 +28814,83 @@ Parameter \(\ell\) bezeichnet also die höchste Stelle, nicht die Länge.
 }
 
 Das Summenzeichen wurde oben für Folgen \(u\colon\mathbb{N}\to\mathbb{N}\)
-eingeführt. Damit die Stellenwertsumme genau in diese Form fällt, führen wir
-zuerst die Stellenwertfolge \(\PlaceTermSeq{b}{a}\) ein. Ihr \(i\)-tes Glied
-ist der Beitrag der \(i\)-ten Ziffer zur Basis \(b\).
+eingeführt. Damit die Stellenwertsumme genau in diese Form fällt, trennen wir
+wie bei Summen- und Produktschritten zunächst die punktweise Vorschrift von
+der durch sie bestimmten Funktion.
+
+\FormulaDefDeltaK[Funktionsvorschrift der Stellenwertfolge]{%
+  \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep i\in\mathbb{N}\vdash
+  \tPlaceTermSeq{b}{a}(i)\coloneqq a(i)\cdot b^i%
+}{Funktionsvorschrift der Stellenwertfolge}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep i}%
+  \DeltaRow{Funktionensymbol}{\tPlaceTermSeq{b}{a}}%
+}
+
+\FormulaThmDelta[Typisierung des Stellenwertterms]{%
+  \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep i\in\mathbb{N}
+  \vdash \tPlaceTermSeq{b}{a}(i)\in\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep i}%
+  \DeltaRow{Funktionensymbol}{\tPlaceTermSeq{b}{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{\BaseOK{b}}{\rA}
+  \proofstep{2}{a\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{3}{i\in\mathbb{N}}{\rA}
+  \proofstep{1}{b\in\mathbb{N}}{%
+    \FormulaRefAuto{\BaseOK{b}\vdash b\in\mathbb{N}}{1}}
+  \proofstep{2,3}{a(i)\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,3}}
+  \proofstep{1,3}{b^i\in\mathbb{N}}{%
+    \FormulaRefAuto{b\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      b^n\in\mathbb{N}}{4,3}}
+  \proofstep{1,2,3}{a(i)\cdot b^i\in\mathbb{N}}{%
+    \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
+      a\cdot b\in\mathbb{N}}{5,6}}
+  \proofstep{1,2,3}{\tPlaceTermSeq{b}{a}(i)=a(i)\cdot b^i}{%
+    \FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep
+      i\in\mathbb{N}\vdash
+      \tPlaceTermSeq{b}{a}(i)\coloneqq a(i)\cdot b^i}{1,2,3}}
+  \proofstep{1,2,3}{\tPlaceTermSeq{b}{a}(i)\in\mathbb{N}}{\rIE{8,7}}
+\end{tabproof}
+
+\FormulaThmDelta[Existenz der Stellenwertfolge zur Basis \(b\)]{%
+  \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\vdash
+  \exists! w\colon\mathbb{N}\to\mathbb{N}\,
+  \forall i\in\mathbb{N}\,w(i)=\tPlaceTermSeq{b}{a}(i)%
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep i}%
+  \DeltaRow{Funktionensymbol}{\tPlaceTermSeq{b}{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{\BaseOK{b}}{\rA}
+  \proofstep{2}{a\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{3}{i\in\mathbb{N}}{\rA}
+  \proofstep{1,2,3}{\tPlaceTermSeq{b}{a}(i)=a(i)\cdot b^i}{%
+    \FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep
+      i\in\mathbb{N}\vdash
+      \tPlaceTermSeq{b}{a}(i)\coloneqq a(i)\cdot b^i}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall i\in\mathbb{N}\,\tPlaceTermSeq{b}{a}(i)=a(i)\cdot b^i}{%
+    \rUI{\rRI{3,4}}}
+  \proofstep{1,2,3}{\tPlaceTermSeq{b}{a}(i)\in\mathbb{N}}{%
+    \FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep
+      i\in\mathbb{N}\vdash
+      \tPlaceTermSeq{b}{a}(i)\in\mathbb{N}}{1,2,3}}
+  \proofstep{1,2}{%
+    \forall i\in\mathbb{N}\,\tPlaceTermSeq{b}{a}(i)\in\mathbb{N}}{%
+    \rUI{\rRI{3,6}}}
+  \proofstep{1,2}{%
+    \exists! w\colon\mathbb{N}\to\mathbb{N}\,
+    \forall i\in\mathbb{N}\,w(i)=\tPlaceTermSeq{b}{a}(i)}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{5,7}}
+\end{tabproof}
+
+Die Stellenwertfolge \(\PlaceTermSeq{b}{a}\) ist die durch diese Vorschrift
+eindeutig bestimmte Folge. Ihr \(i\)-tes Glied ist der Beitrag der \(i\)-ten
+Ziffer zur Basis \(b\).
 
 \FormulaDefDeltaR[Stellenwertfolge zur Basis \(b\)]{%
   \begin{aligned}[t]
@@ -28765,20 +28898,67 @@ ist der Beitrag der \(i\)-ten Ziffer zur Basis \(b\).
     &\PlaceTermSeq{b}{a}\coloneqq \iota w\Bigl(
       w\colon\mathbb{N}\to\mathbb{N}\land{}\\
     &\qquad \forall i\in\mathbb{N}\,
-      w(i)=a(i)\cdot b^i
+      w(i)=\tPlaceTermSeq{b}{a}(i)
     \Bigr)
   \end{aligned}
 }{%
   \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\vdash
   \PlaceTermSeq{b}{a}\coloneqq \iota w\Bigl(
     w\colon\mathbb{N}\to\mathbb{N}\land
-    \forall i\in\mathbb{N}\,w(i)=a(i)\cdot b^i
+    \forall i\in\mathbb{N}\,w(i)=\tPlaceTermSeq{b}{a}(i)
   \Bigr)
 }{%
   \DeltaRow{Mengen}{b\dsep i}%
   \DeltaRow{Funktionen}{a\dsep w}%
+  \DeltaRow{Funktionensymbole}{\tPlaceTermSeq{b}{a}\dsep \PlaceTermSeq{b}{a}}%
+}
+
+\FormulaThmDelta[Stellenwertfolge ist eine Folge natürlicher Zahlen]{%
+  \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\vdash
+  \PlaceTermSeq{b}{a}\colon\mathbb{N}\to\mathbb{N}%
+}{%
+  \DeltaRow{Mengen}{a\dsep b}%
   \DeltaRow{Funktionensymbol}{\PlaceTermSeq{b}{a}}%
 }
+\begin{tabproof}
+  \proofstep{1}{\BaseOK{b}}{\rA}
+  \proofstep{2}{a\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{1,2}{\PlaceTermSeq{b}{a}\colon\mathbb{N}\to\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\vdash
+      \PlaceTermSeq{b}{a}\coloneqq \iota w\Bigl(
+        w\colon\mathbb{N}\to\mathbb{N}\land
+        \forall i\in\mathbb{N}\,w(i)=\tPlaceTermSeq{b}{a}(i)
+      \Bigr)}{1,2}}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Stellenwertfolge]{%
+  \BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep i\in\mathbb{N}\vdash
+  \PlaceTermSeq{b}{a}(i)=a(i)\cdot b^i%
+}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep i}%
+  \DeltaRow{Funktionensymbole}{\tPlaceTermSeq{b}{a}\dsep \PlaceTermSeq{b}{a}}%
+}
+\begin{tabproof}
+  \proofstep{1}{\BaseOK{b}}{\rA}
+  \proofstep{2}{a\colon\mathbb{N}\to\mathbb{N}}{\rA}
+  \proofstep{3}{i\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{%
+    \forall i\in\mathbb{N}\,
+    \PlaceTermSeq{b}{a}(i)=\tPlaceTermSeq{b}{a}(i)}{%
+    \rAEb{\FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\vdash
+      \PlaceTermSeq{b}{a}\coloneqq \iota w\Bigl(
+        w\colon\mathbb{N}\to\mathbb{N}\land
+        \forall i\in\mathbb{N}\,w(i)=\tPlaceTermSeq{b}{a}(i)
+      \Bigr)}{1,2}}}
+  \proofstep{1,2,3}{\PlaceTermSeq{b}{a}(i)=\tPlaceTermSeq{b}{a}(i)}{%
+    \rRE{3,\rUE{4}}}
+  \proofstep{1,2,3}{\tPlaceTermSeq{b}{a}(i)=a(i)\cdot b^i}{%
+    \FormulaRefAuto{\BaseOK{b}\dsep a\colon\mathbb{N}\to\mathbb{N}\dsep
+      i\in\mathbb{N}\vdash
+      \tPlaceTermSeq{b}{a}(i)\coloneqq a(i)\cdot b^i}{1,2,3}}
+  \proofstep{1,2,3}{\PlaceTermSeq{b}{a}(i)=a(i)\cdot b^i}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
+\end{tabproof}
 
 Hat eine Ziffernfolge die betrachtete Länge \(n\), so wird ihr Wert durch die
 endliche Summe über die Stellenwertfolge bestimmt. Die Schreibweise
