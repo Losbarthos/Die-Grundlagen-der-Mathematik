@@ -15617,6 +15617,32 @@ Stufe \(n\) mit \(k<n\).
     \FormulaRefAuto{P_1\lor P_2\lor P_3\dsep [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\vdash R}{3,4,6,7,9,10,13}}
 \end{tabproof}
 
+\FormulaThmDelta[Transitivität der natürlichen Ordnung]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep
+  m\leq n\dsep n\leq k\vdash m\leq k%
+}{%
+  \DeltaRow{Mengen}{k\dsep m\dsep n}%
+  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{3}{k\in\mathbb{N}}{\rA}
+  \proofstep{4}{m\leq n}{\rA}
+  \proofstep{5}{n\leq k}{\rA}
+  \proofstep{1,2,4}{m\subseteq n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+    m\leq n \leftrightarrow m\subseteq n}{1,2,4}}
+  \proofstep{2,3,5}{n\subseteq k}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+    m\leq n \leftrightarrow m\subseteq n}{2,3,5}}
+  \proofstep{1,2,3,4,5}{m\subseteq k}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{6,7}}
+  \proofstep{1,2,3,4,5}{m\leq k}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+    m\leq n \leftrightarrow m\subseteq n}{1,3,8}}
+\end{tabproof}
+
 \FormulaThmDelta[Totale Ordnung der natürlichen Zahlen]{%
   \TotOrd{\leq_{\mathbb{N}},\mathbb{N}}%
 }{%
@@ -15629,8 +15655,12 @@ Stufe \(n\) mit \(k<n\).
     [\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}]
   \DeltaRow{Antisymmetrie}{m\leq n\dsep n\leq m\vdash m=n}
     [\FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}]
-  \DeltaRow{Transitivität}{m\leq n\dsep n\leq k\vdash m\leq k}
-    [\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}]
+  \DeltaRow{Transitivität}{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep
+    m\leq n\dsep n\leq k\vdash m\leq k}
+    [\FormulaRefAuto{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep
+    m\leq n\dsep n\leq k\vdash m\leq k}]
 }{}
 
 
@@ -24971,245 +25001,375 @@ Kardinalzahlen einer endlichen Familie bestimmt.
     \exists X\in\mathcal B\, n=\tCard(X)\}}{7}}
 \end{tabproof}
 
-\FormulaThmDelta[Typisierung der Kardinalwertabbildung]{%
-  \forall X\in\mathcal B\,\Finite{X}
-  \vdash
-  \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}
+\FormulaDefDeltaK[Funktionsvorschrift der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
+  \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)
+}{Funktionsvorschrift der Kardinalwertabbildung}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
+  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
+  \DeltaRow{Termsymbol}{\tCard}
+}
+
+\FormulaThmDelta[Typisierung der Funktionsvorschrift der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
+  \vdash \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}
 }{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X}
-  \DeltaRow{Funktionen}{\Graph(\tCard)}
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
+  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
   \DeltaRow{Termsymbol}{\tCard}
 }
 \begin{tabproof}
-  \proofstep{1}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
+  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
   \proofstep{2}{X\in\mathcal B}{\rA}
   \proofstep{1,2}{\Finite{X}}{\rRE{2,\rUE{1}}}
   \proofstep{1,2}{\tCard(X)\in\CardValues{\mathcal B}}{%
     \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
     \vdash \tCard(X)\in\CardValues{\mathcal B}}{2,3}}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \tCard(X)\in\CardValues{\mathcal B}}{\rUI{\rRI{2,4}}}
-  \proofstep{1}{\Graph(\tCard)\colon\mathcal B\to
-    \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall u\in A\,F(u)\in B
-    \vdash \Graph(F)\colon A\to B}{5}}
+  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
+    X\in\mathcal B
+    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
+  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)\in
+    \CardValues{\mathcal B}}{\rIE{5,4}}
 \end{tabproof}
 
-\FormulaThmDelta[Bild der Kardinalwertabbildung]{%
-  \forall X\in\mathcal B\,\Finite{X}
+\FormulaThmDelta[Existenz der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}
   \vdash
-  \Graph(\tCard)[\mathcal B]=\CardValues{\mathcal B}
+  \exists! F\colon\mathcal B\to\CardValues{\mathcal B}\,
+  \forall X\in\mathcal B\,F(X)=\tCardValMap{\mathcal B}(X)
 }{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
-  \DeltaRow{Funktionen}{\Graph(\tCard)}
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
+  \proofstep{2}{X\in\mathcal B}{\rA}
+  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
+    X\in\mathcal B
+    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \tCardValMap{\mathcal B}(X)=\tCard(X)}{\rUI{\rRI{2,3}}}
+  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)\in
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
+    X\in\mathcal B
+    \vdash \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}}{1,2}}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}}{%
+    \rUI{\rRI{2,5}}}
+  \proofstep{1}{%
+    \exists! F\colon\mathcal B\to\CardValues{\mathcal B}\,
+    \forall X\in\mathcal B\,F(X)=\tCardValMap{\mathcal B}(X)}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{4,6}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}\vdash
+  \CardValMap{\mathcal B}\coloneqq
+  \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
+  \forall X\in\mathcal B\,
+  F(X)=\tCardValMap{\mathcal B}(X)\Bigr)
+}{Kardinalwertabbildung}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
+  \DeltaRow{Funktionen}{F\dsep \CardValMap{\mathcal B}}
+  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
+  \DeltaRow{Neue Symbole}{\CardValMap{\mathcal B}}
+}
+
+\FormulaThmDelta[Typisierung der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}
+  \vdash
+  \CardValMap{\mathcal B}\colon\mathcal B\to\CardValues{\mathcal B}
+}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep Y}
+  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
+  \proofstep{1}{\CardValMap{\mathcal B}\colon
+    \mathcal B\to\CardValues{\mathcal B}}{%
+    \rAEa{\FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\vdash
+    \CardValMap{\mathcal B}\coloneqq
+    \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
+    \forall X\in\mathcal B\,
+    F(X)=\tCardValMap{\mathcal B}(X)\Bigr)}{1}}}
+\end{tabproof}
+
+\FormulaThmDelta[Wert der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
+  \vdash \CardValMap{\mathcal B}(X)=\tCard(X)
+}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
+  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
+  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
   \DeltaRow{Termsymbol}{\tCard}
 }
 \begin{tabproof}
-  \proofstep{1}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
-  \proofstep{1}{\Graph(\tCard)\colon\mathcal B\to
+  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
+  \proofstep{2}{X\in\mathcal B}{\rA}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \CardValMap{\mathcal B}(X)=\tCardValMap{\mathcal B}(X)}{%
+    \rAEb{\FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\vdash
+    \CardValMap{\mathcal B}\coloneqq
+    \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
+    \forall X\in\mathcal B\,
+    F(X)=\tCardValMap{\mathcal B}(X)\Bigr)}{1}}}
+  \proofstep{1,2}{\CardValMap{\mathcal B}(X)=
+    \tCardValMap{\mathcal B}(X)}{\rRE{2,\rUE{3}}}
+  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
+    X\in\mathcal B
+    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
+  \proofstep{1,2}{\CardValMap{\mathcal B}(X)=\tCard(X)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproof}
+
+\FormulaThmDelta[Bild der Kardinalwertabbildung]{%
+  \forall Y\in\mathcal B\,\Finite{Y}
+  \vdash
+  \CardValMap{\mathcal B}[\mathcal B]=\CardValues{\mathcal B}
+}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y\dsep n}
+  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
+  \DeltaRow{Termsymbol}{\tCard}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
+  \proofstep{1}{\CardValMap{\mathcal B}\colon\mathcal B\to
     \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
     \vdash
-    \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}}{1}}
-  \proofstep{1}{\Graph(\tCard)[\mathcal B]\subseteq
+    \CardValMap{\mathcal B}\colon\mathcal B\to
+    \CardValues{\mathcal B}}{1}}
+  \proofstep{1}{\CardValMap{\mathcal B}[\mathcal B]\subseteq
     \CardValues{\mathcal B}}{%
     \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{2}}
-  \proofstep{4}{X\in\mathcal B}{\rA}
-  \proofstep{1,4}{\Finite{X}}{\rRE{4,\rUE{1}}}
-  \proofstep{1,4}{\tCard(X)\in\CardValues{\mathcal B}}{%
-    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}{4,5}}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \tCard(X)\in\CardValues{\mathcal B}}{\rUI{\rRI{4,6}}}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \Graph(\tCard)(X)=\tCard(X)}{%
-    \FormulaRefAuto{\forall u\in A\,F(u)\in B
-    \vdash \forall x\in A\,\Graph(F)(x) = F(x)}{7}}
 
-  \proofstep{9}{n\in\CardValues{\mathcal B}}{\rA}
-  \proofstep{9}{%
+  \proofstep{4}{n\in\CardValues{\mathcal B}}{\rA}
+  \proofstep{4}{%
     n\in\mathbb{N}\land
     \exists X\in\mathcal B\, n=\tCard(X)}{%
     \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
     \{n\in\mathbb{N}\mid
-    \exists X\in\mathcal B\, n=\tCard(X)\}}{9}}
-  \proofstep{9}{\exists X\in\mathcal B\, n=\tCard(X)}{\rAEb{10}}
-  \proofstep{12}{X\in\mathcal B\land n=\tCard(X)}{\rA}
-  \proofstep{12}{X\in\mathcal B}{\rAEa{12}}
-  \proofstep{12}{n=\tCard(X)}{\rAEb{12}}
-  \proofstep{1,12}{\Graph(\tCard)(X)=\tCard(X)}{\rRE{13,\rUE{8}}}
-  \proofstep{1,12}{n=\Graph(\tCard)(X)}{%
-    \FormulaRefAuto{a = b,\, c = b \vdash a = c}{14,15}}
-  \proofstep{1,12}{\exists X\in\mathcal B\,
-    n=\Graph(\tCard)(X)}{\rEI{\rAI{13,16}}}
-  \proofstep{1,12}{n\in\Graph(\tCard)[\mathcal B]}{%
+    \exists X\in\mathcal B\, n=\tCard(X)\}}{4}}
+  \proofstep{4}{\exists X\in\mathcal B\, n=\tCard(X)}{\rAEb{5}}
+  \proofstep{7}{X\in\mathcal B\land n=\tCard(X)}{\rA}
+  \proofstep{7}{X\in\mathcal B}{\rAEa{7}}
+  \proofstep{7}{n=\tCard(X)}{\rAEb{7}}
+  \proofstep{1,7}{\CardValMap{\mathcal B}(X)=\tCard(X)}{%
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
+    X\in\mathcal B
+    \vdash \CardValMap{\mathcal B}(X)=\tCard(X)}{1,8}}
+  \proofstep{1,7}{n=\CardValMap{\mathcal B}(X)}{%
+    \FormulaRefAuto{a = b,\, c = b \vdash a = c}{9,10}}
+  \proofstep{1,7}{\exists X\in\mathcal B\,
+    n=\CardValMap{\mathcal B}(X)}{\rEI{\rAI{8,11}}}
+  \proofstep{1,7}{n\in\CardValMap{\mathcal B}[\mathcal B]}{%
     \FormulaRefAuto{F\colon A\to B\dsep
-    \exists x\in A\,y=F(x)\vdash y\in F[A]}{2,17}}
-  \proofstep{1,9}{n\in\Graph(\tCard)[\mathcal B]}{\rEE{11,12,18}}
+    \exists x\in A\,y=F(x)\vdash y\in F[A]}{2,12}}
+  \proofstep{1,4}{n\in\CardValMap{\mathcal B}[\mathcal B]}{%
+    \rEE{6,7,13}}
   \proofstep{1}{\CardValues{\mathcal B}\subseteq
-    \Graph(\tCard)[\mathcal B]}{%
+    \CardValMap{\mathcal B}[\mathcal B]}{%
     \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{9,19}}}}
-  \proofstep{1}{\Graph(\tCard)[\mathcal B]=
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{4,14}}}}
+  \proofstep{1}{\CardValMap{\mathcal B}[\mathcal B]=
     \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A \vdash A=B}{3,20}}
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A \vdash A=B}{3,15}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Kardinalwertmenge einer endlichen Familie ist endlich]{%
+\FormulaThmDelta[Kardinalwertmenge einer endlichen Familie ist endlich]{%
   \Finite{\mathcal B}\dsep \forall X\in\mathcal B\,\Finite{X}
   \vdash \Finite{\CardValues{\mathcal B}}
-}{EndlicheKardinalwertmenge}{%
+}{%
   \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
+  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
   \DeltaRow{Termsymbol}{\tCard}
-  \DeltaRow{\textbf{Begründung}}{}
-  \DeltaRow{Endliche Ausgangsfamilie}{\Finite{\mathcal B}}
-  \DeltaRow{Kardinalzahlwerte}{%
-    \begin{aligned}[t]
-      &X\in\mathcal B\dsep \Finite{X}\\
-      &\vdash \tCard(X)\in\CardValues{\mathcal B}
-    \end{aligned}}
-    [\FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}]
-  \DeltaRow{Endliche Bilder}{%
-    \begin{aligned}[t]
-      &C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}\\
-      &\vdash \Finite{F[C]}
-    \end{aligned}}
-    [\FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}}]
-}{}
+}
 \begin{tabproof}
   \proofstep{1}{\Finite{\mathcal B}}{\rA}
   \proofstep{2}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
-  \proofstep{2}{\Graph(\tCard)\colon\mathcal B\to
+  \proofstep{2}{\CardValMap{\mathcal B}\colon\mathcal B\to
     \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
     \vdash
-    \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}}{2}}
+    \CardValMap{\mathcal B}\colon\mathcal B\to
+    \CardValues{\mathcal B}}{2}}
   \proofstep{}{\mathcal B\subseteq\mathcal B}{%
     \FormulaRefAuto{A\subseteq A}}
-  \proofstep{1,2}{\Finite{\Graph(\tCard)[\mathcal B]}}{%
+  \proofstep{1,2}{\Finite{\CardValMap{\mathcal B}[\mathcal B]}}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}
     \vdash \Finite{F[C]}}{4,3,1}}
-  \proofstep{2}{\Graph(\tCard)[\mathcal B]=
+  \proofstep{2}{\CardValMap{\mathcal B}[\mathcal B]=
     \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
     \vdash
-    \Graph(\tCard)[\mathcal B]=\CardValues{\mathcal B}}{2}}
+    \CardValMap{\mathcal B}[\mathcal B]=
+    \CardValues{\mathcal B}}{2}}
   \proofstep{1,2}{\Finite{\CardValues{\mathcal B}}}{\rIE{6,5}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Endliche nichtleere Mengen natuerlicher Zahlen besitzen ein Maximum]{%
+\FormulaThmDelta[Endliche nichtleere Mengen natuerlicher Zahlen besitzen ein Maximum]{%
   C\subseteq\mathbb{N}\dsep C\neq\varnothing\dsep \Finite{C}
   \vdash \exists m\in C\,\forall n\in C\,n\leq m
-}{EndlichesMaxNat}{%
+}{%
   \DeltaRow{Mengen}{C\dsep m\dsep n}
   \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-  \DeltaRow{\textbf{Begründung}}{}
-  \DeltaRow{Wohlordnung}{%
-    \begin{aligned}[t]
-      &B\subseteq\mathbb{N}\dsep B\neq\varnothing\\
-      &\vdash \exists a\in B\,\forall b\in B\,a\leq b
-    \end{aligned}}
-    [\FormulaRefAuto{B\subseteq\mathbb{N}\dsep B\neq\varnothing \vdash \exists a\in B\,\forall b\in B\,a\leq b}]
-  \DeltaRow{Endliche Induktion}{\Finite{C}}
-  \DeltaRow{Totalität}{%
-    \begin{aligned}[t]
-      &m\in\mathbb{N}\dsep n\in\mathbb{N}\\
-      &\vdash m\leq n\lor n\leq m
-    \end{aligned}}
-    [\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}]
-}{}
+}
 \begin{tabproofsplitwide}
   \proofpartwideind[Induktionsanfang]{%
-    C=\varnothing\dsep C\neq\varnothing
-    \vdash \exists m\in C\,\forall n\in C\,n\leq m}
-    \proofstepwidestar[4]{C=\varnothing}{\rA}
-    \proofstepwidestar[5]{C\neq\varnothing}{\rA}
-    \proofstepwidestar[4,5]{\bot}{\rBI{4,5}}
-    \proofstepwidestar[4,5]{%
-      \exists m\in C\,\forall n\in C\,n\leq m}{%
-      \FormulaRefAuto{\bot\vdash P}{6}}
+    \varnothing=\varnothing\lor
+    \exists m\in\varnothing\,
+    \forall n\in\varnothing\,n\leq m}
+    \proofstepwidestar[]{\varnothing=\varnothing}{\rII}
+    \proofstepwidestar[]{%
+      \varnothing=\varnothing\lor
+      \exists m\in\varnothing\,
+      \forall n\in\varnothing\,n\leq m}{\rOIa{1}}
   \closeproofpartwideind
 
   \proofpartwideind[Adjunktionsschritt]{%
     \begin{aligned}[t]
       &D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
       a\notin D\dsep
-      \exists m\in D\,\forall n\in D\,n\leq m\\
+      \bigl(D=\varnothing\lor
+      \exists m\in D\,\forall n\in D\,n\leq m\bigr)\\
       &\vdash
+      D\cup\{a\}=\varnothing\lor{}\\
       \exists r\in D\cup\{a\}\,
       \forall n\in D\cup\{a\}\,n\leq r
     \end{aligned}}
     \proofstepwidestar[7]{D\subseteq\mathbb{N}}{\rA}
     \proofstepwidestar[8]{a\in\mathbb{N}}{\rA}
     \proofstepwidestar[9]{a\notin D}{\rA}
-    \proofstepwidestar[10]{\exists m\in D\,\forall n\in D\,n\leq m}{\rA}
-    \proofstepwidestar[11]{m\in D\land \forall n\in D\,n\leq m}{\rA}
-    \proofstepwidestar[11]{m\in D}{\rAEa{11}}
-    \proofstepwidestar[11]{\forall n\in D\,n\leq m}{\rAEb{11}}
-    \proofstepwidestar[7,11]{m\in\mathbb{N}}{%
-      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,12}}
-    \proofstepwidestar[7,8,11]{m\leq a\lor a\leq m}{%
-      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
-      m\leq n\lor n\leq m}{14,8}}
+    \proofstepwidestar[10]{%
+      D=\varnothing\lor
+      \exists m\in D\,\forall n\in D\,n\leq m}{\rA}
 
-    \proofstepwidestar[16]{m\leq a}{\rA}
-    \proofstepwidestar[17]{n\in D\cup\{a\}}{\rA}
-    \proofstepwidestar[17]{n\in D\lor n\in\{a\}}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{17}}
-    \proofstepwidestar[20]{n\in D}{\rA}
-    \proofstepwidestar[11,20]{n\leq m}{\rRE{20,\rUE{13}}}
-    \proofstepwidestar[7,20]{n\in\mathbb{N}}{%
-      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,20}}
-    \proofstepwidestar[7,8,11,16,20]{n\leq a}{%
-      \FormulaRefAuto{m\leq n\dsep n\leq k\vdash m\leq k}{21,16}}
-    \proofstepwidestar[24]{n\in\{a\}}{\rA}
-    \proofstepwidestar[24]{n=a}{%
-      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{24}}
-    \proofstepwidestar[8,24]{n\leq a}{%
-      \rIE{25,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{8}}}
-    \proofstepwidestar[7,8,11,16,17]{n\leq a}{\rOE{19,20,23,24,26}}
-    \proofstepwidestar[7,8,11,16]{%
-      \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{17,27}}}
+    \proofstepwidestar[11]{D=\varnothing}{\rA}
+    \proofstepwidestar[12]{n\in D\cup\{a\}}{\rA}
+    \proofstepwidestar[12]{n\in D\lor n\in\{a\}}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{12}}
+    \proofstepwidestar[14]{n\in D}{\rA}
+    \proofstepwidestar[11,14]{n\in\varnothing}{\rIE{11,14}}
+    \proofstepwidestar[]{n\notin\varnothing}{%
+      \FormulaRefAuto{x \not\in \varnothing}}
+    \proofstepwidestar[11,14]{\bot}{\rBI{15,16}}
+    \proofstepwidestar[11,14]{n\leq a}{%
+      \FormulaRefAuto{\bot\vdash P}{17}}
+    \proofstepwidestar[19]{n\in\{a\}}{\rA}
+    \proofstepwidestar[19]{n=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{19}}
+    \proofstepwidestar[8,19]{n\leq a}{%
+      \rIE{20,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{8}}}
+    \proofstepwidestar[8,11,12]{n\leq a}{\rOE{13,14,18,19,21}}
+    \proofstepwidestar[8,11]{%
+      \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{12,22}}}
     \proofstepwidestar[8]{a\in D\cup\{a\}}{%
       \FormulaRefAuto{a\in A\cup\{a\}}}
-    \proofstepwidestar[7,8,11,16]{%
+    \proofstepwidestar[8,11]{%
       \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{29,28}}}
-
-    \proofstepwidestar[31]{a\leq m}{\rA}
-    \proofstepwidestar[32]{n\in D\cup\{a\}}{\rA}
-    \proofstepwidestar[32]{n\in D\lor n\in\{a\}}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{32}}
-    \proofstepwidestar[35]{n\in D}{\rA}
-    \proofstepwidestar[11,35]{n\leq m}{\rRE{35,\rUE{13}}}
-    \proofstepwidestar[37]{n\in\{a\}}{\rA}
-    \proofstepwidestar[37]{n=a}{%
-      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{37}}
-    \proofstepwidestar[31,37]{n\leq m}{\rIE{38,31}}
-    \proofstepwidestar[11,31,32]{n\leq m}{\rOE{34,35,36,37,39}}
-    \proofstepwidestar[11,31]{%
-      \forall n\in D\cup\{a\}\,n\leq m}{\rUI{\rRI{32,40}}}
-    \proofstepwidestar[12]{m\in D\cup\{a\}}{%
-      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{12}}
-    \proofstepwidestar[11,31]{%
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{24,23}}}
+    \proofstepwidestar[8,11]{%
+      D\cup\{a\}=\varnothing\lor
       \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{42,41}}}
+      \forall n\in D\cup\{a\}\,n\leq r}{\rOIb{25}}
 
+    \proofstepwidestar[27]{%
+      \exists m\in D\,\forall n\in D\,n\leq m}{\rA}
+    \proofstepwidestar[28]{m\in D\land \forall n\in D\,n\leq m}{\rA}
+    \proofstepwidestar[28]{m\in D}{\rAEa{28}}
+    \proofstepwidestar[28]{\forall n\in D\,n\leq m}{\rAEb{28}}
+    \proofstepwidestar[7,28]{m\in\mathbb{N}}{%
+      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,29}}
+    \proofstepwidestar[7,8,28]{m\leq a\lor a\leq m}{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m\leq n\lor n\leq m}{31,8}}
+
+    \proofstepwidestar[33]{m\leq a}{\rA}
+    \proofstepwidestar[34]{n\in D\cup\{a\}}{\rA}
+    \proofstepwidestar[34]{n\in D\lor n\in\{a\}}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{34}}
+    \proofstepwidestar[37]{n\in D}{\rA}
+    \proofstepwidestar[28,37]{n\leq m}{\rRE{37,\rUE{30}}}
+    \proofstepwidestar[7,37]{n\in\mathbb{N}}{%
+      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,37}}
+    \proofstepwidestar[7,8,28,33,37]{n\leq a}{%
+      \FormulaRefAuto{%
+      m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep
+      m\leq n\dsep n\leq k\vdash m\leq k}{39,31,8,38,33}}
+    \proofstepwidestar[41]{n\in\{a\}}{\rA}
+    \proofstepwidestar[41]{n=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{41}}
+    \proofstepwidestar[8,41]{n\leq a}{%
+      \rIE{42,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{8}}}
+    \proofstepwidestar[7,8,28,33,34]{n\leq a}{\rOE{36,37,40,41,43}}
+    \proofstepwidestar[7,8,28,33]{%
+      \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{34,44}}}
+    \proofstepwidestar[8]{a\in D\cup\{a\}}{%
+      \FormulaRefAuto{a\in A\cup\{a\}}}
+    \proofstepwidestar[7,8,28,33]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{46,45}}}
+
+    \proofstepwidestar[48]{a\leq m}{\rA}
+    \proofstepwidestar[49]{n\in D\cup\{a\}}{\rA}
+    \proofstepwidestar[49]{n\in D\lor n\in\{a\}}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{49}}
+    \proofstepwidestar[52]{n\in D}{\rA}
+    \proofstepwidestar[28,52]{n\leq m}{\rRE{52,\rUE{30}}}
+    \proofstepwidestar[54]{n\in\{a\}}{\rA}
+    \proofstepwidestar[54]{n=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{54}}
+    \proofstepwidestar[48,54]{n\leq m}{\rIE{55,48}}
+    \proofstepwidestar[28,48,49]{n\leq m}{\rOE{51,52,53,54,56}}
+    \proofstepwidestar[28,48]{%
+      \forall n\in D\cup\{a\}\,n\leq m}{\rUI{\rRI{49,57}}}
+    \proofstepwidestar[29]{m\in D\cup\{a\}}{%
+      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{29}}
+    \proofstepwidestar[28,48]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{59,58}}}
+
+    \proofstepwidestar[7,8,28]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rOE{32,33,47,48,60}}
+    \proofstepwidestar[7,8,27]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEE{27,28,61}}
+    \proofstepwidestar[7,8,27]{%
+      D\cup\{a\}=\varnothing\lor
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rOIb{62}}
     \proofstepwidestar[7,8,10]{%
+      D\cup\{a\}=\varnothing\lor
       \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rEE{10,11,\rOE{15,16,30,31,43}}}
+      \forall n\in D\cup\{a\}\,n\leq r}{\rOE{10,11,26,27,63}}
   \closeproofpartwideind
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{C\subseteq\mathbb{N}}{\rA}
     \proofstepwidestar[2]{C\neq\varnothing}{\rA}
     \proofstepwidestar[3]{\Finite{C}}{\rA}
+    \proofstepwidestar[1,3]{%
+      C=\varnothing\lor
+      \exists m\in C\,\forall n\in C\,n\leq m}{%
+      \(\mathrm{Induktion}(IA,IS,3,1)\)}
+    \proofstepwidestar[5]{C=\varnothing}{\rA}
+    \proofstepwidestar[2,5]{\bot}{\rBI{5,2}}
+    \proofstepwidestar[2,5]{%
+      \exists m\in C\,\forall n\in C\,n\leq m}{%
+      \FormulaRefAuto{\bot\vdash P}{6}}
+    \proofstepwidestar[8]{%
+      \exists m\in C\,\forall n\in C\,n\leq m}{\rA}
     \proofstepwidestar[1,2,3]{%
       \exists m\in C\,\forall n\in C\,n\leq m}{%
-      \makecell[l]{%
-      Endliche Induktion über \(C\) mit den Teilen\\
-      Induktionsanfang und Adjunktionsschritt.}}
+      \rOE{4,5,7,8,8}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
