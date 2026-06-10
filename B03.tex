@@ -15086,6 +15086,20 @@ Aus \FormulaRefAuto{\varnothing\in\mathbb{N}} folgt, dass die Null in den natür
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n \coloneqq m\subseteq n}{1,2}}
 \end{tabproof}
 
+\FormulaThmDelta[Reflexivität der natürlichen Ordnung]{%
+  n\in\mathbb{N}\vdash n\leq n%
+}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{}{n\subseteq n}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{1}{n\leq n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+    m\leq n \leftrightarrow m\subseteq n}{1,1,2}}
+\end{tabproof}
+
 \FormulaThmDelta[Einführung in die natürliche Ordnungsrelation]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\leq n
   \vdash (m,n)\in \leq_{\mathbb{N}}%
@@ -24946,14 +24960,99 @@ Kardinalzahlen einer endlichen Familie bestimmt.
   \proofstep{2}{\tCard(X)\in\mathbb{N}}{%
     \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
   \proofstep{}{\tCard(X)=\tCard(X)}{\rII}
-  \proofstep{1}{\exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rEI{\rAI{1,4}}}
+  \proofstep{1}{X\in\mathcal B\land \tCard(X)=\tCard(X)}{\rAI{1,4}}
+  \proofstep{1}{\exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rEI{5}}
   \proofstep{1,2}{%
     \tCard(X)\in\mathbb{N}\land
-    \exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rAI{3,5}}
+    \exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rAI{3,6}}
   \proofstep{1,2}{\tCard(X)\in\CardValues{\mathcal B}}{%
     \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
     \{n\in\mathbb{N}\mid
-    \exists X\in\mathcal B\, n=\tCard(X)\}}{6}}
+    \exists X\in\mathcal B\, n=\tCard(X)\}}{7}}
+\end{tabproof}
+
+\FormulaThmDelta[Typisierung der Kardinalwertabbildung]{%
+  \forall X\in\mathcal B\,\Finite{X}
+  \vdash
+  \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}
+}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X}
+  \DeltaRow{Funktionen}{\Graph(\tCard)}
+  \DeltaRow{Termsymbol}{\tCard}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
+  \proofstep{2}{X\in\mathcal B}{\rA}
+  \proofstep{1,2}{\Finite{X}}{\rRE{2,\rUE{1}}}
+  \proofstep{1,2}{\tCard(X)\in\CardValues{\mathcal B}}{%
+    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
+    \vdash \tCard(X)\in\CardValues{\mathcal B}}{2,3}}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \tCard(X)\in\CardValues{\mathcal B}}{\rUI{\rRI{2,4}}}
+  \proofstep{1}{\Graph(\tCard)\colon\mathcal B\to
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{\forall u\in A\,F(u)\in B
+    \vdash \Graph(F)\colon A\to B}{5}}
+\end{tabproof}
+
+\FormulaThmDelta[Bild der Kardinalwertabbildung]{%
+  \forall X\in\mathcal B\,\Finite{X}
+  \vdash
+  \Graph(\tCard)[\mathcal B]=\CardValues{\mathcal B}
+}{%
+  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
+  \DeltaRow{Funktionen}{\Graph(\tCard)}
+  \DeltaRow{Termsymbol}{\tCard}
+}
+\begin{tabproof}
+  \proofstep{1}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
+  \proofstep{1}{\Graph(\tCard)\colon\mathcal B\to
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \vdash
+    \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}}{1}}
+  \proofstep{1}{\Graph(\tCard)[\mathcal B]\subseteq
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{2}}
+  \proofstep{4}{X\in\mathcal B}{\rA}
+  \proofstep{1,4}{\Finite{X}}{\rRE{4,\rUE{1}}}
+  \proofstep{1,4}{\tCard(X)\in\CardValues{\mathcal B}}{%
+    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
+    \vdash \tCard(X)\in\CardValues{\mathcal B}}{4,5}}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \tCard(X)\in\CardValues{\mathcal B}}{\rUI{\rRI{4,6}}}
+  \proofstep{1}{\forall X\in\mathcal B\,
+    \Graph(\tCard)(X)=\tCard(X)}{%
+    \FormulaRefAuto{\forall u\in A\,F(u)\in B
+    \vdash \forall x\in A\,\Graph(F)(x) = F(x)}{7}}
+
+  \proofstep{9}{n\in\CardValues{\mathcal B}}{\rA}
+  \proofstep{9}{%
+    n\in\mathbb{N}\land
+    \exists X\in\mathcal B\, n=\tCard(X)}{%
+    \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
+    \{n\in\mathbb{N}\mid
+    \exists X\in\mathcal B\, n=\tCard(X)\}}{9}}
+  \proofstep{9}{\exists X\in\mathcal B\, n=\tCard(X)}{\rAEb{10}}
+  \proofstep{12}{X\in\mathcal B\land n=\tCard(X)}{\rA}
+  \proofstep{12}{X\in\mathcal B}{\rAEa{12}}
+  \proofstep{12}{n=\tCard(X)}{\rAEb{12}}
+  \proofstep{1,12}{\Graph(\tCard)(X)=\tCard(X)}{\rRE{13,\rUE{8}}}
+  \proofstep{1,12}{n=\Graph(\tCard)(X)}{%
+    \FormulaRefAuto{a = b,\, c = b \vdash a = c}{14,15}}
+  \proofstep{1,12}{\exists X\in\mathcal B\,
+    n=\Graph(\tCard)(X)}{\rEI{\rAI{13,16}}}
+  \proofstep{1,12}{n\in\Graph(\tCard)[\mathcal B]}{%
+    \FormulaRefAuto{F\colon A\to B\dsep
+    \exists x\in A\,y=F(x)\vdash y\in F[A]}{2,17}}
+  \proofstep{1,9}{n\in\Graph(\tCard)[\mathcal B]}{\rEE{11,12,18}}
+  \proofstep{1}{\CardValues{\mathcal B}\subseteq
+    \Graph(\tCard)[\mathcal B]}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{9,19}}}}
+  \proofstep{1}{\Graph(\tCard)[\mathcal B]=
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A \vdash A=B}{3,20}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Kardinalwertmenge einer endlichen Familie ist endlich]{%
@@ -24962,18 +25061,42 @@ Kardinalzahlen einer endlichen Familie bestimmt.
 }{EndlicheKardinalwertmenge}{%
   \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
   \DeltaRow{Termsymbol}{\tCard}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
+  \DeltaRow{\textbf{Begründung}}{}
   \DeltaRow{Endliche Ausgangsfamilie}{\Finite{\mathcal B}}
   \DeltaRow{Kardinalzahlwerte}{%
-    X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}
+    \begin{aligned}[t]
+      &X\in\mathcal B\dsep \Finite{X}\\
+      &\vdash \tCard(X)\in\CardValues{\mathcal B}
+    \end{aligned}}
     [\FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
     \vdash \tCard(X)\in\CardValues{\mathcal B}}]
   \DeltaRow{Endliche Bilder}{%
-    C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}
-    \vdash \Finite{F[C]}}
+    \begin{aligned}[t]
+      &C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}\\
+      &\vdash \Finite{F[C]}
+    \end{aligned}}
     [\FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}}]
 }{}
+\begin{tabproof}
+  \proofstep{1}{\Finite{\mathcal B}}{\rA}
+  \proofstep{2}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
+  \proofstep{2}{\Graph(\tCard)\colon\mathcal B\to
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \vdash
+    \Graph(\tCard)\colon\mathcal B\to\CardValues{\mathcal B}}{2}}
+  \proofstep{}{\mathcal B\subseteq\mathcal B}{%
+    \FormulaRefAuto{A\subseteq A}}
+  \proofstep{1,2}{\Finite{\Graph(\tCard)[\mathcal B]}}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}
+    \vdash \Finite{F[C]}}{4,3,1}}
+  \proofstep{2}{\Graph(\tCard)[\mathcal B]=
+    \CardValues{\mathcal B}}{%
+    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
+    \vdash
+    \Graph(\tCard)[\mathcal B]=\CardValues{\mathcal B}}{2}}
+  \proofstep{1,2}{\Finite{\CardValues{\mathcal B}}}{\rIE{6,5}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Endliche nichtleere Mengen natuerlicher Zahlen besitzen ein Maximum]{%
   C\subseteq\mathbb{N}\dsep C\neq\varnothing\dsep \Finite{C}
@@ -24981,21 +25104,114 @@ Kardinalzahlen einer endlichen Familie bestimmt.
 }{EndlichesMaxNat}{%
   \DeltaRow{Mengen}{C\dsep m\dsep n}
   \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
+  \DeltaRow{\textbf{Begründung}}{}
   \DeltaRow{Wohlordnung}{%
-    B\subseteq\mathbb{N}\dsep B\neq\varnothing
-    \vdash \exists a\in B\,\forall b\in B\,a\leq b}
+    \begin{aligned}[t]
+      &B\subseteq\mathbb{N}\dsep B\neq\varnothing\\
+      &\vdash \exists a\in B\,\forall b\in B\,a\leq b
+    \end{aligned}}
     [\FormulaRefAuto{B\subseteq\mathbb{N}\dsep B\neq\varnothing \vdash \exists a\in B\,\forall b\in B\,a\leq b}]
   \DeltaRow{Endliche Induktion}{\Finite{C}}
-  \DeltaRow{TotalitÃ¤t}{%
-    m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}
+  \DeltaRow{Totalität}{%
+    \begin{aligned}[t]
+      &m\in\mathbb{N}\dsep n\in\mathbb{N}\\
+      &\vdash m\leq n\lor n\leq m
+    \end{aligned}}
     [\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}]
-}{%
-  Die Aussage folgt durch Induktion ueber die endliche Menge \(C\). Im
-  Adjunktionsschritt wird das alte Maximum mit dem neu adjungierten
-  natuerlichen Wert durch die Totalitaet von \(\leq_{\mathbb{N}}\)
-  verglichen.
-}
+}{}
+\begin{tabproofsplitwide}
+  \proofpartwideind[Induktionsanfang]{%
+    C=\varnothing\dsep C\neq\varnothing
+    \vdash \exists m\in C\,\forall n\in C\,n\leq m}
+    \proofstepwidestar[4]{C=\varnothing}{\rA}
+    \proofstepwidestar[5]{C\neq\varnothing}{\rA}
+    \proofstepwidestar[4,5]{\bot}{\rBI{4,5}}
+    \proofstepwidestar[4,5]{%
+      \exists m\in C\,\forall n\in C\,n\leq m}{%
+      \FormulaRefAuto{\bot\vdash P}{6}}
+  \closeproofpartwideind
+
+  \proofpartwideind[Adjunktionsschritt]{%
+    \begin{aligned}[t]
+      &D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
+      a\notin D\dsep
+      \exists m\in D\,\forall n\in D\,n\leq m\\
+      &\vdash
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r
+    \end{aligned}}
+    \proofstepwidestar[7]{D\subseteq\mathbb{N}}{\rA}
+    \proofstepwidestar[8]{a\in\mathbb{N}}{\rA}
+    \proofstepwidestar[9]{a\notin D}{\rA}
+    \proofstepwidestar[10]{\exists m\in D\,\forall n\in D\,n\leq m}{\rA}
+    \proofstepwidestar[11]{m\in D\land \forall n\in D\,n\leq m}{\rA}
+    \proofstepwidestar[11]{m\in D}{\rAEa{11}}
+    \proofstepwidestar[11]{\forall n\in D\,n\leq m}{\rAEb{11}}
+    \proofstepwidestar[7,11]{m\in\mathbb{N}}{%
+      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,12}}
+    \proofstepwidestar[7,8,11]{m\leq a\lor a\leq m}{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m\leq n\lor n\leq m}{14,8}}
+
+    \proofstepwidestar[16]{m\leq a}{\rA}
+    \proofstepwidestar[17]{n\in D\cup\{a\}}{\rA}
+    \proofstepwidestar[17]{n\in D\lor n\in\{a\}}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{17}}
+    \proofstepwidestar[20]{n\in D}{\rA}
+    \proofstepwidestar[11,20]{n\leq m}{\rRE{20,\rUE{13}}}
+    \proofstepwidestar[7,20]{n\in\mathbb{N}}{%
+      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{7,20}}
+    \proofstepwidestar[7,8,11,16,20]{n\leq a}{%
+      \FormulaRefAuto{m\leq n\dsep n\leq k\vdash m\leq k}{21,16}}
+    \proofstepwidestar[24]{n\in\{a\}}{\rA}
+    \proofstepwidestar[24]{n=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{24}}
+    \proofstepwidestar[8,24]{n\leq a}{%
+      \rIE{25,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{8}}}
+    \proofstepwidestar[7,8,11,16,17]{n\leq a}{\rOE{19,20,23,24,26}}
+    \proofstepwidestar[7,8,11,16]{%
+      \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{17,27}}}
+    \proofstepwidestar[8]{a\in D\cup\{a\}}{%
+      \FormulaRefAuto{a\in A\cup\{a\}}}
+    \proofstepwidestar[7,8,11,16]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{29,28}}}
+
+    \proofstepwidestar[31]{a\leq m}{\rA}
+    \proofstepwidestar[32]{n\in D\cup\{a\}}{\rA}
+    \proofstepwidestar[32]{n\in D\lor n\in\{a\}}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{32}}
+    \proofstepwidestar[35]{n\in D}{\rA}
+    \proofstepwidestar[11,35]{n\leq m}{\rRE{35,\rUE{13}}}
+    \proofstepwidestar[37]{n\in\{a\}}{\rA}
+    \proofstepwidestar[37]{n=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{37}}
+    \proofstepwidestar[31,37]{n\leq m}{\rIE{38,31}}
+    \proofstepwidestar[11,31,32]{n\leq m}{\rOE{34,35,36,37,39}}
+    \proofstepwidestar[11,31]{%
+      \forall n\in D\cup\{a\}\,n\leq m}{\rUI{\rRI{32,40}}}
+    \proofstepwidestar[12]{m\in D\cup\{a\}}{%
+      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{12}}
+    \proofstepwidestar[11,31]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{42,41}}}
+
+    \proofstepwidestar[7,8,10]{%
+      \exists r\in D\cup\{a\}\,
+      \forall n\in D\cup\{a\}\,n\leq r}{\rEE{10,11,\rOE{15,16,30,31,43}}}
+  \closeproofpartwideind
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{C\subseteq\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{C\neq\varnothing}{\rA}
+    \proofstepwidestar[3]{\Finite{C}}{\rA}
+    \proofstepwidestar[1,2,3]{%
+      \exists m\in C\,\forall n\in C\,n\leq m}{%
+      \makecell[l]{%
+      Endliche Induktion über \(C\) mit den Teilen\\
+      Induktionsanfang und Adjunktionsschritt.}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaThmDelta[Maximalsatz fuer endliche Familien endlicher Mengen]{%
   \Finite{\mathcal B}\dsep \mathcal B\neq\varnothing\dsep
