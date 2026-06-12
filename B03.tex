@@ -5004,6 +5004,48 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \DeltaRow{Neue Symbole}{\QuotientSet{A}{R}}
 }
 
+\FormulaThmDeltaK[Charakterisierung der Quotientenmenge]{%
+  \EqRel{R,A}
+  \vdash
+  C\in \QuotientSet{A}{R}
+  \leftrightarrow
+  C\in\powerset(A)\land
+  \exists x\in A\,C=\EqClass{x}{R}{A}
+}{QuotientSetChar}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Ã„quivalenzklassen}{\EqClass{x}{R}{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{%
+    \QuotientSet{A}{R}\coloneqq
+    \{C\in\powerset(A)\mid
+    \exists x\in A\,C=\EqClass{x}{R}{A}\}}{%
+    \FormulaRefAuto{QuotientSetDef}{1}}
+
+  \proofstep{3}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{1,3}{C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,3}}
+  \proofstep{1}{C\in \QuotientSet{A}{R}
+    \rightarrow C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rRI{3,4}}
+
+  \proofstep{6}{C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rA}
+  \proofstep{1,6}{C\in \QuotientSet{A}{R}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,6}}
+  \proofstep{1}{C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}
+    \rightarrow C\in \QuotientSet{A}{R}}{\rRI{6,7}}
+
+  \proofstep{1}{C\in \QuotientSet{A}{R}
+    \leftrightarrow
+    C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rLRI{5,8}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Äquivalenzklasse liegt in der Quotientenmenge]{%
   \EqRel{R,A}\dsep x\in A
   \vdash
@@ -5030,7 +5072,7 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
     \EqClass{x}{R}{A}\in\powerset(A)\land
     \exists z\in A\,\EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{\rAI{6,8}}
   \proofstep{1,2}{\EqClass{x}{R}{A}\in \QuotientSet{A}{R}}{%
-    \FormulaRefAuto{QuotientSetDef}{1,9}}
+    \FormulaRefAuto{QuotientSetChar}{1,9}}
 \end{tabproof}
 
 \FormulaThmDelta[Elemente der Quotientenmenge sind Teilmengen]{%
@@ -5047,7 +5089,7 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \proofstep{1,2}{%
     C\in\powerset(A)\land
     \exists x\in A\,C=\EqClass{x}{R}{A}}{%
-    \FormulaRefAuto{QuotientSetDef}{1,2}}
+    \FormulaRefAuto{QuotientSetChar}{1,2}}
   \proofstep{1,2}{C\in\powerset(A)}{\rAEa{3}}
   \proofstep{1,2}{C\subseteq A}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{4}}
@@ -5067,7 +5109,7 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \proofstep{1,2}{%
     C\in\powerset(A)\land
     \exists x\in A\,C=\EqClass{x}{R}{A}}{%
-    \FormulaRefAuto{QuotientSetDef}{1,2}}
+    \FormulaRefAuto{QuotientSetChar}{1,2}}
   \proofstep{1,2}{\exists x\in A\,C=\EqClass{x}{R}{A}}{\rAEb{3}}
 \end{tabproof}
 
@@ -25499,28 +25541,39 @@ eine Äquivalenzklasse.
 \begin{tabproofsplit}
 \proofpart{\(\vdash\)}
   \proofstep{1}{(a,b)\in \SameOccRel{M}}{\rA}
+  \proofstep{}{%
+    \SameOccRel{M}\coloneqq
+    \{(a,b)\in \bigcup M\times\bigcup M\mid
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)\}}{%
+    \FormulaRefAuto{SameOccRelDef}}
   \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M\land
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \FormulaRefAuto{SameOccRelDef}{1}}
-  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M}{\rAEa{2}}
-  \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAEb{2}}
-  \proofstep{1}{a\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{3}}
-  \proofstep{1}{b\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{3}}
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,1}}
+  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M}{\rAEa{3}}
+  \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAEb{3}}
+  \proofstep{1}{a\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{4}}
+  \proofstep{1}{b\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{4}}
   \proofstep{1}{a\in\bigcup M\land b\in\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{5,\rAI{6,4}}}
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{6,\rAI{7,5}}}
 \closeproofpart
 
 \proofpart{\(\dashv\)}
   \proofstep{1}{a\in\bigcup M\land b\in\bigcup M\land
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rA}
+  \proofstep{}{%
+    \SameOccRel{M}\coloneqq
+    \{(a,b)\in \bigcup M\times\bigcup M\mid
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)\}}{%
+    \FormulaRefAuto{SameOccRelDef}}
   \proofstep{1}{a\in\bigcup M}{\rAEa{1}}
   \proofstep{1}{b\in\bigcup M}{\rAEa{\rAEb{1}}}
   \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAEb{\rAEb{1}}}
   \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,3}}
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}}
   \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{5,4}}
-  \proofstep{1}{(a,b)\in \SameOccRel{M}}{\FormulaRefAuto{SameOccRelDef}{6}}
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{6,5}}
+  \proofstep{1}{(a,b)\in \SameOccRel{M}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,7}}
 \closeproofpart
 \end{tabproofsplit}
 
@@ -25728,6 +25781,45 @@ eine Äquivalenzklasse.
   \DeltaRow{Neue Symbole}{\OccQuotSet{M}{X}}
 }
 
+\FormulaThmDeltaK[Charakterisierung des Quotientenbilds]{%
+  C\in\OccQuotSet{M}{X}
+  \leftrightarrow
+  C\in\OccQuotCarrier{M}\land
+  \exists a\in X\,C=\OccClass{M}{a}
+}{OccQuotSetChar}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep C\dsep a}
+  \DeltaRow{Auftretensklassen}{\OccClass{M}{a}}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    \OccQuotSet{M}{X}\coloneqq
+    \{C\in \OccQuotCarrier{M}\mid
+    \exists a\in X\,C=\OccClass{M}{a}\}}{%
+    \FormulaRefAuto{OccQuotSetDef}}
+
+  \proofstep{2}{C\in\OccQuotSet{M}{X}}{\rA}
+  \proofstep{2}{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{1,2}}
+  \proofstep{}{C\in\OccQuotSet{M}{X}
+    \rightarrow C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{\rRI{2,3}}
+
+  \proofstep{5}{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{\rA}
+  \proofstep{5}{C\in\OccQuotSet{M}{X}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{1,5}}
+  \proofstep{}{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}
+    \rightarrow C\in\OccQuotSet{M}{X}}{\rRI{5,6}}
+
+  \proofstep{}{C\in\OccQuotSet{M}{X}
+    \leftrightarrow
+    C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{\rLRI{4,7}}
+\end{tabproof}
+
 \FormulaDefDeltaK[Auftretensquotient einer Mengenfamilie]{%
   \OccQuotFam{M}\coloneqq
   \{Y\in\powerset(\OccQuotCarrier{M})\mid
@@ -25737,6 +25829,44 @@ eine Äquivalenzklasse.
   \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
   \DeltaRow{Neue Symbole}{\OccQuotFam{M}}
 }
+
+\FormulaThmDeltaK[Charakterisierung des Auftretensquotienten]{%
+  Y\in\OccQuotFam{M}
+  \leftrightarrow
+  Y\in\powerset(\OccQuotCarrier{M})\land
+  \exists X\in M\,Y=\OccQuotSet{M}{X}
+}{OccQuotFamChar}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
+}
+\begin{tabproof}
+  \proofstep{}{%
+    \OccQuotFam{M}\coloneqq
+    \{Y\in\powerset(\OccQuotCarrier{M})\mid
+    \exists X\in M\,Y=\OccQuotSet{M}{X}\}}{%
+    \FormulaRefAuto{OccQuotFamDef}}
+
+  \proofstep{2}{Y\in\OccQuotFam{M}}{\rA}
+  \proofstep{2}{Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{1,2}}
+  \proofstep{}{Y\in\OccQuotFam{M}
+    \rightarrow Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\rRI{2,3}}
+
+  \proofstep{5}{Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\rA}
+  \proofstep{5}{Y\in\OccQuotFam{M}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{1,5}}
+  \proofstep{}{Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}
+    \rightarrow Y\in\OccQuotFam{M}}{\rRI{5,6}}
+
+  \proofstep{}{Y\in\OccQuotFam{M}
+    \leftrightarrow
+    Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\rLRI{4,7}}
+\end{tabproof}
 
 Wenn etwa die Elemente 1 und 2 in jedem Familienglied von \(M\) gemeinsam
 auftreten, dann gilt \(\OccClass{M}{1}=\OccClass{M}{2}\). Das Familienglied
@@ -25753,7 +25883,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
 \begin{tabproof}
   \proofstep{1}{C\in\OccQuotSet{M}{X}}{\rA}
   \proofstep{1}{C\in\OccQuotCarrier{M}\land
-    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetDef}{1}}
+    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetChar}{1}}
   \proofstep{1}{C\in\OccQuotCarrier{M}}{\rAEa{2}}
 \end{tabproof}
 
@@ -25778,7 +25908,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
   \proofstep{1}{\exists Z\in M\,\OccQuotSet{M}{X}=\OccQuotSet{M}{Z}}{\rEI{\rAI{1,6}}}
   \proofstep{1}{\OccQuotSet{M}{X}\in\powerset(\OccQuotCarrier{M})\land
     \exists Z\in M\,\OccQuotSet{M}{X}=\OccQuotSet{M}{Z}}{\rAI{5,7}}
-  \proofstep{1}{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotFamDef}{8}}
+  \proofstep{1}{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotFamChar}{8}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Mitglieder des Auftretensquotienten haben ein Urbild]{%
@@ -25792,7 +25922,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
 \begin{tabproof}
   \proofstep{1}{Y\in \OccQuotFam{M}}{\rA}
   \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})\land
-    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamDef}{1}}
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamChar}{1}}
   \proofstep{1}{\exists X\in M\,Y=\OccQuotSet{M}{X}}{\rAEb{2}}
 \end{tabproof}
 
@@ -25805,7 +25935,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
 \begin{tabproof}
   \proofstep{1}{Y\in \OccQuotFam{M}}{\rA}
   \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})\land
-    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamDef}{1}}
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamChar}{1}}
   \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})}{\rAEa{2}}
   \proofstep{1}{Y\subseteq\OccQuotCarrier{M}}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{3}}
@@ -25845,7 +25975,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
     \proofstepwidestar[2,3]{\OccClass{M}{a}\in\OccQuotCarrier{M}\land
       \exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\rAI{6,9}}
     \proofstepwidestar[1,2,3]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{%
-      \FormulaRefAuto{OccQuotSetDef}{10}}
+      \FormulaRefAuto{OccQuotSetChar}{10}}
     \proofstepwidestar[1,2]{a\in X\rightarrow
       \OccClass{M}{a}\in\OccQuotSet{M}{X}}{\rRI{3,11}}
   \closeproofpartwideindR
@@ -25863,7 +25993,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
     \proofstepwidestar[2]{a\in\bigcup M}{\rA}
     \proofstepwidestar[3]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{\rA}
     \proofstepwidestar[3]{\OccClass{M}{a}\in\OccQuotCarrier{M}\land
-      \exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\FormulaRefAuto{OccQuotSetDef}{3}}
+      \exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\FormulaRefAuto{OccQuotSetChar}{3}}
     \proofstepwidestar[3]{\exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\rAEb{4}}
     \proofstepwidestar[6]{b\in X\land \OccClass{M}{a}=\OccClass{M}{b}}{\rA}
     \proofstepwidestar[6]{b\in X}{\rAEa{6}}
@@ -25953,22 +26083,32 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
     \proofstepwidestar[2]{Y\in M}{\rA}
     \proofstepwidestar[3]{C\in\OccQuotSet{M}{X\cup Y}}{\rA}
     \proofstepwidestar[3]{C\in\OccQuotCarrier{M}\land
-      \exists a\in X\cup Y\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetDef}{3}}
+      \exists a\in X\cup Y\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetChar}{3}}
+    \proofstepwidestar[3]{C\in\OccQuotCarrier{M}}{\rAEa{4}}
     \proofstepwidestar[3]{\exists a\in X\cup Y\,C=\OccClass{M}{a}}{\rAEb{4}}
-    \proofstepwidestar[6]{a\in X\cup Y\land C=\OccClass{M}{a}}{\rA}
-    \proofstepwidestar[6]{a\in X\lor a\in Y}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rAEa{6}}}
-    \proofstepwidestar[8]{a\in X}{\rA}
-    \proofstepwidestar[6,8]{C\in\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotSetDef}{\rAI{\rAEa{4},\rEI{\rAI{8,\rAEb{6}}}}}}
-    \proofstepwidestar[6,8]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{9}}}
-    \proofstepwidestar[11]{a\in Y}{\rA}
-    \proofstepwidestar[6,11]{C\in\OccQuotSet{M}{Y}}{\FormulaRefAuto{OccQuotSetDef}{\rAI{\rAEa{4},\rEI{\rAI{11,\rAEb{6}}}}}}
-    \proofstepwidestar[6,11]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIb{12}}}
-    \proofstepwidestar[6]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rOE{7,8,10,11,13}}
-    \proofstepwidestar[3]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rEE{5,6,14}}
+    \proofstepwidestar[7]{a\in X\cup Y\land C=\OccClass{M}{a}}{\rA}
+    \proofstepwidestar[7]{a\in X\lor a\in Y}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rAEa{7}}}
+    \proofstepwidestar[7]{C=\OccClass{M}{a}}{\rAEb{7}}
+    \proofstepwidestar[10]{a\in X}{\rA}
+    \proofstepwidestar[7,10]{a\in X\land C=\OccClass{M}{a}}{\rAI{10,9}}
+    \proofstepwidestar[7,10]{\exists a\in X\,C=\OccClass{M}{a}}{\rEI{11}}
+    \proofstepwidestar[3,7,10]{C\in\OccQuotCarrier{M}\land
+      \exists a\in X\,C=\OccClass{M}{a}}{\rAI{5,12}}
+    \proofstepwidestar[3,7,10]{C\in\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotSetChar}{13}}
+    \proofstepwidestar[3,7,10]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{14}}}
+    \proofstepwidestar[16]{a\in Y}{\rA}
+    \proofstepwidestar[7,16]{a\in Y\land C=\OccClass{M}{a}}{\rAI{16,9}}
+    \proofstepwidestar[7,16]{\exists a\in Y\,C=\OccClass{M}{a}}{\rEI{17}}
+    \proofstepwidestar[3,7,16]{C\in\OccQuotCarrier{M}\land
+      \exists a\in Y\,C=\OccClass{M}{a}}{\rAI{5,18}}
+    \proofstepwidestar[3,7,16]{C\in\OccQuotSet{M}{Y}}{\FormulaRefAuto{OccQuotSetChar}{19}}
+    \proofstepwidestar[3,7,16]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIb{20}}}
+    \proofstepwidestar[3,7]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rOE{8,10,15,16,21}}
+    \proofstepwidestar[3]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rEE{6,7,22}}
     \proofstepwidestar[1,2]{\OccQuotSet{M}{X\cup Y}\subseteq
       \OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{%
       \FormulaRefAuto{A\subseteq B \coloneq
-      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,15}}}}
+      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,23}}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Fall \(C\in\OccQuotSet{M}{X}\)]{%
@@ -25982,14 +26122,20 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
   }[OccQuotPreservesUnionSubsetRightLeftCase]
     \proofstepwidestar[1]{C\in\OccQuotSet{M}{X}}{\rA}
     \proofstepwidestar[1]{C\in\OccQuotCarrier{M}\land
-      \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetDef}{1}}
+      \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetChar}{1}}
+    \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rAEa{2}}
     \proofstepwidestar[1]{\exists a\in X\,C=\OccClass{M}{a}}{\rAEb{2}}
-    \proofstepwidestar[4]{a\in X\land C=\OccClass{M}{a}}{\rA}
-    \proofstepwidestar[4]{a\in X\cup Y}{%
-      \FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{\rAEa{4}}}}
-    \proofstepwidestar[1,4]{C\in\OccQuotSet{M}{X\cup Y}}{%
-      \FormulaRefAuto{OccQuotSetDef}{\rAI{\rAEa{2},\rEI{\rAI{5,\rAEb{4}}}}}}
-    \proofstepwidestar[1]{C\in\OccQuotSet{M}{X\cup Y}}{\rEE{3,4,6}}
+    \proofstepwidestar[5]{a\in X\land C=\OccClass{M}{a}}{\rA}
+    \proofstepwidestar[5]{a\in X\cup Y}{%
+      \FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{\rAEa{5}}}}
+    \proofstepwidestar[5]{C=\OccClass{M}{a}}{\rAEb{5}}
+    \proofstepwidestar[5]{a\in X\cup Y\land C=\OccClass{M}{a}}{\rAI{6,7}}
+    \proofstepwidestar[5]{\exists a\in X\cup Y\,C=\OccClass{M}{a}}{\rEI{8}}
+    \proofstepwidestar[1,5]{C\in\OccQuotCarrier{M}\land
+      \exists a\in X\cup Y\,C=\OccClass{M}{a}}{\rAI{3,9}}
+    \proofstepwidestar[1,5]{C\in\OccQuotSet{M}{X\cup Y}}{%
+      \FormulaRefAuto{OccQuotSetChar}{10}}
+    \proofstepwidestar[1]{C\in\OccQuotSet{M}{X\cup Y}}{\rEE{4,5,11}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Fall \(C\in\OccQuotSet{M}{Y}\)]{%
@@ -26305,7 +26451,7 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
   \proofstepwidestar[13]{X\in M}{\rAEa{13}}
   \proofstepwidestar[9,13]{C\in\OccQuotSet{M}{X}}{\rIE{\rAEb{13},11}}
   \proofstepwidestar[9,13]{C\in\OccQuotCarrier{M}\land
-    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetDef}{15}}
+    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{OccQuotSetChar}{15}}
   \proofstepwidestar[9,13]{\exists a\in X\,C=\OccClass{M}{a}}{\rAEb{16}}
   \proofstepwidestar[18]{a\in X\land C=\OccClass{M}{a}}{\rA}
   \proofstepwidestar[18]{a\in X}{\rAEa{18}}
