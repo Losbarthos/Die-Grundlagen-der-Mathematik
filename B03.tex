@@ -33,6 +33,9 @@
 
 \begin{document}
 
+\title{Bd. 03 - Mengenlehre}
+\author{Martin Kunze}
+\date{}
 \maketitle
 \setcounter{tocdepth}{3}
 \tableofcontents
@@ -4742,6 +4745,260 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \DeltaRow{\textbf{Neue Symbole}}{}
   \DeltaPrem{Äquivalenzrelationen}{}
 }
+
+\subsection{Äquivalenzklassen}
+
+\FormulaDefDeltaK[Äquivalenzklasse eines Elements]{%
+  \EqRel{R,A}\dsep x\in A\vdash
+  \EqClass{x}{R}{A}\coloneqq
+  \{y\in A\mid (x,y)\in R\}
+}{Äquivalenzklasse}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Neue Symbole}{\EqClass{x}{R}{A}}
+}
+
+\FormulaThmDeltaK[Charakterisierung der Äquivalenzklasse]{%
+  \EqRel{R,A}\dsep x\in A
+  \vdash
+  y\in \EqClass{x}{R}{A}
+  \eqvdash
+  y\in A\land (x,y)\in R
+}{EqClassChar}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{%
+    \EqClass{x}{R}{A}\coloneqq
+    \{y\in A\mid (x,y)\in R\}}{%
+    \FormulaRefAuto{Äquivalenzklasse}{1,2}}
+  \proofstep{1,2}{%
+    y\in \EqClass{x}{R}{A}
+    \eqvdash
+    y\in A\land (x,y)\in R}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Repräsentant liegt in seiner Äquivalenzklasse]{%
+  \EqRel{R,A}\dsep x\in A
+  \vdash
+  x\in \EqClass{x}{R}{A}
+}{EqClassRepresentative}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{(x,x)\in R}{\FormulaRefAuto{Äquivalenzrelation}{1,2}}
+  \proofstep{1,2}{x\in A\land (x,x)\in R}{\rAI{2,3}}
+  \proofstep{1,2}{x\in \EqClass{x}{R}{A}}{\FormulaRefAuto{EqClassChar}{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente einer Äquivalenzklasse liegen im Grundbereich]{%
+  \EqRel{R,A}\dsep x\in A\dsep y\in \EqClass{x}{R}{A}
+  \vdash y\in A
+}{EqClassElementInCarrier}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
+  \proofstep{1,2,3}{y\in A\land (x,y)\in R}{\FormulaRefAuto{EqClassChar}{1,2,3}}
+  \proofstep{1,2,3}{y\in A}{\rAEa{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente einer Äquivalenzklasse sind äquivalent zum Repräsentanten]{%
+  \EqRel{R,A}\dsep x\in A\dsep y\in \EqClass{x}{R}{A}
+  \vdash (x,y)\in R
+}{EqClassElementRelated}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
+  \proofstep{1,2,3}{y\in A\land (x,y)\in R}{\FormulaRefAuto{EqClassChar}{1,2,3}}
+  \proofstep{1,2,3}{(x,y)\in R}{\rAEb{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Äquivalente Elemente haben dieselbe Äquivalenzklasse]{%
+  \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+  \vdash
+  \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
+}{EqClassEqualFromRel}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+  \proofstepwidestar[2]{x\in A}{\rA}
+  \proofstepwidestar[3]{y\in A}{\rA}
+  \proofstepwidestar[4]{(x,y)\in R}{\rA}
+
+  \proofstepwidestar[5]{z\in \EqClass{x}{R}{A}}{\rA}
+  \proofstepwidestar[1,2,5]{z\in A}{%
+    \FormulaRefAuto{EqClassElementInCarrier}{1,2,5}}
+  \proofstepwidestar[1,2,5]{(x,z)\in R}{%
+    \FormulaRefAuto{EqClassElementRelated}{1,2,5}}
+  \proofstepwidestar[1,4]{(y,x)\in R}{\FormulaRefAuto{Symmetrie}{4}}
+  \proofstepwidestar[1,2,4,5]{(y,z)\in R}{%
+    \FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}[ax]{8,7}}
+  \proofstepwidestar[1,2,3,4,5]{z\in A\land (y,z)\in R}{\rAI{6,9}}
+  \proofstepwidestar[1,2,3,4,5]{z\in \EqClass{y}{R}{A}}{\FormulaRefAuto{EqClassChar}{1,3,10}}
+
+  \proofstepwidestar[12]{z\in \EqClass{y}{R}{A}}{\rA}
+  \proofstepwidestar[1,3,12]{z\in A}{%
+    \FormulaRefAuto{EqClassElementInCarrier}{1,3,12}}
+  \proofstepwidestar[1,3,12]{(y,z)\in R}{%
+    \FormulaRefAuto{EqClassElementRelated}{1,3,12}}
+  \proofstepwidestar[1,3,4,12]{(x,z)\in R}{%
+    \FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}[ax]{4,14}}
+  \proofstepwidestar[1,2,3,4,12]{z\in A\land (x,z)\in R}{\rAI{13,15}}
+  \proofstepwidestar[1,2,3,4,12]{z\in \EqClass{x}{R}{A}}{\FormulaRefAuto{EqClassChar}{1,2,16}}
+
+  \proofstepwidestar[1,2,3,4]{%
+    z\in \EqClass{x}{R}{A}\leftrightarrow z\in \EqClass{y}{R}{A}}{\rLRI{11,17}}
+  \proofstepwidestar[1,2,3,4]{%
+    \forall z\,\bigl(z\in \EqClass{x}{R}{A}\leftrightarrow
+    z\in \EqClass{y}{R}{A}\bigr)}{\rUI{18}}
+  \proofstepwidestar[1,2,3,4]{%
+    \EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{19}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gleiche Äquivalenzklassen liefern Äquivalenz]{%
+  \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep
+  \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
+  \vdash
+  (x,y)\in R
+}{EqClassRelFromEqual}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{4}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{\rA}
+  \proofstep{1,2}{x\in \EqClass{x}{R}{A}}{%
+    \FormulaRefAuto{EqClassRepresentative}{1,2}}
+  \proofstep{1,2,4}{x\in \EqClass{y}{R}{A}}{\rIE{4,5}}
+  \proofstep{1,2,3,4}{(y,x)\in R}{%
+    \FormulaRefAuto{EqClassElementRelated}{1,3,6}}
+  \proofstep{1,2,3,4}{(x,y)\in R}{\FormulaRefAuto{Symmetrie}{7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Charakterisierung gleicher Äquivalenzklassen]{%
+  \EqRel{R,A}\dsep x\in A\dsep y\in A
+  \vdash
+  \bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
+  \eqvdash
+  (x,y)\in R
+}{EqClassEqualIffRel}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{4}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{\rA}
+  \proofstep{1,2,3,4}{(x,y)\in R}{\FormulaRefAuto{EqClassRelFromEqual}{1,2,3,4}}
+  \proofstep{6}{(x,y)\in R}{\rA}
+  \proofstep{1,2,3,6}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \FormulaRefAuto{EqClassEqualFromRel}{1,2,3,6}}
+  \proofstep{1,2,3}{%
+    \bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
+    \leftrightarrow (x,y)\in R}{\rLRI{5,7}}
+\end{tabproof}
+
+\subsection{Quotientenmengen}
+
+\FormulaDefDeltaK[Quotientenmenge einer Äquivalenzrelation]{%
+  \EqRel{R,A}\vdash
+  \QuotientSet{A}{R}\coloneqq
+  \{C\in\powerset(A)\mid
+  \exists x\in A\,C=\EqClass{x}{R}{A}\}
+}{Quotientenmenge}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
+  \DeltaRow{Neue Symbole}{\QuotientSet{A}{R}}
+}
+
+\FormulaThmDeltaK[Äquivalenzklasse liegt in der Quotientenmenge]{%
+  \EqRel{R,A}\dsep x\in A
+  \vdash
+  \EqClass{x}{R}{A}\in \QuotientSet{A}{R}
+}{EqClassInQuotient}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
+  \proofstep{1,2,3}{y\in A}{%
+    \FormulaRefAuto{EqClassElementInCarrier}{1,2,3}}
+  \proofstep{1,2}{\EqClass{x}{R}{A}\subseteq A}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,4}}}}
+  \proofstep{1,2}{\EqClass{x}{R}{A}\in\powerset(A)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{5}}
+  \proofstep{}{ \EqClass{x}{R}{A}=\EqClass{x}{R}{A}}{\rII}
+  \proofstep{2}{\exists z\in A\,\EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{\rEI{\rAI{2,7}}}
+  \proofstep{1,2}{%
+    \EqClass{x}{R}{A}\in\powerset(A)\land
+    \exists z\in A\,\EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{\rAI{6,8}}
+  \proofstep{1,2}{\EqClass{x}{R}{A}\in \QuotientSet{A}{R}}{%
+    \FormulaRefAuto{Quotientenmenge}{1,9}}
+\end{tabproof}
+
+\FormulaThmDelta[Elemente der Quotientenmenge sind Teilmengen]{%
+  \EqRel{R,A}\dsep C\in \QuotientSet{A}{R}
+  \vdash
+  C\subseteq A
+}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep C}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{1,2}{%
+    C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \FormulaRefAuto{Quotientenmenge}{1,2}}
+  \proofstep{1,2}{C\in\powerset(A)}{\rAEa{3}}
+  \proofstep{1,2}{C\subseteq A}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente der Quotientenmenge haben einen Repräsentanten]{%
+  \EqRel{R,A}\dsep C\in \QuotientSet{A}{R}
+  \vdash
+  \exists x\in A\,C=\EqClass{x}{R}{A}
+}{QuotientRepresentative}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{2}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{1,2}{%
+    C\in\powerset(A)\land
+    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \FormulaRefAuto{Quotientenmenge}{1,2}}
+  \proofstep{1,2}{\exists x\in A\,C=\EqClass{x}{R}{A}}{\rAEb{3}}
+\end{tabproof}
 
 \section{Begriff der Ordnung}
 
@@ -12455,10 +12712,10 @@ Funktion zwischen den beiden Teilfamilien.
     \FormulaRefAuto{x\in A \dsep b\in \Fib_G(x) \vdash G(b)=x}{2,5}}
 \end{tabproof}
 
-\FormulaThmDelta[Auswahlmenge liefert Rechtsinverse]{%
+\FormulaThmDeltaK[Auswahlmenge liefert Rechtsinverse]{%
   \forall X\in \Fib_G[A]\,\exists! a\,(a\in X \land a\in L)
   \vdash \exists F\colon A\to B\,\bigl(G\circ F=\Id_A\bigr)%
-}{
+}{ChoiceSetRightInverse}{
   \DeltaRow{Mengen}{A\dsep B\dsep L\dsep X\dsep a\dsep x}
   \DeltaRow{Surjektive Funktion}{G\colon B\sur A}
 }
@@ -12833,7 +13090,7 @@ Funktion zwischen den beiden Teilfamilien.
     \forall X\in \Fib_G[A]\,\exists! b\,(b\in X\land b\in L_{G,R})%
   }{\FormulaRefAuto{WellOrdFiberChoiceSet}{1,2}}
   \proofstep{1,2}{\exists F\colon A\to B\,G\circ F=\Id_A}{%
-    \FormulaRefAuto{Auswahlmenge liefert Rechtsinverse}{3}}
+    \FormulaRefAuto{ChoiceSetRightInverse}{3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Wohlordnungssatz impliziert Auswahlaxiom]{%
@@ -24929,783 +25186,6 @@ Seiten: Aus einer Injektion \(A\to B\) erhalten wir hier eine Surjektion
   \proofstep{1,2,3,4,5}{\exists G\colon N\sur M}{\rEE{12,13,14}}
 \end{tabproof}
 
-\subsection{Kardinale Maximalsätze}
-
-Für die späteren Auftretensfasern genügt ein Maximum nach endlicher
-Kardinalzahl. Das Maximum wird über die tatsächlich vorkommenden
-Kardinalzahlen einer endlichen Familie bestimmt.
-
-\subsubsection{Kardinalwertmengen}
-
-\FormulaDefDeltaK[Kardinalwertmenge einer Mengenfamilie]{%
-  \CardValues{\mathcal B}\coloneqq
-  \{n\in\mathbb{N}\mid
-  \exists X\in\mathcal B\, n=\tCard(X)\}
-}{Kardinalwertmenge}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
-  \DeltaRow{Termsymbol}{\tCard}
-  \DeltaRow{Neue Symbole}{\CardValues{\mathcal B}}
-}
-
-\FormulaThmDelta[Elemente der Kardinalwertmenge sind natuerlich]{%
-  n\in \CardValues{\mathcal B}\vdash n\in\mathbb{N}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep n}
-}
-\begin{tabproof}
-  \proofstep{1}{n\in \CardValues{\mathcal B}}{\rA}
-  \proofstep{1}{%
-    n\in\mathbb{N}\land
-    \exists X\in\mathcal B\, n=\tCard(X)}{%
-    \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
-    \{n\in\mathbb{N}\mid
-    \exists X\in\mathcal B\, n=\tCard(X)\}}{1}}
-  \proofstep{1}{n\in\mathbb{N}}{\rAEa{2}}
-\end{tabproof}
-
-\FormulaThmDelta[Kardinalwertmenge liegt in den natuerlichen Zahlen]{%
-  \CardValues{\mathcal B}\subseteq\mathbb{N}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep n}
-}
-\begin{tabproof}
-  \proofstep{1}{n\in \CardValues{\mathcal B}}{\rA}
-  \proofstep{1}{n\in\mathbb{N}}{%
-    \FormulaRefAuto{n\in \CardValues{\mathcal B}\vdash n\in\mathbb{N}}{1}}
-  \proofstep{}{\forall n\,\bigl(n\in \CardValues{\mathcal B}
-    \rightarrow n\in\mathbb{N}\bigr)}{\rUI{\rRI{1,2}}}
-  \proofstep{}{\CardValues{\mathcal B}\subseteq\mathbb{N}}{%
-    \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Wert einer endlichen Faser liegt in der Kardinalwertmenge]{%
-  X\in\mathcal B\dsep \Finite{X}
-  \vdash \tCard(X)\in\CardValues{\mathcal B}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in\mathcal B}{\rA}
-  \proofstep{2}{\Finite{X}}{\rA}
-  \proofstep{2}{\tCard(X)\in\mathbb{N}}{%
-    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
-  \proofstep{}{\tCard(X)=\tCard(X)}{\rII}
-  \proofstep{1}{X\in\mathcal B\land \tCard(X)=\tCard(X)}{\rAI{1,4}}
-  \proofstep{1}{\exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rEI{5}}
-  \proofstep{1,2}{%
-    \tCard(X)\in\mathbb{N}\land
-    \exists Y\in\mathcal B\,\tCard(X)=\tCard(Y)}{\rAI{3,6}}
-  \proofstep{1,2}{\tCard(X)\in\CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
-    \{n\in\mathbb{N}\mid
-    \exists X\in\mathcal B\, n=\tCard(X)\}}{7}}
-\end{tabproof}
-
-\subsubsection{Kardinalwertabbildung}
-
-\FormulaDefDeltaK[Funktionsvorschrift der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
-  \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)
-}{Funktionsvorschrift der Kardinalwertabbildung}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
-  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-
-\FormulaThmDelta[Typisierung der Funktionsvorschrift der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
-  \vdash \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
-  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproof}
-  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-  \proofstep{2}{X\in\mathcal B}{\rA}
-  \proofstep{1,2}{\Finite{X}}{\rRE{2,\rUE{1}}}
-  \proofstep{1,2}{\tCard(X)\in\CardValues{\mathcal B}}{%
-    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}{2,3}}
-  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-    X\in\mathcal B
-    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
-  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)\in
-    \CardValues{\mathcal B}}{\rIE{5,4}}
-\end{tabproof}
-
-\FormulaThmDelta[Existenz der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}
-  \vdash
-  \exists! F\colon\mathcal B\to\CardValues{\mathcal B}\,
-  \forall X\in\mathcal B\,F(X)=\tCardValMap{\mathcal B}(X)
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
-}
-\begin{tabproof}
-  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-  \proofstep{2}{X\in\mathcal B}{\rA}
-  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-    X\in\mathcal B
-    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \tCardValMap{\mathcal B}(X)=\tCard(X)}{\rUI{\rRI{2,3}}}
-  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)\in
-    \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-    X\in\mathcal B
-    \vdash \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}}{1,2}}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \tCardValMap{\mathcal B}(X)\in\CardValues{\mathcal B}}{%
-    \rUI{\rRI{2,5}}}
-  \proofstep{1}{%
-    \exists! F\colon\mathcal B\to\CardValues{\mathcal B}\,
-    \forall X\in\mathcal B\,F(X)=\tCardValMap{\mathcal B}(X)}{%
-    \FormulaRefAuto{%
-      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
-      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{4,6}}
-\end{tabproof}
-
-\FormulaDefDeltaK[Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}\vdash
-  \CardValMap{\mathcal B}\coloneqq
-  \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
-  \forall X\in\mathcal B\,
-  F(X)=\tCardValMap{\mathcal B}(X)\Bigr)
-}{Kardinalwertabbildung}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
-  \DeltaRow{Funktionen}{F\dsep \CardValMap{\mathcal B}}
-  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
-  \DeltaRow{Neue Symbole}{\CardValMap{\mathcal B}}
-}
-
-\FormulaThmDelta[Typisierung der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}
-  \vdash
-  \CardValMap{\mathcal B}\colon\mathcal B\to\CardValues{\mathcal B}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep Y}
-  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
-}
-\begin{tabproof}
-  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-  \proofstep{1}{\CardValMap{\mathcal B}\colon
-    \mathcal B\to\CardValues{\mathcal B}}{%
-    \rAEa{\FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\vdash
-    \CardValMap{\mathcal B}\coloneqq
-    \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
-    \forall X\in\mathcal B\,
-    F(X)=\tCardValMap{\mathcal B}(X)\Bigr)}{1}}}
-\end{tabproof}
-
-\FormulaThmDelta[Wert der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}\dsep X\in\mathcal B
-  \vdash \CardValMap{\mathcal B}(X)=\tCard(X)
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y}
-  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
-  \DeltaRow{Funktionensymbol}{\tCardValMap{\mathcal B}}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproof}
-  \proofstep{1}{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-  \proofstep{2}{X\in\mathcal B}{\rA}
-  \proofstep{1}{\forall X\in\mathcal B\,
-    \CardValMap{\mathcal B}(X)=\tCardValMap{\mathcal B}(X)}{%
-    \rAEb{\FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\vdash
-    \CardValMap{\mathcal B}\coloneqq
-    \iota F\Bigl(F\colon\mathcal B\to\CardValues{\mathcal B}\land
-    \forall X\in\mathcal B\,
-    F(X)=\tCardValMap{\mathcal B}(X)\Bigr)}{1}}}
-  \proofstep{1,2}{\CardValMap{\mathcal B}(X)=
-    \tCardValMap{\mathcal B}(X)}{\rRE{2,\rUE{3}}}
-  \proofstep{1,2}{\tCardValMap{\mathcal B}(X)=\tCard(X)}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-    X\in\mathcal B
-    \vdash \tCardValMap{\mathcal B}(X)\coloneqq \tCard(X)}{1,2}}
-  \proofstep{1,2}{\CardValMap{\mathcal B}(X)=\tCard(X)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
-\end{tabproof}
-
-\FormulaThmDeltaR[Bild der Kardinalwertabbildung]{%
-  \forall Y\in\mathcal B\,\Finite{Y}
-  \vdash
-  \CardValMap{\mathcal B}[\mathcal B]=\CardValues{\mathcal B}
-}{%
-  \forall Y\in\mathcal B\,\Finite{Y}
-  \vdash
-  \CardValMap{\mathcal B}[\mathcal B]=\CardValues{\mathcal B}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep Y\dsep n}
-  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Teilmengenrichtung
-  \(\CardValMap{\mathcal B}[\mathcal B]\subseteq
-  \CardValues{\mathcal B}\)]{%
-    \forall Y\in\mathcal B\,\Finite{Y}\dsep
-    n\in\CardValMap{\mathcal B}[\mathcal B]
-    \vdash n\in\CardValues{\mathcal B}
-  }{%
-    \forall Y\in\mathcal B\,\Finite{Y}\dsep
-    n\in\CardValMap{\mathcal B}[\mathcal B]
-    \vdash n\in\CardValues{\mathcal B}
-  }
-    \proofstepwidestar[1]{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-    \proofstepwidestar[2]{n\in\CardValMap{\mathcal B}[\mathcal B]}{\rA}
-    \proofstepwidestar[1]{\CardValMap{\mathcal B}\colon
-      \mathcal B\to\CardValues{\mathcal B}}{%
-      \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
-      \vdash
-      \CardValMap{\mathcal B}\colon\mathcal B\to
-      \CardValues{\mathcal B}}{1}}
-    \proofstepwidestar[1]{\CardValMap{\mathcal B}[\mathcal B]\subseteq
-      \CardValues{\mathcal B}}{%
-      \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{3}}
-    \proofstepwidestar[1,2]{n\in\CardValues{\mathcal B}}{%
-      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{4,2}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Teilmengenrichtung
-  \(\CardValues{\mathcal B}\subseteq
-  \CardValMap{\mathcal B}[\mathcal B]\)]{%
-    \forall Y\in\mathcal B\,\Finite{Y}\dsep
-    n\in\CardValues{\mathcal B}
-    \vdash n\in\CardValMap{\mathcal B}[\mathcal B]
-  }{%
-    \forall Y\in\mathcal B\,\Finite{Y}\dsep
-    n\in\CardValues{\mathcal B}
-    \vdash n\in\CardValMap{\mathcal B}[\mathcal B]
-  }
-    \proofstepwidestar[1]{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-    \proofstepwidestar[2]{n\in\CardValues{\mathcal B}}{\rA}
-    \proofstepwidestar[1]{\CardValMap{\mathcal B}\colon
-      \mathcal B\to\CardValues{\mathcal B}}{%
-      \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
-      \vdash
-      \CardValMap{\mathcal B}\colon\mathcal B\to
-      \CardValues{\mathcal B}}{1}}
-    \proofstepwidestar[2]{%
-      n\in\mathbb{N}\land
-      \exists X\in\mathcal B\, n=\tCard(X)}{%
-      \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
-      \{n\in\mathbb{N}\mid
-      \exists X\in\mathcal B\, n=\tCard(X)\}}{2}}
-    \proofstepwidestar[2]{\exists X\in\mathcal B\, n=\tCard(X)}{\rAEb{4}}
-
-    \proofstepwidestar[6]{X\in\mathcal B\land n=\tCard(X)}{\rA}
-    \proofstepwidestar[6]{X\in\mathcal B}{\rAEa{6}}
-    \proofstepwidestar[6]{n=\tCard(X)}{\rAEb{6}}
-    \proofstepwidestar[1,6]{\CardValMap{\mathcal B}(X)=\tCard(X)}{%
-      \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-      X\in\mathcal B
-      \vdash \CardValMap{\mathcal B}(X)=\tCard(X)}{1,7}}
-    \proofstepwidestar[1,6]{n=\CardValMap{\mathcal B}(X)}{%
-      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{8,9}}
-    \proofstepwidestar[1,6]{\exists X\in\mathcal B\,
-      n=\CardValMap{\mathcal B}(X)}{\rEI{\rAI{7,10}}}
-    \proofstepwidestar[1,6]{n\in\CardValMap{\mathcal B}[\mathcal B]}{%
-      \FormulaRefAuto{F\colon A\to B\dsep
-      \exists x\in A\,y=F(x)\vdash y\in F[A]}{3,11}}
-    \proofstepwidestar[1,2]{n\in\CardValMap{\mathcal B}[\mathcal B]}{%
-      \rEE{5,6,12}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\forall Y\in\mathcal B\,\Finite{Y}}{\rA}
-    \proofstepwidestar[1]{\CardValMap{\mathcal B}[\mathcal B]\subseteq
-      \CardValues{\mathcal B}}{%
-      \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-      n\in\CardValMap{\mathcal B}[\mathcal B]
-      \vdash n\in\CardValues{\mathcal B}}{1}}
-    \proofstepwidestar[1]{\CardValues{\mathcal B}\subseteq
-      \CardValMap{\mathcal B}[\mathcal B]}{%
-      \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}\dsep
-      n\in\CardValues{\mathcal B}
-      \vdash n\in\CardValMap{\mathcal B}[\mathcal B]}{1}}
-    \proofstepwidestar[1]{\CardValMap{\mathcal B}[\mathcal B]=
-      \CardValues{\mathcal B}}{%
-      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A \vdash A=B}{2,3}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\subsubsection{Endliche Kardinalwertmengen}
-
-\FormulaThmDelta[Kardinalwertmenge einer endlichen Familie ist endlich]{%
-  \Finite{\mathcal B}\dsep \forall X\in\mathcal B\,\Finite{X}
-  \vdash \Finite{\CardValues{\mathcal B}}
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep X\dsep n}
-  \DeltaRow{Funktionen}{\CardValMap{\mathcal B}}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproof}
-  \proofstep{1}{\Finite{\mathcal B}}{\rA}
-  \proofstep{2}{\forall X\in\mathcal B\,\Finite{X}}{\rA}
-  \proofstep{2}{\CardValMap{\mathcal B}\colon\mathcal B\to
-    \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
-    \vdash
-    \CardValMap{\mathcal B}\colon\mathcal B\to
-    \CardValues{\mathcal B}}{2}}
-  \proofstep{}{\mathcal B\subseteq\mathcal B}{%
-    \FormulaRefAuto{A\subseteq A}}
-  \proofstep{1,2}{\Finite{\CardValMap{\mathcal B}[\mathcal B]}}{%
-    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C}
-    \vdash \Finite{F[C]}}{4,3,1}}
-  \proofstep{2}{\CardValMap{\mathcal B}[\mathcal B]=
-    \CardValues{\mathcal B}}{%
-    \FormulaRefAuto{\forall Y\in\mathcal B\,\Finite{Y}
-    \vdash
-    \CardValMap{\mathcal B}[\mathcal B]=
-    \CardValues{\mathcal B}}{2}}
-  \proofstep{1,2}{\Finite{\CardValues{\mathcal B}}}{\rIE{6,5}}
-\end{tabproof}
-
-\subsubsection{Maxima endlicher Mengen natuerlicher Zahlen}
-
-\FormulaThmDelta[Leere Ausgangsmenge mit adjungiertem natuerlichem Maximum]{%
-  a\in\mathbb{N}\dsep D=\varnothing
-  \vdash
-  \exists r\in D\cup\{a\}\,
-  \forall n\in D\cup\{a\}\,n\leq r
-}{%
-  \DeltaRow{Mengen}{D\dsep a\dsep n\dsep r}
-  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{a\in\mathbb{N}}{\rA}
-  \proofstepwidestar[2]{D=\varnothing}{\rA}
-  \proofstepwidestar[3]{n\in D\cup\{a\}}{\rA}
-  \proofstepwidestar[3]{n\in D\lor n\in\{a\}}{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{3}}
-
-  \proofstepwidestar[5]{n\in D}{\rA}
-  \proofstepwidestar[2,5]{n\in\varnothing}{\rIE{2,5}}
-  \proofstepwidestar[]{n\notin\varnothing}{%
-    \FormulaRefAuto{x \not\in \varnothing}}
-  \proofstepwidestar[2,5]{\bot}{\rBI{6,7}}
-  \proofstepwidestar[2,5]{n\leq a}{%
-    \FormulaRefAuto{\bot\vdash P}{8}}
-
-  \proofstepwidestar[10]{n\in\{a\}}{\rA}
-  \proofstepwidestar[10]{n=a}{%
-    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{10}}
-  \proofstepwidestar[1,10]{n\leq a}{%
-    \rIE{11,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{1}}}
-
-  \proofstepwidestar[1,2,3]{n\leq a}{\rOE{4,5,9,10,12}}
-  \proofstepwidestar[1,2]{%
-    \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{3,13}}}
-  \proofstepwidestar[]{a\in D\cup\{a\}}{%
-    \FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstepwidestar[1,2]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{15,14}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaR[Adjunktion eines groesseren natuerlichen Wertes liefert ein Maximum]{%
-  \begin{aligned}[t]
-    &D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-    m\in D\dsep \forall n\in D\,n\leq m\dsep m\leq a\\
-    &\vdash
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r
-  \end{aligned}
-}{%
-  D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-  m\in D\dsep \forall n\in D\,n\leq m\dsep m\leq a
-  \vdash
-  \exists r\in D\cup\{a\}\,
-  \forall n\in D\cup\{a\}\,n\leq r
-}{%
-  \DeltaRow{Mengen}{D\dsep a\dsep m\dsep n\dsep r}
-  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{D\subseteq\mathbb{N}}{\rA}
-  \proofstepwidestar[2]{a\in\mathbb{N}}{\rA}
-  \proofstepwidestar[3]{m\in D}{\rA}
-  \proofstepwidestar[4]{\forall n\in D\,n\leq m}{\rA}
-  \proofstepwidestar[5]{m\leq a}{\rA}
-  \proofstepwidestar[1,3]{m\in\mathbb{N}}{%
-    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,3}}
-
-  \proofstepwidestar[7]{n\in D\cup\{a\}}{\rA}
-  \proofstepwidestar[7]{n\in D\lor n\in\{a\}}{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{7}}
-  \proofstepwidestar[10]{n\in D}{\rA}
-  \proofstepwidestar[4,10]{n\leq m}{\rRE{9,\rUE{4}}}
-  \proofstepwidestar[1,10]{n\in\mathbb{N}}{%
-    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,9}}
-  \proofstepwidestar[1,2,3,5,10]{n\leq a}{%
-    \FormulaRefAuto{%
-    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep
-    m\leq n\dsep n\leq k\vdash m\leq k}{11,6,2,10,5}}
-
-  \proofstepwidestar[14]{n\in\{a\}}{\rA}
-  \proofstepwidestar[14]{n=a}{%
-    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{13}}
-  \proofstepwidestar[2,14]{n\leq a}{%
-    \rIE{14,\FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{2}}}
-  \proofstepwidestar[1,2,3,5,7]{n\leq a}{%
-    \rOE{8,9,12,13,15}}
-  \proofstepwidestar[1,2,3,5]{%
-    \forall n\in D\cup\{a\}\,n\leq a}{\rUI{\rRI{7,16}}}
-  \proofstepwidestar[]{a\in D\cup\{a\}}{%
-    \FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstepwidestar[1,2,3,5]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{18,17}}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Altes Maximum bleibt nach kleinerer Adjunktion erhalten]{%
-  m\in D\dsep \forall n\in D\,n\leq m\dsep a\leq m
-  \vdash
-  m\in D\cup\{a\}\land
-  \forall n\in D\cup\{a\}\,n\leq m
-}{%
-  \DeltaRow{Mengen}{D\dsep a\dsep m\dsep n}
-  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{m\in D}{\rA}
-  \proofstepwidestar[2]{\forall n\in D\,n\leq m}{\rA}
-  \proofstepwidestar[3]{a\leq m}{\rA}
-
-  \proofstepwidestar[4]{n\in D\cup\{a\}}{\rA}
-  \proofstepwidestar[4]{n\in D\lor n\in\{a\}}{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{4}}
-  \proofstepwidestar[6]{n\in D}{\rA}
-  \proofstepwidestar[2,6]{n\leq m}{\rRE{6,\rUE{2}}}
-  \proofstepwidestar[8]{n\in\{a\}}{\rA}
-  \proofstepwidestar[8]{n=a}{%
-    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{8}}
-  \proofstepwidestar[3,8]{n\leq m}{\rIE{9,3}}
-  \proofstepwidestar[2,3,4]{n\leq m}{\rOE{5,6,7,8,10}}
-  \proofstepwidestar[2,3]{%
-    \forall n\in D\cup\{a\}\,n\leq m}{\rUI{\rRI{4,11}}}
-  \proofstepwidestar[1]{m\in D\cup\{a\}}{%
-    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{1}}
-  \proofstepwidestar[1,2,3]{%
-    m\in D\cup\{a\}\land
-    \forall n\in D\cup\{a\}\,n\leq m}{\rAI{13,12}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Adjunktion zu einer Menge mit Maximum besitzt ein Maximum]{%
-  D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-  \exists m\in D\,\forall n\in D\,n\leq m
-  \vdash
-  \exists r\in D\cup\{a\}\,
-  \forall n\in D\cup\{a\}\,n\leq r
-}{%
-  \DeltaRow{Mengen}{D\dsep a\dsep m\dsep n\dsep r}
-  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{D\subseteq\mathbb{N}}{\rA}
-  \proofstepwidestar[2]{a\in\mathbb{N}}{\rA}
-  \proofstepwidestar[3]{%
-    \exists m\in D\,\forall n\in D\,n\leq m}{\rA}
-  \proofstepwidestar[4]{m\in D\land \forall n\in D\,n\leq m}{\rA}
-  \proofstepwidestar[4]{m\in D}{\rAEa{4}}
-  \proofstepwidestar[4]{\forall n\in D\,n\leq m}{\rAEb{4}}
-  \proofstepwidestar[1,4]{m\in\mathbb{N}}{%
-    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,5}}
-  \proofstepwidestar[1,2,4]{m\leq a\lor a\leq m}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
-    m\leq n\lor n\leq m}{7,2}}
-
-  \proofstepwidestar[9]{m\leq a}{\rA}
-  \proofstepwidestar[1,2,4,9]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{%
-    \FormulaRefAuto{D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-    m\in D\dsep \forall n\in D\,n\leq m\dsep m\leq a
-    \vdash
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{1,2,5,6,9}}
-
-  \proofstepwidestar[11]{a\leq m}{\rA}
-  \proofstepwidestar[4,11]{%
-    m\in D\cup\{a\}\land
-    \forall n\in D\cup\{a\}\,n\leq m}{%
-    \FormulaRefAuto{m\in D\dsep \forall n\in D\,n\leq m\dsep
-    a\leq m
-    \vdash
-    m\in D\cup\{a\}\land
-    \forall n\in D\cup\{a\}\,n\leq m}{5,6,11}}
-  \proofstepwidestar[4,11]{m\in D\cup\{a\}}{\rAEa{12}}
-  \proofstepwidestar[4,11]{%
-    \forall n\in D\cup\{a\}\,n\leq m}{\rAEb{12}}
-  \proofstepwidestar[4,11]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{\rEI{\rAI{13,14}}}
-
-  \proofstepwidestar[1,2,4]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{\rOE{8,9,10,11,15}}
-  \proofstepwidestar[1,2,3]{%
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r}{\rEE{3,4,16}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Endliche nichtleere Mengen natuerlicher Zahlen besitzen ein Maximum]{%
-  C\subseteq\mathbb{N}\dsep C\neq\varnothing\dsep \Finite{C}
-  \vdash \exists m\in C\,\forall n\in C\,n\leq m
-}{%
-  \DeltaRow{Mengen}{C\dsep m\dsep n}
-  \DeltaRow{Relationen}{\leq_{\mathbb{N}}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideind[Induktionsanfang]{%
-    \varnothing=\varnothing\lor
-    \exists m\in\varnothing\,
-    \forall n\in\varnothing\,n\leq m}
-    \proofstepwidestar[]{\varnothing=\varnothing}{\rII}
-    \proofstepwidestar[]{%
-      \varnothing=\varnothing\lor
-      \exists m\in\varnothing\,
-      \forall n\in\varnothing\,n\leq m}{\rOIa{1}}
-  \closeproofpartwideind
-
-  \proofpartwideindR[Adjunktionsschritt]{%
-    \begin{aligned}[t]
-      &D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-      a\notin D\\
-      &\dsep
-      \bigl(D=\varnothing\lor
-      \exists m\in D\,\forall n\in D\,n\leq m\bigr)\\
-      &\vdash
-      D\cup\{a\}=\varnothing\lor{}\\
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r
-    \end{aligned}}
-  {%
-    D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-    a\notin D\dsep
-    \bigl(D=\varnothing\lor
-    \exists m\in D\,\forall n\in D\,n\leq m\bigr)
-    \vdash
-    D\cup\{a\}=\varnothing\lor
-    \exists r\in D\cup\{a\}\,
-    \forall n\in D\cup\{a\}\,n\leq r
-  }
-    \proofstepwidestar[7]{D\subseteq\mathbb{N}}{\rA}
-    \proofstepwidestar[8]{a\in\mathbb{N}}{\rA}
-    \proofstepwidestar[9]{a\notin D}{\rA}
-    \proofstepwidestar[10]{%
-      D=\varnothing\lor
-      \exists m\in D\,\forall n\in D\,n\leq m}{\rA}
-
-    \proofstepwidestar[11]{D=\varnothing}{\rA}
-    \proofstepwidestar[8,11]{%
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{%
-      \FormulaRefAuto{a\in\mathbb{N}\dsep D=\varnothing
-      \vdash
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{2,5}}
-    \proofstepwidestar[8,11]{%
-      D\cup\{a\}=\varnothing\lor
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rOIb{6}}
-
-    \proofstepwidestar[14]{%
-      \exists m\in D\,\forall n\in D\,n\leq m}{\rA}
-    \proofstepwidestar[7,8,14]{%
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{%
-      \FormulaRefAuto{D\subseteq\mathbb{N}\dsep a\in\mathbb{N}\dsep
-      \exists m\in D\,\forall n\in D\,n\leq m
-      \vdash
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{1,2,8}}
-    \proofstepwidestar[7,8,14]{%
-      D\cup\{a\}=\varnothing\lor
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rOIb{9}}
-    \proofstepwidestar[7,8,10]{%
-      D\cup\{a\}=\varnothing\lor
-      \exists r\in D\cup\{a\}\,
-      \forall n\in D\cup\{a\}\,n\leq r}{\rOE{4,5,7,8,10}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Induktionsschluss}
-    \proofstepwidestar[1]{C\subseteq\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{C\neq\varnothing}{\rA}
-    \proofstepwidestar[3]{\Finite{C}}{\rA}
-    \proofstepwidestar[1,3]{%
-      C=\varnothing\lor
-      \exists m\in C\,\forall n\in C\,n\leq m}{%
-      \(\mathrm{Induktion}(IA,IS,3,1)\)}
-    \proofstepwidestar[5]{C=\varnothing}{\rA}
-    \proofstepwidestar[2,5]{\bot}{\rBI{5,2}}
-    \proofstepwidestar[2,5]{%
-      \exists m\in C\,\forall n\in C\,n\leq m}{%
-      \FormulaRefAuto{\bot\vdash P}{6}}
-    \proofstepwidestar[8]{%
-      \exists m\in C\,\forall n\in C\,n\leq m}{\rA}
-    \proofstepwidestar[1,2,3]{%
-      \exists m\in C\,\forall n\in C\,n\leq m}{%
-      \rOE{4,5,7,8,8}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\subsubsection{Maximalsaetze fuer endliche Familien}
-
-\FormulaThmDelta[Kardinales Maximum liefert maximales Familienglied]{%
-  \forall X\in\mathcal B\,\Finite{X}
-  \dsep
-  \exists m\in\CardValues{\mathcal B}\,
-  \forall n\in\CardValues{\mathcal B}\,n\leq m
-  \vdash
-  \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-  \exists F\colon B\inj A
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep A\dsep B\dsep m\dsep n}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\forall X\in\mathcal B\,\Finite{X}}{\rA}
-  \proofstepwidestar[2]{%
-    \exists m\in\CardValues{\mathcal B}\,
-    \forall n\in\CardValues{\mathcal B}\,n\leq m}{\rA}
-  \proofstepwidestar[3]{%
-    m\in\CardValues{\mathcal B}\land
-    \forall n\in\CardValues{\mathcal B}\,n\leq m}{\rA}
-  \proofstepwidestar[3]{m\in\CardValues{\mathcal B}}{\rAEa{3}}
-  \proofstepwidestar[3]{%
-    \forall n\in\CardValues{\mathcal B}\,n\leq m}{\rAEb{3}}
-  \proofstepwidestar[3]{%
-    m\in\mathbb{N}\land
-    \exists A\in\mathcal B\,m=\tCard(A)}{%
-    \FormulaRefAuto{\CardValues{\mathcal B}\coloneqq
-    \{n\in\mathbb{N}\mid
-    \exists X\in\mathcal B\, n=\tCard(X)\}}{4}}
-  \proofstepwidestar[3]{\exists A\in\mathcal B\,m=\tCard(A)}{\rAEb{6}}
-
-  \proofstepwidestar[8]{A\in\mathcal B\land m=\tCard(A)}{\rA}
-  \proofstepwidestar[8]{A\in\mathcal B}{\rAEa{8}}
-  \proofstepwidestar[8]{m=\tCard(A)}{\rAEb{8}}
-  \proofstepwidestar[1,8]{\Finite{A}}{\rRE{9,\rUE{1}}}
-  \proofstepwidestar[12]{B\in\mathcal B}{\rA}
-  \proofstepwidestar[1,12]{\Finite{B}}{\rRE{12,\rUE{1}}}
-  \proofstepwidestar[1,12]{\tCard(B)\in\CardValues{\mathcal B}}{%
-    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}{12,13}}
-  \proofstepwidestar[3,12]{\tCard(B)\leq m}{\rRE{14,\rUE{5}}}
-  \proofstepwidestar[3,8,12]{\tCard(B)\leq \tCard(A)}{\rIE{10,15}}
-  \proofstepwidestar[1,3,8,12]{\exists F\colon B\inj A}{%
-    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
-    \vdash \exists F\colon M\inj N}{13,11,16}}
-  \proofstepwidestar[1,3,8]{%
-    \forall B\in\mathcal B\,\exists F\colon B\inj A}{\rUI{\rRI{12,17}}}
-  \proofstepwidestar[1,3,8]{%
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{\rEI{\rAI{9,18}}}
-  \proofstepwidestar[1,3]{%
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{\rEE{7,8,19}}
-  \proofstepwidestar[1,2]{%
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{\rEE{2,3,20}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Maximalsatz fuer endliche Familien endlicher Mengen]{%
-  \Finite{\mathcal B}\dsep \mathcal B\neq\varnothing\dsep
-  \forall X\in\mathcal B\,\Finite{X}
-  \vdash
-  \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-  \exists F\colon B\inj A
-}{%
-  \DeltaRow{Mengen}{\mathcal B\dsep A\dsep C\dsep m}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Termsymbol}{\tCard}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\Finite{\mathcal B}}{\rA}
-  \proofstepwidestar[2]{\mathcal B\neq\varnothing}{\rA}
-  \proofstepwidestar[3]{\forall X\in\mathcal B\,\Finite{X}}{\rA}
-  \proofstepwidestar[]{\CardValues{\mathcal B}\subseteq\mathbb{N}}{%
-    \FormulaRefAuto{\CardValues{\mathcal B}\subseteq\mathbb{N}}}
-
-  \proofstepwidestar[2]{\exists A\in\mathcal B}{%
-    \FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{2}}
-  \proofstepwidestar[6]{A\in\mathcal B}{\rA}
-  \proofstepwidestar[3,6]{\Finite{A}}{\rRE{6,\rUE{3}}}
-  \proofstepwidestar[3,6]{\tCard(A)\in\CardValues{\mathcal B}}{%
-    \FormulaRefAuto{X\in\mathcal B\dsep \Finite{X}
-    \vdash \tCard(X)\in\CardValues{\mathcal B}}{6,7}}
-  \proofstepwidestar[3,6]{\CardValues{\mathcal B}\neq\varnothing}{%
-    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{8}}
-  \proofstepwidestar[2,3]{\CardValues{\mathcal B}\neq\varnothing}{\rEE{5,6,9}}
-
-  \proofstepwidestar[1,3]{\Finite{\CardValues{\mathcal B}}}{%
-    \FormulaRefAuto{\Finite{\mathcal B}\dsep
-    \forall X\in\mathcal B\,\Finite{X}
-    \vdash \Finite{\CardValues{\mathcal B}}}{1,3}}
-  \proofstepwidestar[1,2,3]{%
-    \exists m\in\CardValues{\mathcal B}\,
-    \forall n\in\CardValues{\mathcal B}\,n\leq m}{%
-    \FormulaRefAuto{C\subseteq\mathbb{N}\dsep C\neq\varnothing\dsep \Finite{C}
-    \vdash \exists m\in C\,\forall n\in C\,n\leq m}{4,10,11}}
-  \proofstepwidestar[1,2,3]{%
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{%
-    \FormulaRefAuto{\forall X\in\mathcal B\,\Finite{X}
-    \dsep
-    \exists m\in\CardValues{\mathcal B}\,
-    \forall n\in\CardValues{\mathcal B}\,n\leq m
-    \vdash
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{3,12}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Maximalsatz fuer endliche Potenzmengenfamilien]{%
-  \Finite{M}\dsep \mathcal B\subseteq\powerset(M)\dsep
-  \mathcal B\neq\varnothing
-  \vdash
-  \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-  \exists F\colon B\inj A
-}{%
-  \DeltaRow{Mengen}{M\dsep \mathcal B\dsep A\dsep B}
-  \DeltaRow{Funktionen}{F}
-}
-\begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{2}{\mathcal B\subseteq\powerset(M)}{\rA}
-  \proofstep{3}{\mathcal B\neq\varnothing}{\rA}
-  \proofstep{1}{\Finite{\powerset(M)}}{%
-    \FormulaRefAuto{\Finite{A}\vdash \Finite{\powerset(A)}}{1}}
-  \proofstep{1,2}{\Finite{\mathcal B}}{%
-    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{2,4}}
-  \proofstep{6}{A\in\mathcal B}{\rA}
-  \proofstep{2,6}{A\in\powerset(M)}{%
-    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{2,6}}
-  \proofstep{2,6}{A\subseteq M}{%
-    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{7}}
-  \proofstep{1,2,6}{\Finite{A}}{%
-    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{8,1}}
-  \proofstep{1,2}{\forall A\in\mathcal B\,\Finite{A}}{\rUI{\rRI{6,9}}}
-  \proofstep{1,2,3}{%
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{%
-    \FormulaRefAuto{\Finite{\mathcal B}\dsep \mathcal B\neq\varnothing\dsep
-    \forall X\in\mathcal B\,\Finite{X}
-    \vdash
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{5,3,10}}
-\end{tabproof}
-
 \section{Frankl-Vermutung}
 
 Die Frankl-Vermutung, benannt nach Péter Frankl, betrifft endliche
@@ -25762,9 +25242,9 @@ aus \(M\) enthalten ist.
   \DeltaPrem{Frankl-Familien}{\FranklFam{M}}
 }
 
-\FormulaThmDelta[Frankl-Familien sind nichtleer]{%
+\FormulaThmDeltaK[Frankl-Familien sind nichtleer]{%
   \FranklFam{M}\vdash M\neq\varnothing
-}{%
+}{FranklFamNonempty}{%
   \DeltaRow{Mengen}{M}
 }
 \begin{tabproof}
@@ -25772,9 +25252,9 @@ aus \(M\) enthalten ist.
   \proofstep{1}{M\neq\varnothing}{\FormulaRefAuto{Frankl-Familie}{1}}
 \end{tabproof}
 
-\FormulaThmDelta[Frankl-Familien haben nichtleeren Träger]{%
+\FormulaThmDeltaK[Frankl-Familien haben nichtleeren Träger]{%
   \FranklFam{M}\vdash \bigcup M\neq\varnothing
-}{%
+}{FranklFamCarrierNonempty}{%
   \DeltaRow{Mengen}{M}
 }
 \begin{tabproof}
@@ -25782,9 +25262,9 @@ aus \(M\) enthalten ist.
   \proofstep{1}{\bigcup M\neq\varnothing}{\FormulaRefAuto{Frankl-Familie}{1}}
 \end{tabproof}
 
-\FormulaThmDelta[Frankl-Familien sind endlich]{%
+\FormulaThmDeltaK[Frankl-Familien sind endlich]{%
   \FranklFam{M}\vdash \Finite{M}
-}{%
+}{FranklFamFinite}{%
   \DeltaRow{Mengen}{M}
 }
 \begin{tabproof}
@@ -25792,9 +25272,9 @@ aus \(M\) enthalten ist.
   \proofstep{1}{\Finite{M}}{\FormulaRefAuto{Frankl-Familie}{1}}
 \end{tabproof}
 
-\FormulaThmDelta[Frankl-Familien sind vereinigungsabgeschlossen]{%
+\FormulaThmDeltaK[Frankl-Familien sind vereinigungsabgeschlossen]{%
   \FranklFam{M}\vdash \UnionClosedFam(M)
-}{%
+}{FranklFamUnionClosed}{%
   \DeltaRow{Mengen}{M}
 }
 \begin{tabproof}
@@ -25919,2944 +25399,715 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
   \proofstep{1,2}{\Frankl{M}}{\rEE{4,5,16}}
 \end{tabproof}
 
-\subsection{Ein Beispiel zur fehlenden Wohldefiniertheit}
 
-Die natürliche Vorschrift \(X\mapsto X\cup\{a\}\) scheitert auf
-\(\FamAvoiding{M}{a}\) nicht an der Injektivität. Nach der Kürzung einer
-frischen Adjunktion ist sie dort injektiv. Der mögliche Fehler ist vielmehr,
-dass der Wert nicht wieder in der enthaltenden Teilfamilie liegt. Das zeigt
-bereits die folgende aus Paar- und Einermengen gebaute Familie.
+\subsection{Gleiches Auftreten in Mengenfamilien}
 
-\FormulaDefDeltaK[Träger des Wohldefiniertheitsbeispiels]{%
-  \FranklExCarrier\coloneqq \{\varnothing,\{\varnothing\}\}
-}{Träger des Wohldefiniertheitsbeispiels}{%
-  \DeltaRow{Mengen}{\FranklExCarrier}
-  \DeltaRow{Neue Symbole}{\FranklExCarrier}
+Wir identifizieren Elemente des Trägers, die in allen Mitgliedern der Familie
+gemeinsam auftreten. Der Quotient ersetzt anschließend jedes solche Bündel durch
+eine Äquivalenzklasse.
+
+\FormulaDefDeltaK[Relation gleichen Auftretens]{%
+  \SameOccRel{M}\coloneqq
+  \{(a,b)\in \bigcup M\times\bigcup M\mid
+  \forall X\in M\,(a\in X\leftrightarrow b\in X)\}
+}{Relation gleichen Auftretens}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Neue Symbole}{\SameOccRel{M}}
 }
 
-\FormulaDefDeltaK[Beispielfamilie zur Zielverfehlung]{%
-  \FranklExFamily\coloneqq \{\varnothing,\FranklExCarrier\}
-}{Beispielfamilie zur Zielverfehlung}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-  \DeltaRow{Neue Symbole}{\FranklExFamily}
-}
-
-\FormulaThmDelta[Leere Menge liegt im Beispielträger]{%
-  \varnothing\in \FranklExCarrier
-}{%
-  \DeltaRow{Mengen}{\FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing\in \FranklExCarrier}{%
-    \FormulaRefAuto{\FranklExCarrier\coloneqq
-    \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{a\in\{a,b\}}}}
-\end{tabproof}
-
-\FormulaThmDelta[Leere Einermenge liegt im Beispielträger]{%
-  \{\varnothing\}\in \FranklExCarrier
-}{%
-  \DeltaRow{Mengen}{\FranklExCarrier}
+\FormulaThmDeltaK[Charakterisierung gleichen Auftretens]{%
+  (a,b)\in \SameOccRel{M}
+  \eqvdash
+  a\in\bigcup M\land b\in\bigcup M\land
+  \forall X\in M\,(a\in X\leftrightarrow b\in X)
+}{SameOccRelChar}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
 }
 \begin{tabproof}
-  \proofstep{}{\{\varnothing\}\in \FranklExCarrier}{%
-    \FormulaRefAuto{\FranklExCarrier\coloneqq
-    \{\varnothing,\{\varnothing\}\}}{\FormulaRefAuto{b\in\{a,b\}}}}
+  \proofstep{}{%
+    (a,b)\in \SameOccRel{M}
+    \eqvdash
+    (a,b)\in\bigcup M\times\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
+    \FormulaRefAuto{Relation gleichen Auftretens}}
+  \proofstep{}{%
+    (a,b)\in\bigcup M\times\bigcup M
+    \eqvdash a\in\bigcup M\land b\in\bigcup M}{%
+    \FormulaRefAuto{(x,y)\in A\times B \eqvdash x\in A\land y\in B}}
+  \proofstep{}{%
+    (a,b)\in \SameOccRel{M}
+    \eqvdash
+    a\in\bigcup M\land b\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rChain{1,2}}
 \end{tabproof}
 
-\FormulaThmDelta[Leere Menge liegt in der Beispielfamilie]{%
-  \varnothing\in \FranklExFamily
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing\in \FranklExFamily}{%
-    \FormulaRefAuto{\FranklExFamily\coloneqq
-    \{\varnothing,\FranklExCarrier\}}{\FormulaRefAuto{a\in\{a,b\}}}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielträger liegt in der Beispielfamilie]{%
-  \FranklExCarrier\in \FranklExFamily
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\FranklExCarrier\in \FranklExFamily}{%
-    \FormulaRefAuto{\FranklExFamily\coloneqq
-    \{\varnothing,\FranklExCarrier\}}{\FormulaRefAuto{b\in\{a,b\}}}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielfamilie ist nichtleer]{%
-  \FranklExFamily\neq\varnothing
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing\in \FranklExFamily}{%
-    \FormulaRefAuto{\varnothing\in \FranklExFamily}}
-  \proofstep{}{\FranklExFamily\neq\varnothing}{%
-    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{1}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielfamilie ist endlich]{%
-  \Finite{\FranklExFamily}
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\Finite{\{\varnothing,\FranklExCarrier\}}}{%
-    \FormulaRefAuto{\Finite{\{A,B\}}}}
-  \proofstep{}{\FranklExFamily=\{\varnothing,\FranklExCarrier\}}{%
-    \FormulaRefAuto{\FranklExFamily\coloneqq
-    \{\varnothing,\FranklExCarrier\}}}
-  \proofstep{}{\{\varnothing,\FranklExCarrier\}=\FranklExFamily}{%
-    \FormulaRefAuto{a=b\vdash b=a}{2}}
-  \proofstep{}{\Finite{\FranklExFamily}}{%
-    \rIE{3,1}}
-\end{tabproof}
-
-\FormulaThmDelta[Elemente der Beispielfamilie sind die beiden Beispielelemente]{%
-  X\in \FranklExFamily\vdash X=\varnothing\lor X=\FranklExCarrier
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \FranklExFamily}{\rA}
-  \proofstep{1}{X\in\{\varnothing,\FranklExCarrier\}}{%
-    \FormulaRefAuto{\FranklExFamily\coloneqq
-    \{\varnothing,\FranklExCarrier\}}{1}}
-  \proofstep{1}{X=\varnothing\lor X=\FranklExCarrier}{%
-    \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{2}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielfamilie ist unter paarweiser Vereinigung abgeschlossen]{%
-  X\in \FranklExFamily\dsep Y\in \FranklExFamily
-  \vdash X\cup Y\in \FranklExFamily
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X\dsep Y}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Fall \(X=\varnothing\), \(Y=\varnothing\)]{%
-    X=\varnothing\dsep Y=\varnothing\vdash X\cup Y\in \FranklExFamily
-  }{%
-    X=\varnothing\dsep Y=\varnothing\vdash X\cup Y\in \FranklExFamily
-  }
-    \proofstepwidestar[1]{X=\varnothing}{\rA}
-    \proofstepwidestar[2]{Y=\varnothing}{\rA}
-    \proofstepwidestar[1]{X\cup Y=\varnothing\cup Y}{%
-      \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{1}}
-    \proofstepwidestar[2]{\varnothing\cup Y=\varnothing\cup\varnothing}{%
-      \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{2}}
-    \proofstepwidestar[1,2]{X\cup Y=\varnothing\cup\varnothing}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
-    \proofstepwidestar[]{\varnothing\cup\varnothing=\varnothing}{%
-      \FormulaRefAuto{\varnothing\cup\varnothing=\varnothing}}
-    \proofstepwidestar[1,2]{X\cup Y=\varnothing}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
-    \proofstepwidestar[1,2]{\varnothing=X\cup Y}{%
-      \FormulaRefAuto{a=b\vdash b=a}{7}}
-    \proofstepwidestar[]{\varnothing\in \FranklExFamily}{%
-      \FormulaRefAuto{\varnothing\in \FranklExFamily}}
-    \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{\rIE{8,9}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X=\varnothing\), \(Y=\FranklExCarrier\)]{%
-    X=\varnothing\dsep Y=\FranklExCarrier\vdash
-    X\cup Y\in \FranklExFamily
-  }{%
-    X=\varnothing\dsep Y=\FranklExCarrier\vdash
-    X\cup Y\in \FranklExFamily
-  }
-    \proofstepwidestar[1]{X=\varnothing}{\rA}
-    \proofstepwidestar[2]{Y=\FranklExCarrier}{\rA}
-    \proofstepwidestar[1]{X\cup Y=\varnothing\cup Y}{%
-      \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{1}}
-    \proofstepwidestar[2]{\varnothing\cup Y=\varnothing\cup \FranklExCarrier}{%
-      \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{2}}
-    \proofstepwidestar[1,2]{X\cup Y=\varnothing\cup \FranklExCarrier}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
-    \proofstepwidestar[]{\varnothing\cup \FranklExCarrier=\FranklExCarrier}{%
-      \FormulaRefAuto{\varnothing \cup A = A}}
-    \proofstepwidestar[1,2]{X\cup Y=\FranklExCarrier}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
-    \proofstepwidestar[1,2]{\FranklExCarrier=X\cup Y}{%
-      \FormulaRefAuto{a=b\vdash b=a}{7}}
-    \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
-      \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
-    \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{\rIE{8,9}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X=\FranklExCarrier\), \(Y=\varnothing\)]{%
-    X=\FranklExCarrier\dsep Y=\varnothing\vdash
-    X\cup Y\in \FranklExFamily
-  }{%
-    X=\FranklExCarrier\dsep Y=\varnothing\vdash
-    X\cup Y\in \FranklExFamily
-  }
-    \proofstepwidestar[1]{X=\FranklExCarrier}{\rA}
-    \proofstepwidestar[2]{Y=\varnothing}{\rA}
-    \proofstepwidestar[1]{X\cup Y=\FranklExCarrier\cup Y}{%
-      \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{1}}
-    \proofstepwidestar[2]{\FranklExCarrier\cup Y=\FranklExCarrier\cup\varnothing}{%
-      \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{2}}
-    \proofstepwidestar[1,2]{X\cup Y=\FranklExCarrier\cup\varnothing}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
-    \proofstepwidestar[]{\FranklExCarrier\cup\varnothing=\FranklExCarrier}{%
-      \FormulaRefAuto{A \cup \varnothing = A}}
-    \proofstepwidestar[1,2]{X\cup Y=\FranklExCarrier}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
-    \proofstepwidestar[1,2]{\FranklExCarrier=X\cup Y}{%
-      \FormulaRefAuto{a=b\vdash b=a}{7}}
-    \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
-      \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
-    \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{\rIE{8,9}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X=\FranklExCarrier\), \(Y=\FranklExCarrier\)]{%
-    X=\FranklExCarrier\dsep Y=\FranklExCarrier\vdash
-    X\cup Y\in \FranklExFamily
-  }{%
-    X=\FranklExCarrier\dsep Y=\FranklExCarrier\vdash
-    X\cup Y\in \FranklExFamily
-  }
-    \proofstepwidestar[1]{X=\FranklExCarrier}{\rA}
-    \proofstepwidestar[2]{Y=\FranklExCarrier}{\rA}
-    \proofstepwidestar[1]{X\cup Y=\FranklExCarrier\cup Y}{%
-      \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{1}}
-    \proofstepwidestar[2]{\FranklExCarrier\cup Y=
-      \FranklExCarrier\cup \FranklExCarrier}{%
-      \FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{2}}
-    \proofstepwidestar[1,2]{X\cup Y=\FranklExCarrier\cup \FranklExCarrier}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
-    \proofstepwidestar[]{\FranklExCarrier\cup \FranklExCarrier=\FranklExCarrier}{%
-      \FormulaRefAuto{A \cup A = A}}
-    \proofstepwidestar[1,2]{X\cup Y=\FranklExCarrier}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
-    \proofstepwidestar[1,2]{\FranklExCarrier=X\cup Y}{%
-      \FormulaRefAuto{a=b\vdash b=a}{7}}
-    \proofstepwidestar[]{\FranklExCarrier\in \FranklExFamily}{%
-      \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
-    \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{\rIE{8,9}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
-    \proofstepwidestar[1]{X\in \FranklExFamily}{\rA}
-    \proofstepwidestar[2]{Y\in \FranklExFamily}{\rA}
-    \proofstepwidestar[1]{X=\varnothing\lor X=\FranklExCarrier}{%
-      \FormulaRefAuto{X\in \FranklExFamily\vdash
-      X=\varnothing\lor X=\FranklExCarrier}{1}}
-    \proofstepwidestar[2]{Y=\varnothing\lor Y=\FranklExCarrier}{%
-      \FormulaRefAuto{X\in \FranklExFamily\vdash
-      X=\varnothing\lor X=\FranklExCarrier}{2}}
-
-    \proofstepwidestar[5]{X=\varnothing}{\rA}
-    \proofstepwidestar[6]{Y=\varnothing}{\rA}
-    \proofstepwidestar[5,6]{X\cup Y\in \FranklExFamily}{%
-      \FormulaRefAuto{X=\varnothing\dsep Y=\varnothing
-      \vdash X\cup Y\in \FranklExFamily}{5,6}}
-    \proofstepwidestar[8]{Y=\FranklExCarrier}{\rA}
-    \proofstepwidestar[5,8]{X\cup Y\in \FranklExFamily}{%
-      \FormulaRefAuto{X=\varnothing\dsep Y=\FranklExCarrier
-      \vdash X\cup Y\in \FranklExFamily}{5,8}}
-    \proofstepwidestar[2,5]{X\cup Y\in \FranklExFamily}{%
-      \rOE{4,6,7,8,9}}
-
-    \proofstepwidestar[11]{X=\FranklExCarrier}{\rA}
-    \proofstepwidestar[12]{Y=\varnothing}{\rA}
-    \proofstepwidestar[11,12]{X\cup Y\in \FranklExFamily}{%
-      \FormulaRefAuto{X=\FranklExCarrier\dsep Y=\varnothing
-      \vdash X\cup Y\in \FranklExFamily}{11,12}}
-    \proofstepwidestar[14]{Y=\FranklExCarrier}{\rA}
-    \proofstepwidestar[11,14]{X\cup Y\in \FranklExFamily}{%
-      \FormulaRefAuto{X=\FranklExCarrier\dsep Y=\FranklExCarrier
-      \vdash X\cup Y\in \FranklExFamily}{11,14}}
-    \proofstepwidestar[2,11]{X\cup Y\in \FranklExFamily}{%
-      \rOE{4,12,13,14,15}}
-    \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{%
-      \rOE{3,5,10,11,16}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\FormulaThmDelta[Beispielfamilie ist vereinigungsabgeschlossen]{%
-  \UnionClosedFam(\FranklExFamily)
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier\dsep X\dsep Y}
+\FormulaThmDeltaK[Relation gleichen Auftretens ist Äquivalenzrelation]{%
+  \vdash \EqRel{\SameOccRel{M},\bigcup M}
+}{SameOccRelEqRel}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b\dsep c}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{X\in \FranklExFamily}{\rA}
-  \proofstepwidestar[2]{Y\in \FranklExFamily}{\rA}
-  \proofstepwidestar[1,2]{X\cup Y\in \FranklExFamily}{%
-    \FormulaRefAuto{X\in \FranklExFamily\dsep Y\in \FranklExFamily
-    \vdash X\cup Y\in \FranklExFamily}{1,2}}
-  \proofstepwidestar[]{\UnionClosedFam(\FranklExFamily)}{%
-    \FormulaRefAuto{\UnionClosedFam(M)}{\rUI{\rRI{1,\rRI{2,3}}}}}
+  \proofstepwidestar[1]{(a,b)\in \SameOccRel{M}}{\rA}
+  \proofstepwidestar[1]{a\in\bigcup M\land b\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\FormulaRefAuto{SameOccRelChar}{1}}
+  \proofstepwidestar[1]{a\in\bigcup M}{\rAEa{2}}
+  \proofstepwidestar[1]{b\in\bigcup M}{\rAEa{\rAEb{2}}}
+  \proofstepwidestar[1]{(a,b)\in\bigcup M\times\bigcup M}{%
+    \FormulaRefAuto{(x,y)\in A\times B \eqvdash x\in A\land y\in B}{\rAI{3,4}}}
+  \proofstepwidestar[]{\SameOccRel{M}\subseteq\bigcup M\times\bigcup M}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,5}}}}
+
+  \proofstepwidestar[7]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[8]{X\in M}{\rA}
+  \proofstepwidestar[7,8]{a\in X\leftrightarrow a\in X}{\FormulaRefAuto{P\leftrightarrow P}}
+  \proofstepwidestar[7]{\forall X\in M\,(a\in X\leftrightarrow a\in X)}{\rUI{\rRI{8,9}}}
+  \proofstepwidestar[7]{a\in\bigcup M\land a\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow a\in X)}{\rAI{7,\rAI{7,10}}}
+  \proofstepwidestar[7]{(a,a)\in \SameOccRel{M}}{\FormulaRefAuto{SameOccRelChar}{11}}
+
+  \proofstepwidestar[13]{(a,b)\in \SameOccRel{M}}{\rA}
+  \proofstepwidestar[13]{a\in\bigcup M\land b\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\FormulaRefAuto{SameOccRelChar}{13}}
+  \proofstepwidestar[13]{b\in\bigcup M}{\rAEa{\rAEb{14}}}
+  \proofstepwidestar[13]{a\in\bigcup M}{\rAEa{14}}
+  \proofstepwidestar[13]{\forall X\in M\,(b\in X\leftrightarrow a\in X)}{%
+    \FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x))\vdash
+    \forall x(Q(x)\leftrightarrow P(x))}{\rAEb{\rAEb{14}}}}
+  \proofstepwidestar[13]{b\in\bigcup M\land a\in\bigcup M\land
+    \forall X\in M\,(b\in X\leftrightarrow a\in X)}{\rAI{15,\rAI{16,17}}}
+  \proofstepwidestar[13]{(b,a)\in \SameOccRel{M}}{\FormulaRefAuto{SameOccRelChar}{18}}
+
+  \proofstepwidestar[20]{(a,b)\in \SameOccRel{M}}{\rA}
+  \proofstepwidestar[21]{(b,c)\in \SameOccRel{M}}{\rA}
+  \proofstepwidestar[20]{a\in\bigcup M\land b\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\FormulaRefAuto{SameOccRelChar}{20}}
+  \proofstepwidestar[21]{b\in\bigcup M\land c\in\bigcup M\land
+    \forall X\in M\,(b\in X\leftrightarrow c\in X)}{\FormulaRefAuto{SameOccRelChar}{21}}
+  \proofstepwidestar[20]{a\in\bigcup M}{\rAEa{22}}
+  \proofstepwidestar[21]{c\in\bigcup M}{\rAEa{\rAEb{23}}}
+  \proofstepwidestar[20,21]{\forall X\in M\,(a\in X\leftrightarrow c\in X)}{%
+    \FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)),
+    \forall x(Q(x)\leftrightarrow R(x))\vdash
+    \forall x(P(x)\leftrightarrow R(x))}{\rAEb{\rAEb{22}},\rAEb{\rAEb{23}}}}
+  \proofstepwidestar[20,21]{a\in\bigcup M\land c\in\bigcup M\land
+    \forall X\in M\,(a\in X\leftrightarrow c\in X)}{\rAI{24,\rAI{25,26}}}
+  \proofstepwidestar[20,21]{(a,c)\in \SameOccRel{M}}{\FormulaRefAuto{SameOccRelChar}{27}}
+
+  \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \FormulaRefAuto{Äquivalenzrelation}{6,12,19,28}}
 \end{tabproofwide}
 
-\FormulaThmDelta[Ausgesparte Einermenge der Beispielfamilie]{%
-  \{\varnothing\}\notin \FranklExFamily
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing\in\{\varnothing\}}{\FormulaRefAuto{a\in\{a\}}}
-  \proofstep{}{\varnothing\notin\varnothing}{%
-    \FormulaRefAuto{x \not\in \varnothing}}
-  \proofstep{}{\{\varnothing\}\neq\varnothing}{%
-    \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{1,2}}
-  \proofstep{}{\{\varnothing\}\notin\{\varnothing\}}{%
-    \FormulaRefAuto{\{\varnothing\}\notin\{\varnothing\}}}
-
-  \proofstep{}{\{\varnothing\}\in \FranklExCarrier}{%
-    \FormulaRefAuto{\{\varnothing\}\in \FranklExCarrier}}
-  \proofstep{}{\FranklExCarrier\neq\{\varnothing\}}{%
-    \FormulaRefAuto{x \in A,\, x \not\in B \vdash A \neq B}{5,4}}
-  \proofstep{}{\{\varnothing\}\neq \FranklExCarrier}{%
-    \FormulaRefAuto{a \neq b \vdash b \neq a}{6}}
-
-  \proofstep{8}{\{\varnothing\}\in \FranklExFamily}{\rA}
-  \proofstep{8}{\{\varnothing\}=\varnothing
-    \lor \{\varnothing\}=\FranklExCarrier}{%
-    \FormulaRefAuto{X\in \FranklExFamily\vdash
-    X=\varnothing\lor X=\FranklExCarrier}{8}}
-  \proofstep{10}{\{\varnothing\}=\varnothing}{\rA}
-  \proofstep{10}{\bot}{\rBI{10,3}}
-  \proofstep{12}{\{\varnothing\}=\FranklExCarrier}{\rA}
-  \proofstep{12}{\bot}{\rBI{12,7}}
-  \proofstep{8}{\bot}{\rOE{9,10,11,12,13}}
-  \proofstep{}{\{\varnothing\}\notin \FranklExFamily}{\rCI{8,14}}
-\end{tabproof}
-\FormulaThmDelta[Leerer Grundpunkt liegt im Vereinigungsbereich]{%
-  \varnothing\in\bigcup \FranklExFamily
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep \FranklExCarrier}
-}
-\begin{tabproof}
-  \proofstep{}{\FranklExCarrier\in \FranklExFamily}{%
-    \FormulaRefAuto{\FranklExCarrier\in \FranklExFamily}}
-  \proofstep{}{\varnothing\in \FranklExCarrier}{%
-    \FormulaRefAuto{\varnothing\in \FranklExCarrier}}
-  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
-    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,2}}
-\end{tabproof}
-
-\FormulaThmDelta[Beispielfamilie hat Frankl-Voraussetzung]{%
-  \FranklFam{\FranklExFamily}
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily}
-}
-\begin{tabproof}
-  \proofstep{}{\FranklExFamily\neq\varnothing}{%
-    \FormulaRefAuto{\FranklExFamily\neq\varnothing}}
-  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
-    \FormulaRefAuto{\varnothing\in\bigcup \FranklExFamily}}
-  \proofstep{}{\bigcup \FranklExFamily\neq\varnothing}{%
-    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{2}}
-  \proofstep{}{\Finite{\FranklExFamily}}{%
-    \FormulaRefAuto{\Finite{\FranklExFamily}}}
-  \proofstep{}{\UnionClosedFam(\FranklExFamily)}{%
-    \FormulaRefAuto{\UnionClosedFam(\FranklExFamily)}}
-  \proofstep{}{\FranklFam{\FranklExFamily}}{%
-    \FormulaRefAuto{Frankl-Familie}{1,3,4,5}}
-\end{tabproof}
-
-In der folgenden Aussage wird bewusst die Vorschrift
-\(\tFranklAdj{\FranklExFamily}{\varnothing}\) betrachtet und nicht die
-eigentliche Funktion \(\FranklAdj{\FranklExFamily}{\varnothing}\). Denn die
-eigentliche Adjunktionsabbildung ist nur unter der Voraussetzung
-\(\{\varnothing\}\in\FranklExFamily\) eingeführt; zuvor wurde jedoch
-\(\{\varnothing\}\notin \FranklExFamily\) gezeigt. Das Beispiel zeigt also
-gerade, dass die naive Vorschrift \(X\mapsto X\cup\{\varnothing\}\) die
-Zielteilfamilie verfehlt.
-
-\FormulaThmDelta[Adjunktionsvorschrift verfehlt Beispielziel]{%
-  \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
-  \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-  \FamContaining{\FranklExFamily}{\varnothing}\bigr)
-}{%
-  \DeltaRow{Mengen}{\FranklExFamily\dsep X}
-  \DeltaRow{Funktionensymbol}{\tFranklAdj{\FranklExFamily}{\varnothing}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamAvoiding{\FranklExFamily}{\varnothing}\dsep
-    \FamContaining{\FranklExFamily}{\varnothing}}
-}
-\begin{tabproof}
-  \proofstep{}{\varnothing\in \FranklExFamily}{%
-    \FormulaRefAuto{\varnothing\in \FranklExFamily}}
-  \proofstep{}{\varnothing\notin\varnothing}{%
-    \FormulaRefAuto{x \not\in \varnothing}}
-  \proofstep{}{\varnothing\in \FamAvoiding{\FranklExFamily}{\varnothing}}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{\rAI{1,2}}}
-  \proofstep{}{\{\varnothing\}\notin \FranklExFamily}{%
-    \FormulaRefAuto{\{\varnothing\}\notin \FranklExFamily}}
-  \proofstep{}{\{\varnothing\}\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{%
-    \FormulaRefAuto{A\notin M\vdash A\notin \FamContaining{M}{a}}{4}}
-  \proofstep{}{\{\varnothing\}=\varnothing\cup\{\varnothing\}}{%
-    \FormulaRefAuto{A = \varnothing \cup A}}
-  \proofstep{}{\varnothing\cup\{\varnothing\}=\{\varnothing\}}{%
-    \FormulaRefAuto{a=b\vdash b=a}{6}}
-  \proofstep{}{\varnothing\cup\{\varnothing\}\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{7,5}}
-  \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)=
-    \varnothing\cup\{\varnothing\}}{%
-    \FormulaRefAuto{X\in \FamAvoiding{M}{a}\vdash
-    \tFranklAdj{M}{a}(X)\coloneqq X\cup\{a\}}{3}}
-  \proofstep{}{\tFranklAdj{\FranklExFamily}{\varnothing}(\varnothing)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}}{\rIE{9,8}}
-  \proofstep{}{%
-    \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
-    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{\rEI{\rAI{3,10}}}
-\end{tabproof}
-
-\FormulaThmDeltaR[Endliches Vorschriftsbeispiel mit Zielverfehlung]{%
-  \begin{aligned}[t]
-    \vdash{}& \exists M\,\exists a\,\Bigl(
-    \FranklFam{M}\land a\in\bigcup M\land{}\\
-    &\exists X\in \FamAvoiding{M}{a}\,
-    \bigl(\tFranklAdj{M}{a}(X)\notin \FamContaining{M}{a}\bigr)\Bigr)
-  \end{aligned}
-}{%
-  \vdash \exists M\,\exists a\,
-  \Bigl(\FranklFam{M}\land a\in\bigcup M\land
-  \exists X\in \FamAvoiding{M}{a}\,
-  \bigl(\tFranklAdj{M}{a}(X)\notin \FamContaining{M}{a}\bigr)\Bigr)
-}{%
-  \DeltaRow{Mengen}{M\dsep \FranklExFamily\dsep a\dsep X}
-  \DeltaRow{Funktionensymbol}{\tFranklAdj{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{}{\FranklFam{\FranklExFamily}}{%
-    \FormulaRefAuto{\FranklFam{\FranklExFamily}}}
-  \proofstep{}{\varnothing\in\bigcup \FranklExFamily}{%
-    \FormulaRefAuto{\varnothing\in\bigcup \FranklExFamily}}
-  \proofstep{}{%
-    \exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
-    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}{%
-    \FormulaRefAuto{\exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
-    \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-    \FamContaining{\FranklExFamily}{\varnothing}\bigr)}}
-  \proofstep{}{%
-    \begin{aligned}[t]
-      &\FranklFam{\FranklExFamily}\land
-      \varnothing\in\bigcup \FranklExFamily\land{}\\
-      &\exists X\in \FamAvoiding{\FranklExFamily}{\varnothing}\,
-      \bigl(\tFranklAdj{\FranklExFamily}{\varnothing}(X)\notin
-      \FamContaining{\FranklExFamily}{\varnothing}\bigr)
-    \end{aligned}}{\rAI{1,\rAI{2,3}}}
-  \proofstep{}{\exists a\,
-    \begin{aligned}[t]
-      (&\FranklFam{\FranklExFamily}\land
-      a\in\bigcup \FranklExFamily\land{}\\
-      &\exists X\in \FamAvoiding{\FranklExFamily}{a}\,
-      \bigl(\tFranklAdj{\FranklExFamily}{a}(X)\notin
-      \FamContaining{\FranklExFamily}{a}\bigr))
-    \end{aligned}}{\rEI{4}}
-  \proofstep{}{%
-    \begin{aligned}[t]
-      &\exists M\,\exists a\,\Bigl(
-      \FranklFam{M}\land a\in\bigcup M\land{}\\
-      &\exists X\in \FamAvoiding{M}{a}\,
-      \bigl(\tFranklAdj{M}{a}(X)\notin{}\\
-      &\FamContaining{M}{a}\bigr)\Bigr)
-    \end{aligned}}{\rEI{5}}
-\end{tabproof}
-\subsection{Eine allgemeine korrigierte Adjunktion}
-
-Die Adjunktion \(X\mapsto X\cup\{a\}\) muss nicht auf allen
-\(a\)-vermeidenden Mengen einer Familie \(M\) wieder in
-\(M\) landen. Wir trennen daher die guten Stellen der natürlichen
-Adjunktion von den defekten Stellen.
-
-\FormulaDefDeltaK[Gute Stellen der Adjunktion]{%
-  \AdjGood{M}{a}\coloneqq
-  \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}
-}{Gute Adjunktionsstellen}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}}
-  \DeltaRow{Neue Symbole}{\AdjGood{M}{a}}
-}
-
-\FormulaDefDeltaK[Defekte Stellen der Adjunktion]{%
-  \AdjDefect{M}{a}\coloneqq
-  \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}
-}{Defekte Adjunktionsstellen}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}}
-  \DeltaRow{Neue Symbole}{\AdjDefect{M}{a}}
-}
-
-\FormulaThmDelta[Gute Adjunktionsstellen liegen im Definitionsbereich]{%
-  X\in \AdjGood{M}{a}\vdash X\in \FamAvoiding{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}\dsep
-  \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}\land
-    X\cup\{a\}\in M}{%
-    \FormulaRefAuto{\AdjGood{M}{a}\coloneqq
-    \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}}{1}}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{\rAEa{2}}
-\end{tabproof}
-
-\FormulaThmDelta[Gute Adjunktionsstellen vermeiden das Element]{%
-  X\in \AdjGood{M}{a}\vdash a\notin X
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}\dsep
-  \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    X\in \FamAvoiding{M}{a}}{1}}
-  \proofstep{1}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{2}}
-  \proofstep{1}{a\notin X}{\rAEb{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Gute Adjunktionsstellen liefern enthaltende Bilder]{%
-  X\in \AdjGood{M}{a}\vdash
-  X\cup\{a\}\in \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \FamAvoiding{M}{a}\dsep \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}\land
-    X\cup\{a\}\in M}{%
-    \FormulaRefAuto{\AdjGood{M}{a}\coloneqq
-    \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}}{1}}
-  \proofstep{1}{X\cup\{a\}\in M}{\rAEb{2}}
-  \proofstep{}{a\in X\cup\{a\}}{\FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstep{1}{X\cup\{a\}\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{%
-    \rAI{3,4}}}
-\end{tabproof}
-
-\FormulaDefDeltaK[Funktionsvorschrift der guten Adjunktion]{%
-  X\in \AdjGood{M}{a}\vdash
-  \tAdjGoodMap{M}{a}(X)\coloneqq X\cup\{a\}
-}{Funktionsvorschrift der guten Adjunktion}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}}
-}
-
-\FormulaThmDelta[Typisierung der guten Adjunktionsvorschrift]{%
-  X\in \AdjGood{M}{a}\vdash
-  \tAdjGoodMap{M}{a}(X)\in \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{1}{\tAdjGoodMap{M}{a}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    \tAdjGoodMap{M}{a}(X)\coloneqq X\cup\{a\}}{1}}
-  \proofstep{1}{X\cup\{a\}\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    X\cup\{a\}\in \FamContaining{M}{a}}{1}}
-  \proofstep{1}{\tAdjGoodMap{M}{a}(X)\in
-    \FamContaining{M}{a}}{\rIE{2,3}}
-\end{tabproof}
-
-\FormulaThmDeltaR[Gute Adjunktion als Funktion zur Vorschrift]{%
-  \begin{aligned}[t]
-    \vdash{}& \exists! F\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}\,\\
-    &\forall X\in \AdjGood{M}{a}\,
-    F(X)=\tAdjGoodMap{M}{a}(X)
-  \end{aligned}
-}{%
-  \vdash \exists! F\colon
-  \AdjGood{M}{a}\to \FamContaining{M}{a}\,
-  \forall X\in \AdjGood{M}{a}\,
-  F(X)=\tAdjGoodMap{M}{a}(X)
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Funktionensymbol}{\tAdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjGood{M}{a}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{X\in \AdjGood{M}{a}}{\rA}
-  \proofstepwidestar[1]{\tAdjGoodMap{M}{a}(X)\in
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    \tAdjGoodMap{M}{a}(X)\in
-    \FamContaining{M}{a}}{1}}
-  \proofstepwidestar[]{\forall X\in \AdjGood{M}{a}\,
-    \tAdjGoodMap{M}{a}(X)\in
-    \FamContaining{M}{a}}{\rUI{\rRI{1,2}}}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      &\exists! F\colon
-      \AdjGood{M}{a}\to \FamContaining{M}{a}\,\\
-      &\forall X\in \AdjGood{M}{a}\,
-      F(X)=\tAdjGoodMap{M}{a}(X)
-    \end{aligned}}{%
-    \FormulaRefAuto{%
-      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
-      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
-    }{3}}
-\end{tabproofwide}
-
-\FormulaDefDeltaR[Gute Adjunktionsabbildung]{%
-  \begin{aligned}[t]
-    \AdjGoodMap{M}{a}\coloneqq
-    \iota F\Bigl(&F\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}\land{}\\
-    &\forall X\in \AdjGood{M}{a}\,
-    F(X)=\tAdjGoodMap{M}{a}(X)\Bigr)
-  \end{aligned}
-}{%
-  \AdjGoodMap{M}{a}\coloneqq
-  \iota F\Bigl(F\colon
-  \AdjGood{M}{a}\to \FamContaining{M}{a}\land
-  \forall X\in \AdjGood{M}{a}\,
-  F(X)=\tAdjGoodMap{M}{a}(X)\Bigr)
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Funktionensymbole}{\tAdjGoodMap{M}{a}\dsep
-    \AdjGoodMap{M}{a}}
-  \DeltaRow{Neue Symbole}{\AdjGoodMap{M}{a}}
-}
-
-\FormulaThmDelta[Gute Adjunktionsabbildung ist eine Funktion]{%
-  \AdjGoodMap{M}{a}\colon
-  \AdjGood{M}{a}\to \FamContaining{M}{a}
-}{%
+\FormulaDefDeltaK[Auftretensklasse]{%
+  a\in\bigcup M\vdash
+  \OccClass{M}{a}\coloneqq
+  \EqClass{a}{\SameOccRel{M}}{\bigcup M}
+}{Auftretensklasse}{%
   \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{}{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}{%
-    \rAEa{\FormulaRefAuto{\AdjGoodMap{M}{a}\coloneqq
-    \iota F\Bigl(F\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}\land
-    \forall X\in \AdjGood{M}{a}\,
-    F(X)=\tAdjGoodMap{M}{a}(X)\Bigr)}}}
-\end{tabproof}
-
-\FormulaThmDelta[Wert der guten Adjunktionsabbildung]{%
-  X\in \AdjGood{M}{a}\vdash
-  \AdjGoodMap{M}{a}(X)=X\cup\{a\}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionensymbole}{\tAdjGoodMap{M}{a}\dsep
-    \AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{}{\forall X\in \AdjGood{M}{a}\,
-    \AdjGoodMap{M}{a}(X)=
-    \tAdjGoodMap{M}{a}(X)}{%
-    \rAEb{\FormulaRefAuto{\AdjGoodMap{M}{a}\coloneqq
-    \iota F\Bigl(F\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}\land
-    \forall X\in \AdjGood{M}{a}\,
-    F(X)=\tAdjGoodMap{M}{a}(X)\Bigr)}}}
-  \proofstep{1}{\AdjGoodMap{M}{a}(X)=
-    \tAdjGoodMap{M}{a}(X)}{\rRE{1,\rUE{2}}}
-  \proofstep{1}{\tAdjGoodMap{M}{a}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    \tAdjGoodMap{M}{a}(X)\coloneqq X\cup\{a\}}{1}}
-  \proofstep{1}{\AdjGoodMap{M}{a}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{3,4}}
-\end{tabproof}
-
-\FormulaDefDeltaK[Freie Ziele nach der guten Adjunktion]{%
-  \AdjFree{M}{a}\coloneqq
-  \FamContaining{M}{a}\setminus
-  \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-}{Freie Adjunktionsziele}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-    \AdjGood{M}{a}}
-  \DeltaRow{Neue Symbole}{\AdjFree{M}{a}}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{a}{\SameOccRel{M}}{\bigcup M}}
+  \DeltaRow{Neue Symbole}{\OccClass{M}{a}}
 }
 
-\FormulaThmDelta[Defekte Adjunktionsstellen liegen im Definitionsbereich]{%
-  X\in \AdjDefect{M}{a}\vdash X\in \FamAvoiding{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}\dsep
-  \AdjGood{M}{a}\dsep \AdjDefect{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{1}{X\in
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-    \FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{1}}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}\land
-    X\notin \AdjGood{M}{a}}{%
-    \FormulaRefAuto{x \in A \setminus B \eqvdash
-    x \in A \land x \notin B}{2}}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{\rAEa{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Defekte Adjunktionsstellen vermeiden das Element]{%
-  X\in \AdjDefect{M}{a}\vdash a\notin X
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}\dsep
-  \AdjDefect{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{X\in \AdjDefect{M}{a}\vdash
-    X\in \FamAvoiding{M}{a}}{1}}
-  \proofstep{1}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{2}}
-  \proofstep{1}{a\notin X}{\rAEb{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Gute Adjunktionsbilder liegen im Bild der guten Adjunktion]{%
-  X\in \AdjGood{M}{a}\vdash
-  X\cup\{a\}\in
-  \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-    \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{}{\AdjGood{M}{a}\subseteq
-    \AdjGood{M}{a}}{\FormulaRefAuto{A\subseteq A}}
-  \proofstep{}{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}}
-  \proofstep{1}{\AdjGoodMap{M}{a}(X)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C
-    \vdash F(x)\in F[C]}{2,3,1}}
-  \proofstep{1}{\AdjGoodMap{M}{a}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    \AdjGoodMap{M}{a}(X)=X\cup\{a\}}{1}}
-  \proofstep{1}{X\cup\{a\}=\AdjGoodMap{M}{a}(X)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{5}}
-  \proofstep{1}{X\cup\{a\}\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rIE{6,4}}
-\end{tabproof}
-
-\FormulaThmDelta[Zerlegung der vermeidenden Teilfamilie]{%
-  \FamAvoiding{M}{a}=
-  \AdjGood{M}{a}\cup \AdjDefect{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}\dsep
-  \AdjGood{M}{a}\dsep \AdjDefect{M}{a}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Teilmengenrichtung links nach rechts]{%
-    \FamAvoiding{M}{a}\subseteq
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}
-  }{%
-    \FamAvoiding{M}{a}\subseteq
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}
-  }
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{\rA}
-    \proofstepwidestar[]{X\in \AdjGood{M}{a}\lor
-      X\notin \AdjGood{M}{a}}{\FormulaRefAuto{P \lor \neg P}}
-    \proofstepwidestar[3]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{3}}
-    \proofstepwidestar[5]{X\notin \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[1,5]{X\in \FamAvoiding{M}{a}\land
-      X\notin \AdjGood{M}{a}}{\rAI{1,5}}
-    \proofstepwidestar[1,5]{X\in
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-      \FormulaRefAuto{x \in A \setminus B \eqvdash
-      x \in A \land x \notin B}{6}}
-    \proofstepwidestar[1,5]{X\in \AdjDefect{M}{a}}{%
-      \rIE{\FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}},7}}
-    \proofstepwidestar[1,5]{X\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{z \in B \vdash z \in A \cup B}{8}}
-    \proofstepwidestar[1]{X\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \rOE{2,3,4,5,9}}
-    \proofstepwidestar[]{%
-      \FamAvoiding{M}{a}\subseteq
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{A \subseteq B \coloneq
-      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,10}}}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Teilmengenrichtung rechts nach links]{%
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}\subseteq
-    \FamAvoiding{M}{a}
-  }{%
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}\subseteq
-    \FamAvoiding{M}{a}
-  }
-    \proofstepwidestar[1]{X\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[1]{X\in \AdjGood{M}{a}\lor
-      X\in \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
-    \proofstepwidestar[3]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in \FamAvoiding{M}{a}}{%
-      \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-      X\in \FamAvoiding{M}{a}}{3}}
-    \proofstepwidestar[5]{X\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[5]{X\in \FamAvoiding{M}{a}}{%
-      \FormulaRefAuto{X\in \AdjDefect{M}{a}\vdash
-      X\in \FamAvoiding{M}{a}}{5}}
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{%
-      \rOE{2,3,4,5,6}}
-    \proofstepwidestar[]{%
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}\subseteq
-      \FamAvoiding{M}{a}}{%
-      \FormulaRefAuto{A \subseteq B \coloneq
-      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,7}}}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
-    \proofstepwidestar[]{%
-      \FamAvoiding{M}{a}\subseteq
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{\FamAvoiding{M}{a}\subseteq
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}}
-    \proofstepwidestar[]{%
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}\subseteq
-      \FamAvoiding{M}{a}}{%
-      \FormulaRefAuto{\AdjGood{M}{a}\cup \AdjDefect{M}{a}\subseteq
-      \FamAvoiding{M}{a}}}
-    \proofstepwidestar[]{%
-      \FamAvoiding{M}{a}=
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{1,2}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\FormulaThmDelta[Gute und defekte Adjunktionsstellen sind disjunkt]{%
-  \AdjGood{M}{a}\cap \AdjDefect{M}{a}=\varnothing
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjDefect{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{}{\AdjDefect{M}{a}=
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-    \FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}}
-  \proofstep{}{\AdjDefect{M}{a}\cap
-    \AdjGood{M}{a}=\varnothing}{%
-    \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}{1}}
-  \proofstep{}{\AdjGood{M}{a}\cap \AdjDefect{M}{a}=
-    \AdjDefect{M}{a}\cap \AdjGood{M}{a}}{%
-    \FormulaRefAuto{A \cap B = B \cap A}}
-  \proofstep{}{\AdjGood{M}{a}\cap
-    \AdjDefect{M}{a}=\varnothing}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,2}}
-\end{tabproof}
-
-\FormulaThmDelta[Freie Adjunktionsziele liegen in der Zielteilfamilie]{%
-  Y\in \AdjFree{M}{a}\vdash
-  Y\in \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjGood{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{Y\in \AdjFree{M}{a}}{\rA}
-  \proofstep{1}{Y\in \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\coloneqq
-    \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{1}}
-  \proofstep{1}{Y\in \FamContaining{M}{a}\land
-    Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{x \in A \setminus B \eqvdash
-    x \in A \land x \notin B}{2}}
-  \proofstep{1}{Y\in \FamContaining{M}{a}}{\rAEa{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Freie Adjunktionsziele bilden Teilfamilie der Zielteilfamilie]{%
-  \AdjFree{M}{a}\subseteq \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{Y\in \AdjFree{M}{a}}{\rA}
-  \proofstep{1}{Y\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{Y\in \AdjFree{M}{a}\vdash
-    Y\in \FamContaining{M}{a}}{1}}
-  \proofstep{}{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,2}}}}
-\end{tabproof}
-
-\FormulaThmDelta[Freie Adjunktionsziele vermeiden gute Bilder]{%
-  Y\in \AdjFree{M}{a}\vdash
-  Y\notin \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep
-  \AdjGood{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{Y\in \AdjFree{M}{a}}{\rA}
-  \proofstep{1}{Y\in \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\coloneqq
-    \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{1}}
-  \proofstep{1}{Y\in \FamContaining{M}{a}\land
-    Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{x \in A \setminus B \eqvdash
-    x \in A \land x \notin B}{2}}
-  \proofstep{1}{Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rAEb{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Freie Adjunktionsziele sind von guten Bildern getrennt]{%
-  \AdjFree{M}{a}\cap
-  \AdjGoodMap{M}{a}[\AdjGood{M}{a}]=\varnothing
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{}{\AdjFree{M}{a}=
-    \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\coloneqq
-    \FamContaining{M}{a}\setminus
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}}
-  \proofstep{}{\AdjFree{M}{a}\cap
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]=\varnothing}{%
-    \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}{1}}
-\end{tabproof}
-
-Ist nun eine Injektion von den defekten Stellen in die noch freien Ziele
-gegeben, so ergänzt sie die natürliche Adjunktion zu einer Abbildung auf der
-ganzen \(a\)-vermeidenden Teilfamilie.
-
-\FormulaDefDeltaK[Korrigierte Adjunktionsabbildung]{%
-  h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
+\FormulaThmDeltaK[Charakterisierung der Auftretensklasse]{%
+  a\in\bigcup M
   \vdash
-  \FranklAdjCorr{M}{a}{h}\coloneqq
-  \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}
-}{Korrigierte Adjunktionsabbildung}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep \AdjDefect{M}{a}}
-  \DeltaRow{Neue Symbole}{\FranklAdjCorr{M}{a}{h}}
-}
-
-\FormulaThmDelta[Wert der korrigierten Adjunktion auf guten Stellen]{%
-  h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-  \dsep X\in \AdjGood{M}{a}\vdash
-  \FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjDefect{M}{a}\dsep \AdjFree{M}{a}\dsep
-  \FamContaining{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{}{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
-    F\colon A\to C}{1,3}}
-  \proofstep{}{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}}
-  \proofstep{1,2}{%
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}(X)=
-    \AdjGoodMap{M}{a}(X)}{%
-    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
-    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,4,2}}
-  \proofstep{1}{\FranklAdjCorr{M}{a}{h}=
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}\coloneqq
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-      {\AdjGoodMap{M}{a}}{h_a}}{1}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=
-    \AdjGoodMap{M}{a}(X)}{\rIE{7,6}}
-  \proofstep{2}{\AdjGoodMap{M}{a}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    \AdjGoodMap{M}{a}(X)=X\cup\{a\}}{2}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{8,9}}
-\end{tabproof}
-
-\FormulaThmDelta[Wert der korrigierten Adjunktion auf defekten Stellen]{%
-  h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-  \dsep X\in \AdjDefect{M}{a}\vdash
-  \FranklAdjCorr{M}{a}{h}(X)=h_a(X)
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjDefect{M}{a}\dsep \AdjFree{M}{a}\dsep
-  \FamContaining{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{}{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
-    F\colon A\to C}{1,3}}
-  \proofstep{}{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}}
-  \proofstep{}{\AdjGood{M}{a}\cap
-    \AdjDefect{M}{a}=\varnothing}{%
-    \FormulaRefAuto{\AdjGood{M}{a}\cap
-    \AdjDefect{M}{a}=\varnothing}}
-  \proofstep{1,2}{%
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}(X)=h_a(X)}{%
-    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C
-    \dsep g\colon B\to C\dsep x\in B
-    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{6,5,4,2}}
-  \proofstep{1}{\FranklAdjCorr{M}{a}{h}=
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}\coloneqq
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-      {\AdjGoodMap{M}{a}}{h_a}}{1}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{%
-    \rIE{8,7}}
-\end{tabproof}
-
-\FormulaThmDelta[Korrigierte Werte guter Stellen sind gute Adjunktionsbilder]{%
-  h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-  \dsep X\in \AdjGood{M}{a}\vdash
-  \FranklAdjCorr{M}{a}{h}(X)\in
-  \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \AdjGoodMap{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AdjGood{M}{a}\dsep \AdjDefect{M}{a}\dsep
-    \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{1,2}}
-  \proofstep{2}{X\cup\{a\}\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash
-    X\cup\{a\}\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{2}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rIE{3,4}}
-\end{tabproof}
-
-\FormulaThmDelta[Korrigierte Werte defekter Stellen sind freie Ziele]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \dsep X\in \AdjDefect{M}{a}
-  \vdash
-  \FranklAdjCorr{M}{a}{h}(X)\in \AdjFree{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjDefect{M}{a}\dsep
-  \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjDefect{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{3,2}}
-  \proofstep{1,2}{h_a(X)\in \AdjFree{M}{a}}{%
-    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{1,2}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)\in
-    \AdjFree{M}{a}}{\rIE{4,5}}
-\end{tabproof}
-
-\FormulaThmDelta[Korrigierte Adjunktion ist wohldefiniert]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \vdash
-  \FranklAdjCorr{M}{a}{h}\colon
-  \FamAvoiding{M}{a}\to \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamAvoiding{M}{a}\dsep \FamContaining{M}{a}\dsep
-    \AdjGood{M}{a}\dsep \AdjDefect{M}{a}\dsep
-    \AdjFree{M}{a}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-  \proofstepwidestar[]{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjFree{M}{a}\subseteq
-    \FamContaining{M}{a}}}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\to
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash F\colon A\to C}{2,3}}
-  \proofstepwidestar[]{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AdjGoodMap{M}{a}\colon
-    \AdjGood{M}{a}\to \FamContaining{M}{a}}}
-  \proofstepwidestar[1]{%
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}\colon
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}
-    \to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C
-    \vdash \CaseFun{A}{B}{f}{g}\colon A\cup B\to C}{5,4}}
-  \proofstepwidestar[1]{\FranklAdjCorr{M}{a}{h}=
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-    {\AdjGoodMap{M}{a}}{h_a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}\coloneqq
-    \CaseFun{\AdjGood{M}{a}}{\AdjDefect{M}{a}}
-      {\AdjGoodMap{M}{a}}{h_a}}{2}}
-  \proofstepwidestar[]{%
-    \FamAvoiding{M}{a}=
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}=
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}}}
-  \proofstepwidestar[1]{%
-    \FranklAdjCorr{M}{a}{h}\colon
-    \AdjGood{M}{a}\cup \AdjDefect{M}{a}
-    \to \FamContaining{M}{a}}{\rIE{7,6}}
-  \proofstepwidestar[1]{%
-    \FranklAdjCorr{M}{a}{h}\colon
-    \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
-    \rIE{\FormulaRefAuto{a=b\vdash b=a}{8},9}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Korrigierte Adjunktion ist auf guten Stellen injektiv]{%
-  h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-  \dsep X\in \AdjGood{M}{a}\dsep
-  Y\in \AdjGood{M}{a}\dsep
-  \FranklAdjCorr{M}{a}{h}(X)=
-  \FranklAdjCorr{M}{a}{h}(Y)
-  \vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AdjGood{M}{a}\dsep \AdjDefect{M}{a}\dsep
-    \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjGood{M}{a}}{\rA}
-  \proofstep{3}{Y\in \AdjGood{M}{a}}{\rA}
-  \proofstep{4}{\FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{1,2}}
-  \proofstep{1,3}{\FranklAdjCorr{M}{a}{h}(Y)=Y\cup\{a\}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=X\cup\{a\}}{1,3}}
-  \proofstep{1,2}{X\cup\{a\}=
-    \FranklAdjCorr{M}{a}{h}(X)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{5}}
-  \proofstep{1,2,4}{X\cup\{a\}=
-    \FranklAdjCorr{M}{a}{h}(Y)}{%
-    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{7,4}}
-  \proofstep{1,2,3,4}{X\cup\{a\}=Y\cup\{a\}}{%
-    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{8,6}}
-  \proofstep{2}{a\notin X}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash a\notin X}{2}}
-  \proofstep{3}{a\notin Y}{%
-    \FormulaRefAuto{X\in \AdjGood{M}{a}\vdash a\notin X}{3}}
-  \proofstep{1,2,3,4}{X=Y}{%
-    \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep
-    X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{10,11,9}}
-\end{tabproof}
-
-\FormulaThmDelta[Korrigierte Adjunktion ist auf defekten Stellen injektiv]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \dsep X\in \AdjDefect{M}{a}\dsep
-  Y\in \AdjDefect{M}{a}\dsep
-  \FranklAdjCorr{M}{a}{h}(X)=
-  \FranklAdjCorr{M}{a}{h}(Y)
-  \vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjDefect{M}{a}\dsep
-  \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{3}{Y\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{4}{\FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-  \proofstep{1}{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-  \proofstep{1,2}{\FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjDefect{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{5,2}}
-  \proofstep{1,3}{\FranklAdjCorr{M}{a}{h}(Y)=h_a(Y)}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjDefect{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)=h_a(X)}{5,3}}
-  \proofstep{1,2}{h_a(X)=
-    \FranklAdjCorr{M}{a}{h}(X)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{6}}
-  \proofstep{1,2,4}{h_a(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)}{%
-    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{8,4}}
-  \proofstep{1,2,3,4}{h_a(X)=h_a(Y)}{%
-    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{9,7}}
-  \proofstep{1,2,3,4}{X=Y}{\FormulaRefAuto{Injektive Funktion}{1,2,3,10}}
-\end{tabproof}
-
-\FormulaThmDelta[Korrigierte Adjunktion trennt gute von defekten Stellen]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \dsep X\in \AdjGood{M}{a}\dsep
-  Y\in \AdjDefect{M}{a}\dsep
-  \FranklAdjCorr{M}{a}{h}(X)=
-  \FranklAdjCorr{M}{a}{h}(Y)
-  \vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjDefect{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstepwidestar[2]{X\in \AdjGood{M}{a}}{\rA}
-  \proofstepwidestar[3]{Y\in \AdjDefect{M}{a}}{\rA}
-  \proofstepwidestar[4]{%
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-  \proofstepwidestar[1,2]{%
-    \FranklAdjCorr{M}{a}{h}(X)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{5,2}}
-  \proofstepwidestar[1,3]{%
-    \FranklAdjCorr{M}{a}{h}(Y)\in \AdjFree{M}{a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}\dsep X\in \AdjDefect{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}(X)\in \AdjFree{M}{a}}{1,3}}
-  \proofstepwidestar[1,3]{%
-    \FranklAdjCorr{M}{a}{h}(Y)\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{Y\in \AdjFree{M}{a}\vdash
-    Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{7}}
-  \proofstepwidestar[1,3,4]{%
-    \FranklAdjCorr{M}{a}{h}(X)\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rIE{4,8}}
-  \proofstepwidestar[1,2,3,4]{X=Y}{%
-    \FormulaRefAuto{P,\,\neg P \vdash Q}{6,9}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Korrigierte Adjunktion trennt defekte von guten Stellen]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \dsep X\in \AdjDefect{M}{a}\dsep
-  Y\in \AdjGood{M}{a}\dsep
-  \FranklAdjCorr{M}{a}{h}(X)=
-  \FranklAdjCorr{M}{a}{h}(Y)
-  \vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{\AdjGood{M}{a}\dsep
-  \AdjDefect{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstepwidestar[2]{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstepwidestar[3]{Y\in \AdjGood{M}{a}}{\rA}
-  \proofstepwidestar[4]{%
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-  \proofstepwidestar[1,3]{%
-    \FranklAdjCorr{M}{a}{h}(Y)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-    \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\vdash
-    \FranklAdjCorr{M}{a}{h}(X)\in
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{5,3}}
-  \proofstepwidestar[1,2]{%
-    \FranklAdjCorr{M}{a}{h}(X)\in \AdjFree{M}{a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}\dsep X\in \AdjDefect{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}(X)\in \AdjFree{M}{a}}{1,2}}
-  \proofstepwidestar[1,2]{%
-    \FranklAdjCorr{M}{a}{h}(X)\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \FormulaRefAuto{Y\in \AdjFree{M}{a}\vdash
-    Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{7}}
-  \proofstepwidestar[1,2,4]{%
-    \FranklAdjCorr{M}{a}{h}(Y)\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-    \rIE{\FormulaRefAuto{a=b\vdash b=a}{4},8}}
-  \proofstepwidestar[1,2,3,4]{X=Y}{%
-    \FormulaRefAuto{P,\,\neg P \vdash Q}{6,9}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Korrigierte Adjunktion ist punktweise injektiv]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \dsep X\in \FamAvoiding{M}{a}\dsep
-  Y\in \FamAvoiding{M}{a}\dsep
-  \FranklAdjCorr{M}{a}{h}(X)=
-  \FranklAdjCorr{M}{a}{h}(Y)
-  \vdash X=Y
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamAvoiding{M}{a}\dsep
-    \AdjGood{M}{a}\dsep \AdjDefect{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Fall \(X\in\AdjGood{M}{a}\), \(Y\in\AdjGood{M}{a}\)]{%
-    \begin{aligned}[t]
-      &h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}\dsep{}\\
-      &X\in \AdjGood{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-    \end{aligned}
-  }{%
-    h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-    \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-  }
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[2]{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[4]{Y\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[5]{%
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-    \proofstepwidestar[1,2,3,4,5]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}
-      \dsep X\in \AdjGood{M}{a}\dsep
-      Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)
-      \vdash X=Y}{2,3,4,5}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X\in\AdjGood{M}{a}\), \(Y\in\AdjDefect{M}{a}\)]{%
-    \begin{aligned}[t]
-      &h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}\dsep{}\\
-      &X\in \AdjGood{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-    \end{aligned}
-  }{%
-    h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-    \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-    \dsep X\in \AdjGood{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-  }
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[2]{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[4]{Y\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[5]{%
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-    \proofstepwidestar[1,2,3,4,5]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep X\in \AdjGood{M}{a}\dsep
-      Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)
-      \vdash X=Y}{1,3,4,5}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X\in\AdjDefect{M}{a}\), \(Y\in\AdjGood{M}{a}\)]{%
-    \begin{aligned}[t]
-      &h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}\dsep{}\\
-      &X\in \AdjDefect{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-    \end{aligned}
-  }{%
-    h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-    \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-    \dsep X\in \AdjDefect{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-  }
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[2]{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[4]{Y\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[5]{%
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-    \proofstepwidestar[1,2,3,4,5]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep X\in \AdjDefect{M}{a}\dsep
-      Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)
-      \vdash X=Y}{1,3,4,5}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Fall \(X\in\AdjDefect{M}{a}\), \(Y\in\AdjDefect{M}{a}\)]{%
-    \begin{aligned}[t]
-      &h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}\dsep{}\\
-      &X\in \AdjDefect{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-    \end{aligned}
-  }{%
-    h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-    \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-    \dsep X\in \AdjDefect{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y
-  }
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[2]{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[3]{X\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[4]{Y\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[5]{%
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-    \proofstepwidestar[1,2,3,4,5]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}\dsep X\in \AdjDefect{M}{a}\dsep
-      Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)
-      \vdash X=Y}{1,3,4,5}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[2]{X\in \FamAvoiding{M}{a}}{\rA}
-    \proofstepwidestar[3]{Y\in \FamAvoiding{M}{a}}{\rA}
-    \proofstepwidestar[4]{%
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)}{\rA}
-    \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\to
-      \AdjFree{M}{a}}{\FormulaRefAuto{Injektive Funktion}{1}}
-    \proofstepwidestar[]{%
-      \FamAvoiding{M}{a}=
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{\FamAvoiding{M}{a}=
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}}
-    \proofstepwidestar[2]{X\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{\rIE{6,2}}
-    \proofstepwidestar[3]{Y\in
-      \AdjGood{M}{a}\cup \AdjDefect{M}{a}}{\rIE{6,3}}
-    \proofstepwidestar[2]{X\in \AdjGood{M}{a}\lor
-      X\in \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{7}}
-    \proofstepwidestar[3]{Y\in \AdjGood{M}{a}\lor
-      Y\in \AdjDefect{M}{a}}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{8}}
-
-    \proofstepwidestar[11]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[12]{Y\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[1,4,5,11,12]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-      \dsep X\in \AdjGood{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y}{1,5,11,12,4}}
-    \proofstepwidestar[14]{Y\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[1,4,5,11,14]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-      \dsep X\in \AdjGood{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y}{1,5,11,14,4}}
-    \proofstepwidestar[1,3,4,5,11]{X=Y}{%
-      \rOE{10,12,13,14,15}}
-
-    \proofstepwidestar[17]{X\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[18]{Y\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[1,4,5,17,18]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-      \dsep X\in \AdjDefect{M}{a}\dsep Y\in \AdjGood{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y}{1,5,17,18,4}}
-    \proofstepwidestar[20]{Y\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[1,4,5,17,20]{X=Y}{%
-      \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-      \AdjFree{M}{a}
-      \dsep h_a\colon \AdjDefect{M}{a}\to \AdjFree{M}{a}
-      \dsep X\in \AdjDefect{M}{a}\dsep Y\in \AdjDefect{M}{a}\dsep
-      \FranklAdjCorr{M}{a}{h}(X)=
-      \FranklAdjCorr{M}{a}{h}(Y)\vdash X=Y}{1,5,17,20,4}}
-    \proofstepwidestar[1,3,4,5,17]{X=Y}{%
-      \rOE{10,18,19,20,21}}
-    \proofstepwidestar[1,2,3,4]{X=Y}{%
-      \rOE{9,11,16,17,22}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\FormulaThmDelta[Korrigierte Adjunktionsabbildung ist injektiv]{%
-  h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \vdash
-  \FranklAdjCorr{M}{a}{h}\colon
-  \FamAvoiding{M}{a}\inj \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AdjGood{M}{a}\dsep \AdjDefect{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}}{\rA}
-  \proofstepwidestar[1]{%
-    \FranklAdjCorr{M}{a}{h}\colon
-    \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}
-    \vdash
-    \FranklAdjCorr{M}{a}{h}\colon
-    \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{1}}
-  \proofstepwidestar[1]{%
-    \forall X,Y\in \FamAvoiding{M}{a}\,
-    \bigl(\FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)\rightarrow X=Y\bigr)}{%
-    \FormulaRefAuto{h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-    \dsep X\in \FamAvoiding{M}{a}\dsep
-    Y\in \FamAvoiding{M}{a}\dsep
-    \FranklAdjCorr{M}{a}{h}(X)=
-    \FranklAdjCorr{M}{a}{h}(Y)
-    \vdash X=Y}{1}}
-  \proofstepwidestar[1]{%
-    \FranklAdjCorr{M}{a}{h}\colon
-    \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{Injektive Funktion}{2,3}}
-\end{tabproofwide}
-
-Im Fall einer enthaltenen Einermenge gibt es keine defekten Stellen. Damit
-fällt die korrigierte Adjunktionsabbildung auf die ursprüngliche Abbildung
-\(X\mapsto X\cup\{a\}\) zurück.
-
-\FormulaThmDelta[Einermengenfall der korrigierten Adjunktion]{%
-  \UnionClosedFam(M)\dsep \{a\}\in M
-  \vdash \AdjDefect{M}{a}=\varnothing
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\AdjDefect{M}{a}\dsep \AdjGood{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{\UnionClosedFam(M)}{\rA}
-  \proofstep{2}{\{a\}\in M}{\rA}
-  \proofstep{3}{X\in \AdjDefect{M}{a}}{\rA}
-  \proofstep{3}{X\in
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-    \FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-    \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{3}}
-  \proofstep{3}{X\in \FamAvoiding{M}{a}\land
-    X\notin \AdjGood{M}{a}}{%
-    \FormulaRefAuto{x \in A \setminus B \eqvdash
-    x \in A \land x \notin B}{4}}
-  \proofstep{3}{X\in \FamAvoiding{M}{a}}{\rAEa{5}}
-  \proofstep{3}{X\notin \AdjGood{M}{a}}{\rAEb{5}}
-  \proofstep{3}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{6}}
-  \proofstep{3}{X\in M}{\rAEa{8}}
-  \proofstep{1,2,3}{X\cup\{a\}\in M}{%
-    \FormulaRefAuto{X \in M \dsep Y \in M \vdash X \cup Y \in M}{9,2}}
-  \proofstep{1,2,3}{X\in \AdjGood{M}{a}}{%
-    \FormulaRefAuto{\AdjGood{M}{a}\coloneqq
-    \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}}{6,10}}
-  \proofstep{1,2,3}{\bot}{\rBI{11,7}}
-  \proofstep{1,2}{X\notin \AdjDefect{M}{a}}{\rCI{3,12}}
-  \proofstep{1,2}{\forall X\,X\notin \AdjDefect{M}{a}}{\rUI{13}}
-  \proofstep{1,2}{\AdjDefect{M}{a}=\varnothing}{%
-    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{14}}
-\end{tabproof}
-
-\subsection{Reparaturkriterium und Reduktionsziel}
-
-Die korrigierte Adjunktionsabbildung macht die eigentliche Aufgabe kleiner:
-Man muss nicht mehr direkt eine Injektion von allen \(a\)-vermeidenden Mengen
-in alle \(a\)-enthaltenden Mengen konstruieren. Es genügt, die defekten
-Stellen injektiv in die nach den guten Adjunktionen noch freien Ziele
-einzubetten.
-
-\FormulaThmDelta[Reparaturkriterium für Halbhäufigkeit]{%
-  a\in\bigcup M\dsep
-  \exists h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-  \vdash \HalfOcc{a}{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Funktionen}{h_a\dsep \FranklAdjCorr{M}{a}{h}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AdjDefect{M}{a}\dsep \AdjFree{M}{a}\dsep
-    \FamAvoiding{M}{a}\dsep \FamContaining{M}{a}}
+  b\in \OccClass{M}{a}
+  \eqvdash
+  b\in\bigcup M\land (a,b)\in\SameOccRel{M}
+}{OccClassChar}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
 }
 \begin{tabproof}
   \proofstep{1}{a\in\bigcup M}{\rA}
-  \proofstep{2}{%
-    \exists h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{3}{h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{3}{%
-    \FranklAdjCorr{M}{a}{h}\colon
-    \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{%
-      h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \vdash
-      \FranklAdjCorr{M}{a}{h}\colon
-      \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{3}}
-  \proofstep{3}{%
-    \exists F\colon \FamAvoiding{M}{a}\inj
-    \FamContaining{M}{a}}{\rEI{4}}
-  \proofstep{1,3}{\HalfOcc{a}{M}}{%
-    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
-    a\in\bigcup M\land
-    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{1,5}}}
-  \proofstep{1,2}{\HalfOcc{a}{M}}{\rEE{2,3,6}}
+  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{\FormulaRefAuto{SameOccRelEqRel}}
+  \proofstep{1}{\OccClass{M}{a}\coloneqq
+    \EqClass{a}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{1}}
+  \proofstep{1}{b\in \OccClass{M}{a}
+    \eqvdash b\in\bigcup M\land (a,b)\in\SameOccRel{M}}{%
+    \FormulaRefAuto{EqClassChar}{2,1,3}}
 \end{tabproof}
 
-\FormulaThmDelta[Reparaturkriterium für die Frankl-Eigenschaft]{%
-  \exists a\,\Bigl(a\in\bigcup M\land
-  \exists h_a\colon \AdjDefect{M}{a}\inj
-  \AdjFree{M}{a}\Bigr)
-  \vdash \Frankl{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Funktionen}{h_a}
-  \DeltaRow{Teilmengenfamilien}{\AdjDefect{M}{a}\dsep \AdjFree{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{%
-    \exists a\,\Bigl(a\in\bigcup M\land
-    \exists h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}\Bigr)}{\rA}
-  \proofstep{2}{%
-    a\in\bigcup M\land
-    \exists h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rA}
-  \proofstep{2}{a\in\bigcup M}{\rAEa{2}}
-  \proofstep{2}{%
-    \exists h_a\colon \AdjDefect{M}{a}\inj
-    \AdjFree{M}{a}}{\rAEb{2}}
-  \proofstep{2}{\HalfOcc{a}{M}}{%
-    \FormulaRefAuto{%
-      a\in\bigcup M\dsep
-      \exists h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}
-      \vdash \HalfOcc{a}{M}}{3,4}}
-  \proofstep{2}{\exists a\,\HalfOcc{a}{M}}{\rEI{5}}
-  \proofstep{2}{\Frankl{M}}{%
-    \FormulaRefAuto{\Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}}{6}}
-  \proofstep{1}{\Frankl{M}}{\rEE{1,2,7}}
-\end{tabproof}
-
-Damit genügt für einen Beweis der korrigierten Frankl-Vermutung das
-folgende Reparaturziel:
-\[
-  \begin{aligned}[t]
-    \FranklFam{M}\vdash{}&
-    \exists a\,\Bigl(a\in\bigcup M\land{}\\
-    &\exists h_a\colon \AdjDefect{M}{a}\inj \AdjFree{M}{a}\Bigr).
-  \end{aligned}
-\]
-Zusammen mit dem vorigen Korollar folgt daraus unmittelbar
-\(\Frankl{M}\). Es wird hier nur als hinreichendes Beweisziel
-verwendet; eine beliebige Injektion
-\(\FamAvoiding{M}{a}\inj \FamContaining{M}{a}\) muss nicht schon in dieser
-reparierten Adjunktionsform gegeben sein.
-
-Die beiden Hilfsfamilien haben dabei die folgende anschauliche Bedeutung:
-\(\AdjDefect{M}{a}\) besteht aus den \(a\)-vermeidenden Mengen, deren
-\(a\)-Adjunktion fehlt; \(\AdjFree{M}{a}\) besteht aus den
-\(a\)-enthaltenden Mengen, die noch nicht als Bild einer guten Adjunktion
-verbraucht sind.
-
-\FormulaThmDeltaR[Charakterisierung defekter Adjunktionsstellen]{%
-  \begin{aligned}[t]
-    X\in \AdjDefect{M}{a}\eqvdash{}&
-    X\in \FamAvoiding{M}{a}\land{}\\
-    &X\cup\{a\}\notin M
-  \end{aligned}
-}{%
-  X\in \AdjDefect{M}{a}\eqvdash
-  X\in \FamAvoiding{M}{a}\land
-  X\cup\{a\}\notin M
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamAvoiding{M}{a}\dsep \AdjGood{M}{a}\dsep
-    \AdjDefect{M}{a}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwide{\(\vdash\)}
-    \proofstepwidestar[1]{X\in \AdjDefect{M}{a}}{\rA}
-    \proofstepwidestar[1]{X\in
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-      \FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{1}}
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{%
-      \FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
-    \proofstepwidestar[1]{X\notin \AdjGood{M}{a}}{%
-      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{2}}
-    \proofstepwidestar[5]{X\cup\{a\}\in M}{\rA}
-    \proofstepwidestar[1,5]{X\in \AdjGood{M}{a}}{%
-      \FormulaRefAuto{\AdjGood{M}{a}\coloneqq
-      \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}}{3,5}}
-    \proofstepwidestar[1,5]{\bot}{\rBI{6,4}}
-    \proofstepwidestar[1]{X\cup\{a\}\notin M}{\rCI{5,7}}
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}\land
-      X\cup\{a\}\notin M}{\rAI{3,8}}
-  \closeproofpartwide
-
-  \proofpartwide{\(\dashv\)}
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}\land
-      X\cup\{a\}\notin M}{\rA}
-    \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{\rAEa{1}}
-    \proofstepwidestar[1]{X\cup\{a\}\notin M}{\rAEb{1}}
-    \proofstepwidestar[4]{X\in \AdjGood{M}{a}}{\rA}
-    \proofstepwidestar[4]{X\in \FamAvoiding{M}{a}\land
-      X\cup\{a\}\in M}{%
-      \FormulaRefAuto{\AdjGood{M}{a}\coloneqq
-      \{X\in \FamAvoiding{M}{a}\mid X\cup\{a\}\in M\}}{4}}
-    \proofstepwidestar[4]{X\cup\{a\}\in M}{\rAEb{5}}
-    \proofstepwidestar[1,4]{\bot}{\rBI{6,3}}
-    \proofstepwidestar[1]{X\notin \AdjGood{M}{a}}{\rCI{4,7}}
-    \proofstepwidestar[1]{X\in
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}}{%
-      \FormulaRefAuto{x \in A\dsep x\notin B\vdash
-      x \in A\setminus B}{2,8}}
-    \proofstepwidestar[1]{X\in \AdjDefect{M}{a}}{%
-      \rIE{\FormulaRefAuto{\AdjDefect{M}{a}\coloneqq
-      \FamAvoiding{M}{a}\setminus \AdjGood{M}{a}},9}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\FormulaThmDeltaR[Charakterisierung freier Adjunktionsziele]{%
-  \begin{aligned}[t]
-    Y\in \AdjFree{M}{a}\eqvdash{}&
-    Y\in \FamContaining{M}{a}\land{}\\
-    &Y\notin
-    \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-  \end{aligned}
-}{%
-  Y\in \AdjFree{M}{a}\eqvdash
-  Y\in \FamContaining{M}{a}\land
-  Y\notin
-  \AdjGoodMap{M}{a}[\AdjGood{M}{a}]
-}{%
-  \DeltaRow{Mengen}{M\dsep Y\dsep a}
-  \DeltaRow{Funktionensymbol}{\AdjGoodMap{M}{a}}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \AdjGood{M}{a}\dsep
-    \AdjFree{M}{a}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwide{\(\vdash\)}
-    \proofstepwidestar[1]{Y\in \AdjFree{M}{a}}{\rA}
-    \proofstepwidestar[1]{Y\in
-      \FamContaining{M}{a}\setminus
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-      \FormulaRefAuto{\AdjFree{M}{a}\coloneqq
-      \FamContaining{M}{a}\setminus
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{1}}
-    \proofstepwidestar[1]{Y\in \FamContaining{M}{a}}{%
-      \FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
-    \proofstepwidestar[1]{Y\notin
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{2}}
-    \proofstepwidestar[1]{%
-      Y\in \FamContaining{M}{a}\land
-      Y\notin
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rAI{3,4}}
-  \closeproofpartwide
-
-  \proofpartwide{\(\dashv\)}
-    \proofstepwidestar[1]{%
-      Y\in \FamContaining{M}{a}\land
-      Y\notin
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rA}
-    \proofstepwidestar[1]{Y\in \FamContaining{M}{a}}{\rAEa{1}}
-    \proofstepwidestar[1]{Y\notin
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{\rAEb{1}}
-    \proofstepwidestar[1]{Y\in
-      \FamContaining{M}{a}\setminus
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]}{%
-      \FormulaRefAuto{x \in A\dsep x\notin B\vdash
-      x \in A\setminus B}{2,3}}
-    \proofstepwidestar[1]{Y\in \AdjFree{M}{a}}{%
-      \rIE{\FormulaRefAuto{\AdjFree{M}{a}\coloneqq
-      \FamContaining{M}{a}\setminus
-      \AdjGoodMap{M}{a}[\AdjGood{M}{a}]},4}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\subsection{Auftretensfasern}
-
-Die folgenden Fasern sind die verschiedenen Teilfamilien von \(M\), die als
-\(\FamContaining{M}{a}\) fuer ein im Traeger vorkommendes Element auftreten.
-
-\FormulaDefDeltaK[Auftretensfasern einer Familie]{%
-  \OccFibers{M}\coloneqq
-  \{A\in\powerset(M)\mid
-  \exists a\in\bigcup M\, A=\FamContaining{M}{a}\}
-}{Auftretensfasern}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}}
-  \DeltaRow{Neue Symbole}{\OccFibers{M}}
-}
-
-\FormulaThmDelta[Auftretensfaser eines Traegerelements ist Auftretensfaser]{%
-  a\in\bigcup M\vdash \FamContaining{M}{a}\in\OccFibers{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \OccFibers{M}}
+\FormulaThmDeltaK[Gleich auftretende Elemente haben dieselbe Auftretensklasse]{%
+  a\in\bigcup M\dsep b\in\bigcup M\dsep (a,b)\in\SameOccRel{M}
+  \vdash
+  \OccClass{M}{a}=\OccClass{M}{b}
+}{OccClassEqualFromRel}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
 }
 \begin{tabproof}
   \proofstep{1}{a\in\bigcup M}{\rA}
-  \proofstep{}{\FamContaining{M}{a}\subseteq M}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\subseteq M}}
-  \proofstep{}{\FamContaining{M}{a}\in\powerset(M)}{%
-    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{2}}
-  \proofstep{}{\FamContaining{M}{a}=\FamContaining{M}{a}}{\rII}
-  \proofstep{1}{\exists b\in\bigcup M\,
-    \FamContaining{M}{a}=\FamContaining{M}{b}}{\rEI{\rAI{1,4}}}
-  \proofstep{1}{%
-    \FamContaining{M}{a}\in\powerset(M)\land
-    \exists b\in\bigcup M\,
-    \FamContaining{M}{a}=\FamContaining{M}{b}}{\rAI{3,5}}
-  \proofstep{1}{\FamContaining{M}{a}\in\OccFibers{M}}{%
-    \FormulaRefAuto{\OccFibers{M}\coloneqq
-    \{A\in\powerset(M)\mid
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}\}}{6}}
+  \proofstep{2}{b\in\bigcup M}{\rA}
+  \proofstep{3}{(a,b)\in\SameOccRel{M}}{\rA}
+  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{\FormulaRefAuto{SameOccRelEqRel}}
+  \proofstep{1}{\OccClass{M}{a}=\EqClass{a}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{1}}
+  \proofstep{2}{\OccClass{M}{b}=\EqClass{b}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{2}}
+  \proofstep{1,2,3}{\EqClass{a}{\SameOccRel{M}}{\bigcup M}=\EqClass{b}{\SameOccRel{M}}{\bigcup M}}{%
+    \FormulaRefAuto{EqClassEqualFromRel}{4,1,2,3}}
+  \proofstep{1,2,3}{\OccClass{M}{a}=\OccClass{M}{b}}{\rIE{5,6,7}}
 \end{tabproof}
 
-\FormulaThmDelta[Auftretensfasern liegen in der Potenzmenge]{%
-  \OccFibers{M}\subseteq\powerset(M)
-}{%
-  \DeltaRow{Mengen}{M\dsep A}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{A\in\OccFibers{M}}{\rA}
-  \proofstep{1}{%
-    A\in\powerset(M)\land
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}{%
-    \FormulaRefAuto{\OccFibers{M}\coloneqq
-    \{A\in\powerset(M)\mid
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}\}}{1}}
-  \proofstep{1}{A\in\powerset(M)}{\rAEa{2}}
-  \proofstep{}{\forall A\,\bigl(A\in\OccFibers{M}
-    \rightarrow A\in\powerset(M)\bigr)}{\rUI{\rRI{1,3}}}
-  \proofstep{}{\OccFibers{M}\subseteq\powerset(M)}{%
-    \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{4}}
-\end{tabproof}
-
-\FormulaThmDelta[Auftretensfasern sind bei nichtleerem Traeger nichtleer]{%
-  \bigcup M\neq\varnothing\vdash \OccFibers{M}\neq\varnothing
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{\bigcup M\neq\varnothing}{\rA}
-  \proofstep{1}{\exists a\in\bigcup M}{%
-    \FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{1}}
-  \proofstep{3}{a\in\bigcup M}{\rA}
-  \proofstep{3}{\FamContaining{M}{a}\in\OccFibers{M}}{%
-    \FormulaRefAuto{a\in\bigcup M\vdash
-    \FamContaining{M}{a}\in\OccFibers{M}}{3}}
-  \proofstep{3}{\OccFibers{M}\neq\varnothing}{%
-    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}{4}}
-  \proofstep{1}{\OccFibers{M}\neq\varnothing}{\rEE{2,3,5}}
-\end{tabproof}
-
-\FormulaThmDelta[Auftretensfasern besitzen ein kardinales Maximum]{%
-  \Finite{M}\dsep \bigcup M\neq\varnothing
+\FormulaThmDeltaK[Gleiche Auftretensklassen liefern gleiches Auftreten]{%
+  a\in\bigcup M\dsep b\in\bigcup M\dsep
+  \OccClass{M}{a}=\OccClass{M}{b}
   \vdash
-  \exists A\in\OccFibers{M}\,\forall B\in\OccFibers{M}\,
-  \exists F\colon B\inj A
-}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}}
+  (a,b)\in\SameOccRel{M}
+}{OccClassRelFromEqual}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
 }
 \begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{2}{\bigcup M\neq\varnothing}{\rA}
-  \proofstep{}{\OccFibers{M}\subseteq\powerset(M)}{%
-    \FormulaRefAuto{\OccFibers{M}\subseteq\powerset(M)}}
-  \proofstep{2}{\OccFibers{M}\neq\varnothing}{%
-    \FormulaRefAuto{\bigcup M\neq\varnothing
-    \vdash \OccFibers{M}\neq\varnothing}{2}}
-  \proofstep{1,2}{%
-    \exists A\in\OccFibers{M}\,\forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{%
-    \FormulaRefAuto{\Finite{M}\dsep \mathcal B\subseteq\powerset(M)\dsep
-    \mathcal B\neq\varnothing
-    \vdash
-    \exists A\in\mathcal B\,\forall B\in\mathcal B\,
-    \exists F\colon B\inj A}{1,3,4}}
+  \proofstep{1}{a\in\bigcup M}{\rA}
+  \proofstep{2}{b\in\bigcup M}{\rA}
+  \proofstep{3}{\OccClass{M}{a}=\OccClass{M}{b}}{\rA}
+  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{\FormulaRefAuto{SameOccRelEqRel}}
+  \proofstep{1}{\OccClass{M}{a}=\EqClass{a}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{1}}
+  \proofstep{2}{\OccClass{M}{b}=\EqClass{b}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{2}}
+  \proofstep{1,2,3}{\EqClass{a}{\SameOccRel{M}}{\bigcup M}=\EqClass{b}{\SameOccRel{M}}{\bigcup M}}{\rIE{5,6,3}}
+  \proofstep{1,2,3}{(a,b)\in\SameOccRel{M}}{\FormulaRefAuto{EqClassRelFromEqual}{4,1,2,7}}
 \end{tabproof}
 
-\FormulaThmDelta[Auftretensfaser hat einen Traegerzeugen]{%
-  A\in\OccFibers{M}\vdash
-  \exists a\in\bigcup M\, A=\FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}\dsep \FamContaining{M}{a}}
+\subsection{Der Auftretensquotient}
+
+\FormulaDefDeltaK[Träger des Auftretensquotienten]{%
+  \OccQuotCarrier{M}\coloneqq
+  \QuotientSet{\bigcup M}{\SameOccRel{M}}
+}{Träger des Auftretensquotienten}{%
+  \DeltaRow{Mengen}{M}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Neue Symbole}{\OccQuotCarrier{M}}
+}
+
+\FormulaDefDeltaK[Quotientenbild eines Familienglieds]{%
+  \OccQuotSet{M}{X}\coloneqq
+  \{C\in \OccQuotCarrier{M}\mid
+  \exists a\in X\,C=\OccClass{M}{a}\}
+}{Quotientenbild eines Familienglieds}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep C\dsep a}
+  \DeltaRow{Auftretensklassen}{\OccClass{M}{a}}
+  \DeltaRow{Neue Symbole}{\OccQuotSet{M}{X}}
+}
+
+\FormulaDefDeltaK[Auftretensquotient einer Mengenfamilie]{%
+  \OccQuotFam{M}\coloneqq
+  \{Y\in\powerset(\OccQuotCarrier{M})\mid
+  \exists X\in M\,Y=\OccQuotSet{M}{X}\}
+}{Auftretensquotient}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
+  \DeltaRow{Neue Symbole}{\OccQuotFam{M}}
+}
+
+Wenn etwa die Elemente 1 und 2 in jedem Familienglied von \(M\) gemeinsam
+auftreten, dann gilt \(\OccClass{M}{1}=\OccClass{M}{2}\). Das Familienglied
+\(\{1,2,3,4\}\) wird im Quotienten durch die Klassen
+\(\{\OccClass{M}{1},\OccClass{M}{3},\OccClass{M}{4}\}\) dargestellt; die
+Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
+
+\FormulaThmDeltaK[Quotientenbilder liegen im Quotiententräger]{%
+  C\in\OccQuotSet{M}{X}\vdash C\in\OccQuotCarrier{M}
+}{OccQuotSetElementInCarrier}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep C}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
 }
 \begin{tabproof}
-  \proofstep{1}{A\in\OccFibers{M}}{\rA}
-  \proofstep{1}{%
-    A\in\powerset(M)\land
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}{%
-    \FormulaRefAuto{\OccFibers{M}\coloneqq
-    \{A\in\powerset(M)\mid
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}\}}{1}}
-  \proofstep{1}{\exists a\in\bigcup M\,
-    A=\FamContaining{M}{a}}{\rAEb{2}}
+  \proofstep{1}{C\in\OccQuotSet{M}{X}}{\rA}
+  \proofstep{1}{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{1}}
+  \proofstep{1}{C\in\OccQuotCarrier{M}}{\rAEa{2}}
 \end{tabproof}
 
-\subsection{Reduktion auf endliche Mengenglieder}
-
-Die Musterreduktion ersetzt ein beliebiges Mitglied \(X\in M\) durch die
-Menge aller Auftretensfasern, in denen \(X\) liegt. Dadurch werden die
-urspruenglichen Elemente von \(X\) nur noch durch die in \(M\) sichtbaren
-Auftretensfasern repraesentiert.
-
-\FormulaDefDeltaK[Auftretensmuster eines Familienmitglieds]{%
-  \PatOf{M}{X}\coloneqq
-  \{A\in\OccFibers{M}\mid X\in A\}
-}{Auftretensmuster}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep A}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}}
-  \DeltaRow{Neue Symbole}{\PatOf{M}{X}}
-}
-
-\FormulaThmDelta[Auftretensmuster liegen in den Auftretensfasern]{%
-  \PatOf{M}{X}\subseteq\OccFibers{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep A}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \OccFibers{M}}
+\FormulaThmDeltaK[Quotientenbild eines Mitglieds liegt im Auftretensquotienten]{%
+  X\in M
+  \vdash
+  \OccQuotSet{M}{X}\in\OccQuotFam{M}
+}{OccQuotSetInFam}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep C}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
 }
 \begin{tabproof}
-  \proofstep{1}{A\in\PatOf{M}{X}}{\rA}
-  \proofstep{1}{A\in\OccFibers{M}\land X\in A}{%
-    \FormulaRefAuto{\PatOf{M}{X}\coloneqq
-    \{A\in\OccFibers{M}\mid X\in A\}}{1}}
-  \proofstep{1}{A\in\OccFibers{M}}{\rAEa{2}}
-  \proofstep{}{\forall A\,\bigl(A\in\PatOf{M}{X}
-    \rightarrow A\in\OccFibers{M}\bigr)}{\rUI{\rRI{1,3}}}
-  \proofstep{}{\PatOf{M}{X}\subseteq\OccFibers{M}}{%
+  \proofstep{1}{X\in M}{\rA}
+  \proofstep{2}{C\in\OccQuotSet{M}{X}}{\rA}
+  \proofstep{2}{C\in\OccQuotCarrier{M}}{\FormulaRefAuto{OccQuotSetElementInCarrier}{2}}
+  \proofstep{}{\OccQuotSet{M}{X}\subseteq\OccQuotCarrier{M}}{%
     \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{4}}
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,3}}}}
+  \proofstep{}{\OccQuotSet{M}{X}\in\powerset(\OccQuotCarrier{M})}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{4}}
+  \proofstep{}{\OccQuotSet{M}{X}=\OccQuotSet{M}{X}}{\rII}
+  \proofstep{1}{\exists Z\in M\,\OccQuotSet{M}{X}=\OccQuotSet{M}{Z}}{\rEI{\rAI{1,6}}}
+  \proofstep{1}{\OccQuotSet{M}{X}\in\powerset(\OccQuotCarrier{M})\land
+    \exists Z\in M\,\OccQuotSet{M}{X}=\OccQuotSet{M}{Z}}{\rAI{5,7}}
+  \proofstep{1}{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{Auftretensquotient}{8}}
 \end{tabproof}
 
-\FormulaThmDelta[Auftretensmuster liegen in der Potenzmenge von \(M\)]{%
-  \PatOf{M}{X}\subseteq\powerset(M)
-}{%
-  \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \OccFibers{M}}
+\FormulaThmDeltaK[Mitglieder des Auftretensquotienten haben ein Urbild]{%
+  Y\in \OccQuotFam{M}
+  \vdash
+  \exists X\in M\,Y=\OccQuotSet{M}{X}
+}{OccQuotFamPreimage}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
 }
 \begin{tabproof}
-  \proofstep{}{\PatOf{M}{X}\subseteq\OccFibers{M}}{%
-    \FormulaRefAuto{\PatOf{M}{X}\subseteq\OccFibers{M}}}
-  \proofstep{}{\OccFibers{M}\subseteq\powerset(M)}{%
-    \FormulaRefAuto{\OccFibers{M}\subseteq\powerset(M)}}
-  \proofstep{}{\PatOf{M}{X}\subseteq\powerset(M)}{%
-    \FormulaRefAuto{A \subseteq B,\, B \subseteq C \vdash A \subseteq C}{1,2}}
+  \proofstep{1}{Y\in \OccQuotFam{M}}{\rA}
+  \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{Auftretensquotient}{1}}
+  \proofstep{1}{\exists X\in M\,Y=\OccQuotSet{M}{X}}{\rAEb{2}}
 \end{tabproof}
 
-\FormulaThmDelta[Auftretensmuster sind endlich]{%
-  \FranklFam{M}\dsep X\in M\vdash \Finite{\PatOf{M}{X}}
-}{%
-  \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \OccFibers{M}}
+\FormulaThmDeltaK[Mitglieder des Auftretensquotienten liegen im Quotiententräger]{%
+  Y\in \OccQuotFam{M}
+  \vdash Y\subseteq\OccQuotCarrier{M}
+}{OccQuotMemberSubsetCarrier}{%
+  \DeltaRow{Mengen}{M\dsep Y}
 }
 \begin{tabproof}
-  \proofstep{1}{\FranklFam{M}}{\rA}
-  \proofstep{2}{X\in M}{\rA}
-  \proofstep{1}{\Finite{M}}{\FormulaRefAuto{Frankl-Familie}{1}}
-  \proofstep{1}{\Finite{\powerset(M)}}{%
-    \FormulaRefAuto{\Finite{A}\vdash \Finite{\powerset(A)}}{3}}
-  \proofstep{}{\PatOf{M}{X}\subseteq\powerset(M)}{%
-    \FormulaRefAuto{\PatOf{M}{X}\subseteq\powerset(M)}}
-  \proofstep{1}{\Finite{\PatOf{M}{X}}}{%
-    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{5,4}}
+  \proofstep{1}{Y\in \OccQuotFam{M}}{\rA}
+  \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})\land
+    \exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{Auftretensquotient}{1}}
+  \proofstep{1}{Y\in\powerset(\OccQuotCarrier{M})}{\rAEa{2}}
+  \proofstep{1}{Y\subseteq\OccQuotCarrier{M}}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{3}}
 \end{tabproof}
 
-\FormulaThmDelta[Auftretensmuster charakterisieren Faserzugehoerigkeit]{%
-  A\in\OccFibers{M}\dsep X\in A\vdash A\in\PatOf{M}{X}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep A}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \OccFibers{M}}
+\FormulaThmDeltaK[Mitgliedschaftstransport in den Auftretensquotienten]{%
+  X\in M\dsep a\in\bigcup M
+  \vdash
+  a\in X
+  \eqvdash
+  \OccClass{M}{a}\in\OccQuotSet{M}{X}
+}{OccQuotMembershipTransport}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b\dsep C}
+  \DeltaRow{Auftretensklassen}{\OccClass{M}{a}}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
 }
-\begin{tabproof}
-  \proofstep{1}{A\in\OccFibers{M}}{\rA}
-  \proofstep{2}{X\in A}{\rA}
-  \proofstep{1,2}{A\in\OccFibers{M}\land X\in A}{\rAI{1,2}}
-  \proofstep{1,2}{A\in\PatOf{M}{X}}{%
-    \FormulaRefAuto{\PatOf{M}{X}\coloneqq
-    \{A\in\OccFibers{M}\mid X\in A\}}{3}}
-\end{tabproof}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in M}{\rA}
+  \proofstepwidestar[2]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[3]{a\in X}{\rA}
+  \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{\FormulaRefAuto{SameOccRelEqRel}}
+  \proofstepwidestar[2]{\OccClass{M}{a}=\EqClass{a}{\SameOccRel{M}}{\bigcup M}}{\FormulaRefAuto{Auftretensklasse}{2}}
+  \proofstepwidestar[2]{\OccClass{M}{a}\in\OccQuotCarrier{M}}{%
+    \FormulaRefAuto{EqClassInQuotient}{4,2,5}}
+  \proofstepwidestar[2,3]{\exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\rEI{\rAI{3,\rII}}}
+  \proofstepwidestar[2,3]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{%
+    \FormulaRefAuto{Quotientenbild eines Familienglieds}{\rAI{6,7}}}
 
-\FormulaThmDelta[Auftretensmuster-Mitgliedschaft liefert Faserzugehoerigkeit]{%
-  A\in\PatOf{M}{X}\vdash X\in A
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep A}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \OccFibers{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{A\in\PatOf{M}{X}}{\rA}
-  \proofstep{1}{A\in\OccFibers{M}\land X\in A}{%
-    \FormulaRefAuto{\PatOf{M}{X}\coloneqq
-    \{A\in\OccFibers{M}\mid X\in A\}}{1}}
-  \proofstep{1}{X\in A}{\rAEb{2}}
-\end{tabproof}
+  \proofstepwidestar[9]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{\rA}
+  \proofstepwidestar[9]{\OccClass{M}{a}\in\OccQuotCarrier{M}\land
+    \exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{9}}
+  \proofstepwidestar[9]{\exists b\in X\,\OccClass{M}{a}=\OccClass{M}{b}}{\rAEb{10}}
+  \proofstepwidestar[12]{b\in X\land \OccClass{M}{a}=\OccClass{M}{b}}{\rA}
+  \proofstepwidestar[12]{b\in X}{\rAEa{12}}
+  \proofstepwidestar[1,12]{b\in\bigcup M}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,13}}
+  \proofstepwidestar[2,12]{\OccClass{M}{a}=\OccClass{M}{b}}{\rAEb{12}}
+  \proofstepwidestar[2,12]{(a,b)\in\SameOccRel{M}}{\FormulaRefAuto{OccClassRelFromEqual}{2,14,15}}
+  \proofstepwidestar[2,12]{a\in\bigcup M\land b\in\bigcup M\land
+    \forall Z\in M\,(a\in Z\leftrightarrow b\in Z)}{\FormulaRefAuto{SameOccRelChar}{16}}
+  \proofstepwidestar[1,2,12]{a\in X\leftrightarrow b\in X}{\rRE{1,\rUE{\rAEb{\rAEb{17}}}}}
+  \proofstepwidestar[1,2,12]{a\in X}{\FormulaRefAuto{P\leftrightarrow Q, Q \vdash P}{18,13}}
+  \proofstepwidestar[1,2,9]{a\in X}{\rEE{11,12,19}}
+  \proofstepwidestar[1,2]{a\in X\leftrightarrow
+    \OccClass{M}{a}\in\OccQuotSet{M}{X}}{\rLRI{8,20}}
+\end{tabproofwide}
 
-\FormulaThmDelta[Auftretensmuster unterscheiden Mitglieder]{%
+\FormulaThmDeltaK[Quotientenbilder unterscheiden Familienglieder]{%
   X\in M\dsep Y\in M\dsep
-  \PatOf{M}{X}=\PatOf{M}{Y}\vdash X=Y
-}{%
+  \OccQuotSet{M}{X}=\OccQuotSet{M}{Y}
+  \vdash X=Y
+}{OccQuotSetSeparatesMembers}{%
   \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \OccFibers{M}\dsep
-    \PatOf{M}{X}\dsep \PatOf{M}{Y}}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}\dsep \OccQuotSet{M}{Y}}
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{X\in M}{\rA}
   \proofstepwidestar[2]{Y\in M}{\rA}
-  \proofstepwidestar[3]{\PatOf{M}{X}=\PatOf{M}{Y}}{\rA}
-
+  \proofstepwidestar[3]{\OccQuotSet{M}{X}=\OccQuotSet{M}{Y}}{\rA}
   \proofstepwidestar[4]{a\in X}{\rA}
-  \proofstepwidestar[1,4]{a\in\bigcup M}{%
-    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,4}}
-  \proofstepwidestar[1,4]{\FamContaining{M}{a}\in\OccFibers{M}}{%
-    \FormulaRefAuto{a\in\bigcup M\vdash
-    \FamContaining{M}{a}\in\OccFibers{M}}{5}}
-  \proofstepwidestar[1,4]{X\in M\land a\in X}{\rAI{1,4}}
-  \proofstepwidestar[1,4]{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{7}}
-  \proofstepwidestar[1,4]{\FamContaining{M}{a}\in\PatOf{M}{X}}{%
-    \FormulaRefAuto{A\in\OccFibers{M}\dsep X\in A
-    \vdash A\in\PatOf{M}{X}}{6,8}}
-  \proofstepwidestar[1,3,4]{\FamContaining{M}{a}\in\PatOf{M}{Y}}{%
-    \rIE{3,9}}
-  \proofstepwidestar[1,3,4]{Y\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{A\in\PatOf{M}{X}\vdash X\in A}{10}}
-  \proofstepwidestar[1,3,4]{Y\in M\land a\in Y}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{11}}
-  \proofstepwidestar[1,3,4]{a\in Y}{\rAEb{12}}
-  \proofstepwidestar[1,3]{a\in X\rightarrow a\in Y}{\rRI{4,13}}
+  \proofstepwidestar[1,4]{a\in\bigcup M}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,4}}
+  \proofstepwidestar[1,4]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotMembershipTransport}{1,5,4}}
+  \proofstepwidestar[1,3,4]{\OccClass{M}{a}\in\OccQuotSet{M}{Y}}{\rIE{3,6}}
+  \proofstepwidestar[1,2,3,4]{a\in Y}{\FormulaRefAuto{OccQuotMembershipTransport}{2,5,7}}
+  \proofstepwidestar[1,2,3]{X\subseteq Y}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{4,8}}}}
 
-  \proofstepwidestar[15]{a\in Y}{\rA}
-  \proofstepwidestar[2,15]{a\in\bigcup M}{%
-    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{2,15}}
-  \proofstepwidestar[2,15]{\FamContaining{M}{a}\in\OccFibers{M}}{%
-    \FormulaRefAuto{a\in\bigcup M\vdash
-    \FamContaining{M}{a}\in\OccFibers{M}}{16}}
-  \proofstepwidestar[2,15]{Y\in M\land a\in Y}{\rAI{2,15}}
-  \proofstepwidestar[2,15]{Y\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{18}}
-  \proofstepwidestar[2,15]{\FamContaining{M}{a}\in\PatOf{M}{Y}}{%
-    \FormulaRefAuto{A\in\OccFibers{M}\dsep X\in A
-    \vdash A\in\PatOf{M}{X}}{17,19}}
-  \proofstepwidestar[2,3,15]{\FamContaining{M}{a}\in\PatOf{M}{X}}{%
-    \rIE{\FormulaRefAuto{a=b\vdash b=a}{3},20}}
-  \proofstepwidestar[2,3,15]{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{A\in\PatOf{M}{X}\vdash X\in A}{21}}
-  \proofstepwidestar[2,3,15]{X\in M\land a\in X}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{22}}
-  \proofstepwidestar[2,3,15]{a\in X}{\rAEb{23}}
-  \proofstepwidestar[2,3]{a\in Y\rightarrow a\in X}{\rRI{15,24}}
-
-  \proofstepwidestar[1,2,3]{a\in X\leftrightarrow a\in Y}{\rLRI{14,25}}
-  \proofstepwidestar[1,2,3]{%
-    \forall a\,\bigl(a\in X\leftrightarrow a\in Y\bigr)}{\rUI{26}}
-  \proofstepwidestar[1,2,3]{X=Y}{%
-    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B)
-    \eqvdash A = B}{27}}
+  \proofstepwidestar[10]{a\in Y}{\rA}
+  \proofstepwidestar[2,10]{a\in\bigcup M}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{2,10}}
+  \proofstepwidestar[2,10]{\OccClass{M}{a}\in\OccQuotSet{M}{Y}}{\FormulaRefAuto{OccQuotMembershipTransport}{2,11,10}}
+  \proofstepwidestar[2,3,10]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{3},12}}
+  \proofstepwidestar[1,2,3,10]{a\in X}{\FormulaRefAuto{OccQuotMembershipTransport}{1,11,13}}
+  \proofstepwidestar[1,2,3]{Y\subseteq X}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{10,14}}}}
+  \proofstepwidestar[1,2,3]{X=Y}{\FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{9,15}}
 \end{tabproofwide}
 
-\FormulaDefDeltaK[Musterfamilie einer Familie]{%
-  \PatFam{M}\coloneqq
-  \{C\in\powerset(\OccFibers{M})\mid
-  \exists X\in M\, C=\PatOf{M}{X}\}
-}{Musterfamilie}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep C}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}\dsep \PatOf{M}{X}}
-  \DeltaRow{Neue Symbole}{\PatFam{M}}
+\FormulaThmDeltaK[Quotient erhält Vereinigungen]{%
+  X\in M\dsep Y\in M
+  \vdash
+  \OccQuotSet{M}{X\cup Y}
+  =
+  \OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}
+}{OccQuotPreservesUnion}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep C\dsep a}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}\dsep \OccQuotSet{M}{Y}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in M}{\rA}
+  \proofstepwidestar[2]{Y\in M}{\rA}
+  \proofstepwidestar[3]{C\in\OccQuotSet{M}{X\cup Y}}{\rA}
+  \proofstepwidestar[3]{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\cup Y\,C=\OccClass{M}{a}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{3}}
+  \proofstepwidestar[3]{\exists a\in X\cup Y\,C=\OccClass{M}{a}}{\rAEb{4}}
+  \proofstepwidestar[6]{a\in X\cup Y\land C=\OccClass{M}{a}}{\rA}
+  \proofstepwidestar[6]{a\in X\lor a\in Y}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rAEa{6}}}
+  \proofstepwidestar[8]{a\in X}{\rA}
+  \proofstepwidestar[6,8]{C\in\OccQuotSet{M}{X}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{\rAI{\rAEa{4},\rEI{\rAI{8,\rAEb{6}}}}}}
+  \proofstepwidestar[6,8]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{9}}}
+  \proofstepwidestar[11]{a\in Y}{\rA}
+  \proofstepwidestar[6,11]{C\in\OccQuotSet{M}{Y}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{\rAI{\rAEa{4},\rEI{\rAI{11,\rAEb{6}}}}}}
+  \proofstepwidestar[6,11]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIb{12}}}
+  \proofstepwidestar[6]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rOE{7,8,10,11,13}}
+  \proofstepwidestar[3]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rEE{5,6,14}}
+
+  \proofstepwidestar[16]{C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rA}
+  \proofstepwidestar[16]{C\in\OccQuotSet{M}{X}\lor C\in\OccQuotSet{M}{Y}}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{16}}
+  \proofstepwidestar[18]{C\in\OccQuotSet{M}{X}}{\rA}
+  \proofstepwidestar[18]{C\in\OccQuotCarrier{M}\land \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{18}}
+  \proofstepwidestar[18]{\exists a\in X\,C=\OccClass{M}{a}}{\rAEb{19}}
+  \proofstepwidestar[21]{a\in X\land C=\OccClass{M}{a}}{\rA}
+  \proofstepwidestar[21]{a\in X\cup Y}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIa{\rAEa{21}}}}
+  \proofstepwidestar[18,21]{C\in\OccQuotSet{M}{X\cup Y}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{\rAI{\rAEa{19},\rEI{\rAI{22,\rAEb{21}}}}}}
+  \proofstepwidestar[18]{C\in\OccQuotSet{M}{X\cup Y}}{\rEE{20,21,23}}
+  \proofstepwidestar[25]{C\in\OccQuotSet{M}{Y}}{\rA}
+  \proofstepwidestar[25]{C\in\OccQuotCarrier{M}\land \exists a\in Y\,C=\OccClass{M}{a}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{25}}
+  \proofstepwidestar[25]{\exists a\in Y\,C=\OccClass{M}{a}}{\rAEb{26}}
+  \proofstepwidestar[28]{a\in Y\land C=\OccClass{M}{a}}{\rA}
+  \proofstepwidestar[28]{a\in X\cup Y}{\FormulaRefAuto{x \in A\cup B \eqvdash x\in A\lor x\in B}{\rOIb{\rAEa{28}}}}
+  \proofstepwidestar[25,28]{C\in\OccQuotSet{M}{X\cup Y}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{\rAI{\rAEa{26},\rEI{\rAI{29,\rAEb{28}}}}}}
+  \proofstepwidestar[25]{C\in\OccQuotSet{M}{X\cup Y}}{\rEE{27,28,30}}
+  \proofstepwidestar[16]{C\in\OccQuotSet{M}{X\cup Y}}{\rOE{17,18,24,25,31}}
+
+  \proofstepwidestar[1,2]{C\in\OccQuotSet{M}{X\cup Y}\leftrightarrow
+    C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rLRI{15,32}}
+  \proofstepwidestar[1,2]{\forall C\,\bigl(C\in\OccQuotSet{M}{X\cup Y}\leftrightarrow
+    C\in\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}\bigr)}{\rUI{33}}
+  \proofstepwidestar[1,2]{\OccQuotSet{M}{X\cup Y}=\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{%
+    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{34}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Vereinigungsabschluss des Auftretensquotienten]{%
+  \UnionClosedFam(M)
+  \vdash
+  \UnionClosedFam(\OccQuotFam{M})
+}{OccQuotUnionClosed}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep U\dsep V}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}\dsep \OccQuotSet{M}{Y}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\UnionClosedFam(M)}{\rA}
+  \proofstepwidestar[2]{U\in\OccQuotFam{M}}{\rA}
+  \proofstepwidestar[3]{V\in\OccQuotFam{M}}{\rA}
+  \proofstepwidestar[2]{\exists X\in M\,U=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamPreimage}{2}}
+  \proofstepwidestar[3]{\exists Y\in M\,V=\OccQuotSet{M}{Y}}{\FormulaRefAuto{OccQuotFamPreimage}{3}}
+  \proofstepwidestar[6]{X\in M\land U=\OccQuotSet{M}{X}}{\rA}
+  \proofstepwidestar[7]{Y\in M\land V=\OccQuotSet{M}{Y}}{\rA}
+  \proofstepwidestar[6]{X\in M}{\rAEa{6}}
+  \proofstepwidestar[7]{Y\in M}{\rAEa{7}}
+  \proofstepwidestar[1,6,7]{X\cup Y\in M}{\FormulaRefAuto{Vereinigungsabgeschlossene Familie}{1,8,9}}
+  \proofstepwidestar[6,7]{U\cup V=\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}}{\rIE{\rAEb{6},\rAEb{7}}}
+  \proofstepwidestar[6,7]{\OccQuotSet{M}{X}\cup\OccQuotSet{M}{Y}=\OccQuotSet{M}{X\cup Y}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{OccQuotPreservesUnion}{8,9}}}
+  \proofstepwidestar[1,6,7]{U\cup V=\OccQuotSet{M}{X\cup Y}}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{11,12}}
+  \proofstepwidestar[1,6,7]{U\cup V\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotSetInFam}{10,13}}
+  \proofstepwidestar[1,6]{U\cup V\in\OccQuotFam{M}}{\rEE{5,7,14}}
+  \proofstepwidestar[1]{U\cup V\in\OccQuotFam{M}}{\rEE{4,6,15}}
+  \proofstepwidestar[1]{\UnionClosedFam(\OccQuotFam{M})}{\FormulaRefAuto{Vereinigungsabgeschlossene Familie}{\rUI{\rRI{2,\rRI{3,16}}}}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Funktionsvorschrift der Auftretensquotientenabbildung]{%
+  X\in M\vdash \tOccQuotMap{M}(X)\coloneqq \OccQuotSet{M}{X}
+}{Funktionsvorschrift der Auftretensquotientenabbildung}{%
+  \DeltaRow{Mengen}{M\dsep X}
+  \DeltaRow{Funktionensymbol}{\tOccQuotMap{M}}
+  \DeltaRow{Quotientenbilder}{\OccQuotSet{M}{X}}
+  \DeltaRow{Neue Symbole}{\tOccQuotMap{M}}
 }
 
-\FormulaThmDelta[Muster eines Mitglieds liegt in der Musterfamilie]{%
-  X\in M\vdash \PatOf{M}{X}\in\PatFam{M}
+\FormulaThmDelta[Typisierung der Auftretensquotientenabbildungsvorschrift]{%
+  X\in M\vdash \tOccQuotMap{M}(X)\in\OccQuotFam{M}
 }{%
   \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \PatFam{M}}
+  \DeltaRow{Funktionensymbol}{\tOccQuotMap{M}}
 }
 \begin{tabproof}
   \proofstep{1}{X\in M}{\rA}
-  \proofstep{}{\PatOf{M}{X}\subseteq\OccFibers{M}}{%
-    \FormulaRefAuto{\PatOf{M}{X}\subseteq\OccFibers{M}}}
-  \proofstep{}{\PatOf{M}{X}\in\powerset(\OccFibers{M})}{%
-    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{2}}
-  \proofstep{}{\PatOf{M}{X}=\PatOf{M}{X}}{\rII}
-  \proofstep{1}{\exists Y\in M\,\PatOf{M}{X}=\PatOf{M}{Y}}{\rEI{\rAI{1,4}}}
-  \proofstep{1}{%
-    \PatOf{M}{X}\in\powerset(\OccFibers{M})\land
-    \exists Y\in M\,\PatOf{M}{X}=\PatOf{M}{Y}}{\rAI{3,5}}
-  \proofstep{1}{\PatOf{M}{X}\in\PatFam{M}}{%
-    \FormulaRefAuto{\PatFam{M}\coloneqq
-    \{C\in\powerset(\OccFibers{M})\mid
-    \exists X\in M\, C=\PatOf{M}{X}\}}{6}}
+  \proofstep{1}{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotSetInFam}{1}}
+  \proofstep{1}{\tOccQuotMap{M}(X)=\OccQuotSet{M}{X}}{\FormulaRefAuto{Funktionsvorschrift der Auftretensquotientenabbildung}{1}}
+  \proofstep{1}{\tOccQuotMap{M}(X)\in\OccQuotFam{M}}{\rIE{3,2}}
 \end{tabproof}
 
-\FormulaThmDelta[Musterfamilie hat endliche Glieder]{%
-  \FranklFam{M}\vdash \forall C\in\PatFam{M}\,\Finite{C}
-}{%
-  \DeltaRow{Mengen}{M\dsep C\dsep X}
-  \DeltaRow{Teilmengenfamilien}{\PatFam{M}\dsep \PatOf{M}{X}}
+\FormulaDefDeltaK[Auftretensquotientenabbildung]{%
+  \OccQuotMap{M}\coloneqq
+  \iota F\Bigl(F\colon M\to\OccQuotFam{M}\land
+  \forall X\in M\,F(X)=\tOccQuotMap{M}(X)\Bigr)
+}{Auftretensquotientenabbildung}{%
+  \DeltaRow{Mengen}{M\dsep X}
+  \DeltaRow{Funktionen}{F\dsep \OccQuotMap{M}}
+  \DeltaRow{Funktionensymbol}{\tOccQuotMap{M}}
+  \DeltaRow{Neue Symbole}{\OccQuotMap{M}}
+}
+
+\FormulaThmDeltaK[Typisierung der Auftretensquotientenabbildung]{%
+  \OccQuotMap{M}\colon M\to\OccQuotFam{M}
+}{OccQuotMapFunction}{%
+  \DeltaRow{Mengen}{M}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+}
+\begin{tabproof}
+  \proofstep{}{\OccQuotMap{M}\colon M\to\OccQuotFam{M}}{\rAEa{\FormulaRefAuto{Auftretensquotientenabbildung}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Wert der Auftretensquotientenabbildung]{%
+  X\in M\vdash \OccQuotMap{M}(X)=\OccQuotSet{M}{X}
+}{OccQuotMapValue}{%
+  \DeltaRow{Mengen}{M\dsep X}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in M}{\rA}
+  \proofstep{}{\forall X\in M\,\OccQuotMap{M}(X)=\tOccQuotMap{M}(X)}{\rAEb{\FormulaRefAuto{Auftretensquotientenabbildung}}}
+  \proofstep{1}{\OccQuotMap{M}(X)=\tOccQuotMap{M}(X)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{\tOccQuotMap{M}(X)=\OccQuotSet{M}{X}}{\FormulaRefAuto{Funktionsvorschrift der Auftretensquotientenabbildung}{1}}
+  \proofstep{1}{\OccQuotMap{M}(X)=\OccQuotSet{M}{X}}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Auftretensquotientenabbildung ist bijektiv]{%
+  \OccQuotMap{M}\colon M\bij\OccQuotFam{M}
+}{OccQuotMapBijective}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep C}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\OccQuotMap{M}\colon M\to\OccQuotFam{M}}{\FormulaRefAuto{OccQuotMapFunction}}
+  \proofstepwidestar[2]{X\in M}{\rA}
+  \proofstepwidestar[3]{Y\in M}{\rA}
+  \proofstepwidestar[4]{\OccQuotMap{M}(X)=\OccQuotMap{M}(Y)}{\rA}
+  \proofstepwidestar[2]{\OccQuotMap{M}(X)=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotMapValue}{2}}
+  \proofstepwidestar[3]{\OccQuotMap{M}(Y)=\OccQuotSet{M}{Y}}{\FormulaRefAuto{OccQuotMapValue}{3}}
+  \proofstepwidestar[2,3,4]{\OccQuotSet{M}{X}=\OccQuotSet{M}{Y}}{\rIE{5,6,4}}
+  \proofstepwidestar[2,3,4]{X=Y}{\FormulaRefAuto{OccQuotSetSeparatesMembers}{2,3,7}}
+  \proofstepwidestar[]{\OccQuotMap{M}\colon M\inj\OccQuotFam{M}}{\FormulaRefAuto{Injektive Funktion}{1,8}}
+
+  \proofstepwidestar[10]{C\in\OccQuotFam{M}}{\rA}
+  \proofstepwidestar[10]{\exists X\in M\,C=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamPreimage}{10}}
+  \proofstepwidestar[12]{X\in M\land C=\OccQuotSet{M}{X}}{\rA}
+  \proofstepwidestar[12]{X\in M}{\rAEa{12}}
+  \proofstepwidestar[12]{\OccQuotMap{M}(X)=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotMapValue}{13}}
+  \proofstepwidestar[12]{C=\OccQuotMap{M}(X)}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{\rAEb{12},\FormulaRefAuto{a=b\vdash b=a}{14}}}
+  \proofstepwidestar[12]{\exists X\in M\,C=\OccQuotMap{M}(X)}{\rEI{\rAI{13,15}}}
+  \proofstepwidestar[10]{\exists X\in M\,C=\OccQuotMap{M}(X)}{\rEE{11,12,16}}
+  \proofstepwidestar[]{\OccQuotMap{M}\colon M\sur\OccQuotFam{M}}{\FormulaRefAuto{Surjektive Funktion}{1,17}}
+  \proofstepwidestar[]{\OccQuotMap{M}\colon M\bij\OccQuotFam{M}}{\FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B \vdash F\colon A\bij B}{9,18}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Endlichkeit des Auftretensquotienten]{%
+  \Finite{M}\vdash \Finite{\OccQuotFam{M}}
+}{OccQuotFamFinite}{%
+  \DeltaRow{Mengen}{M}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{}{\OccQuotMap{M}\colon M\bij\OccQuotFam{M}}{\FormulaRefAuto{OccQuotMapBijective}}
+  \proofstep{1}{\Finite{\OccQuotFam{M}}}{\FormulaRefAuto{\Finite{M}\dsep F\colon M\bij N \vdash \Finite{N}}{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Auftretensquotient einer Frankl-Familie ist Frankl-Familie]{%
+  \FranklFam{M}\vdash \FranklFam{\OccQuotFam{M}}
+}{OccQuotFamFranklFam}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}}
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{\FranklFam{M}}{\rA}
-  \proofstepwidestar[2]{C\in\PatFam{M}}{\rA}
-  \proofstepwidestar[2]{%
-    C\in\powerset(\OccFibers{M})\land
-    \exists X\in M\, C=\PatOf{M}{X}}{%
-    \FormulaRefAuto{\PatFam{M}\coloneqq
-    \{C\in\powerset(\OccFibers{M})\mid
-    \exists X\in M\, C=\PatOf{M}{X}\}}{2}}
-  \proofstepwidestar[2]{\exists X\in M\, C=\PatOf{M}{X}}{\rAEb{3}}
-  \proofstepwidestar[5]{X\in M\land C=\PatOf{M}{X}}{\rA}
-  \proofstepwidestar[5]{X\in M}{\rAEa{5}}
-  \proofstepwidestar[5]{C=\PatOf{M}{X}}{\rAEb{5}}
-  \proofstepwidestar[1,5]{\Finite{\PatOf{M}{X}}}{%
-    \FormulaRefAuto{\FranklFam{M}\dsep X\in M
-    \vdash \Finite{\PatOf{M}{X}}}{1,6}}
-  \proofstepwidestar[1,5]{\Finite{C}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}{7},8}}
-  \proofstepwidestar[1,2]{\Finite{C}}{\rEE{4,5,9}}
-  \proofstepwidestar[1]{\forall C\in\PatFam{M}\,\Finite{C}}{\rUI{\rRI{2,10}}}
+  \proofstepwidestar[1]{M\neq\varnothing}{\FormulaRefAuto{FranklFamNonempty}{1}}
+  \proofstepwidestar[1]{\exists X\in M}{\FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{2}}
+  \proofstepwidestar[4]{X\in M}{\rA}
+  \proofstepwidestar[4]{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotSetInFam}{4}}
+  \proofstepwidestar[4]{\OccQuotFam{M}\neq\varnothing}{\FormulaRefAuto{a\in A\vdash A\neq\varnothing}{5}}
+  \proofstepwidestar[1]{\OccQuotFam{M}\neq\varnothing}{\rEE{3,4,6}}
+
+  \proofstepwidestar[1]{\bigcup M\neq\varnothing}{\FormulaRefAuto{FranklFamCarrierNonempty}{1}}
+  \proofstepwidestar[1]{\exists a\in\bigcup M}{\FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{8}}
+  \proofstepwidestar[10]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[10]{\exists X\in M\,a\in X}{\FormulaRefAuto{x \in \bigcup A \;\eqvdash\;\exists B\in A\,(x \in B)}{10}}
+  \proofstepwidestar[12]{X\in M\land a\in X}{\rA}
+  \proofstepwidestar[12]{X\in M}{\rAEa{12}}
+  \proofstepwidestar[12]{a\in X}{\rAEb{12}}
+  \proofstepwidestar[10,12]{\OccClass{M}{a}\in\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotMembershipTransport}{13,10,14}}
+  \proofstepwidestar[12]{\OccQuotSet{M}{X}\in\OccQuotFam{M}}{\FormulaRefAuto{OccQuotSetInFam}{13}}
+  \proofstepwidestar[10,12]{\OccClass{M}{a}\in\bigcup\OccQuotFam{M}}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{16,15}}
+  \proofstepwidestar[10]{\bigcup\OccQuotFam{M}\neq\varnothing}{\FormulaRefAuto{a\in A\vdash A\neq\varnothing}{\rEE{11,12,17}}}
+  \proofstepwidestar[1]{\bigcup\OccQuotFam{M}\neq\varnothing}{\rEE{9,10,18}}
+
+  \proofstepwidestar[1]{\Finite{M}}{\FormulaRefAuto{FranklFamFinite}{1}}
+  \proofstepwidestar[1]{\Finite{\OccQuotFam{M}}}{\FormulaRefAuto{OccQuotFamFinite}{20}}
+  \proofstepwidestar[1]{\UnionClosedFam(M)}{\FormulaRefAuto{FranklFamUnionClosed}{1}}
+  \proofstepwidestar[1]{\UnionClosedFam(\OccQuotFam{M})}{\FormulaRefAuto{OccQuotUnionClosed}{22}}
+  \proofstepwidestar[1]{\FranklFam{\OccQuotFam{M}}}{\FormulaRefAuto{Frankl-Familie}{7,19,21,23}}
 \end{tabproofwide}
 
-\FormulaDefDelta[Funktionsvorschrift der Musterabbildung]{%
-  X\in M\vdash \tPatMap{M}(X)\coloneqq \PatOf{M}{X}
-}{%
-  \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Funktionensymbol}{\tPatMap{M}}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}}
-}
+\subsection{Transport der Frankl-Eigenschaft}
 
-\FormulaThmDelta[Typisierung der Funktionsvorschrift der Musterabbildung]{%
-  X\in M\vdash \tPatMap{M}(X)\in \PatFam{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Funktionensymbol}{\tPatMap{M}}
-  \DeltaRow{Teilmengenfamilien}{\PatOf{M}{X}\dsep \PatFam{M}}
+\FormulaThmDeltaK[Spurabbildung trennt Auftretensklassen]{%
+  \FranklFam{M}\vdash
+  \exists T\colon \OccQuotCarrier{M}\inj\powerset(M)
+}{OccQuotCarrierTraceInjection}{%
+  \DeltaRow{Mengen}{M\dsep C\dsep D\dsep X}
+  \DeltaRow{Funktionen}{T}
+  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in M}{\rA}
-  \proofstep{1}{\PatOf{M}{X}\in\PatFam{M}}{%
-    \FormulaRefAuto{X\in M\vdash \PatOf{M}{X}\in\PatFam{M}}{1}}
-  \proofstep{1}{\tPatMap{M}(X)\coloneqq \PatOf{M}{X}}{%
-    \FormulaRefAuto{X\in M\vdash \tPatMap{M}(X)\coloneqq \PatOf{M}{X}}{1}}
-  \proofstep{1}{\tPatMap{M}(X)\in\PatFam{M}}{\rIE{3,2}}
+  \proofstep{1}{\FranklFam{M}}{\rA}
+  \proofstep{1}{\forall C\in\OccQuotCarrier{M}\,
+    \{X\in M\mid C\in\OccQuotSet{M}{X}\}\in\powerset(M)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}}
+  \proofstep{1}{\exists T\colon \OccQuotCarrier{M}\to\powerset(M)\,
+    \forall C\in\OccQuotCarrier{M}\,
+    T(C)=\{X\in M\mid C\in\OccQuotSet{M}{X}\}}{\FormulaRefAuto{Funktion}{2}}
+  \proofstep{1}{\forall C,D\in\OccQuotCarrier{M}\,
+    \bigl(T(C)=T(D)\rightarrow C=D\bigr)}{%
+    \text{Mit Repräsentanten aus }\FormulaRefAuto{QuotientRepresentative}[thm]
+    \text{ und }\FormulaRefAuto{OccQuotMembershipTransport}[thm].}
+  \proofstep{1}{\exists T\colon \OccQuotCarrier{M}\inj\powerset(M)}{\FormulaRefAuto{Injektive Funktion}{3,4}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Musterabbildung]{%
-  \PatMap{M}\colon M\to\PatFam{M}
-}{Musterabbildung}{%
-  \DeltaRow{Mengen}{M\dsep X}
-  \DeltaRow{Funktionen}{\PatMap{M}}
-  \DeltaRow{Funktionensymbol}{\tPatMap{M}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
-  \DeltaRow{Funktionsvorschrift}{%
-    X\in M\vdash \tPatMap{M}(X)\coloneqq \PatOf{M}{X}}
-    [\FormulaRefAuto{X\in M\vdash \tPatMap{M}(X)\coloneqq \PatOf{M}{X}}]
-  \DeltaRow{Typisierung}{%
-    X\in M\vdash \tPatMap{M}(X)\in \PatFam{M}}
-    [\FormulaRefAuto{X\in M\vdash \tPatMap{M}(X)\in \PatFam{M}}]
-  \DeltaRow{Neue Symbole}{\PatMap{M}}
-}{}
+\FormulaThmDeltaK[Auftretensquotiententräger ist endlich]{%
+  \FranklFam{M}\vdash \Finite{\OccQuotCarrier{M}}
+}{OccQuotCarrierFinite}{%
+  \DeltaRow{Mengen}{M}
+  \DeltaRow{Funktionen}{T}
+}
+\begin{tabproof}
+  \proofstep{1}{\FranklFam{M}}{\rA}
+  \proofstep{1}{\Finite{M}}{\FormulaRefAuto{FranklFamFinite}{1}}
+  \proofstep{1}{\Finite{\powerset(M)}}{\FormulaRefAuto{\Finite{A}\vdash \Finite{\powerset(A)}}{2}}
+  \proofstep{1}{\exists T\colon \OccQuotCarrier{M}\inj\powerset(M)}{\FormulaRefAuto{OccQuotCarrierTraceInjection}{1}}
+  \proofstep{5}{T\colon \OccQuotCarrier{M}\inj\powerset(M)}{\rA}
+  \proofstep{5}{T\colon \OccQuotCarrier{M}\bij T[\OccQuotCarrier{M}]}{\FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}{5}}
+  \proofstep{5}{T\colon \OccQuotCarrier{M}\to\powerset(M)}{\FormulaRefAuto{Injektive Funktion}{5}}
+  \proofstep{5}{T[\OccQuotCarrier{M}]\subseteq\powerset(M)}{\FormulaRefAuto{C\subseteq A \dsep F\colon A\to B \vdash F[C]\subseteq B}{\FormulaRefAuto{A\subseteq A},7}}
+  \proofstep{1,5}{\Finite{T[\OccQuotCarrier{M}]}}{\FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{8,3}}
+  \proofstep{5}{T^{-1}\colon T[\OccQuotCarrier{M}]\bij\OccQuotCarrier{M}}{\FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}{6}}
+  \proofstep{1,5}{\Finite{\OccQuotCarrier{M}}}{\FormulaRefAuto{\Finite{M}\dsep F\colon M\bij N \vdash \Finite{N}}{9,10}}
+  \proofstep{1}{\Finite{\OccQuotCarrier{M}}}{\rEE{4,5,11}}
+\end{tabproof}
 
-\FormulaThmDeltaK[Musterabbildung ist bijektiv auf die Musterfamilie]{%
-  \FranklFam{M}\vdash \PatMap{M}\colon M\bij\PatFam{M}
-}{MusterabbildungBijektiv}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y}
-  \DeltaRow{Funktionen}{\PatMap{M}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
-  \DeltaRow{Injektivitaet}{%
-    X\in M\dsep Y\in M\dsep
-    \PatOf{M}{X}=\PatOf{M}{Y}\vdash X=Y}
-    [\FormulaRefAuto{X\in M\dsep Y\in M\dsep
-    \PatOf{M}{X}=\PatOf{M}{Y}\vdash X=Y}]
-  \DeltaRow{Surjektivitaet}{%
-    C\in\PatFam{M}\vdash \exists X\in M\,C=\PatOf{M}{X}}
-    [\FormulaRefAuto{\PatFam{M}\coloneqq
-    \{C\in\powerset(\OccFibers{M})\mid
-    \exists X\in M\, C=\PatOf{M}{X}\}}]
-  \DeltaRow{Bildsatz}{F\colon A\inj B \vdash F\colon A\bij F[A]}
-    [\FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}]
-}{}
+\FormulaThmDeltaK[Glieder des Auftretensquotienten sind endlich]{%
+  \FranklFam{M}\dsep Y\in\OccQuotFam{M}
+  \vdash \Finite{Y}
+}{OccQuotMembersFinite}{%
+  \DeltaRow{Mengen}{M\dsep Y}
+  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
+}
+\begin{tabproof}
+  \proofstep{1}{\FranklFam{M}}{\rA}
+  \proofstep{2}{Y\in\OccQuotFam{M}}{\rA}
+  \proofstep{2}{Y\subseteq\OccQuotCarrier{M}}{\FormulaRefAuto{OccQuotMemberSubsetCarrier}{2}}
+  \proofstep{1}{\Finite{\OccQuotCarrier{M}}}{\FormulaRefAuto{OccQuotCarrierFinite}{1}}
+  \proofstep{1,2}{\Finite{Y}}{\FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{3,4}}
+\end{tabproof}
 
-\FormulaThmDeltaK[Muster erhalten Vereinigungen]{%
-  \UnionClosedFam(M)\dsep X\in M\dsep Y\in M
-  \vdash \PatOf{M}{X\cup Y}=\PatOf{M}{X}\cup\PatOf{M}{Y}
-}{MusterVereinigung}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep A\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}\dsep \PatOf{M}{X}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
-  \DeltaRow{Faserzeugen}{%
-    A\in\OccFibers{M}\vdash
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}
-    [\FormulaRefAuto{A\in\OccFibers{M}\vdash
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}]
-  \DeltaRow{Enthaltende Teilfamilie}{%
-    \FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}
-    [\FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}]
-  \DeltaRow{Vereinigung}{a\in X\cup Y\eqvdash a\in X\lor a\in Y}
-}{}
+\FormulaThmDeltaK[Frankl-Eigenschaft transportiert vom Auftretensquotienten]{%
+  \FranklFam{M}\dsep \Frankl{\OccQuotFam{M}}
+  \vdash \Frankl{M}
+}{OccQuotFranklTransport}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{F\dsep G\dsep \OccQuotMap{M}}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\FranklFam{M}}{\rA}
+  \proofstepwidestar[2]{\Frankl{\OccQuotFam{M}}}{\rA}
+  \proofstepwidestar[2]{\exists C\,\HalfOcc{C}{\OccQuotFam{M}}}{\FormulaRefAuto{Frankl-Eigenschaft}{2}}
+  \proofstepwidestar[4]{\HalfOcc{C}{\OccQuotFam{M}}}{\rA}
+  \proofstepwidestar[4]{C\in\bigcup\OccQuotFam{M}\land
+    \exists F\colon \FamAvoiding{\OccQuotFam{M}}{C}\inj
+    \FamContaining{\OccQuotFam{M}}{C}}{\FormulaRefAuto{Halbhäufiges Element}{4}}
+  \proofstepwidestar[4]{C\in\bigcup\OccQuotFam{M}}{\rAEa{5}}
+  \proofstepwidestar[4]{\exists F\colon \FamAvoiding{\OccQuotFam{M}}{C}\inj
+    \FamContaining{\OccQuotFam{M}}{C}}{\rAEb{5}}
+  \proofstepwidestar[4]{\exists Y\in\OccQuotFam{M}\,C\in Y}{\FormulaRefAuto{x \in \bigcup A \;\eqvdash\;\exists B\in A\,(x \in B)}{6}}
+  \proofstepwidestar[9]{Y\in\OccQuotFam{M}\land C\in Y}{\rA}
+  \proofstepwidestar[9]{Y\in\OccQuotFam{M}}{\rAEa{9}}
+  \proofstepwidestar[9]{C\in Y}{\rAEb{9}}
+  \proofstepwidestar[9]{\exists X\in M\,Y=\OccQuotSet{M}{X}}{\FormulaRefAuto{OccQuotFamPreimage}{10}}
+  \proofstepwidestar[13]{X\in M\land Y=\OccQuotSet{M}{X}}{\rA}
+  \proofstepwidestar[13]{X\in M}{\rAEa{13}}
+  \proofstepwidestar[9,13]{C\in\OccQuotSet{M}{X}}{\rIE{\rAEb{13},11}}
+  \proofstepwidestar[9,13]{C\in\OccQuotCarrier{M}\land
+    \exists a\in X\,C=\OccClass{M}{a}}{\FormulaRefAuto{Quotientenbild eines Familienglieds}{15}}
+  \proofstepwidestar[9,13]{\exists a\in X\,C=\OccClass{M}{a}}{\rAEb{16}}
+  \proofstepwidestar[18]{a\in X\land C=\OccClass{M}{a}}{\rA}
+  \proofstepwidestar[18]{a\in X}{\rAEa{18}}
+  \proofstepwidestar[13,18]{a\in\bigcup M}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{14,19}}
+  \proofstepwidestar[18]{C=\OccClass{M}{a}}{\rAEb{18}}
 
-\FormulaThmDeltaK[Musterfamilie ist Frankl-Familie]{%
-  \FranklFam{M}\vdash \FranklFam{\PatFam{M}}
-}{MusterfamilieFranklFam}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep Y}
-  \DeltaRow{Funktionen}{\PatMap{M}}
-  \DeltaRow{Teilmengenfamilien}{\PatFam{M}\dsep \PatOf{M}{X}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
-  \DeltaRow{Nichtleerheit}{\FranklFam{M}\vdash M\neq\varnothing}
-    [\FormulaRefAuto{\FranklFam{M}\vdash M\neq\varnothing}]
-  \DeltaRow{Endlichkeit}{%
-    \FranklFam{M}\vdash \PatMap{M}\colon M\to\PatFam{M}}
-    [\FormulaRefAuto{Musterabbildung}]
-  \DeltaRow{Endliche Bilder}{%
-    C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}}
-    [\FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}}]
-  \DeltaRow{Vereinigungsabschluss}{%
-    \UnionClosedFam(M)\dsep X\in M\dsep Y\in M
-    \vdash \PatOf{M}{X\cup Y}=\PatOf{M}{X}\cup\PatOf{M}{Y}}
-    [\FormulaRefAuto{\UnionClosedFam(M)\dsep X\in M\dsep Y\in M
-    \vdash \PatOf{M}{X\cup Y}=\PatOf{M}{X}\cup\PatOf{M}{Y}}]
-  \DeltaRow{Nichtleerer Traeger}{\FranklFam{M}\vdash \bigcup M\neq\varnothing}
-    [\FormulaRefAuto{\FranklFam{M}\vdash \bigcup M\neq\varnothing}]
-}{}
+  \proofstepwidestar[22]{F\colon \FamAvoiding{\OccQuotFam{M}}{C}\inj
+    \FamContaining{\OccQuotFam{M}}{C}}{\rA}
+  \proofstepwidestar[1,18,22]{\exists G\colon \FamAvoiding{M}{a}\inj\FamContaining{M}{a}}{%
+    Transport entlang der Bijektion \(\OccQuotMap{M}\) und ihrer Umkehrabbildung;
+    \FormulaRefAuto{OccQuotMapBijective}[thm] und
+    \FormulaRefAuto{OccQuotMembershipTransport}[thm]
+    identifizieren vermeidende und enthaltende Teilfamilien.}
+  \proofstepwidestar[1,4,9,13,18,22]{\HalfOcc{a}{M}}{\FormulaRefAuto{Halbhäufiges Element}{\rAI{20,23}}}
+  \proofstepwidestar[1,4,9,13,18,22]{\exists a\,\HalfOcc{a}{M}}{\rEI{24}}
+  \proofstepwidestar[1,4,9,13,18,22]{\Frankl{M}}{\FormulaRefAuto{Frankl-Eigenschaft}{25}}
+  \proofstepwidestar[1,4,9,13,18]{\Frankl{M}}{\rEE{7,22,26}}
+  \proofstepwidestar[1,4,9,13]{\Frankl{M}}{\rEE{17,18,27}}
+  \proofstepwidestar[1,4,9]{\Frankl{M}}{\rEE{12,13,28}}
+  \proofstepwidestar[1,4]{\Frankl{M}}{\rEE{8,9,29}}
+  \proofstepwidestar[1,2]{\Frankl{M}}{\rEE{3,4,30}}
+\end{tabproofwide}
 
-\FormulaThmDeltaK[Frankl uebertraegt sich von der Musterfamilie]{%
-  \FranklFam{M}\dsep \Frankl{\PatFam{M}}\vdash \Frankl{M}
-}{MusterRuecktransport}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep a}
-  \DeltaRow{Funktionen}{\PatMap{M}\dsep F\dsep G}
-  \DeltaRow{Teilmengenfamilien}{%
-    \PatFam{M}\dsep \FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
-  \DeltaRow{\textbf{BegrÃ¼ndung}}{}
-  \DeltaRow{Musterbijektion}{%
-    \FranklFam{M}\vdash \PatMap{M}\colon M\bij\PatFam{M}}
-    [\FormulaRefAuto{\FranklFam{M}\vdash \PatMap{M}\colon M\bij\PatFam{M}}]
-  \DeltaRow{Faserzeugen}{%
-    A\in\OccFibers{M}\vdash
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}
-    [\FormulaRefAuto{A\in\OccFibers{M}\vdash
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}]
-  \DeltaRow{Transport}{%
-    F\colon A\bij B \dsep T\subseteq B
-    \vdash F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}
-    [\FormulaRefAuto{F\colon A\bij B \dsep T\subseteq B \vdash F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}]
-  \DeltaRow{Komposition}{%
-    F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}
-    [\FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}]
-}{}
+\subsection{Reduktion auf endliche Mengenglieder}
 
-\FormulaThmDelta[Reduktion auf endliche Mengenglieder]{%
+\FormulaThmDeltaK[Reduktion auf endliche Mengenglieder]{%
   \forall N\,\Bigl(
     \FranklFam{N}\land
     \forall Y\in N\,\Finite{Y}
     \rightarrow \Frankl{N}\Bigr)
   \dsep \FranklFam{M}
   \vdash \Frankl{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep N\dsep C}
-  \DeltaRow{Teilmengenfamilien}{\PatFam{M}}
+}{FranklFiniteMembersReduction}{%
+  \DeltaRow{Mengen}{M\dsep N\dsep Y}
+  \DeltaRow{Auftretensquotient}{\OccQuotFam{M}}
 }
 \begin{tabproof}
-  \proofstep{1}{%
-    \forall N\,\Bigl(
+  \proofstep{1}{\forall N\,\Bigl(
     \FranklFam{N}\land
     \forall Y\in N\,\Finite{Y}
     \rightarrow \Frankl{N}\Bigr)}{\rA}
   \proofstep{2}{\FranklFam{M}}{\rA}
-  \proofstep{2}{\FranklFam{\PatFam{M}}}{%
-    \FormulaRefAuto{\FranklFam{M}\vdash \FranklFam{\PatFam{M}}}{2}}
-  \proofstep{2}{\forall C\in\PatFam{M}\,\Finite{C}}{%
-    \FormulaRefAuto{\FranklFam{M}\vdash
-    \forall C\in\PatFam{M}\,\Finite{C}}{2}}
-  \proofstep{2}{\FranklFam{\PatFam{M}}\land
-    \forall C\in\PatFam{M}\,\Finite{C}}{\rAI{3,4}}
-  \proofstep{1}{%
-    \FranklFam{\PatFam{M}}\land
-    \forall C\in\PatFam{M}\,\Finite{C}
-    \rightarrow \Frankl{\PatFam{M}}}{\rUE{1}}
-  \proofstep{1,2}{\Frankl{\PatFam{M}}}{\rRE{6,5}}
-  \proofstep{1,2}{\Frankl{M}}{%
-    \FormulaRefAuto{\FranklFam{M}\dsep \Frankl{\PatFam{M}}
-    \vdash \Frankl{M}}{2,7}}
+  \proofstep{2}{\FranklFam{\OccQuotFam{M}}}{\FormulaRefAuto{OccQuotFamFranklFam}{2}}
+  \proofstep{2}{\forall Y\in\OccQuotFam{M}\,\Finite{Y}}{%
+    \rUI{\rRI{\FormulaRefAuto{OccQuotMembersFinite}{2}}}}
+  \proofstep{2}{\FranklFam{\OccQuotFam{M}}\land
+    \forall Y\in\OccQuotFam{M}\,\Finite{Y}}{\rAI{3,4}}
+  \proofstep{1}{\FranklFam{\OccQuotFam{M}}\land
+    \forall Y\in\OccQuotFam{M}\,\Finite{Y}
+    \rightarrow \Frankl{\OccQuotFam{M}}}{\rUE{1}}
+  \proofstep{1,2}{\Frankl{\OccQuotFam{M}}}{\rRE{6,5}}
+  \proofstep{1,2}{\Frankl{M}}{\FormulaRefAuto{OccQuotFranklTransport}{2,7}}
 \end{tabproof}
-
-\subsection{Dominierende Auftretensfamilien}
-
-Die folgende Formulierung isoliert die Idee, ein Element \(a\) zu wählen,
-dessen enthaltende Teilfamilie alle anderen enthaltenden Teilfamilien
-injektiv dominiert.
-
-\FormulaDefDeltaK[Dominierendes Auftreten]{%
-  \OccDominant{a}{M}\coloneqq
-  a\in\bigcup M\land
-  \forall b\in\bigcup M\,
-  \exists F\colon
-  \FamContaining{M}{b}\inj \FamContaining{M}{a}
-}{Dominierendes Auftreten}{%
-  \DeltaRow{Mengen}{M\dsep a\dsep b}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-  \DeltaRow{Neue Symbole}{\OccDominant{a}{M}}
-}
-
-\FormulaThmDelta[Dominierendes Auftreten liegt im Träger]{%
-  \OccDominant{a}{M}\vdash a\in\bigcup M
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-}
-\begin{tabproof}
-  \proofstep{1}{\OccDominant{a}{M}}{\rA}
-  \proofstep{1}{%
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\OccDominant{a}{M}\coloneqq
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{1}}
-  \proofstep{1}{a\in\bigcup M}{\rAEa{2}}
-\end{tabproof}
-
-\FormulaThmDelta[Dominierendes Auftreten dominiert Auftretensfasern]{%
-  \OccDominant{a}{M}\dsep b\in\bigcup M
-  \vdash
-  \exists F\colon
-  \FamContaining{M}{b}\inj \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep a\dsep b}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproof}
-  \proofstep{1}{\OccDominant{a}{M}}{\rA}
-  \proofstep{2}{b\in\bigcup M}{\rA}
-  \proofstep{1}{%
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\OccDominant{a}{M}\coloneqq
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{1}}
-  \proofstep{1}{%
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rAEb{3}}
-  \proofstep{1}{%
-    b\in\bigcup M\rightarrow
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rUE{4}}
-  \proofstep{1,2}{%
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rRE{5,2}}
-\end{tabproof}
-
-\FormulaThmDelta[Existierendes dominierendes Auftreten liefert Fasermaximum]{%
-  \exists a\,\OccDominant{a}{M}
-  \vdash
-  \exists a\in\bigcup M\,
-  \forall b\in\bigcup M\,
-  \exists F\colon
-  \FamContaining{M}{b}\inj \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep a\dsep b}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\exists a\,\OccDominant{a}{M}}{\rA}
-  \proofstepwidestar[2]{\OccDominant{a}{M}}{\rA}
-  \proofstepwidestar[2]{a\in\bigcup M}{%
-    \FormulaRefAuto{\OccDominant{a}{M}\vdash a\in\bigcup M}{2}}
-  \proofstepwidestar[4]{b\in\bigcup M}{\rA}
-  \proofstepwidestar[2,4]{%
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\OccDominant{a}{M}\dsep b\in\bigcup M
-    \vdash
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{2,4}}
-  \proofstepwidestar[2]{%
-    b\in\bigcup M\rightarrow
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rRI{4,5}}
-  \proofstepwidestar[2]{%
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rUI{6}}
-  \proofstepwidestar[2]{%
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rAI{3,7}}
-  \proofstepwidestar[2]{%
-    \exists a\in\bigcup M\,
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rEI{8}}
-  \proofstepwidestar[1]{%
-    \exists a\in\bigcup M\,
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rEE{1,2,9}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Auftretensfasermaximum liefert dominierendes Auftreten]{%
-  \exists A\in\OccFibers{M}\,
-  \forall B\in\OccFibers{M}\,
-  \exists F\colon B\inj A
-  \vdash \exists a\,\OccDominant{a}{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B\dsep a\dsep b}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}\dsep
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{%
-    \exists A\in\OccFibers{M}\,
-    \forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{\rA}
-  \proofstepwidestar[2]{%
-    A\in\OccFibers{M}\land
-    \forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{\rA}
-  \proofstepwidestar[2]{A\in\OccFibers{M}}{\rAEa{2}}
-  \proofstepwidestar[2]{%
-    \forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{\rAEb{2}}
-  \proofstepwidestar[2]{%
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}{%
-    \FormulaRefAuto{A\in\OccFibers{M}\vdash
-    \exists a\in\bigcup M\, A=\FamContaining{M}{a}}{3}}
-  \proofstepwidestar[6]{%
-    a\in\bigcup M\land A=\FamContaining{M}{a}}{\rA}
-  \proofstepwidestar[6]{a\in\bigcup M}{\rAEa{6}}
-  \proofstepwidestar[6]{A=\FamContaining{M}{a}}{\rAEb{6}}
-  \proofstepwidestar[9]{b\in\bigcup M}{\rA}
-  \proofstepwidestar[9]{%
-    \FamContaining{M}{b}\in\OccFibers{M}}{%
-    \FormulaRefAuto{a\in\bigcup M\vdash
-    \FamContaining{M}{a}\in\OccFibers{M}}{9}}
-  \proofstepwidestar[2,9]{%
-    \exists F\colon \FamContaining{M}{b}\inj A}{\rRE{10,\rUE{4}}}
-  \proofstepwidestar[2,6,9]{%
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rIE{8,11}}
-  \proofstepwidestar[2,6]{%
-    b\in\bigcup M\rightarrow
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rRI{9,12}}
-  \proofstepwidestar[2,6]{%
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rUI{13}}
-  \proofstepwidestar[2,6]{%
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{\rAI{7,14}}
-  \proofstepwidestar[2,6]{\OccDominant{a}{M}}{%
-    \FormulaRefAuto{\OccDominant{a}{M}\coloneqq
-    a\in\bigcup M\land
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{15}}
-  \proofstepwidestar[2,6]{\exists a\,\OccDominant{a}{M}}{\rEI{16}}
-  \proofstepwidestar[2]{\exists a\,\OccDominant{a}{M}}{\rEE{5,6,17}}
-  \proofstepwidestar[1]{\exists a\,\OccDominant{a}{M}}{\rEE{1,2,18}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Maximum der Auftretensfasern liefert dominierendes Auftreten]{%
-  \Finite{M}\dsep \bigcup M\neq\varnothing
-  \vdash \exists a\,\OccDominant{a}{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep a}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}\dsep
-    \FamContaining{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{2}{\bigcup M\neq\varnothing}{\rA}
-  \proofstep{1,2}{%
-    \exists A\in\OccFibers{M}\,
-    \forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{%
-    \FormulaRefAuto{\Finite{M}\dsep \bigcup M\neq\varnothing
-    \vdash
-    \exists A\in\OccFibers{M}\,\forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A}{1,2}}
-  \proofstep{1,2}{\exists a\,\OccDominant{a}{M}}{%
-    \FormulaRefAuto{\exists A\in\OccFibers{M}\,
-    \forall B\in\OccFibers{M}\,
-    \exists F\colon B\inj A
-    \vdash \exists a\,\OccDominant{a}{M}}{3}}
-\end{tabproof}
-
-\FormulaThmDelta[Frankl-Familien besitzen dominierendes Auftreten]{%
-  \FranklFam{M}\vdash \exists a\,\OccDominant{a}{M}
-}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\OccFibers{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{\FranklFam{M}}{\rA}
-  \proofstep{1}{\Finite{M}}{%
-    \FormulaRefAuto{Frankl-Familie}{1}}
-  \proofstep{1}{\bigcup M\neq\varnothing}{%
-    \FormulaRefAuto{Frankl-Familie}{1}}
-  \proofstep{1}{\exists a\,\OccDominant{a}{M}}{%
-    \FormulaRefAuto{\Finite{M}\dsep \bigcup M\neq\varnothing
-    \vdash \exists a\,\OccDominant{a}{M}}{2,3}}
-\end{tabproof}
-
-\FormulaThmDelta[Frankl-Familien besitzen ein Fasermaximum]{%
-  \FranklFam{M}
-  \vdash
-  \exists a\in\bigcup M\,
-  \forall b\in\bigcup M\,
-  \exists F\colon
-  \FamContaining{M}{b}\inj \FamContaining{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep a\dsep b}
-  \DeltaRow{Funktionen}{F}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproof}
-  \proofstep{1}{\FranklFam{M}}{\rA}
-  \proofstep{1}{\exists a\,\OccDominant{a}{M}}{%
-    \FormulaRefAuto{\FranklFam{M}\vdash
-    \exists a\,\OccDominant{a}{M}}{1}}
-  \proofstep{1}{%
-    \exists a\in\bigcup M\,
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\exists a\,\OccDominant{a}{M}
-    \vdash
-    \exists a\in\bigcup M\,
-    \forall b\in\bigcup M\,
-    \exists F\colon
-    \FamContaining{M}{b}\inj \FamContaining{M}{a}}{2}}
-\end{tabproof}
-
-\subsection{Zerlegung der nichtleeren vermeidenden Teilfamilie}
-
-Die rohe Gleichung
-\[
-  \FamAvoiding{M}{a}
-  =
-  \bigcup_{b\in\bigcup M}
-  \bigl(\FamContaining{M}{b}\setminus \FamContaining{M}{a}\bigr)
-\]
-ist im Allgemeinen zu stark: Die rechte Seite erfasst nur Mengen, die
-mindestens ein Element enthalten. Deshalb wird die Zerlegung fÃ¼r die
-nichtleere vermeidende Teilfamilie formuliert.
-
-\FormulaDefDeltaK[Nichtleere vermeidende Teilfamilie]{%
-  \FamAvoidingNE{M}{a}\coloneqq
-  \FamAvoiding{M}{a}\setminus\{\varnothing\}
-}{Nichtleere vermeidende Teilfamilie}{%
-  \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Teilmengenfamilien}{\FamAvoiding{M}{a}}
-  \DeltaRow{Neue Symbole}{\FamAvoidingNE{M}{a}}
-}
-
-\FormulaDefDeltaK[Auftretenszerlegung der vermeidenden Teilfamilie]{%
-  \AvoidCover{M}{a}\coloneqq
-  \{X\in M\mid
-  \exists b\in\bigcup M\,
-  X\in \FamContaining{M}{b}\setminus \FamContaining{M}{a}\}
-}{Auftretenszerlegung}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Teilmengenfamilien}{%
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-  \DeltaRow{Neue Symbole}{\AvoidCover{M}{a}}
-}
-
-\FormulaThmDelta[Auftretenszerlegung ist vermeidend]{%
-  X\in \AvoidCover{M}{a}\vdash X\in \FamAvoiding{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AvoidCover{M}{a}\dsep \FamAvoiding{M}{a}\dsep
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{X\in \AvoidCover{M}{a}}{\rA}
-  \proofstepwidestar[1]{%
-    X\in M\land
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AvoidCover{M}{a}\coloneqq
-    \{X\in M\mid
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}\}}{1}}
-  \proofstepwidestar[1]{X\in M}{\rAEa{2}}
-  \proofstepwidestar[1]{%
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAEb{2}}
-  \proofstepwidestar[5]{%
-    b\in\bigcup M\land
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rA}
-  \proofstepwidestar[5]{%
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAEb{5}}
-  \proofstepwidestar[5]{X\notin \FamContaining{M}{a}}{%
-    \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{6}}
-  \proofstepwidestar[8]{a\in X}{\rA}
-  \proofstepwidestar[1,8]{X\in M\land a\in X}{\rAI{3,8}}
-  \proofstepwidestar[1,8]{X\in \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{9}}
-  \proofstepwidestar[1,5,8]{\bot}{\rBI{10,7}}
-  \proofstepwidestar[1,5]{a\notin X}{\rCI{8,11}}
-  \proofstepwidestar[1,5]{X\in M\land a\notin X}{\rAI{3,12}}
-  \proofstepwidestar[1,5]{X\in \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{13}}
-  \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{\rEE{4,5,14}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Auftretenszerlegung ist nichtleer]{%
-  X\in \AvoidCover{M}{a}\vdash X\neq\varnothing
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AvoidCover{M}{a}\dsep
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{X\in \AvoidCover{M}{a}}{\rA}
-  \proofstepwidestar[1]{%
-    X\in M\land
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{\AvoidCover{M}{a}\coloneqq
-    \{X\in M\mid
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}\}}{1}}
-  \proofstepwidestar[1]{%
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAEb{2}}
-  \proofstepwidestar[4]{%
-    b\in\bigcup M\land
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rA}
-  \proofstepwidestar[4]{%
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAEb{4}}
-  \proofstepwidestar[4]{X\in \FamContaining{M}{b}}{%
-    \FormulaRefAuto{x \in A \setminus B \vdash x \in A}{5}}
-  \proofstepwidestar[4]{X\in M\land b\in X}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{6}}
-  \proofstepwidestar[4]{b\in X}{\rAEb{7}}
-  \proofstepwidestar[4]{X\neq\varnothing}{%
-    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}{8}}
-  \proofstepwidestar[1]{X\neq\varnothing}{\rEE{3,4,9}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Auftretenszerlegung liegt in der nichtleeren Vermeidung]{%
-  X\in \AvoidCover{M}{a}\vdash X\in \FamAvoidingNE{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AvoidCover{M}{a}\dsep \FamAvoiding{M}{a}\dsep
-    \FamAvoidingNE{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AvoidCover{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{X\in \AvoidCover{M}{a}\vdash
-    X\in \FamAvoiding{M}{a}}{1}}
-  \proofstep{1}{X\neq\varnothing}{%
-    \FormulaRefAuto{X\in \AvoidCover{M}{a}\vdash
-    X\neq\varnothing}{1}}
-  \proofstep{4}{X\in\{\varnothing\}}{\rA}
-  \proofstep{4}{X=\varnothing}{%
-    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{4}}
-  \proofstep{1,4}{\bot}{\rBI{5,3}}
-  \proofstep{1}{X\notin\{\varnothing\}}{\rCI{4,6}}
-  \proofstep{1}{X\in
-    \FamAvoiding{M}{a}\setminus\{\varnothing\}}{%
-    \FormulaRefAuto{x \in A\dsep x\notin B\vdash
-    x \in A\setminus B}{2,7}}
-  \proofstep{1}{X\in \FamAvoidingNE{M}{a}}{%
-    \rIE{\FormulaRefAuto{\FamAvoidingNE{M}{a}\coloneqq
-    \FamAvoiding{M}{a}\setminus\{\varnothing\}},8}}
-\end{tabproof}
-
-\FormulaThmDelta[Nichtleere Vermeidung liegt in der Auftretenszerlegung]{%
-  X\in \FamAvoidingNE{M}{a}\vdash X\in \AvoidCover{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AvoidCover{M}{a}\dsep \FamAvoiding{M}{a}\dsep
-    \FamAvoidingNE{M}{a}\dsep
-    \FamContaining{M}{a}\dsep \FamContaining{M}{b}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{X\in \FamAvoidingNE{M}{a}}{\rA}
-  \proofstepwidestar[1]{X\in
-    \FamAvoiding{M}{a}\setminus\{\varnothing\}}{%
-    \FormulaRefAuto{\FamAvoidingNE{M}{a}\coloneqq
-    \FamAvoiding{M}{a}\setminus\{\varnothing\}}{1}}
-  \proofstepwidestar[1]{X\in \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
-  \proofstepwidestar[1]{X\notin\{\varnothing\}}{%
-    \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{2}}
-  \proofstepwidestar[1]{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{3}}
-  \proofstepwidestar[1]{X\in M}{\rAEa{5}}
-  \proofstepwidestar[1]{a\notin X}{\rAEb{5}}
-  \proofstepwidestar[8]{X=\varnothing}{\rA}
-  \proofstepwidestar[8]{X\in\{\varnothing\}}{%
-    \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{8}}
-  \proofstepwidestar[1,8]{\bot}{\rBI{9,4}}
-  \proofstepwidestar[1]{X\neq\varnothing}{\rCI{8,10}}
-  \proofstepwidestar[1]{\exists b\in X}{%
-    \FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{11}}
-  \proofstepwidestar[13]{b\in X}{\rA}
-  \proofstepwidestar[1,13]{b\in\bigcup M}{%
-    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{6,13}}
-  \proofstepwidestar[1,13]{X\in M\land b\in X}{\rAI{6,13}}
-  \proofstepwidestar[1,13]{X\in \FamContaining{M}{b}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{15}}
-  \proofstepwidestar[17]{X\in \FamContaining{M}{a}}{\rA}
-  \proofstepwidestar[17]{X\in M\land a\in X}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{17}}
-  \proofstepwidestar[17]{a\in X}{\rAEb{18}}
-  \proofstepwidestar[1,17]{\bot}{\rBI{19,7}}
-  \proofstepwidestar[1]{X\notin \FamContaining{M}{a}}{\rCI{17,20}}
-  \proofstepwidestar[1,13]{%
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{%
-    \FormulaRefAuto{x \in A\dsep x\notin B\vdash
-    x \in A\setminus B}{16,21}}
-  \proofstepwidestar[1,13]{%
-    b\in\bigcup M\land
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAI{14,22}}
-  \proofstepwidestar[1,13]{%
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rEI{23}}
-  \proofstepwidestar[1,13]{%
-    X\in M\land
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}}{\rAI{6,24}}
-  \proofstepwidestar[1,13]{X\in \AvoidCover{M}{a}}{%
-    \FormulaRefAuto{\AvoidCover{M}{a}\coloneqq
-    \{X\in M\mid
-    \exists b\in\bigcup M\,
-    X\in \FamContaining{M}{b}\setminus
-    \FamContaining{M}{a}\}}{25}}
-  \proofstepwidestar[1]{X\in \AvoidCover{M}{a}}{\rEE{12,13,26}}
-\end{tabproofwide}
-
-\FormulaThmDelta[Nichtleere vermeidende Teilfamilie ist Auftretenszerlegung]{%
-  \AvoidCover{M}{a}=\FamAvoidingNE{M}{a}
-}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Teilmengenfamilien}{%
-    \AvoidCover{M}{a}\dsep \FamAvoidingNE{M}{a}}
-}
-\begin{tabproof}
-  \proofstep{1}{X\in \AvoidCover{M}{a}}{\rA}
-  \proofstep{1}{X\in \FamAvoidingNE{M}{a}}{%
-    \FormulaRefAuto{X\in \AvoidCover{M}{a}\vdash
-    X\in \FamAvoidingNE{M}{a}}{1}}
-  \proofstep{3}{X\in \FamAvoidingNE{M}{a}}{\rA}
-  \proofstep{3}{X\in \AvoidCover{M}{a}}{%
-    \FormulaRefAuto{X\in \FamAvoidingNE{M}{a}\vdash
-    X\in \AvoidCover{M}{a}}{3}}
-  \proofstep{}{X\in \AvoidCover{M}{a}\leftrightarrow
-    X\in \FamAvoidingNE{M}{a}}{\rLRI{2,4}}
-  \proofstep{}{\forall X\,\bigl(X\in \AvoidCover{M}{a}\leftrightarrow
-    X\in \FamAvoidingNE{M}{a}\bigr)}{\rUI{5}}
-  \proofstep{}{\AvoidCover{M}{a}=\FamAvoidingNE{M}{a}}{%
-    \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B)
-    \eqvdash A = B}{6}}
-\end{tabproof}
-
-
-\chapter{Addition und Multiplikation auf \(\mathbb{N}\)}
-
-Die Menge der natürlichen Zahlen wurde als kleinste induktive Menge
-konstruiert; die Nachfolgerabbildung
-\(\Succ\colon\mathbb{N}\to\mathbb{N}\) und der Dedekindsche
-Rekursionssatz stehen bereits zur Verfügung. Damit können wir die
-arithmetischen Grundoperationen ohne neues mengentheoretisches Prinzip
-einführen: Jede Operation entsteht als Wert einer eindeutig bestimmten
-Rekursionsabbildung.
 
 \section{Addition}
 
