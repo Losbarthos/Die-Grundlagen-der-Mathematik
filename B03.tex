@@ -11657,6 +11657,137 @@ F\circ G = \Id_A\dsep G\circ F =\Id_B \vdash G=F^{-1}
     \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B \vdash F\colon A\bij B}{4,5}}
 \end{tabproof}
 
+\subsection{Spurabbildungen mengenwertiger Funktionen}
+
+Ist \(F\colon A\to\powerset(B)\) eine mengenwertige Funktion, so
+beschreibt die Spurabbildung zu einem Wert \(b\in B\) die Menge aller
+Argumente \(x\in A\), deren Funktionswert \(b\) enthält.
+
+\FormulaDefDeltaK[Spurvorschrift einer mengenwertigen Funktion]{%
+  F\colon A\to\powerset(B)\dsep b\in B\vdash
+  \tTraceMap{F}(b)\coloneqq
+  \{x\in A\mid b\in F(x)\}
+}{TraceMapRuleDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep x}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Funktionensymbol}{\tTraceMap{F}}
+}
+
+\FormulaThmDeltaK[Spurmengen liegen in der Potenzmenge des Definitionsbereichs]{%
+  F\colon A\to\powerset(B)\dsep b\in B
+  \vdash
+  \{x\in A\mid b\in F(x)\}\in\powerset(A)
+}{TraceSetInPower}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to\powerset(B)}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{3}{x\in
+    \{x\in A\mid b\in F(x)\}}{\rA}
+  \proofstep{3}{x\in A}{%
+    \FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{3}}
+  \proofstep{}{\{x\in A\mid b\in F(x)\}\subseteq A}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,4}}}}
+  \proofstep{}{\{x\in A\mid b\in F(x)\}\in\powerset(A)}{%
+    \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}{5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Typisierung der Spurvorschrift]{%
+  F\colon A\to\powerset(B)\dsep b\in B
+  \vdash \tTraceMap{F}(b)\in\powerset(A)
+}{TraceMapRuleTyped}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep x}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Funktionensymbol}{\tTraceMap{F}}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to\powerset(B)}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{1,2}{\tTraceMap{F}(b)\coloneqq
+    \{x\in A\mid b\in F(x)\}}{%
+    \FormulaRefAuto{TraceMapRuleDef}{1,2}}
+  \proofstep{1,2}{\{x\in A\mid b\in F(x)\}\in\powerset(A)}{%
+    \FormulaRefAuto{TraceSetInPower}{1,2}}
+  \proofstep{1,2}{\tTraceMap{F}(b)\in\powerset(A)}{\rIE{3,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Existenz der Spurabbildung einer mengenwertigen Funktion]{%
+  F\colon A\to\powerset(B)\vdash
+  \exists! T\colon B\to\powerset(A)\,
+  \forall b\in B\,T(b)=\tTraceMap{F}(b)
+}{TraceMapExists}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b}
+  \DeltaRow{Funktionen}{F\dsep T}
+  \DeltaRow{Funktionensymbol}{\tTraceMap{F}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\to\powerset(B)}{\rA}
+  \proofstepwidestar[1]{%
+    \begin{aligned}[t]
+      &\exists! T\colon B\to\powerset(A)\,\\
+      &\forall b\in B\,T(b)=\tTraceMap{F}(b)
+    \end{aligned}}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
+    }{%
+      \FormulaRefAuto{TraceMapRuleDef}{1},
+      \FormulaRefAuto{TraceMapRuleTyped}{1}}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Spurabbildung einer mengenwertigen Funktion]{%
+  F\colon A\to\powerset(B)\vdash
+  \TraceMap{F}\coloneqq
+  \iota T\Bigl(
+    T\colon B\to\powerset(A)\land
+    \forall b\in B\,T(b)=\tTraceMap{F}(b)
+  \Bigr)
+}{TraceMapDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b}
+  \DeltaRow{Funktionen}{F\dsep T\dsep \TraceMap{F}}
+  \DeltaRow{Funktionensymbol}{\tTraceMap{F}}
+  \DeltaRow{Neue Symbole}{\TraceMap{F}}
+}
+
+\FormulaThmDeltaK[Typisierung der Spurabbildung]{%
+  F\colon A\to\powerset(B)\vdash
+  \TraceMap{F}\colon B\to\powerset(A)
+}{TraceMapFunction}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep \TraceMap{F}}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to\powerset(B)}{\rA}
+  \proofstep{1}{\TraceMap{F}\colon B\to\powerset(A)}{%
+    \rAEa{\FormulaRefAuto{TraceMapDef}{1}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Wert der Spurabbildung]{%
+  F\colon A\to\powerset(B)\dsep b\in B
+  \vdash
+  \TraceMap{F}(b)=\{x\in A\mid b\in F(x)\}
+}{TraceMapValue}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep x}
+  \DeltaRow{Funktionen}{F\dsep \TraceMap{F}}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to\powerset(B)}{\rA}
+  \proofstep{2}{b\in B}{\rA}
+  \proofstep{1}{\forall b\in B\,
+    \TraceMap{F}(b)=\tTraceMap{F}(b)}{%
+    \rAEb{\FormulaRefAuto{TraceMapDef}{1}}}
+  \proofstep{1,2}{\TraceMap{F}(b)=\tTraceMap{F}(b)}{%
+    \rRE{2,\rUE{3}}}
+  \proofstep{1,2}{\tTraceMap{F}(b)\coloneqq
+    \{x\in A\mid b\in F(x)\}}{%
+    \FormulaRefAuto{TraceMapRuleDef}{1,2}}
+  \proofstep{1,2}{\TraceMap{F}(b)=
+    \{x\in A\mid b\in F(x)\}}{\rIE{4,5}}
+\end{tabproof}
+
 \subsection{Quotientenprojektionen und Quotientenbildabbildungen}
 
 \FormulaDefDeltaK[Funktionsvorschrift der Quotientenprojektion]{%
@@ -27197,100 +27328,19 @@ Klasse \(\OccClass{M}{1}\) kann informell als ein neues Element gelesen werden.
 
 Die Abbildung \(\OccQuotMap{M}\) ordnet einem Familienglied \(X\in M\)
 sein Quotientenbild in \(\powerset(\OccQuotCarrier{M})\) zu. Die
-Spurabbildung \(\OccQuotTraceMap{M}\) läuft in der entgegengesetzten
-Inzidenzrichtung: Einer Quotientenklasse \(C\in\OccQuotCarrier{M}\)
-ordnet sie die Familie aller \(X\in M\) zu, deren Quotientenbild \(C\)
-enthält.
-
-\FormulaThmDeltaK[Spurmengen liegen in der Potenzmenge der Familie]{%
-  C\in\OccQuotCarrier{M}
-  \vdash
-  \{X\in M\mid C\in\OccQuotMap{M}(X)\}\in\powerset(M)
-}{OccQuotTraceSetInPower}{%
-  \DeltaRow{Mengen}{M\dsep C\dsep X}
-  \DeltaRow{Funktionen}{\OccQuotMap{M}}
-  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{C\in\OccQuotCarrier{M}}{\rA}
-  \proofstep{2}{X\in
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{\rA}
-  \proofstep{2}{X\in M}{%
-    \FormulaRefAuto{x \in \{x \in A \mid P(x)\}\vdash x\in A}{2}}
-  \proofstep{}{\{X\in M\mid C\in\OccQuotMap{M}(X)\}\subseteq M}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,3}}}}
-  \proofstep{}{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}\in\powerset(M)}{%
-    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{4}}
-\end{tabproof}
-
-\FormulaDefDeltaK[Spurvorschrift des Ununterscheidbarkeitsquotienten]{%
-  C\in\OccQuotCarrier{M}\vdash
-  \tOccQuotTraceMap{M}(C)\coloneqq
-  \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-}{OccQuotTraceMapRuleDef}{%
-  \DeltaRow{Mengen}{M\dsep C\dsep X}
-  \DeltaRow{Funktionen}{\OccQuotMap{M}}
-  \DeltaRow{Funktionensymbol}{\tOccQuotTraceMap{M}}
-  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
-}
-
-\FormulaThmDeltaK[Typisierung der Spurvorschrift]{%
-  C\in\OccQuotCarrier{M}
-  \vdash \tOccQuotTraceMap{M}(C)\in\powerset(M)
-}{OccQuotTraceMapRuleTyped}{%
-  \DeltaRow{Mengen}{M\dsep C}
-  \DeltaRow{Funktionensymbol}{\tOccQuotTraceMap{M}}
-  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{C\in\OccQuotCarrier{M}}{\rA}
-  \proofstep{1}{\tOccQuotTraceMap{M}(C)\coloneqq
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{%
-    \FormulaRefAuto{OccQuotTraceMapRuleDef}{1}}
-  \proofstep{1}{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}\in\powerset(M)}{%
-    \FormulaRefAuto{OccQuotTraceSetInPower}{1}}
-  \proofstep{1}{\tOccQuotTraceMap{M}(C)\in\powerset(M)}{\rIE{2,3}}
-\end{tabproof}
-
-\FormulaThmDeltaK[Existenz der Spurabbildung des Ununterscheidbarkeitsquotienten]{%
-  \exists! T\colon \OccQuotCarrier{M}\to\powerset(M)\,
-  \forall C\in\OccQuotCarrier{M}\,
-  T(C)=\tOccQuotTraceMap{M}(C)
-}{OccQuotTraceMapExists}{%
-  \DeltaRow{Mengen}{M\dsep C}
-  \DeltaRow{Funktionen}{T}
-  \DeltaRow{Funktionensymbol}{\tOccQuotTraceMap{M}}
-  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      &\exists! T\colon \OccQuotCarrier{M}\to\powerset(M)\,\\
-      &\forall C\in\OccQuotCarrier{M}\,
-      T(C)=\tOccQuotTraceMap{M}(C)
-    \end{aligned}}{%
-    \FormulaRefAuto{%
-      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
-      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
-    }{%
-      \FormulaRefAuto{OccQuotTraceMapRuleDef},
-      \FormulaRefAuto{OccQuotTraceMapRuleTyped}}}
-\end{tabproofwide}
+Spurabbildung \(\OccQuotTraceMap{M}\) ist die allgemeine Spur der
+mengenwertigen Abbildung \(\OccQuotMap{M}\). Sie läuft in der
+entgegengesetzten Inzidenzrichtung: Einer Quotientenklasse
+\(C\in\OccQuotCarrier{M}\) ordnet sie die Familie aller \(X\in M\) zu,
+deren Quotientenbild \(C\) enthält.
 
 \FormulaDefDeltaK[Spurabbildung des Ununterscheidbarkeitsquotienten]{%
   \OccQuotTraceMap{M}\coloneqq
-  \iota T\Bigl(
-    T\colon \OccQuotCarrier{M}\to\powerset(M)\land
-    \forall C\in\OccQuotCarrier{M}\,
-    T(C)=\tOccQuotTraceMap{M}(C)
-  \Bigr)
+  \TraceMap{\OccQuotMap{M}}
 }{OccQuotTraceMapDef}{%
-  \DeltaRow{Mengen}{M\dsep C}
-  \DeltaRow{Funktionen}{T\dsep \OccQuotTraceMap{M}}
-  \DeltaRow{Funktionensymbol}{\tOccQuotTraceMap{M}}
+  \DeltaRow{Mengen}{M}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}\dsep
+  \TraceMap{\OccQuotMap{M}}\dsep \OccQuotTraceMap{M}}
   \DeltaRow{Neue Symbole}{\OccQuotTraceMap{M}}
 }
 
@@ -27302,9 +27352,17 @@ enthält.
   \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
 }
 \begin{tabproof}
-  \proofstep{}{\OccQuotTraceMap{M}\colon
+  \proofstep{}{\OccQuotMap{M}\colon
+    M\to\powerset(\OccQuotCarrier{M})}{%
+    \FormulaRefAuto{OccQuotMapPowerFunction}}
+  \proofstep{}{\TraceMap{\OccQuotMap{M}}\colon
     \OccQuotCarrier{M}\to\powerset(M)}{%
-    \rAEa{\FormulaRefAuto{OccQuotTraceMapDef}}}
+    \FormulaRefAuto{TraceMapFunction}{1}}
+  \proofstep{}{\OccQuotTraceMap{M}=
+    \TraceMap{\OccQuotMap{M}}}{%
+    \FormulaRefAuto{OccQuotTraceMapDef}}
+  \proofstep{}{\OccQuotTraceMap{M}\colon
+    \OccQuotCarrier{M}\to\powerset(M)}{\rIE{3,2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Wert der Spurabbildung des Ununterscheidbarkeitsquotienten]{%
@@ -27318,16 +27376,21 @@ enthält.
 }
 \begin{tabproof}
   \proofstep{1}{C\in\OccQuotCarrier{M}}{\rA}
-  \proofstep{}{\forall C\in\OccQuotCarrier{M}\,
-    \OccQuotTraceMap{M}(C)=\tOccQuotTraceMap{M}(C)}{%
-    \rAEb{\FormulaRefAuto{OccQuotTraceMapDef}}}
-  \proofstep{1}{\OccQuotTraceMap{M}(C)=
-    \tOccQuotTraceMap{M}(C)}{\rRE{1,\rUE{2}}}
-  \proofstep{1}{\tOccQuotTraceMap{M}(C)\coloneqq
+  \proofstep{}{\OccQuotMap{M}\colon
+    M\to\powerset(\OccQuotCarrier{M})}{%
+    \FormulaRefAuto{OccQuotMapPowerFunction}}
+  \proofstep{1}{\TraceMap{\OccQuotMap{M}}(C)=
     \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{%
-    \FormulaRefAuto{OccQuotTraceMapRuleDef}{1}}
+    \FormulaRefAuto{TraceMapValue}{2,1}}
+  \proofstep{}{\OccQuotTraceMap{M}=
+    \TraceMap{\OccQuotMap{M}}}{%
+    \FormulaRefAuto{OccQuotTraceMapDef}}
   \proofstep{1}{\OccQuotTraceMap{M}(C)=
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{\rIE{3,4}}
+    \TraceMap{\OccQuotMap{M}}(C)}{%
+    \FormulaRefAuto{x\in A\dsep F=G\vdash F(x)=G(x)}{1,4}}
+  \proofstep{1}{\OccQuotTraceMap{M}(C)=
+    \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Gleiche Spuren liefern gleiche Bildmitgliedschaften]{%
