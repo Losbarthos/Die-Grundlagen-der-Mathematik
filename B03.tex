@@ -11851,6 +11851,43 @@ Argumente \(x\in A\), deren Funktionswert \(b\) enthält.
     \{x\in A\mid b\in F(x)\}}{\rIE{4,5}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Gleiche Spuren liefern gleiche Bildmitgliedschaften]{%
+  \begin{aligned}[t]
+    &F\colon A\to\powerset(B)\dsep b\in B\dsep c\in B\\
+    &\dsep \TraceMap{F}(b)=\TraceMap{F}(c)\dsep x\in A\\
+    &\vdash b\in F(x)\leftrightarrow c\in F(x)
+  \end{aligned}
+}{TraceMapEqualityMembership}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep c\dsep x}
+  \DeltaRow{Funktionen}{F\dsep \TraceMap{F}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\to\powerset(B)}{\rA}
+  \proofstepwidestar[2]{b\in B}{\rA}
+  \proofstepwidestar[3]{c\in B}{\rA}
+  \proofstepwidestar[4]{\TraceMap{F}(b)=\TraceMap{F}(c)}{\rA}
+  \proofstepwidestar[5]{x\in A}{\rA}
+  \proofstepwidestar[1,2]{\TraceMap{F}(b)=
+    \{x\in A\mid b\in F(x)\}}{%
+    \FormulaRefAuto{TraceMapValue}{1,2}}
+  \proofstepwidestar[1,3]{\TraceMap{F}(c)=
+    \{x\in A\mid c\in F(x)\}}{%
+    \FormulaRefAuto{TraceMapValue}{1,3}}
+  \proofstepwidestar[1,2]{%
+    \{x\in A\mid b\in F(x)\}=\TraceMap{F}(b)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
+  \proofstepwidestar[1,2,4]{%
+    \{x\in A\mid b\in F(x)\}=\TraceMap{F}(c)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,4}}
+  \proofstepwidestar[1,2,3,4]{%
+    \{x\in A\mid b\in F(x)\}=
+    \{x\in A\mid c\in F(x)\}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,7}}
+  \proofstepwidestar[1,2,3,4,5]{%
+    b\in F(x)\leftrightarrow c\in F(x)}{%
+    \FormulaRefAuto{SeparationEqualityPredicateEquivalence}{10,5}}
+\end{tabproofwide}
+
 \subsection{Quotientenprojektionen und Quotientenbildabbildungen}
 
 \FormulaDefDeltaK[Funktionsvorschrift der Quotientenprojektion]{%
@@ -26419,6 +26456,35 @@ Ununterscheidbarkeitsrelation und bilden ihre Äquivalenzklassen im Träger
   \DeltaRow{Neue Symbole}{\OccQuotCarrier{M}}
 }
 
+\FormulaThmDeltaK[Ununterscheidbarkeitsklassen liegen im Quotiententräger]{%
+  a\in\bigcup M\vdash \OccClass{M}{a}\in\OccQuotCarrier{M}
+}{OccClassInCarrier}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
+  \DeltaRow{Ununterscheidbarkeitsklassen}{\OccClass{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{a\in\bigcup M}{\rA}
+  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \FormulaRefAuto{SameOccRelEqRel}}
+  \proofstep{1}{\OccClass{M}{a}=
+    \EqClass{a}{\SameOccRel{M}}{\bigcup M}}{%
+    \FormulaRefAuto{OccClassDef}{1}}
+  \proofstep{1}{\EqClass{a}{\SameOccRel{M}}{\bigcup M}\in
+    \QuotientSet{\bigcup M}{\SameOccRel{M}}}{%
+    \FormulaRefAuto{EqClassInQuotient}{2,1}}
+  \proofstep{}{\OccQuotCarrier{M}=
+    \QuotientSet{\bigcup M}{\SameOccRel{M}}}{%
+    \FormulaRefAuto{OccQuotCarrierDef}}
+  \proofstep{1}{\OccClass{M}{a}\in
+    \QuotientSet{\bigcup M}{\SameOccRel{M}}}{\rIE{3,4}}
+  \proofstep{}{\QuotientSet{\bigcup M}{\SameOccRel{M}}=
+    \OccQuotCarrier{M}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{1}{\OccClass{M}{a}\in\OccQuotCarrier{M}}{\rIE{7,6}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Elemente des Ununterscheidbarkeitsquotiententrägers besitzen Repräsentanten]{%
   C\in\OccQuotCarrier{M}\vdash
   \exists a\in\bigcup M\,C=\OccClass{M}{a}
@@ -27498,46 +27564,64 @@ deren Quotientenbild \(C\) enthält.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,3}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Gleiche Spuren liefern gleiche Bildmitgliedschaften]{%
+\FormulaThmDeltaK[Gleiche Quotientenspuren liefern gleiche Bildmitgliedschaften]{%
   \begin{aligned}[t]
-    &\{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}\\
-    &\dsep X\in M
-    \vdash
+    &C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\\
+    &\dsep \OccQuotTraceMap{M}(C)=\OccQuotTraceMap{M}(D)
+    \dsep X\in M\\
+    &\vdash
     C\in\OccQuotMap{M}(X)\leftrightarrow
     D\in\OccQuotMap{M}(X)
   \end{aligned}
 }{OccQuotTraceEqualityMembership}{%
   \DeltaRow{Mengen}{M\dsep C\dsep D\dsep X}
-  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}\dsep \OccQuotTraceMap{M}}
+  \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
 }
-\begin{tabproof}
-  \proofstep{1}{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}}{\rA}
-  \proofstep{2}{X\in M}{\rA}
-  \proofstep{1,2}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rA}
+  \proofstepwidestar[2]{D\in\OccQuotCarrier{M}}{\rA}
+  \proofstepwidestar[3]{\OccQuotTraceMap{M}(C)=
+    \OccQuotTraceMap{M}(D)}{\rA}
+  \proofstepwidestar[4]{X\in M}{\rA}
+  \proofstepwidestar[]{\OccQuotMap{M}\colon
+    M\to\powerset(\OccQuotCarrier{M})}{%
+    \FormulaRefAuto{OccQuotMapPowerFunction}}
+  \proofstepwidestar[]{\OccQuotTraceMap{M}=
+    \TraceMap{\OccQuotMap{M}}}{%
+    \FormulaRefAuto{OccQuotTraceMapDef}}
+  \proofstepwidestar[1]{\OccQuotTraceMap{M}(C)=
+    \TraceMap{\OccQuotMap{M}}(C)}{%
+    \FormulaRefAuto{x\in A\dsep F=G\vdash F(x)=G(x)}{1,6}}
+  \proofstepwidestar[2]{\OccQuotTraceMap{M}(D)=
+    \TraceMap{\OccQuotMap{M}}(D)}{%
+    \FormulaRefAuto{x\in A\dsep F=G\vdash F(x)=G(x)}{2,6}}
+  \proofstepwidestar[1]{\TraceMap{\OccQuotMap{M}}(C)=
+    \OccQuotTraceMap{M}(C)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstepwidestar[1,3]{\TraceMap{\OccQuotMap{M}}(C)=
+    \OccQuotTraceMap{M}(D)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,3}}
+  \proofstepwidestar[1,2,3]{\TraceMap{\OccQuotMap{M}}(C)=
+    \TraceMap{\OccQuotMap{M}}(D)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,8}}
+  \proofstepwidestar[1,2,3,4]{%
     C\in\OccQuotMap{M}(X)\leftrightarrow
     D\in\OccQuotMap{M}(X)}{%
-    \FormulaRefAuto{SeparationEqualityPredicateEquivalence}{1,2}}
-\end{tabproof}
+    \FormulaRefAuto{TraceMapEqualityMembership}{5,1,2,11,4}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Gleiche Spuren vergleichen Repräsentanten]{%
   \begin{aligned}[t]
     &C=\OccClass{M}{a}\dsep D=\OccClass{M}{b}\dsep
     a\in\bigcup M\dsep b\in\bigcup M\\
-    &\dsep
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}\\
+    &\dsep \OccQuotTraceMap{M}(C)=\OccQuotTraceMap{M}(D)\\
     &\vdash (a,b)\in\SameOccRel{M}
   \end{aligned}
 }{OccQuotTraceRepresentativesRel}{%
   \DeltaRow{Mengen}{M\dsep C\dsep D\dsep X\dsep a\dsep b}
   \DeltaRow{Relationen}{\SameOccRel{M}}
-  \DeltaRow{Funktionen}{\OccQuotMap{M}}
+  \DeltaRow{Funktionen}{\OccQuotMap{M}\dsep \OccQuotTraceMap{M}}
   \DeltaRow{Ununterscheidbarkeitsklassen}{\OccClass{M}{a}\dsep
   \OccClass{M}{b}}
 }
@@ -27546,67 +27630,67 @@ deren Quotientenbild \(C\) enthält.
   \proofstepwidestar[2]{D=\OccClass{M}{b}}{\rA}
   \proofstepwidestar[3]{a\in\bigcup M}{\rA}
   \proofstepwidestar[4]{b\in\bigcup M}{\rA}
-  \proofstepwidestar[5]{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}}{\rA}
+  \proofstepwidestar[5]{\OccQuotTraceMap{M}(C)=
+    \OccQuotTraceMap{M}(D)}{\rA}
+  \proofstepwidestar[3]{\OccClass{M}{a}\in\OccQuotCarrier{M}}{%
+    \FormulaRefAuto{OccClassInCarrier}{3}}
+  \proofstepwidestar[1,3]{C\in\OccQuotCarrier{M}}{\rIE{1,6}}
+  \proofstepwidestar[4]{\OccClass{M}{b}\in\OccQuotCarrier{M}}{%
+    \FormulaRefAuto{OccClassInCarrier}{4}}
+  \proofstepwidestar[2,4]{D\in\OccQuotCarrier{M}}{\rIE{2,8}}
 
-  \proofstepwidestar[6]{X\in M}{\rA}
-  \proofstepwidestar[3,6]{a\in X\leftrightarrow
+  \proofstepwidestar[10]{X\in M}{\rA}
+  \proofstepwidestar[3,10]{a\in X\leftrightarrow
     \OccClass{M}{a}\in\OccQuotMap{M}(X)}{%
-    \FormulaRefAuto{OccQuotMembershipTransport}{6,3}}
-  \proofstepwidestar[1,3,6]{a\in X\leftrightarrow
-    C\in\OccQuotMap{M}(X)}{\rIE{1,7}}
-  \proofstepwidestar[5,6]{C\in\OccQuotMap{M}(X)\leftrightarrow
+    \FormulaRefAuto{OccQuotMembershipTransport}{10,3}}
+  \proofstepwidestar[1,3,10]{a\in X\leftrightarrow
+    C\in\OccQuotMap{M}(X)}{\rIE{1,11}}
+  \proofstepwidestar[1,2,3,4,5,10]{C\in\OccQuotMap{M}(X)\leftrightarrow
     D\in\OccQuotMap{M}(X)}{%
-    \FormulaRefAuto{OccQuotTraceEqualityMembership}{5,6}}
-  \proofstepwidestar[4,6]{b\in X\leftrightarrow
+    \FormulaRefAuto{OccQuotTraceEqualityMembership}{7,9,5,10}}
+  \proofstepwidestar[4,10]{b\in X\leftrightarrow
     \OccClass{M}{b}\in\OccQuotMap{M}(X)}{%
-    \FormulaRefAuto{OccQuotMembershipTransport}{6,4}}
-  \proofstepwidestar[2,4,6]{b\in X\leftrightarrow
-    D\in\OccQuotMap{M}(X)}{\rIE{2,10}}
-  \proofstepwidestar[2,4,6]{D\in\OccQuotMap{M}(X)\leftrightarrow
+    \FormulaRefAuto{OccQuotMembershipTransport}{10,4}}
+  \proofstepwidestar[2,4,10]{b\in X\leftrightarrow
+    D\in\OccQuotMap{M}(X)}{\rIE{2,14}}
+  \proofstepwidestar[2,4,10]{D\in\OccQuotMap{M}(X)\leftrightarrow
     b\in X}{%
-    \FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{11}}
-  \proofstepwidestar[1,3,5,6]{a\in X\leftrightarrow
+    \FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{15}}
+  \proofstepwidestar[1,2,3,4,5,10]{a\in X\leftrightarrow
     D\in\OccQuotMap{M}(X)}{%
     \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R
-    \vdash P\leftrightarrow R}{8,9}}
-  \proofstepwidestar[1,2,3,4,5,6]{a\in X\leftrightarrow b\in X}{%
+    \vdash P\leftrightarrow R}{12,13}}
+  \proofstepwidestar[1,2,3,4,5,10]{a\in X\leftrightarrow b\in X}{%
     \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R
-    \vdash P\leftrightarrow R}{13,12}}
+    \vdash P\leftrightarrow R}{17,16}}
   \proofstepwidestar[1,2,3,4,5]{%
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \rUI{\rRI{6,14}}}
+    \rUI{\rRI{10,18}}}
   \proofstepwidestar[1,2,3,4,5]{%
     a\in\bigcup M\land b\in\bigcup M\land
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \rAI{3,\rAI{4,15}}}
+    \rAI{3,\rAI{4,19}}}
   \proofstepwidestar[1,2,3,4,5]{(a,b)\in\SameOccRel{M}}{%
-    \FormulaRefAuto{SameOccRelChar}{16}}
+    \FormulaRefAuto{SameOccRelChar}{20}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Gleiche Spuren trennen Ununterscheidbarkeitsklassen]{%
   \begin{aligned}[t]
     &C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\\
-    &\dsep
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}
+    &\dsep \OccQuotTraceMap{M}(C)=\OccQuotTraceMap{M}(D)
     \vdash C=D
   \end{aligned}
 }{OccQuotTraceSeparatesClasses}{%
   \DeltaRow{Mengen}{M\dsep C\dsep D\dsep a\dsep b}
   \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Funktionen}{\OccQuotTraceMap{M}}
   \DeltaRow{Quotiententräger}{\OccQuotCarrier{M}}
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rA}
   \proofstepwidestar[2]{D\in\OccQuotCarrier{M}}{\rA}
-  \proofstepwidestar[3]{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}}{\rA}
+  \proofstepwidestar[3]{\OccQuotTraceMap{M}(C)=
+    \OccQuotTraceMap{M}(D)}{\rA}
   \proofstepwidestar[1]{\exists a\in\bigcup M\,
     C=\OccClass{M}{a}}{%
     \FormulaRefAuto{OccQuotCarrierRepresentative}{1}}
@@ -27648,30 +27732,11 @@ deren Quotientenbild \(C\) enthält.
   \proofstepwidestar[3]{D\in\OccQuotCarrier{M}}{\rA}
   \proofstepwidestar[4]{\OccQuotTraceMap{M}(C)=
     \OccQuotTraceMap{M}(D)}{\rA}
-  \proofstepwidestar[2]{\OccQuotTraceMap{M}(C)=
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}}{%
-    \FormulaRefAuto{OccQuotTraceMapValue}{2}}
-  \proofstepwidestar[3]{\OccQuotTraceMap{M}(D)=
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}}{%
-    \FormulaRefAuto{OccQuotTraceMapValue}{3}}
-  \proofstepwidestar[2]{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}=
-    \OccQuotTraceMap{M}(C)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{5}}
-  \proofstepwidestar[2,4]{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}=
-    \OccQuotTraceMap{M}(D)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,4}}
-  \proofstepwidestar[2,3,4]{%
-    \{X\in M\mid C\in\OccQuotMap{M}(X)\}
-    =
-    \{X\in M\mid D\in\OccQuotMap{M}(X)\}}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,6}}
   \proofstepwidestar[2,3,4]{C=D}{%
-    \FormulaRefAuto{OccQuotTraceSeparatesClasses}{2,3,9}}
+    \FormulaRefAuto{OccQuotTraceSeparatesClasses}{2,3,4}}
   \proofstepwidestar[]{\OccQuotTraceMap{M}\colon
     \OccQuotCarrier{M}\inj\powerset(M)}{%
-    \FormulaRefAuto{Injektive Funktion}{1,10}}
+    \FormulaRefAuto{Injektive Funktion}{1,5}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Spurabbildung trennt Ununterscheidbarkeitsklassen]{%
