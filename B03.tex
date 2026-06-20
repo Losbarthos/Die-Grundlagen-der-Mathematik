@@ -3338,6 +3338,58 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
     \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{4,6}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Vereinigungskürzung bei disjunktem Zusatz]{%
+  A\cap C=\varnothing\dsep B\cap C=\varnothing\dsep
+  A\cup C=B\cup C\vdash A=B
+}{UnionCancelDisjointRight}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x}
+}
+\begin{tabproof}
+  \proofstep{1}{A\cap C=\varnothing}{\rA}
+  \proofstep{2}{B\cap C=\varnothing}{\rA}
+  \proofstep{3}{A\cup C=B\cup C}{\rA}
+
+  \proofstep{4}{x\in A}{\rA}
+  \proofstep{4}{x\in A\cup C}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{4}}
+  \proofstep{3,4}{x\in B\cup C}{\rIE{3,5}}
+  \proofstep{3,4}{x\in B\lor x\in C}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{6}}
+
+  \proofstep{8}{x\in B}{\rA}
+  \proofstep{9}{x\in C}{\rA}
+  \proofstep{1,4}{x\notin C}{%
+    \FormulaRefAuto{A \cap B = \varnothing,\ x \in A \vdash x \notin B}{1,4}}
+  \proofstep{1,4,9}{x\in B}{%
+    \FormulaRefAuto{P\dsep \neg P \vdash Q}{9,10}}
+  \proofstep{1,3,4}{x\in B}{\rOE{7,8,8,9,11}}
+  \proofstep{1,3}{A\subseteq B}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{4,12}}}}
+
+  \proofstep{14}{x\in B}{\rA}
+  \proofstep{14}{x\in B\cup C}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{14}}
+  \proofstep{3}{B\cup C=A\cup C}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstep{3,14}{x\in A\cup C}{\rIE{16,15}}
+  \proofstep{3,14}{x\in A\lor x\in C}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{17}}
+
+  \proofstep{19}{x\in A}{\rA}
+  \proofstep{20}{x\in C}{\rA}
+  \proofstep{2,14}{x\notin C}{%
+    \FormulaRefAuto{A \cap B = \varnothing,\ x \in A \vdash x \notin B}{2,14}}
+  \proofstep{2,14,20}{x\in A}{%
+    \FormulaRefAuto{P\dsep \neg P \vdash Q}{20,21}}
+  \proofstep{2,3,14}{x\in A}{\rOE{18,19,19,20,22}}
+  \proofstep{2,3}{B\subseteq A}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,23}}}}
+
+  \proofstep{1,2,3}{A=B}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,24}}
+\end{tabproof}
+
 \subsection{Idempotenz, Kommutativität, Assoziativität}
 
 \FormulaThmAuto{x \in A \eqvdash x \in A \cup A}
@@ -6614,6 +6666,28 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
     \FormulaRefAuto{C\subseteq A \dsep F\colon A\to B \vdash F[C]\subseteq B}{2,1}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Bilder in disjunkten Zielmengen sind disjunkt]{%
+  F\colon A\to C\dsep G\colon B\to D\dsep C\cap D=\varnothing
+  \vdash F[A]\cap G[B]=\varnothing
+}{DisjointTargetImagesDisjoint}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep D}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to C}{\rA}
+  \proofstep{2}{G\colon B\to D}{\rA}
+  \proofstep{3}{C\cap D=\varnothing}{\rA}
+  \proofstep{1}{F[A]\subseteq C}{%
+    \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{1}}
+  \proofstep{2}{G[B]\subseteq D}{%
+    \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{2}}
+  \proofstep{1,2}{F[A]\cap G[B]\subseteq C\cap D}{%
+    \FormulaRefAuto{A \subseteq B,\, C \subseteq D \vdash A \cap C \subseteq B \cap D}{4,5}}
+  \proofstep{1,2,3}{F[A]\cap G[B]\subseteq\varnothing}{\rIE{3,6}}
+  \proofstep{1,2,3}{F[A]\cap G[B]=\varnothing}{%
+    \FormulaRefAuto{A\subseteq\varnothing\vdash A=\varnothing}{7}}
+\end{tabproof}
+
 \FormulaThmDelta[Bild einer bijektiven Funktion ist die Zielmenge]{%
   F\colon A\bij B \vdash F[A]=B
 }{%
@@ -8831,6 +8905,173 @@ dann für die eigentliche Funktion.
     \FormulaRefAuto{a=b,\,b=c\vdash a=c}{7,8,9}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Injektives Zusammenführen von Fallabbildungszweigen]{%
+  A\cap B=\varnothing\dsep
+  f\colon A\inj C\dsep g\colon B\inj C\dsep
+  f[A]\cap g[B]=\varnothing
+  \vdash \CaseFun{A}{B}{f}{g}\colon A\cup B\inj C
+}{CaseFunInjectiveDisjointImages}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep g\dsep \CaseFun{A}{B}{f}{g}}
+}
+\begin{tabproof}
+  \proofstep{1}{A\cap B=\varnothing}{\rA}
+  \proofstep{2}{f\colon A\inj C}{\rA}
+  \proofstep{3}{g\colon B\inj C}{\rA}
+  \proofstep{4}{f[A]\cap g[B]=\varnothing}{\rA}
+  \proofstep{2}{f\colon A\to C}{\FormulaRefAuto{Injektive Funktion}{2}}
+  \proofstep{3}{g\colon B\to C}{\FormulaRefAuto{Injektive Funktion}{3}}
+  \proofstep{2,3}{\CaseFun{A}{B}{f}{g}\colon A\cup B\to C}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C
+    \vdash \CaseFun{A}{B}{f}{g}\colon A\cup B\to C}{5,6}}
+
+  \proofstep{8}{x\in A\cup B}{\rA}
+  \proofstep{9}{y\in A\cup B}{\rA}
+  \proofstep{10}{\CaseFun{A}{B}{f}{g}(x)=\CaseFun{A}{B}{f}{g}(y)}{\rA}
+  \proofstep{8}{x\in A\lor x\in B}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{8}}
+  \proofstep{9}{y\in A\lor y\in B}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{9}}
+
+  \proofstep{13}{x\in A}{\rA}
+  \proofstep{14}{y\in A}{\rA}
+  \proofstep{2,3,13}{\CaseFun{A}{B}{f}{g}(x)=f(x)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,6,13}}
+  \proofstep{2,3,14}{\CaseFun{A}{B}{f}{g}(y)=f(y)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,6,14}}
+  \proofstep{2,3,13}{f(x)=\CaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{15}}
+  \proofstep{2,3,10,13}{f(x)=\CaseFun{A}{B}{f}{g}(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{17,10}}
+  \proofstep{2,3,10,13,14}{f(x)=f(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{18,16}}
+  \proofstep{2,10,13,14}{x=y}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+    F(x)=F(y)\vdash x=y}{2,13,14,19}}
+
+  \proofstep{21}{y\in B}{\rA}
+  \proofstep{1,3,6,21}{\CaseFun{A}{B}{f}{g}(y)=g(y)}{%
+    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
+    g\colon B\to C\dsep x\in B
+    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{1,5,6,21}}
+  \proofstep{2,3,13}{\CaseFun{A}{B}{f}{g}(x)=f(x)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,6,13}}
+  \proofstep{2,3,13}{f(x)=\CaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{23}}
+  \proofstep{2,3,10,13}{f(x)=\CaseFun{A}{B}{f}{g}(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{24,10}}
+  \proofstep{1,2,3,10,13,21}{f(x)=g(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{25,22}}
+  \proofstep{}{A\subseteq A}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{}{B\subseteq B}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{2,13}{f(x)\in f[A]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep
+    x\in C\vdash F(x)\in F[C]}{27,2,13}}
+  \proofstep{3,21}{g(y)\in g[B]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep
+    x\in C\vdash F(x)\in F[C]}{28,3,21}}
+  \proofstep{1,2,3,10,13,21}{g(y)\in f[A]}{\rIE{26,29}}
+  \proofstep{1,2,3,10,13,21}{g(y)\in f[A]\cap g[B]}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{31,30}}}
+  \proofstep{1,2,3,4,10,13,21}{g(y)\in\varnothing}{\rIE{4,32}}
+  \proofstep{}{g(y)\notin\varnothing}{%
+    \rUE{\FormulaRefAuto{\varnothing \coloneq
+    \iota O\bigl(\forall x\,(x \not\in O)\bigr)}}}
+  \proofstep{1,2,3,4,10,13,21}{\bot}{\rBI{33,34}}
+  \proofstep{1,2,3,4,10,13,21}{x=y}{%
+    \FormulaRefAuto{P\dsep \neg P \vdash Q}{33,34}}
+
+  \proofstep{1,2,3,4,10,13}{x=y}{\rOE{12,14,20,21,36}}
+
+  \proofstep{38}{x\in B}{\rA}
+  \proofstep{39}{y\in A}{\rA}
+  \proofstep{1,2,3,38}{\CaseFun{A}{B}{f}{g}(x)=g(x)}{%
+    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
+    g\colon B\to C\dsep x\in B
+    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{1,5,6,38}}
+  \proofstep{2,3,39}{\CaseFun{A}{B}{f}{g}(y)=f(y)}{%
+    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+    \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}{5,6,39}}
+  \proofstep{1,2,3,38}{g(x)=\CaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{40}}
+  \proofstep{1,2,3,10,38}{g(x)=\CaseFun{A}{B}{f}{g}(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{42,10}}
+  \proofstep{1,2,3,10,38,39}{g(x)=f(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{43,41}}
+  \proofstep{3,38}{g(x)\in g[B]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep
+    x\in C\vdash F(x)\in F[C]}{28,3,38}}
+  \proofstep{2,39}{f(y)\in f[A]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep
+    x\in C\vdash F(x)\in F[C]}{27,2,39}}
+  \proofstep{1,2,3,10,38,39}{g(x)\in f[A]}{\rIE{44,46}}
+  \proofstep{1,2,3,10,38,39}{g(x)\in f[A]\cap g[B]}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{47,45}}}
+  \proofstep{1,2,3,4,10,38,39}{g(x)\in\varnothing}{\rIE{4,48}}
+  \proofstep{1,2,3,4,10,38,39}{\bot}{\rBI{49,34}}
+  \proofstep{1,2,3,4,10,38,39}{x=y}{%
+    \FormulaRefAuto{P\dsep \neg P \vdash Q}{49,34}}
+
+  \proofstep{52}{y\in B}{\rA}
+  \proofstep{1,2,3,38}{\CaseFun{A}{B}{f}{g}(x)=g(x)}{%
+    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
+    g\colon B\to C\dsep x\in B
+    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{1,5,6,38}}
+  \proofstep{1,2,3,52}{\CaseFun{A}{B}{f}{g}(y)=g(y)}{%
+    \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
+    g\colon B\to C\dsep x\in B
+    \vdash \CaseFun{A}{B}{f}{g}(x)=g(x)}{1,5,6,52}}
+  \proofstep{1,2,3,38}{g(x)=\CaseFun{A}{B}{f}{g}(x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{53}}
+  \proofstep{1,2,3,10,38}{g(x)=\CaseFun{A}{B}{f}{g}(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{55,10}}
+  \proofstep{1,2,3,10,38,52}{g(x)=g(y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{56,54}}
+  \proofstep{3,10,38,52}{x=y}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+    F(x)=F(y)\vdash x=y}{3,38,52,57}}
+
+  \proofstep{1,2,3,4,10,38}{x=y}{\rOE{12,39,51,52,58}}
+  \proofstep{1,2,3,4,8,9,10}{x=y}{\rOE{11,13,37,38,59}}
+  \proofstep{1,2,3,4}{%
+    \forall x,y\in A\cup B\,
+    \bigl(\CaseFun{A}{B}{f}{g}(x)=\CaseFun{A}{B}{f}{g}(y)
+    \rightarrow x=y\bigr)}{\rUI{\rUI{\rRI{8,\rRI{9,\rRI{10,60}}}}}}
+  \proofstep{1,2,3,4}{\CaseFun{A}{B}{f}{g}\colon A\cup B\inj C}{%
+    \FormulaRefAuto{Injektive Funktion}{7,61}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Injektives Zusammenführen in disjunkte Zielmengen]{%
+  A\cap B=\varnothing\dsep C\cap D=\varnothing\dsep
+  f\colon A\inj C\dsep g\colon B\inj D
+  \vdash \exists h\colon A\cup B\inj C\cup D
+}{CaseFunDisjointTargetInjection}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep D}
+  \DeltaRow{Funktionen}{f\dsep g\dsep h}
+}
+\begin{tabproof}
+  \proofstep{1}{A\cap B=\varnothing}{\rA}
+  \proofstep{2}{C\cap D=\varnothing}{\rA}
+  \proofstep{3}{f\colon A\inj C}{\rA}
+  \proofstep{4}{g\colon B\inj D}{\rA}
+  \proofstep{}{C\subseteq C\cup D}{\FormulaRefAuto{A\subseteq A\cup B}}
+  \proofstep{}{D\subseteq C\cup D}{\FormulaRefAuto{B\subseteq A\cup B}}
+  \proofstep{3}{f\colon A\to C}{\FormulaRefAuto{Injektive Funktion}{3}}
+  \proofstep{4}{g\colon B\to D}{\FormulaRefAuto{Injektive Funktion}{4}}
+  \proofstep{2,3,4}{f[A]\cap g[B]=\varnothing}{%
+    \FormulaRefAuto{DisjointTargetImagesDisjoint}{7,8,2}}
+  \proofstep{3}{f\colon A\inj C\cup D}{%
+    \FormulaRefAuto{InjectiveCodomainExtension}{3,5}}
+  \proofstep{4}{g\colon B\inj C\cup D}{%
+    \FormulaRefAuto{InjectiveCodomainExtension}{4,6}}
+  \proofstep{1,2,3,4}{\CaseFun{A}{B}{f}{g}\colon A\cup B\inj C\cup D}{%
+    \FormulaRefAuto{CaseFunInjectiveDisjointImages}{1,10,11,9}}
+  \proofstep{1,2,3,4}{\exists h\colon A\cup B\inj C\cup D}{\rEI{12}}
+\end{tabproof}
+
 \subsection{Die Identitätsfunktion}
 
 \subsubsection{Definition der Identitätsfunktion}
@@ -10252,6 +10493,24 @@ C\subseteq A \vdash F\restriction_C\colon C\twoheadrightarrow F[C]
   \proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
 \end{tabproof}
 
+
+\FormulaThmDeltaK[Erweiterung der Zielmenge erhält Injektivität]{%
+  F\colon A\inj B\dsep B\subseteq C\vdash F\colon A\inj C
+}{InjectiveCodomainExtension}{%
+  \DeltaDecl{Mengen}{A\dsep B\dsep C}%
+  \DeltaDecl{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\inj B}{\rA}
+  \proofstep{2}{B\subseteq C}{\rA}
+  \proofstep{1}{F\colon A\to B}{\FormulaRefAuto{Injektive Funktion}{1}}
+  \proofstep{1,2}{F\colon A\to C}{%
+    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash F\colon A\to C}{3,2}}
+  \proofstep{1}{x\in A\land y\in A\land F(x)=F(y)\rightarrow x=y}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+    F(x)=F(y)\vdash x=y}{1}}
+  \proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
+\end{tabproof}
 
 \subsubsection{Einschränkung auf das Urbild einer Teilmenge}
 
@@ -26436,14 +26695,14 @@ aus \(M\) enthalten ist.
 
 Wegen der Bedingung \(a\in\bigcup M\) in der Definition von
 \(\HalfOcc{a}{M}\) muss die Trägervereinigung nichtleer sein. Die
-Die Frankl-Vermutung lautet in dieser Form daher:
+Frankl-Vermutung lautet in dieser Form daher:
 \[
   \FranklFam{M}\vdash \Frankl{M}.
 \]
 Ohne die Zusatzannahme \(\bigcup M\neq\varnothing\) wäre bereits
 \(M=\{\varnothing\}\) ein Gegenbeispiel zur Formulierung, denn dann gibt es
 kein \(a\in\bigcup M\). Die Aussage wird hier nicht als bewiesener Satz
-verwendet. Wir zeigen zunächst zwei einfache Spezialfälle.
+verwendet. Wir zeigen zunächst einige einfache Spezialfälle.
 
 \subsection{Fall einer enthaltenen Einermenge}
 
@@ -26549,6 +26808,1001 @@ Spezialfall direkt als \(\bigcap M\neq\varnothing\) formuliert werden.
     \vdash \Frankl{M}}{6,15}}
 
   \proofstep{1,2}{\Frankl{M}}{\rEE{4,5,16}}
+\end{tabproof}
+
+
+\subsection{Fall einer enthaltenen Zweiermenge}
+
+Wir betrachten nun den Fall, dass die Familie ein Glied \(\{a,b\}\)
+enthält. Lokal zerlegen wir \(M\) nach dem Auftreten von \(a\) und \(b\):
+\[
+\begin{array}{c|cc}
+ & b\text{ wird vermieden} & b\text{ wird enthalten}\\
+\midrule
+a\text{ vermieden} &
+M_{00}=\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b} &
+M_{01}=\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\\
+a\text{ enthalten} &
+M_{10}=\FamContaining{M}{a}\cap\FamAvoiding{M}{b} &
+M_{11}=\FamContaining{M}{a}\cap\FamContaining{M}{b}
+\end{array}
+\]
+Die Abbildung \(X\mapsto X\cup\{a,b\}\) injiziert \(M_{00}\) in
+\(M_{11}\). Die gemischten Klassen \(M_{01}\) und \(M_{10}\) sind als
+Teilmengen von \(M\) endlich. Gibt es eine Injektion
+\(M_{01}\to M_{10}\), so werden die beiden Zweige zu einer Injektion
+\(\FamAvoiding{M}{a}\to\FamContaining{M}{a}\) zusammengeführt; damit ist
+\(a\) halbhäufig. Gibt es keine solche Injektion, liefert der Vergleich
+endlicher Mengen eine Injektion \(M_{10}\to M_{01}\). Dann werden die
+Zweige analog zu einer Injektion
+\(\FamAvoiding{M}{b}\to\FamContaining{M}{b}\) zusammengeführt; damit ist
+\(b\) halbhäufig.
+
+\paragraph{Lokale Klassenrechnungen}
+
+\FormulaThmDeltaK[Zerlegung der \(a\)-vermeidenden Klassen im Zweierfall]{%
+  \begin{aligned}[t]
+  \FamAvoiding{M}{a}
+  &=
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cup
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairAvoidADecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}}{\rA}
+  \proofstep{1}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{1}}
+  \proofstep{}{b\in X\lor b\notin X}{\FormulaRefAuto{P \lor \neg P}}
+  \proofstep{4}{b\notin X}{\rA}
+  \proofstep{1,4}{X\in\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}%
+      {\rAI{\rAEa{2},4}}}
+  \proofstep{1,4}{X\in
+    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,5}}}
+  \proofstep{1,4}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{6}}
+  \proofstep{8}{b\in X}{\rA}
+  \proofstep{1,8}{X\in\FamContaining{M}{b}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}%
+      {\rAI{\rAEa{2},8}}}
+  \proofstep{1,8}{X\in
+    \FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,9}}}
+  \proofstep{1,8}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{10}}
+  \proofstep{1}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \rOE{3,8,11,4,7}}
+  \proofstep{}{\FamAvoiding{M}{a}\subseteq
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,12}}}}
+
+  \proofstep{14}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
+  \proofstep{14}{X\in
+    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}
+    \lor
+    X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{14}}
+  \proofstep{16}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{16}{X\in\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{16}}
+  \proofstep{18}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{\rA}
+  \proofstep{18}{X\in\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{18}}
+  \proofstep{14}{X\in\FamAvoiding{M}{a}}{\rOE{15,16,17,18,19}}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \subseteq \FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,20}}}}
+  \proofstep{}{
+    \FamAvoiding{M}{a}
+    =
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,21}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zerlegung der \(b\)-vermeidenden Klassen im Zweierfall]{%
+  \begin{aligned}[t]
+  \FamAvoiding{M}{b}
+  &=
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cup
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairAvoidBDecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{}{
+    \FamAvoiding{M}{b}
+    =
+    \bigl(\FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{b}\cap\FamContaining{M}{a}\bigr)}{%
+    \FormulaRefAuto{FranklPairAvoidADecomp}}
+  \proofstep{}{
+    \FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}
+    =
+    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{
+    \FamAvoiding{M}{b}\cap\FamContaining{M}{a}
+    =
+    \FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{
+    \FamAvoiding{M}{b}
+    =
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \rIE{2,\rIE{3,1}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Disjunktheit der \(a\)-vermeidenden Zweige]{%
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cap
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  =\varnothing
+}{FranklPairAvoidADisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
+  \proofstep{1}{X\in\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{2}}
+  \proofstep{1}{X\in\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
+  \proofstep{1}{b\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{4}}}
+  \proofstep{1}{b\in X}{%
+    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
+    \{X\in M\mid a\in X\}}{5}}}
+  \proofstep{1}{\bot}{\rBI{7,6}}
+  \proofstep{}{X\notin
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rCI{1,8}}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Disjunktheit der \(b\)-vermeidenden Zweige]{%
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cap
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  =\varnothing
+}{FranklPairAvoidBDisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
+  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{2}}
+  \proofstep{1}{X\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
+  \proofstep{1}{a\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{4}}}
+  \proofstep{1}{a\in X}{%
+    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
+    \{X\in M\mid a\in X\}}{5}}}
+  \proofstep{1}{\bot}{\rBI{7,6}}
+  \proofstep{}{X\notin
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rCI{1,8}}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zerlegung der \(a\)-enthaltenden Zielklassen]{%
+  \begin{aligned}[t]
+  \FamContaining{M}{a}
+  &=
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cup
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairContainADecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in\FamContaining{M}{a}}{\rA}
+  \proofstep{1}{X\in M\land a\in X}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{1}}
+  \proofstep{}{b\in X\lor b\notin X}{\FormulaRefAuto{P \lor \neg P}}
+  \proofstep{4}{b\in X}{\rA}
+  \proofstep{1,4}{X\in\FamContaining{M}{b}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}%
+      {\rAI{\rAEa{2},4}}}
+  \proofstep{1,4}{X\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,5}}}
+  \proofstep{1,4}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{6}}
+  \proofstep{8}{b\notin X}{\rA}
+  \proofstep{1,8}{X\in\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}%
+      {\rAI{\rAEa{2},8}}}
+  \proofstep{1,8}{X\in
+    \FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,9}}}
+  \proofstep{1,8}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{10}}
+  \proofstep{1}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \rOE{3,4,7,8,11}}
+  \proofstep{}{\FamContaining{M}{a}\subseteq
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,12}}}}
+
+  \proofstep{14}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{14}{X\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}
+    \lor
+    X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{14}}
+  \proofstep{16}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{\rA}
+  \proofstep{16}{X\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{16}}
+  \proofstep{18}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{18}{X\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{18}}
+  \proofstep{14}{X\in\FamContaining{M}{a}}{\rOE{15,16,17,18,19}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \subseteq \FamContaining{M}{a}}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,20}}}}
+  \proofstep{}{
+    \FamContaining{M}{a}
+    =
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,21}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zerlegung der \(b\)-enthaltenden Zielklassen]{%
+  \begin{aligned}[t]
+  \FamContaining{M}{b}
+  &=
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cup
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairContainBDecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{}{
+    \FamContaining{M}{b}
+    =
+    \bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)}{%
+    \FormulaRefAuto{FranklPairContainADecomp}}
+  \proofstep{}{
+    \FamContaining{M}{b}\cap\FamContaining{M}{a}
+    =
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{
+    \FamContaining{M}{b}\cap\FamAvoiding{M}{a}
+    =
+    \FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{
+    \FamContaining{M}{b}
+    =
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \rIE{2,\rIE{3,1}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Disjunktheit der \(a\)-enthaltenden Zielzweige]{%
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cap
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  =\varnothing
+}{FranklPairContainADisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
+  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
+  \proofstep{1}{X\in\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{2}}
+  \proofstep{1}{X\in\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
+  \proofstep{1}{b\in X}{%
+    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
+    \{X\in M\mid a\in X\}}{4}}}
+  \proofstep{1}{b\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{5}}}
+  \proofstep{1}{\bot}{\rBI{6,7}}
+  \proofstep{}{X\notin
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rCI{1,8}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Disjunktheit der \(b\)-enthaltenden Zielzweige]{%
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cap
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  =\varnothing
+}{FranklPairContainBDisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
+  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
+  \proofstep{1}{X\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{2}}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
+  \proofstep{1}{a\in X}{%
+    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
+    \{X\in M\mid a\in X\}}{4}}}
+  \proofstep{1}{a\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{5}}}
+  \proofstep{1}{\bot}{\rBI{6,7}}
+  \proofstep{}{X\notin
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rCI{1,8}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Endlichkeit der Klasse \(M_{01}\)]{%
+  \Finite{M}\vdash
+  \Finite{\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}
+}{FranklPairMixed01Finite}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{}{\FamAvoiding{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\subseteq M}}
+  \proofstep{}{\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\subseteq M}{%
+    \FormulaRefAuto{A\subseteq M \vdash A\cap B\subseteq M}{2}}
+  \proofstep{1}{\Finite{\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}}{%
+    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{3,1}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Endlichkeit der Klasse \(M_{10}\)]{%
+  \Finite{M}\vdash
+  \Finite{\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}
+}{FranklPairMixed10Finite}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{}{\FamContaining{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\subseteq M}}
+  \proofstep{}{\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\subseteq M}{%
+    \FormulaRefAuto{A\subseteq M \vdash A\cap B\subseteq M}{2}}
+  \proofstep{1}{\Finite{\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}}{%
+    \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{3,1}}
+\end{tabproof}
+
+\paragraph{Die Zweieradjunktion}
+
+\FormulaThmDeltaK[Zweiermenge ist zu zwei vermiedenen Elementen disjunkt]{%
+  a\notin X\dsep b\notin X\vdash X\cap\{a,b\}=\varnothing
+}{PairSetDisjointFromTwoAvoided}{%
+  \DeltaRow{Mengen}{X\dsep a\dsep b\dsep x}
+}
+\begin{tabproof}
+  \proofstep{1}{a\notin X}{\rA}
+  \proofstep{2}{b\notin X}{\rA}
+  \proofstep{3}{x\in X\cap\{a,b\}}{\rA}
+  \proofstep{3}{x\in X}{\FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
+  \proofstep{3}{x\in\{a,b\}}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
+  \proofstep{3}{x=a\lor x=b}{%
+    \FormulaRefAuto{\{A,B\} \coloneq
+    \iota C\bigl(\forall x\,(x \in C \leftrightarrow x = A \lor x = B)\bigr)}{5}}
+  \proofstep{7}{x=a}{\rA}
+  \proofstep{3,7}{a\in X}{\rIE{7,4}}
+  \proofstep{1,3,7}{\bot}{\rBI{8,1}}
+  \proofstep{10}{x=b}{\rA}
+  \proofstep{3,10}{b\in X}{\rIE{10,4}}
+  \proofstep{2,3,10}{\bot}{\rBI{11,2}}
+  \proofstep{1,2,3}{\bot}{\rOE{6,7,9,10,12}}
+  \proofstep{1,2}{x\notin X\cap\{a,b\}}{\rCI{3,13}}
+  \proofstep{1,2}{X\cap\{a,b\}=\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{14}}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Funktionsvorschrift der Zweieradjunktion]{%
+  X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\vdash
+  t_{U_{M,a,b}}(X)\coloneqq X\cup\{a,b\}
+}{FranklPairAdjTerm}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+
+\FormulaThmDeltaK[Funktionsvorschrift der Zweieradjunktion ist injektiv]{%
+  X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\dsep
+  Y\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\dsep
+  t_{U_{M,a,b}}(X)=t_{U_{M,a,b}}(Y)\vdash X=Y
+}{FranklPairAdjTermInjective}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a\dsep b}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{2}{Y\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{3}{t_{U_{M,a,b}}(X)=t_{U_{M,a,b}}(Y)}{\rA}
+  \proofstep{1}{X\in\FamAvoiding{M}{a}}{\FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
+  \proofstep{1}{X\in\FamAvoiding{M}{b}}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
+  \proofstep{2}{Y\in\FamAvoiding{M}{a}}{\FormulaRefAuto{x\in A\cap B\vdash x\in A}{2}}
+  \proofstep{2}{Y\in\FamAvoiding{M}{b}}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{2}}
+  \proofstep{1}{a\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{4}}}
+  \proofstep{1}{b\notin X}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{5}}}
+  \proofstep{2}{a\notin Y}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{6}}}
+  \proofstep{2}{b\notin Y}{%
+    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{7}}}
+  \proofstep{1}{X\cap\{a,b\}=\varnothing}{%
+    \FormulaRefAuto{PairSetDisjointFromTwoAvoided}{8,9}}
+  \proofstep{2}{Y\cap\{a,b\}=\varnothing}{%
+    \FormulaRefAuto{PairSetDisjointFromTwoAvoided}{10,11}}
+  \proofstep{1}{t_{U_{M,a,b}}(X)=X\cup\{a,b\}}{%
+    \FormulaRefAuto{FranklPairAdjTerm}{1}}
+  \proofstep{2}{t_{U_{M,a,b}}(Y)=Y\cup\{a,b\}}{%
+    \FormulaRefAuto{FranklPairAdjTerm}{2}}
+  \proofstep{1}{X\cup\{a,b\}=t_{U_{M,a,b}}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{14}}
+  \proofstep{1,3}{X\cup\{a,b\}=t_{U_{M,a,b}}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{16,3}}
+  \proofstep{1,2,3}{X\cup\{a,b\}=Y\cup\{a,b\}}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{17,15}}
+  \proofstep{1,2,3}{X=Y}{%
+    \FormulaRefAuto{UnionCancelDisjointRight}{12,13,18}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Typisierung der Zweieradjunktionsvorschrift]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\dsep
+  X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}
+  \vdash
+  t_{U_{M,a,b}}(X)\in
+  \FamContaining{M}{a}\cap\FamContaining{M}{b}
+}{FranklPairAdjTermTyped}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{3}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{3}{X\in\FamAvoiding{M}{a}}{\FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
+  \proofstep{3}{X\in M}{%
+    \rAEa{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{4}}}
+  \proofstep{1,2,3}{X\cup\{a,b\}\in M}{%
+    \FormulaRefAuto{Vereinigungsabgeschlossene Familie}{1,5,2}}
+  \proofstep{}{a\in\{a,b\}}{\FormulaRefAuto{a \in \{a,b\}}}
+  \proofstep{}{b\in\{a,b\}}{\FormulaRefAuto{b \in \{a,b\}}}
+  \proofstep{}{a\in X\cup\{a,b\}}{\FormulaRefAuto{z \in B \vdash z \in A \cup B}{7}}
+  \proofstep{}{b\in X\cup\{a,b\}}{\FormulaRefAuto{z \in B \vdash z \in A \cup B}{8}}
+  \proofstep{1,2,3}{X\cup\{a,b\}\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{\rAI{6,9}}}
+  \proofstep{1,2,3}{X\cup\{a,b\}\in\FamContaining{M}{b}}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{\rAI{6,10}}}
+  \proofstep{1,2,3}{X\cup\{a,b\}\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{11,12}}}
+  \proofstep{3}{t_{U_{M,a,b}}(X)=X\cup\{a,b\}}{%
+    \FormulaRefAuto{FranklPairAdjTerm}{3}}
+  \proofstep{1,2,3}{t_{U_{M,a,b}}(X)\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{\rIE{14,13}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Existenz der Zweieradjunktionsabbildung]{%
+  \begin{aligned}[t]
+  &\UnionClosedFam(M)\dsep \{a,b\}\in M\vdash{}\\
+  &\exists! U\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \to
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\,{}\\
+  &\forall X\in
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,
+  U(X)=t_{U_{M,a,b}}(X)
+  \end{aligned}
+}{FranklPairAdjExists}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{3}{X\in
+    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{3}{t_{U_{M,a,b}}(X)=X\cup\{a,b\}}{%
+    \FormulaRefAuto{FranklPairAdjTerm}{3}}
+  \proofstep{1,2,3}{t_{U_{M,a,b}}(X)\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{FranklPairAdjTermTyped}{1,2,3}}
+  \proofstep{1}{%
+    \begin{aligned}[t]
+    &\forall X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,{}\\
+    &t_{U_{M,a,b}}(X)=X\cup\{a,b\}
+    \end{aligned}}{\rUI{\rRI{3,4}}}
+  \proofstep{1,2}{%
+    \begin{aligned}[t]
+    &\forall X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,{}\\
+    &t_{U_{M,a,b}}(X)\in
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}
+    \end{aligned}}{\rUI{\rRI{3,5}}}
+  \proofstep{1,2}{%
+    \begin{aligned}[t]
+    &\exists! U\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \to
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\,{}\\
+    &\forall X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,
+    U(X)=t_{U_{M,a,b}}(X)
+    \end{aligned}}{%
+    \FormulaRefAuto{%
+      x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{6,7}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Zweieradjunktionsabbildung]{%
+  \begin{aligned}[t]
+  &\UnionClosedFam(M)\dsep \{a,b\}\in M\vdash{}\\
+  &U_{M,a,b}\coloneqq \iota U\Bigl(
+  U\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \to
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\land{}\\
+  &\qquad
+  \forall X\in
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,
+  U(X)=t_{U_{M,a,b}}(X)
+  \Bigr)
+  \end{aligned}
+}{FranklPairAdjDef}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U\dsep U_{M,a,b}}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+
+\FormulaThmDeltaK[Zweieradjunktionsabbildung ist Funktion]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\vdash
+  U_{M,a,b}\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \to
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+}{FranklPairAdjFunction}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{1,2}{U_{M,a,b}\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \to
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \rAEa{\FormulaRefAuto{FranklPairAdjDef}{1,2}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Auswertung der Zweieradjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\dsep
+  X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}
+  \vdash U_{M,a,b}(X)=t_{U_{M,a,b}}(X)
+}{FranklPairAdjEval}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{3}{X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{1,2}{%
+    \begin{aligned}[t]
+    &\forall X\in
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)\,{}\\
+    &U_{M,a,b}(X)=t_{U_{M,a,b}}(X)
+    \end{aligned}}{%
+    \rAEb{\FormulaRefAuto{FranklPairAdjDef}{1,2}}}
+  \proofstep{1,2,3}{U_{M,a,b}(X)=t_{U_{M,a,b}}(X)}{\rRE{3,\rUE{4}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zweieradjunktionsabbildung ist injektiv]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M
+  \vdash
+  U_{M,a,b}\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+}{FranklPairAdjInjection}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+  \DeltaRow{Funktionensymbol}{t_{U_{M,a,b}}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{1,2}{U_{M,a,b}\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \to
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{FranklPairAdjFunction}{1,2}}
+  \proofstep{4}{X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{5}{Y\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
+  \proofstep{6}{U_{M,a,b}(X)=U_{M,a,b}(Y)}{\rA}
+  \proofstep{4}{U_{M,a,b}(X)=t_{U_{M,a,b}}(X)}{%
+    \FormulaRefAuto{FranklPairAdjEval}{1,2,4}}
+  \proofstep{5}{U_{M,a,b}(Y)=t_{U_{M,a,b}}(Y)}{%
+    \FormulaRefAuto{FranklPairAdjEval}{1,2,5}}
+  \proofstep{4}{t_{U_{M,a,b}}(X)=U_{M,a,b}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstep{4,6}{t_{U_{M,a,b}}(X)=U_{M,a,b}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,6}}
+  \proofstep{4,5,6}{t_{U_{M,a,b}}(X)=t_{U_{M,a,b}}(Y)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,8}}
+  \proofstep{4,5,6}{X=Y}{%
+    \FormulaRefAuto{FranklPairAdjTermInjective}{4,5,11}}
+  \proofstep{1,2}{U_{M,a,b}\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{Injektive Funktion}{3,\rUI{\rRI{4,\rRI{5,\rRI{6,12}}}}}}
+\end{tabproof}
+
+\paragraph{Zusammenführung der Zweige}
+
+\FormulaThmDeltaK[Positiver Mischklassenfall liefert Frankl]{%
+  \begin{aligned}[t]
+  &\UnionClosedFam(M)\dsep \{a,b\}\in M\dsep a\in\bigcup M\dsep{}\\
+  &\exists F\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \vdash \Frankl{M}
+  \end{aligned}
+}{FranklPairPositiveBranch}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F\dsep H\dsep U_{M,a,b}}
+}
+\begin{tabproof}
+  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+  \proofstep{2}{\{a,b\}\in M}{\rA}
+  \proofstep{3}{a\in\bigcup M}{\rA}
+  \proofstep{4}{\exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{1,2}{U_{M,a,b}\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{FranklPairAdjInjection}{1,2}}
+
+  \proofstep{6}{F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\varnothing}{\FormulaRefAuto{FranklPairAvoidADisjoint}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\varnothing}{\FormulaRefAuto{FranklPairContainADisjoint}}
+  \proofstep{1,2,6}{\exists H\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{CaseFunDisjointTargetInjection}{7,8,5,6}}
+  \proofstep{10}{H\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{FranklPairAvoidADecomp}}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\FamContaining{M}{a}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{FranklPairContainADecomp}}}
+  \proofstep{10}{H\colon \FamAvoiding{M}{a}\inj\FamContaining{M}{a}}{%
+    \rIE{11,\rIE{12,10}}}
+  \proofstep{10}{\exists H\colon
+    \FamAvoiding{M}{a}\inj\FamContaining{M}{a}}{\rEI{13}}
+  \proofstep{3,10}{\HalfOcc{a}{M}}{%
+    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
+    a\in\bigcup M\land
+    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{3,14}}}
+  \proofstep{3,10}{\exists a\,\HalfOcc{a}{M}}{\rEI{15}}
+  \proofstep{3,10}{\Frankl{M}}{%
+    \FormulaRefAuto{\Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}}{16}}
+  \proofstep{1,2,3,6}{\Frankl{M}}{\rEE{9,10,17}}
+  \proofstep{1,2,3,4}{\Frankl{M}}{\rEE{4,6,18}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Negativer Mischklassenfall liefert Frankl]{%
+  \begin{aligned}[t]
+  &\Finite{M}\dsep \UnionClosedFam(M)\dsep
+  \{a,b\}\in M\dsep b\in\bigcup M\dsep{}\\
+  &\neg\exists F\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \vdash \Frankl{M}
+  \end{aligned}
+}{FranklPairNegativeBranch}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H\dsep U_{M,a,b}}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\UnionClosedFam(M)}{\rA}
+  \proofstep{3}{\{a,b\}\in M}{\rA}
+  \proofstep{4}{b\in\bigcup M}{\rA}
+  \proofstep{5}{\neg\exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{1}{\Finite{\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}}{%
+    \FormulaRefAuto{FranklPairMixed01Finite}{1}}
+  \proofstep{1}{\Finite{\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}}{%
+    \FormulaRefAuto{FranklPairMixed10Finite}{1}}
+  \proofstep{1,5}{\exists G\colon
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep
+    \neg\exists F\colon M\inj N
+    \vdash \exists G\colon N\inj M}{6,7,5}}
+  \proofstep{2,3}{U_{M,a,b}\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{FranklPairAdjInjection}{2,3}}
+
+  \proofstep{10}{G\colon
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cap
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\varnothing}{\FormulaRefAuto{FranklPairAvoidBDisjoint}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cap
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\varnothing}{\FormulaRefAuto{FranklPairContainBDisjoint}}
+  \proofstep{2,3,10}{\exists H\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
+    \FormulaRefAuto{CaseFunDisjointTargetInjection}{11,12,9,10}}
+  \proofstep{14}{H\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    =\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{FranklPairAvoidBDecomp}}}
+  \proofstep{}{
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \cup
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    =\FamContaining{M}{b}}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{FranklPairContainBDecomp}}}
+  \proofstep{14}{H\colon \FamAvoiding{M}{b}\inj\FamContaining{M}{b}}{%
+    \rIE{15,\rIE{16,14}}}
+  \proofstep{14}{\exists H\colon
+    \FamAvoiding{M}{b}\inj\FamContaining{M}{b}}{\rEI{17}}
+  \proofstep{4,14}{\HalfOcc{b}{M}}{%
+    \FormulaRefAuto{\HalfOcc{a}{M}\coloneqq
+    a\in\bigcup M\land
+    \exists F\colon \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{\rAI{4,18}}}
+  \proofstep{4,14}{\exists b\,\HalfOcc{b}{M}}{\rEI{19}}
+  \proofstep{4,14}{\Frankl{M}}{%
+    \FormulaRefAuto{\Frankl{M}\coloneqq \exists a\,\HalfOcc{a}{M}}{20}}
+  \proofstep{1,2,3,4,5,10}{\Frankl{M}}{\rEE{13,14,21}}
+  \proofstep{1,2,3,4,5}{\Frankl{M}}{\rEE{8,10,22}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Frankl-Vermutung bei enthaltener Zweiermenge]{%
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep a\neq b\dsep \{a,b\}\in M
+  \vdash \Frankl{M}
+}{FranklPairMemberFrankl}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{M}}{\rA}
+  \proofstep{2}{\UnionClosedFam(M)}{\rA}
+  \proofstep{3}{a\neq b}{\rA}
+  \proofstep{4}{\{a,b\}\in M}{\rA}
+  \proofstep{}{a\in\{a,b\}}{\FormulaRefAuto{a \in \{a,b\}}}
+  \proofstep{}{b\in\{a,b\}}{\FormulaRefAuto{b \in \{a,b\}}}
+  \proofstep{4}{a\in\bigcup M}{%
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{4,5}}
+  \proofstep{4}{b\in\bigcup M}{%
+    \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{4,6}}
+  \proofstep{}{
+    \exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \lor
+    \neg\exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
+    \FormulaRefAuto{P \lor \neg P}}
+
+  \proofstep{10}{\exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{2,4,7,10}{\Frankl{M}}{%
+    \FormulaRefAuto{FranklPairPositiveBranch}{2,4,7,10}}
+
+  \proofstep{12}{\neg\exists F\colon
+    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \inj
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
+  \proofstep{1,2,4,8,12}{\Frankl{M}}{%
+    \FormulaRefAuto{FranklPairNegativeBranch}{1,2,4,8,12}}
+
+  \proofstep{1,2,3,4}{\Frankl{M}}{\rOE{9,10,11,12,13}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Frankl-Familie mit enthaltener Zweiermenge erfüllt Frankl]{%
+  \FranklFam{M}\dsep
+  \exists a\,\exists b\,(a\neq b\land \{a,b\}\in M)
+  \vdash \Frankl{M}
+}{FranklFamPairMemberFrankl}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{1}{\FranklFam{M}}{\rA}
+  \proofstep{2}{\exists a\,\exists b\,(a\neq b\land \{a,b\}\in M)}{\rA}
+  \proofstep{1}{\Finite{M}}{\FormulaRefAuto{FranklFamFinite}{1}}
+  \proofstep{1}{\UnionClosedFam(M)}{\FormulaRefAuto{FranklFamUnionClosed}{1}}
+
+  \proofstep{5}{\exists b\,(a\neq b\land \{a,b\}\in M)}{\rA}
+  \proofstep{6}{a\neq b\land \{a,b\}\in M}{\rA}
+  \proofstep{6}{a\neq b}{\rAEa{6}}
+  \proofstep{6}{\{a,b\}\in M}{\rAEb{6}}
+  \proofstep{1,6}{\Frankl{M}}{%
+    \FormulaRefAuto{FranklPairMemberFrankl}{3,4,7,8}}
+  \proofstep{1,5}{\Frankl{M}}{\rEE{5,6,9}}
+  \proofstep{1,2}{\Frankl{M}}{\rEE{2,5,10}}
 \end{tabproof}
 
 
