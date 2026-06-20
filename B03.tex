@@ -3777,6 +3777,85 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
     {\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
 \end{tabproofwide}
 
+\paragraph{Zerlegungen durch relative Komplemente}
+
+Jedes Element von \(A\) liegt entweder in \(B\) oder nicht in \(B\).
+Im zweiten Fall liegt es wegen \(A\subseteq M\) im relativen Komplement
+\(M\setminus B\). Umgekehrt liegt jedes Element beider Teilstücke
+bereits in \(A\).
+
+\FormulaThmDeltaK[Zerlegung einer Teilmenge entlang eines relativen Komplements]{%
+  A\subseteq M\vdash
+  A=(A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)
+}{SubsetRelativeComplementDecomp}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep M\dsep x}
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq M}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{}{x\in B\lor x\notin B}{\FormulaRefAuto{P \lor \neg P}}
+  \proofstep{4}{x\in B}{\rA}
+  \proofstep{2,4}{x\in A\cap B}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,4}}}
+  \proofstep{2,4}{x\in (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
+    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{5}}
+  \proofstep{7}{x\notin B}{\rA}
+  \proofstep{1,2}{x\in M}{%
+    \FormulaRefAuto{A\subseteq B,\, x\in A\vdash x\in B}{1,2}}
+  \proofstep{1,2,7}{x\in M\setminus B}{%
+    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{\rAI{8,7}}}
+  \proofstep{1,2,7}{x\in A\cap(M\setminus B)}{%
+    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,9}}}
+  \proofstep{1,2,7}{x\in (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
+    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{10}}
+  \proofstep{1,2}{x\in (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
+    \rOE{3,4,6,7,11}}
+  \proofstep{1}{A\subseteq (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,12}}}}
+  \proofstep{14}{x\in (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{\rA}
+  \proofstep{14}{x\in A\cap B\lor x\in A\cap(M\setminus B)}{%
+    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{14}}
+  \proofstep{16}{x\in A\cap B}{\rA}
+  \proofstep{16}{x\in A}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{16}}
+  \proofstep{18}{x\in A\cap(M\setminus B)}{\rA}
+  \proofstep{18}{x\in A}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{18}}
+  \proofstep{14}{x\in A}{\rOE{15,16,17,18,19}}
+  \proofstep{}{(A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)\subseteq A}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,20}}}}
+  \proofstep{1}{A=(A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,21}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Disjunktheit der Zerlegung entlang eines relativen Komplements]{%
+  (A\cap B)\cap\bigl(A\cap(M\setminus B)\bigr)=\varnothing
+}{RelativeComplementDecompDisjoint}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep M\dsep x}
+}
+\begin{tabproof}
+  \proofstep{}{M\setminus B=M\setminus B}{\rII}
+  \proofstep{}{(M\setminus B)\cap B=\varnothing}{%
+    \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}{1}}
+  \proofstep{3}{x\in (A\cap B)\cap\bigl(A\cap(M\setminus B)\bigr)}{\rA}
+  \proofstep{3}{x\in A\cap B}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
+  \proofstep{3}{x\in A\cap(M\setminus B)}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
+  \proofstep{3}{x\in B}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{4}}
+  \proofstep{3}{x\in M\setminus B}{%
+    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{5}}
+  \proofstep{3}{x\notin M\setminus B}{%
+    \FormulaRefAuto{A \cap B = \varnothing,\ x \in B \vdash x \notin A}{2,6}}
+  \proofstep{3}{\bot}{\rBI{7,8}}
+  \proofstep{}{x\notin (A\cap B)\cap\bigl(A\cap(M\setminus B)\bigr)}{\rCI{3,9}}
+  \proofstep{}{(A\cap B)\cap\bigl(A\cap(M\setminus B)\bigr)=\varnothing}{%
+    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{10}}}
+\end{tabproof}
+
 \subsection{Eigenschaften in Bezug auf Teilmengen}
 
 \subsubsection{Elementare Teilmengenbeziehungen}
@@ -4094,6 +4173,52 @@ vermeiden.
   \proofstep{1}{X\in M}{\rAEa{2}}
   \proofstep{}{\FamAvoiding{M}{a}\subseteq M}{%
     \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,3}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Enthaltende Teilfamilie als relatives Komplement der vermeidenden Teilfamilie]{%
+  M\setminus\FamAvoiding{M}{a}=\FamContaining{M}{a}
+}{FamContainingAsAvoidingRelativeComplement}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Teilmengenfamilien}{\FamContaining{M}{a}\dsep \FamAvoiding{M}{a}}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in M\setminus\FamAvoiding{M}{a}}{\rA}
+  \proofstep{1}{X\in M\land X\notin\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{X\in M}{\rAEa{2}}
+  \proofstep{1}{X\notin\FamAvoiding{M}{a}}{\rAEb{2}}
+  \proofstep{5}{a\notin X}{\rA}
+  \proofstep{1,5}{X\in\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{Vermeidende Teilfamilie}{\rAI{3,5}}}
+  \proofstep{1,5}{\bot}{\rBI{6,4}}
+  \proofstep{1}{\neg(a\notin X)}{\rCI{5,7}}
+  \proofstep{1}{a\in X}{\FormulaRefAuto{rDN}{8}}
+  \proofstep{1}{X\in M\land a\in X}{\rAI{3,9}}
+  \proofstep{1}{X\in\FamContaining{M}{a}}{%
+    \FormulaRefAuto{Enthaltende Teilfamilie}{10}}
+  \proofstep{}{M\setminus\FamAvoiding{M}{a}\subseteq \FamContaining{M}{a}}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,11}}}}
+
+  \proofstep{13}{X\in\FamContaining{M}{a}}{\rA}
+  \proofstep{13}{X\in M\land a\in X}{%
+    \FormulaRefAuto{Enthaltende Teilfamilie}{13}}
+  \proofstep{13}{X\in M}{\rAEa{14}}
+  \proofstep{13}{a\in X}{\rAEb{14}}
+  \proofstep{17}{X\in\FamAvoiding{M}{a}}{\rA}
+  \proofstep{17}{X\in M\land a\notin X}{%
+    \FormulaRefAuto{Vermeidende Teilfamilie}{17}}
+  \proofstep{17}{a\notin X}{\rAEb{18}}
+  \proofstep{13,17}{\bot}{\rBI{16,19}}
+  \proofstep{13}{X\notin\FamAvoiding{M}{a}}{\rCI{17,20}}
+  \proofstep{13}{X\in M\land X\notin\FamAvoiding{M}{a}}{\rAI{15,21}}
+  \proofstep{13}{X\in M\setminus\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{22}}
+  \proofstep{}{\FamContaining{M}{a}\subseteq M\setminus\FamAvoiding{M}{a}}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{13,23}}}}
+  \proofstep{}{M\setminus\FamAvoiding{M}{a}=\FamContaining{M}{a}}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{12,24}}
 \end{tabproof}
 
 \FormulaThmDelta[Außenstehende Mengen sind nicht enthaltend]{%
@@ -9064,9 +9189,9 @@ dann für die eigentliche Funktion.
   \proofstep{2,3,4}{f[A]\cap g[B]=\varnothing}{%
     \FormulaRefAuto{DisjointTargetImagesDisjoint}{7,8,2}}
   \proofstep{3}{f\colon A\inj C\cup D}{%
-    \FormulaRefAuto{InjectiveCodomainExtension}{3,5}}
+    \FormulaRefAutoFwd{F\colon A\inj B\dsep B\subseteq C\vdash F\colon A\inj C}}
   \proofstep{4}{g\colon B\inj C\cup D}{%
-    \FormulaRefAuto{InjectiveCodomainExtension}{4,6}}
+    \FormulaRefAutoFwd{F\colon A\inj B\dsep B\subseteq C\vdash F\colon A\inj C}}
   \proofstep{1,2,3,4}{\CaseFun{A}{B}{f}{g}\colon A\cup B\inj C\cup D}{%
     \FormulaRefAuto{CaseFunInjectiveDisjointImages}{1,10,11,9}}
   \proofstep{1,2,3,4}{\exists h\colon A\cup B\inj C\cup D}{\rEI{12}}
@@ -26852,76 +26977,24 @@ Zweige analog zu einer Injektion
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}}{\rA}
-  \proofstep{1}{X\in M\land a\notin X}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}{1}}
-  \proofstep{}{b\in X\lor b\notin X}{\FormulaRefAuto{P \lor \neg P}}
-  \proofstep{4}{b\notin X}{\rA}
-  \proofstep{1,4}{X\in\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}%
-      {\rAI{\rAEa{2},4}}}
-  \proofstep{1,4}{X\in
-    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,5}}}
-  \proofstep{1,4}{X\in
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{6}}
-  \proofstep{8}{b\in X}{\rA}
-  \proofstep{1,8}{X\in\FamContaining{M}{b}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}%
-      {\rAI{\rAEa{2},8}}}
-  \proofstep{1,8}{X\in
-    \FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,9}}}
-  \proofstep{1,8}{X\in
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{10}}
-  \proofstep{1}{X\in
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \rOE{3,8,11,4,7}}
-  \proofstep{}{\FamAvoiding{M}{a}\subseteq
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,12}}}}
-
-  \proofstep{14}{X\in
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
-  \proofstep{14}{X\in
-    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}
-    \lor
-    X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{14}}
-  \proofstep{16}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
-  \proofstep{16}{X\in\FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{16}}
-  \proofstep{18}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{\rA}
-  \proofstep{18}{X\in\FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{18}}
-  \proofstep{14}{X\in\FamAvoiding{M}{a}}{\rOE{15,16,17,18,19}}
+  \proofstep{}{\FamAvoiding{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\subseteq M}}
   \proofstep{}{
+    \FamAvoiding{M}{a}
+    =
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \subseteq \FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,20}}}}
+    \bigl(\FamAvoiding{M}{a}\cap(M\setminus\FamAvoiding{M}{b})\bigr)}{%
+    \FormulaRefAuto{SubsetRelativeComplementDecomp}{1}}
+  \proofstep{}{M\setminus\FamAvoiding{M}{b}=\FamContaining{M}{b}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
   \proofstep{}{
     \FamAvoiding{M}{a}
     =
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cup
     \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,21}}
+    \rIE{3,2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Zerlegung der \(b\)-vermeidenden Klassen im Zweierfall]{%
@@ -26936,13 +27009,16 @@ Zweige analog zu einer Injektion
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
 \begin{tabproof}
+  \proofstep{}{\FamAvoiding{M}{b}\subseteq M}{%
+    \FormulaRefAuto{\FamAvoiding{M}{a}\subseteq M}}
   \proofstep{}{
     \FamAvoiding{M}{b}
     =
     \bigl(\FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}\bigr)
     \cup
     \bigl(\FamAvoiding{M}{b}\cap\FamContaining{M}{a}\bigr)}{%
-    \FormulaRefAuto{FranklPairAvoidADecomp}}
+    \rIE{\FormulaRefAuto{FamContainingAsAvoidingRelativeComplement},
+      \FormulaRefAuto{SubsetRelativeComplementDecomp}{1}}}
   \proofstep{}{
     \FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}
     =
@@ -26959,7 +27035,7 @@ Zweige analog zu einer Injektion
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cup
     \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \rIE{2,\rIE{3,1}}}
+    \rIE{3,\rIE{4,2}}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Disjunktheit der \(a\)-vermeidenden Zweige]{%
@@ -26971,35 +27047,20 @@ Zweige analog zu einer Injektion
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in
+  \proofstep{}{
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cap
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
-  \proofstep{1}{X\in\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{2}}
-  \proofstep{1}{X\in\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
-  \proofstep{1}{b\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{4}}}
-  \proofstep{1}{b\in X}{%
-    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{5}}}
-  \proofstep{1}{\bot}{\rBI{7,6}}
-  \proofstep{}{X\notin
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \cap
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rCI{1,8}}
+    \bigl(\FamAvoiding{M}{a}\cap(M\setminus\FamAvoiding{M}{b})\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{RelativeComplementDecompDisjoint}}
+  \proofstep{}{M\setminus\FamAvoiding{M}{b}=\FamContaining{M}{b}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
   \proofstep{}{
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cap
     \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
     =\varnothing}{%
-    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+    \rIE{2,1}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Disjunktheit der \(b\)-vermeidenden Zweige]{%
@@ -27011,35 +27072,35 @@ Zweige analog zu einer Injektion
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
 \begin{tabproof}
-  \proofstep{1}{X\in
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}\bigr)
     \cap
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
-  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{2}}
-  \proofstep{1}{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
-  \proofstep{1}{a\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{4}}}
-  \proofstep{1}{a\in X}{%
-    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{5}}}
-  \proofstep{1}{\bot}{\rBI{7,6}}
-  \proofstep{}{X\notin
-    \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \bigl(\FamAvoiding{M}{b}\cap(M\setminus\FamAvoiding{M}{a})\bigr)
+    =\varnothing}{%
+    \FormulaRefAuto{RelativeComplementDecompDisjoint}}
+  \proofstep{}{M\setminus\FamAvoiding{M}{a}=\FamContaining{M}{a}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
+  \proofstep{}{
+    \bigl(\FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}\bigr)
     \cap
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rCI{1,8}}
+    \bigl(\FamAvoiding{M}{b}\cap\FamContaining{M}{a}\bigr)
+    =\varnothing}{\rIE{2,1}}
+  \proofstep{}{
+    \FamAvoiding{M}{b}\cap\FamAvoiding{M}{a}
+    =
+    \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstep{}{
+    \FamAvoiding{M}{b}\cap\FamContaining{M}{a}
+    =
+    \FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
   \proofstep{}{
     \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     \cap
     \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
     =\varnothing}{%
-    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
+    \rIE{4,\rIE{5,3}}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Zerlegung der \(a\)-enthaltenden Zielklassen]{%
@@ -27053,78 +27114,40 @@ Zweige analog zu einer Injektion
 }{FranklPairContainADecomp}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
-\begin{tabproof}
-  \proofstep{1}{X\in\FamContaining{M}{a}}{\rA}
-  \proofstep{1}{X\in M\land a\in X}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}{1}}
-  \proofstep{}{b\in X\lor b\notin X}{\FormulaRefAuto{P \lor \neg P}}
-  \proofstep{4}{b\in X}{\rA}
-  \proofstep{1,4}{X\in\FamContaining{M}{b}}{%
-    \FormulaRefAuto{\FamContaining{M}{a}\coloneqq \{X\in M\mid a\in X\}}%
-      {\rAI{\rAEa{2},4}}}
-  \proofstep{1,4}{X\in
-    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,5}}}
-  \proofstep{1,4}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \FormulaRefAuto{z \in A \vdash z \in A \cup B}{6}}
-  \proofstep{8}{b\notin X}{\rA}
-  \proofstep{1,8}{X\in\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq \{X\in M\mid a\notin X\}}%
-      {\rAI{\rAEa{2},8}}}
-  \proofstep{1,8}{X\in
-    \FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{1,9}}}
-  \proofstep{1,8}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \FormulaRefAuto{z \in B \vdash z \in A \cup B}{10}}
-  \proofstep{1}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \rOE{3,4,7,8,11}}
-  \proofstep{}{\FamContaining{M}{a}\subseteq
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,12}}}}
-
-  \proofstep{14}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
-  \proofstep{14}{X\in
-    \FamContaining{M}{a}\cap\FamContaining{M}{b}
-    \lor
-    X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{14}}
-  \proofstep{16}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{\rA}
-  \proofstep{16}{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{16}}
-  \proofstep{18}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{\rA}
-  \proofstep{18}{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{18}}
-  \proofstep{14}{X\in\FamContaining{M}{a}}{\rOE{15,16,17,18,19}}
-  \proofstep{}{
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
+\begin{tabproofwide}
+  \proofstepwidestar{\FamContaining{M}{a}\subseteq M}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\subseteq M}}
+  \proofstepwide{\FamContaining{M}{a}}{=}{%
     \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    \subseteq \FamContaining{M}{a}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{14,20}}}}
-  \proofstep{}{
-    \FamContaining{M}{a}
-    =
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
     \cup
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{%
-    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{13,21}}
-\end{tabproof}
+    \bigl(\FamContaining{M}{a}\cap(M\setminus\FamAvoiding{M}{b})\bigr)}{%
+    \FormulaRefAuto{SubsetRelativeComplementDecomp}{1}}
+  \proofstepwidestar{M\setminus\FamAvoiding{M}{b}=\FamContaining{M}{b}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
+  \proofstepwide{\FamContaining{M}{a}}{=}{%
+    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \cup
+    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rIE{3,2}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \end{aligned}
+  }{%
+    \FormulaRefAuto{A \cup B = B \cup A}}
+  \proofstepwide{\FamContaining{M}{a}}{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \end{aligned}
+  }{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Zerlegung der \(b\)-enthaltenden Zielklassen]{%
   \begin{aligned}[t]
@@ -27137,32 +27160,50 @@ Zweige analog zu einer Injektion
 }{FranklPairContainBDecomp}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
-\begin{tabproof}
-  \proofstep{}{
-    \FamContaining{M}{b}
-    =
-    \bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)
-    \cup
-    \bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)}{%
-    \FormulaRefAuto{FranklPairContainADecomp}}
-  \proofstep{}{
-    \FamContaining{M}{b}\cap\FamContaining{M}{a}
-    =
+\begin{tabproofwide}
+  \proofstepwidestar{\FamContaining{M}{b}\subseteq M}{%
+    \FormulaRefAuto{\FamContaining{M}{a}\subseteq M}}
+  \proofstepwide{\FamContaining{M}{b}}{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{b}\cap(M\setminus\FamAvoiding{M}{a})\bigr)
+    \end{aligned}
+  }{%
+    \FormulaRefAuto{SubsetRelativeComplementDecomp}{1}}
+  \proofstepwidestar{M\setminus\FamAvoiding{M}{a}=\FamContaining{M}{a}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
+  \proofstepwide{\FamContaining{M}{b}}{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)
+    \end{aligned}
+  }{\rIE{3,2}}
+  \proofstepwide{\FamContaining{M}{b}\cap\FamContaining{M}{a}}{=}{%
     \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
     \FormulaRefAuto{A \cap B = B \cap A}}
-  \proofstep{}{
-    \FamContaining{M}{b}\cap\FamAvoiding{M}{a}
-    =
+  \proofstepwide{\FamContaining{M}{b}\cap\FamAvoiding{M}{a}}{=}{%
     \FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
     \FormulaRefAuto{A \cap B = B \cap A}}
-  \proofstep{}{
-    \FamContaining{M}{b}
-    =
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cup
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{%
-    \rIE{2,\rIE{3,1}}}
-\end{tabproof}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)
+    \end{aligned}
+  }{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)\\
+    &\cup\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)
+    \end{aligned}
+  }{%
+    \FormulaRefAuto{A \cup B = B \cup A}}
+  \proofstepwide{\FamContaining{M}{b}}{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cup\bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{%
+    \rIE{5,\rIE{6,\rIE{7,4}}}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Disjunktheit der \(a\)-enthaltenden Zielzweige]{%
   \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
@@ -27172,37 +27213,40 @@ Zweige analog zu einer Injektion
 }{FranklPairContainADisjoint}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
-\begin{tabproof}
-  \proofstep{1}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rA}
-  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
-  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
-  \proofstep{1}{X\in\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{2}}
-  \proofstep{1}{X\in\FamAvoiding{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{3}}
-  \proofstep{1}{b\in X}{%
-    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{4}}}
-  \proofstep{1}{b\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{5}}}
-  \proofstep{1}{\bot}{\rBI{6,7}}
-  \proofstep{}{X\notin
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)}{\rCI{1,8}}
-  \proofstep{}{
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
-    =\varnothing}{%
-    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
-\end{tabproof}
+\begin{tabproofwide}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap(M\setminus\FamAvoiding{M}{b})\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{%
+    \FormulaRefAuto{RelativeComplementDecompDisjoint}}
+  \proofstepwidestar{M\setminus\FamAvoiding{M}{b}=\FamContaining{M}{b}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{\rIE{2,1}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \end{aligned}
+  }{\FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{\rIE{4,3}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Disjunktheit der \(b\)-enthaltenden Zielzweige]{%
   \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
@@ -27212,37 +27256,56 @@ Zweige analog zu einer Injektion
 }{FranklPairContainBDisjoint}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
 }
-\begin{tabproof}
-  \proofstep{1}{X\in
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rA}
-  \proofstep{1}{X\in\FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{1}}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in B}{1}}
-  \proofstep{1}{X\in\FamContaining{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{2}}
-  \proofstep{1}{X\in\FamAvoiding{M}{a}}{%
-    \FormulaRefAuto{x\in A\cap B\vdash x\in A}{3}}
-  \proofstep{1}{a\in X}{%
-    \rAEb{\FormulaRefAuto{\FamContaining{M}{a}\coloneqq
-    \{X\in M\mid a\in X\}}{4}}}
-  \proofstep{1}{a\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{5}}}
-  \proofstep{1}{\bot}{\rBI{6,7}}
-  \proofstep{}{X\notin
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)}{\rCI{1,8}}
-  \proofstep{}{
-    \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
-    \cap
-    \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
-    =\varnothing}{%
-    \FormulaRefAuto{\forall x\, x\notin A\vdash A=\varnothing}{\rUI{9}}}
-\end{tabproof}
+\begin{tabproofwide}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{b}\cap(M\setminus\FamAvoiding{M}{a})\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{%
+    \FormulaRefAuto{RelativeComplementDecompDisjoint}}
+  \proofstepwidestar{M\setminus\FamAvoiding{M}{a}=\FamContaining{M}{a}}{%
+    \FormulaRefAuto{FamContainingAsAvoidingRelativeComplement}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{b}\cap\FamAvoiding{M}{a}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{b}\cap\FamContaining{M}{a}\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{\rIE{2,1}}
+  \proofstepwidestar{
+    \FamContaining{M}{b}\cap\FamAvoiding{M}{a}
+    =
+    \FamAvoiding{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstepwidestar{
+    \FamContaining{M}{b}\cap\FamContaining{M}{a}
+    =
+    \FamContaining{M}{a}\cap\FamContaining{M}{b}}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{\rIE{4,\rIE{5,3}}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{\FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstepwide{%
+    \begin{aligned}[t]
+    &\bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)\\
+    &\cap\bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+    \end{aligned}
+  }{=}{\varnothing}{\rIE{7,6}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Endlichkeit der Klasse \(M_{01}\)]{%
   \Finite{M}\vdash
