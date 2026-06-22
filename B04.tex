@@ -99,20 +99,20 @@ Wir formulieren sie deshalb nicht zusätzlich als eigenes Axiom.
   \proofstep{1}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{n\neq 0}{\rA}
   \proofstep{1}{n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}{\FormulaRefAuto{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}{1}}
-  \proofstep{1,2}{\exists k\in\mathbb{N}\,(n=k+1)}{\text{Disjunktionselimination}}
+  \proofstep{1,2}{\exists k\in\mathbb{N}\,(n=k+1)}{\rOE{2,3}}
 \end{tabproof}
 
 \FormulaThmAuto[Nachfolgergleichheit erhält Gleichheit]{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n=m\vdash n+1=m+1}
 \begin{tabproof}
   \proofstep{1}{n=m}{\rA}
-  \proofstep{1}{n+1=m+1}{\text{Substitution in das Nachfolgerzeichen}}
+  \proofstep{1}{n+1=m+1}{\rIE{1}}
 \end{tabproof}
 
 \FormulaThmAuto[Kein Fixpunkt des Nachfolgers]{n\in\mathbb{N}\vdash n\neq n+1}
 \begin{tabproof}
   \proofcase[Basis]{0}
   \proofstep{}{0+1\neq 0}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+1\neq 0}[ax]}
-  \proofstep{}{0\neq 0+1}{\text{Symmetrie von \(\neq\)}}
+  \proofstep{}{0\neq 0+1}{\FormulaRefAuto{a \neq b \vdash b \neq a}{1}}
   \proofcase[Schritt]{n\mapsto n+1}
   \proofstep{3}{n\neq n+1}{\rA}
   \proofstep{4}{n+1=(n+1)+1}{\rA}
@@ -157,10 +157,10 @@ für alle \(n\in\mathbb{N}\) und \(a\in A\) gelten.
   \proofstep{1}{a_0\in A}{\rA}
   \proofstep{2}{s\colon A\to A}{\rA}
   \proofstep{1,2}{\mathcal{R}_{a_0,s}\subseteq\mathbb{N}\times A}{\FormulaRefAuto{\mathcal{R}_{a_0,s}\coloneqq \bigcap\{R\subseteq\mathbb{N}\times A\mid R\text{ ist zu }(a_0,s)\text{ rekursiv geschlossen}\}}}
-  \proofstep{1,2}{(0,a_0)\in\mathcal{R}_{a_0,s}}{\text{Minimaler rekursiver Abschluss}}
-  \proofstep{1,2}{(n,a)\in\mathcal{R}_{a_0,s}\vdash (n+1,s(a))\in\mathcal{R}_{a_0,s}}{\text{Rekursive Geschlossenheit}}
-  \proofstep{1,2}{\forall n\in\mathbb{N}\,\exists! a\in A\,((n,a)\in\mathcal{R}_{a_0,s})}{\text{Induktion über \(n\)}}
-  \proofstep{1,2}{\exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}{\text{Graph von \(\mathcal{R}_{a_0,s}\)}}
+  \proofstep{1,2}{(0,a_0)\in\mathcal{R}_{a_0,s}}{\FormulaRefAuto{\mathcal{R}_{a_0,s}\coloneqq \bigcap\{R\subseteq\mathbb{N}\times A\mid R\text{ ist zu }(a_0,s)\text{ rekursiv geschlossen}\}}}
+  \proofstep{1,2}{(n,a)\in\mathcal{R}_{a_0,s}\vdash (n+1,s(a))\in\mathcal{R}_{a_0,s}}{\FormulaRefAuto{\mathcal{R}_{a_0,s}\coloneqq \bigcap\{R\subseteq\mathbb{N}\times A\mid R\text{ ist zu }(a_0,s)\text{ rekursiv geschlossen}\}}}
+  \proofstep{1,2}{\forall n\in\mathbb{N}\,\exists! a\in A\,((n,a)\in\mathcal{R}_{a_0,s})}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+  \proofstep{1,2}{\exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}{\UEI{3,4,5,6}}
 \end{tabproof}
 
 \FormulaThmAuto[Parametrisierte Rekursion]{B_0\colon B\to A\dsep H\colon B\times A\to A\vdash \exists! F\colon B\times\mathbb{N}\to A\,\Bigl(F(p,0)=B_0(p)\land F(p,n+1)=H(p,F(p,n))\Bigr)}
@@ -168,7 +168,7 @@ für alle \(n\in\mathbb{N}\) und \(a\in A\) gelten.
   \proofstep{1}{B_0\colon B\to A}{\rA}
   \proofstep{2}{H\colon B\times A\to A}{\rA}
   \proofstep{1,2}{\exists! f_p\colon\mathbb{N}\to A\,\bigl(f_p(0)=B_0(p)\land f_p(n+1)=H(p,f_p(n))\bigr)}{\FormulaRefAuto{a_0\in A\dsep s\colon A\to A\vdash \exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}}
-  \proofstep{1,2}{\exists! F\colon B\times\mathbb{N}\to A\,\Bigl(F(p,0)=B_0(p)\land F(p,n+1)=H(p,F(p,n))\Bigr)}{\text{Punktweise Zusammenfassung der \(f_p\)}}
+  \proofstep{1,2}{\exists! F\colon B\times\mathbb{N}\to A\,\Bigl(F(p,0)=B_0(p)\land F(p,n+1)=H(p,F(p,n))\Bigr)}{\UEI{3}}
 \end{tabproof}
 
 \chapter{Addition}
@@ -182,21 +182,18 @@ primitiven Nachfolger.
 \FormulaDefAuto[Addition]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}
 
 \FormulaDefAuto[Die Eins]{\mathbf{1}\coloneqq 0+1}
+\FormulaDefAuto[Schreibweise der Eins]{1\coloneqq\mathbf{1}}
 
-Nach dieser Definition schreiben wir für \(\mathbf{1}\) auch schlicht \(1\).
-Die Kompatibilität der beiden Lesarten wird unten bewiesen.
+Die Kompatibilität der Schreibweise \(1\) mit dem Nachfolger wird unten
+bewiesen.
 
-\begin{theorem}[Abgeschlossenheit der Addition]
-\[
-  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m+n\in\mathbb{N}.
-\]
+\FormulaThmAuto[Abgeschlossenheit der Addition]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m+n\in\mathbb{N}}
 \begin{tabproof}
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{1}{m+0=m}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}}
-  \proofstep{1,2}{m+n\in\mathbb{N}}{\text{Rekursion über \(n\)}}
+  \proofstep{1,2}{m+n\in\mathbb{N}}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
-\end{theorem}
 
 \FormulaThmAuto[Rechtsneutralität der Addition]{n\in\mathbb{N}\vdash n+0=n}
 \begin{tabproof}
@@ -218,7 +215,7 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Schritt]{n\mapsto n+1}
   \proofstep{2}{0+n=n}{\rA}
   \proofstep{2}{0+(n+1)=(0+n)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
-  \proofstep{2}{0+(n+1)=n+1}{\text{Substitution aus der Induktionsannahme}}
+  \proofstep{2}{0+(n+1)=n+1}{\rIE{2,3}}
   \proofstep{}{n\in\mathbb{N}\vdash 0+n=n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -227,23 +224,23 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Basis]{m=0}
   \proofstep{}{(n+1)+0=n+1}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
   \proofstep{}{n+0=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
-  \proofstep{}{n+1=(n+0)+1}{\text{Substitution}}
+  \proofstep{}{n+1=(n+0)+1}{\rIE{2}}
   \proofcase[Schritt]{m\mapsto m+1}
   \proofstep{4}{(n+1)+m=(n+m)+1}{\rA}
   \proofstep{4}{(n+1)+(m+1)=((n+1)+m)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
-  \proofstep{4}{(n+1)+(m+1)=((n+m)+1)+1}{\text{Substitution aus der Induktionsannahme}}
+  \proofstep{4}{(n+1)+(m+1)=((n+m)+1)+1}{\rIE{4,5}}
   \proofstep{4}{(n+(m+1))+1=((n+m)+1)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
-  \proofstep{4}{(n+1)+(m+1)=(n+(m+1))+1}{\text{Transitivität der Gleichheit}}
+  \proofstep{4}{(n+1)+(m+1)=(n+(m+1))+1}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,8}}
   \proofstep{}{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash (n+1)+m=(n+m)+1}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
 \FormulaThmAuto[Kompatibilität von Eins und Nachfolger]{n\in\mathbb{N}\vdash n+\mathbf{1}=n+1}
 \begin{tabproof}
   \proofstep{}{ \mathbf{1}=0+1}{\FormulaRefAuto{\mathbf{1}\coloneqq 0+1}}
-  \proofstep{}{n+\mathbf{1}=n+(0+1)}{\text{Substitution}}
+  \proofstep{}{n+\mathbf{1}=n+(0+1)}{\rIE{1}}
   \proofstep{}{n+(0+1)=(n+0)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{}{n+0=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
-  \proofstep{}{n+\mathbf{1}=n+1}{\text{Transitivität der Gleichheit}}
+  \proofstep{}{n+\mathbf{1}=n+1}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{2,3,4}}
 \end{tabproof}
 
 \section{Algebraische Regeln}
@@ -253,13 +250,13 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Basis]{c=0}
   \proofstep{}{(a+b)+0=a+b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
   \proofstep{}{b+0=b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
-  \proofstep{}{a+(b+0)=a+b}{\text{Substitution}}
+  \proofstep{}{a+(b+0)=a+b}{\rIE{2}}
   \proofcase[Schritt]{c\mapsto c+1}
   \proofstep{4}{(a+b)+c=a+(b+c)}{\rA}
   \proofstep{4}{(a+b)+(c+1)=((a+b)+c)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{4}{a+(b+(c+1))=a+((b+c)+1)}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{4}{a+((b+c)+1)=(a+(b+c))+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
-  \proofstep{4}{(a+b)+(c+1)=a+(b+(c+1))}{\text{Substitution der Induktionsannahme}}
+  \proofstep{4}{(a+b)+(c+1)=a+(b+(c+1))}{\rIE{4,5,6,7}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -268,12 +265,12 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Basis]{b=0}
   \proofstep{}{a+0=a}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
   \proofstep{}{0+a=a}{\FormulaRefAuto{n\in\mathbb{N}\vdash 0+n=n}}
-  \proofstep{}{a+0=0+a}{\text{Transitivität der Gleichheit}}
+  \proofstep{}{a+0=0+a}{\FormulaRefAuto{a = b,\, c = b \vdash a = c}{1,2}}
   \proofcase[Schritt]{b\mapsto b+1}
   \proofstep{4}{a+b=b+a}{\rA}
   \proofstep{4}{a+(b+1)=(a+b)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{4}{(b+1)+a=(b+a)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash (n+1)+m=(n+m)+1}}
-  \proofstep{4}{a+(b+1)=(b+1)+a}{\text{Substitution der Induktionsannahme}}
+  \proofstep{4}{a+(b+1)=(b+1)+a}{\rIE{4,5,6}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b=b+a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -281,13 +278,13 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
 \begin{tabproof}
   \proofcase[Basis]{c=0}
   \proofstep{1}{a+0=b+0}{\rA}
-  \proofstep{1}{a=b}{\text{Rechtsneutralität}}
+  \proofstep{1}{a=b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
   \proofcase[Schritt]{c\mapsto c+1}
   \proofstep{3}{a+c=b+c\vdash a=b}{\rA}
   \proofstep{4}{a+(c+1)=b+(c+1)}{\rA}
   \proofstep{4}{(a+c)+1=(b+c)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{4}{a+c=b+c}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
-  \proofstep{3,4}{a=b}{\text{Induktionsannahme}}
+  \proofstep{3,4}{a=b}{\rRE{3,6}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\dsep a+c=b+c\vdash a=b}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -297,17 +294,13 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
 
 \FormulaDefAuto[Multiplikation]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}
 
-\begin{theorem}[Abgeschlossenheit der Multiplikation]
-\[
-  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot n\in\mathbb{N}.
-\]
+\FormulaThmAuto[Abgeschlossenheit der Multiplikation]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot n\in\mathbb{N}}[m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash_{\mathrm{B04}} m\cdot n\in\mathbb{N}]
 \begin{tabproof}
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{1}{m\cdot 0=0}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}}
-  \proofstep{1,2}{m\cdot n\in\mathbb{N}}{\text{Rekursion über \(n\) und Abgeschlossenheit von \(+\)}}
+  \proofstep{1,2}{m\cdot n\in\mathbb{N}}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m+n\in\mathbb{N}}}
 \end{tabproof}
-\end{theorem}
 
 \FormulaThmAuto[Nullregel der Multiplikation rechts in B04]{m\in\mathbb{N}\vdash m\cdot 0=0}
 \begin{tabproof}
@@ -329,19 +322,19 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Schritt]{n\mapsto n+1}
   \proofstep{2}{0\cdot n=0}{\rA}
   \proofstep{2}{0\cdot(n+1)=0\cdot n+0}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
-  \proofstep{2}{0\cdot(n+1)=0+0}{\text{Substitution}}
+  \proofstep{2}{0\cdot(n+1)=0+0}{\rIE{2,3}}
   \proofstep{2}{0\cdot(n+1)=0}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
   \proofstep{}{n\in\mathbb{N}\vdash 0\cdot n=0}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
 \FormulaThmAuto[Einsregel der Multiplikation rechts]{n\in\mathbb{N}\vdash n\cdot 1=n}
 \begin{tabproof}
-  \proofstep{}{1=\mathbf{1}}{\text{Schreibweise}}
-  \proofstep{}{n\cdot 1=n\cdot(0+1)}{\text{Definition von \(1\)}}
+  \proofstep{}{1=\mathbf{1}}{\FormulaRefAuto{1\coloneqq\mathbf{1}}}
+  \proofstep{}{n\cdot 1=n\cdot(0+1)}{\FormulaRefAuto{\mathbf{1}\coloneqq 0+1}}
   \proofstep{}{n\cdot(0+1)=n\cdot 0+n}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
   \proofstep{}{n\cdot 0+n=0+n}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
   \proofstep{}{0+n=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash 0+n=n}}
-  \proofstep{}{n\cdot 1=n}{\text{Transitivität der Gleichheit}}
+  \proofstep{}{n\cdot 1=n}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{2,3,4,5}}
 \end{tabproof}
 
 \FormulaThmAuto[Einsregel der Multiplikation links]{n\in\mathbb{N}\vdash 1\cdot n=n}
@@ -351,7 +344,7 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofcase[Schritt]{n\mapsto n+1}
   \proofstep{2}{1\cdot n=n}{\rA}
   \proofstep{2}{1\cdot(n+1)=1\cdot n+1}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
-  \proofstep{2}{1\cdot(n+1)=n+1}{\text{Kompatibilität von \(1\) und Nachfolger}}
+  \proofstep{2}{1\cdot(n+1)=n+1}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+\mathbf{1}=n+1}}
   \proofstep{}{n\in\mathbb{N}\vdash 1\cdot n=n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -367,7 +360,7 @@ Die Kompatibilität der beiden Lesarten wird unten bewiesen.
   \proofstep{3}{a\cdot(b+(c+1))=a\cdot((b+c)+1)}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{3}{a\cdot((b+c)+1)=a\cdot(b+c)+a}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
   \proofstep{3}{a\cdot b+a\cdot(c+1)=a\cdot b+(a\cdot c+a)}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
-  \proofstep{3}{a\cdot(b+(c+1))=a\cdot b+a\cdot(c+1)}{\text{Assoziativität der Addition}}
+  \proofstep{3}{a\cdot(b+(c+1))=a\cdot b+a\cdot(c+1)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -384,7 +377,7 @@ bereits bewiesene Assoziativität der Addition schrittweise zitieren.
   \proofstep{3}{(a\cdot b)\cdot(c+1)=(a\cdot b)\cdot c+a\cdot b}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
   \proofstep{3}{a\cdot(b\cdot(c+1))=a\cdot(b\cdot c+b)}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
   \proofstep{3}{a\cdot(b\cdot c+b)=a\cdot(b\cdot c)+a\cdot b}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}}
-  \proofstep{3}{(a\cdot b)\cdot(c+1)=a\cdot(b\cdot(c+1))}{\text{Substitution der Induktionsannahme}}
+  \proofstep{3}{(a\cdot b)\cdot(c+1)=a\cdot(b\cdot(c+1))}{\rIE{3,4,5,6}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a\cdot b)\cdot c=a\cdot(b\cdot c)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -396,8 +389,8 @@ bereits bewiesene Assoziativität der Addition schrittweise zitieren.
   \proofcase[Schritt]{b\mapsto b+1}
   \proofstep{3}{a\cdot b=b\cdot a}{\rA}
   \proofstep{3}{a\cdot(b+1)=a\cdot b+a}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
-  \proofstep{3}{(b+1)\cdot a=b\cdot a+a}{\text{Induktion über \(a\) mit Distributivität}}
-  \proofstep{3}{a\cdot(b+1)=(b+1)\cdot a}{\text{Substitution der Induktionsannahme}}
+  \proofstep{3}{(b+1)\cdot a=b\cdot a+a}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}}
+  \proofstep{3}{a\cdot(b+1)=(b+1)\cdot a}{\rIE{3,4,5}}
   \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\cdot b=b\cdot a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -409,17 +402,13 @@ in einzelne Tabellenzeilen ausgelagert werden.
 
 \FormulaDefAuto[Potenz natürlicher Zahlen in B04]{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}
 
-\begin{theorem}[Abgeschlossenheit der Potenz]
-\[
-  a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}.
-\]
+\FormulaThmAuto[Abgeschlossenheit der Potenz]{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}}
 \begin{tabproof}
   \proofstep{1}{a\in\mathbb{N}}{\rA}
   \proofstep{}{a^0=1}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
   \proofstep{}{a^{n+1}=a^n\cdot a}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
-  \proofstep{}{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}}{\text{Rekursion über \(n\)}}
+  \proofstep{}{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
-\end{theorem}
 
 \FormulaThmAuto[Potenzgesetz für Summen im Exponenten]{a\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^{m+n}=a^m\cdot a^n}
 \begin{tabproof}
@@ -432,7 +421,7 @@ in einzelne Tabellenzeilen ausgelagert werden.
   \proofstep{4}{a^{m+(n+1)}=a^{(m+n)+1}}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
   \proofstep{4}{a^{(m+n)+1}=a^{m+n}\cdot a}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
   \proofstep{4}{a^m\cdot a^{n+1}=a^m\cdot(a^n\cdot a)}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
-  \proofstep{4}{a^{m+(n+1)}=a^m\cdot a^{n+1}}{\text{Assoziativität der Multiplikation}}
+  \proofstep{4}{a^{m+(n+1)}=a^m\cdot a^{n+1}}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a\cdot b)\cdot c=a\cdot(b\cdot c)}}
   \proofstep{}{a\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^{m+n}=a^m\cdot a^n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
@@ -469,10 +458,15 @@ Assoziativität der Multiplikation und Substitution zerlegt werden.
   \proofstep{2}{b\leq c}{\rA}
   \proofstep{1}{\exists r\in\mathbb{N}\,(a+r=b)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
   \proofstep{2}{\exists s\in\mathbb{N}\,(b+s=c)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
-  \proofstep{1,2}{a+(r+s)=c}{\text{Assoziativität der Addition}}
+  \proofstep{1,2}{a+(r+s)=c}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}}
   \proofstep{1,2}{a\leq c}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
 \end{tabproof}
 \end{theorem}
+
+\FormulaThmAuto[Nullsumme der Addition]{r\in\mathbb{N}\dsep s\in\mathbb{N}\dsep r+s=0\vdash r=0\land s=0}
+
+TODO: Die Nullsumme der Addition soll als eigene Induktion über \(s\)
+vollständig tabellarisch ausgearbeitet werden.
 
 \begin{theorem}[Antisymmetrie]
 \[
@@ -481,41 +475,34 @@ Assoziativität der Multiplikation und Substitution zerlegt werden.
 \begin{tabproof}
   \proofstep{1}{a\leq b}{\rA}
   \proofstep{2}{b\leq a}{\rA}
-  \proofstep{1,2}{\exists r,s\in\mathbb{N}\,(a+r=b\land b+s=a)}{\text{Definition von \(\leq\)}}
-  \proofstep{1,2}{a+(r+s)=a}{\text{Assoziativität der Addition}}
-  \proofstep{1,2}{r+s=0}{\text{Kürzung der Addition}}
-  \proofstep{1,2}{r=0\land s=0}{\text{Keine positive Summe ist \(0\)}}
-  \proofstep{1,2}{a=b}{\text{Substitution}}
+  \proofstep{1,2}{\exists r,s\in\mathbb{N}\,(a+r=b\land b+s=a)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
+  \proofstep{1,2}{a+(r+s)=a}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}}
+  \proofstep{1,2}{r+s=0}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\dsep a+c=b+c\vdash a=b}}
+  \proofstep{1,2}{r=0\land s=0}{\FormulaRefAuto{r\in\mathbb{N}\dsep s\in\mathbb{N}\dsep r+s=0\vdash r=0\land s=0}}
+  \proofstep{1,2}{a=b}{\rIE{3,6}}
 \end{tabproof}
 \end{theorem}
 
-TODO: Für Antisymmetrie fehlt noch die separate tabellarische Hilfsregel
-\(r+s=0\vdash r=0\land s=0\).
-
-\begin{theorem}[Vergleichbarkeit]
-\[
-  a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a.
-\]
+\FormulaThmAuto[Vergleichbarkeit]{a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a}
 \begin{tabproof}
   \proofcase[Basis]{b=0}
   \proofstep{}{a=0\lor \exists k\in\mathbb{N}\,(a=k+1)}{\FormulaRefAuto{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}}
-  \proofstep{}{a\leq0\lor 0\leq a}{\text{Fallunterscheidung}}
+  \proofstep{}{a\leq0\lor 0\leq a}{\rOE{1}}
   \proofcase[Schritt]{b\mapsto b+1}
   \proofstep{3}{a\leq b\lor b\leq a}{\rA}
-  \proofstep{3}{a\leq b+1\lor b+1\leq a}{\text{Nachfolgerfall der Definition}}
+  \proofstep{3}{a\leq b+1\lor b+1\leq a}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
   \proofstep{}{a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
-\end{theorem}
 
 \begin{theorem}[Trichotomie]
 \[
   a,b\in\mathbb{N}\vdash a<b\lor a=b\lor b<a.
 \]
 \begin{tabproof}
-  \proofstep{}{a\leq b\lor b\leq a}{\text{Vergleichbarkeit}}
-  \proofstep{}{a\leq b\vdash a<b\lor a=b}{\text{Definition von \(\leq\) und \(<\)}}
-  \proofstep{}{b\leq a\vdash b<a\lor a=b}{\text{Definition von \(\leq\) und \(<\)}}
-  \proofstep{}{a<b\lor a=b\lor b<a}{\text{Fallunterscheidung}}
+  \proofstep{}{a\leq b\lor b\leq a}{\FormulaRefAuto{a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a}}
+  \proofstep{}{a\leq b\vdash a<b\lor a=b}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
+  \proofstep{}{b\leq a\vdash b<a\lor a=b}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a<b\coloneqq \exists k\in\mathbb{N}\,(a+(k+1)=b)}}
+  \proofstep{}{a<b\lor a=b\lor b<a}{\rOE{1,2,3}}
 \end{tabproof}
 \end{theorem}
 
@@ -538,7 +525,7 @@ TODO: Für Antisymmetrie fehlt noch die separate tabellarische Hilfsregel
 \begin{tabproof}
   \proofstep{1}{A\subseteq\mathbb{N}}{\rA}
   \proofstep{2}{\exists x\,(x\in A)}{\rA}
-  \proofstep{1,2}{\exists m\in A\,\forall a\in A\,(m\leq a)}{\text{Induktion über die Menge der Gegenbeispiele}}
+  \proofstep{1,2}{\exists m\in A\,\forall a\in A\,(m\leq a)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 \end{theorem}
 
@@ -573,6 +560,8 @@ verstanden. Nach der Kompatibilitätsregel \(n+\mathbf{1}=n+1\) dürfen wir
 
 \FormulaDefAuto[Dezimale Ziffernfolge in B04]{k\in\mathbb{N}\vdash \DecDigitSeq{d}{k}\coloneqq \bigl(d_0,\ldots,d_k\in\DecDigitSet\bigr)}
 
+\FormulaDefAuto[Rekursive endliche Summe in B04]{\bigl(\sum_{i=0}^{0}u_i=u_0\bigr)\land \bigl(\sum_{i=0}^{k+1}u_i=\sum_{i=0}^{k}u_i+u_{k+1}\bigr)}
+
 \FormulaDefAuto[Rekursive dezimale Stellenwertauswertung]{\DecDigitSeq{d}{k}\vdash \bigl(\DecPlaceVal{d}{0}=d_0\land \DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot 10^{k+1}\bigr)}
 
 \begin{theorem}[Summenform der Stellenwertauswertung]
@@ -586,7 +575,7 @@ verstanden. Nach der Kompatibilitätsregel \(n+\mathbf{1}=n+1\) dürfen wir
   \proofcase[Schritt]{k\mapsto k+1}
   \proofstep{2}{\DecPlaceVal{d}{k}=\sum_{i=0}^{k}d_i\cdot10^i}{\rA}
   \proofstep{2}{\DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot10^{k+1}}{\FormulaRefAuto{\DecDigitSeq{d}{k}\vdash \bigl(\DecPlaceVal{d}{0}=d_0\land \DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot 10^{k+1}\bigr)}}
-  \proofstep{2}{\DecPlaceVal{d}{k+1}=\sum_{i=0}^{k+1}d_i\cdot10^i}{\text{Definition der endlichen Summe}}
+  \proofstep{2}{\DecPlaceVal{d}{k+1}=\sum_{i=0}^{k+1}d_i\cdot10^i}{\FormulaRefAuto{\bigl(\sum_{i=0}^{0}u_i=u_0\bigr)\land \bigl(\sum_{i=0}^{k+1}u_i=\sum_{i=0}^{k}u_i+u_{k+1}\bigr)}}
 \end{tabproof}
 \end{theorem}
 
