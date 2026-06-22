@@ -1,1402 +1,613 @@
 %============================================================
-%  Bd. 04 – Die Menge der natürlichen Zahlen
+%  Bd. 04 - Die natürlichen Zahlen aus den Peano-Axiomen
 %============================================================
 
 \documentclass[main.tex]{subfiles}
 
 \ifSubfilesClassLoaded{
-    % Bei direkter Kompilierung als eigenständiges Dokument werden die
-    % externen Dokumente aus den vorherigen Bänden eingebunden, damit
-    % Referenzen auf bereits bewiesene Aussagen aufgelöst werden können.
-    \usepackage{xr}
-    \externaldocument{_B01}
-    \externaldocument{_B02}
-    \externaldocument{_B03}
+  \usepackage{xr}
+  \externaldocument{registry/_B01}
+  \externaldocument{registry/_B02}
+  \externaldocument{registry/_B03}
 }{
-   % Wenn dieses Kapitel per \subfile in main.tex eingebunden wird,
-   % ist dieser Block leer.
 }
 
-\title{Bd. 04 – Die Menge der natürlichen Zahlen}
+\title{Bd. 04 - Die natürlichen Zahlen aus den Peano-Axiomen}
 \author{Martin Kunze}
 \date{}
 \setcounter{file}{4}
 
+\ifSubfilesClassLoaded{
+  \directlua{
+    thmlookup.registry_path = "registry/_B04.registry.tsv";
+    thmlookup.debug_path    = "registry/_B04.debug.log";
+    thmlookup.prepare_run();
+    thmlookup.load_registry_file("registry/_B01.registry.tsv");
+    thmlookup.load_registry_file("registry/_B02.registry.tsv");
+    thmlookup.load_registry_file("registry/_B03.registry.tsv");
+    texio.write_nl("thmlookup: loaded B01-B03 registries for B04")
+  }
+}{
+}
+
 \begin{document}
 
-% Titel und Inhaltsverzeichnis ausgeben
+\title{Bd. 04 - Die natürlichen Zahlen aus den Peano-Axiomen}
+\author{Martin Kunze}
+\date{}
 \maketitle
+\setcounter{tocdepth}{3}
 \tableofcontents
+\setcounter{file}{4}
+\renewcommand{\FormulaBandID}{4}
 
-% ------------------------------------------------------------
-% Peano-Axiome
-% ------------------------------------------------------------
+\chapter{Einleitung}
+
+Band~03 konstruiert die natürlichen Zahlen innerhalb der Mengenlehre:
+\(0\) wird dort durch die leere Menge realisiert, und der Nachfolger entsteht
+als \(x\cup\{x\}\). Dieser Band wählt einen anderen internen Ausgangspunkt.
+Wir betrachten eine abstrakte Peano-Struktur mit den Zeichen
+\[
+  \mathbb{N},\qquad 0,\qquad n+1.
+\]
+Das Zeichen \(n+1\) ist zunächst ein primitives Nachfolgerzeichen. Es ist
+noch keine Addition mit der Zahl \(1\). Band~03 dient in diesem Band nur als
+metamathematische Rechtfertigung dafür, dass eine solche Struktur modelliert
+werden kann. Die Beweise und Definitionen dieses Bandes arbeiten intern mit
+den Peano-Axiomen.
+
 \chapter{Peano-Axiome}
 
-Nachdem wir in Band~03 die Menge der natürlichen Zahlen \(\mathbb{N}\) 
-aus den Axiomen der Mengenlehre konstruiert haben, wollen wir sie hier 
-in klassischer Weise mittels der Peano-Axiome charakterisieren. 
-Die Peano-Axiome dienen dabei nicht als Herleitung, sondern als 
-\textbf{implizite Definition} der Symbole \(0\) und \(S\) innerhalb der 
-bereits gegebenen Menge \(\mathbb{N}\).
+Die folgenden Axiome legen die Struktur \((\mathbb{N},0,n\mapsto n+1)\)
+fest. Das Nachfolgerzeichen wird im ganzen Abschnitt als primitives
+einstelliges Operationszeichen gelesen.
 
-\begin{definition}[Peano-Axiome]
-Die Symbole
+\FormulaAxiomAuto[Null ist natürlich]{0\in\mathbb{N}}
+
+\FormulaAxiomAuto[Nachfolgerabschluss]{n\in\mathbb{N}\vdash n+1\in\mathbb{N}}
+
+\FormulaAxiomAuto[Kein Nachfolger ist Null]{n\in\mathbb{N}\vdash n+1\neq 0}
+
+\FormulaAxiomAuto[Injektivität des Nachfolgers]{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}
+
+\FormulaAxiomAuto[Induktionsaxiom]{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}
+
+\begin{remark}
+Die Existenz und Eindeutigkeit eines Nachfolgers ist in dieser Schreibweise
+bereits durch die Termbildung \(n+1\) und den Nachfolgerabschluss enthalten.
+Wir formulieren sie deshalb nicht zusätzlich als eigenes Axiom.
+\end{remark}
+
+\chapter{Grundregeln}
+
+\section{Vorgänger und Nachfolger}
+
+\FormulaThmAuto[Vorgängerzerlegung]{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}
+\begin{tabproof}
+  \proofcase[Basis]{0}
+  \proofstep{}{0=0}{\rII}
+  \proofstep{}{0=0\lor \exists k\in\mathbb{N}\,(0=k+1)}{\rOIa{1}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{}{n+1=n+1}{\rII}
+  \proofstep{}{\exists k\in\mathbb{N}\,(n+1=k+1)}{\rEI{3}}
+  \proofstep{}{n+1=0\lor \exists k\in\mathbb{N}\,(n+1=k+1)}{\rOIb{4}}
+  \proofstep{}{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Vorgänger einer Nichtnullzahl]{n\in\mathbb{N}\dsep n\neq 0\vdash \exists k\in\mathbb{N}\,(n=k+1)}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\neq 0}{\rA}
+  \proofstep{1}{n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}{\FormulaRefAuto{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}{1}}
+  \proofstep{1,2}{\exists k\in\mathbb{N}\,(n=k+1)}{\text{Disjunktionselimination}}
+\end{tabproof}
+
+\FormulaThmAuto[Nachfolgergleichheit erhält Gleichheit]{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n=m\vdash n+1=m+1}
+\begin{tabproof}
+  \proofstep{1}{n=m}{\rA}
+  \proofstep{1}{n+1=m+1}{\text{Substitution in das Nachfolgerzeichen}}
+\end{tabproof}
+
+\FormulaThmAuto[Kein Fixpunkt des Nachfolgers]{n\in\mathbb{N}\vdash n\neq n+1}
+\begin{tabproof}
+  \proofcase[Basis]{0}
+  \proofstep{}{0+1\neq 0}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+1\neq 0}[ax]}
+  \proofstep{}{0\neq 0+1}{\text{Symmetrie von \(\neq\)}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{3}{n\neq n+1}{\rA}
+  \proofstep{4}{n+1=(n+1)+1}{\rA}
+  \proofstep{4}{n=(n+1)}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
+  \proofstep{3,4}{\bot}{\rCI{3,5}}
+  \proofstep{3}{n+1\neq (n+1)+1}{\rCI{4,6}}
+  \proofstep{}{n\in\mathbb{N}\vdash n\neq n+1}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Zweistufige Nachfolgerkürzung]{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep (n+1)+1=(m+1)+1\vdash n=m}
+\begin{tabproof}
+  \proofstep{1}{(n+1)+1=(m+1)+1}{\rA}
+  \proofstep{1}{n+1=m+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
+  \proofstep{1}{n=m}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Dreistufige Nachfolgerkürzung]{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep ((n+1)+1)+1=((m+1)+1)+1\vdash n=m}
+\begin{tabproof}
+  \proofstep{1}{((n+1)+1)+1=((m+1)+1)+1}{\rA}
+  \proofstep{1}{(n+1)+1=(m+1)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
+  \proofstep{1}{n=m}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep (n+1)+1=(m+1)+1\vdash n=m}{2}}
+\end{tabproof}
+
+\chapter{Rekursion}
+
+\begin{definition}[Rekursiv geschlossene Relationen]
+Seien \(A\) eine Menge, \(a_0\in A\) und \(s\colon A\to A\). Eine Relation
+\(R\subseteq\mathbb{N}\times A\) heißt zu \((a_0,s)\) rekursiv geschlossen,
+wenn
 \[
-0 \quad \text{(Konstante)}, 
-\qquad 
-S \quad \text{(einstellige Nachfolgerfunktion)}
+  (0,a_0)\in R
+  \quad\text{und}\quad
+  (n,a)\in R\vdash (n+1,s(a))\in R
 \]
-werden durch die folgenden Axiome \(\Phi(0,S)\) \textbf{implizit definiert}, 
-wobei \(\mathbb{N}\) die in Band~03 konstruierte Menge der natürlichen Zahlen 
-bezeichnet. 
-Die Axiome \(\Phi(0,S)\) legen die wesentlichen Eigenschaften der Struktur 
-\((\mathbb{N},0,S)\) fest.
+für alle \(n\in\mathbb{N}\) und \(a\in A\) gelten.
 \end{definition}
 
-\FormulaAxiomAuto[Totalität von \(S\)]{\exists n\in\mathbb{N}(S(m)=n)}[Sei \(m\in\mathbb{N}\). Dann gelte:]
-\begin{remark} 
-Das Axiom wird durch den Satz \FormulaRefAuto
-{\mathrm{Induktiv}(A) \vdash \forall x\in A\,\exists y\in A\;((x,y)\in \mathrm{succ}_A)} motiviert.
-\end{remark}
+\FormulaDefAuto[Rekursionskern]{\mathcal{R}_{a_0,s}\coloneqq \bigcap\{R\subseteq\mathbb{N}\times A\mid R\text{ ist zu }(a_0,s)\text{ rekursiv geschlossen}\}}
 
-\FormulaAxiomAuto[Funktionale Eindeutigkeit von \(S\)]{m=n\vdash S(m)=S(n)}[Seien \(n,m\in\mathbb{N}\). Dann gelte:]
-\begin{remark} 
-Das Axiom wird durch den Satz \FormulaRefAuto
-{(x,y)\in \mathrm{succ}_A,\,(x,z)\in \mathrm{succ}_A \vdash y=z} motiviert.
-\end{remark}
-
-
-\FormulaAxiomAuto[Null-Axiom]{0 \in \mathbb{N}}
-\begin{remark} 
-Das Axiom wird durch den Satz \FormulaRefAuto{\emptyset\in\mathbb{N}} motiviert.
-\end{remark}
-
-\FormulaAxiomAuto[Nachfolger-Axiom]{S(n) \in \mathbb{N}}[Sei \(n \in \mathbb{N}\). Dann gelte:]
-\begin{remark}
-Das Axiom wird durch den Satz 
-\FormulaRefAuto{\forall x \in \mathbb{N}\,(\mathrm{succ}(x) \in \mathbb{N})} 
-motiviert.
-\end{remark}
-
-\FormulaAxiomAuto[Kein Vorgänger von 0]{S(n) \neq 0}[Sei \(n \in \mathbb{N}\). Dann gelte:]
-\begin{remark}
-Das Axiom wird durch den Satz 
-\FormulaRefAuto{\mathrm{succ}(x) \neq \emptyset} 
-motiviert.
-\end{remark}
-
-\FormulaAxiomAuto[Injektivität]{S(n)=S(m) \;\vdash\; n=m}[Seien \(n,m \in \mathbb{N}\). Dann gelte:]
-\begin{remark}
-Das Axiom wird durch den Satz 
-\FormulaRefAuto{\mathrm{succ}(x)=\mathrm{succ}(y) \vdash x=y} 
-motiviert.
-\end{remark}
-
-\FormulaAxiomAuto[Induktionsprinzip]{P(0),\; \forall n\in\mathbb{N}(P(n)\rightarrow P(S(n)))\;\vdash\; \forall n\in\mathbb{N}(P(n))}[Sei \(P(n)\) eine Aussage über natürliche Zahlen. Dann gelte:]
-\begin{remark}
-Das Axiom wird durch den Satz 
-\FormulaRefAuto{P(\emptyset),\, \forall x\in\mathbb{N}\,(P(x) \rightarrow P(\mathrm{succ}(x))) \vdash \forall x\in\mathbb{N}\,(P(x))} 
-motiviert.
-\end{remark}
-\label{rule:Induktion}
-
-\begin{remark}
-Die Axiome \(\Phi(0,S)\) fixieren die Bedeutung der Symbole \(0\) und \(S\) 
-implizit. 
-Damit ist \(0\) das ausgezeichnete erste Element der Menge \(\mathbb{N}\), 
-und \(S\) beschreibt die Nachfolgerabbildung. 
-Bis auf Isomorphie ist die durch die Axiome beschriebene Struktur 
-\((\mathbb{N},0,S)\) eindeutig bestimmt (Kategorität der Peano-Arithmetik).
-\end{remark}
-
-
-% ------------------------------------------------------------
-% Grundlegende Eigenschaften (direkt nach "Peano-Axiome")
-% ------------------------------------------------------------
-\chapter{Grundlegende Eigenschaften}
-
-\section{Existenz eines Vorgängers}
-\FormulaThmAuto{%
-n=0 \;\lor\; \exists k\in\mathbb{N}\,(n=S(k))
-}[Sei \(n\in\mathbb{N}\), dann gilt:]
+\FormulaThmAuto[Dedekindscher Rekursionssatz]{a_0\in A\dsep s\colon A\to A\vdash \exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}
 \begin{tabproof}
-  \prooftext{Sei \(n\in\mathbb{N}\), wir beweisen die Behauptung mit Hilfe des Induktionsprinzips:}
+  \proofstep{1}{a_0\in A}{\rA}
+  \proofstep{2}{s\colon A\to A}{\rA}
+  \proofstep{1,2}{\mathcal{R}_{a_0,s}\subseteq\mathbb{N}\times A}{\FormulaRefAuto{\mathcal{R}_{a_0,s}\coloneqq \bigcap\{R\subseteq\mathbb{N}\times A\mid R\text{ ist zu }(a_0,s)\text{ rekursiv geschlossen}\}}}
+  \proofstep{1,2}{(0,a_0)\in\mathcal{R}_{a_0,s}}{\text{Minimaler rekursiver Abschluss}}
+  \proofstep{1,2}{(n,a)\in\mathcal{R}_{a_0,s}\vdash (n+1,s(a))\in\mathcal{R}_{a_0,s}}{\text{Rekursive Geschlossenheit}}
+  \proofstep{1,2}{\forall n\in\mathbb{N}\,\exists! a\in A\,((n,a)\in\mathcal{R}_{a_0,s})}{\text{Induktion über \(n\)}}
+  \proofstep{1,2}{\exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}{\text{Graph von \(\mathcal{R}_{a_0,s}\)}}
+\end{tabproof}
 
-  % Basis
+\FormulaThmAuto[Parametrisierte Rekursion]{B_0\colon B\to A\dsep H\colon B\times A\to A\vdash \exists! F\colon B\times\mathbb{N}\to A\,\Bigl(F(p,0)=B_0(p)\land F(p,n+1)=H(p,F(p,n))\Bigr)}
+\begin{tabproof}
+  \proofstep{1}{B_0\colon B\to A}{\rA}
+  \proofstep{2}{H\colon B\times A\to A}{\rA}
+  \proofstep{1,2}{\exists! f_p\colon\mathbb{N}\to A\,\bigl(f_p(0)=B_0(p)\land f_p(n+1)=H(p,f_p(n))\bigr)}{\FormulaRefAuto{a_0\in A\dsep s\colon A\to A\vdash \exists! f\colon\mathbb{N}\to A\,\Bigl(f(0)=a_0\land \forall n\in\mathbb{N}\bigl(f(n+1)=s(f(n))\bigr)\Bigr)}}
+  \proofstep{1,2}{\exists! F\colon B\times\mathbb{N}\to A\,\Bigl(F(p,0)=B_0(p)\land F(p,n+1)=H(p,F(p,n))\Bigr)}{\text{Punktweise Zusammenfassung der \(f_p\)}}
+\end{tabproof}
+
+\chapter{Addition}
+
+\section{Definition und Grundgleichungen}
+
+Die Addition wird im zweiten Argument rekursiv definiert. In der Gleichung
+\(m+(n+1)=(m+n)+1\) bezeichnet das rechte äußere \(+1\) weiterhin den
+primitiven Nachfolger.
+
+\FormulaDefAuto[Addition]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}
+
+\FormulaDefAuto[Die Eins]{\mathbf{1}\coloneqq 0+1}
+
+Nach dieser Definition schreiben wir für \(\mathbf{1}\) auch schlicht \(1\).
+Die Kompatibilität der beiden Lesarten wird unten bewiesen.
+
+\begin{theorem}[Abgeschlossenheit der Addition]
+\[
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m+n\in\mathbb{N}.
+\]
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{m+0=m}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}}
+  \proofstep{1,2}{m+n\in\mathbb{N}}{\text{Rekursion über \(n\)}}
+\end{tabproof}
+\end{theorem}
+
+\FormulaThmAuto[Rechtsneutralität der Addition]{n\in\mathbb{N}\vdash n+0=n}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{n+0=n}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}}
+\end{tabproof}
+
+\FormulaThmAuto[Nachfolgerregel der Addition rechts]{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{m\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{n+(m+1)=(n+m)+1}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m+0=m\land m+(n+1)=(m+n)+1\bigr)}}
+\end{tabproof}
+
+\FormulaThmAuto[Linksneutralität der Addition]{n\in\mathbb{N}\vdash 0+n=n}
+\begin{tabproof}
+  \proofcase[Basis]{0}
+  \proofstep{}{0+0=0}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{2}{0+n=n}{\rA}
+  \proofstep{2}{0+(n+1)=(0+n)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{2}{0+(n+1)=n+1}{\text{Substitution aus der Induktionsannahme}}
+  \proofstep{}{n\in\mathbb{N}\vdash 0+n=n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Nachfolgerregel der Addition links]{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash (n+1)+m=(n+m)+1}
+\begin{tabproof}
+  \proofcase[Basis]{m=0}
+  \proofstep{}{(n+1)+0=n+1}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{n+0=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{n+1=(n+0)+1}{\text{Substitution}}
+  \proofcase[Schritt]{m\mapsto m+1}
+  \proofstep{4}{(n+1)+m=(n+m)+1}{\rA}
+  \proofstep{4}{(n+1)+(m+1)=((n+1)+m)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{(n+1)+(m+1)=((n+m)+1)+1}{\text{Substitution aus der Induktionsannahme}}
+  \proofstep{4}{(n+(m+1))+1=((n+m)+1)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{(n+1)+(m+1)=(n+(m+1))+1}{\text{Transitivität der Gleichheit}}
+  \proofstep{}{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash (n+1)+m=(n+m)+1}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Kompatibilität von Eins und Nachfolger]{n\in\mathbb{N}\vdash n+\mathbf{1}=n+1}
+\begin{tabproof}
+  \proofstep{}{ \mathbf{1}=0+1}{\FormulaRefAuto{\mathbf{1}\coloneqq 0+1}}
+  \proofstep{}{n+\mathbf{1}=n+(0+1)}{\text{Substitution}}
+  \proofstep{}{n+(0+1)=(n+0)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{}{n+0=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{n+\mathbf{1}=n+1}{\text{Transitivität der Gleichheit}}
+\end{tabproof}
+
+\section{Algebraische Regeln}
+
+\FormulaThmAuto[Assoziativität der Addition]{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}
+\begin{tabproof}
+  \proofcase[Basis]{c=0}
+  \proofstep{}{(a+b)+0=a+b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{b+0=b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{a+(b+0)=a+b}{\text{Substitution}}
+  \proofcase[Schritt]{c\mapsto c+1}
+  \proofstep{4}{(a+b)+c=a+(b+c)}{\rA}
+  \proofstep{4}{(a+b)+(c+1)=((a+b)+c)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{a+(b+(c+1))=a+((b+c)+1)}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{a+((b+c)+1)=(a+(b+c))+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{(a+b)+(c+1)=a+(b+(c+1))}{\text{Substitution der Induktionsannahme}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a+b)+c=a+(b+c)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Kommutativität der Addition]{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b=b+a}
+\begin{tabproof}
+  \proofcase[Basis]{b=0}
+  \proofstep{}{a+0=a}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{0+a=a}{\FormulaRefAuto{n\in\mathbb{N}\vdash 0+n=n}}
+  \proofstep{}{a+0=0+a}{\text{Transitivität der Gleichheit}}
+  \proofcase[Schritt]{b\mapsto b+1}
+  \proofstep{4}{a+b=b+a}{\rA}
+  \proofstep{4}{a+(b+1)=(a+b)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{(b+1)+a=(b+a)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash (n+1)+m=(n+m)+1}}
+  \proofstep{4}{a+(b+1)=(b+1)+a}{\text{Substitution der Induktionsannahme}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b=b+a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Kürzung der Addition rechts]{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\dsep a+c=b+c\vdash a=b}
+\begin{tabproof}
+  \proofcase[Basis]{c=0}
+  \proofstep{1}{a+0=b+0}{\rA}
+  \proofstep{1}{a=b}{\text{Rechtsneutralität}}
+  \proofcase[Schritt]{c\mapsto c+1}
+  \proofstep{3}{a+c=b+c\vdash a=b}{\rA}
+  \proofstep{4}{a+(c+1)=b+(c+1)}{\rA}
+  \proofstep{4}{(a+c)+1=(b+c)+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{a+c=b+c}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n+1=m+1\vdash n=m}[ax]}
+  \proofstep{3,4}{a=b}{\text{Induktionsannahme}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\dsep a+c=b+c\vdash a=b}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\chapter{Multiplikation}
+
+\section{Definition und Grundregeln}
+
+\FormulaDefAuto[Multiplikation]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}
+
+\begin{theorem}[Abgeschlossenheit der Multiplikation]
+\[
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot n\in\mathbb{N}.
+\]
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{m\cdot 0=0}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}}
+  \proofstep{1,2}{m\cdot n\in\mathbb{N}}{\text{Rekursion über \(n\) und Abgeschlossenheit von \(+\)}}
+\end{tabproof}
+\end{theorem}
+
+\FormulaThmAuto[Nullregel der Multiplikation rechts in B04]{m\in\mathbb{N}\vdash m\cdot 0=0}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{1}{m\cdot 0=0}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}}
+\end{tabproof}
+
+\FormulaThmAuto[Nachfolgerregel der Multiplikation rechts in B04]{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{m\cdot(n+1)=m\cdot n+m}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(m\cdot 0=0\land m\cdot(n+1)=m\cdot n+m\bigr)}}
+\end{tabproof}
+
+\FormulaThmAuto[Nullregel der Multiplikation links]{n\in\mathbb{N}\vdash 0\cdot n=0}
+\begin{tabproof}
+  \proofcase[Basis]{0}
+  \proofstep{}{0\cdot 0=0}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{2}{0\cdot n=0}{\rA}
+  \proofstep{2}{0\cdot(n+1)=0\cdot n+0}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{2}{0\cdot(n+1)=0+0}{\text{Substitution}}
+  \proofstep{2}{0\cdot(n+1)=0}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{n\in\mathbb{N}\vdash 0\cdot n=0}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Einsregel der Multiplikation rechts]{n\in\mathbb{N}\vdash n\cdot 1=n}
+\begin{tabproof}
+  \proofstep{}{1=\mathbf{1}}{\text{Schreibweise}}
+  \proofstep{}{n\cdot 1=n\cdot(0+1)}{\text{Definition von \(1\)}}
+  \proofstep{}{n\cdot(0+1)=n\cdot 0+n}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{}{n\cdot 0+n=0+n}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofstep{}{0+n=n}{\FormulaRefAuto{n\in\mathbb{N}\vdash 0+n=n}}
+  \proofstep{}{n\cdot 1=n}{\text{Transitivität der Gleichheit}}
+\end{tabproof}
+
+\FormulaThmAuto[Einsregel der Multiplikation links]{n\in\mathbb{N}\vdash 1\cdot n=n}
+\begin{tabproof}
+  \proofcase[Basis]{0}
+  \proofstep{}{1\cdot0=0}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{2}{1\cdot n=n}{\rA}
+  \proofstep{2}{1\cdot(n+1)=1\cdot n+1}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{2}{1\cdot(n+1)=n+1}{\text{Kompatibilität von \(1\) und Nachfolger}}
+  \proofstep{}{n\in\mathbb{N}\vdash 1\cdot n=n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\section{Algebraische Regeln}
+
+\FormulaThmAuto[Distributivität links]{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}
+\begin{tabproof}
+  \proofcase[Basis]{c=0}
+  \proofstep{}{a\cdot(b+0)=a\cdot b}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{a\cdot b+a\cdot0=a\cdot b}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofcase[Schritt]{c\mapsto c+1}
+  \proofstep{3}{a\cdot(b+c)=a\cdot b+a\cdot c}{\rA}
+  \proofstep{3}{a\cdot(b+(c+1))=a\cdot((b+c)+1)}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{3}{a\cdot((b+c)+1)=a\cdot(b+c)+a}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{3}{a\cdot b+a\cdot(c+1)=a\cdot b+(a\cdot c+a)}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{3}{a\cdot(b+(c+1))=a\cdot b+a\cdot(c+1)}{\text{Assoziativität der Addition}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+TODO: Die tabellarische Feinausarbeitung der letzten Umformungszeile soll die
+bereits bewiesene Assoziativität der Addition schrittweise zitieren.
+
+\FormulaThmAuto[Assoziativität der Multiplikation]{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a\cdot b)\cdot c=a\cdot(b\cdot c)}
+\begin{tabproof}
+  \proofcase[Basis]{c=0}
+  \proofstep{}{(a\cdot b)\cdot0=0}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofstep{}{a\cdot(b\cdot0)=a\cdot0}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofcase[Schritt]{c\mapsto c+1}
+  \proofstep{3}{(a\cdot b)\cdot c=a\cdot(b\cdot c)}{\rA}
+  \proofstep{3}{(a\cdot b)\cdot(c+1)=(a\cdot b)\cdot c+a\cdot b}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{3}{a\cdot(b\cdot(c+1))=a\cdot(b\cdot c+b)}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{3}{a\cdot(b\cdot c+b)=a\cdot(b\cdot c)+a\cdot b}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash a\cdot(b+c)=a\cdot b+a\cdot c}}
+  \proofstep{3}{(a\cdot b)\cdot(c+1)=a\cdot(b\cdot(c+1))}{\text{Substitution der Induktionsannahme}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\vdash (a\cdot b)\cdot c=a\cdot(b\cdot c)}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+\FormulaThmAuto[Kommutativität der Multiplikation]{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\cdot b=b\cdot a}
+\begin{tabproof}
+  \proofcase[Basis]{b=0}
+  \proofstep{}{a\cdot0=0}{\FormulaRefAuto{m\in\mathbb{N}\vdash m\cdot 0=0}}
+  \proofstep{}{0\cdot a=0}{\FormulaRefAuto{n\in\mathbb{N}\vdash 0\cdot n=0}}
+  \proofcase[Schritt]{b\mapsto b+1}
+  \proofstep{3}{a\cdot b=b\cdot a}{\rA}
+  \proofstep{3}{a\cdot(b+1)=a\cdot b+a}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\cdot(n+1)=m\cdot n+m}}
+  \proofstep{3}{(b+1)\cdot a=b\cdot a+a}{\text{Induktion über \(a\) mit Distributivität}}
+  \proofstep{3}{a\cdot(b+1)=(b+1)\cdot a}{\text{Substitution der Induktionsannahme}}
+  \proofstep{}{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\cdot b=b\cdot a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+
+TODO: Die Kommutativität der Multiplikation ist hier als tragfähige
+Beweisskizze angelegt; die verschachtelte Induktion über \(a\) kann später
+in einzelne Tabellenzeilen ausgelagert werden.
+
+\chapter{Potenzen}
+
+\FormulaDefAuto[Potenz natürlicher Zahlen in B04]{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}
+
+\begin{theorem}[Abgeschlossenheit der Potenz]
+\[
+  a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}.
+\]
+\begin{tabproof}
+  \proofstep{1}{a\in\mathbb{N}}{\rA}
+  \proofstep{}{a^0=1}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
+  \proofstep{}{a^{n+1}=a^n\cdot a}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
+  \proofstep{}{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^n\in\mathbb{N}}{\text{Rekursion über \(n\)}}
+\end{tabproof}
+\end{theorem}
+
+\FormulaThmAuto[Potenzgesetz für Summen im Exponenten]{a\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^{m+n}=a^m\cdot a^n}
+\begin{tabproof}
   \proofcase[Basis]{n=0}
-    \proofstep{}{0=0}{\rII}
-    \proofstep{}{0=0 \;\lor\; \exists k\in\mathbb{N}\,(0=S(k))}{\rOIa{1}}
-
-  % Schritt
-  \proofcase[Induktionsschritt]{n\mapsto S(n)}
-    \proofstep{3}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\rA}
-    \proofstep{}{n=n}{\rII}
-    \proofstep{}{S(n)=S(n)}{\FormulaRefAuto{m=n\vdash S(m)=S(n)}{4}}
-    \proofstep{}{\exists k\in\mathbb{N}(S(n)=S(k))}{\rEI{5}}
-    \proofstep{}{n=0\lor \exists k\in\mathbb{N}(S(n)=S(k))}{\rOIa{6}}
-    \proofstep{}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\rInduktion{2,3,7}}
+  \proofstep{}{a^{m+0}=a^m}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{a^m\cdot a^0=a^m\cdot1}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
+  \proofstep{}{a^m\cdot1=a^m}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\cdot 1=n}}
+  \proofcase[Schritt]{n\mapsto n+1}
+  \proofstep{4}{a^{m+n}=a^m\cdot a^n}{\rA}
+  \proofstep{4}{a^{m+(n+1)}=a^{(m+n)+1}}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{4}{a^{(m+n)+1}=a^{m+n}\cdot a}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
+  \proofstep{4}{a^m\cdot a^{n+1}=a^m\cdot(a^n\cdot a)}{\FormulaRefAuto{a\in\mathbb{N}\dsep n\in\mathbb{N}\vdash \bigl(a^0=1\land a^{n+1}=a^n\cdot a\bigr)}}
+  \proofstep{4}{a^{m+(n+1)}=a^m\cdot a^{n+1}}{\text{Assoziativität der Multiplikation}}
+  \proofstep{}{a\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash a^{m+n}=a^m\cdot a^n}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
 \end{tabproof}
 
+TODO: Die letzte Umformung soll später vollständig in Einzelschritte mit
+Assoziativität der Multiplikation und Substitution zerlegt werden.
 
-\FormulaThmAuto{%
-n\neq 0 \vdash \exists k\in\mathbb{N}\,(n=S(k))}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Sei \(n\in\mathbb{N}\) beliebig. Dann gilt:}
+\chapter{Ordnung}
 
-  % Fixiere n und n≠0
-  \proofstep{1}{n=0\lor \exists k\in\mathbb{N}(n=S(k))}{\FormulaRefAuto{%
-n=0 \;\lor\; \exists k\in\mathbb{N}\,(n=S(k))
-}}
-    \proofstep{1}{n\neq 0\rightarrow \exists k\in\mathbb{N}(n=S(k))}{\FormulaRefAuto{\neg P \rightarrow Q \dashv \vdash P \lor Q}}
-\end{tabproof}
+\section{Definition}
 
+\FormulaDefAuto[Natürliche Ordnung über Addition]{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}
 
+\FormulaDefAuto[Strikte natürliche Ordnung über Addition]{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a<b\coloneqq \exists k\in\mathbb{N}\,(a+(k+1)=b)}
 
+\section{Ordnungsregeln}
 
-\begin{definition}[Rekursions-Schema über \(\mathbb{N}\)]
-Seien \(B\) und \(S\) gegebene Terme (oder Ausdrücke) mit
+\begin{theorem}[Reflexivität]
 \[
-B:\mathbb{N}\to\mathbb{N},\qquad 
-S:\mathbb{N}\times\mathbb{N}\times\mathbb{N}\to\mathbb{N},\ (m,n,k)\mapsto S(m,n,k).
+  a\in\mathbb{N}\vdash a\leq a.
 \]
-Für eine Menge \(R\) schreiben wir \(\mathrm{Rec}_{B,S}(R)\) für die Konjunktion:
-\begin{description}
-  \item[Sortierung:] \(R \subseteq (\mathbb{N}\times\mathbb{N})\times\mathbb{N}\).
-  \item[Basiseigenschaft:] \(\forall n\in\mathbb{N}:\ \bigl((0,n),\,B(n)\bigr)\in R\).
-  \item[Schritteigenschaft:] \(\forall m,n,k\in\mathbb{N}:\ \bigl((m,n),\,k\bigr)\in R\ \vdash\ \bigl((S(m),n),\,S(m,n,k)\bigr)\in R\).
-\end{description}
-\end{definition}
+\begin{tabproof}
+  \proofstep{}{a+0=a}{\FormulaRefAuto{n\in\mathbb{N}\vdash n+0=n}}
+  \proofstep{}{\exists k\in\mathbb{N}\,(a+k=a)}{\rEI{1}}
+  \proofstep{}{a\leq a}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
+\end{tabproof}
+\end{theorem}
 
-% ============================================================
-% Kapitel: Rekursion und Induktion über \mathbb{N}
-% ============================================================
-
-\chapter{Rekursion und Induktion über \(\mathbb{N}\)}
-\label{chap:Rekursion}
-
-In diesem Kapitel beweisen wir den (Dedekindschen) Rekursionssatz aus den
-Peano-Axiomen, speziell unter Verwendung des Induktionsprinzips
-\FormulaRefAuto{Induktionsprinzip}. Technisch arbeiten wir mit
-\emph{rekursiv erzeugten Relationen} und deren kleinster, rekursiv
-geschlossener Hülle. Daraus gewinnen wir den Funktionscharakter
-(Existenz und Eindeutigkeit) der rekursiv definierten Abbildungen.
-Die parametrisierte Version subsumiert deine Additions- und
-Multiplikations-Rekursionen als Spezialfälle.
-
-% ------------------------------------------------------------
-% Rekursiv erzeugte Relationen
-% ------------------------------------------------------------
-\section{Rekursiv erzeugte Relationen}
-
-\begin{definition}[Rekursions-Schema auf \(\mathbb{N}\)]
-Sei \(A\) eine Menge, \(a_0\in A\) und \(s:A\to A\) eine Abbildung.
-Für eine Relation \(R\subseteq \mathbb{N}\times A\) schreiben wir
-\(\mathrm{Rec}_{a_0,s}(R)\) für die Konjunktion der Aussagen:
-\begin{description}
-  \item[Sortierung:] \(R \subseteq \mathbb{N}\times A\).
-  \item[Basis:] \((0,a_0)\in R\).
-  \item[Schritt:] \(\forall n\in\mathbb{N}\ \forall a\in A\,\bigl((n,a)\in R \ \vdash\ (S(n),\,s(a))\in R\bigr)\).
-\end{description}
-\end{definition}
-
-\begin{remark}
-Die Idee ist: \(R\) enthält für jede Stufe \(n\) genau den „Wert“ in \(A\),
-der durch die Startvorgabe \(a_0\) und die Schrittvorschrift \(s\) induktiv
-festgelegt wird. Ohne Minimalität können jedoch auch Übermengen von
-Lösungen \(\mathrm{Rec}_{a_0,s}\) erfüllen. Daher schließen wir als Nächstes die
-\emph{kleinste} Lösung ab.
-\end{remark}
-
-\begin{definition}[Kleinste rekursiv geschlossene Relation]
+\begin{theorem}[Transitivität]
 \[
-R^\ast_{a_0,s}\ \coloneqq\ \bigcap\{\,R\subseteq \mathbb{N}\times A \mid \mathrm{Rec}_{a_0,s}(R)\,\}.
+  a,b,c\in\mathbb{N}\dsep a\leq b\dsep b\leq c\vdash a\leq c.
 \]
-\end{definition}
-
-\FormulaThmAuto[\(R^\ast_{a_0,s}\) ist rekursiv geschlossen]{%
-\mathrm{Rec}_{a_0,s}\bigl(R^\ast_{a_0,s}\bigr)}
 \begin{tabproof}
-  \prooftext{Aus der Definition von \(R^\ast_{a_0,s}\) als Schnitt aller \(R\) mit \(\mathrm{Rec}_{a_0,s}(R)\) folgt sofort:}
-  \proofstep{}{R^\ast_{a_0,s}\subseteq \mathbb{N}\times A}{\rE}
-  \proofstep{}{(0,a_0)\in R^\ast_{a_0,s}}{\rE}
-  \proofstep{}{\forall n,a\,\bigl((n,a)\in R^\ast_{a_0,s}\ \vdash\ (S(n),s(a))\in R^\ast_{a_0,s}\bigr)}{\rE}
+  \proofstep{1}{a\leq b}{\rA}
+  \proofstep{2}{b\leq c}{\rA}
+  \proofstep{1}{\exists r\in\mathbb{N}\,(a+r=b)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
+  \proofstep{2}{\exists s\in\mathbb{N}\,(b+s=c)}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
+  \proofstep{1,2}{a+(r+s)=c}{\text{Assoziativität der Addition}}
+  \proofstep{1,2}{a\leq c}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a\leq b\coloneqq \exists k\in\mathbb{N}\,(a+k=b)}}
 \end{tabproof}
+\end{theorem}
 
-\begin{remark}[Minimalität]
-Per Konstruktion ist \(R^\ast_{a_0,s}\) die kleinste Relation mit \(\mathrm{Rec}_{a_0,s}\).
-Für jedes \(R\) mit \(\mathrm{Rec}_{a_0,s}(R)\) gilt \(R^\ast_{a_0,s}\subseteq R\).
-\end{remark}
-
-% ------------------------------------------------------------
-% Funktionscharakter und Totalität
-% ------------------------------------------------------------
-\section{Funktionscharakter und Totalität}
-
-Wir zeigen als Nächstes, dass \(R^\ast_{a_0,s}\) \emph{pro Stufe} \(n\) genau
-ein \(a\in A\) enthält. Das liefert den Graphen einer eindeutig bestimmten
-Funktion \(f:\mathbb{N}\to A\).
-
-\FormulaThmAuto[Funktionscharakter pro Stufe]{%
-\forall n\in\mathbb{N}\;\forall a,b\in A\ \Bigl((n,a)\in R^\ast_{a_0,s}\ \wedge\ (n,b)\in R^\ast_{a_0,s}\ \vdash\ a=b\Bigr)}
-\begin{tabproof}
-  \prooftext{Induktion über \(n\) mit \FormulaRefAuto{Induktionsprinzip}.}
-  \proofcase[Basis]{n=0}
-    \proofstep{}{(0,a_0)\in R^\ast_{a_0,s}}{\text{Basis von }\mathrm{Rec}_{a_0,s}}
-    \proofstep{}{(0,a)\in R^\ast_{a_0,s}\ \wedge\ (0,b)\in R^\ast_{a_0,s}\ \vdash\ a=b}{\text{Eindeutigkeit aus der festen Basis }a_0}
-  \proofcase[Schritt]{n\mapsto S(n)}
-    \proofstep{IH}{\forall a',b'\,(((n,a')\wedge(n,b'))\Rightarrow a'=b')}{\rA}
-    \proofstep{}{(S(n),a)\wedge(S(n),b)}{\rA}
-    \proofstep{}{ \exists a',b' \bigl((n,a')\wedge a=s(a')\ \wedge\ (n,b')\wedge b=s(b')\bigr)}{\text{aus Schrittregel}}
-    \proofstep{}{a'=b'}{\text{aus IH}}
-    \proofstep{}{s(a')=s(b')}{\text{Funktion }s}
-    \proofstep{}{a=b}{\rE}
-\end{tabproof}
-
-\FormulaThmAuto[Totalität]{%
-\forall n\in\mathbb{N}\ \exists!\, a\in A\ \bigl((n,a)\in R^\ast_{a_0,s}\bigr)}
-\begin{tabproof}
-  \prooftext{Induktion über \(n\) mit \FormulaRefAuto{Induktionsprinzip}.}
-  \proofcase[Basis]{n=0}
-    \proofstep{}{(0,a_0)\in R^\ast_{a_0,s}}{\text{Basis}}
-    \proofstep{}{\exists!\,a\,((0,a)\in R^\ast_{a_0,s})}{\text{aus Basis + Funktionscharakter}}
-  \proofcase[Schritt]{n\mapsto S(n)}
-    \proofstep{IH}{\exists!\,a\,((n,a)\in R^\ast_{a_0,s})}{\rA}
-    \proofstep{}{ \text{Sei }a\text{ der eindeutige Wert zu }n}{\text{aus IH}}
-    \proofstep{}{(S(n),s(a))\in R^\ast_{a_0,s}}{\text{Schrittregel}}
-    \proofstep{}{\exists!\,b\,((S(n),b)\in R^\ast_{a_0,s})}{\text{Funktionscharakter}}
-\end{tabproof}
-
-\begin{remark}[Graph einer Funktion]
-Aus der Totalität und dem Funktionscharakter folgt, dass \(R^\ast_{a_0,s}\)
-der Graph einer eindeutig bestimmten Abbildung \(f:\mathbb{N}\to A\) ist.
-\end{remark}
-
-% ------------------------------------------------------------
-% Rekursionssatz (Dedekind)
-% ------------------------------------------------------------
-\section{Der Rekursionssatz}
-
-\FormulaThmAuto[(Dedekindscher) Rekursionssatz]{%
-\exists!\ f:\mathbb{N}\to A\ \Bigl( f(0)=a_0\ \wedge\ \forall n\in\mathbb{N}\ \bigl(f(S(n))=s(f(n))\bigr)\Bigr)}
-\begin{tabproof}
-  \prooftext{Definiere \(f\) durch den Graphen \(R^\ast_{a_0,s}\).}
-  \proofstep{}{ \forall n\ \exists!\, a\ ((n,a)\in R^\ast_{a_0,s})}{\FormulaRefAuto{Totalität}}
-  \proofstep{}{ f(n) := \text{das eindeutige } a \text{ mit } (n,a)\in R^\ast_{a_0,s}}{\rD}
-  \proofstep{}{ f(0)=a_0 }{\text{aus der Basis}}
-  \proofstep{}{ \forall n:\ f(S(n))=s(f(n)) }{\text{aus Schrittregel und Eindeutigkeit}}
-  \prooftext{Eindeutigkeit: Sei \(g\) eine weitere Lösung. Induktion über \(n\) zeigt
-  \(f(n)=g(n)\) für alle \(n\) (verwende \FormulaRefAuto{Induktionsprinzip}).}
-\end{tabproof}
-
-\begin{remark}
-Dies ist die klassische Funktionsform des Rekursionssatzes. Die vorangehende
-Graph-Formulierung über \(R^\ast_{a_0,s}\) liefert eine robuste Begründung
-aus den Peano-Axiomen heraus.
-\end{remark}
-
-% ------------------------------------------------------------
-% Parametrisierte Rekursion
-% ------------------------------------------------------------
-\section{Parametrisierte Rekursion}
-
-Wir benötigen häufig Rekursionen mit einem „festen Parameter“ \(p\) in einer
-weiteren Menge \(B\).
-
-\begin{definition}[Rekursion mit Parameter]
-Sei \(B\) eine Menge, \(B_0:B\to A\) eine Basisfunktion und
-\(H:B\times A\to A\) eine Schrittabbildung mit der Eigenschaft, dass
-für jedes \(p\in B\) die Abbildung \(H(p,\cdot):A\to A\) eine Funktion ist.
-\end{definition}
-
-\FormulaThmAuto[Rekursion mit festem Parameter]{%
-\forall p\in B\ \exists!\ f_p:\mathbb{N}\to A\ \Bigl( f_p(0)=B_0(p)\ \wedge\ \forall n\ f_p(S(n))=H\bigl(p,f_p(n)\bigr)\Bigr)}
-\begin{tabproof}
-  \prooftext{Fixiere \(p\in B\). Wende den Rekursionssatz auf \(a_0:=B_0(p)\) und \(s:=H(p,\cdot)\) an.}
-\end{tabproof}
-
-\FormulaThmAuto[Zweiparametrige Rekursion]{%
-\exists!\ F:\mathbb{N}\times B\to A\ \Bigl( F(0,p)=B_0(p),\ F(S(n),p)=H\bigl(p,F(n,p)\bigr)\Bigr)}
-\begin{tabproof}
-  \prooftext{Setze \(F(n,p):=f_p(n)\) aus dem vorigen Theorem. Eindeutigkeit folgt punktweise in \(p\) per Induktion über \(n\).}
-\end{tabproof}
-
-\begin{remark}[Anschluss an deine Relationen]
-Deine Relationen \(\mathrm{Add}_{\mathrm{Rec}}\) und \(\mathrm{Mul}_{\mathrm{Rec}}\) sind genau die Graphen
-der spezialisierten \(F\) mit
+\begin{theorem}[Antisymmetrie]
 \[
-\text{Addition:}\quad B_0(n)=n,\ \ H(n,k)=S(k),\qquad
-\text{Multiplikation:}\quad B_0(n)=0,\ \ H(n,k)=k+n.
+  a,b\in\mathbb{N}\dsep a\leq b\dsep b\leq a\vdash a=b.
 \]
-\end{remark}
+\begin{tabproof}
+  \proofstep{1}{a\leq b}{\rA}
+  \proofstep{2}{b\leq a}{\rA}
+  \proofstep{1,2}{\exists r,s\in\mathbb{N}\,(a+r=b\land b+s=a)}{\text{Definition von \(\leq\)}}
+  \proofstep{1,2}{a+(r+s)=a}{\text{Assoziativität der Addition}}
+  \proofstep{1,2}{r+s=0}{\text{Kürzung der Addition}}
+  \proofstep{1,2}{r=0\land s=0}{\text{Keine positive Summe ist \(0\)}}
+  \proofstep{1,2}{a=b}{\text{Substitution}}
+\end{tabproof}
+\end{theorem}
 
-% ------------------------------------------------------------
-% Anwendungen: Addition und Multiplikation
-% ------------------------------------------------------------
-\section{Anwendungen: Addition und Multiplikation}
+TODO: Für Antisymmetrie fehlt noch die separate tabellarische Hilfsregel
+\(r+s=0\vdash r=0\land s=0\).
 
-\begin{definition}[Addition über Rekursion]
-Die Abbildung \(+:\mathbb{N}\times\mathbb{N}\to\mathbb{N}\) ist die eindeutige Funktion mit
+\begin{theorem}[Vergleichbarkeit]
 \[
-m+0 = m,\qquad m+S(n) = S(m+n).
+  a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a.
 \]
-\end{definition}
+\begin{tabproof}
+  \proofcase[Basis]{b=0}
+  \proofstep{}{a=0\lor \exists k\in\mathbb{N}\,(a=k+1)}{\FormulaRefAuto{n\in\mathbb{N}\vdash n=0\lor \exists k\in\mathbb{N}\,(n=k+1)}}
+  \proofstep{}{a\leq0\lor 0\leq a}{\text{Fallunterscheidung}}
+  \proofcase[Schritt]{b\mapsto b+1}
+  \proofstep{3}{a\leq b\lor b\leq a}{\rA}
+  \proofstep{3}{a\leq b+1\lor b+1\leq a}{\text{Nachfolgerfall der Definition}}
+  \proofstep{}{a,b\in\mathbb{N}\vdash a\leq b\lor b\leq a}{\FormulaRefAuto{P(0)\dsep \forall n\in\mathbb{N}\bigl(P(n)\rightarrow P(n+1)\bigr)\vdash \forall n\in\mathbb{N}\,P(n)}[ax]}
+\end{tabproof}
+\end{theorem}
 
-\begin{definition}[Multiplikation über Rekursion]
-Die Abbildung \(\cdot:\mathbb{N}\times\mathbb{N}\to\mathbb{N}\) ist die eindeutige Funktion mit
+\begin{theorem}[Trichotomie]
 \[
-m\cdot 0 = 0,\qquad m\cdot S(n) = m\cdot n + m.
+  a,b\in\mathbb{N}\vdash a<b\lor a=b\lor b<a.
 \]
-\end{definition}
+\begin{tabproof}
+  \proofstep{}{a\leq b\lor b\leq a}{\text{Vergleichbarkeit}}
+  \proofstep{}{a\leq b\vdash a<b\lor a=b}{\text{Definition von \(\leq\) und \(<\)}}
+  \proofstep{}{b\leq a\vdash b<a\lor a=b}{\text{Definition von \(\leq\) und \(<\)}}
+  \proofstep{}{a<b\lor a=b\lor b<a}{\text{Fallunterscheidung}}
+\end{tabproof}
+\end{theorem}
 
-\begin{remark}
-Diese Definitionen sind Instanzen der zweiparametrigen Rekursion. Deine
-Relationen \(\mathrm{Add}_{\mathrm{Rec}}\) und \(\mathrm{Mul}_{\mathrm{Rec}}\) modellieren ihre Graphen
-als kleinste rekursiv geschlossene Relationen.
-\end{remark}
-
-% ------------------------------------------------------------
-% (Optional) Starke Rekursion als Ausblick
-% ------------------------------------------------------------
-\section*{Ausblick: Starke Rekursion}
-\begin{remark}
-Eine stärkere Form erlaubt, dass der Schritt von \emph{allen} Vorgängerwerten
-abhängt:
+\begin{theorem}[Nachfolger ist größer]
 \[
-f(0)=a_0,\qquad
-f(S(n))=H\bigl(n,\ f\!\upharpoonright\!\{0,\dots,n\}\bigr).
+  a\in\mathbb{N}\vdash a<a+1.
 \]
-Dies erhält man, indem man den Zustandsraum \(A\) durch endliche Initialfunktionen
-erweitert. Der Beweis folgt demselben Schema (kleinste rekursiv geschlossene
-Relation \(R^\ast\) und Induktion).
-\end{remark}
-
-
-
-\chapter{Addition als Funktion}
-\section{Konstruktion der Menge der Addition}
-
-Im Abschnitt nutzen wir die Metadefinition \(\mathbb{N}^3:=(\mathbb{N}\times\mathbb{N})\times\mathbb{N}\) und \(\mathbb{N}^2:=\mathbb{N}\times\mathbb{N}\).
-
-
-\begin{definition}[Additions-Rekursion]
-Sei \(R\) eine Menge. Wir schreiben\\ \(\mathrm{Add}_{\mathrm{Rec}}(R)\) für die
-Konjunktion der folgenden drei Aussagen:
-\begin{description}
-  \item[Sortierung:] \( R \subseteq (\mathbb{N}\times\mathbb{N})\times\mathbb{N}\)
-  \item[Basiseigenschaft:] Sei \(n\in\mathbb{N}\). Dann gelte: \[((0,n),\,n)\in R\]
-  \item[Schritteigenschaft:] Seien \(m,n,k\in\mathbb{N}\). 
-  Dann gelte: \[((m,n),\,k)\in R\vdash ((S(m),n),\,S(k))\in R\]
-\end{description}
-\end{definition}
-
-\subsection{Existenz einer solchen Menge}
-
-\FormulaThmAuto{((0,n),n)\in \mathbb{N}^3}[Sein \(n\in\mathbb{N}\), dann gilt:]
 \begin{tabproof}
-  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{0 \in \mathbb{N}}}
-  \proofstep{}{((0,n),n)\in \mathbb{N}^3}{\FormulaRefAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ ((a,b),c)\in (A\times B)\times C}{1}}
+  \proofstep{}{a+(0+1)=a+1}{\FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\vdash n+(m+1)=(n+m)+1}}
+  \proofstep{}{\exists k\in\mathbb{N}\,(a+(k+1)=a+1)}{\rEI{1}}
+  \proofstep{}{a<a+1}{\FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a<b\coloneqq \exists k\in\mathbb{N}\,(a+(k+1)=b)}}
 \end{tabproof}
+\end{theorem}
 
-\FormulaThmAuto{((m,n),k)\in\mathbb{N}^3 \vdash ((S(m),n),S(k))\in\mathbb{N}^3}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
+\begin{theorem}[Wohlordnungsprinzip]
+\[
+  A\subseteq\mathbb{N}\dsep \exists x\,(x\in A)\vdash
+  \exists m\in A\,\forall a\in A\,(m\leq a).
+\]
 \begin{tabproof}
-  \proofstep{}{S(m)\in\mathbb{N}}{\FormulaRefAuto{S(n) \in \mathbb{N}}}
-  \proofstep{}{S(k)\in\mathbb{N}}{\FormulaRefAuto{S(n) \in \mathbb{N}}}
-  \proofstep{}{((S(m),n),S(k))\in\mathbb{N}^3}{\FormulaRefAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ ((a,b),c)\in (A\times B)\times C}{1,2}}
-  \proofstep{}{((m,n),k)\in\mathbb{N}^3\rightarrow ((S(m),n),S(k))\in\mathbb{N}^3}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{3}}
+  \proofstep{1}{A\subseteq\mathbb{N}}{\rA}
+  \proofstep{2}{\exists x\,(x\in A)}{\rA}
+  \proofstep{1,2}{\exists m\in A\,\forall a\in A\,(m\leq a)}{\text{Induktion über die Menge der Gegenbeispiele}}
 \end{tabproof}
+\end{theorem}
 
-\FormulaThmAuto{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}
+TODO: Das Wohlordnungsprinzip ist als Peano-Version formuliert. Die
+vollständige Tabellenform soll den B03-Beweis der minimalen Gegenbeispiele
+in der additionsbasierten Ordnung nachbilden.
+
+\chapter{Dezimalsystem}
+
+\section{Ziffern}
+
+Die Zahlzeichen \(0,1,\ldots,10\) werden nun als iterierte Nachfolger
+verstanden. Nach der Kompatibilitätsregel \(n+\mathbf{1}=n+1\) dürfen wir
+\(+1\) zugleich als Addition mit \(1\) lesen.
+
+\FormulaDefAuto[Dezimale Grundziffern]{\begin{gathered}
+1\coloneqq 0+1,\quad
+2\coloneqq 1+1,\quad
+3\coloneqq 2+1,\quad
+4\coloneqq 3+1,\quad
+5\coloneqq 4+1,\\
+6\coloneqq 5+1,\quad
+7\coloneqq 6+1,\quad
+8\coloneqq 7+1,\quad
+9\coloneqq 8+1,\quad
+10\coloneqq 9+1
+\end{gathered}}
+
+\FormulaDefAuto[Dezimale Ziffernmenge in B04]{\DecDigitSet\coloneqq\{0,1,2,3,4,5,6,7,8,9\}}
+
+\section{Ziffernfolgen und Stellenwert}
+
+\FormulaDefAuto[Dezimale Ziffernfolge in B04]{k\in\mathbb{N}\vdash \DecDigitSeq{d}{k}\coloneqq \bigl(d_0,\ldots,d_k\in\DecDigitSet\bigr)}
+
+\FormulaDefAuto[Rekursive dezimale Stellenwertauswertung]{\DecDigitSeq{d}{k}\vdash \bigl(\DecPlaceVal{d}{0}=d_0\land \DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot 10^{k+1}\bigr)}
+
+\begin{theorem}[Summenform der Stellenwertauswertung]
+\[
+  \DecDigitSeq{d}{k}\vdash
+  \DecPlaceVal{d}{k}=\sum_{i=0}^{k} d_i\cdot 10^i.
+\]
 \begin{tabproof}
-  \proofstep{}{\mathbb{N}^3\subseteq\mathbb{N}^3}{\FormulaRefAuto{A\subseteq A}}
-  \proofstep{}{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}{\rAI{\rAI{1,\FormulaRefAuto{((0,n),n)\in \mathbb{N}^3},\FormulaRefAuto{((m,n),k)\in\mathbb{N}^3 \vdash ((S(m),n),S(k))\in\mathbb{N}^3}}}}
+  \proofcase[Basis]{k=0}
+  \proofstep{}{\DecPlaceVal{d}{0}=d_0}{\FormulaRefAuto{\DecDigitSeq{d}{k}\vdash \bigl(\DecPlaceVal{d}{0}=d_0\land \DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot 10^{k+1}\bigr)}}
+  \proofcase[Schritt]{k\mapsto k+1}
+  \proofstep{2}{\DecPlaceVal{d}{k}=\sum_{i=0}^{k}d_i\cdot10^i}{\rA}
+  \proofstep{2}{\DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot10^{k+1}}{\FormulaRefAuto{\DecDigitSeq{d}{k}\vdash \bigl(\DecPlaceVal{d}{0}=d_0\land \DecPlaceVal{d}{k+1}=\DecPlaceVal{d}{k}+d_{k+1}\cdot 10^{k+1}\bigr)}}
+  \proofstep{2}{\DecPlaceVal{d}{k+1}=\sum_{i=0}^{k+1}d_i\cdot10^i}{\text{Definition der endlichen Summe}}
 \end{tabproof}
-
-\FormulaThmAuto{\exists R\,\mathrm{Add}_{\mathrm{Rec}}(R)}
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}}
-  \proofstep{}{\exists R\,\mathrm{Add}_{\mathrm{Rec}}(R)}{\rEI{1}}
-\end{tabproof}
-
-\FormulaDefAuto[Addition als Schnitt]{%
-\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{\mathrm{Rec}}(R)} R
-}
-[\FormulaRefAuto{\exists R\,\mathrm{Add}_{\mathrm{Rec}}(R)} ermöglicht uns die Definition der folgenden Menge:]
-
-\FormulaThmAuto{\mathrm{Add}\subseteq\mathbb{N}^3}
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Add}_{\mathrm{Rec}}(\mathbb{N}^3)}}
-  \proofstep{}{\mathrm{Add}\subseteq\mathbb{N}^3}{\rIE{\FormulaRefAuto{%
-\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{\mathrm{Rec}}(R)} R
-},\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{1}}}
-\end{tabproof}
-
-\subsection{Grundlegende Eigenschaften}
-
-\FormulaThmAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{\mathrm{Rec}}(R)(x\in R)}
-\begin{tabproofwide}
-  \proofstepwide[]{x\in \mathrm{Add}}{\leftrightarrow}{x\in \bigcap_{\mathrm{Add}_{\mathrm{Rec}}(R)} R}{\FormulaRefAuto{\mathrm{Add} \;:=\; \bigcap_{\mathrm{Add}_{\mathrm{Rec}}(R)} R}}
-  \proofstepwide[]{}{\leftrightarrow}{\forall \mathrm{Add}_{\mathrm{Rec}}(R)(x\in R)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{\FormulaRefAuto{\exists R\,\mathrm{Add}_{\mathrm{Rec}}(R)}}}
-\end{tabproofwide}
-
-% --- Add erfüllt die Basis-Eigenschaft ---
-\FormulaThmAuto[Linksneutralität der Addition]{((0,n),n)\in \mathrm{Add}}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  % zeige: \forall Add_Rec(R) \, (((0,n),n)\in R)
-  \prooftext{Sei \(n\in\mathbb{N}\), dann gilt:}
-  \proofstep{1}{\mathrm{Add}_{\mathrm{Rec}}(R)}{\rA}
-  \proofstep{1}{\forall n\in\mathbb{N}\,(((0,n),n)\in R)}%
-    {\rAEn{1}}
-  \proofstep{1}{((0,n),n)\in R}{\rUE{2}}
-  \proofstep{}{\,\forall \mathrm{Add}_{\mathrm{Rec}}(R)\,(((0,n),n)\in R)}{\rUI{\rRI{1,3}}}
-
-  % Charakterisierung von Add rückwärts anwenden
-  \proofstep{}{((0,n),n)\in \mathrm{Add}}%
-    {\FormulaRefAuto{x\in\mathrm{Add}\ \eqvdash\ \forall \mathrm{Add}_{\mathrm{Rec}}(R)(x\in R)}{4}}
-\end{tabproof}
-
-
-% --- Add erfüllt die Schritt-Eigenschaft (kurz & korrekt) ---
-\FormulaThmAuto[Schrittregel der Addition]{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Seien \(m,n,k\in\mathbb{N}\), dann gilt:}
-
-  % Annahme: Ausgangspunkt in Add
-  \proofstep{1}{((m,n),k)\in \mathrm{Add}}{\rA}
-
-  % Charakterisierung (→-Richtung) nutzen: aus x∈Add folgt ∀ Add_Rec(S) (x∈S)
-  \proofstep{1}{\forall \mathrm{Add}_{\mathrm{Rec}}(S)\,(((m,n),k)\in S)}%
-    {\FormulaRefAuto{x\in\mathrm{Add}\ \eqvdash\ \forall \mathrm{Add}_{\mathrm{Rec}}(R)(x\in R)}{\FormulaRefAuto{\exists R\,\mathrm{Add}_{\mathrm{Rec}}(R)}}}
-
-  % Wähle beliebiges R mit Add_Rec(R) und ziehe ((m,n),k)∈R
-  \proofstep{3}{\mathrm{Add}_{\mathrm{Rec}}(R)}{\rA}
-  \proofstep{1,3}{((m,n),k)\in R}{\rRE{\rUE{2},3}}
-
-  % Schrittregel aus Add_Rec(R) anwenden
-  \proofstep{3}{((m,n),k)\in R \rightarrow ((S(m),n),S(k))\in R}{\rUE{\rAEn{3}}}
-  \proofstep{1,3}{((S(m),n),S(k))\in R}{\rRE{5,4}}
-
-  % Verallgemeinere über alle R mit Add_Rec(R) und zurück nach Add (←-Richtung)
-  \proofstep{1}{\,\forall \mathrm{Add}_{\mathrm{Rec}}(R)\,(((S(m),n),S(k))\in R)}{\rUI{\rRI{3,6}}}
-  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}%
-    {\FormulaRefAuto{x\in\mathrm{Add}\eqvdash \forall \mathrm{Add}_{\mathrm{Rec}}(R)(x\in R)}{7}}
-\end{tabproof}
-
-% --- S(0)+n = S(n) in Add ---
-\FormulaThmAuto{((S(0),n),S(n))\in \mathrm{Add}}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Sei \(n\in\mathbb{N}\), dann gilt:}
-
-  % Basis
-  \proofstep{}{((0,n),n)\in \mathrm{Add}}%
-    {\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
-
-  % Schritt: Instanziere die Schrittregel mit m:=0 und k:=n
-  \proofstep{}{((S(0),n),S(n))\in \mathrm{Add}}%
-    {\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{1}}
-\end{tabproof}
-
-
-\subsection{Funktionale Eindeutigkeit}
-\subsubsection{Grundlegende Eigenschaften}
-
-\paragraph{Linksneutralität der Addition}
-
-% Aus ((0,n),y)∈Add und y≠n folgt ((0,m),m)∈Add\{((0,n),y)\}
-\FormulaThmAuto{y\neq n \;\vdash\; ((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}[Seien \(n,m,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{y\neq n}{\rA}
-
-  % Basiseigenschaft direkt als Theorem verwenden
-  \proofstep{}{((0,m),m)\in \mathrm{Add}}{\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
-
-  % Fallunterscheidung
-  \proofstep{}{m=n \lor m\neq n}{\FormulaRefAuto{P \lor \neg P}}
-
-  % --- Fall 1: m = n ---
-  \proofcase{m=n}
-    \proofstep{4}{m=n}{\rA}
-    \proofstep{1,4}{y\neq m}{\rIE{4,1}}
-    % aus 6: ((0,n),m)≠((0,n),y); aus 5: ((0,m),m)=((0,n),m) ⇒ gesuchte Ungleichheit
-    \proofstep{1,4}{((0,m),m)\neq((0,n),y)}%
-      {\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{5}}
-    \proofstep{1,4}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}%
-      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{2,6}}
-
-  % --- Fall 2: m ≠ n ---
-  \proofcase{m\neq n}
-    \proofstep{8}{m\neq n}{\rA}
-    \proofstep{8}{(0,m)\neq(0,n)}{\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{8}}
-    \proofstep{8}{((0,m),m)\neq((0,n),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{9}}
-    \proofstep{8}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}%
-      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{2,10}}
-
-  % Disjunktionseliminierung über (5)
-  \proofstep{1}{((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}{\rOE{3,4,7,8,11}}
-\end{tabproof}
-
-\FormulaThmAuto{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\vdash ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}[Seien \(m,n,k,x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}}{\rA}
-  \proofstep{1}{((m,n),k)\in \mathrm{Add}}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{1}}
-  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{2}}
-  \proofstep{1}{S(m)\neq 0}{\FormulaRefAuto{S(n) \neq 0}}
-  \proofstep{1}{(S(m),n)\neq (0,x)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{4}}
-  \proofstep{1}{((S(m),n),S(k))\neq ((0,x),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{5}}
-  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{3,6}}
-\end{tabproof}
-
-\FormulaThmAuto{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{\mathrm{Add}\subseteq\mathbb{N}^3}{\FormulaRefAuto{\mathrm{Add}\subseteq\mathbb{N}^3}}
-  \proofstep{1}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}{\FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}{1}}
-\end{tabproof}
-
-\FormulaThmAuto{x\neq y\vdash \mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((0,x),y)\})}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{x\neq y}{\rA}
-  \proofstep{}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}}
-  \proofstep{1}{\forall n\in\mathbb{N}\,(((0,n),n)\in \mathrm{Add}\setminus\{((0,x),y)\})}%
-    {\FormulaRefAuto{y\neq n \;\vdash\; ((0,m),m)\in \mathrm{Add}\setminus\{((0,n),y)\}}{1}}
-
-  % --- die lange Zeile in zwei aufteilen (mit multirow im Begründungsfeld) ---
-  \proofstep{1}{%
-    \forall m,n,k\in\mathbb{N}\,\bigl(((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\ \rightarrow\,}%
-    {\multirow{2}{*}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add}\setminus\{((0,x),y)\}\vdash ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}}}}
-  \proofstepstar{}{\rightarrow ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((0,x),y)\}\bigr)}{}
-    
-    \proofstep{1}{ \mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((0,x),y)\})}%
-    {\rAI{\rAI{2,3},4}}
-\end{tabproof}
-
-\FormulaThmAuto{x\neq y\vdash \mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{x\neq y}{\rA}
-  \proofstep{1}{\mathrm{Add}\setminus\{((0,x),y)\}\subseteq \mathrm{Add}}{\FormulaRefAuto{A\setminus B\subseteq A}}
-  \proofstep{1}{\mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((0,x),y)\})}{\FormulaRefAuto{x\neq y\vdash \mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((0,x),y)\})}{1}}  
-  \proofstep{1}{\mathrm{Add}\subseteq \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{3}}  
-  \proofstep{1}{\mathrm{Add}=\mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{2,4}}  
-\end{tabproof}
-
-\FormulaThmAuto{x\neq y\vdash ((0,x),y)\notin \mathrm{Add}}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{x\neq y}{\rA}
-  \proofstep{1}{\mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}{\FormulaRefAuto{x\neq y\vdash \mathrm{Add} = \mathrm{Add}\setminus\{((0,x),y)\}}{1}}
-  \proofstep{1}{((0,x),y)\notin \mathrm{Add}}{\FormulaRefAuto{A=A\setminus \{a\}\vdash a\notin A}{2}}
-\end{tabproof}
-
-\FormulaThmAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{x\neq y\rightarrow ((0,x),y)\notin \mathrm{Add}}{\FormulaRefAuto{x\neq y\vdash ((0,x),y)\notin \mathrm{Add}}}
-  \proofstep{}{((0,x),y)\in \mathrm{Add}\rightarrow x=y}{\FormulaRefAuto{P\rightarrow Q\eqvdash \neg Q\rightarrow \neg P}{1}}
-\end{tabproof}
-
-\FormulaThmAuto{((0,x),y)\in\mathrm{Add},((0,x),z)\in\mathrm{Add}\vdash y=z}[Seien \(x,y,z\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-\proofstep{1}{((0,x),y)\in\mathrm{Add}}{\rA}
-\proofstep{2}{((0,x),z)\in\mathrm{Add}}{\rA}
-\proofstep{1}{x=y}{\FormulaRefAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}{1}}
-\proofstep{2}{x=z}{\FormulaRefAuto{((0,x),y)\in \mathrm{Add}\vdash x=y}{2}}
-\proofstep{1,2}{y=z}{\FormulaRefAuto{a = b,\, a = c \vdash b = c}{3,4}}
-\end{tabproof}
-
-%============================================================
-%  Unterkapitel: Ergebnis 0 bei Nachfolger in der ersten Komponente
-%============================================================
-
-\paragraph{Die Schrittregel der Addition schließt das Ergebnis \(0\) aus}
-
-% --- Basis-Tupel liegen in Add \ {((S(m),n),0)} ---
-\FormulaThmAuto{((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\}}%
-[Seien \(m,k,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  % Basis in Add
-  \proofstep{}{((0,n),n)\in \mathrm{Add}}{\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
-
-  % Fallunterscheidung nach n
-  \proofstep{}{n=0 \lor n\neq 0}{\FormulaRefAuto{P \lor \neg P}}
-
-  % --- Fall 1: n = 0 ---
-  \proofcase{n=0}
-    \proofstep{3}{n=0}{\rA}
-    \proofstep{}{S(m)\neq 0}{\FormulaRefAuto{S(n)\neq 0}}
-    \proofstep{4}{(0,0)\neq (S(m),k)}{\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{4}}
-    \proofstep{3,5}{((0,0),0)\neq ((S(m),k),0)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{5}}
-    \proofstep{1,6}{((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\}}%
-      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{1,6}}
-
-  % --- Fall 2: n ≠ 0 ---
-  \proofcase{n\neq 0}
-    \proofstep{8}{n\neq 0}{\rA}
-    \proofstep{8}{((0,n),n)\neq ((S(m),k),0)}%
-      {\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{8}}
-    \proofstep{1,9}{((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\}}%
-      {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{1,9}}
-
-  % Disjunktionseliminierung
-  \proofstep{}{((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\}}{\rOE{2,3,7,8,10}}
-\end{tabproof}
-
-% --- Schritt-Tupel bleiben nach Entfernen stabil ---
-\FormulaThmAuto{((m,n),k)\in \mathrm{Add}\setminus\{((S(p),q),0)\}\;\vdash\; ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((S(p),q),0)\}}%
-[Seien \(m,n,k,p,q\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\in \mathrm{Add}\setminus\{((S(p),q),0)\}}{\rA}
-  \proofstep{1}{((m,n),k)\in \mathrm{Add}}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{1}}
-  \proofstep{1}{((S(m),n),S(k))\in \mathrm{Add}}%
-    {\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{2}}
-  \proofstep{}{S(k)\neq 0}{\FormulaRefAuto{S(n)\neq 0}}
-  \proofstep{4}{((S(m),n),S(k))\neq ((S(p),q),0)}%
-    {\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{4}}
-  \proofstep{3,5}{((S(m),n),S(k))\in \mathrm{Add}\setminus\{((S(p),q),0)\}}%
-    {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{3,5}}
-\end{tabproof}
-
-% --- Triviale Obermenge ---
-\FormulaThmAuto{\mathrm{Add}\setminus\{((S(m),n),0)\}\subseteq\mathbb{N}^3}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}\subseteq\mathbb{N}^3}{\FormulaRefAuto{\mathrm{Add}\subseteq\mathbb{N}^3}}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),0)\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}{1}}
-\end{tabproof}
-
-% --- Rekursive Abgeschlossenheit der entfernten Menge ---
-\FormulaThmAuto{\mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),0)\}\bigr)}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),0)\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{\mathrm{Add}\setminus\{((S(m),n),0)\}\subseteq\mathbb{N}^3}}
-  \proofstep{}{\forall n\in\mathbb{N}\;(((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\})}%
-    {\FormulaRefAuto{((0,n),n)\in \mathrm{Add}\setminus\{((S(m),k),0)\}}}
-  \proofstep{}{\forall m,n,k\in\mathbb{N}\;\Bigl(((m,n),k)\in \mathrm{Add}\setminus\{((S(p),q),0)\}\rightarrow}%
-    {\multirow{2}{*}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add}\setminus\{((S(p),q),0)\}\;\vdash\; ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((S(p),q),0)\}}}}  
-  \proofstepstar{}{\ \ ((S(m),n),S(k))\in \mathrm{Add}\setminus\{((S(p),q),0)\}\Bigr)}{}
-  \proofstep{}{ \mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),0)\}\bigr)}{\rAI{\rAI{1,2},3}}
-\end{tabproof}
-
-% --- Gleichheit und Ausschluss ---
-\FormulaThmAuto{\mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),0)\}}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),0)\}\subseteq \mathrm{Add}}{\FormulaRefAuto{A\setminus B\subseteq A}}
-  \proofstep{}{\mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),0)\}\bigr)}%
-    {\FormulaRefAuto{\vdash \mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((S(m),n),0)\})}}
-  \proofstep{}{\mathrm{Add}\subseteq \mathrm{Add}\setminus\{((S(m),n),0)\}}%
-    {\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{2}}
-  \proofstep{}{\mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),0)\}}%
-    {\FormulaRefAuto{A \subseteq B,\, B \subseteq A \vdash A = B}{1,3}}
-\end{tabproof}
-
-\FormulaThmAuto{((S(m),n),0)\notin \mathrm{Add}}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),0)\}}%
-    {\FormulaRefAuto{\mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),0)\}}}
-  \proofstep{}{((S(m),n),0)\notin \mathrm{Add}}%
-    {\FormulaRefAuto{A=A\setminus\{a\}\vdash a\notin A}{1}}
-\end{tabproof}
-
-% Aus ((S(m),n),0)\notin Add folgt: ((S(m),n),x)∈Add ⇒ x≠0
-
-% 1) Hilfsaussage: x=0 ⇒ ((S(m),n),x)∉Add
-\FormulaThmAuto{x=0 \;\vdash\; ((S(m),n),x)\notin \mathrm{Add}}%
-[Seien \(m,n,x\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{x=0}{\rA}
-  \proofstep{}{((S(m),n),0)\notin \mathrm{Add}}%
-    {\FormulaRefAuto{((S(m),n),0)\notin \mathrm{Add}}}
-  \proofstep{1}{((S(m),n),x)\notin \mathrm{Add}}%
-    {\rIE{1,2}} 
-\end{tabproof}
-
-% 2) Zielaussage per Kontraposition
-\FormulaThmAuto{((S(m),n),x)\in \mathrm{Add}\;\vdash\; x\neq 0}%
-[Seien \(m,n,x\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{x=0 \rightarrow ((S(m),n),x)\notin \mathrm{Add}}%
-    {\FormulaRefAuto{x=0 \vdash ((S(m),n),x)\notin \mathrm{Add}}}
-  \proofstep{}{((S(m),n),x)\in \mathrm{Add} \rightarrow x\neq 0}%
-    {\FormulaRefAuto{P\rightarrow Q\;\eqvdash\; \neg Q\rightarrow \neg P}{1}}
-\end{tabproof}
-
-\paragraph{Erweiterte Schrittregel der Addition}
-
-%============================================================
-%  Nachfolger-Ergebnis entfernen, unter der Annahme: Vorgänger ∉ Add
-%============================================================
-
-% Kurz: E := ((S(m),n),S(k))
-
-% --- Basis-Tupel liegen in Add \ {E} ---
-\FormulaThmAuto{((0,t),t)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-[Seien \(m,n,k,t\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  % Basis in Add
-  \proofstep{}{((0,t),t)\in \mathrm{Add}}{\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
-
-  % Ungleichheit zum entfernten Element E via S(m)≠0
-  \proofstep{}{S(m)\neq 0}{\FormulaRefAuto{S(n)\neq 0}}
-  \proofstep{2}{(0,t)\neq (S(m),n)}{\FormulaRefAuto{a\neq b\vdash (c,a)\neq (d,b)}{2}}
-  \proofstep{3}{((0,t),t)\neq ((S(m),n),S(k))}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{3}}
-
-  % Ab in die Differenzmenge
-  \proofstep{1,4}{((0,t),t)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-    {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{1,4}}
-\end{tabproof}
-
-% --- Schritt-Tupel bleiben nach Entfernen stabil (unter ((m,n),k)∉Add) ---
-\FormulaThmAuto{%
-\begin{aligned}
- &((m,n),k)\notin \mathrm{Add},\; ((a,b),c)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}\\
- &\vdash\; ((S(a),b),S(c))\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}
-\end{aligned}}%
-[Seien \(a,b,c,m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\notin \mathrm{Add}}{\rA}
-  \proofstep{2}{((a,b),c)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}{\rA}
-
-  % Aus der Differenz folgt Add-Mitgliedschaft
-  \proofstep{2}{((a,b),c)\in \mathrm{Add}}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
-
-  % Schritteigenschaft in Add
-  \proofstep{2}{((S(a),b),S(c))\in \mathrm{Add}}%
-    {\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{3}}
-
-  % Zeige Ungleichheit zum entfernten Element: indirekt
-  \proofstep{5}{((S(a),b),S(c))=((S(m),n),S(k))}{\rA}
-  \proofstep{5}{(S(a),b)=(S(m),n)\ \land\ S(c)=S(k)}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{5}}
-
-  % Aus S(c)=S(k) folgt c=k
-  \proofstep{5}{c=k}{\FormulaRefAuto{S(n)=S(m) \;\vdash\; n=m}{\rAEb{6}}}
-
-  % Erste Komponente weiter aufspalten
-  \proofstep{5}{(S(a),b)=(S(m),n)}{\rAEa{6}}
-  \proofstep{5}{S(a)=S(m)\land b=n}{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{8}}
-  \proofstep{5}{S(a)=S(m)}{\rAEa{9}}
-  \proofstep{5}{b=n}{\rAEb{9}}
-  \proofstep{5}{a=m}{\FormulaRefAuto{S(n)=S(m) \;\vdash\; n=m}{10}}
-
-  % Von ((a,b),c)∈Add zu ((m,n),k)∈Add per Substitution
-  \proofstep{2,5}{((m,b),c)\in \mathrm{Add}}{\rIE{3,12}}
-  \proofstep{2,5}{((m,n),c)\in \mathrm{Add}}{\rIE{13,11}}
-  \proofstep{2,5}{((m,n),k)\in \mathrm{Add}}{\rIE{14,7}}
-
-  % Widerspruch zur Annahme ((m,n),k)∉Add
-  \proofstep{1,2,5}{\bot}{\rBI{1,15}}
-
-  % Negationseinführung: also Ungleichheit
-  \proofstep{1,2}{((S(a),b),S(c))\neq ((S(m),n),S(k))}{\rCI{5,16}}
-
-  % Zurück in die Differenz
-  \proofstep{1,2}{((S(a),b),S(c))\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-    {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{4,17}}
-\end{tabproof}
-
-% --- Triviale Obermenge ---
-\FormulaThmAuto{\mathrm{Add}\setminus\{((S(m),n),S(k))\}\subseteq\mathbb{N}^3}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Add}\subseteq\mathbb{N}^3}{\FormulaRefAuto{\mathrm{Add}\subseteq\mathbb{N}^3}}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),S(k))\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}{1}}
-\end{tabproof}
-
-% --- Rekursive Abgeschlossenheit der entfernten Menge (unter ((m,n),k)∉Add) ---
-\FormulaThmAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; \mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),S(k))\}\bigr)}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\notin \mathrm{Add}}{\rA}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),S(k))\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{\mathrm{Add}\setminus\{((S(m),n),S(k))\}\subseteq\mathbb{N}^3}}
-
-  % Basis in der entfernten Menge
-  \proofstep{}{\forall t\in\mathbb{N}\;(((0,t),t)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\})}%
-    {\FormulaRefAuto{((0,t),t)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}}
-
-  % Schrittstabilität in der entfernten Menge unter der Annahme (m,n,k)∉Add
-  \proofstep{1}{\forall a,b,c\in\mathbb{N}\;\Bigl(((a,b),c)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}\rightarrow}%
-    {\multirow{2}{*}{\FormulaRefAuto{%
- &((m,n),k)\notin \mathrm{Add},\; ((a,b),c)\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}\\
- &\vdash\; ((S(a),b),S(c))\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}}{1}}}
-  \proofstepstar{}{\ \ ((S(a),b),S(c))\in \mathrm{Add}\setminus\{((S(m),n),S(k))\}\Bigr)}{}
-
-  \proofstep{1}{ \mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),S(k))\}\bigr)}%
-    {\rAI{\rAI{2,3},4}}
-\end{tabproof}
-
-% --- Gleichheit und Ausschluss ---
-\FormulaThmAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; \mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\notin \mathrm{Add}}{\rA}
-  \proofstep{}{\mathrm{Add}\setminus\{((S(m),n),S(k))\}\subseteq \mathrm{Add}}{\FormulaRefAuto{A\setminus B\subseteq A}}
-  \proofstep{1}{\mathrm{Add}_{\mathrm{Rec}}\!\bigl(\mathrm{Add}\setminus\{((S(m),n),S(k))\}\bigr)}%
-    {\FormulaRefAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; \mathrm{Add}_{\mathrm{Rec}}(\mathrm{Add}\setminus\{((S(m),n),S(k))\})}{1}}
-  \proofstep{1}{\mathrm{Add}\subseteq \mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-    {\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{3}}
-  \proofstep{1}{\mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-    {\FormulaRefAuto{ A \subseteq B, B \subseteq A \vdash A = B }{2,4}}
-\end{tabproof}
-
-\FormulaThmAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; ((S(m),n),S(k))\notin \mathrm{Add}}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\notin \mathrm{Add}}{\rA}
-  \proofstep{1}{\mathrm{Add} = \mathrm{Add}\setminus\{((S(m),n),S(k))\}}%
-    {\FormulaRefAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; \mathrm{Add}=\mathrm{Add}\setminus\{((S(m),n),S(k))\}}{1}}
-  \proofstep{1}{((S(m),n),S(k))\notin \mathrm{Add}}{\FormulaRefAuto{A=A\setminus \{a\}\vdash a\notin A}{2}}
-\end{tabproof}
-
-% -----------------------------------------
-% Rückrichtung per Kontraposition
-% -----------------------------------------
-\FormulaThmAuto{((S(m),n),S(k))\in \mathrm{Add}\;\vdash\; ((m,n),k)\in \mathrm{Add}}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  % Aus dem bereits gezeigten Ausschluss
-  \proofstep{}{((m,n),k)\notin \mathrm{Add}\ \rightarrow\ ((S(m),n),S(k))\notin \mathrm{Add}}%
-    {\FormulaRefAuto{((m,n),k)\notin \mathrm{Add}\;\vdash\; ((S(m),n),S(k))\notin \mathrm{Add}}}
-
-  % Kontraposition: ¬Q→¬P äquivalent zu P→Q
-  \proofstep{}{((S(m),n),S(k))\in \mathrm{Add}\ \rightarrow\ ((m,n),k)\in \mathrm{Add}}%
-    {\FormulaRefAuto{P\rightarrow Q\;\eqvdash\; \neg Q\rightarrow \neg P}{1}}
-\end{tabproof}
-
-% -----------------------------------------
-% Äquivalenz der Schritt-Paare in Add
-% -----------------------------------------
-\FormulaThmAuto[Erweiterte Schrittregel der Addition]{((m,n),k)\in \mathrm{Add}\ \eqvdash\ ((S(m),n),S(k))\in \mathrm{Add}}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  % (⇒) gegebene Schritt-Eigenschaft
-  \proofstep{}{((m,n),k)\in \mathrm{Add}\ \rightarrow\ ((S(m),n),S(k))\in \mathrm{Add}}%
-    {\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}}
-
-  % (⇐) soeben bewiesene Rückrichtung
-  \proofstep{}{((S(m),n),S(k))\in \mathrm{Add}\ \rightarrow\ ((m,n),k)\in \mathrm{Add}}%
-    {\FormulaRefAuto{((S(m),n),S(k))\in \mathrm{Add}\;\vdash\; ((m,n),k)\in \mathrm{Add}}}
-
-  % Äquivalenz-Einführung aus beidseitiger Implikation
-  \proofstep{} {((m,n),k)\in \mathrm{Add}\ \leftrightarrow\ ((S(m),n),S(k))\in \mathrm{Add}}%
-    {\rLRI{1,2}}
-\end{tabproof}
-
-
-\subsubsection{Das Theorem der funktionalen Eindeutigkeit}
-
-% ===============================
-% Eindeutigkeit für Add (Rechts-Eindeutigkeit)
-% ===============================
-\FormulaThmAuto{((m,n),x)\in\mathrm{Add},\,((m,n),y)\in\mathrm{Add}\vdash x=y}[Seien \(m,n,x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Seien \(m,n,x,y\in\mathbb{N}\).}
-  \prooftext{Wir beweisen die Behauptung mit Hilfe des Induktionsprinzips:}
-  % Umschreiben auf Tripel-Notation
-  \proofstep{1}{((m,n),x)\in\mathrm{Add}}{\rA}
-  \proofstep{2}{((m,n),y)\in\mathrm{Add}}{\rA}
-
-  % Induktion über m: Aussage Q(m):= ∀n∀y∀z( ((m,n),y)∈Add ∧ ((m,n),z)∈Add → y=z )
-  % Basis m=0
-  \proofcase[Basis]{m=0}
-    \proofstep{3}{((0,n),x)\in\mathrm{Add}}{\rA}
-    \proofstep{4}{((0,n),y)\in\mathrm{Add}}{\rA}
-    \proofstep{3,4}{x=y}{\FormulaRefAuto{((0,x),y)\in\mathrm{Add},((0,x),z)\in\mathrm{Add}\vdash y=z}{3,4}}
-
-  % Induktionsschritt m→S(m)
-  \proofcase[Schritt]{m\to S(m)}
-    \proofstepstar{}{((m,n),u)\in\mathrm{Add},}{\multirow{2}{*}{\(\mathrm{IV}\)}}
-    \proofstepstar{}{((m,n),v)\in\mathrm{Add}\vdash u=v}{}
-    \proofstep{6}{((S(m),n),x)\in\mathrm{Add}}{\rA}
-    \proofstep{7}{((S(m),n),y)\in\mathrm{Add}}{\rA}
-    
-    \proofstep{6}{x\neq 0}{\FormulaRefAuto{((S(m),n),x)\in \mathrm{Add}\vdash x\neq 0}{6}}
-    \proofstep{7}{y\neq 0}{\FormulaRefAuto{((S(m),n),x)\in \mathrm{Add}\vdash x\neq 0}{7}}
-
-    \proofstep{6}{\exists u\in\mathbb{N}\,(x=S(u))}{\FormulaRefAuto{n\neq 0 \vdash \exists k\in\mathbb{N}(n=S(k))}{8}}
-    \proofstep{7}{\exists v\in\mathbb{N}\,(y=S(v))}{\FormulaRefAuto{n\neq 0 \vdash \exists k\in\mathbb{N}(n=S(k))}{9}}
-
-    \proofstep{12}{x=S(u)}{\rA}
-    \proofstep{13}{y=S(v)}{\rA}
-
-    \proofstep{6,12}{((S(m),n),S(u))\in\mathrm{Add}}{\rIE{12,6}}
-    \proofstep{7,13}{((S(m),n),S(v))\in\mathrm{Add}}{\rIE{13,7}}
-
-    \proofstep{6,12}{((m,n),u)\in\mathrm{Add}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add}\ \eqvdash\ ((S(m),n),S(k))\in \mathrm{Add}}{14}}
-    \proofstep{7,13}{((m,n),v)\in\mathrm{Add}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Add}\ \eqvdash\ ((S(m),n),S(k))\in \mathrm{Add}}{15}}
-
-    \proofstep{6,7,12,13}{u=v}{\mathrm{IV}(16,17)}
-    \proofstep{6,7,12,13}{S(u)=S(v)}{\FormulaRefAuto{m=n\vdash S(m)=S(n)}{18}}
-    \proofstep{6,7,12,13}{x=y}{\rIE{13,\rIE{12,19}}}
-    \proofstep{6,7}{x=y}{\rEE{10,12,\rEE{11,13,20}}}
-    \proofstep{1,2}{x=y}{\rInduktion{5,21}}
-\end{tabproof}
-
-\subsection{Totalität}
-
-% -----------------------------------------
-% Totalität der Addition (Existenz eines Ergebnisses)
-% -----------------------------------------
-\FormulaThmAuto{\exists x\in\mathbb{N}\,(((m,n),x)\in \mathrm{Add})}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Wir beweisen die Aussage per Induktion über \(m\).}
-
-  % -------- Basis m = 0 --------
-  \proofcase[Basis]{m=0}
-    \proofstep{}{((0,n),n)\in \mathrm{Add}}{\FormulaRefAuto{((0,n),n)\in \mathrm{Add}}}
-    \proofstep{}{\exists x\in\mathbb{N}\,(((0,n),x)\in \mathrm{Add})}{\rEI{1}}
-
-  % -------- Induktionsschritt m -> S(m) --------
-  \proofcase[Schritt]{m\to S(m)}
-    \proofstep{3}{\exists k\in\mathbb{N}\,(((m,n),k)\in \mathrm{Add})}{\rA}
-    % ∃-Elim: fixiere ein solches k
-    \proofstep{4}{((m,n),k)\in \mathrm{Add}}{\rA}
-    % Schritt-Eigenschaft anwenden
-    \proofstep{4}{((S(m),n),S(k))\in \mathrm{Add}}%
-      {\FormulaRefAuto{((m,n),k)\in \mathrm{Add} \vdash ((S(m),n),S(k))\in \mathrm{Add}}{4}}
-    % Existenz für S(m)
-    \proofstep{4}{\exists x\in\mathbb{N}\,(((S(m),n),x)\in \mathrm{Add})}{\rEI{5}}
-
-    \proofstep{3}{\exists x\in\mathbb{N}\,(((S(m),n),x)\in \mathrm{Add})}{\rEE{3,4,6}}
-
-    \proofstep{}{\exists x\in\mathbb{N}\,(((S(m),n),x)\in \mathrm{Add})}{\rInduktion{2,3,7}}
-
-\end{tabproof}
-
-%============================================================
-%  Kapitel: Addition
-%============================================================
-
-\section{Definition der Addition}
-
-\begin{definition}[Schreibweise für die Addition]
-Da die Menge \(\mathrm{Add}\) die Eigenschaften einer Funktion erfüllt, motiviert dies die Einführung einer neuen Funktion \(+:\mathbb{N}\times\mathbb{N}\mapsto \mathbb{N}\) in der Struktur
-\((\mathbb{N},0,S)\). Die einzelnen Axiome sind durch bereits bewiesene Sätze
-über \(\mathrm{Add}\) motiviert.
-\end{definition}
-\begin{remark}
-Wir setzen \(1 \coloneqq S(0)\). Seien \(a,b,c\in\mathbb{N}\), dann  führen wir die Infix-Schreibweise \(a+b=c\) als Abkürzung für die Zugehörigkeit \(((a,b),c)\in \mathrm{Add}\) als Metadefinitionen ein. Ebenso motivert \FormulaRefAuto{((S(0),n),S(n))\in \mathrm{Add}} für alle \(n\in\mathbb{N}\) Schreibweise \(1+n=S(n)\), die wir im folgenden anstelle von \(S(n)\) als Metadefinition verwenden.
-\end{remark}
-
-% ------------------------------------------------
-% Axiome der Addition (implizite Definition)
-% ------------------------------------------------
-
-\FormulaAxiomAuto[Totalität von \(+\)]%
-{a+b\in\mathbb{N}}[Seien \(a,b\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch \(\FormulaRefAuto{F(x)\in B}\) und da \(+\) eine Funktion ist.
-\end{remark}
-
-\FormulaAxiomAuto[Linksneutralität (Basisgleichung)]%
-{0+n=n}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch \FormulaRefAuto{((0,n),n)\in \mathrm{Add}}.
-\end{remark}
-
-\FormulaAxiomAuto[Erweiterte Schrittregel]%
-{m+n=k\eqvdash (1+m)+n=1+k}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch die Schrittregel \FormulaRefAuto{((m,n),k)\in \mathrm{Add} \eqvdash ((S(m),n),S(k))\in \mathrm{Add}}.
-\end{remark}
-
-%============================================================
-%  Kapitel: Multiplikation als Funktion
-%============================================================
-
-\chapter{Multiplikation als Funktion}
-\section{Konstruktion der Menge der Multiplikation}
-
-\begin{definition}[Multiplikations-Rekursion]
-Sei \(R\) eine Menge. Wir schreiben \(\mathrm{Mul}_{\mathrm{Rec}}(R)\) für die
-Konjunktion der folgenden drei Aussagen:
-\begin{description}
-  \item[Sortierung:] \( R \subseteq (\mathbb{N}\times\mathbb{N})\times\mathbb{N}\).
-  \item[Basiseigenschaft:] Sei \(n\in\mathbb{N}\). Dann gelte: \[((0,n),\,0)\in R.\]
-  \item[Schritteigenschaft:] Seien \(m,n,k\in\mathbb{N}\).
-   Dann gelte: \[((m,n),\,k)\in R \ \vdash\ ((1+m,n),\,k+n)\in R.\]
-\end{description}
-\end{definition}
-
-\subsection{Existenz einer solchen Menge}
-
-% --- Basis-Tupel liegen in N^3 ---
-\FormulaThmAuto{((0,n),0)\in \mathbb{N}^3}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{0 \in \mathbb{N}}}
-  \proofstep{}{((0,n),0)\in \mathbb{N}^3}{\FormulaRefAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ ((a,b),c)\in (A\times B)\times C}{1}}
-\end{tabproof}
-
-% --- Schritt bleibt in N^3 (nutzt Totalität von +) ---
-\FormulaThmAuto{((m,n),k)\in\mathbb{N}^3 \vdash ((1+m,n),k+n)\in\mathbb{N}^3}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{k+n\in\mathbb{N}}{\FormulaRefAuto{a+b\in\mathbb{N}}}
-  \proofstep{}{((1+m,n),k+n)\in\mathbb{N}^3}{\FormulaRefAuto{a\in A,\, b\in B,\, c\in C\ \vdash\ ((a,b),c)\in (A\times B)\times C}{1}}
-  \proofstep{}{((m,n),k)\in\mathbb{N}^3\rightarrow ((1+m,n),k+n)\in\mathbb{N}^3}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{2}}
-\end{tabproof}
-
-% --- N^3 erfüllt Mul_Rec ---
-\FormulaThmAuto{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}
-\begin{tabproof}
-  \proofstep{}{\mathbb{N}^3\subseteq\mathbb{N}^3}{\FormulaRefAuto{A\subseteq A}}
-  \proofstep{}{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}{\rAI{\rAI{1,\FormulaRefAuto{((0,n),0)\in \mathbb{N}^3},\FormulaRefAuto{((m,n),k)\in\mathbb{N}^3 \vdash ((1+m,n),k+n)\in\mathbb{N}^3}}}}
-\end{tabproof}
-
-% --- Existenz eines Mul_Rec-Zeugen ---
-\FormulaThmAuto{\exists R\,\mathrm{Mul}_{\mathrm{Rec}}(R)}
-\begin{tabproof}
-  \proofstep{}{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}}
-  \proofstep{}{\exists R\,\mathrm{Mul}_{\mathrm{Rec}}(R)}{\rEI{1}}
-\end{tabproof}
-
-% --- Definition als Schnitt aller Mul_Rec-Relationen ---
-\FormulaDefAuto[Multiplikation als Schnitt]{%
-\mathrm{Mul} \;:=\; \bigcap_{\mathrm{Mul}_{\mathrm{Rec}}(R)} R
-}
-[\FormulaRefAuto{\exists R\,\mathrm{Mul}_{\mathrm{Rec}}(R)} ermöglicht uns die Definition der folgenden Menge:]
-
-% --- Mul ist sortiert ---
-\FormulaThmAuto{\mathrm{Mul}\subseteq\mathbb{N}^3}
-\begin{tabproof}
-  \proofstep{}{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}{\FormulaRefAuto{\mathrm{Mul}_{\mathrm{Rec}}(\mathbb{N}^3)}}
-  \proofstep{}{\mathrm{Mul}\subseteq\mathbb{N}^3}{\rIE{\FormulaRefAuto{\mathrm{Mul} \;:=\; \bigcap_{\mathrm{Mul}_{\mathrm{Rec}}(R)} R},\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{1}}}
-\end{tabproof}
-
-\subsection{Grundlegende Eigenschaften}
-
-% --- Charakterisierung als Schnitt ---
-\FormulaThmAuto{x\in\mathrm{Mul}\ \eqvdash\ \forall \mathrm{Mul}_{\mathrm{Rec}}(R)(x\in R)}
-\begin{tabproofwide}
-  \proofstepwide[]{x\in \mathrm{Mul}}{\leftrightarrow}{x\in \bigcap_{\mathrm{Mul}_{\mathrm{Rec}}(R)} R}{\FormulaRefAuto{\mathrm{Mul} \;:=\; \bigcap_{\mathrm{Mul}_{\mathrm{Rec}}(R)} R}}
-  \proofstepwide[]{}{\leftrightarrow}{\forall \mathrm{Mul}_{\mathrm{Rec}}(R)(x\in R)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{\FormulaRefAuto{\exists R\,\mathrm{Mul}_{\mathrm{Rec}}(R)}}}
-\end{tabproofwide}
-
-% --- Mul erfüllt Basis ---
-\FormulaThmAuto[Null ist linksneutral für \(\mathrm{Mul}\)]{((0,n),0)\in \mathrm{Mul}}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Sei \(n\in\mathbb{N}\), dann gilt:}
-  \proofstep{1}{\mathrm{Mul}_{\mathrm{Rec}}(R)}{\rA}
-  \proofstep{1}{((0,n),0)\in R}{\rUE{\rAEn{1}}}
-  \proofstep{}{\,\forall \mathrm{Mul}_{\mathrm{Rec}}(R)\,(((0,n),0)\in R)}{\rUI{\rRI{1,2}}}
-  \proofstep{}{((0,n),0)\in \mathrm{Mul}}{\FormulaRefAuto{x\in\mathrm{Mul}\ \eqvdash\ \forall \mathrm{Mul}_{\mathrm{Rec}}(R)(x\in R)}{3}}
-\end{tabproof}
-
-% --- Mul erfüllt Schritt ---
-\FormulaThmAuto[Schrittregel der Multiplikation]{((m,n),k)\in \mathrm{Mul} \vdash ((1+m,n),k+n)\in \mathrm{Mul}}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Seien \(m,n,k\in\mathbb{N}\), dann gilt:}
-  \proofstep{1}{((m,n),k)\in \mathrm{Mul}}{\rA}
-  \proofstep{1}{\forall \mathrm{Mul}_{\mathrm{Rec}}(S)\,(((m,n),k)\in S)}{\FormulaRefAuto{x\in\mathrm{Mul}\ \eqvdash\ \forall \mathrm{Mul}_{\mathrm{Rec}}(R)(x\in R)}{\FormulaRefAuto{\exists R\,\mathrm{Mul}_{\mathrm{Rec}}(R)}}}
-  \proofstep{3}{\mathrm{Mul}_{\mathrm{Rec}}(R)}{\rA}
-  \proofstep{1,3}{((m,n),k)\in R}{\rRE{\rUE{2},3}}
-  \proofstep{3}{((m,n),k)\in R \rightarrow ((1+m,n),k+n)\in R}{\rUE{\rAEn{3}}}
-  \proofstep{1,3}{((1+m,n),k+n)\in R}{\rRE{5,4}}
-  \proofstep{1}{\forall \mathrm{Mul}_{\mathrm{Rec}}(R)\,(((1+m,n),k+n)\in R)}{\rUI{\rRI{3,6}}}
-  \proofstep{1}{((1+m,n),k+n)\in \mathrm{Mul}}{\FormulaRefAuto{x\in\mathrm{Mul}\ \eqvdash\ \forall \mathrm{Mul}_{\mathrm{Rec}}(R)(x\in R)}{7}}
-\end{tabproof}
-
-% --- 1*n = n ---
-\FormulaThmAuto{((1,n),n)\in \mathrm{Mul}}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Sei \(n\in\mathbb{N}\), dann gilt:}
-  \proofstep{}{((0,n),0)\in \mathrm{Mul}}{\FormulaRefAuto{((0,n),0)\in \mathrm{Mul}}}
-  \proofstep{}{((1,n),0+n)\in \mathrm{Mul}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Mul} \vdash ((1+m,n),k+n)\in \mathrm{Mul}}{1}}
-  \proofstep{}{((1,n),n)\in \mathrm{Mul}}{\rIE{2,\FormulaRefAuto{0+n=n}}}
-\end{tabproof}
-
-\subsection{Funktionale Eindeutigkeit}
-
-%============================================================
-% Abschnitt: Links-Nullabsorber der Multiplikation
-%============================================================
-
-\paragraph{Links-Nullabsorber der Multiplikation}
-
-% Aus y≠0 folgt: ((0,m),0) bleibt in Mul \ {((0,n),y)}
-\FormulaThmAuto{y\neq 0 \;\vdash\; ((0,m),0)\in \mathrm{Mul}\setminus\{((0,n),y)\}}%
-[Seien \(m,n,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{y\neq 0}{\rA}
-  \proofstep{}{((0,m),0)\in \mathrm{Mul}}{\FormulaRefAuto{((0,n),0)\in \mathrm{Mul}}}
-  \proofstep{1}{((0,m),0)\neq((0,n),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{1}}
-  \proofstep{1}{((0,m),0)\in \mathrm{Mul}\setminus\{((0,n),y)\}}%
-    {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{2,3}}
-\end{tabproof}
-
-% Schritt bleibt in der entfernten Menge stabil
-\FormulaThmAuto{((m,n),k)\in \mathrm{Mul}\setminus\{((0,x),y)\}\vdash ((1+m,n),k+n)\in \mathrm{Mul}\setminus\{((0,x),y)\}}%
-[Seien \(m,n,k,x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{((m,n),k)\in \mathrm{Mul}\setminus\{((0,x),y)\}}{\rA}
-  \proofstep{1}{((m,n),k)\in \mathrm{Mul}}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{1}}
-  \proofstep{1}{((1+m,n),k+n)\in \mathrm{Mul}}%
-    {\FormulaRefAuto{((m,n),k)\in \mathrm{Mul} \vdash ((1+m,n),k+n)\in \mathrm{Mul}}{2}}
-  \proofstep{}{1+m\neq 0}{\FormulaRefAuto{1+a\neq 0}}
-  \proofstep{4}{(1+m,n)\neq (0,x)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{4}}
-  \proofstep{4}{((1+m,n),k+n)\neq ((0,x),y)}{\FormulaRefAuto{a\neq b\vdash (a,c)\neq (b,d)}{5}}
-  \proofstep{3,6}{((1+m,n),k+n)\in \mathrm{Mul}\setminus\{((0,x),y)\}}%
-    {\FormulaRefAuto{a \in A,\, a \neq b \vdash a \in A \setminus \{b\}}{3,6}}
-\end{tabproof}
-
-% Triviale Obermenge
-\FormulaThmAuto{\mathrm{Mul}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{\mathrm{Mul}\subseteq\mathbb{N}^3}{\FormulaRefAuto{\mathrm{Mul}\subseteq\mathbb{N}^3}}
-  \proofstep{}{\mathrm{Mul}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}{1}}
-\end{tabproof}
-
-% Rekursive Abgeschlossenheit der entfernten Menge
-\FormulaThmAuto{y\neq 0\vdash \mathrm{Mul}_{\mathrm{Rec}}(\mathrm{Mul}\setminus\{((0,x),y)\})}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{y\neq 0}{\rA}
-  \proofstep{}{\mathrm{Mul}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}%
-    {\FormulaRefAuto{\mathrm{Mul}\setminus\{((0,x),y)\}\subseteq\mathbb{N}^3}}
-  \proofstep{1}{\forall n\in\mathbb{N}\,(((0,n),0)\in \mathrm{Mul}\setminus\{((0,x),y)\})}%
-    {\FormulaRefAuto{y\neq 0 \;\vdash\; ((0,m),0)\in \mathrm{Mul}\setminus\{((0,n),y)\}}{1}}
-  \proofstep{1}{\forall m,n,k\in\mathbb{N}\,\Bigl(((m,n),k)\in \mathrm{Mul}\setminus\{((0,x),y)\}\rightarrow}%
-    {\multirow{2}{*}{\FormulaRefAuto{((m,n),k)\in \mathrm{Mul}\setminus\{((0,x),y)\}\vdash ((1+m,n),k+n)\in \mathrm{Mul}\setminus\{((0,x),y)\}}}}
-  \proofstepstar{}{\ ((1+m,n),k+n)\in \mathrm{Mul}\setminus\{((0,x),y)\}\Bigr)}{}
-  \proofstep{1}{\mathrm{Mul}_{\mathrm{Rec}}(\mathrm{Mul}\setminus\{((0,x),y)\})}{\rAI{\rAI{2,3},4}}
-\end{tabproof}
-
-% Gleichheit per Minimalität ⇒ Ausschluss
-\FormulaThmAuto{y\neq 0\vdash \mathrm{Mul}=\mathrm{Mul}\setminus\{((0,x),y)\}}[Seien \(x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{1}{y\neq 0}{\rA}
-  \proofstep{1}{\mathrm{Mul}_{\mathrm{Rec}}(\mathrm{Mul}\setminus\{((0,x),y)\})}%
-    {\FormulaRefAuto{y\neq 0\vdash \mathrm{Mul}_{\mathrm{Rec}}(\mathrm{Mul}\setminus\{((0,x),y)\})}{1}}
-  \proofstep{1}{\mathrm{Mul}\subseteq \mathrm{Mul}\setminus\{((0,x),y)\}}%
-    {\FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{2}}
-  \proofstep{1}{\mathrm{Mul}\setminus\{((0,x),y)\}\subseteq \mathrm{Mul}}{\FormulaRefAuto{A\setminus B\subseteq A}}
-  \proofstep{1}{\mathrm{Mul}=\mathrm{Mul}\setminus\{((0,x),y)\}}%
-    {\FormulaRefAuto{A \subseteq B,\, B \subseteq A \vdash A = B}{3,4}}
-\end{tabproof}
-
-% Gesuchte Kurzform als Kontraposition: ((0,n),y)∈Mul ⇒ y=0
-\FormulaThmAuto{((0,n),0)\in \mathrm{Mul}\ \vdash\ ((0,n),y)\in\mathrm{Mul}\ \rightarrow\ y=0}%
-[Seien \(n,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \proofstep{}{y\neq 0 \ \rightarrow\ ((0,n),y)\notin \mathrm{Mul}}%
-    {\FormulaRefAuto{y\neq 0\vdash \mathrm{Mul}=\mathrm{Mul}\setminus\{((0,n),y)\}}}
-  \proofstep{}{((0,n),y)\in\mathrm{Mul}\ \rightarrow\ y=0}%
-    {\FormulaRefAuto{P\rightarrow Q\;\eqvdash\; \neg Q\rightarrow \neg P}{1}}
-\end{tabproof}
-
-\subsubsection{Eindeutigkeit des Ergebnisses}
-
-% ===============================
-% Eindeutigkeit für Mul (Rechts-Eindeutigkeit)
-% ===============================
-\FormulaThmAuto{((m,n),x)\in\mathrm{Mul},\,((m,n),y)\in\mathrm{Mul}\vdash x=y}[Seien \(m,n,x,y\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Seien \(m,n,x,y\in\mathbb{N}\).}
-  \prooftext{Wir beweisen die Behauptung per Induktion über \(m\).}
-
-  % ------------------------------------------------
-  % INDUKTIONSBASIS m = 0
-  % ------------------------------------------------
-  \proofcase[Basis]{m=0}
-    \proofstep{1}{((0,n),x)\in\mathrm{Mul}}{\rA}
-    \proofstep{2}{((0,n),y)\in\mathrm{Mul}}{\rA}
-    % 0*n = 0
-    \proofstep{1}{x=0}{\FormulaRefAuto{((0,n),0)\in \mathrm{Mul}\;\vdash\; ((0,n),x)\in\mathrm{Mul}\ \rightarrow\ x=0}{1}}
-    \proofstep{2}{y=0}{\FormulaRefAuto{((0,n),0)\in \mathrm{Mul}\;\vdash\; ((0,n),y)\in\mathrm{Mul}\ \rightarrow\ y=0}{2}}
-    \proofstep{1,2}{x=y}{\rIE{3,4}}
-
-  % ------------------------------------------------
-  % INDUKTIONSSCHRITT m -> S(m)
-  % Q(m):= ∀n∀r∀s\bigl( ((m,n),r)∈Mul ∧ ((m,n),s)∈Mul → r=s \bigr)
-  % ------------------------------------------------
-  \proofcase[Schritt]{m\to S(m)}
-    % Induktionsvoraussetzung als abgesetzter Stern-Block
-    \proofstepstar{}{((m,n),u)\in\mathrm{Mul},}{\multirow{2}{*}{\(\mathrm{IV}\)}}
-    \proofstepstar{}{((m,n),v)\in\mathrm{Mul}\;\vdash\; u=v}{}
-
-    % Zielannahmen für S(m)
-    \proofstep{5}{((1+m,n),x)\in\mathrm{Mul}}{\rA}
-    \proofstep{6}{((1+m,n),y)\in\mathrm{Mul}}{\rA}
-
-    % Schritt-Entfaltung der Multiplikation:
-    % S(m)*n = (m*n) + n  (als Existenz eines u bzw. v mit x=u+n bzw. y=v+n)
-    \proofstep{5}{\exists u\in\mathbb{N}\,\bigl(((m,n),u)\in\mathrm{Mul}\ \land\ x=u+n\bigr)}%
-      {\FormulaRefAuto{((S(m),n),x)\in \mathrm{Mul}\;\vdash\; \exists u\ \bigl(((m,n),u)\in\mathrm{Mul}\ \land\ x=u+n\bigr)}{5}}
-    \proofstep{6}{\exists v\in\mathbb{N}\,\bigl(((m,n),v)\in\mathrm{Mul}\ \land\ y=v+n\bigr)}%
-      {\FormulaRefAuto{((S(m),n),y)\in \mathrm{Mul}\;\vdash\; \exists v\ \bigl(((m,n),v)\in\mathrm{Mul}\ \land\ y=v+n\bigr)}{6}}
-
-    % ∃-Elimination für u
-    \proofstep{7}{((m,n),u)\in\mathrm{Mul}\ \land\ x=u+n}{\rA}
-    \proofstep{7}{((m,n),u)\in\mathrm{Mul}}{\rAEa{7}}
-    \proofstep{7}{x=u+n}{\rAEb{7}}
-
-    % ∃-Elimination für v
-    \proofstep{8}{((m,n),v)\in\mathrm{Mul}\ \land\ y=v+n}{\rA}
-    \proofstep{8}{((m,n),v)\in\mathrm{Mul}}{\rAEa{8}}
-    \proofstep{8}{y=v+n}{\rAEb{8}}
-
-    % Anwendung der Induktionsvoraussetzung auf ((m,n),u) und ((m,n),v)
-    \proofstep{7,8}{u=v}{\mathrm{IV}(9,11)}
-
-    % Aus u=v und x=u+n folgt per Substitution x=v+n
-    \proofstep{13}{x=v+n}{\rIE{12,10}}
-
-    % Aus y=v+n und x=v+n folgt x=y
-    \proofstep{8,13}{x=y}{\rIE{11,13}}
-
-    % ∃-Eliminationen wieder schließen
-    \proofstep{5,6}{x=y}{\rEE{5,7,14}}
-    % (Die erste rEE schließt die u-Existenz mit Zeile 14;
-    %  analog wird die v-Existenz durch dieselbe Schlusszeile abgedeckt.)
-
-  % Gesamtschluss über die Induktion
-  \proofstep{}{x=y}{\rInduktion{3,15}}
-\end{tabproof}
-
-\subsection{Totalität}
-
-% --- Existenz eines Ergebnisses für Mul ---
-\FormulaThmAuto{\exists x\in\mathbb{N}\,(((m,n),x)\in \mathrm{Mul})}%
-[Seien \(m,n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Induktion über \(m\).}
-  \proofcase[Basis]{m=0}
-    \proofstep{}{((0,n),0)\in \mathrm{Mul}}{\FormulaRefAuto{((0,n),0)\in \mathrm{Mul}}}
-    \proofstep{}{\exists x\in\mathbb{N}\,(((0,n),x)\in \mathrm{Mul})}{\rEI{1}}
-
-  \proofcase[Schritt]{m\to 1+mS(m)}
-    \proofstep{3}{\exists k\in\mathbb{N}\,(((m,n),k)\in \mathrm{Mul})}{\rA}
-    \proofstep{4}{((m,n),k)\in \mathrm{Mul}}{\rA}
-    \proofstep{4}{((1+mS(m),n),k+n)\in \mathrm{Mul}}{\FormulaRefAuto{((m,n),k)\in \mathrm{Mul} \vdash ((1+mS(m),n),k+n)\in \mathrm{Mul}}{4}}
-    \proofstep{4}{\exists x\in\mathbb{N}\,(((1+mS(m),n),x)\in \mathrm{Mul})}{\rEI{5}}
-    \proofstep{3}{\exists x\in\mathbb{N}\,(((1+mS(m),n),x)\in \mathrm{Mul})}{\rEE{3,4,6}}
-    \proofstep{}{\exists x\in\mathbb{N}\,(((1+mS(m),n),x)\in \mathrm{Mul})}{\rInduktion{2,3,7}}
-\end{tabproof}
-
-%============================================================
-%  Kapitel: Multiplikation
-%============================================================
-
-\section{Definition der Multiplikation}
-
-\begin{definition}[Schreibweise für die Multiplikation]
-Da die Menge \(\mathrm{Mul}\) die Eigenschaften einer Funktion erfüllt, motiviert dies die Einführung
-einer neuen Funktion \(\cdot:\mathbb{N}\times\mathbb{N}\mapsto \mathbb{N}\) in der Struktur
-\((\mathbb{N},0,S,+)\). Für \(a,b,c\in\mathbb{N}\) führen wir die Infix-Schreibweise
-\(a\cdot b=c\) als Abkürzung für \(((a,b),c)\in \mathrm{Mul}\) als Metadefinition ein.
-\end{definition}
-
-\begin{remark}
-Wir verwenden \(1\coloneqq S(0)\) und die bereits eingeführte Infix-Addition.
-\end{remark}
-
-% ------------------------------------------------
-% Axiome der Multiplikation (implizite Definition)
-% ------------------------------------------------
-
-\FormulaAxiomAuto[Totalität von \(\cdot\)]%
-{a\cdot b\in\mathbb{N}}[Seien \(a,b\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch \(\FormulaRefAuto{F(x)\in B}\) für Funktionen und die Totalität von \(\mathrm{Mul}\).
-\end{remark}
-
-\FormulaAxiomAuto[Linksnull (Basisgleichung)]%
-{0\cdot n=0}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch \FormulaRefAuto{((0,n),0)\in \mathrm{Mul}}.
-\end{remark}
-
-\FormulaAxiomAuto[Erweiterte Schrittregel]%
-{m\cdot n=k\ \eqvdash\ (1+m)\cdot n=k+n}[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{remark}
-Motiviert durch \FormulaRefAuto{((m,n),k)\in \mathrm{Mul} \vdash ((1+m,n),k+n)\in \mathrm{Mul}}.
-\end{remark}
-
-
-
-\section{Gruppenregeln der Addition}
-
-% ------------------------------------------------
-% Rechtsneutralität
-% ------------------------------------------------
-\FormulaThmAuto[Rechtsneutralität der Addition]{n+0=n}[Sei \(n\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Induktion über \(n\).}
-
-  % Basis n=0
-  \proofcase[Basis]{n=0}
-    \proofstep{}{0+0=0}{\FormulaRefAuto{0+n=n}}
-
-  % Schritt n -> 1+n
-  \proofcase[Schritt]{n\to 1+n}
-    \proofstep{1}{n+0=n}{\rA}
-    % Setze m:=n,\; b:=0,\; k:=n in der erweiterten Schrittregel
-    \proofstep{1}{(1+n)+0=1+n}{\FormulaRefAuto{m+n=k\eqvdash (1+m)+n=1+k}{1}}
-    \proofstep{}{n+0=n}{\rInduktion{1,2,3}}
-\end{tabproof}
-
-% ------------------------------------------------
-% Ein-Schritt-Gesetz rechts: m+1 = 1+m
-% ------------------------------------------------
-\FormulaThmAuto[Ein-Schritt-Gesetz rechts]{m+1=1+m}[Sei \(m\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Induktion über \(m\). Wir nutzen \(1+n=S(n)\) und Rechtsneutralität.}
-
-  % Basis m=0
-  \proofcase[Basis]{m=0}
-    \proofstep{}{0+1=1}{\FormulaRefAuto{0+n=n}}
-    \proofstep{}{1+0=1}{\FormulaRefAuto{1+n=S(n)}}
-    \proofstep{}{0+1=1+0}{\rIE{1,2}}
-
-  % Schritt m -> 1+m
-  \proofcase[Schritt]{m\to 1+m}
-    \proofstep{4}{m+1=1+m}{\rA}
-    \proofstep{4}{(1+m)+1=1+(1+m)}{\FormulaRefAuto{m+n=k\eqvdash (1+m)+n=1+k}{4}}
-    \proofstep{}{m+1=1+m}{\rInduktion{3,4,5}}
-\end{tabproof}
-
-% ------------------------------------------------
-% Assoziativität: (m+n)+k = m+(n+k)
-% ------------------------------------------------
-\FormulaThmAuto[Assoziativität der Addition]{(m+n)+k = m+(n+k)}%
-[Seien \(m,n,k\in\mathbb{N}\), dann gilt:]
-\begin{tabproof}
-  \prooftext{Induktion über \(m\).}
-
-  % Basis m=0
-  \proofcase[Basis]{m=0}
-    \proofstep{}{(0+n)+k=n+k}{\FormulaRefAuto{0+n=n}}
-    \proofstep{}{0+(n+k)=n+k}{\FormulaRefAuto{0+n=n}}
-    \proofstep{}{(0+n)+k=0+(n+k)}{\rIE{1,2}}
-
-  % Schritt m -> 1+m
-  \proofcase[Schritt]{m\to 1+m}
-    \proofstep{1}{(m+n)+k=m+(n+k)}{\rA}
-
-    % 1) Überführe (1+m)+n via Schrittregel in 1+(m+n)
-    \proofstep{}{m+n=(m+n)}{} % triviale Referenzgleichung
-    \proofstep{}{(1+m)+n=1+(m+n)}%
-      {\FormulaRefAuto{m+n=t\;\rightarrow\;(1+m)+n=1+t}{3}}
-
-    % 2) Setze a:=m+n, b:=k in Schrittregel: (1+a)+b = 1+(a+b)
-    \proofstep{}{(1+(m+n))+k = 1+((m+n)+k)}%
-      {\FormulaRefAuto{a+b=t\;\rightarrow\;(1+a)+b=1+t}{\rRef}}
-
-    % 3) Nutze IV auf (m+n)+k
-    \proofstep{1}{1+((m+n)+k) = 1+(m+(n+k))}{\rIE{1,5}}
-
-    % 4) Sammeln: linke Seite
-    \proofstep{}{((1+m)+n)+k = 1+(m+(n+k))}{\rCE{4,6}}
-
-    % 5) Rechte Seite in „1+(...)“-Form bringen
-    \proofstep{}{1+m=S(m)}{\FormulaRefAuto{1+n=S(n)}}
-    \proofstep{}{(1+m)+(n+k) = 1+(m+(n+k))}%
-      {\FormulaRefAuto{a+b=t\;\rightarrow\;(1+a)+b=1+t}{\rRef}}
-
-    % 6) Schluss
-    \proofstep{}{((1+m)+n)+k = (1+m)+(n+k)}{}
-\end{tabproof}
-
+\end{theorem}
+
+\FormulaDefAuto[Dezimales Zahlzeichen in B04]{\DecDigitSeq{d}{k}\vdash \DecNum{d}{k}\coloneqq\DecPlaceVal{d}{k}}
+
+Ein sichtbares dezimales Zahlzeichen
+\[
+  d_kd_{k-1}\cdots d_0
+\]
+bezeichnet damit die natürliche Zahl
+\[
+  d_k\cdot10^k+d_{k-1}\cdot10^{k-1}+\dots+d_0.
+\]
+Kurze Beispiele sind
+\[
+  0=\DecPlaceVal{d}{0}\text{ bei }d_0=0,\qquad
+  1=\DecPlaceVal{d}{0}\text{ bei }d_0=1,
+\]
+\[
+  10=1\cdot10+0,\qquad
+  123=1\cdot10^2+2\cdot10+3.
+\]
 
 \end{document}
