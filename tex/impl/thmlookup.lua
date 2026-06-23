@@ -517,6 +517,13 @@ function M.ref_by_id(id)
   tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
 end
 
+local function emit_ref_code(r)
+  return "\\ThmLookupEmitRefResolved{" ..
+    (r.env or "") .. "}{" ..
+    (r.label or "") .. "}{" ..
+    (r.number or "?") .. "}"
+end
+
 
 -- ---------- opts parsing (MVP) ----------
 local function parse_opts(opts)
@@ -568,14 +575,14 @@ function M.ref_by_structure(opts, expr, starred)
   -- 1) frischer Treffer
   if #candidates == 1 then
     local r = candidates[1]
-    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
+    tex.sprint(emit_ref_code(r))
     return
   end
 
   -- 2) Fallback: genau ein self_loaded Treffer
   if #candidates == 0 and #self_candidates == 1 then
     local r = self_candidates[1]
-    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
+    tex.sprint(emit_ref_code(r))
     return
   end
 
@@ -821,7 +828,7 @@ function M.define_ref_macro(qkey, opts, expr, starred)
   local texcode
   if #candidates == 1 then
     local r = candidates[1]
-    texcode = "\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}"
+    texcode = emit_ref_code(r)
   elseif #candidates == 0 then
     texcode = "\\textbf{[Theorem nicht gefunden]}"
   else
