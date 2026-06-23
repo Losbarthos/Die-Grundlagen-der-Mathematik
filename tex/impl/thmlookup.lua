@@ -638,6 +638,19 @@ local function split_tsv(line)
   return res
 end
 
+local function insert_loaded_record_once(key, rec)
+  if key == "" then return end
+
+  M.by_key[key] = M.by_key[key] or {}
+  for _, r in ipairs(M.by_key[key]) do
+    if r.label == rec.label and r.env == rec.env and r.number == rec.number then
+      return
+    end
+  end
+
+  table.insert(M.by_key[key], rec)
+end
+
 function M.load_registry()
   local f = io.open(M.registry_path, "r")
   if not f then return end
@@ -740,16 +753,12 @@ function M.load_registry_file(path)
         }
 
         -- 1) unter dem Key aus der TSV ablegen (falls vorhanden)
-        if key_in ~= "" then
-          M.by_key[key_in] = M.by_key[key_in] or {}
-          table.insert(M.by_key[key_in], rec)
-        end
+        insert_loaded_record_once(key_in, rec)
 
         -- 2) zusätzlich unter dem *aktuell* berechneten Key ablegen
         local key_now = make_key(canon)
         if key_now ~= "" and key_now ~= key_in then
-          M.by_key[key_now] = M.by_key[key_now] or {}
-          table.insert(M.by_key[key_now], rec)
+          insert_loaded_record_once(key_now, rec)
         end
       end
     end

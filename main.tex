@@ -47,6 +47,19 @@
   end
 }
 
+\newcommand{\ThmLookupBand}[1]{%
+  \directlua{thmlookup.set_band_output("\luaescapestring{\detokenize{#1}}")}%
+}
+
+\newcommand{\ThmLookupLoadBandRegistries}[1]{%
+  \directlua{
+    local list = "\luaescapestring{\detokenize{#1}}"
+    for tag in string.gmatch(list, "[^, ]+") do
+      thmlookup.load_registry_file("registry/_" .. tag .. ".registry.tsv")
+    end
+  }%
+}
+
 
 
 % --- Warnschwellen ---
@@ -58,19 +71,22 @@
 
 \begin{document}
 
-%\ThmLookupBand{B01}
+\ThmLookupBand{B01}
 \subfile{B01}
 
 \clearpage
-%\ThmLookupBand{B02}
+\ThmLookupBand{B02}
+\ThmLookupLoadBandRegistries{B01}
 \subfile{B02}
 
 \clearpage
-%\ThmLookupBand{B03}
+\ThmLookupBand{B03}
+\ThmLookupLoadBandRegistries{B01,B02}
 \subfile{B03}
 
 \clearpage
-%\ThmLookupBand{B04}
+\ThmLookupBand{B04}
+\ThmLookupLoadBandRegistries{B01,B02,B03}
 \subfile{B04}
 
 
