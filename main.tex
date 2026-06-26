@@ -32,7 +32,7 @@
 % --- thmlookup: pro Band in eigene Dateien schreiben ---
 \directlua{
   function thmlookup.set_band_output(tag)
-    local base = "registry/_" .. tag
+    local base = "\luaescapestring{\detokenize{registry/_}}" .. tag
     local reg  = base .. ".registry.tsv"
     local dbg  = base .. ".debug.log"
 
@@ -49,14 +49,14 @@
 }
 
 \newcommand{\ThmLookupBand}[1]{%
-  \directlua{thmlookup.set_band_output("\luaescapestring{\detokenize{#1}}")}%
+  \directlua{thmlookup.set_band_output([==[\luaescapestring{\detokenize{#1}}]==])}%
 }
 
 \newcommand{\ThmLookupLoadBandRegistries}[1]{%
   \directlua{
-    local list = "\luaescapestring{\detokenize{#1}}"
-    for tag in string.gmatch(list, "[^, ]+") do
-      thmlookup.load_registry_file("registry/_" .. tag .. ".registry.tsv")
+    local list = [==[\luaescapestring{\detokenize{#1}}]==]
+    for tag in string.gmatch(list, [==[[^, ]+]==]) do
+      thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_}}]==] .. tag .. [==[.registry.tsv]==])
     end
   }%
 }

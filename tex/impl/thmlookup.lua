@@ -485,8 +485,13 @@ function M.register_id(id, env, label)
 
   local existing = M.by_id[id]
   if existing then
-    -- nur self-loaded Altlast darf überschrieben werden
-    if not (existing.loaded == true and existing.self_loaded == true) then
+    -- Geladene Altlasten aus dem eigenen Vorlauf oder aus früheren Bänden
+    -- dürfen durch lokale Definitionen ersetzt werden. Damit blendet B04
+    -- B03-IDs aus, sobald der entsprechende Satz lokal vorhanden ist.
+    if existing.loaded == false then
+      if existing.env == env and existing.label == label then
+        return
+      end
       texio.write_nl("thmlookup WARNING: duplicate id '" .. id .. "' (keeping first)")
       return
     end
@@ -524,6 +529,26 @@ local function emit_ref_code(r)
     (r.number or "?") .. "}"
 end
 
+local function choose_candidates(all, env)
+  local fresh, self_loaded, external = {}, {}, {}
+
+  for _, r in ipairs(all or {}) do
+    if (not env) or r.env == env then
+      if r.loaded == false then
+        fresh[#fresh+1] = r
+      elseif r.self_loaded == true then
+        self_loaded[#self_loaded+1] = r
+      else
+        external[#external+1] = r
+      end
+    end
+  end
+
+  if #fresh > 0 then return fresh, "fresh" end
+  if #self_loaded > 0 then return self_loaded, "self-loaded" end
+  return external, "external"
+end
+
 
 -- ---------- opts parsing (MVP) ----------
 local function parse_opts(opts)
@@ -545,55 +570,22 @@ function M.ref_by_structure(opts, expr, starred)
   local canon = alpha_normalize(expr)
   local key = make_key(canon)
 
-  local all = M.by_key[key] or {}
-  local candidates = {}
-  local blocked_forward = false
-  local self_candidates = {}
+  local candidates, source = choose_candidates(M.by_key[key] or {}, o.env)
 
-  for _, r in ipairs(all) do
-    if r.self_loaded == true then
-      blocked_forward = true
-      self_candidates[#self_candidates+1] = r
-    else
-      candidates[#candidates+1] = r
-    end
-  end
-
-  -- optional env filter (auf beide Listen anwenden)
-  if o.env then
-    local function filt(list)
-      local out = {}
-      for _, r in ipairs(list) do
-        if r.env == o.env then out[#out+1] = r end
-      end
-      return out
-    end
-    candidates = filt(candidates)
-    self_candidates = filt(self_candidates)
-  end
-
-  -- 1) frischer Treffer
   if #candidates == 1 then
     local r = candidates[1]
     tex.sprint(emit_ref_code(r))
     return
   end
 
-  -- 2) Fallback: genau ein self_loaded Treffer
-  if #candidates == 0 and #self_candidates == 1 then
-    local r = self_candidates[1]
-    tex.sprint(emit_ref_code(r))
-    return
-  end
-
   if #candidates == 0 then
-    write_debug_block(expr, canon, key, blocked_forward and "blocked-forward" or "none", {})
+    write_debug_block(expr, canon, key, "none", {})
     tex.sprint("\\textbf{[Theorem nicht gefunden]}")
     return
   end
 
   -- ambiguous (wie bisher)
-  write_debug_block(expr, canon, key, "ambiguous", candidates)
+  write_debug_block(expr, canon, key, "ambiguous-" .. source, candidates)
   if starred then
     tex.sprint("\\textbf{[Mehrdeutig: bitte wählen]}\\,")
     tex.sprint("\\begin{itemize}")
@@ -814,16 +806,7 @@ function M.define_ref_macro(qkey, opts, expr, starred)
   local canon = alpha_normalize(expr)
   local key = make_key(canon)
 
-  local candidates = M.by_key[key] or {}
-
-  -- optional env filter
-  if o.env then
-    local filtered = {}
-    for _, r in ipairs(candidates) do
-      if r.env == o.env then filtered[#filtered+1] = r end
-    end
-    candidates = filtered
-  end
+  local candidates, source = choose_candidates(M.by_key[key] or {}, o.env)
 
   local texcode
   if #candidates == 1 then
@@ -832,6 +815,7 @@ function M.define_ref_macro(qkey, opts, expr, starred)
   elseif #candidates == 0 then
     texcode = "\\textbf{[Theorem nicht gefunden]}"
   else
+    write_debug_block(expr, canon, key, "ambiguous-forward-" .. source, candidates)
     -- ambiguous
     if starred then
       texcode = "\\textbf{[Mehrdeutig: bitte wählen]}"
