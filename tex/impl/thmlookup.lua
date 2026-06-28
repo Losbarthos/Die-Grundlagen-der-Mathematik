@@ -31,6 +31,19 @@ local function escape_field(s)
   return s
 end
 
+local function join_tsv(fields)
+  local last = #fields
+  while last > 1 and fields[last] == "" do
+    last = last - 1
+  end
+
+  local out = {}
+  for i = 1, last do
+    out[i] = fields[i] or ""
+  end
+  return table.concat(out, "\t")
+end
+
 local function append_line(path, line)
   local f = io.open(path, "a") -- öffnet Datei f im Modus append 
   if not f then 
@@ -402,7 +415,7 @@ function M.register(label, env, number, statement, title)
 
   M.by_key[key] = M.by_key[key] or {}
 
-  local line = table.concat({
+  local line = join_tsv({
     escape_field(M.format_version),
     escape_field(label),
     escape_field(env),
@@ -410,7 +423,7 @@ function M.register(label, env, number, statement, title)
     escape_field(key),
     escape_field(canon),
     escape_field(title)
-  }, "\t")
+  })
 
   -- 1) gleicher (label,env) Eintrag vorhanden?
   local existing_idx = nil
@@ -501,12 +514,12 @@ function M.register_id(id, env, label)
   M.by_id[id] = { env = env, label = label, loaded = false, self_loaded = false }
 
   -- persistieren in TSV
-  local line = table.concat({
+  local line = join_tsv({
     "ID",
     escape_field(id),
     escape_field(env),
     escape_field(label)
-  }, "\t")
+  })
   append_line(M.registry_path, line)
 end
 
