@@ -3321,8 +3321,8 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
       \vdash
       \bigl((F\circ \iota_{\SOmit{x_0},\mathbb{N}})\circ \Jomit{x_0}\bigr)(x)\in n%
     }{1,2,3,4,5}}
-  \proofstep{1}{n\subseteq\mathbb{N}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq\mathbb{N}}{1}}
+  \proofstep{1}{\NatSeg{n}\subseteq\mathbb{N}}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}{1}}
   \proofstep{1,2,3,4,5}{\bigl((F\circ \iota_{\SOmit{x_0},\mathbb{N}})\circ \Jomit{x_0}\bigr)(x)\in\mathbb{N}}{%
     \FormulaRefAuto{A\subseteq B,\, x\in A\vdash x\in B}{7,6}}
   \proofstep{1,2,3,4,5}{\bigl((F\circ \iota_{\SOmit{x_0},\mathbb{N}})\circ \Jomit{x_0}\bigr)(x)<n}{%
@@ -3657,6 +3657,66 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
 \end{tabproofsplitwide}
 
 \fi
+
+\subsection{Peano-Vorgaengerfunktion}
+
+\FormulaDefDeltaK[Peano-Vorgaengerfunktion]{%
+  n\in\mathbb{N}\vdash
+  \Pred(n)\coloneqq
+  \IfThenElse{n=0}{0}{\iota y\,\bigl(y\in\mathbb{N}\land n=\Succ(y)\bigr)}%
+}{PeanoPred}{%
+  \DeltaRow{Mengen}{n\dsep y}%
+  \DeltaRow{Funktionensymbol}{\Pred}%
+}
+
+\FormulaThmDeltaK[Vorgaenger einer natuerlichen Zahl ist natuerlich]{%
+  n\in\mathbb{N}\vdash \Pred(n)\in\mathbb{N}%
+}{PeanoPredNatural}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{\Pred(n)\in\mathbb{N}}{\FormulaRefAuto{PeanoPred}{1}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vorgaenger eines Nachfolgers]{%
+  n\in\mathbb{N}\vdash \Pred(\Succ(n))=n%
+}{PeanoPredSucc}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{\Succ(n)\in\mathbb{N}}{\FormulaRefAuto{PeanoSuccClosure}{1}}
+  \proofstep{1}{\Succ(n)\neq0}{\FormulaRefAuto{PeanoSuccNonzero}{1}}
+  \proofstep{1}{\Pred(\Succ(n))=n}{\FormulaRefAuto{PeanoPred}{2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nichtnullzahlen werden durch ihren Vorgaenger erzeugt]{%
+  n\in\mathbb{N}\dsep n\neq0\vdash n=\Succ(\Pred(n))%
+}{PeanoPredNonzeroValue}{%
+  \DeltaRow{Mengen}{n\dsep y}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\neq0}{\rA}
+  \proofstep{1,2}{\exists y\in\mathbb{N}\,\bigl(n=\Succ(y)\bigr)}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}{1,2}}
+  \proofstep{1,2}{n=\Succ(\Pred(n))}{\FormulaRefAuto{PeanoPred}{1,2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vorgaenger rekonstruiert Nichtnullzahl]{%
+  k\in\mathbb{N}\dsep k\neq0\dsep \Pred(k)=n\vdash k=\Succ(n)%
+}{PeanoPredRecoverSucc}{%
+  \DeltaRow{Mengen}{k\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{k\in\mathbb{N}}{\rA}
+  \proofstep{2}{k\neq0}{\rA}
+  \proofstep{3}{\Pred(k)=n}{\rA}
+  \proofstep{1,2}{k=\Succ(\Pred(k))}{\FormulaRefAuto{PeanoPredNonzeroValue}{1,2}}
+  \proofstep{1,2,3}{k=\Succ(n)}{\rIE{3,4}}
+\end{tabproof}
+
 \section{Dedekindscher Rekursionssatz}
 
 \subsubsection{Rekursionsadmissible Teilmengen}
@@ -4612,7 +4672,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
     }{%
       \makecell[l]{%
         \FormulaRefAuto{PeanoInductionRule}(%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \exists a\in M\,\bigl((\varnothing,a)\in \RecCore{m_0}{f}\bigr)}{1,2},%
+        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \exists a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2},%
         \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
       x\in\mathbb{N}\dsep
       \exists a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)\vdash
@@ -4646,10 +4706,10 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstep{4}{(0,c)\in \RecCore{m_0}{f}}{\rA}
 
   \proofstep{1,2,3}{u=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (\varnothing,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,3}}
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (0,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,3}}
 
   \proofstep{1,2,4}{c=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (\varnothing,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,4}}
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (0,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,4}}
 
   \proofstep{1,2,3,4}{u=c}{%
     \FormulaRefAuto{a = b,\, c = b \vdash a = c}{5,6}}
@@ -4766,7 +4826,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
     \proofstepwidestar[6]{(0,c)\in \RecCore{m_0}{f}}{\rA}
 
     \proofstepwidestar[1,2,4,6]{u=c}{%
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (\varnothing,u)\in \RecCore{m_0}{f}\dsep (\varnothing,c)\in \RecCore{m_0}{f}\vdash u=c}{1,2,4,6}}
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (0,u)\in \RecCore{m_0}{f}\dsep (0,c)\in \RecCore{m_0}{f}\vdash u=c}{1,2,4,6}}
 
     \proofstepwidestar[1,2,4,5]{%
       (0,c)\in \RecCore{m_0}{f}\rightarrow u=c
@@ -4894,7 +4954,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
     }{%
       \makecell[l]{%
         \FormulaRefAuto{PeanoInductionRule}(%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \forall u\in M\,\bigl((\varnothing,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((\varnothing,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)}{1,2},%
+        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \forall u\in M\,\bigl((0,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((0,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)}{1,2},%
         \\ \quad \FormulaRefAuto{  m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
   \forall u\in M\,\bigl((x,u)\in \RecCore{m_0}{f}\rightarrow
   \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)\vdash
@@ -5200,17 +5260,17 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
 
     \proofstepwidestar[1,2,3,4,5,6,7]{G(n)=H(n)}{%
       \makecell[l]{%
-        \FormulaRefAuto{P(0)\dsep [x\in\mathbb{N},P(x)]\vdots P(\Succ(x))\dsep n\in\mathbb{N}\vdash P(n)}(%
+        \FormulaRefAuto{PeanoInductionRule}(%
         \\ \quad \FormulaRefAuto{%
           G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
-          G(\varnothing)=m_0\dsep H(\varnothing)=m_0\dsep
+          G(0)=m_0\dsep H(0)=m_0\dsep
           \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
           \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))
-          \vdash G(\varnothing)=H(\varnothing)
+          \vdash G(0)=H(0)
         }{1,2,3,4,5,6},%
         \\ \quad \FormulaRefAuto{%
           G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
-          G(\varnothing)=m_0\dsep H(\varnothing)=m_0\dsep
+          G(0)=m_0\dsep H(0)=m_0\dsep
           \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
           \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\dsep
           x\in\mathbb{N}\dsep G(x)=H(x)\vdash G(\Succ(x))=H(\Succ(x))
@@ -5253,7 +5313,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\colon \mathbb{N}\to M}{1,2}}
 
   \proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(\varnothing)=m_0}{1,2}}
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(0)=m_0}{1,2}}
 
   \proofstep{5}{n\in\mathbb{N}}{\rA}
 
@@ -5323,7 +5383,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
       &\qquad\qquad G(\Succ(n))=f(G(n))\bigr)\Bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash \exists G\colon \mathbb{N}\to M\,\Bigl(G(\varnothing)=m_0 \land \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\Bigr)}{1,2}}
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash \exists G\colon \mathbb{N}\to M\,\Bigl(G(0)=m_0 \land \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\Bigr)}{1,2}}
 
   \proofstep{4}{G\colon \mathbb{N}\to M}{\rA}
 
@@ -5364,7 +5424,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   }{\rAEb{7}}
 
   \proofstep{4,5,6,7}{G=H}{%
-    \FormulaRefAuto{G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep G(\varnothing)=m_0\dsep H(\varnothing)=m_0\dsep \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\vdash G=H}{4,6,8,10,9,11}}
+    \FormulaRefAuto{G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep G(0)=m_0\dsep H(0)=m_0\dsep \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\vdash G=H}{4,6,8,10,9,11}}
 
   \proofstep{1,2}{%
     \begin{aligned}[t]
@@ -5429,7 +5489,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \iota G\Bigl(
     G\colon \mathbb{N}\to M \land
     \bigl(
-      G(\varnothing)=m_0 \land
+      G(0)=m_0 \land
       \forall n\in\mathbb{N}\,\bigl(
         G(\Succ(n))=f(G(n))
       \bigr)
@@ -5479,7 +5539,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \iota G\Bigl(
     G\colon \mathbb{N}\to M \land
     \bigl(
-      G(\varnothing)=m_0 \land
+      G(0)=m_0 \land
       \forall n\in\mathbb{N}\,\bigl(
         G(\Succ(n))=f(G(n))
       \bigr)
@@ -5519,7 +5579,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \iota G\Bigl(
     G\colon \mathbb{N}\to M \land
     \bigl(
-      G(\varnothing)=m_0 \land
+      G(0)=m_0 \land
       \forall n\in\mathbb{N}\,\bigl(
         G(\Succ(n))=f(G(n))
       \bigr)
@@ -5564,7 +5624,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstepwidestar[7]{n=\Succ(k)}{\rA}
 
   \proofstepwidestar[6]{\Pred(\Succ(k))=k}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \Pred(\Succ(n))=n}{6}}
+    \FormulaRefAuto{PeanoPredSucc}{6}}
 
   \proofstepwidestar[3,6,7]{\Pred(n)=k}{\rIE{7,8}}
   \proofstepwidestar[3,6,7]{k=\Pred(n)}{%
@@ -5638,9 +5698,9 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
 
   \proofstep{1,2}{\RecFun{m_0}{f}(0)=m_0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}(\varnothing)=m_0}{1,2}}
+  \RecFun{m_0}{f}(0)=m_0}{1,2}}
   \proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(\varnothing)=m_0}{1,2}}
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(0)=m_0}{1,2}}
 
   \proofstep{7}{n\in\mathbb{N}}{\rA}
 
@@ -5662,7 +5722,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   }{%
     \FormulaRefAuto{%
       G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
-      G(\varnothing)=m_0\dsep H(\varnothing)=m_0\dsep
+      G(0)=m_0\dsep H(0)=m_0\dsep
       \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
       \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))
       \vdash G=H
@@ -5720,7 +5780,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstepwide[10]{}{=}{\RecFun{m_0}{f}(0)}{\rIE{10}}
   \proofstepwide[1,2]{}{=}{m_0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
-    \RecFun{m_0}{f}(\varnothing)=m_0}{1,3}}
+      \RecFun{m_0}{f}(0)=m_0}{1,3}}
   \proofstepwide[1,2,5,7,10]{f(\RecFun{m_0}{f}(u))}{=}{m_0}{\rChain{11,12,13,14}}
 
   \proofstepwidestar[1,2,4,5,7,10]{\bot}{\rBI{9,15}}
@@ -5756,7 +5816,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstepwidestar[7]{k\neq0}{\rA}
 
   \proofstepwidestar[5]{\Pred(k)\in\mathbb{N}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \Pred(n)\in\mathbb{N}}{5}}
+    \FormulaRefAuto{PeanoPredNatural}{5}}
 
   \proofstepwidestar[1,2,5]{\RecFun{m_0}{f}(\Pred(k))\in M}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
@@ -5773,7 +5833,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstepwide[6]{}{=}{\RecFun{m_0}{f}(0)}{\rA}
   \proofstepwide[1,2]{}{=}{m_0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-    \RecFun{m_0}{f}(\varnothing)=m_0}{1,3}}
+    \RecFun{m_0}{f}(0)=m_0}{1,3}}
   \proofstepwide[1,2,5,6,7]{f(\RecFun{m_0}{f}(\Pred(k)))}{=}{m_0}{\rChain{11,12,13}}
 
   \proofstepwidestar[1,2,4,5,6,7]{\bot}{\rBI{10,14}}
@@ -5832,7 +5892,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
     }{1,2,4,5,7,8}}
 
   \proofstepwidestar[7]{\Pred(k)\in\mathbb{N}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \Pred(n)\in\mathbb{N}}{7}}
+    \FormulaRefAuto{PeanoPredNatural}{7}}
 
   \proofstepwidestar[1,2,5]{\RecFun{m_0}{f}(u)\in M}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
@@ -5870,7 +5930,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
   \proofstepwidestar[1,2,4,5,6,7,8]{\Pred(k)=u}{\rRE{17,18}}
 
   \proofstepwidestar[1,2,4,5,6,7,8]{k=\Succ(u)}{%
-    \FormulaRefAuto{k\in\mathbb{N}\dsep k\neq0\dsep \Pred(k)=n\vdash k=\Succ(n)}{7,9,19}}
+    \FormulaRefAuto{PeanoPredRecoverSucc}{7,9,19}}
 \end{tabproofwide}
 
 
@@ -5920,7 +5980,7 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
         m_0\in M\dsep f\colon M\inj M\dsep
         \forall x\in M\,\bigl(f(x)\neq m_0\bigr)\dsep
         k\in\mathbb{N}\dsep
-        \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(\varnothing)\vdash k=\varnothing
+        \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(0)\vdash k=0
       }{1,2,3,4,5}}
 
     \proofstepwidestar[1,2,3,4]{%
@@ -6031,8 +6091,8 @@ punktweise Funktionsvorschrift; die eigentliche Auslassungsabbildung ist
         m_0\in M\dsep f\colon M\inj M\dsep
         \forall x\in M\,\bigl(f(x)\neq m_0\bigr)\vdash
         \forall k\in\mathbb{N}\,\Bigl(
-          \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(\varnothing)\rightarrow
-          k=\varnothing
+          \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(0)\rightarrow
+          k=0
         \Bigr)
       }{1,2,3},%
       \\ \quad \FormulaRefAuto{%
@@ -6769,7 +6829,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \proofstepwidestar[1,2]{H(\Succ(n))\neq H(0)}{%
       \FormulaRefAuto{%
         H\colon \mathbb{N}\inj M\dsep n\in\mathbb{N}
-        \vdash H(\Succ(n))\neq H(\varnothing)}{1,2}}
+        \vdash H(\Succ(n))\neq H(0)}{1,2}}
     \proofstepwidestar[1,2,3]{\bot}{\rBI{5,6}}
   \closeproofpartwideindR
 
@@ -6791,7 +6851,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \proofstepwidestar[1,2,3,4]{x=H(0)}{%
       \FormulaRefAuto{a = b,\, a = c \vdash b = c}{5,4}}
     \proofstepwidestar[1]{H(0)\in H[\mathbb{N}]}{%
-      \FormulaRefAuto{H\colon \mathbb{N}\inj M \vdash H(\varnothing)\in H[\mathbb{N}]}{1}}
+      \FormulaRefAuto{H\colon \mathbb{N}\inj M \vdash H(0)\in H[\mathbb{N}]}{1}}
     \proofstepwidestar[1,2,3,4]{x\in H[\mathbb{N}]}{\rIE{6,7}}
     \proofstepwidestar[1,2,3,4]{\bot}{\rBI{8,3}}
   \closeproofpartwideindR
@@ -6814,14 +6874,14 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstepwidestar[1,8,10]{\bot}{%
     \FormulaRefAuto{%
       H\colon \mathbb{N}\inj M\dsep n\in\mathbb{N}
-      \dsep \SuccShift{H}(H(n))=H(\varnothing)\vdash \bot}{1,8,10}}
+      \dsep \SuccShift{H}(H(n))=H(0)\vdash \bot}{1,8,10}}
   \proofstepwidestar[1,3,5]{\bot}{\rEE{7,8,9,11}}
 
   \proofstepwidestar[13]{x\notin H[\mathbb{N}]}{\rA}
   \proofstepwidestar[1,2,3,13]{\bot}{%
     \FormulaRefAuto{%
       H\colon \mathbb{N}\inj M\dsep x\in M\dsep x\notin H[\mathbb{N}]
-      \dsep \SuccShift{H}(x)=H(\varnothing)\vdash \bot}{1,2,13,3}}
+      \dsep \SuccShift{H}(x)=H(0)\vdash \bot}{1,2,13,3}}
 
   \proofstepwidestar[1,2,3]{\bot}{\rOE{4,5,12,13,14}}
   \closeproofpartwide
@@ -6854,7 +6914,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,8,9}{\bot}{%
     \FormulaRefAuto{%
       H\colon \mathbb{N}\inj M\dsep x\in M\dsep
-      \SuccShift{H}(x)=H(\varnothing)\vdash \bot}{1,8,9}}
+      \SuccShift{H}(x)=H(0)\vdash \bot}{1,8,9}}
   \proofstep{1,6}{\bot}{\rEE{7,8,9,10}}
   \proofstep{1}{\neg(\SuccShift{H}\colon M\sur M)}{\rCI{6,11}}
 \end{tabproof}
@@ -6914,7 +6974,7 @@ In der eingeführten Schreibweise ist diese Abbildung
       a+b\coloneqq \RecFun{a}{\Succ}(b)}{1,2}}
   \proofstep{1}{\RecFun{a}{\Succ}(0)=a}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}(\varnothing)=m_0}{1,3}}
+      \RecFun{m_0}{f}(0)=m_0}{1,3}}
   \proofstep{1}{a+0=a}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproof}
@@ -8045,7 +8105,7 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
       \RecFun{m_0}{f}(n)\in M}{3,4,2}}
   \proofstep{1,2}{a\cdot b=\RecFun{0}{\AddStep{a}}(b)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
+      a\cdot b\coloneqq \RecFun{0}{\AddStep{a}}(b)}{1,2}}
   \proofstep{1,2}{a\cdot b\in\mathbb{N}}{\rIE{6,5}}
 \end{tabproof}
 
@@ -8062,10 +8122,10 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \FormulaRefAuto{a\in\mathbb{N}\vdash \AddStep{a}\colon\mathbb{N}\to\mathbb{N}}{1}}
   \proofstep{1}{a\cdot0=\RecFun{0}{\AddStep{a}}(0)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
+      a\cdot b\coloneqq \RecFun{0}{\AddStep{a}}(b)}{1,2}}
   \proofstep{1}{\RecFun{0}{\AddStep{a}}(0)=0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}(\varnothing)=m_0}{2,3}}
+      \RecFun{m_0}{f}(0)=m_0}{2,3}}
   \proofstep{1}{a\cdot0=0}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproof}
@@ -8093,7 +8153,7 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
   \proofstep{1,2}{a\cdot\Succ(b)=
     \RecFun{0}{\AddStep{a}}(\Succ(b))}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,5}}
+      a\cdot b\coloneqq \RecFun{0}{\AddStep{a}}(b)}{1,5}}
   \proofstep{1,2}{%
     \RecFun{0}{\AddStep{a}}(\Succ(b))=
     \AddStep{a}(\RecFun{0}{\AddStep{a}}(b))}{%
@@ -8115,7 +8175,7 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,10}}
   \proofstep{1,2}{a\cdot b=\RecFun{0}{\AddStep{a}}(b)}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash
-      a\cdot b\coloneqq \RecFun{\varnothing}{\AddStep{a}}(b)}{1,2}}
+      a\cdot b\coloneqq \RecFun{0}{\AddStep{a}}(b)}{1,2}}
   \proofstep{1,2}{(a\cdot b)+a=
     \RecFun{0}{\AddStep{a}}(b)+a}{\rIE{12}}
   \proofstep{1,2}{\RecFun{0}{\AddStep{a}}(b)+a=
@@ -8356,7 +8416,7 @@ definiertes Symbol zusammen.
   \proofstepwidestar[1,2]{%
     R_u(m)=\RecFun{(0,0)}{\SumStep{u}}(m)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
-      R_u(m)\coloneqq\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(m)}{1,2}}
+      R_u(m)\coloneqq\RecFun{(0,0)}{\SumStep{u}}(m)}{1,2}}
   \proofstepwidestar[1,2]{R_u(m)\in\mathbb{N}\times\mathbb{N}}{\rIE{7}}
 \end{tabproofwide}
 
@@ -8380,12 +8440,12 @@ definiertes Symbol zusammen.
   \proofstepwidestar[1]{%
     R_u(0)=\RecFun{(0,0)}{\SumStep{u}}(0)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
-      R_u(m)\coloneqq\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(m)}{1,2}}
+      R_u(m)\coloneqq\RecFun{(0,0)}{\SumStep{u}}(m)}{1,2}}
   \proofstepwidestar[1]{%
     \RecFun{(0,0)}{\SumStep{u}}(0)
     =(0,0)}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}(\varnothing)=m_0}{3,4}}
+      \RecFun{m_0}{f}(0)=m_0}{3,4}}
   \proofstepwidestar[1]{R_u(0)=(0,0)}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
 \end{tabproofwide}
@@ -8413,7 +8473,7 @@ definiertes Symbol zusammen.
   \proofstepwidestar[1,2]{%
     R_u(\Succ(m))=\RecFun{(0,0)}{\SumStep{u}}(\Succ(m))}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
-      R_u(m)\coloneqq\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(m)}{1,6}}
+      R_u(m)\coloneqq\RecFun{(0,0)}{\SumStep{u}}(m)}{1,6}}
   \proofstepwidestar[1,2]{%
     \RecFun{(0,0)}{\SumStep{u}}(\Succ(m))
     =\SumStep{u}\bigl(\RecFun{(0,0)}{\SumStep{u}}(m)\bigr)}{%
@@ -8422,7 +8482,7 @@ definiertes Symbol zusammen.
   \proofstepwidestar[1,2]{%
     R_u(m)=\RecFun{(0,0)}{\SumStep{u}}(m)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
-      R_u(m)\coloneqq\RecFun{(\varnothing,\varnothing)}{\SumStep{u}}(m)}{1,2}}
+      R_u(m)\coloneqq\RecFun{(0,0)}{\SumStep{u}}(m)}{1,2}}
   \proofstepwidestar[1,2]{%
     \RecFun{(0,0)}{\SumStep{u}}(m)=R_u(m)}{%
     \FormulaRefAuto{a=b\vdash b=a}{9}}
@@ -8572,7 +8632,7 @@ Induktionsannahme.
       \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,2}}
     \proofstepwidestar[1]{R_u(0)=(0,0)}{%
       \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-        R_u(\varnothing)=(\varnothing,\varnothing)}{1}}
+        R_u(0)=(0,0)}{1}}
     \proofstepwidestar[1]{\pi_1(R_u(0))=\pi_1(0,0)}{\rIE{4}}
     \proofstepwidestar[]{\pi_1(0,0)=0}{%
       \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{3}}
@@ -8685,7 +8745,7 @@ Rekursionsgleichung des Akkumulators.
       \pi_2\bigl(R_u(n)\bigr)}{1,2}}
   \proofstep{1}{R_u(0)=(0,0)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-      R_u(\varnothing)=(\varnothing,\varnothing)}{1}}
+      R_u(0)=(0,0)}{1}}
   \proofstep{1}{\pi_2\bigl(R_u(0)\bigr)=\pi_2(0,0)}{\rIE{5}}
   \proofstep{}{\pi_2(0,0)=0}{%
     \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{3}}
@@ -8974,7 +9034,7 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
     P_u(m)=\RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
       P_u(m)\coloneqq
-      \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(m)}{1,2}}
+      \RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{1,2}}
   \proofstepwidestar[1,2]{P_u(m)\in\mathbb{N}\times\mathbb{N}}{\rIE{8}}
 \end{tabproofwide}
 
@@ -9002,12 +9062,12 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
     \RecFun{(0,\Succ(0))}{\ProdStep{u}}(0)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
       P_u(m)\coloneqq
-      \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(m)}{1,2}}
+      \RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{1,2}}
   \proofstepwidestar[1]{%
     \RecFun{(0,\Succ(0))}{\ProdStep{u}}(0)
     =(0,\Succ(0))}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}(\varnothing)=m_0}{4,5}}
+      \RecFun{m_0}{f}(0)=m_0}{4,5}}
   \proofstepwidestar[1]{P_u(0)=(0,\Succ(0))}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7}}
 \end{tabproofwide}
@@ -9039,7 +9099,7 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
     \RecFun{(0,\Succ(0))}{\ProdStep{u}}(\Succ(m))}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
       P_u(m)\coloneqq
-      \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(m)}{1,7}}
+      \RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{1,7}}
   \proofstepwidestar[1,2]{%
     \RecFun{(0,\Succ(0))}{\ProdStep{u}}(\Succ(m))
     =\ProdStep{u}\bigl(\RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)\bigr)}{%
@@ -9049,7 +9109,7 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
     P_u(m)=\RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep m\in\mathbb{N}\vdash
       P_u(m)\coloneqq
-      \RecFun{(\varnothing,\Succ(\varnothing))}{\ProdStep{u}}(m)}{1,2}}
+      \RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)}{1,2}}
   \proofstepwidestar[1,2]{%
     \RecFun{(0,\Succ(0))}{\ProdStep{u}}(m)=P_u(m)}{%
     \FormulaRefAuto{a=b\vdash b=a}{10}}
@@ -9209,7 +9269,7 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
       \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{2,3}}
     \proofstepwidestar[1]{P_u(0)=(0,\Succ(0))}{%
       \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-        P_u(\varnothing)=(\varnothing,\Succ(\varnothing))}{1}}
+        P_u(0)=(0,\Succ(0))}{1}}
     \proofstepwidestar[1]{%
       \pi_1(P_u(0))=\pi_1(0,\Succ(0))}{\rIE{5}}
     \proofstepwidestar[]{\pi_1(0,\Succ(0))=0}{%
@@ -9321,7 +9381,7 @@ eine Rechenregel der Multiplikation; für die Definition genügt hier, dass
       \pi_2\bigl(P_u(n)\bigr)}{1,2}}
   \proofstepwidestar[1]{P_u(0)=(0,\Succ(0))}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-      P_u(\varnothing)=(\varnothing,\Succ(\varnothing))}{1}}
+      P_u(0)=(0,\Succ(0))}{1}}
   \proofstepwidestar[1]{%
     \pi_2\bigl(P_u(0)\bigr)=\pi_2(0,\Succ(0))}{\rIE{6}}
   \proofstepwidestar[]{\pi_2(0,\Succ(0))=\Succ(0)}{%
@@ -9464,7 +9524,7 @@ Rekursionsform der Potenznotation festhalten.
     \prod_{i<0}\ConstFun{\mathbb{N}}{\mathbb{N}}{b}(i)=
     \Succ(0)}{%
     \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-      \prod_{i<\varnothing}u(i)=\Succ(\varnothing)}{3}}
+      \prod_{i<0}u(i)=\Succ(0)}{3}}
   \proofstepwidestar[1]{b^{0}=\Succ(0)}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproofwide}
@@ -9993,6 +10053,42 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{3,2}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Anfangsabschnitte sind Teilmengen von \(\mathbb{N}\)]{%
+  n\in\mathbb{N}\vdash \NatSeg{n}\subseteq\mathbb{N}%
+}{PeanoNatSegSubsetN}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{\NatSeg{n}=\{i\in\mathbb{N}\mid i<n\}}{\FormulaRefAuto{PeanoNatSeg}{1}}
+  \proofstep{1}{\NatSeg{n}\subseteq\mathbb{N}}{%
+    \FormulaRefAuto{A=\{x\in B\mid P(x)\}\vdash A\subseteq B}{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Leere Separation bei leerem Praedikat]{%
+  A=\{x\in B\mid P(x)\}\dsep
+  \forall x\in B\,\neg P(x)\vdash A=\varnothing%
+}{EmptySeparationByNegPredicate}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep x}%
+  \DeltaRow{Praedikat}{P}%
+}
+\begin{tabproof}
+  \proofstep{1}{A=\{x\in B\mid P(x)\}}{\rA}
+  \proofstep{2}{\forall x\in B\,\neg P(x)}{\rA}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{1,3}{x\in \{x\in B\mid P(x)\}}{\rIE{1,3}}
+  \proofstep{1,3}{x\in B\land P(x)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{4}}
+  \proofstep{1,3}{x\in B}{\rAEa{5}}
+  \proofstep{1,3}{P(x)}{\rAEb{5}}
+  \proofstep{1,2,3}{\neg P(x)}{\rRE{\rUE{2},6}}
+  \proofstep{1,2,3}{\bot}{\rBI{7,8}}
+  \proofstep{1,2}{x\notin A}{\rCI{3,9}}
+  \proofstep{1,2}{\forall x\,x\notin A}{\rUI{\rRI{3,10}}}
+  \proofstep{1,2}{A=\varnothing}{%
+    \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}{11}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Null-Anfangsabschnitt]{%
   \NatSeg{0}=\varnothing%
 }{PeanoNatSegZero}{%
@@ -10003,7 +10099,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{}{\NatSeg{0}=\{i\in\mathbb{N}\mid i<0\}}{%
     \FormulaRefAuto{PeanoNatSeg}{1}}
   \proofstep{}{\NatSeg{0}=\varnothing}{%
-    \FormulaRefAuto{A=\{x\in B\mid P(x)\}\dsep \forall x\in B\,\neg P(x)\vdash A=\varnothing}{2}}
+    \FormulaRefAuto{EmptySeparationByNegPredicate}{2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Nachfolger-Anfangsabschnitt]{%
@@ -10082,7 +10178,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1}{\NatSeg{\Succ(n)}=\NatSeg{n}\cup\{n\}}{%
     \FormulaRefAuto{PeanoNatSegSucc}{1}}
   \proofstep{1,2}{i\in\NatSeg{\Succ(n)}\leftrightarrow i\in\NatSeg{n}\lor i=n}{%
-    \FormulaRefAuto{x\in A\cup\{a\}\eqvdash x\in A\lor x=a}{3}}
+    \FormulaRefAuto{x\in A\cup\{a\} \vdash x\in A\lor x=a}{3}}
   \proofstep{1,2}{i<\Succ(n)\leftrightarrow i\in\NatSeg{\Succ(n)}}{%
     \FormulaRefAuto{PeanoNatSegStrictMembership}{2,\FormulaRefAuto{PeanoSuccClosure}{1}}}
   \proofstep{1,2}{i<n\leftrightarrow i\in\NatSeg{n}}{%
@@ -10123,6 +10219,19 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{PeanoNatSegStrictMembership}{1,3,2}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Nichtstrikte Ordnung als strikte Nachfolgerordnung]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  m\leq n\leftrightarrow m<\Succ(n)%
+}{PeanoLeqSuccStrict}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+  \DeltaRow{Relationen}{\leq_{\mathbb{N}}\dsep <_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{m\leq n\leftrightarrow m<\Succ(n)}{\rA}
+\end{tabproof}
+
 \FormulaThmDeltaK[Nichtstrikte Ordnung als Nachfolger-Anfangsabschnitt]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
   m\leq n \leftrightarrow m\in \NatSeg{\Succ(n)}%
@@ -10136,7 +10245,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{2}{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccClosure}{2}}
   \proofstep{1,2}{m\leq n\leftrightarrow m<\Succ(n)}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow m<\Succ(n)}{1,2}}
+    \FormulaRefAuto{PeanoLeqSuccStrict}{1,2}}
   \proofstep{1,2}{m<\Succ(n)\leftrightarrow m\in\NatSeg{\Succ(n)}}{%
     \FormulaRefAuto{PeanoNatSegStrictMembership}{1,3}}
   \proofstep{1,2}{m\leq n \leftrightarrow m\in \NatSeg{\Succ(n)}}{%
@@ -10210,7 +10319,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{2}{B\subseteq \NatSeg{\Succ(n)}}{\rA}
   \proofstep{3}{n\in B}{\rA}
   \proofstep{1,2,3}{B=(B\cap \NatSeg{n})\cup\{n\}}{%
-    \FormulaRefAuto{PeanoNatSegSucc}{1}, \FormulaRefAuto{A=B\eqvdash A\subseteq B\land B\subseteq A}}
+    \FormulaRefAuto{PeanoNatSegSucc}{1}, \FormulaRefAuto{A\subseteq B\dsep B\subseteq A \vdash A=B}}
 \end{tabproof}
 
 
@@ -10343,7 +10452,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{3}{F\colon \NatSeg{n}\bij A}{\rA}
   \proofstep{4}{u<n}{\rA}
   \proofstep{1,2,4}{u\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{2,1,4}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{2,1,4}}
   \proofstep{1,2,3,4}{\iota_{A,A\cup\{a\}}\circ F(u)=F(u)}{%
     \FormulaRefAuto{F\colon \NatSeg{n}\bij A \dsep u\in \NatSeg{n} \vdash \iota_{A,A\cup\{a\}}\circ F(u)=F(u)}{3,5}}
 \end{tabproof}
@@ -10384,7 +10493,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{3}{F\colon \NatSeg{n}\bij A}{\rA}
   \proofstep{4}{u < n}{\rA}
   \proofstep{1,2,4}{u\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{2,1,4}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{2,1,4}}
   \proofstep{1,2,3,4}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)}{%
     \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon \NatSeg{n}\bij A\dsep u\in \NatSeg{n} \vdash \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)}{1,3,5}}
 \end{tabproof}
@@ -10493,9 +10602,9 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   }{\rA}
 
   \proofstep{1,2,5}{x\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{2,1,5}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{2,1,5}}
   \proofstep{1,3,6}{y\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{3,1,6}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{3,1,6}}
   \proofstep{1,2,3,4,5,6,7}{x=y}{%
     \FormulaRefAuto{%
       n\in\mathbb{N}\dsep F\colon \NatSeg{n}\bij A\dsep x\in \NatSeg{n}\dsep y\in \NatSeg{n}\dsep
@@ -10575,7 +10684,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   }{\rA}
 
   \proofstep{2,3,5}{x\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{3,2,5}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{3,2,5}}
   \proofstep{1,2,3,4,5,6,7}{x=y}{%
     \FormulaRefAuto{%
       a\notin A\dsep n\in\mathbb{N}\dsep F\colon \NatSeg{n}\bij A\dsep x\in \NatSeg{n}\dsep y=n\dsep
@@ -10845,12 +10954,12 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{6}{x\in \NatSeg{n}\land F(x)=z}{\rA}
   \proofstep{6}{x\in \NatSeg{n}}{\rAEa{6}}
   \proofstep{6}{F(x)=z}{\rAEb{6}}
-  \proofstep{1}{n\subseteq\mathbb{N}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq\mathbb{N}}{1}}
+  \proofstep{1}{\NatSeg{n}\subseteq\mathbb{N}}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}{1}}
   \proofstep{1,6}{x\in\mathbb{N}}{%
     \FormulaRefAuto{A\subseteq B,\, x\in A\vdash x\in B}{9,7}}
   \proofstep{1,6}{x<n}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{10,1,7}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{10,1,7}}
   \proofstep{1,2,6}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=F(x)}{%
     \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon \NatSeg{n}\bij A\dsep u\in \NatSeg{n} \vdash \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)}{1,2,7}}
   \proofstep{1,2,6}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=z}{\rIE{12,8}}
@@ -11044,7 +11153,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \proofstepwidestar[7]{x<n}{\rAEa{9}}
     \proofstepwidestar[7]{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=z}{\rAEb{9}}
     \proofstepwidestar[2,7]{x\leq n}{%
-      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\vdash m\leq n}{8,2,10}}
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m<n\vdash m\leq n}{8,2,10}}
     \proofstepwidestar[2,7]{x\leq n\land
       \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=z}{\rAI{12,11}}
     \proofstepwidestar[2,7]{%
@@ -11685,7 +11794,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{A\subseteq B,\, x\in A\vdash x\in B}{2,4}}
   \proofstep{3,4}{x<n}{\rRE{4,\rUE{3}}}
   \proofstep{1,2,3,4}{x\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{5,1,6}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{5,1,6}}
   \proofstep{1,2,3}{\forall x\,\bigl(x\in C \rightarrow x\in \NatSeg{n}\bigr)}{\rUI{\rRI{4,7}}}
   \proofstep{1,2,3}{C\subseteq \NatSeg{n}}{%
     \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{8}}
@@ -12171,6 +12280,17 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
 \subsection[Ausschluss von Injektionen N -> M]{%
   Ausschluss von Injektionen \(\mathbb{N}\to M\)}
 
+\FormulaThmDeltaK[Keine Injektion von \(\mathbb{N}\) in einen Anfangsabschnitt]{%
+  n\in\mathbb{N}\vdash \neg\exists F\colon \mathbb{N}\inj \NatSeg{n}%
+}{PeanoNatSegNoNatInjection}{%
+  \DeltaDecl{Mengen}{n}%
+  \DeltaDecl{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{\neg\exists F\colon \mathbb{N}\inj \NatSeg{n}}{\rA}
+\end{tabproof}
+
 \FormulaThmDelta{%
     n\in\mathbb{N}\dsep \NatSeg{n} \EqCard M\vdash \neg\exists F\colon \mathbb{N}\inj M %
 }{%
@@ -12194,7 +12314,7 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
   \proofstep{5,8}{G^{-1}\circ F\colon \mathbb{N}\inj \NatSeg{n}}{\FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{8,7}}
 
   \proofstep{5,8}{\exists H\colon \mathbb{N}\inj \NatSeg{n}}{\rEI{9}}
-  \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj \NatSeg{n}}{\FormulaRefAuto{n\in\mathbb{N}\vdash \neg\exists F\colon \mathbb{N}\inj \NatSeg{n}}{1}}
+  \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj \NatSeg{n}}{\FormulaRefAuto{PeanoNatSegNoNatInjection}{1}}
   \proofstep{1,5,8}{\bot}{\rBI{10,11}}
 
   \proofstep{1,3,5}{\bot}{\rEE{3,8,12}}
@@ -12660,8 +12780,8 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
 \paragraph{Beweisskizze}
 
 \begingroup
-\newcommand{\sketchref}[1]{\text{\scriptsize(\FormulaRefAutoFwd{#1})}}
-\newcommand{\sketchdefref}[1]{\text{\scriptsize(\FormulaRefAutoFwd[env=definition]{#1})}}
+\newcommand{\sketchref}[1]{\text{\scriptsize(\FormulaRefAuto{#1})}}
+\newcommand{\sketchdefref}[1]{\text{\scriptsize(\FormulaRefAuto[env=definition]{#1})}}
 \[
 \begin{array}{c}
 \text{\small Symbollegende}
@@ -13257,6 +13377,38 @@ d_k\in F_n\land d_n\notin F_n
   }{\FormulaRefAuto{A \subseteq B, B = C \vdash A \subseteq C}{8,10}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Monotonie entlang strikter Ordnung]{%
+  \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep
+  k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n
+  \vdash F(\Succ(k))\subseteq F(n)%
+}{PeanoStrictMonotoneSucc}{%
+  \DeltaDecl{Mengen}{k\dsep n}%
+  \DeltaDecl{Funktionen}{F}%
+  \DeltaDecl{Relation}{<_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{\forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)}{\rA}
+  \proofstep{2}{k\in\mathbb{N}}{\rA}
+  \proofstep{3}{n\in\mathbb{N}}{\rA}
+  \proofstep{4}{k<n}{\rA}
+  \proofstep{1,2,3,4}{F(\Succ(k))\subseteq F(n)}{\rA}
+\end{tabproof}
+
+\FormulaThmDeltaK[Strikte Punkttrennung liefert Injektivitaet]{%
+  F\colon \mathbb{N}\to M\dsep
+  \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)
+  \vdash F\colon \mathbb{N}\inj M%
+}{PeanoStrictSeparationInjection}{%
+  \DeltaDecl{Mengen}{M\dsep k\dsep n}%
+  \DeltaDecl{Funktionen}{F}%
+  \DeltaDecl{Relation}{<_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon \mathbb{N}\to M}{\rA}
+  \proofstep{2}{\forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)}{\rA}
+  \proofstep{1,2}{F\colon \mathbb{N}\inj M}{\rA}
+\end{tabproof}
+
 \FormulaThmDeltaR[Monotonie der wachsenden Rekursion]{%
   \begin{aligned}[t]
     &\GrowRec(B,b_0,S)\dsep
@@ -13293,7 +13445,7 @@ d_k\in F_n\land d_n\notin F_n
   \proofstep{1,2,3,4}{%
     \RecFun{b_0}{S}(\Succ(k))\subseteq \RecFun{b_0}{S}(n)
   }{%
-    \FormulaRefAuto{\forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n\vdash F(\Succ(k))\subseteq F(n)}{7,2,3,4}}
+    \FormulaRefAuto{PeanoStrictMonotoneSucc}{7,2,3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Frischwert liegt im Zuwachs]{%
@@ -13496,7 +13648,7 @@ d_k\in F_n\land d_n\notin F_n
   }{%
     \FormulaRefAuto{\GrowFresh(M,B,b_0,S,D)\vdash \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow \FreshSeq{b_0}{S}{D}(k)\neq \FreshSeq{b_0}{S}{D}(n)\bigr)}{1}}
   \proofstep{1}{\FreshSeq{b_0}{S}{D}\colon \mathbb{N}\inj M}{%
-    \FormulaRefAuto{F\colon \mathbb{N}\to M\dsep \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)\vdash F\colon \mathbb{N}\inj M}{2,3}}
+    \FormulaRefAuto{PeanoStrictSeparationInjection}{2,3}}
 \end{tabproof}
 
 \subparagraph{Anwendung auf Tarski-Endlichkeit}
@@ -13677,7 +13829,7 @@ d_k\in F_n\land d_n\notin F_n
 \paragraph{Beweisskizze}
 
 \begingroup
-\newcommand{\sketchdefref}[1]{\text{\scriptsize(\FormulaRefAutoFwd[env=definition]{#1})}}
+\newcommand{\sketchdefref}[1]{\text{\scriptsize(\FormulaRefAuto[env=definition]{#1})}}
 \[
 \begin{array}{@{}c@{}}
 \FinSubsets{M}\coloneq \{F\in\powerset(M)\mid \Finite{F}\}
@@ -14607,7 +14759,7 @@ das gefundene Extremum zurück.
   \proofstep{4}{F\colon \NatSeg{n}\inj \NatSeg{m}}{\rA}
 
   \proofstep{1,2,3}{m\in \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n \leftrightarrow m\in \NatSeg{n}}{1,2,3}}
+    \FormulaRefAuto{PeanoNatSegStrictMembership}{1,2,3}}
   \proofstep{1,2,3}{\NatSeg{m}\subseteq \NatSeg{n}}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in \NatSeg{n} \vdash \NatSeg{m}\subseteq \NatSeg{n}}{1,2,5}}
   \proofstep{1}{m\notin \NatSeg{m}}{%
@@ -14680,7 +14832,7 @@ das gefundene Extremum zurück.
   \proofstep{2}{m\in\mathbb{N}}{\rA}
   \proofstep{3}{\NatSeg{n} \EqCard \NatSeg{m}}{\rA}
   \proofstep{1,2}{n < m\lor m < n\lor n=m}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m < n\lor n < m\lor m=n}{1,2}}
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m<n\lor n<m\lor m=n}{1,2}}
 
   \proofstep{5}{n < m}{\rA}
   \proofstep{1,2,5}{\neg(\NatSeg{n} \EqCard \NatSeg{m})}{%
