@@ -525,21 +525,25 @@ end
 
 
 
-function M.ref_by_id(id)
-  id = id or ""
-  local r = M.by_id[id]
-  if (not r) or (r.self_loaded == true) then
-    tex.sprint("\\textbf{[Theorem nicht gefunden]}")
-    return
-  end
-  tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
-end
-
 local function emit_ref_code(r)
   return "\\ThmLookupEmitRefResolved{" ..
     (r.env or "") .. "}{" ..
     (r.label or "") .. "}{" ..
     (r.number or "?") .. "}"
+end
+
+function M.ref_by_id(id)
+  id = id or ""
+  local r = M.by_id[id]
+  if not r then
+    tex.sprint("\\textbf{[Theorem nicht gefunden]}")
+    return
+  end
+  if r.number and r.number ~= "" then
+    tex.sprint(emit_ref_code(r))
+  else
+    tex.sprint("\\ThmLookupEmitRef{" .. (r.env or "") .. "}{" .. (r.label or "") .. "}")
+  end
 end
 
 local function choose_candidates(all, env)
@@ -663,6 +667,20 @@ local function insert_loaded_record_once(key, rec)
   table.insert(M.by_key[key], rec)
 end
 
+local function find_loaded_number(label, env)
+  if not label or label == "" then return "" end
+
+  for _, records in pairs(M.by_key or {}) do
+    for _, r in ipairs(records or {}) do
+      if r.label == label and ((not env) or env == "" or r.env == env) then
+        return r.number or ""
+      end
+    end
+  end
+
+  return ""
+end
+
 function M.load_registry()
   local f = io.open(M.registry_path, "r")
   if not f then return end
@@ -678,7 +696,13 @@ function M.load_registry()
         local label = unescape_field(c[4] or "")
         if id ~= "" then
           -- self-registry => self_loaded = true
-          M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = true }
+          M.by_id[id] = {
+            env = env,
+            label = label,
+            number = find_loaded_number(label, env),
+            loaded = true,
+            self_loaded = true,
+          }
         end
 
       else
@@ -744,7 +768,13 @@ function M.load_registry_file(path)
           local existing = M.by_id[id]
           -- Cross-band darf self-loaded überschreiben; echte Konflikte nicht
           if (not existing) or (existing.self_loaded == true) then
-            M.by_id[id] = { env = env, label = label, loaded = true, self_loaded = false }
+            M.by_id[id] = {
+              env = env,
+              label = label,
+              number = find_loaded_number(label, env),
+              loaded = true,
+              self_loaded = false,
+            }
           end
         end
 
