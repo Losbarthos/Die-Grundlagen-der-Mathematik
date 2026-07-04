@@ -1553,7 +1553,12 @@ neu eingeführt.
 \end{tabproof}
 
 
-\section{Natürliche Ordnung}
+\section{Von-Neumann-Vergleich der natürlichen Zahlen}
+
+Der folgende Block enthält Hilfsaussagen zur von-Neumann-Darstellung der
+natürlichen Zahlen, also zu Mitgliedschaft und Teilmengenrelation zwischen
+natürlichen Zahlen. Die natürliche Ordnung im Sinne von B04 wird später nach
+der Addition additiv eingeführt.
 
 \FormulaDefDelta[Strikte Ordnungsrelation der natürlichen Zahlen]{%
   <_{\mathbb{N}}\coloneqq
@@ -6447,7 +6452,7 @@ Definition \(\FormulaRefAuto{RecFunDef}\) direkt.
   \proofstep{1,2,3}{\RecFun{m_0}{f}\colon \mathbb{N}\inj M}{%
     \FormulaRefAuto{Injektive Funktion}{4,5}}
 \end{tabproof}
-\subsection{Folgenverschiebung entlang einer Einbettung}
+\subsection{Anwendung: Folgenverschiebung entlang einer Einbettung}
 
 Im folgenden Konstruktionsschritt bezeichnet \(\tSuccShift{H}\) nur die
 punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
@@ -7520,10 +7525,46 @@ In der eingeführten Schreibweise ist diese Abbildung
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\FormulaDefDeltaK[Zahlzeichen \(1\)]{%
+  1\coloneqq\Succ(0)%
+}{PeanoOne}{%
+  \DeltaRow{Mengen}{0\dsep 1}%
+  \DeltaRow{Funktionensymbol}{\Succ}%
+  \DeltaRow{Definitionsprinzip}{Nachfolger von 0}%
+}
+
+\FormulaThmDeltaK[Das Zahlzeichen \(1\) ist natürlich]{%
+  1\in\mathbb{N}%
+}{PeanoOneInN}{%
+  \DeltaRow{Mengen}{1}%
+}
+\begin{tabproof}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{\Succ(0)\in\mathbb{N}}{\FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{}{1\in\mathbb{N}}{\rIE{1,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nachfolger als Addition von \(1\)]{%
+  n\in\mathbb{N}\vdash n+1=\Succ(n)%
+}{PeanoAddOneSucc}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}}
+  \proofstep{1}{n+1=n+\Succ(0)}{\rIE{2}}
+  \proofstep{1}{n+\Succ(0)=\Succ(n)}{\FormulaRefAuto{PeanoAddSuccZero}{1}}
+  \proofstep{1}{n+1=\Succ(n)}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
 \section{Natürliche Ordnung}
 
 Die Ordnung auf \(\mathbb{N}\) wird in diesem Band aus der Addition gewonnen.
 Sie ist daher nicht die Mitgliedschaftsrelation der von-Neumann-Konstruktion.
+Mit dem Zahlzeichen \(1\) schreiben wir Nachfolgerabstände bevorzugt als
+\(n+1\); formal wird dies durch \(n+1=\Succ(n)\) abgesichert.
 
 \FormulaDefDeltaK[Ordnungsrelation der natürlichen Zahlen]{%
   \leq_{\mathbb{N}}\coloneqq
@@ -7589,6 +7630,74 @@ Sie ist daher nicht die Mitgliedschaftsrelation der von-Neumann-Konstruktion.
       m<n \coloneqq \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{1,2}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Additive Charakterisierung der strikten natürlichen Ordnung mit \(+1\)]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  m<n \leftrightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)%
+}{PeanoStrictAddOneDistance}{%
+  \DeltaRow{Mengen}{k\dsep m\dsep n}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Hinrichtung]{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m<n
+    \vdash \exists k\in\mathbb{N}\,(m+(k+1)=n)
+  }{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m<n
+    \vdash \exists k\in\mathbb{N}\,(m+(k+1)=n)
+  }
+    \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{m<n}{\rA}
+    \proofstepwidestar[1,2,3]{\exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+        m<n \leftrightarrow \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{1,2,3}}
+    \proofstepwidestar[5]{k\in\mathbb{N}\land m+\Succ(k)=n}{\rA}
+    \proofstepwidestar[5]{k\in\mathbb{N}}{\rAEa{5}}
+    \proofstepwidestar[5]{m+\Succ(k)=n}{\rAEb{5}}
+    \proofstepwidestar[5]{k+1=\Succ(k)}{\FormulaRefAuto{PeanoAddOneSucc}{6}}
+    \proofstepwidestar[5]{m+(k+1)=m+\Succ(k)}{\rIE{8}}
+    \proofstepwidestar[5]{m+(k+1)=n}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,7}}
+    \proofstepwidestar[5]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rEI{\rAI{6,10}}}
+    \proofstepwidestar[1,2,3]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rEE{4,5,11}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Rückrichtung]{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep
+    \exists k\in\mathbb{N}\,(m+(k+1)=n)\vdash m<n
+  }{%
+    m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep
+    \exists k\in\mathbb{N}\,(m+(k+1)=n)\vdash m<n
+  }
+    \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rA}
+    \proofstepwidestar[4]{k\in\mathbb{N}\land m+(k+1)=n}{\rA}
+    \proofstepwidestar[4]{k\in\mathbb{N}}{\rAEa{4}}
+    \proofstepwidestar[4]{m+(k+1)=n}{\rAEb{4}}
+    \proofstepwidestar[4]{k+1=\Succ(k)}{\FormulaRefAuto{PeanoAddOneSucc}{5}}
+    \proofstepwidestar[4]{m+(k+1)=m+\Succ(k)}{\rIE{7}}
+    \proofstepwidestar[4]{m+\Succ(k)=m+(k+1)}{\FormulaRefAuto{a=b\vdash b=a}{8}}
+    \proofstepwidestar[4]{m+\Succ(k)=n}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,6}}
+    \proofstepwidestar[4]{\exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{\rEI{\rAI{5,10}}}
+    \proofstepwidestar[1,2,4]{m<n}{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+        m<n \leftrightarrow \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{1,2,11}}
+    \proofstepwidestar[1,2,3]{m<n}{\rEE{3,4,12}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[1,2]{%
+      m<n\rightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rRI{3,4}}
+    \proofstepwidestar[1,2]{%
+      \exists k\in\mathbb{N}\,(m+(k+1)=n)\rightarrow m<n}{\rRI{5,6}}
+    \proofstepwidestar[1,2]{%
+      m<n \leftrightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rLRI{7,8}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
 \FormulaThmDelta[Reflexivität der natürlichen Ordnung]{%
   n\in\mathbb{N}\vdash n\leq n%
 }{%
@@ -7627,6 +7736,20 @@ Sie ist daher nicht die Mitgliedschaftsrelation der von-Neumann-Konstruktion.
       m\leq n \leftrightarrow \exists k\in\mathbb{N}\,(m+k=n)}{1,2,6}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Element ist kleiner oder gleich \(n+1\)]{%
+  n\in\mathbb{N}\vdash n\leq n+1%
+}{PeanoLeqAddOne}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{n\leq \Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\leq \Succ(n)}{1}}
+  \proofstep{1}{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstep{1}{\Succ(n)=n+1}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstep{1}{n\leq n+1}{\rIE{4,2}}
+\end{tabproof}
+
 \FormulaThmDelta[Element ist strikt kleiner als sein Nachfolger]{%
   n\in\mathbb{N}\vdash n<\Succ(n)%
 }{%
@@ -7644,6 +7767,20 @@ Sie ist daher nicht die Mitgliedschaftsrelation der von-Neumann-Konstruktion.
   \proofstep{1}{n<\Succ(n)}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
       m<n \leftrightarrow \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}{1,2,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Element ist strikt kleiner als \(n+1\)]{%
+  n\in\mathbb{N}\vdash n<n+1%
+}{PeanoLtAddOne}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{n<\Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n<\Succ(n)}{1}}
+  \proofstep{1}{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstep{1}{\Succ(n)=n+1}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstep{1}{n<n+1}{\rIE{4,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Strikte Ordnung impliziert natürliche Ordnung]{%
@@ -7780,6 +7917,25 @@ Sie ist daher nicht die Mitgliedschaftsrelation der von-Neumann-Konstruktion.
     \FormulaRefAuto{PeanoSuccLeqDistance}{1,2}}
   \proofstep{1,2}{m<n \leftrightarrow \Succ(m)\leq n}{%
     \FormulaRefAuto{P \leftrightarrow Q, R \leftrightarrow Q \vdash P \leftrightarrow R}{3,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[\(1\)-Charakterisierung der strikten natürlichen Ordnung]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  m<n \leftrightarrow m+1\leq n%
+}{PeanoLtAddOneLeq}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{1,2}{m<n \leftrightarrow \Succ(m)\leq n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m<n \leftrightarrow \Succ(m)\leq n}{1,2}}
+  \proofstep{1}{m+1=\Succ(m)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstep{1}{\Succ(m)=m+1}{\FormulaRefAuto{a=b\vdash b=a}{4}}
+  \proofstep{1,2}{\Succ(m)\leq n\leftrightarrow m+1\leq n}{\rIE{5}}
+  \proofstep{1,2}{m<n \leftrightarrow m+1\leq n}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{3,6}}
 \end{tabproof}
 
 \FormulaThmDelta[Einführung in die natürliche Ordnungsrelation]{%
@@ -9889,13 +10045,13 @@ Zahlzeichen als eigene Symbole festgelegt.
 
 \section{Zahlzeichen, Basen und Ziffern}
 
-Zunächst führen wir die vertrauten kleinen Zahlzeichen als Abkürzungen für
-die entsprechenden natürlichen Zahlen ein. Dabei ist \(0\) bereits eingeführt,
-und jedes folgende Zahlzeichen bezeichnet den Nachfolger des vorherigen.
+Das Zahlzeichen \(1\) wurde bereits vor der additiven Ordnung eingeführt.
+Die übrigen vertrauten kleinen Zahlzeichen werden hier als Abkürzungen für
+die entsprechenden natürlichen Zahlen ergänzt; jedes folgende Zahlzeichen
+bezeichnet den Nachfolger des vorherigen.
 
-\FormulaDefDeltaK[Natürliche Zahlzeichen bis zehn]{%
+\FormulaDefDeltaK[Natürliche Zahlzeichen von zwei bis zehn]{%
   \begin{gathered}
-1\coloneqq\Succ(0),\qquad
     2\coloneqq\Succ(1),\qquad
     3\coloneqq\Succ(2),\\
     4\coloneqq\Succ(3),\qquad
@@ -9906,8 +10062,8 @@ und jedes folgende Zahlzeichen bezeichnet den Nachfolger des vorherigen.
     9\coloneqq\Succ(8),\qquad
     10\coloneqq\Succ(9)
   \end{gathered}
-}{Natürliche Zahlzeichen bis zehn}{%
-  \DeltaRow{Mengen}{0\dsep 1\dsep 2\dsep 3\dsep 4\dsep 5\dsep 6\dsep 7\dsep 8\dsep 9\dsep 10}%
+}{Natürliche Zahlzeichen von zwei bis zehn}{%
+  \DeltaRow{Mengen}{1\dsep 2\dsep 3\dsep 4\dsep 5\dsep 6\dsep 7\dsep 8\dsep 9\dsep 10}%
   \DeltaRow{Funktionensymbol}{\Succ}%
 }
 
