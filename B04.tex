@@ -3821,7 +3821,19 @@ Damit ist der Kern der Graph einer Funktion. Die Rekursionsgleichungen folgen
 dann aus der Konstruktion des Kerns, und die Eindeutigkeit einer beliebigen
 anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
 
-\subsubsection{Rekursionsadmissible Teilmengen}
+\paragraph{Aufbau des Abschnitts}
+
+Der Abschnitt trennt die Hauptlinie des Beweises von den technischen
+Fixierungsargumenten. Zuerst werden rekursionsadmissible Teilmengen und der
+Rekursionskern konstruiert. Danach zeigen die Fixierungslemmata, dass jede
+Stufe des Kerns höchstens einen Wert enthält; die Induktion liefert die
+Existenz eines Werts in jeder Stufe. Aus eindeutiger Existenz wird der Kern als
+Funktion gelesen. Die Rekursionsgleichungen und die Eindeutigkeit beliebiger
+rekursiver Abbildungen ergeben schließlich den Dedekindschen Rekursionssatz.
+Die danach eingeführte Rekursionsabbildung ist nur noch das benannte Objekt,
+das durch diesen Satz eindeutig bestimmt ist.
+
+\subsubsection{Hauptkonstruktion: Rekursionsadmissible Mengen und Rekursionskern}
 
 \paragraph{Axiome der Rekursionsadmissibilität}
 
@@ -3878,7 +3890,12 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \DeltaPrem{\makecell[l]{Rekursionsadmissible\\Teilmenge}}{ }%
 }
 
-\paragraph{Beispiele rekursionsadmissibler Mengen}
+\paragraph{Nichtleere Admissibilität und Hilfskonstruktionen}
+
+Der volle Produktraum zeigt zunächst, dass es überhaupt rekursionsadmissible
+Teilmengen gibt. Die beiden Fixierungsmengen sind technische Werkzeuge: Sie
+werden später benutzt, um falsche Werte in der Nullstufe und in einer
+Nachfolgerstufe aus dem Rekursionskern auszuschließen.
 
 \subparagraph{Der volle Produktraum}
 
@@ -3947,7 +3964,7 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\subparagraph{Fixierungsmenge der Nullstufe}
+\subparagraph{Technisches Lemma: Fixierungsmenge der Nullstufe}
 
 \FormulaDefDeltaR[Fixierungsmenge der Nullstufe]{%
   \begin{aligned}[t]
@@ -4063,7 +4080,11 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\subparagraph{Rekursionskern}
+\subparagraph{Schnittkonstruktion des Rekursionskerns}
+
+Der Rekursionskern ist die kleinste rekursionsadmissible Teilmenge von
+\(\mathbb{N}\times M\): Ein Paar liegt genau dann im Kern, wenn es in jeder
+rekursionsadmissiblen Teilmenge liegt.
 
 \FormulaDefDelta[Rekursionskern]{%
   m_0\in M \dsep f\colon M\to M \vdash
@@ -4362,6 +4383,65 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   }
 \end{tabproofwide}
 
+\FormulaThmDeltaK[Rekursionskern ist kleinster rekursionsadmissibler Graphkandidat]{%
+  \begin{aligned}[t]
+    &m_0\in M\dsep f\colon M\to M \vdash{}\\
+    &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M \land{}\\
+    &(0,m_0)\in \RecCore{m_0}{f}\land{}\\
+    &\AdmRec{m_0}{f}(\RecCore{m_0}{f})\land{}\\
+    &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow
+      \RecCore{m_0}{f}\subseteq H\bigr)
+  \end{aligned}
+}{RecCoreLeastAdmissible}{%
+  \DeltaDecl{Mengen}{H\dsep M\dsep m_0}%
+  \DeltaDecl{Funktionen}{f}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m_0\in M}{\rA}
+  \proofstepwidestar[2]{f\colon M\to M}{\rA}
+
+  \proofstepwidestar[1,2]{\RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2}}
+  \proofstepwidestar[1,2]{(0,m_0)\in \RecCore{m_0}{f}}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash (0,m_0)\in \RecCore{m_0}{f}}{1,2}}
+  \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\RecCore{m_0}{f})}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \AdmRec{m_0}{f}(\RecCore{m_0}{f})}{1,2}}
+
+  \proofstepwidestar[5]{\AdmRec{m_0}{f}(H)}{\rA}
+  \proofstepwidestar[1,2,5]{\RecCore{m_0}{f}\subseteq H}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep \AdmRec{m_0}{f}(H)
+    \vdash \RecCore{m_0}{f}\subseteq H}{1,2,5}}
+  \proofstepwidestar[1,2]{%
+    \forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow
+    \RecCore{m_0}{f}\subseteq H\bigr)
+  }{\rUI{\rRI{5,6}}}
+
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M\land{}\\
+      &(0,m_0)\in \RecCore{m_0}{f}
+    \end{aligned}
+  }{\rAI{3,4}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M\land{}\\
+      &(0,m_0)\in \RecCore{m_0}{f}\land{}\\
+      &\AdmRec{m_0}{f}(\RecCore{m_0}{f})
+    \end{aligned}
+  }{\rAI{8,5}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M\land{}\\
+      &(0,m_0)\in \RecCore{m_0}{f}\land{}\\
+      &\AdmRec{m_0}{f}(\RecCore{m_0}{f})\land{}\\
+      &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow
+        \RecCore{m_0}{f}\subseteq H\bigr)
+    \end{aligned}
+  }{\rAI{9,7}}
+\end{tabproofwide}
+
+\subparagraph{Fixierung der Nullstufe des Kerns}
+
 \FormulaThmDelta[Die Nullstufe des Rekursionskerns ist festgelegt]{%
   m_0\in M\dsep f\colon M\to M\dsep
   (0,a)\in \RecCore{m_0}{f}\vdash a=m_0
@@ -4405,7 +4485,7 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \proofstepwidestar[1,3]{a=m_0}{\rRE{10,9}}
 \end{tabproofwide}
 
-\subparagraph{Fixierungsmenge einer Nachfolgerstufe}
+\subparagraph{Technisches Lemma: Fixierungsmenge einer Nachfolgerstufe}
 
 \FormulaDefDeltaR[Fixierungsmenge der Nachfolgerstufe]{%
   \begin{aligned}[t]
@@ -4695,7 +4775,190 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \proofstepwidestar[1,2,3,4,5,6,7]{b=f(a)}{\rRE{14,13}}
 \end{tabproofwide}
 
-\subsubsection{Stufenwerte des Rekursionskerns}
+\FormulaThmDeltaK[Fixierungslemma für Rekursionskernstufen]{%
+  \begin{aligned}[t]
+    &m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M\dsep{}\\
+    &(x,u)\in \RecCore{m_0}{f}\dsep
+    \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)
+    \vdash{}\\
+    &\bigl((0,a)\in \RecCore{m_0}{f}\rightarrow a=m_0\bigr)\land{}\\
+    &\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\rightarrow b=f(u)\bigr)
+  \end{aligned}
+}{RecCoreStageBarrier}{%
+  \DeltaDecl{Mengen}{M\dsep x\dsep u\dsep a\dsep b\dsep c\dsep m_0}%
+  \DeltaDecl{Funktionen}{f}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m_0\in M}{\rA}
+  \proofstepwidestar[2]{f\colon M\to M}{\rA}
+  \proofstepwidestar[3]{x\in\mathbb{N}}{\rA}
+  \proofstepwidestar[4]{u\in M}{\rA}
+  \proofstepwidestar[5]{(x,u)\in \RecCore{m_0}{f}}{\rA}
+  \proofstepwidestar[6]{%
+    \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)
+  }{\rA}
+
+  \proofstepwidestar[7]{(0,a)\in \RecCore{m_0}{f}}{\rA}
+  \proofstepwidestar[1,2,7]{a=m_0}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
+    (0,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,7}}
+  \proofstepwidestar[1,2]{(0,a)\in \RecCore{m_0}{f}\rightarrow a=m_0}{%
+    \rRI{7,8}}
+
+  \proofstepwidestar[10]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
+  \proofstepwidestar[1,2,3,4,5,6,10]{b=f(u)}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
+    (n,a)\in \RecCore{m_0}{f}\dsep
+    \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow c=a\bigr)\dsep
+    (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,4,5,6,10}}
+  \proofstepwidestar[1,2,3,4,5,6]{%
+    (\Succ(x),b)\in \RecCore{m_0}{f}\rightarrow b=f(u)
+  }{\rRI{10,11}}
+
+  \proofstepwidestar[1,2,3,4,5,6]{%
+    \bigl((0,a)\in \RecCore{m_0}{f}\rightarrow a=m_0\bigr)\land
+    \bigl((\Succ(x),b)\in \RecCore{m_0}{f}\rightarrow b=f(u)\bigr)
+  }{\rAI{9,12}}
+\end{tabproofwide}
+
+\subsubsection{Das Stufenlemma}
+
+Dieser Block ist der eigentliche Punkt der Konstruktion. Statt Existenz und
+Eindeutigkeit jeder Stufe getrennt zu beweisen, wird direkt über das Prädikat
+\[
+  U(n)\;:\Longleftrightarrow\;
+  \exists!a\in M\,\bigl((n,a)\in\RecCore{m_0}{f}\bigr)
+\]
+induktiv argumentiert.
+
+\FormulaThmDeltaK[Stufenlemma des Rekursionskerns]{%
+  m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}
+  \vdash \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+}{RecCoreStageUnique}{%
+  \DeltaDecl{Mengen}{M\dsep n\dsep x\dsep a\dsep b\dsep c\dsep u\dsep m_0}%
+  \DeltaDecl{Funktionen}{f}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    m_0\in M\dsep f\colon M\to M
+    \vdash \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)
+  }{%
+    m_0\in M\dsep f\colon M\to M
+    \vdash \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)
+  }
+    \proofstepwidestar[1]{m_0\in M}{\rA}
+    \proofstepwidestar[2]{f\colon M\to M}{\rA}
+    \proofstepwidestar[1,2]{(0,m_0)\in \RecCore{m_0}{f}}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash (0,m_0)\in \RecCore{m_0}{f}}{1,2}}
+    \proofstepwidestar[1,2]{%
+      \exists a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)
+    }{\rEI{\rAI{1,3}}}
+
+    \proofstepwidestar[5]{u\in M}{\rA}
+    \proofstepwidestar[6]{c\in M}{\rA}
+    \proofstepwidestar[7]{(0,u)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[8]{(0,c)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[1,2,7]{u=m_0}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
+      (0,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,7}}
+    \proofstepwidestar[1,2,8]{c=m_0}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
+      (0,a)\in \RecCore{m_0}{f}\vdash a=m_0}{1,2,8}}
+    \proofstepwidestar[1,2,7,8]{u=c}{%
+      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{9,10}}
+
+    \proofstepwidestar[1,2]{%
+      \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)
+    }{\UEI{4,5,6,7,8,11}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep{}\\
+      &\exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
+      \vdash{}\\
+      &\exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
+    \end{aligned}
+  }{%
+    m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
+    \exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
+    \vdash
+    \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
+  }
+    \proofstepwidestar[1]{m_0\in M}{\rA}
+    \proofstepwidestar[2]{f\colon M\to M}{\rA}
+    \proofstepwidestar[3]{x\in\mathbb{N}}{\rA}
+    \proofstepwidestar[4]{%
+      \exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
+    }{\rA}
+
+    \proofstepwidestar[5]{u\in M}{\rA}
+    \proofstepwidestar[6]{(x,u)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[2,5]{f(u)\in M}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,5}}
+    \proofstepwidestar[1,2,3,5,6]{(\Succ(x),f(u))\in \RecCore{m_0}{f}}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
+      (n,a)\in \RecCore{m_0}{f}
+      \vdash (\Succ(n),f(a))\in \RecCore{m_0}{f}}{1,2,3,5,6}}
+    \proofstepwidestar[1,2,3,5,6]{%
+      \exists b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
+    }{\rEI{\rAI{7,8}}}
+
+    \proofstepwidestar[4,5,6]{%
+      \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)
+    }{\UEE{4,5,6}}
+
+    \proofstepwidestar[11]{b\in M}{\rA}
+    \proofstepwidestar[12]{c\in M}{\rA}
+    \proofstepwidestar[13]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[14]{(\Succ(x),c)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[1,2,3,5,6,10,13]{b=f(u)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
+      (n,a)\in \RecCore{m_0}{f}\dsep
+      \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow c=a\bigr)\dsep
+      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,10,13}}
+    \proofstepwidestar[1,2,3,5,6,10,14]{c=f(u)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
+      (n,a)\in \RecCore{m_0}{f}\dsep
+      \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow c=a\bigr)\dsep
+      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,10,14}}
+    \proofstepwidestar[1,2,3,5,6,10,13,14]{b=c}{%
+      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{15,16}}
+
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
+    }{\UEI{9,11,12,13,14,17}}
+    \proofstepwidestar[1,2,3,4]{%
+      \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
+    }{\UEE{4,5,6,18}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{m_0\in M}{\rA}
+    \proofstepwidestar[2]{f\colon M\to M}{\rA}
+    \proofstepwidestar[3]{n\in\mathbb{N}}{\rA}
+
+    \proofstepwidestar[1,2,3]{%
+      \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+    }{%
+      \makecell[l]{%
+        \FormulaRefAuto{PeanoInductionRule}(
+        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M
+          \vdash \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2},
+        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
+          \exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
+          \vdash
+          \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)}{1,2},
+        \\ \quad 3
+        \\ )
+      }%
+    }
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\iffalse
+
+\paragraph{Existenz}
 
 \FormulaThmDelta[Existenz eines Werts in jeder Stufe]{%
   m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}
@@ -4785,6 +5048,8 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
     }
   \closeproofpartwide
 \end{tabproofsplitwide}
+
+\paragraph{Eindeutigkeit}
 
 \FormulaThmDeltaR[Eindeutigkeit in der Nullstufe]{%
   \begin{aligned}[t]
@@ -5090,6 +5355,8 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\paragraph{Eindeutige Existenz}
+
 \FormulaThmDelta[Eindeutige Existenz eines Werts in jeder Stufe]{%
   m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}
   \vdash \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
@@ -5113,7 +5380,96 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
     \UEI{4,5,6,7,8,9}}
 \end{tabproof}
 
+\fi
+
 \subsubsection{Der Rekursionskern als Funktion}
+
+Nachdem jede Stufe genau einen Wert besitzt, kann der Rekursionskern selbst als
+Graph einer Funktion \(\mathbb{N}\to M\) gelesen werden.
+
+\paragraph{Allgemeines Graph-Lemma}
+
+\FormulaThmDeltaK[Graph mit eindeutigen Werten ist eine Funktion]{%
+  R\subseteq A\times B\dsep
+  \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)
+  \vdash R\colon A\to B
+}{UniqueValuedGraphFunction}{%
+  \DeltaDecl{Mengen}{A\dsep B\dsep R\dsep x\dsep y\dsep z}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Funktionale Eindeutigkeit]{%
+    \begin{aligned}[t]
+      &R\subseteq A\times B\dsep
+      \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep{}\\
+      &(x,y)\in R\dsep (x,z)\in R\vdash y=z
+    \end{aligned}
+  }{%
+    R\subseteq A\times B\dsep
+    \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep
+    (x,y)\in R\dsep (x,z)\in R\vdash y=z
+  }
+    \proofstepwidestar[1]{R\subseteq A\times B}{\rA}
+    \proofstepwidestar[2]{%
+      \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)
+    }{\rA}
+    \proofstepwidestar[3]{(x,y)\in R}{\rA}
+    \proofstepwidestar[4]{(x,z)\in R}{\rA}
+    \proofstepwidestar[1,3]{(x,y)\in A\times B}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{1,3}}
+    \proofstepwidestar[1,3]{x\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{5}}
+    \proofstepwidestar[1,3]{y\in B}{%
+      \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{5}}
+    \proofstepwidestar[1,4]{(x,z)\in A\times B}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{1,4}}
+    \proofstepwidestar[1,4]{z\in B}{%
+      \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{8}}
+    \proofstepwidestar[1,2,3]{%
+      \exists! y\in B\,\bigl((x,y)\in R\bigr)
+    }{\rRE{\rUE{2},6}}
+    \proofstepwidestar[1,2,3,4]{y=z}{%
+      \UEE{10,7,9,3,4}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Totalität]{%
+    R\subseteq A\times B\dsep
+    \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep
+    x\in A\vdash \exists y\,\bigl((x,y)\in R\bigr)
+  }{%
+    R\subseteq A\times B\dsep
+    \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep
+    x\in A\vdash \exists y\,\bigl((x,y)\in R\bigr)
+  }
+    \proofstepwidestar[1]{R\subseteq A\times B}{\rA}
+    \proofstepwidestar[2]{%
+      \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)
+    }{\rA}
+    \proofstepwidestar[3]{x\in A}{\rA}
+    \proofstepwidestar[2,3]{%
+      \exists! y\in B\,\bigl((x,y)\in R\bigr)
+    }{\rRE{\rUE{2},3}}
+    \proofstepwidestar[2,3]{\exists y\,\bigl((x,y)\in R\bigr)}{\UEE{4}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{R\subseteq A\times B}{\rA}
+    \proofstepwidestar[2]{%
+      \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)
+    }{\rA}
+    \proofstepwidestar[1,2]{R\colon A\to B}{%
+      \FormulaRefAuto{Funktion}{%
+        1,
+        \FormulaRefAuto{R\subseteq A\times B\dsep
+          \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep
+          (x,y)\in R\dsep (x,z)\in R\vdash y=z}{1,2},
+        \FormulaRefAuto{R\subseteq A\times B\dsep
+          \forall x\in A\,\exists! y\in B\,\bigl((x,y)\in R\bigr)\dsep
+          x\in A\vdash \exists y\,\bigl((x,y)\in R\bigr)}{1,2}%
+      }}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\paragraph{Anwendung auf den Rekursionskern}
 
 \FormulaThmDelta[Der Rekursionskern ist eine Abbildung]{%
   m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\colon \mathbb{N}\to M
@@ -5121,86 +5477,24 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \DeltaDecl{Mengen}{M\dsep x\dsep y\dsep z\dsep m_0}%
   \DeltaDecl{Funktionen}{f}%
 }
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Funktionale Eindeutigkeit]{%
-    m_0\in M\dsep f\colon M\to M\dsep
-    (x,y)\in \RecCore{m_0}{f}\dsep (x,z)\in \RecCore{m_0}{f}\vdash y=z
-  }{%
-    m_0\in M\dsep f\colon M\to M\dsep
-    (x,y)\in \RecCore{m_0}{f}\dsep (x,z)\in \RecCore{m_0}{f}\vdash y=z
-  }
-    \proofstepwidestar[1]{m_0\in M}{\rA}
-    \proofstepwidestar[2]{f\colon M\to M}{\rA}
-    \proofstepwidestar[3]{(x,y)\in \RecCore{m_0}{f}}{\rA}
-    \proofstepwidestar[4]{(x,z)\in \RecCore{m_0}{f}}{\rA}
+\begin{tabproof}
+  \proofstep{1}{m_0\in M}{\rA}
+  \proofstep{2}{f\colon M\to M}{\rA}
+  \proofstep{1,2}{\RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2}}
+  \proofstep{4}{n\in\mathbb{N}}{\rA}
+  \proofstep{1,2,4}{%
+    \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+  }{\FormulaRefAuto{RecCoreStageUnique}{1,2,4}}
+  \proofstep{1,2}{%
+    \forall n\in\mathbb{N}\,
+    \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+  }{\rUI{\rRI{4,5}}}
+  \proofstep{1,2}{\RecCore{m_0}{f}\colon \mathbb{N}\to M}{%
+    \FormulaRefAuto{UniqueValuedGraphFunction}{3,6}}
+\end{tabproof}
 
-    \proofstepwidestar[1,2]{\RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{%
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2}}
-
-    \proofstepwidestar[1,2,3]{(x,y)\in \mathbb{N}\times M}{%
-      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{5,3}}
-
-    \proofstepwidestar[1,2,4]{(x,z)\in \mathbb{N}\times M}{%
-      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{5,4}}
-
-    \proofstepwidestar[1,2,3]{x\in\mathbb{N}}{%
-      \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{6}}
-
-    \proofstepwidestar[1,2,3]{y\in M}{%
-      \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{6}}
-
-    \proofstepwidestar[1,2,4]{z\in M}{%
-      \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{7}}
-
-    \proofstepwidestar[1,2,3,4]{y=z}{%
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep b\in M\dsep (n,a)\in \RecCore{m_0}{f}\dsep (n,b)\in \RecCore{m_0}{f}\vdash a=b}{1,2,8,9,10,3,4}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Totalität]{%
-    m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\vdash
-    \exists y\,\bigl((x,y)\in \RecCore{m_0}{f}\bigr)
-  }{%
-    m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\vdash
-    \exists y\,\bigl((x,y)\in \RecCore{m_0}{f}\bigr)
-  }
-    \proofstepwidestar[1]{m_0\in M}{\rA}
-    \proofstepwidestar[2]{f\colon M\to M}{\rA}
-    \proofstepwidestar[3]{x\in\mathbb{N}}{\rA}
-
-    \proofstepwidestar[1,2,3]{%
-      \exists a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
-    }{%
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash \exists a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)}{1,2,3}}
-
-    \proofstepwidestar[5]{a\in M}{\rA}
-    \proofstepwidestar[6]{(x,a)\in \RecCore{m_0}{f}}{\rA}
-
-    \proofstepwidestar[1,2,3,5,6]{%
-      \exists y\,\bigl((x,y)\in \RecCore{m_0}{f}\bigr)
-    }{%
-      \rEI{6}}
-
-    \proofstepwidestar[1,2,3]{%
-      \exists y\,\bigl((x,y)\in \RecCore{m_0}{f}\bigr)
-    }{%
-      \rEE{4,5,6,7}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
-    \proofstepwidestar[1]{m_0\in M}{\rA}
-    \proofstepwidestar[2]{f\colon M\to M}{\rA}
-
-    \proofstepwidestar[1,2]{\RecCore{m_0}{f}\colon \mathbb{N}\to M}{%
-      \FormulaRefAuto{Funktion}{%
-        \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2},
-        \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep (x,y)\in \RecCore{m_0}{f}\dsep (x,z)\in \RecCore{m_0}{f}\vdash y=z}{1,2},
-        \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\vdash \exists y\,\bigl((x,y)\in \RecCore{m_0}{f}\bigr)}{1,2}%
-      }%
-    }
-  \closeproofpartwide
-\end{tabproofsplitwide}
-
-\paragraph{Rekursionsgleichungen des Rekursionskerns}
+\paragraph{Rekursionsgleichungen}
 
 \FormulaThmDelta[Anfangswert des Rekursionskerns]{%
   m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(0)=m_0
@@ -5255,6 +5549,11 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
 \end{tabproof}
 
 \paragraph{Eindeutigkeit rekursiv definierter Abbildungen}
+
+Die folgende Induktion trennt die spätere Eindeutigkeitsaussage vom
+Existenzbeweis: Jede Abbildung mit demselben Anfangswert und derselben
+Rekursionsgleichung stimmt punktweise mit jeder anderen solchen Abbildung
+überein.
 
 \FormulaThmDeltaR[Eindeutigkeit rekursiv definierter Abbildungen]{%
   \begin{aligned}
@@ -5391,6 +5690,10 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
 \end{tabproofsplitwide}
 
 \subsubsection{Der Dedekindsche Rekursionssatz}
+
+Der Hauptsatz ist nun nur noch die Zusammenführung der beiden vorherigen
+Blöcke. Die Existenz kommt vom Rekursionskern als Funktion, die Eindeutigkeit
+von der punktweisen Induktion über rekursiv definierte Abbildungen.
 
 \FormulaThmDeltaR[Existenz einer rekursiv definierten Abbildung]{%
   \begin{aligned}
@@ -5539,37 +5842,23 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
     \UEI{3,4,5,6,7,12}}
 \end{tabproof}
 
-\subsubsection{Die Rekursionsabbildung}
+\subsubsection{Die Rekursionsabbildung als benanntes Objekt}
+
+Nach dem Stufenlemma ist der Rekursionskern bereits der Graph einer eindeutig
+bestimmten Abbildung. Die Rekursionsabbildung wird deshalb nicht noch einmal
+als neuer \(\iota\)-Zeuge eingeführt, sondern direkt als dieser Kern benannt.
+Die folgenden Sätze übertragen die bereits bewiesenen Rekursionsgleichungen
+auf dieses Symbol und sammeln Zusatzlemmata, die später für Einbettungen
+benötigt werden.
 
 \paragraph{Definition der Rekursionsabbildung}
 
-\FormulaDefDeltaR[Definition der Rekursionsabbildung]{%
-  \begin{aligned}[t]
-    &m_0\in M\dsep f\colon M\to M \vdash{}\\
-    &\RecFun{m_0}{f}\coloneqq \iota G\Bigl({}\\
-    &\qquad G\colon \mathbb{N}\to M \land{}\\
-    &\qquad \bigl(
-      G(0)=m_0 \land{}\\
-    &\qquad\qquad \forall n\in\mathbb{N}\,\bigl(
-      G(\Succ(n))=f(G(n))
-    \bigr)\bigr)
-    \Bigr)
-  \end{aligned}
-}{%
+\FormulaDefDeltaK[Definition der Rekursionsabbildung]{%
   m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}\coloneqq
-  \iota G\Bigl(
-    G\colon \mathbb{N}\to M \land
-    \bigl(
-      G(0)=m_0 \land
-      \forall n\in\mathbb{N}\,\bigl(
-        G(\Succ(n))=f(G(n))
-      \bigr)
-    \bigr)
-  \Bigr)
-}{%
-  \DeltaDecl{Mengen}{M\dsep n\dsep m_0}%
-  \DeltaDecl{Funktionen}{f\dsep G}%
+  \RecFun{m_0}{f}\coloneqq \RecCore{m_0}{f}%
+}{RecFunDef}{%
+  \DeltaDecl{Mengen}{M\dsep m_0}%
+  \DeltaDecl{Funktionen}{f}%
 }
 
 \paragraph{Grundlegende Eigenschaften}
@@ -5585,18 +5874,13 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \proofstep{1}{m_0\in M}{\rA}
   \proofstep{2}{f\colon M\to M}{\rA}
 
+  \proofstep{1,2}{\RecFun{m_0}{f}=\RecCore{m_0}{f}}{%
+    \FormulaRefAuto{RecFunDef}{1,2}}
+  \proofstep{1,2}{\RecCore{m_0}{f}\colon \mathbb{N}\to M}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
+    \RecCore{m_0}{f}\colon \mathbb{N}\to M}{1,2}}
   \proofstep{1,2}{\RecFun{m_0}{f}\colon \mathbb{N}\to M}{%
-    \rAEa{\FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}\coloneqq
-  \iota G\Bigl(
-    G\colon \mathbb{N}\to M \land
-    \bigl(
-      G(0)=m_0 \land
-      \forall n\in\mathbb{N}\,\bigl(
-        G(\Succ(n))=f(G(n))
-      \bigr)
-    \bigr)
-  \Bigr)}{1,2}}}
+    \rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDelta[Werte der Rekursionsabbildung liegen in $M$]{%
@@ -5628,27 +5912,12 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \proofstep{1}{m_0\in M}{\rA}
   \proofstep{2}{f\colon M\to M}{\rA}
 
-  \proofstep{1,2}{%
-    \begin{aligned}[t]
-      &\RecFun{m_0}{f}(0)=m_0 \land{}\\
-      &\forall n\in\mathbb{N}\,\bigl(
-        \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-      \bigr)
-    \end{aligned}
-  }{%
-    \rAEb{\FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}\coloneqq
-  \iota G\Bigl(
-    G\colon \mathbb{N}\to M \land
-    \bigl(
-      G(0)=m_0 \land
-      \forall n\in\mathbb{N}\,\bigl(
-        G(\Succ(n))=f(G(n))
-      \bigr)
-    \bigr)
-  \Bigr)}{1,2}}}
-
-  \proofstep{1,2}{\RecFun{m_0}{f}(0)=m_0}{\rAEa{3}}
+  \proofstep{1,2}{\RecFun{m_0}{f}=\RecCore{m_0}{f}}{%
+    \FormulaRefAuto{RecFunDef}{1,2}}
+  \proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
+    \RecCore{m_0}{f}(0)=m_0}{1,2}}
+  \proofstep{1,2}{\RecFun{m_0}{f}(0)=m_0}{\rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Rekursionsgleichung der Rekursionsabbildung]{%
@@ -5668,35 +5937,16 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
   \proofstep{2}{f\colon M\to M}{\rA}
   \proofstep{3}{n\in\mathbb{N}}{\rA}
 
-  \proofstep{1,2}{%
-    \begin{aligned}[t]
-      &\RecFun{m_0}{f}(0)=m_0 \land{}\\
-      &\forall n\in\mathbb{N}\,\bigl(
-        \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-      \bigr)
-    \end{aligned}
+  \proofstep{1,2}{\RecFun{m_0}{f}=\RecCore{m_0}{f}}{%
+    \FormulaRefAuto{RecFunDef}{1,2}}
+  \proofstep{1,2,3}{%
+    \RecCore{m_0}{f}(\Succ(n))=f(\RecCore{m_0}{f}(n))
   }{%
-    \rAEb{\FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}\coloneqq
-  \iota G\Bigl(
-    G\colon \mathbb{N}\to M \land
-    \bigl(
-      G(0)=m_0 \land
-      \forall n\in\mathbb{N}\,\bigl(
-        G(\Succ(n))=f(G(n))
-      \bigr)
-    \bigr)
-  \Bigr)}{1,2}}}
-
-  \proofstep{1,2}{%
-    \forall n\in\mathbb{N}\,\bigl(
-      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-    \bigr)
-  }{\rAEb{4}}
-
+    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+    \RecCore{m_0}{f}(\Succ(n))=f(\RecCore{m_0}{f}(n))}{1,2,3}}
   \proofstep{1,2,3}{%
     \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-  }{\rRE{\rUE{5},3}}
+  }{\rIE{4,5}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Rekursionsgleichung der Rekursionsabbildung für Nichtnullstellen]{%
@@ -5781,58 +6031,9 @@ anderen rekursiv definierten Abbildung wird erneut per Induktion bewiesen.
 \end{tabproofwide}
 \paragraph{Zusammenhang mit dem Rekursionskern}
 
-\FormulaThmDelta[Rekursionsabbildung und Rekursionskern stimmen überein]{%
-  m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}=\RecCore{m_0}{f}
-}{%
-  \DeltaDecl{Mengen}{M\dsep n\dsep m_0}%
-  \DeltaDecl{Funktionen}{f\dsep G\dsep H}%
-}
-\begin{tabproof}
-  \proofstep{1}{m_0\in M}{\rA}
-  \proofstep{2}{f\colon M\to M}{\rA}
-
-  \proofstep{1,2}{\RecFun{m_0}{f}\colon \mathbb{N}\to M}{%
-    \FormulaRefAuto{ m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}\colon \mathbb{N}\to M}{1,2}}
-  \proofstep{1,2}{\RecCore{m_0}{f}\colon \mathbb{N}\to M}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\colon \mathbb{N}\to M}{1,2}}
-
-  \proofstep{1,2}{\RecFun{m_0}{f}(0)=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash
-  \RecFun{m_0}{f}(0)=m_0}{1,2}}
-  \proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(0)=m_0}{1,2}}
-
-  \proofstep{7}{n\in\mathbb{N}}{\rA}
-
-  \proofstep{1,2,7}{%
-    \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-  }{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-  \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{1,2,7}}
-
-  \proofstep{1,2,7}{%
-    \RecCore{m_0}{f}(\Succ(n))=f(\RecCore{m_0}{f}(n))
-  }{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash \RecCore{m_0}{f}(\Succ(n))=f(\RecCore{m_0}{f}(n))}{1,2,7}}
-
-  \proofstep{1,2}{%
-    \forall n\in\mathbb{N}\,\bigl(
-      \RecFun{m_0}{f}(n)=\RecCore{m_0}{f}(n)
-    \bigr)
-  }{%
-    \FormulaRefAuto{%
-      G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
-      G(0)=m_0\dsep H(0)=m_0\dsep
-      \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
-      \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))
-      \vdash G=H
-    }{3,4,5,6,8,9}}
-
-  \proofstep{1,2}{\RecFun{m_0}{f}=\RecCore{m_0}{f}}{%
-    \FormulaRefAuto{\forall x\in A (F(x)=G(x)) \eqvdash F=G}{10}}
-\end{tabproof}
+Per Definition ist die Rekursionsabbildung der Rekursionskern:
+\(\RecFun{m_0}{f}=\RecCore{m_0}{f}\). Entsprechende Beweise verwenden die
+Definition \(\FormulaRefAuto{RecFunDef}\) direkt.
 
 
 \paragraph{Hilfssätze zur Injektivität der Rekursionsabbildung}
