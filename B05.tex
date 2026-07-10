@@ -264,6 +264,42 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{}{\NatSeg{0}=\varnothing}{%
     \FormulaRefAuto{EmptySeparationByNegPredicate}{2}}
 \end{tabproof}
+
+\FormulaThmDeltaK[Nachfolgerfall der strikten Ordnung]{%
+  n\in\mathbb{N}\dsep i\in\mathbb{N}\vdash
+  i<\Succ(n)\leftrightarrow i<n\lor i=n%
+}{PeanoStrictSuccSplit}{%
+  \DeltaRow{Mengen}{i\dsep n}%
+  \DeltaRow{Relationen}{<_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{i\in\mathbb{N}}{\rA}
+  \proofstep{1}{\Succ(n)\in\mathbb{N}}{\FormulaRefAuto{PeanoSuccClosure}{1}}
+  \proofstep{1,2}{i<\Succ(n)\leftrightarrow i\in\Succ(n)}{%
+    \FormulaRefAuto{VonNeumannStrictMembership}[thm]{2,3}}
+  \proofstep{1,2}{i\in\Succ(n)\leftrightarrow i\leq n}{%
+    \FormulaRefAuto{VonNeumannSuccMembershipLeqEquiv}[thm]{2,1}}
+  \proofstep{1,2}{i<\Succ(n)\leftrightarrow i\leq n}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{4,5}}
+  \proofstep{7}{i\leq n}{\rA}
+  \proofstep{1,2,7}{i<n\lor i=n}{%
+    \FormulaRefAuto{VonNeumannLeqSplit}[thm]{2,1,7}}
+  \proofstep{1,2}{i\leq n\rightarrow i<n\lor i=n}{\rRI{7,8}}
+  \proofstep{10}{i<n\lor i=n}{\rA}
+  \proofstep{11}{i<n}{\rA}
+  \proofstep{1,2,11}{i\leq n}{%
+    \FormulaRefAuto{VonNeumannStrictImpliesLeq}[thm]{2,1,11}}
+  \proofstep{13}{i=n}{\rA}
+  \proofstep{1}{n\leq n}{\FormulaRefAuto{VonNeumannLeqReflexive}[thm]{1}}
+  \proofstep{1,13}{i\leq n}{\rIE{13,14}}
+  \proofstep{1,2,10}{i\leq n}{\rOE{10,11,12,13,15}}
+  \proofstep{1,2}{(i<n\lor i=n)\rightarrow i\leq n}{\rRI{10,16}}
+  \proofstep{1,2}{i\leq n\leftrightarrow i<n\lor i=n}{\rLRI{9,17}}
+  \proofstep{1,2}{i<\Succ(n)\leftrightarrow i<n\lor i=n}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{6,18}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Nachfolger-Anfangsabschnitt]{%
   n\in\mathbb{N}\vdash
   \NatSeg{\Succ(n)}=\NatSeg{n}\cup\{n\}%
@@ -325,28 +361,6 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1,2}{m<n \leftrightarrow m\in\NatSeg{n}}{%
     \FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{3}}
 \end{tabproof}
-\FormulaThmDeltaK[Nachfolgerfall der strikten Ordnung]{%
-  n\in\mathbb{N}\dsep i\in\mathbb{N}\vdash
-  i<\Succ(n)\leftrightarrow i<n\lor i=n%
-}{PeanoStrictSuccSplit}{%
-  \DeltaRow{Mengen}{i\dsep n}%
-  \DeltaRow{Relationen}{<_{\mathbb{N}}}%
-}
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{i\in\mathbb{N}}{\rA}
-  \proofstep{1}{\NatSeg{\Succ(n)}=\NatSeg{n}\cup\{n\}}{%
-    \FormulaRefAuto{PeanoNatSegSucc}{1}}
-  \proofstep{1,2}{i\in\NatSeg{\Succ(n)}\leftrightarrow i\in\NatSeg{n}\lor i=n}{%
-    \FormulaRefAuto{x\in A\cup\{a\} \vdash x\in A\lor x=a}{3}}
-  \proofstep{1,2}{i<\Succ(n)\leftrightarrow i\in\NatSeg{\Succ(n)}}{%
-    \FormulaRefAuto{PeanoNatSegStrictMembership}{2,\FormulaRefAuto{PeanoSuccClosure}{1}}}
-  \proofstep{1,2}{i<n\leftrightarrow i\in\NatSeg{n}}{%
-    \FormulaRefAuto{PeanoNatSegStrictMembership}{2,1}}
-  \proofstep{1,2}{i<\Succ(n)\leftrightarrow i<n\lor i=n}{%
-    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{5,4}}
-\end{tabproof}
-
 \FormulaThmDeltaK[Kein Endpunkt im eigenen Anfangsabschnitt]{%
   n\in\mathbb{N}\vdash n\notin \NatSeg{n}%
 }{PeanoNatSegEndpointNotIn}{%
@@ -358,7 +372,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1,2}{n<n}{%
     \FormulaRefAuto{PeanoNatSegStrictMembership}{1,1,2}}
   \proofstep{1}{n\leq n}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\leq n}{1}}
+    \FormulaRefAuto{VonNeumannLeqReflexive}[thm]{1}}
   \proofstep{1,2}{\bot}{%
     \FormulaRefAuto{PeanoOrderNoCycle}{1,1,3,4}}
   \proofstep{1}{n\notin\NatSeg{n}}{\rCI{2,5}}
@@ -389,7 +403,17 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
 \begin{tabproof}
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
-  \proofstep{1,2}{m\leq n\leftrightarrow m<\Succ(n)}{\rA}
+  \proofstep{2}{\Succ(n)\in\mathbb{N}}{\FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{1,2}{m\in\Succ(n)\leftrightarrow m\leq n}{%
+    \FormulaRefAuto{VonNeumannSuccMembershipLeqEquiv}[thm]{1,2}}
+  \proofstep{1,2}{m\leq n\leftrightarrow m\in\Succ(n)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\vdash Q\leftrightarrow P}{4}}
+  \proofstep{1,2}{m<\Succ(n)\leftrightarrow m\in\Succ(n)}{%
+    \FormulaRefAuto{VonNeumannStrictMembership}[thm]{1,3}}
+  \proofstep{1,2}{m\in\Succ(n)\leftrightarrow m<\Succ(n)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\vdash Q\leftrightarrow P}{6}}
+  \proofstep{1,2}{m\leq n\leftrightarrow m<\Succ(n)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{5,7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Nichtstrikte Ordnung als Nachfolger-Anfangsabschnitt]{%
@@ -1534,7 +1558,7 @@ Peano-Variante deaktiviert.
   \proofstep{2}{\Finite{A}}{\rA}
 
   \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij A}{%
-    \FormulaRefAuto{FiniteIffNatSegBijection}[thm]{2}}
+    \text{inaktiver Altbeweis}}
 
   \proofstep{4}{n\in\mathbb{N}\land \exists F\colon \NatSeg{n}\bij A}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
@@ -1776,7 +1800,7 @@ Peano-Variante deaktiviert.
   \proofstep{2}{\Finite{B}}{\rA}
 
   \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij B}{%
-    \FormulaRefAuto{FiniteIffNatSegBijection}[thm]{2}}
+    \text{inaktiver Altbeweis}}
 
   \proofstep{4}{n\in\mathbb{N}\land \exists F\colon \NatSeg{n}\bij B}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
@@ -4997,7 +5021,7 @@ das gefundene Extremum zurück.
   \proofstep{4}{F\colon n\inj m}{\rA}
 
   \proofstep{1,2,3}{m\in n}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m<n\leftrightarrow m\in n}{1,2,3}}
+    \FormulaRefAuto{VonNeumannStrictMembership}[thm]{1,2,3}}
   \proofstep{1,2,3}{m\subseteq n}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{1,2,5}}
   \proofstep{1}{m\notin m}{%
@@ -5235,7 +5259,7 @@ das gefundene Extremum zurück.
   \proofstep{2}{\tCard(N)\in\mathbb{N}}{%
     \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
   \proofstep{1,2}{\tCard(M)\leq \tCard(N)\lor \tCard(N)\leq \tCard(M)}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}{4,5}}
+    \FormulaRefAuto{VonNeumannLeqTotal}[thm]{4,5}}
 
   \proofstep{7}{\tCard(M)\leq \tCard(N)}{\rA}
   \proofstep{1,2,7}{\exists F\colon M\inj N}{%
