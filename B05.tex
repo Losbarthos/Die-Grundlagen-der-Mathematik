@@ -52,77 +52,138 @@
   texio.write_nl([==[thmlookup: B05 loaded B01-B04 registries]==])
 }
 
-\chapter{Einleitung}
+\chapter{Axiomatische Grundlage}
 
-Dieser Band verbindet den in Band~03 definierten Begriff der endlichen
-Menge mit den auf der Peano-Struktur aus Band~04 gebildeten
-Anfangsabschnitten. Die elementaren
-Abschlusseigenschaften der Endlichkeit werden nicht erneut axiomatisiert,
-sondern aus Band~03 übernommen.
+Band~03 führt das Prädikat \(\Finite{\cdot}\) als primitives Symbol ein. Für den gesamten
+vorliegenden Band gelten genau die dort registrierten drei
+Endlichkeitsaxiome:
+\[
+\begin{array}{rcll}
+ &\Finite{\varnothing},
+ &\qquad&\FormulaRefAuto{FiniteEmptyAxiom}[ax],\\[2pt]
+ a\notin A,\ \Finite A
+ &\vdash \Finite{A\cup\{a\}},
+ &&\FormulaRefAuto{FiniteAdjunctionAxiom}[ax],\\[2pt]
+ P(\varnothing),\
+ [\Finite A,P(A),a\notin A]\vdots P(A\cup\{a\}),\
+ \Finite M
+ &\vdash P(M),
+ &&\FormulaRefAuto{FiniteInductionRule}[ax].
+\end{array}
+\]
+Neue Endlichkeitsaxiome werden in diesem Band nicht deklariert. Insbesondere
+sind Transport, Vereinigung, Teilmenge, Bild, Potenzmenge sowie die
+Dedekind- und Tarski-Charakterisierungen hier zu beweisende Folgerungen.
 
-Die natuerlichen Zahlen, die Peano-Ordnung, Rekursion sowie die arithmetischen
-Hilfssaetze werden als bereits in Band~04 bereitgestellte Grundlage verwendet.
-Als einzige zusätzliche Kompatibilitätsannahme wird vorausgesetzt, dass jede
-endliche Menge zu einem Peano-Anfangsabschnitt gleichmächtig ist. Die
-Rückrichtung und die daraus folgenden Sätze werden anschließend bewiesen.
-
-\chapter{Definitionen und Axiome der endlichen Mengen}
-
-Der Endlichkeitsbegriff ist bereits in Band~03 durch eine Bijektion von einer
-natürlichen Zahl auf die betrachtete Menge definiert. In diesem Band kommt
-lediglich die Darstellung durch Peano-Anfangsabschnitte hinzu. Die endliche
-Kardinalzahl wird erst nach dem Beweis der Eindeutigkeit ihres Zählzeugen
-definiert.
-
-\FormulaDefDeltaK[Definitionelle Ausgangsdaten der endlichen Mengen]{%
-  \mathsf{FinSig}(\NatSeg,\Finite)%
-}{Definitionelle Ausgangsdaten der endlichen Mengen}{%
-  \DeltaRow{\textbf{Grundlage}}{}
-  \DeltaRow{Peano-Struktur}
-           {(\mathbb{N},0,\Succ)}
-  \DeltaRow{Natuerliche Ordnung}
-           {<_{\mathbb{N}}\dsep \leq_{\mathbb{N}}}
-  \DeltaRow{\textbf{Bereits definierter Begriff}}{}
-  \DeltaRow{Endlichkeit}{%
-    \Finite{M}\coloneqq
-    \exists k\in\mathbb{N}\,\exists F\colon k\bij M%
-  }[\FormulaRefAuto{FiniteByBijection}[def]]
-  \DeltaRow{\textbf{Definitionelle Abkürzung}}{}
-  \DeltaRow{Anfangsabschnitt}
-           {\begin{aligned}[t]
-              n\in\mathbb{N}\vdash{}&\\[-2pt]
-              \NatSeg{n}\coloneqq{}&
-              \{i\in\mathbb{N}\mid i<n\}
-            \end{aligned}}
-}
-
-Die Anfangsabschnitte werden aus der Peano-Ordnung definiert; ihre Grundregeln
-werden im folgenden Kapitel bewiesen. Die axiomatische Ergänzung besteht aus
-genau einem Kompatibilitätsaxiom für den bereits definierten
-Endlichkeitsbegriff. Insbesondere sind Leere-Mengen-, Adjunktions-,
-Vereinigungs-, Teilmengen-, Bild- und Transportsatz keine Axiome dieses Bandes.
-
-\FormulaDefDeltaK[Kompatibilitätsaxiom der Peano-Darstellung]{%
-  \mathsf{FinAx}(\NatSeg,\Finite)%
-}{Endliche Mengen}{%
-  \DeltaRow{\textbf{Kompatibilitätsaxiom}}{}
-  \DeltaRow{Peano-Zeuge}
-           {\begin{aligned}[t]
-              \Finite{M}\vdash{}&
-              \exists n\in\mathbb{N}\,(\NatSeg{n}\EqCard M)
-            \end{aligned}}
-}
-
-\FormulaAxiomAutoR[Endlichkeit hat einen Anfangsabschnittszeugen]{%
-  \Finite{M}\vdash \exists n\in\mathbb{N}\,\bigl(\NatSeg{n}\EqCard M\bigr)%
-}{FiniteWitnessAxiom}
-
-\paragraph{Status dieses Bands.}
-Der folgende Teil beweist zunächst die fehlende Rückrichtung des
-Kompatibilitätsaxioms aus den elementaren Endlichkeitssätzen von Band~03.
-Danach werden die weiteren Eigenschaften endlicher Mengen und ihre
-Kardinalzahlen als Folgerungen entwickelt.
+Als Brücke zur üblichen Darstellung steht aus Band~03 ausschließlich die dort
+aus den drei Axiomen bewiesene Bijektionscharakterisierung zur Verfügung:
+\[
+  \Finite M\eqvdash
+  \exists n\in\mathbb N\,\exists F\colon n\bij M.
+\]
+Dies ist \FormulaRefAuto{FiniteBijectionEquiv}[thm].
+Dabei ist \(n\) die von-Neumann-Zahl selbst. Die später verwendeten
+Peano-Anfangsabschnitte \(\NatSeg{n}\) sind davon zu unterscheiden und werden
+nur in ausdrücklich entsprechend bezeichneten Sätzen benutzt.
 \chapter{Endliche Mengen}
+
+\section{Unmittelbare Folgerungen der Axiome}
+
+Zunächst halten wir die beiden elementaren Axiome als Sätze fest. Dadurch
+können die folgenden Beweise einheitlich auf registrierte Theorem-IDs
+verweisen, ohne zusätzliche Annahmen einzuführen.
+
+\FormulaThmDeltaK[Die leere Menge ist endlich]{%
+  \Finite{\varnothing}%
+}{FiniteEmpty}{%
+  \DeltaRow{Mengen}{}%
+}
+\begin{tabproof}
+  \proofstep{}{\Finite{\varnothing}}{\FormulaRefAuto{FiniteEmptyAxiom}[ax]}
+\end{tabproof}
+
+\FormulaThmDeltaK[Adjunktion eines neuen Elements erhält Endlichkeit]{%
+  a\notin A\dsep \Finite A\vdash \Finite{A\cup\{a\}}%
+}{FiniteAdjunction}{%
+  \DeltaRow{Mengen}{A\dsep a}%
+}
+\begin{tabproof}
+  \proofstep{1}{a\notin A}{\rA}
+  \proofstep{2}{\Finite A}{\rA}
+  \proofstep{1,2}{\Finite{A\cup\{a\}}}{%
+    \FormulaRefAuto{FiniteAdjunctionAxiom}[ax]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Charakterisierung durch Gleichmächtigkeit]{%
+  \Finite M\eqvdash
+  \exists n\in\mathbb N\,(n\EqCard M)%
+}{FiniteEqCardEquiv}{%
+  \DeltaRow{Mengen}{M\dsep n}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\Finite M}{\rA}
+    \proofstep{1}{\exists n\in\mathbb N\,\exists F\colon n\bij M}{%
+      \FormulaRefAuto{FiniteBijectionEquiv}[thm]{1}}
+    \proofstep{3}{n\in\mathbb N\land \exists F\colon n\bij M}{\rA}
+    \proofstep{3}{n\in\mathbb N}{\rAEa{3}}
+    \proofstep{3}{\exists F\colon n\bij M}{\rAEb{3}}
+    \proofstep{3}{n\EqCard M}{%
+      \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{5}}
+    \proofstep{3}{n\in\mathbb N\land n\EqCard M}{\rAI{4,6}}
+    \proofstep{3}{\exists n\in\mathbb N\,(n\EqCard M)}{\rEI{7}}
+    \proofstep{1}{\exists n\in\mathbb N\,(n\EqCard M)}{\rEE{2,3,8}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\exists n\in\mathbb N\,(n\EqCard M)}{\rA}
+    \proofstep{2}{n\in\mathbb N\land n\EqCard M}{\rA}
+    \proofstep{2}{n\in\mathbb N}{\rAEa{2}}
+    \proofstep{2}{n\EqCard M}{\rAEb{2}}
+    \proofstep{2}{\exists F\colon n\bij M}{%
+      \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{4}}
+    \proofstep{2}{n\in\mathbb N\land\exists F\colon n\bij M}{\rAI{3,5}}
+    \proofstep{2}{\exists n\in\mathbb N\,\exists F\colon n\bij M}{\rEI{6}}
+    \proofstep{2}{\Finite M}{\FormulaRefAuto{FiniteBijectionEquiv}[thm]{7}}
+    \proofstep{1}{\Finite M}{\rEE{1,2,8}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDeltaK[Transport der Endlichkeit entlang der Gleichmächtigkeit]{%
+  \Finite M\dsep M\EqCard N\vdash \Finite N%
+}{FiniteEqCardTransport}{%
+  \DeltaRow{Mengen}{M\dsep N\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite M}{\rA}
+  \proofstep{2}{M\EqCard N}{\rA}
+  \proofstep{1}{\exists n\in\mathbb N\,(n\EqCard M)}{%
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
+  \proofstep{4}{n\in\mathbb N\land n\EqCard M}{\rA}
+  \proofstep{4}{n\in\mathbb N}{\rAEa{4}}
+  \proofstep{4}{n\EqCard M}{\rAEb{4}}
+  \proofstep{2,4}{n\EqCard N}{%
+    \FormulaRefAuto{A\EqCard B\dsep B\EqCard C\vdash A\EqCard C}{6,2}}
+  \proofstep{2,4}{n\in\mathbb N\land n\EqCard N}{\rAI{5,7}}
+  \proofstep{2,4}{\exists n\in\mathbb N\,(n\EqCard N)}{\rEI{8}}
+  \proofstep{2,4}{\Finite N}{\FormulaRefAuto{FiniteEqCardEquiv}[thm]{9}}
+  \proofstep{1,2}{\Finite N}{\rEE{3,4,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Transport der Endlichkeit mittels Bijektion]{%
+  \Finite M\dsep F\colon M\bij N\vdash \Finite N%
+}{FiniteBijectionTransport}{%
+  \DeltaRow{Mengen}{M\dsep N}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite M}{\rA}
+  \proofstep{2}{F\colon M\bij N}{\rA}
+  \proofstep{2}{M\EqCard N}{%
+    \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{2}}
+  \proofstep{1,2}{\Finite N}{\FormulaRefAuto{FiniteEqCardTransport}[thm]{1,3}}
+\end{tabproof}
 
 
 \section{Peano-Anfangsabschnitte}
@@ -422,12 +483,11 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
 \end{tabproof}
 
 
-\section{Axiomatischer Begriff der Endlichkeit}
+\section{Endlichkeit abstrakter Peano-Anfangsabschnitte}
 
-Der Endlichkeitsbegriff stammt aus Band~03. Das Peano-Zeugenaxiom liefert
-zunächst nur die Darstellung einer endlichen Menge durch einen
-Anfangsabschnitt. Für die Rückrichtung zeigen wir zuerst, dass jeder
-Peano-Anfangsabschnitt im Sinn von Band~03 endlich ist.
+Die folgenden beiden Sätze betreffen ausdrücklich die abstrakten
+Peano-Anfangsabschnitte. Sie werden direkt aus den drei Endlichkeitsaxiomen
+gewonnen und dienen nicht als allgemeine Endlichkeitszeugen.
 
 \FormulaThmDeltaK[Peano-Anfangsabschnitte sind endlich]{%
   n\in\mathbb{N}\vdash \Finite{\NatSeg{n}}%
@@ -489,109 +549,89 @@ Peano-Anfangsabschnitt im Sinn von Band~03 endlich ist.
     \FormulaRefAuto{FiniteEqCardTransport}[thm]{3,2}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Charakterisierung durch gleichmächtige Peano-Anfangsabschnitte]{%
-  \Finite{M}\eqvdash
-  \exists n\in\mathbb{N}\,\bigl(\NatSeg{n}\EqCard M\bigr)%
-}{FiniteNatSegEqCardEquiv}{%
-  \DeltaRow{Mengen}{M\dsep n}%
-}
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{\Finite{M}}{\rA}
-    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(\NatSeg{n}\EqCard M\bigr)}{%
-      \FormulaRefAuto{FiniteWitnessAxiom}[ax]{1}}
-  \closeproofpart
-
-  \proofpart{\(\dashv\)}
-    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(\NatSeg{n}\EqCard M\bigr)}{\rA}
-    \proofstep{2}{n\in\mathbb{N}\land \NatSeg{n}\EqCard M}{\rA}
-    \proofstep{2}{n\in\mathbb{N}}{\rAEa{2}}
-    \proofstep{2}{\NatSeg{n}\EqCard M}{\rAEb{2}}
-    \proofstep{2}{\Finite{M}}{%
-      \FormulaRefAuto{FiniteNatSegEqCardIntro}[thm]{3,4}}
-    \proofstep{1}{\Finite{M}}{\rEE{1,2,5}}
-  \closeproofpart
-\end{tabproofsplit}
-
 \section{Elementare Eigenschaften endlicher Mengen}
 
-\iffalse
-\FormulaThmDelta[Transport der Endlichkeit entlang der Gleichmächtigkeit]{%
-  \Finite{M}\dsep M \EqCard N \vdash \Finite{N}%
-}{
-  \DeltaRow{Mengen}{M\dsep N\dsep n}
+Die Transportaussagen wurden oben ausschließlich aus
+\FormulaRefAuto{FiniteBijectionEquiv}[thm] und den allgemeinen Regeln der
+Gleichmächtigkeit hergeleitet.
+
+\FormulaThmDeltaK[Adjunktion eines beliebigen Elements]{%
+  \Finite A\vdash \Finite{A\cup\{a\}}%
+}{FiniteInsert}{%
+  \DeltaRow{Mengen}{A\dsep a}%
 }
 \begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{2}{M \EqCard N}{\rA}
-  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(\NatSeg{n} \EqCard M\bigr)}{1}}
-
-  \proofstep{4}{n\in\mathbb{N}\land \NatSeg{n} \EqCard M}{\rA}
-  \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
-  \proofstep{4}{\NatSeg{n} \EqCard M}{\rAEb{4}}
-  \proofstep{2,4}{\NatSeg{n} \EqCard N}{%
-    \FormulaRefAuto{A \EqCard B \dsep B \EqCard C \vdash A \EqCard C}{6,2}}
-  \proofstep{2,4}{n\in\mathbb{N}\land \NatSeg{n} \EqCard N}{\rAI{5,7}}
-  \proofstep{2,4}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard N\bigr)}{\rEI{8}}
-
-  \proofstep{1,2}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard N\bigr)}{\rEE{3,4,9}}
-  \proofstep{1,2}{\Finite{N}}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(\NatSeg{n} \EqCard M\bigr)}{10}}
+  \proofstep{1}{\Finite A}{\rA}
+  \proofstep{}{a\in A\lor a\notin A}{\FormulaRefAuto{P\lor\neg P}}
+  \proofstep{3}{a\in A}{\rA}
+  \proofstep{3}{A\cup\{a\}=A}{%
+    \FormulaRefAuto{A\cup\{a\}=A\eqvdash a\in A}{3}}
+  \proofstep{3}{A=A\cup\{a\}}{\FormulaRefAuto{a=b\vdash b=a}{4}}
+  \proofstep{1,3}{\Finite{A\cup\{a\}}}{\rIE{5,1}}
+  \proofstep{7}{a\notin A}{\rA}
+  \proofstep{1,7}{\Finite{A\cup\{a\}}}{%
+    \FormulaRefAuto{FiniteAdjunction}[thm]{7,1}}
+  \proofstep{1}{\Finite{A\cup\{a\}}}{\rOE{2,3,6,7,8}}
 \end{tabproof}
-\fi
 
-\paragraph{Explizite Bijektionen}
-
-\FormulaThmDeltaK[Charakterisierung der Endlichkeit durch Bijektionen]{%
-  \Finite{M}\eqvdash
-  \exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij M
-}{FiniteIffNatSegBijection}{%
-  \DeltaRow{Mengen}{M\dsep n}
-  \DeltaRow{Funktionen}{F}
+\FormulaThmDeltaK[Vereinigung endlicher Mengen ist endlich]{%
+  \Finite A\dsep \Finite B\vdash \Finite{A\cup B}%
+}{FiniteUnion}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b}%
 }
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{\Finite{M}}{\rA}
-    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(\NatSeg{n}\EqCard M\bigr)}{%
-      \FormulaRefAuto{FiniteNatSegEqCardEquiv}[thm]{1}}
-    \proofstep{3}{n\in\mathbb{N}\land \NatSeg{n}\EqCard M}{\rA}
-    \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
-    \proofstep{3}{\NatSeg{n}\EqCard M}{\rAEb{3}}
-    \proofstep{3}{\exists F\colon \NatSeg{n}\bij M}{%
-      \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{5}}
-    \proofstep{3}{n\in\mathbb{N}\land \exists F\colon \NatSeg{n}\bij M}{%
-      \rAI{4,6}}
-    \proofstep{3}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij M}{%
-      \rEI{7}}
-    \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij M}{%
-      \rEE{2,3,8}}
-  \closeproofpart
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    \Finite A\vdash \Finite{A\cup\varnothing}%
+  }{%
+    \Finite A\vdash \Finite{A\cup\varnothing}%
+  }[FiniteUnionBase]
+    \proofstepwidestar[1]{\Finite A}{\rA}
+    \proofstepwidestar{}{A\cup\varnothing=\varnothing\cup A}{%
+      \FormulaRefAuto{A\cup B=B\cup A}}
+    \proofstepwidestar{}{A=\varnothing\cup A}{\FormulaRefAuto{A=\varnothing\cup A}}
+    \proofstepwidestar{}{\varnothing\cup A=A}{\FormulaRefAuto{a=b\vdash b=a}{3}}
+    \proofstepwidestar{}{A\cup\varnothing=A}{\rIE{2,4}}
+    \proofstepwidestar{}{A=A\cup\varnothing}{\FormulaRefAuto{a=b\vdash b=a}{5}}
+    \proofstepwidestar[1]{\Finite{A\cup\varnothing}}{\rIE{6,1}}
+  \closeproofpartwideindR
 
-  \proofpart{\(\dashv\)}
-    \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij M}{\rA}
-    \proofstep{2}{n\in\mathbb{N}\land \exists F\colon \NatSeg{n}\bij M}{\rA}
-    \proofstep{2}{n\in\mathbb{N}}{\rAEa{2}}
-    \proofstep{2}{\exists F\colon \NatSeg{n}\bij M}{\rAEb{2}}
-    \proofstep{2}{\NatSeg{n}\EqCard M}{%
-      \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{4}}
-    \proofstep{2}{\Finite{M}}{%
-      \FormulaRefAuto{FiniteNatSegEqCardIntro}[thm]{3,5}}
-    \proofstep{1}{\Finite{M}}{\rEE{1,2,6}}
-  \closeproofpart
-\end{tabproofsplit}
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &\Finite B\dsep \Finite{A\cup B}\dsep b\notin B\\
+      &\vdash \Finite{A\cup(B\cup\{b\})}
+    \end{aligned}%
+  }{%
+    \Finite B\dsep \Finite{A\cup B}\dsep b\notin B
+    \vdash \Finite{A\cup(B\cup\{b\})}%
+  }[FiniteUnionStep]
+    \proofstepwidestar[1]{\Finite B}{\rA}
+    \proofstepwidestar[2]{\Finite{A\cup B}}{\rA}
+    \proofstepwidestar[3]{b\notin B}{\rA}
+    \proofstepwidestar[2]{\Finite{(A\cup B)\cup\{b\}}}{%
+      \FormulaRefAuto{FiniteInsert}[thm]{2}}
+    \proofstepwidestar{}{A\cup(B\cup\{b\})=(A\cup B)\cup\{b\}}{%
+      \FormulaRefAuto{A\cup(B\cup C)=(A\cup B)\cup C}}
+    \proofstepwidestar{}{(A\cup B)\cup\{b\}=A\cup(B\cup\{b\})}{%
+      \FormulaRefAuto{a=b\vdash b=a}{5}}
+    \proofstepwidestar[2]{\Finite{A\cup(B\cup\{b\})}}{\rIE{6,4}}
+  \closeproofpartwideindR
 
-Der Transport entlang einer Bijektion ist bereits in Band~03 bewiesen
-(\FormulaRefAuto{FiniteBijectionTransport}[thm]) und wird im Folgenden direkt
-verwendet.
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{\Finite A}{\rA}
+    \proofstepwidestar[2]{\Finite B}{\rA}
+    \proofstepwidestar[1,2]{\Finite{A\cup B}}{%
+      \FormulaRefAuto{FiniteInductionRule}[ax]{IA,IS,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \section{Beispiele endlicher Mengen}
 
 \subsection{Adjunktion eines neuen Elements}
 
-Die Erhaltung der Endlichkeit unter Adjunktion ist bereits in Band~03
-bewiesen (\FormulaRefAuto{FiniteAdjunction}[thm]). Die dortige Konstruktion
-der erweiterten Bijektion wird hier nicht wiederholt.
+Die Erhaltung der Endlichkeit unter Adjunktion ist hier die unmittelbare
+Theoremform von \FormulaRefAuto{FiniteAdjunctionAxiom}[ax]. Die nachfolgende
+ausführliche Konstruktion der erweiterten Bijektion bleibt als technische
+Peano-Variante deaktiviert.
 
 \iffalse
 
@@ -1698,6 +1738,7 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \fi
 
+\iffalse
 \FormulaThmDeltaK[Adjunktion endlich vieler Elemente]{%
   \Finite{A}\dsep n\in\mathbb{N}\dsep
   F\colon \NatSeg{n}\to M
@@ -1719,6 +1760,7 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \proofstep{1,2,3}{\Finite{A\cup F[\NatSeg{n}]}}{%
     \FormulaRefAuto{FiniteUnion}[thm]{1,6}}
 \end{tabproof}
+\fi
 
 \subsection{Vereinigung endlicher Mengen ist endlich}
 
@@ -1757,9 +1799,9 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \subsection{Ein- und Paarmengen}
 
-\FormulaThmDelta[Einermengen sind endlich]{%
+\FormulaThmDeltaK[Einermengen sind endlich]{%
   \Finite{\{A\}}
-}{%
+}{FiniteSingleton}{%
   \DeltaRow{Mengen}{A}
 }
 \begin{tabproof}
@@ -1774,9 +1816,9 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \proofstep{}{\Finite{\{A\}}}{\rIE{5,3}}
 \end{tabproof}
 
-\FormulaThmDelta[Paarmengen sind endlich]{%
+\FormulaThmDeltaK[Paarmengen sind endlich]{%
   \Finite{\{A,B\}}
-}{%
+}{FinitePair}{%
   \DeltaRow{Mengen}{A\dsep B}
 }
 \begin{tabproof}
@@ -1793,7 +1835,7 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \subsection{Teilmengen natürlicher Zahlen sind endlich}
 
-\iffalse
+% Der folgende von-Neumann-Induktionsblock ist aktiv.
 
 \iffalse
 \FormulaThmDelta[Die leere Menge ist endlich]{%
@@ -1803,13 +1845,13 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 }
 \begin{tabproof}
   \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
-  \proofstep{}{\NatSeg{0}=\varnothing}{\FormulaRefAuto{PeanoNatSegZero}}
+  \proofstep{}{0=\varnothing}{\FormulaRefAuto{PeanoNatSegZero}}
   \proofstep{}{\varnothing \EqCard \varnothing}{\FormulaRefAuto{A \EqCard A}}
-  \proofstep{}{\NatSeg{0} \EqCard \varnothing}{\rIE{2,3}}
-  \proofstep{}{0\in\mathbb{N}\land \NatSeg{0} \EqCard \varnothing}{\rAI{1,4}}
-  \proofstep{}{\exists n\in\mathbb{N}\,\NatSeg{n} \EqCard \varnothing}{\rEI{5}}
+  \proofstep{}{0 \EqCard \varnothing}{\rIE{2,3}}
+  \proofstep{}{0\in\mathbb{N}\land 0 \EqCard \varnothing}{\rAI{1,4}}
+  \proofstep{}{\exists n\in\mathbb{N}\,n \EqCard \varnothing}{\rEI{5}}
   \proofstep{}{\Finite{\varnothing}}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(\NatSeg{n} \EqCard M\bigr)}{6}}
+    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{6}}
 \end{tabproof}
 \fi
 
@@ -1828,57 +1870,57 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \FormulaThmDelta[Fall \(n\in C\) im Induktionsschritt für endliche Teilmengen natürlicher Zahlen]{%
   \begin{aligned}[t]
-    &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-    &C\subseteq \NatSeg{\Succ(n)}\dsep n\in C \vdash \Finite{C}
+    &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+    &C\subseteq \Succ(n)\dsep n\in C \vdash \Finite{C}
   \end{aligned}
 }{%
   \DeltaRow{Mengen}{n\dsep C}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
-  \proofstep{3}{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+  \proofstep{2}{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
+  \proofstep{3}{C\subseteq \Succ(n)}{\rA}
   \proofstep{4}{n\in C}{\rA}
 
-  \proofstep{}{C\cap \NatSeg{n}\subseteq \NatSeg{n}}{\FormulaRefAuto{A\cap B \subseteq B}}
-  \proofstep{2}{(C\cap \NatSeg{n})\subseteq \NatSeg{n} \rightarrow \Finite{C\cap \NatSeg{n}}}{\rUE{2}}
-  \proofstep{2}{\Finite{C\cap \NatSeg{n}}}{\rRE{5,6}}
+  \proofstep{}{C\cap n\subseteq n}{\FormulaRefAuto{A\cap B \subseteq B}}
+  \proofstep{2}{(C\cap n)\subseteq n \rightarrow \Finite{C\cap n}}{\rUE{2}}
+  \proofstep{2}{\Finite{C\cap n}}{\rRE{5,6}}
 
-  \proofstep{8}{n\in C\cap \NatSeg{n}}{\rA}
-  \proofstep{8}{n\in \NatSeg{n}}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{8}}
-  \proofstep{1,8}{\bot}{\rBI{9,\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin \NatSeg{n}}{1}}}
-  \proofstep{1}{n\notin C\cap \NatSeg{n}}{\rCI{8,10}}
+  \proofstep{8}{n\in C\cap n}{\rA}
+  \proofstep{8}{n\in n}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{8}}
+  \proofstep{1,8}{\bot}{\rBI{9,\FormulaRefAuto{a\not\in a}}}
+  \proofstep{1}{n\notin C\cap n}{\rCI{8,10}}
 
-  \proofstep{1,2,4}{\Finite{(C\cap \NatSeg{n})\cup\{n\}}}{%
+  \proofstep{1,2,4}{\Finite{(C\cap n)\cup\{n\}}}{%
     \FormulaRefAuto{FiniteAdjunction}[thm]{11,7}}
-  \proofstep{1,3,4}{C=(C\cap \NatSeg{n})\cup\{n\}}{%
-    \FormulaRefAuto{PeanoNatSegSubsetSuccWithEndpoint}{1,3,4}}
-  \proofstep{1,3,4}{(C\cap \NatSeg{n})\cup\{n\}=C}{\FormulaRefAuto{a=b \vdash b=a}{13}}
+  \proofstep{1,3,4}{C=(C\cap n)\cup\{n\}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \Succ(n)\dsep n\in B \vdash B=(B\cap n)\cup\{n\}}{1,3,4}}
+  \proofstep{1,3,4}{(C\cap n)\cup\{n\}=C}{\FormulaRefAuto{a=b \vdash b=a}{13}}
   \proofstep{1,2,3,4}{\Finite{C}}{\rIE{14,12}}
 \end{tabproof}
 
 \FormulaThmDelta[Fall \(n\notin C\) im Induktionsschritt für endliche Teilmengen natürlicher Zahlen]{%
   \begin{aligned}[t]
-    &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-    &C\subseteq \NatSeg{\Succ(n)}\dsep n\notin C \vdash \Finite{C}
+    &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+    &C\subseteq \Succ(n)\dsep n\notin C \vdash \Finite{C}
   \end{aligned}
 }{%
   \DeltaRow{Mengen}{n\dsep C}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
-  \proofstep{3}{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+  \proofstep{2}{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
+  \proofstep{3}{C\subseteq \Succ(n)}{\rA}
   \proofstep{4}{n\notin C}{\rA}
 
-  \proofstep{1,3,4}{C\subseteq \NatSeg{n}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \NatSeg{\Succ(n)}\dsep n\notin B \vdash B\subseteq \NatSeg{n}}{1,3,4}}
-  \proofstep{1,2,3,4}{C\subseteq \NatSeg{n} \rightarrow \Finite{C}}{\rUE{2}}
+  \proofstep{1,3,4}{C\subseteq n}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \Succ(n)\dsep n\notin B \vdash B\subseteq n}{1,3,4}}
+  \proofstep{1,2,3,4}{C\subseteq n \rightarrow \Finite{C}}{\rUE{2}}
   \proofstep{1,2,3,4}{\Finite{C}}{\rIE{5,6}}
 \end{tabproof}
 
 \FormulaThmDelta[Induktionsschritt für endliche Teilmengen natürlicher Zahlen]{%
-  n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep C\subseteq \NatSeg{\Succ(n)}\vdash
+  n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep C\subseteq \Succ(n)\vdash
   \Finite{C}
 }{%
   \DeltaRow{Mengen}{n\dsep C}
@@ -1886,69 +1928,69 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 \begin{tabproofsplitwide}
   \proofpartwideindR[Fall \(n\in C\)]{%
     \begin{aligned}[t]
-      &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-      &C\subseteq \NatSeg{\Succ(n)}\dsep n\in C \vdash \Finite{C}
+      &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+      &C\subseteq \Succ(n)\dsep n\in C \vdash \Finite{C}
     \end{aligned}
   }{%
-    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep
-    C\subseteq \NatSeg{\Succ(n)}\dsep n\in C \vdash \Finite{C}
+    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep
+    C\subseteq \Succ(n)\dsep n\in C \vdash \Finite{C}
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
-    \proofstepwidestar[3]{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
+    \proofstepwidestar[3]{C\subseteq \Succ(n)}{\rA}
     \proofstepwidestar[4]{n\in C}{\rA}
 
     \proofstepwidestar[1,2,3,4]{\Finite{C}}{%
       \FormulaRefAuto{%
         \begin{aligned}[t]
-          &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-          &C\subseteq \NatSeg{\Succ(n)}\dsep n\in C \vdash \Finite{C}
+          &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+          &C\subseteq \Succ(n)\dsep n\in C \vdash \Finite{C}
         \end{aligned}
       }{1,2,3,4}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Fall \(n\notin C\)]{%
     \begin{aligned}[t]
-      &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-      &C\subseteq \NatSeg{\Succ(n)}\dsep n\notin C \vdash \Finite{C}
+      &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+      &C\subseteq \Succ(n)\dsep n\notin C \vdash \Finite{C}
     \end{aligned}
   }{%
-    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep
-    C\subseteq \NatSeg{\Succ(n)}\dsep n\notin C \vdash \Finite{C}
+    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep
+    C\subseteq \Succ(n)\dsep n\notin C \vdash \Finite{C}
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
-    \proofstepwidestar[3]{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
+    \proofstepwidestar[3]{C\subseteq \Succ(n)}{\rA}
     \proofstepwidestar[4]{n\notin C}{\rA}
 
     \proofstepwidestar[1,2,3,4]{\Finite{C}}{%
       \FormulaRefAuto{%
         \begin{aligned}[t]
-          &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep{}\\
-          &C\subseteq \NatSeg{\Succ(n)}\dsep n\notin C \vdash \Finite{C}
+          &n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep{}\\
+          &C\subseteq \Succ(n)\dsep n\notin C \vdash \Finite{C}
         \end{aligned}
       }{1,2,3,4}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
+    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
 
-    \proofstepwidestar[3]{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+    \proofstepwidestar[3]{C\subseteq \Succ(n)}{\rA}
     \proofstepwidestar[]{n\in C \lor n\notin C}{\FormulaRefAuto{P \lor \neg P}}
 
     \proofstepwidestar[5]{n\in C}{\rA}
     \proofstepwidestar[1,2,3,5]{\Finite{C}}{%
       \FormulaRefAuto{%
-        n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep
-        C\subseteq \NatSeg{\Succ(n)}\dsep n\in C \vdash \Finite{C}
+        n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep
+        C\subseteq \Succ(n)\dsep n\in C \vdash \Finite{C}
       }{1,2,3,5}}
 
     \proofstepwidestar[7]{n\notin C}{\rA}
     \proofstepwidestar[1,2,3,7]{\Finite{C}}{%
       \FormulaRefAuto{%
-        n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep
-        C\subseteq \NatSeg{\Succ(n)}\dsep n\notin C \vdash \Finite{C}
+        n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep
+        C\subseteq \Succ(n)\dsep n\notin C \vdash \Finite{C}
       }{1,2,3,7}}
 
     \proofstepwidestar[1,2,3]{\Finite{C}}{\rOE{4,5,6,7,8}}
@@ -1956,7 +1998,7 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 \end{tabproofsplitwide}
 
 \FormulaThmDelta[Teilmengen natürlicher Zahlen sind endlich]{%
-  n\in\mathbb{N}\dsep C\subseteq \NatSeg{n} \vdash \Finite{C}
+  n\in\mathbb{N}\dsep C\subseteq n \vdash \Finite{C}
 }{%
   \DeltaRow{Mengen}{n\dsep C}
 }
@@ -1973,38 +2015,37 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \closeproofpartwideind
 
   \proofpartwideind[Induktionsschritt]{%
-    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\vdash
-    \forall C\,\bigl(C\subseteq \NatSeg{\Succ(n)} \rightarrow \Finite{C}\bigr)}
+    n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\vdash
+    \forall C\,\bigl(C\subseteq \Succ(n) \rightarrow \Finite{C}\bigr)}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{\rA}
+    \proofstepwidestar[2]{\forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{\rA}
 
-    \proofstepwidestar[3]{C\subseteq \NatSeg{\Succ(n)}}{\rA}
+    \proofstepwidestar[3]{C\subseteq \Succ(n)}{\rA}
     \proofstepwidestar[1,2,3]{\Finite{C}}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\dsep C\subseteq \NatSeg{\Succ(n)}\vdash \Finite{C}}{1,2,3}}
-    \proofstepwidestar[1,2]{C\subseteq \NatSeg{\Succ(n)}\rightarrow \Finite{C}}{\rII{3,4}}
+      \FormulaRefAuto{n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\dsep C\subseteq \Succ(n)\vdash \Finite{C}}{1,2,3}}
+    \proofstepwidestar[1,2]{C\subseteq \Succ(n)\rightarrow \Finite{C}}{\rII{3,4}}
     \proofstepwidestar[1,2]{%
-      \forall C\,\bigl(C\subseteq \NatSeg{\Succ(n)} \rightarrow \Finite{C}\bigr)}{%
+      \forall C\,\bigl(C\subseteq \Succ(n) \rightarrow \Finite{C}\bigr)}{%
       \rUI{\rRI{3,5}}}
   \closeproofpartwideind
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{C\subseteq \NatSeg{n}}{\rA}
+    \proofstepwidestar[2]{C\subseteq n}{\rA}
 
     \proofstepwidestar[1]{%
-      \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)}{%
+      \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)}{%
       \FormulaRefAuto{PeanoInductionRule}{%
         \FormulaRefAuto{\forall C\,\bigl(C\subseteq \varnothing \rightarrow \Finite{C}\bigr)},%
-        \FormulaRefAuto{n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq \NatSeg{n} \rightarrow \Finite{C}\bigr)\vdash \forall C\,\bigl(C\subseteq \NatSeg{\Succ(n)} \rightarrow \Finite{C}\bigr)},%
+        \FormulaRefAuto{n\in\mathbb{N}\dsep \forall C\,\bigl(C\subseteq n \rightarrow \Finite{C}\bigr)\vdash \forall C\,\bigl(C\subseteq \Succ(n) \rightarrow \Finite{C}\bigr)},%
         1}}
 
-    \proofstepwidestar[1]{C\subseteq \NatSeg{n} \rightarrow \Finite{C}}{\rUE{3}}
+    \proofstepwidestar[1]{C\subseteq n \rightarrow \Finite{C}}{\rUE{3}}
     \proofstepwidestar[1,2]{\Finite{C}}{\rIE{2,4}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\fi
-
+% Ende des von-Neumann-Induktionsblocks
 \FormulaThmDeltaK[Teilmengen von Peano-Anfangsabschnitten sind endlich]{%
   n\in\mathbb{N}\dsep C\subseteq \NatSeg{n}\vdash \Finite{C}%
 }{FiniteNatSegSubset}{%
@@ -2072,26 +2113,25 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \subsection{Teilmengen endlicher Mengen sind endlich}
 
-\iffalse
-\FormulaThmDelta[Teilmengen endlicher Mengen sind endlich]{%
+\FormulaThmDeltaK[Teilmengen endlicher Mengen sind endlich]{%
   T\subseteq M\dsep \Finite{M} \vdash \Finite{T}
-}{%
+}{FiniteSubset}{%
   \DeltaRow{Mengen}{T\dsep M\dsep n}
   \DeltaRow{Funktionen}{F}
 }
 \begin{tabproof}
   \proofstep{1}{T\subseteq M}{\rA}
   \proofstep{2}{\Finite{M}}{\rA}
-  \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon \NatSeg{n}\bij M}{%
-    \FormulaRefAuto{FiniteIffNatSegBijection}[thm]{2}}
-  \proofstep{4}{n\in\mathbb{N}\land \exists F\colon \NatSeg{n}\bij M}{\rA}
+  \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{%
+    \FormulaRefAuto{FiniteBijectionEquiv}[thm]{2}}
+  \proofstep{4}{n\in\mathbb{N}\land \exists F\colon n\bij M}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
-  \proofstep{4}{\exists F\colon \NatSeg{n}\bij M}{\rAEb{4}}
-  \proofstep{7}{F\colon \NatSeg{n}\bij M}{\rA}
-  \proofstep{1,7}{F^{-1}[T]\subseteq \NatSeg{n}}{%
+  \proofstep{4}{\exists F\colon n\bij M}{\rAEb{4}}
+  \proofstep{7}{F\colon n\bij M}{\rA}
+  \proofstep{1,7}{F^{-1}[T]\subseteq n}{%
     \FormulaRefAuto{C\subseteq B\dsep F\colon A\bij B \vdash F^{-1}[C]\subseteq A}{1,7}}
   \proofstep{1,4,7}{\Finite{F^{-1}[T]}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep C\subseteq \NatSeg{n} \vdash \Finite{C}}{5,8}}
+    \FormulaRefAuto{n\in\mathbb{N}\dsep C\subseteq n \vdash \Finite{C}}{5,8}}
   \proofstep{1,7}{F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}{%
     \FormulaRefAuto{F\colon A\bij B \dsep T\subseteq B \vdash F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}{7,1}}
   \proofstep{1,4,7}{\Finite{T}}{%
@@ -2099,11 +2139,10 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \proofstep{1,4}{\Finite{T}}{\rEE{6,7,11}}
   \proofstep{1,2}{\Finite{T}}{\rEE{3,4,12}}
 \end{tabproof}
-\fi
 
-\FormulaThmDelta[Enthaltende Teilfamilie einer endlichen Familie ist endlich]{%
+\FormulaThmDeltaK[Enthaltende Teilfamilie einer endlichen Familie ist endlich]{%
   \Finite{M}\vdash \Finite{\FamContaining{M}{a}}
-}{%
+}{FiniteContainingSubfamily}{%
   \DeltaRow{Mengen}{M\dsep a}
 }
 \begin{tabproof}
@@ -2114,9 +2153,9 @@ der erweiterten Bijektion wird hier nicht wiederholt.
     \FormulaRefAuto{FiniteSubset}[thm]{2,1}}
 \end{tabproof}
 
-\FormulaThmDelta[Vermeidende Teilfamilie einer endlichen Familie ist endlich]{%
+\FormulaThmDeltaK[Vermeidende Teilfamilie einer endlichen Familie ist endlich]{%
   \Finite{M}\vdash \Finite{\FamAvoiding{M}{a}}
-}{%
+}{FiniteAvoidingSubfamily}{%
   \DeltaRow{Mengen}{M\dsep a}
 }
 \begin{tabproof}
@@ -2129,10 +2168,9 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 
 \subsection{Bilder endlicher Mengen sind endlich}
 
-\iffalse
-\FormulaThmDelta[Bilder endlicher Mengen sind endlich]{%
+\FormulaThmDeltaK[Bilder endlicher Mengen sind endlich]{%
   C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}
-}{%
+}{FiniteImage}{%
   \DeltaRow{Mengen}{A\dsep B\dsep C}
   \DeltaRow{Funktionen}{F\dsep G}
 }
@@ -2156,54 +2194,53 @@ der erweiterten Bijektion wird hier nicht wiederholt.
     \FormulaRefAuto{FiniteBijectionTransport}[thm]{10,7}}
   \proofstep{1,2,3}{\Finite{F[C]}}{\rEE{5,6,11}}
 \end{tabproof}
-\fi
 
 \subsection{Potenzmengen natürlicher Zahlen sind endlich}
 
 \FormulaDefDelta[Funktionsvorschrift der Potenzmengenadjunktion]{%
-  X\in\powerset(\NatSeg{n})\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}
+  X\in\powerset(n)\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}
 }{%
   \DeltaRow{Mengen}{n\dsep X}
   \DeltaRow{Funktionensymbol}{\tPowAdj{n}}
 }
 
 \FormulaThmDelta[Typisierung der Funktionsvorschrift der Potenzmengenadjunktion]{%
-  n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash \tPowAdj{n}(X)\in\powerset(\NatSeg{\Succ(n)})
+  n\in\mathbb{N}\dsep X\in\powerset(n)\vdash \tPowAdj{n}(X)\in\powerset(\Succ(n))
 }{%
   \DeltaRow{Mengen}{n\dsep X}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{X\in\powerset(\NatSeg{n})}{\rA}
-  \proofstep{2}{X\subseteq \NatSeg{n}}{%
+  \proofstep{2}{X\in\powerset(n)}{\rA}
+  \proofstep{2}{X\subseteq n}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{2}}
-  \proofstep{1}{\NatSeg{n}\subseteq \NatSeg{\Succ(n)}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \NatSeg{n}\subseteq \NatSeg{\Succ(n)}}{1}}
-  \proofstep{1,2}{X\subseteq \NatSeg{\Succ(n)}}{%
+  \proofstep{1}{n\subseteq \Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq \Succ(n)}{1}}
+  \proofstep{1,2}{X\subseteq \Succ(n)}{%
     \FormulaRefAuto{A \subseteq B,\, B \subseteq C \vdash A \subseteq C}{3,4}}
-  \proofstep{1}{n\in \NatSeg{\Succ(n)}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\in \NatSeg{\Succ(n)}}{1}}
+  \proofstep{1}{n\in \Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\in \Succ(n)}{1}}
   \proofstep{1}{\{n\}\subseteq \Succ(n)}{%
     \FormulaRefAuto{a \in A \vdash \{a\} \subseteq A}{6}}
   \proofstep{1,2}{X\cup\{n\}\subseteq \Succ(n)}{%
     \FormulaRefAuto{A \subseteq C,\, B \subseteq C \vdash A \cup B \subseteq C}{5,7}}
   \proofstep{2}{\tPowAdj{n}(X)\coloneqq X\cup\{n\}}{%
-    \FormulaRefAuto{X\in\powerset(\NatSeg{n})\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}}{2}}
+    \FormulaRefAuto{X\in\powerset(n)\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}}{2}}
   \proofstep{1,2}{\tPowAdj{n}(X)\subseteq \Succ(n)}{\rIE{9,8}}
-  \proofstep{1,2}{\tPowAdj{n}(X)\in\powerset(\NatSeg{\Succ(n)})}{%
+  \proofstep{1,2}{\tPowAdj{n}(X)\in\powerset(\Succ(n))}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{10}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Existenz der Potenzmengenadjunktion]{%
   \begin{aligned}[t]
     &n\in\mathbb{N}\vdash{}\\
-    &\exists! F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})\,{}\\
-    &\forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+    &\exists! F\colon \powerset(n)\to \powerset(\Succ(n))\,{}\\
+    &\forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
   \end{aligned}
 }{%
   n\in\mathbb{N}\vdash
-  \exists! F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})\,
-  \forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+  \exists! F\colon \powerset(n)\to \powerset(\Succ(n))\,
+  \forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
 }{%
   \DeltaRow{Mengen}{n\dsep X}
   \DeltaRow{Funktionen}{F}
@@ -2212,8 +2249,8 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \proofstep{1}{n\in\mathbb{N}}{\rA}
   \proofstep{1}{%
     \begin{aligned}[t]
-      &\exists! F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})\,{}\\
-      &\forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+      &\exists! F\colon \powerset(n)\to \powerset(\Succ(n))\,{}\\
+      &\forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
     \end{aligned}
   }{%
     \FormulaRefAuto{%
@@ -2221,11 +2258,11 @@ der erweiterten Bijektion wird hier nicht wiederholt.
       \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)
     }{%
       \FormulaRefAuto{%
-        X\in\powerset(\NatSeg{n})\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}
+        X\in\powerset(n)\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}
       },%
       \FormulaRefAuto{%
-        n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash
-        \tPowAdj{n}(X)\in\powerset(\NatSeg{\Succ(n)})
+        n\in\mathbb{N}\dsep X\in\powerset(n)\vdash
+        \tPowAdj{n}(X)\in\powerset(\Succ(n))
       }{1}%
     }%
   }
@@ -2234,9 +2271,9 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 \FormulaDefDelta[Potenzmengenadjunktion]{%
   n\in\mathbb{N}\vdash
   \PowAdj{n}\coloneqq \iota F\Bigl(
-    F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})
+    F\colon \powerset(n)\to \powerset(\Succ(n))
     \land
-    \forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+    \forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
   \Bigr)
 }{%
   \DeltaRow{Mengen}{n\dsep X}
@@ -2244,187 +2281,187 @@ der erweiterten Bijektion wird hier nicht wiederholt.
 }
 
 \FormulaThmDelta[Typisierung der Potenzmengenadjunktion]{%
-  n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})
+  n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))
 }{%
   \DeltaRow{Mengen}{n\dsep X}
   \DeltaRow{Funktionen}{\PowAdj{n}}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{1}{\PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{%
+  \proofstep{1}{\PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{%
     \rAEa{\FormulaRefAuto{%
       n\in\mathbb{N}\vdash
       \PowAdj{n}\coloneqq \iota F\Bigl(
-        F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})
+        F\colon \powerset(n)\to \powerset(\Succ(n))
         \land
-        \forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+        \forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
       \Bigr)
     }{1}}}
 \end{tabproof}
 
 \FormulaThmDelta[Werte der Potenzmengenadjunktion]{%
-  n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash \PowAdj{n}(X)=\tPowAdj{n}(X)
+  n\in\mathbb{N}\dsep X\in\powerset(n)\vdash \PowAdj{n}(X)=\tPowAdj{n}(X)
 }{%
   \DeltaRow{Mengen}{n\dsep X}
   \DeltaRow{Funktionen}{\PowAdj{n}}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{X\in\powerset(\NatSeg{n})}{\rA}
-  \proofstep{1}{\forall X\in\powerset(\NatSeg{n})\,\PowAdj{n}(X)=\tPowAdj{n}(X)}{%
+  \proofstep{2}{X\in\powerset(n)}{\rA}
+  \proofstep{1}{\forall X\in\powerset(n)\,\PowAdj{n}(X)=\tPowAdj{n}(X)}{%
     \rAEb{\FormulaRefAuto{%
       n\in\mathbb{N}\vdash
       \PowAdj{n}\coloneqq \iota F\Bigl(
-        F\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})
+        F\colon \powerset(n)\to \powerset(\Succ(n))
         \land
-        \forall X\in\powerset(\NatSeg{n})\,F(X)=\tPowAdj{n}(X)
+        \forall X\in\powerset(n)\,F(X)=\tPowAdj{n}(X)
       \Bigr)
     }{1}}}
   \proofstep{1,2}{\PowAdj{n}(X)=\tPowAdj{n}(X)}{\rUE{3}}
 \end{tabproof}
 
 \FormulaThmDelta[Explizite Werte der Potenzmengenadjunktion]{%
-  n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash \PowAdj{n}(X)=X\cup\{n\}
+  n\in\mathbb{N}\dsep X\in\powerset(n)\vdash \PowAdj{n}(X)=X\cup\{n\}
 }{%
   \DeltaRow{Mengen}{n\dsep X}
   \DeltaRow{Funktionen}{\PowAdj{n}}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{X\in\powerset(\NatSeg{n})}{\rA}
+  \proofstep{2}{X\in\powerset(n)}{\rA}
   \proofstep{1,2}{\PowAdj{n}(X)=\tPowAdj{n}(X)}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash \PowAdj{n}(X)=\tPowAdj{n}(X)}{1,2}}
+    \FormulaRefAuto{n\in\mathbb{N}\dsep X\in\powerset(n)\vdash \PowAdj{n}(X)=\tPowAdj{n}(X)}{1,2}}
   \proofstep{2}{\tPowAdj{n}(X)\coloneqq X\cup\{n\}}{%
-    \FormulaRefAuto{X\in\powerset(\NatSeg{n})\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}}{2}}
+    \FormulaRefAuto{X\in\powerset(n)\vdash \tPowAdj{n}(X)\coloneqq X\cup\{n\}}{2}}
   \proofstep{1,2}{\PowAdj{n}(X)=X\cup\{n\}}{\rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDelta[Fall \(n\notin Y\) der Zerlegung der Potenzmenge]{%
-  n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\dsep n\notin Y \vdash Y\in\powerset(\NatSeg{n})
+  n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\dsep n\notin Y \vdash Y\in\powerset(n)
 }{%
   \DeltaRow{Mengen}{n\dsep Y}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{Y\in\powerset(\NatSeg{\Succ(n)})}{\rA}
+  \proofstep{2}{Y\in\powerset(\Succ(n))}{\rA}
   \proofstep{3}{n\notin Y}{\rA}
-  \proofstep{2}{Y\subseteq \NatSeg{\Succ(n)}}{%
+  \proofstep{2}{Y\subseteq \Succ(n)}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{2}}
-  \proofstep{1,2,3}{Y\subseteq \NatSeg{n}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \NatSeg{\Succ(n)}\dsep n\notin B \vdash B\subseteq \NatSeg{n}}{1,4,3}}
-  \proofstep{1,2,3}{Y\in\powerset(\NatSeg{n})}{%
+  \proofstep{1,2,3}{Y\subseteq n}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \Succ(n)\dsep n\notin B \vdash B\subseteq n}{1,4,3}}
+  \proofstep{1,2,3}{Y\in\powerset(n)}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{5}}
 \end{tabproof}
 
 \FormulaThmDelta[Fall \(n\in Y\) der Zerlegung der Potenzmenge]{%
-  n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\dsep n\in Y \vdash Y\in \PowAdj{n}[\powerset(\NatSeg{n})]
+  n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\dsep n\in Y \vdash Y\in \PowAdj{n}[\powerset(n)]
 }{%
   \DeltaRow{Mengen}{n\dsep Y\dsep X}
   \DeltaRow{Funktionen}{\PowAdj{n}}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{Y\in\powerset(\NatSeg{\Succ(n)})}{\rA}
+  \proofstep{2}{Y\in\powerset(\Succ(n))}{\rA}
   \proofstep{3}{n\in Y}{\rA}
-  \proofstep{2}{Y\subseteq \NatSeg{\Succ(n)}}{%
+  \proofstep{2}{Y\subseteq \Succ(n)}{%
     \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}{2}}
-  \proofstep{1,2,3}{Y=(Y\cap \NatSeg{n})\cup\{n\}}{%
-    \FormulaRefAuto{PeanoNatSegSubsetSuccWithEndpoint}{1,4,3}}
-  \proofstep{}{Y\cap \NatSeg{n}\subseteq \NatSeg{n}}{\FormulaRefAuto{A\cap B \subseteq B}}
-  \proofstep{}{Y\cap \NatSeg{n}\in\powerset(\NatSeg{n})}{%
+  \proofstep{1,2,3}{Y=(Y\cap n)\cup\{n\}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep B\subseteq \Succ(n)\dsep n\in B \vdash B=(B\cap n)\cup\{n\}}{1,4,3}}
+  \proofstep{}{Y\cap n\subseteq n}{\FormulaRefAuto{A\cap B \subseteq B}}
+  \proofstep{}{Y\cap n\in\powerset(n)}{%
     \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}{6}}
-  \proofstep{1}{\PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{1}}
-  \proofstep{1}{\PowAdj{n}(Y\cap \NatSeg{n})=(Y\cap \NatSeg{n})\cup\{n\}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash \PowAdj{n}(X)=X\cup\{n\}}{1,7}}
-  \proofstep{1}{(Y\cap \NatSeg{n})\cup\{n\}=\PowAdj{n}(Y\cap \NatSeg{n})}{%
+  \proofstep{1}{\PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{1}}
+  \proofstep{1}{\PowAdj{n}(Y\cap n)=(Y\cap n)\cup\{n\}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep X\in\powerset(n)\vdash \PowAdj{n}(X)=X\cup\{n\}}{1,7}}
+  \proofstep{1}{(Y\cap n)\cup\{n\}=\PowAdj{n}(Y\cap n)}{%
     \FormulaRefAuto{a=b\vdash b=a}{9}}
-  \proofstep{1,2,3}{Y=\PowAdj{n}(Y\cap \NatSeg{n})}{\rIE{5,10}}
-  \proofstep{1,2,3}{\exists X\in\powerset(\NatSeg{n})\,Y=\PowAdj{n}(X)}{\rEI{\rAI{7,11}}}
-  \proofstep{1,2,3}{Y\in \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+  \proofstep{1,2,3}{Y=\PowAdj{n}(Y\cap n)}{\rIE{5,10}}
+  \proofstep{1,2,3}{\exists X\in\powerset(n)\,Y=\PowAdj{n}(X)}{\rEI{\rAI{7,11}}}
+  \proofstep{1,2,3}{Y\in \PowAdj{n}[\powerset(n)]}{%
     \FormulaRefAuto{F\colon A\to B\dsep \exists x\in A\,y=F(x)\vdash y\in F[A]}{8,12}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Zerlegung der Potenzmenge einer Nachfolgermenge]{%
-  n\in\mathbb{N}\vdash \powerset(\NatSeg{\Succ(n)})=\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]
+  n\in\mathbb{N}\vdash \powerset(\Succ(n))=\powerset(n)\cup \PowAdj{n}[\powerset(n)]
 }{%
-  n\in\mathbb{N}\vdash \powerset(\NatSeg{\Succ(n)})=\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]
+  n\in\mathbb{N}\vdash \powerset(\Succ(n))=\powerset(n)\cup \PowAdj{n}[\powerset(n)]
 }{%
   \DeltaRow{Mengen}{n\dsep Y\dsep X}
   \DeltaRow{Funktionen}{\PowAdj{n}}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Teilmengenrichtung \(\powerset(\NatSeg{\Succ(n)})\subseteq \powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\)]{%
-    n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\vdash Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]
+  \proofpartwideindR[Teilmengenrichtung \(\powerset(\Succ(n))\subseteq \powerset(n)\cup \PowAdj{n}[\powerset(n)]\)]{%
+    n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\vdash Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]
   }{%
-    n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\vdash Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]
+    n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\vdash Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{Y\in\powerset(\NatSeg{\Succ(n)})}{\rA}
+    \proofstepwidestar[2]{Y\in\powerset(\Succ(n))}{\rA}
     \proofstepwidestar[]{n\in Y\lor n\notin Y}{\FormulaRefAuto{P \lor \neg P}}
 
     \proofstepwidestar[4]{n\in Y}{\rA}
-    \proofstepwidestar[1,2,4]{Y\in \PowAdj{n}[\powerset(\NatSeg{n})]}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\dsep n\in Y \vdash Y\in \PowAdj{n}[\powerset(\NatSeg{n})]}{1,2,4}}
-    \proofstepwidestar[1,2,4]{Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+    \proofstepwidestar[1,2,4]{Y\in \PowAdj{n}[\powerset(n)]}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\dsep n\in Y \vdash Y\in \PowAdj{n}[\powerset(n)]}{1,2,4}}
+    \proofstepwidestar[1,2,4]{Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{%
       \FormulaRefAuto{z \in B \vdash z \in A \cup B}{5}}
 
     \proofstepwidestar[7]{n\notin Y}{\rA}
-    \proofstepwidestar[1,2,7]{Y\in\powerset(\NatSeg{n})}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\dsep n\notin Y \vdash Y\in\powerset(\NatSeg{n})}{1,2,7}}
-    \proofstepwidestar[1,2,7]{Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+    \proofstepwidestar[1,2,7]{Y\in\powerset(n)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\dsep n\notin Y \vdash Y\in\powerset(n)}{1,2,7}}
+    \proofstepwidestar[1,2,7]{Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{%
       \FormulaRefAuto{z \in A \vdash z \in A \cup B}{8}}
 
-    \proofstepwidestar[1,2]{Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{\rOE{3,4,6,7,9}}
+    \proofstepwidestar[1,2]{Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{\rOE{3,4,6,7,9}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Teilmengenrichtung \(\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\subseteq \powerset(\NatSeg{\Succ(n)})\)]{%
-    n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\vdash Y\in\powerset(\NatSeg{\Succ(n)})
+  \proofpartwideindR[Teilmengenrichtung \(\powerset(n)\cup \PowAdj{n}[\powerset(n)]\subseteq \powerset(\Succ(n))\)]{%
+    n\in\mathbb{N}\dsep Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]\vdash Y\in\powerset(\Succ(n))
   }{%
-    n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\vdash Y\in\powerset(\NatSeg{\Succ(n)})
+    n\in\mathbb{N}\dsep Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]\vdash Y\in\powerset(\Succ(n))
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{\rA}
-    \proofstepwidestar[2]{Y\in\powerset(\NatSeg{n})\lor Y\in \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+    \proofstepwidestar[2]{Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{\rA}
+    \proofstepwidestar[2]{Y\in\powerset(n)\lor Y\in \PowAdj{n}[\powerset(n)]}{%
       \FormulaRefAuto{x\in A\cup B \eqvdash x\in A\lor x\in B}{2}}
 
-    \proofstepwidestar[4]{Y\in\powerset(\NatSeg{n})}{\rA}
-    \proofstepwidestar[1]{\NatSeg{n}\subseteq \NatSeg{\Succ(n)}}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash \NatSeg{n}\subseteq \NatSeg{\Succ(n)}}{1}}
-    \proofstepwidestar[1,4]{\powerset(\NatSeg{n})\subseteq \powerset(\NatSeg{\Succ(n)})}{%
+    \proofstepwidestar[4]{Y\in\powerset(n)}{\rA}
+    \proofstepwidestar[1]{n\subseteq \Succ(n)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq \Succ(n)}{1}}
+    \proofstepwidestar[1,4]{\powerset(n)\subseteq \powerset(\Succ(n))}{%
       \FormulaRefAuto{A \subseteq B \vdash \powerset(A) \subseteq \powerset(B)}{5}}
-    \proofstepwidestar[1,4]{Y\in\powerset(\NatSeg{\Succ(n)})}{\rRE{\rUE{6},4}}
+    \proofstepwidestar[1,4]{Y\in\powerset(\Succ(n))}{\rRE{\rUE{6},4}}
 
-    \proofstepwidestar[8]{Y\in \PowAdj{n}[\powerset(\NatSeg{n})]}{\rA}
-    \proofstepwidestar[1]{\PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{1}}
-    \proofstepwidestar[1,8]{\exists X\in\powerset(\NatSeg{n})\,Y=\PowAdj{n}(X)}{%
+    \proofstepwidestar[8]{Y\in \PowAdj{n}[\powerset(n)]}{\rA}
+    \proofstepwidestar[1]{\PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{1}}
+    \proofstepwidestar[1,8]{\exists X\in\powerset(n)\,Y=\PowAdj{n}(X)}{%
       \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash \exists x\in A\,y=F(x)}{9,8}}
 
-    \proofstepwidestar[11]{X\in\powerset(\NatSeg{n})\land Y=\PowAdj{n}(X)}{\rA}
-    \proofstepwidestar[11]{X\in\powerset(\NatSeg{n})}{\rAEa{11}}
+    \proofstepwidestar[11]{X\in\powerset(n)\land Y=\PowAdj{n}(X)}{\rA}
+    \proofstepwidestar[11]{X\in\powerset(n)}{\rAEa{11}}
     \proofstepwidestar[11]{Y=\PowAdj{n}(X)}{\rAEb{11}}
-    \proofstepwidestar[1,11]{\PowAdj{n}(X)\in\powerset(\NatSeg{\Succ(n)})}{%
+    \proofstepwidestar[1,11]{\PowAdj{n}(X)\in\powerset(\Succ(n))}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{9,12}}
-    \proofstepwidestar[1,11]{Y\in\powerset(\NatSeg{\Succ(n)})}{\rIE{13,14}}
+    \proofstepwidestar[1,11]{Y\in\powerset(\Succ(n))}{\rIE{13,14}}
 
-    \proofstepwidestar[1,8]{Y\in\powerset(\NatSeg{\Succ(n)})}{\rEE{10,11,15}}
-    \proofstepwidestar[1,2]{Y\in\powerset(\NatSeg{\Succ(n)})}{\rOE{3,4,7,8,16}}
+    \proofstepwidestar[1,8]{Y\in\powerset(\Succ(n))}{\rEE{10,11,15}}
+    \proofstepwidestar[1,2]{Y\in\powerset(\Succ(n))}{\rOE{3,4,7,8,16}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[1]{\powerset(\NatSeg{\Succ(n)})\subseteq \powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{\Succ(n)})\vdash Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{1}}
-    \proofstepwidestar[1]{\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\subseteq \powerset(\NatSeg{\Succ(n)})}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]\vdash Y\in\powerset(\NatSeg{\Succ(n)})}{1}}
-    \proofstepwidestar[1]{\powerset(\NatSeg{\Succ(n)})=\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+    \proofstepwidestar[1]{\powerset(\Succ(n))\subseteq \powerset(n)\cup \PowAdj{n}[\powerset(n)]}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(\Succ(n))\vdash Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{1}}
+    \proofstepwidestar[1]{\powerset(n)\cup \PowAdj{n}[\powerset(n)]\subseteq \powerset(\Succ(n))}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep Y\in\powerset(n)\cup \PowAdj{n}[\powerset(n)]\vdash Y\in\powerset(\Succ(n))}{1}}
+    \proofstepwidestar[1]{\powerset(\Succ(n))=\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{%
       \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{2,3}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaThmDelta[Potenzmengen natürlicher Zahlen sind endlich]{%
-  n\in\mathbb{N}\vdash \Finite{\powerset(\NatSeg{n})}
+  n\in\mathbb{N}\vdash \Finite{\powerset(n)}
 }{%
   \DeltaRow{Mengen}{n}
 }
@@ -2444,48 +2481,48 @@ der erweiterten Bijektion wird hier nicht wiederholt.
   \closeproofpartwideind
 
   \proofpartwideindR[Induktionsschritt]{%
-    n\in\mathbb{N}\dsep \Finite{\powerset(\NatSeg{n})} \vdash \Finite{\powerset(\NatSeg{\Succ(n)})}
+    n\in\mathbb{N}\dsep \Finite{\powerset(n)} \vdash \Finite{\powerset(\Succ(n))}
   }{%
-    n\in\mathbb{N}\dsep \Finite{\powerset(\NatSeg{n})} \vdash \Finite{\powerset(\NatSeg{\Succ(n)})}
+    n\in\mathbb{N}\dsep \Finite{\powerset(n)} \vdash \Finite{\powerset(\Succ(n))}
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[2]{\Finite{\powerset(\NatSeg{n})}}{\rA}
-    \proofstepwidestar[1]{\powerset(\NatSeg{\Succ(n)})=\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash \powerset(\NatSeg{\Succ(n)})=\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}{1}}
-    \proofstepwidestar[]{\powerset(\NatSeg{n})\subseteq \powerset(\NatSeg{n})}{\FormulaRefAuto{A \subseteq A}}
-    \proofstepwidestar[1]{\PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(\NatSeg{n})\to \powerset(\NatSeg{\Succ(n)})}{1}}
-    \proofstepwidestar[1,2]{\Finite{\PowAdj{n}[\powerset(\NatSeg{n})]}}{%
+    \proofstepwidestar[2]{\Finite{\powerset(n)}}{\rA}
+    \proofstepwidestar[1]{\powerset(\Succ(n))=\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash \powerset(\Succ(n))=\powerset(n)\cup \PowAdj{n}[\powerset(n)]}{1}}
+    \proofstepwidestar[]{\powerset(n)\subseteq \powerset(n)}{\FormulaRefAuto{A \subseteq A}}
+    \proofstepwidestar[1]{\PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash \PowAdj{n}\colon \powerset(n)\to \powerset(\Succ(n))}{1}}
+    \proofstepwidestar[1,2]{\Finite{\PowAdj{n}[\powerset(n)]}}{%
       \FormulaRefAuto{FiniteImage}[thm]{4,5,2}}
-    \proofstepwidestar[1,2]{\Finite{\powerset(\NatSeg{n})\cup \PowAdj{n}[\powerset(\NatSeg{n})]}}{%
+    \proofstepwidestar[1,2]{\Finite{\powerset(n)\cup \PowAdj{n}[\powerset(n)]}}{%
       \FormulaRefAuto{FiniteUnion}[thm]{2,6}}
-    \proofstepwidestar[1,2]{\Finite{\powerset(\NatSeg{\Succ(n)})}}{\rIE{3,7}}
+    \proofstepwidestar[1,2]{\Finite{\powerset(\Succ(n))}}{\rIE{3,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[1]{\Finite{\powerset(\NatSeg{n})}}{%
+    \proofstepwidestar[1]{\Finite{\powerset(n)}}{%
       \FormulaRefAuto{PeanoInductionRule}{IA,IS,1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \subsection{Potenzmengen endlicher Mengen sind endlich}
 
-\FormulaThmDelta[Potenzmengen endlicher Mengen sind endlich]{%
+\FormulaThmDeltaK[Potenzmengen endlicher Mengen sind endlich]{%
   \Finite{A}\vdash \Finite{\powerset(A)}
-}{%
+}{FinitePowerSet}{%
   \DeltaRow{Mengen}{A\dsep n}
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{A}}{\rA}
-  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n}\EqCard A\bigr)}{%
-    \FormulaRefAuto{FiniteWitnessAxiom}[ax]{1}}
+  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land n\EqCard A\bigr)}{%
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
 
-  \proofstep{3}{n\in\mathbb{N}\land \NatSeg{n}\EqCard A}{\rA}
+  \proofstep{3}{n\in\mathbb{N}\land n\EqCard A}{\rA}
   \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
-  \proofstep{3}{\NatSeg{n}\EqCard A}{\rAEb{3}}
-  \proofstep{4}{\Finite{\powerset(\NatSeg{n})}}{\FormulaRefAuto{n\in\mathbb{N}\vdash \Finite{\powerset(\NatSeg{n})}}{4}}
-  \proofstep{5}{\powerset(\NatSeg{n})\EqCard \powerset(A)}{\FormulaRefAuto{A \EqCard B \vdash \powerset(A)\EqCard \powerset(B)}{5}}
+  \proofstep{3}{n\EqCard A}{\rAEb{3}}
+  \proofstep{4}{\Finite{\powerset(n)}}{\FormulaRefAuto{n\in\mathbb{N}\vdash \Finite{\powerset(n)}}{4}}
+  \proofstep{5}{\powerset(n)\EqCard \powerset(A)}{\FormulaRefAuto{A \EqCard B \vdash \powerset(A)\EqCard \powerset(B)}{5}}
   \proofstep{3}{\Finite{\powerset(A)}}{\FormulaRefAuto{FiniteEqCardTransport}[thm]{6,7}}
   \proofstep{1}{\Finite{\powerset(A)}}{\rEE{2,3,8}}
 \end{tabproof}
@@ -2525,41 +2562,33 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
 \subsection[Ausschluss von Injektionen N -> M]{%
   Ausschluss von Injektionen \(\mathbb{N}\to M\)}
 
-\FormulaThmDeltaK[Keine Injektion von \(\mathbb{N}\) in einen Anfangsabschnitt]{%
-  n\in\mathbb{N}\vdash \neg\exists F\colon \mathbb{N}\inj \NatSeg{n}%
-}{PeanoNatSegNoNatInjection}{%
-  \DeltaDecl{Mengen}{n}%
-  \DeltaDecl{Funktionen}{F}%
-}
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{1}{\neg\exists F\colon \mathbb{N}\inj \NatSeg{n}}{\rA}
-\end{tabproof}
-
-\FormulaThmDelta{%
-    n\in\mathbb{N}\dsep \NatSeg{n} \EqCard M\vdash \neg\exists F\colon \mathbb{N}\inj M %
-}{%
+\FormulaThmDeltaK[Transport des Injektionsausschlusses von einer natürlichen Zahl]{%
+    n\in\mathbb{N}\dsep n\EqCard M
+    \vdash \neg\exists F\colon \mathbb{N}\inj M %
+}{FiniteWitnessNoNatInjection}{%
   \DeltaDecl{Mengen}{n\dsep M}%
+  \DeltaDecl{Funktionen}{F\dsep G\dsep H}%
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{\NatSeg{n} \EqCard M}{\rA}
+  \proofstep{2}{n\EqCard M}{\rA}
 
   \proofstep{3}{\exists F\colon \mathbb{N}\inj M}{\rA}
 
-  \proofstep{2}{\exists G\colon \NatSeg{n}\bij M}{\FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{2}}
+  \proofstep{2}{\exists G\colon n\bij M}{\FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{2}}
 
-  \proofstep{5}{G\colon \NatSeg{n}\bij M}{\rA}
+  \proofstep{5}{G\colon n\bij M}{\rA}
 
-  \proofstep{5}{G^{-1}\colon M\bij \NatSeg{n}}{\FormulaRefAuto{F\colon A\bij B \vdash F^{-1}\colon B\bij A}{5}}
-  \proofstep{5}{G^{-1}\colon M\inj \NatSeg{n}}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{6}}
+  \proofstep{5}{G^{-1}\colon M\bij n}{\FormulaRefAuto{F\colon A\bij B \vdash F^{-1}\colon B\bij A}{5}}
+  \proofstep{5}{G^{-1}\colon M\inj n}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{6}}
 
   \proofstep{8}{F\colon \mathbb{N}\inj M}{\rA}
 
-  \proofstep{5,8}{G^{-1}\circ F\colon \mathbb{N}\inj \NatSeg{n}}{\FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{8,7}}
+  \proofstep{5,8}{G^{-1}\circ F\colon \mathbb{N}\inj n}{\FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{8,7}}
 
-  \proofstep{5,8}{\exists H\colon \mathbb{N}\inj \NatSeg{n}}{\rEI{9}}
-  \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj \NatSeg{n}}{\FormulaRefAuto{PeanoNatSegNoNatInjection}{1}}
+  \proofstep{5,8}{\exists H\colon \mathbb{N}\inj n}{\rEI{9}}
+  \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj n}{%
+    \FormulaRefAuto{VonNeumannNoNatInjection}[thm]{1}}
   \proofstep{1,5,8}{\bot}{\rBI{10,11}}
 
   \proofstep{1,3,5}{\bot}{\rEE{3,8,12}}
@@ -2968,7 +2997,7 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
   \TarskiFinite(M)
 }{Tarski-endliche Menge}{
   \DeltaRow{Mengen}{M\dsep B\dsep x\dsep y}
-  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{\textbf{Definitionsbedingung}}{}
   \DeltaRow{\makecell[l]{Tarskisches\\Maximalitätsaxiom}}
   {%
     \begin{aligned}[t]
@@ -2986,7 +3015,7 @@ S(M) & \xrightarrow{\mathrm{ZF}} & I(M)
   \TarskiMinFinite(M)
 }{minimal Tarski-endliche Menge}{
   \DeltaRow{Mengen}{M\dsep B\dsep x\dsep y}
-  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{\textbf{Definitionsbedingung}}{}
   \DeltaRow{\makecell[l]{Tarskisches\\Minimalitätsaxiom}}
   {%
     \begin{aligned}[t]
@@ -3600,38 +3629,6 @@ d_k\in F_n\land d_n\notin F_n
   }{\FormulaRefAuto{A \subseteq B, B = C \vdash A \subseteq C}{8,10}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Monotonie entlang strikter Ordnung]{%
-  \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep
-  k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n
-  \vdash F(\Succ(k))\subseteq F(n)%
-}{PeanoStrictMonotoneSucc}{%
-  \DeltaDecl{Mengen}{k\dsep n}%
-  \DeltaDecl{Funktionen}{F}%
-  \DeltaDecl{Relation}{<_{\mathbb{N}}}%
-}
-\begin{tabproof}
-  \proofstep{1}{\forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)}{\rA}
-  \proofstep{2}{k\in\mathbb{N}}{\rA}
-  \proofstep{3}{n\in\mathbb{N}}{\rA}
-  \proofstep{4}{k<n}{\rA}
-  \proofstep{1,2,3,4}{F(\Succ(k))\subseteq F(n)}{\rA}
-\end{tabproof}
-
-\FormulaThmDeltaK[Strikte Punkttrennung liefert Injektivitaet]{%
-  F\colon \mathbb{N}\to M\dsep
-  \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)
-  \vdash F\colon \mathbb{N}\inj M%
-}{PeanoStrictSeparationInjection}{%
-  \DeltaDecl{Mengen}{M\dsep k\dsep n}%
-  \DeltaDecl{Funktionen}{F}%
-  \DeltaDecl{Relation}{<_{\mathbb{N}}}%
-}
-\begin{tabproof}
-  \proofstep{1}{F\colon \mathbb{N}\to M}{\rA}
-  \proofstep{2}{\forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)}{\rA}
-  \proofstep{1,2}{F\colon \mathbb{N}\inj M}{\rA}
-\end{tabproof}
-
 \FormulaThmDeltaR[Monotonie der wachsenden Rekursion]{%
   \begin{aligned}[t]
     &\GrowRec(B,b_0,S)\dsep
@@ -3668,7 +3665,11 @@ d_k\in F_n\land d_n\notin F_n
   \proofstep{1,2,3,4}{%
     \RecFun{b_0}{S}(\Succ(k))\subseteq \RecFun{b_0}{S}(n)
   }{%
-    \FormulaRefAuto{PeanoStrictMonotoneSucc}{7,2,3,4}}
+    \FormulaRefAuto{%
+      \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep
+      k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n
+      \vdash F(\Succ(k))\subseteq F(n)
+    }{7,2,3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Frischwert liegt im Zuwachs]{%
@@ -3871,10 +3872,21 @@ d_k\in F_n\land d_n\notin F_n
   }{%
     \FormulaRefAuto{\GrowFresh(M,B,b_0,S,D)\vdash \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow \FreshSeq{b_0}{S}{D}(k)\neq \FreshSeq{b_0}{S}{D}(n)\bigr)}{1}}
   \proofstep{1}{\FreshSeq{b_0}{S}{D}\colon \mathbb{N}\inj M}{%
-    \FormulaRefAuto{PeanoStrictSeparationInjection}{2,3}}
+    \FormulaRefAuto{%
+      F\colon \mathbb{N}\to M\dsep
+      \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)
+      \vdash F\colon \mathbb{N}\inj M
+    }{2,3}}
 \end{tabproof}
 
 \subparagraph{Anwendung auf Tarski-Endlichkeit}
+
+\paragraph{Abhängigkeit vom Auswahlaxiom.}
+Die im nächsten Satz gleichzeitig gewählten Erweiterungen \(S(X)\) und
+Frischelemente \(D(X)\) werden mit dem bereits eingeführten
+\FormulaRefAuto{Auswahlaxiom}[ax] gewonnen. Damit hängen der folgende
+Frischdaten-Satz und folglich die Dedekind-Rückrichtung zur Endlichkeit in
+der hier gegebenen Beweisroute vom Auswahlaxiom ab.
 
 \FormulaThmDeltaR[Nichtmaximalitaet liefert Frischdaten]{%
   \begin{aligned}[t]
@@ -3898,7 +3910,8 @@ d_k\in F_n\land d_n\notin F_n
   \proofstep{2}{\exists b_0\in B}{%
     \FormulaRefAuto{B\neq\varnothing\vdash \exists x\in B}{2}}
   \proofstep{1,3}{\exists S\colon B\to B\,\forall x\in B\,\bigl(x\subset S(x)\bigr)}{%
-    \FormulaRefAuto{B\subseteq \powerset(M)\dsep \forall x\in B\,\exists y\in B\,\bigl(x\subset y\bigr)\vdash \exists S\colon B\to B\,\forall x\in B\,\bigl(x\subset S(x)\bigr)}{1,3}}
+    \FormulaRefAuto{B\subseteq \powerset(M)\dsep \forall x\in B\,\exists y\in B\,\bigl(x\subset y\bigr)\vdash \exists S\colon B\to B\,\forall x\in B\,\bigl(x\subset S(x)\bigr)}{1,3},
+    \FormulaRefAuto{Auswahlaxiom}[ax]}
   \proofstep{6}{b_0\in B}{\rA}
   \proofstep{7}{S\colon B\to B\land \forall x\in B\,\bigl(x\subset S(x)\bigr)}{\rA}
   \proofstep{7}{S\colon B\to B}{\rAEa{7}}
@@ -3910,7 +3923,8 @@ d_k\in F_n\land d_n\notin F_n
       &\bigl(D(X)\in S(X)\setminus X\bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{B\subseteq \powerset(M)\dsep S\colon B\to B\dsep \forall X\in B\,\bigl(X\subset S(X)\bigr)\vdash \exists D\colon B\to M\,\forall X\in B\,\bigl(D(X)\in S(X)\setminus X\bigr)}{1,8,9}}
+    \FormulaRefAuto{B\subseteq \powerset(M)\dsep S\colon B\to B\dsep \forall X\in B\,\bigl(X\subset S(X)\bigr)\vdash \exists D\colon B\to M\,\forall X\in B\,\bigl(D(X)\in S(X)\setminus X\bigr)}{1,8,9},
+    \FormulaRefAuto{Auswahlaxiom}[ax]}
   \proofstep{12}{%
     \begin{aligned}[t]
       &D\colon B\to M\land{}\\
@@ -4252,21 +4266,21 @@ definierten Familie \(\FinSubsets{M}\); es wird keine unendliche Folge von
 Entscheidungen konstruiert. Der direkte Schluss von Dedekind-Endlichkeit auf
 Endlichkeit ist damit nicht mitbewiesen.
 
-\FormulaThmDelta[Endliche Mengen sind Dedekind-endlich]{%
+\FormulaThmDeltaK[Endliche Mengen sind Dedekind-endlich]{%
   \Finite{M}\vdash \neg\exists H\colon \mathbb{N}\inj M
-}{%
+}{FiniteNoNatInjection}{%
   \DeltaDecl{Mengen}{M\dsep n}%
   \DeltaDecl{Funktionen}{H}%
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)}{%
-    \FormulaRefAuto{FiniteWitnessAxiom}[ax]{1}}
-  \proofstep{3}{n\in\mathbb{N}\land \NatSeg{n} \EqCard M}{\rA}
+  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land n\EqCard M\bigr)}{%
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
+  \proofstep{3}{n\in\mathbb{N}\land n\EqCard M}{\rA}
   \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
-  \proofstep{3}{\NatSeg{n} \EqCard M}{\rAEb{3}}
+  \proofstep{3}{n\EqCard M}{\rAEb{3}}
   \proofstep{3}{\neg\exists H\colon \mathbb{N}\inj M}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep \NatSeg{n} \EqCard M\vdash \neg\exists F\colon \mathbb{N}\inj M}{4,5}}
+    \FormulaRefAuto{FiniteWitnessNoNatInjection}[thm]{4,5}}
   \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj M}{\rEE{2,3,6}}
 \end{tabproof}
 
@@ -4705,7 +4719,8 @@ das gefundene Extremum zurück.
   \proofpart{\(\dashv\)}
     \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj M}{\rA}
     \proofstep{1}{\TarskiFinite(M)}{%
-      \FormulaRefAuto{\neg\exists H\colon \mathbb{N}\inj M\vdash \TarskiFinite(M)}{1}}
+      \FormulaRefAuto{\neg\exists H\colon \mathbb{N}\inj M\vdash \TarskiFinite(M)}{1},
+      \FormulaRefAuto{Auswahlaxiom}[ax]}
     \proofstep{1}{\Finite{M}}{%
       \FormulaRefAuto{\TarskiFinite(M)\vdash \Finite{M}}{2}}
   \closeproofpart
@@ -4884,24 +4899,24 @@ das gefundene Extremum zurück.
 \subsection{Eindeutigkeit der endlichen Kardinalzahl}
 
 \FormulaThmDelta[Selbstinjektionen natürlicher Zahlen sind bijektiv]{%
-  n\in\mathbb{N}\dsep F\colon \NatSeg{n}\inj \NatSeg{n}
-  \vdash F\colon \NatSeg{n}\bij \NatSeg{n}
+  n\in\mathbb{N}\dsep F\colon n\inj n
+  \vdash F\colon n\bij n
 }{%
   \DeltaRow{Mengen}{n}
   \DeltaRow{Funktionen}{F\dsep G}
 }
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
-  \proofstep{2}{F\colon \NatSeg{n}\inj \NatSeg{n}}{\rA}
-  \proofstep{}{\NatSeg{n}\subseteq \NatSeg{n}}{\FormulaRefAuto{A\subseteq A}}
-  \proofstep{1}{\Finite{\NatSeg{n}}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep C\subseteq \NatSeg{n} \vdash \Finite{C}}{1,3}}
-  \proofstep{1}{\forall G\colon \NatSeg{n}\inj \NatSeg{n}\,\bigl(G\colon \NatSeg{n}\bij \NatSeg{n}\bigr)}{%
+  \proofstep{2}{F\colon n\inj n}{\rA}
+  \proofstep{}{n\subseteq n}{\FormulaRefAuto{A\subseteq A}}
+  \proofstep{1}{\Finite{n}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep C\subseteq n \vdash \Finite{C}}{1,3}}
+  \proofstep{1}{\forall G\colon n\inj n\,\bigl(G\colon n\bij n\bigr)}{%
     \FormulaRefAuto{%
       \Finite{M}\eqvdash
       \forall F\colon M\inj M\,\bigl(F\colon M\bij M\bigr)
     }{4}}
-  \proofstep{1,2}{F\colon \NatSeg{n}\bij \NatSeg{n}}{\rUE{5}}
+  \proofstep{1,2}{F\colon n\bij n}{\rUE{5}}
 \end{tabproof}
 
 \subsubsection{Schubfachkern}
@@ -4969,7 +4984,7 @@ das gefundene Extremum zurück.
 
 \FormulaThmDelta[Keine Injektion in kleinere natürliche Zahl]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n
-  \dsep F\colon \NatSeg{n}\inj \NatSeg{m} \vdash \bot
+  \dsep F\colon n\inj m \vdash \bot
 }{%
   \DeltaRow{Mengen}{m\dsep n}
   \DeltaRow{Funktionen}{F}
@@ -4979,24 +4994,24 @@ das gefundene Extremum zurück.
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{3}{m < n}{\rA}
-  \proofstep{4}{F\colon \NatSeg{n}\inj \NatSeg{m}}{\rA}
+  \proofstep{4}{F\colon n\inj m}{\rA}
 
-  \proofstep{1,2,3}{m\in \NatSeg{n}}{%
-    \FormulaRefAuto{PeanoNatSegStrictMembership}{1,2,3}}
-  \proofstep{1,2,3}{\NatSeg{m}\subseteq \NatSeg{n}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in \NatSeg{n} \vdash \NatSeg{m}\subseteq \NatSeg{n}}{1,2,5}}
-  \proofstep{1}{m\notin \NatSeg{m}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\notin \NatSeg{n}}{1}}
-  \proofstep{1,2,3}{\iota_{\NatSeg{m},\NatSeg{n}}\colon \NatSeg{m}\inj \NatSeg{n}}{%
+  \proofstep{1,2,3}{m\in n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m<n\leftrightarrow m\in n}{1,2,3}}
+  \proofstep{1,2,3}{m\subseteq n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{1,2,5}}
+  \proofstep{1}{m\notin m}{%
+    \FormulaRefAuto{a\not\in a}}
+  \proofstep{1,2,3}{\iota_{m,n}\colon m\inj n}{%
     \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{6}}
-  \proofstep{1,2,3,4}{\iota_{\NatSeg{m},\NatSeg{n}}\circ F\colon \NatSeg{n}\inj \NatSeg{n}}{%
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\inj n}{%
     \FormulaRefAuto{F\colon A\inj B \dsep G\colon B\inj C\vdash G\circ F\colon A\inj C}{4,8}}
 
-  \proofstep{1,2,3,4}{\iota_{\NatSeg{m},\NatSeg{n}}\circ F\colon \NatSeg{n}\bij \NatSeg{n}}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon \NatSeg{n}\inj \NatSeg{n} \vdash F\colon \NatSeg{n}\bij \NatSeg{n}}{2,9}}
-  \proofstep{1,2,3,4}{\iota_{\NatSeg{m},\NatSeg{n}}\circ F\colon \NatSeg{n}\sur \NatSeg{n}}{%
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\bij n}{%
+    \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\inj n \vdash F\colon n\bij n}{2,9}}
+  \proofstep{1,2,3,4}{\iota_{m,n}\circ F\colon n\sur n}{%
     \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}{10}}
-  \proofstep{4}{F\colon \NatSeg{n}\to \NatSeg{m}}{%
+  \proofstep{4}{F\colon n\to m}{%
     \FormulaRefAuto{Injektive Funktion}{4}}
   \proofstep{1,2,3,4}{\bot}{%
     \FormulaRefAuto{%
@@ -5012,11 +5027,11 @@ das gefundene Extremum zurück.
 \FormulaThmDeltaR[Keine größere natürliche Zahl ist gleichmächtig]{%
   \begin{aligned}[t]
     &m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash {}\\
-    &\neg(\NatSeg{m} \EqCard \NatSeg{n})
+    &\neg(m \EqCard n)
   \end{aligned}
 }{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n
-  \vdash \neg(\NatSeg{m} \EqCard \NatSeg{n})
+  \vdash \neg(m \EqCard n)
 }{%
   \DeltaRow{Mengen}{m\dsep n}
   \DeltaRow{Funktionen}{F}
@@ -5026,26 +5041,26 @@ das gefundene Extremum zurück.
   \proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{3}{m < n}{\rA}
-  \proofstep{4}{\NatSeg{m} \EqCard \NatSeg{n}}{\rA}
-  \proofstep{4}{\NatSeg{n} \EqCard \NatSeg{m}}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{4}}
-  \proofstep{4}{\exists F\colon \NatSeg{n}\bij \NatSeg{m}}{%
+  \proofstep{4}{m \EqCard n}{\rA}
+  \proofstep{4}{n \EqCard m}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{4}}
+  \proofstep{4}{\exists F\colon n\bij m}{%
     \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{5}}
 
-  \proofstep{7}{F\colon \NatSeg{n}\bij \NatSeg{m}}{\rA}
-  \proofstep{7}{F\colon \NatSeg{n}\inj \NatSeg{m}}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{7}}
+  \proofstep{7}{F\colon n\bij m}{\rA}
+  \proofstep{7}{F\colon n\inj m}{\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{7}}
   \proofstep{1,2,3,7}{\bot}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\dsep F\colon \NatSeg{n}\inj \NatSeg{m} \vdash \bot}{1,2,3,8}}
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n\dsep F\colon n\inj m \vdash \bot}{1,2,3,8}}
 
   \proofstep{1,2,3,4}{\bot}{\rEE{6,7,9}}
-  \proofstep{1,2,3}{\neg(\NatSeg{m} \EqCard \NatSeg{n})}{\rCI{4,10}}
+  \proofstep{1,2,3}{\neg(m \EqCard n)}{\rCI{4,10}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Gleichmächtige natürliche Zahlen sind gleich]{%
   n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep
-  \NatSeg{n} \EqCard \NatSeg{m} \vdash n=m
+  n \EqCard m \vdash n=m
 }{%
   n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep
-  \NatSeg{n} \EqCard \NatSeg{m} \vdash n=m
+  n \EqCard m \vdash n=m
 }{%
   \DeltaRow{Mengen}{n\dsep m}
   \DeltaRow{Relationen}{<_{\mathbb{N}}}
@@ -5053,19 +5068,19 @@ das gefundene Extremum zurück.
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{m\in\mathbb{N}}{\rA}
-  \proofstep{3}{\NatSeg{n} \EqCard \NatSeg{m}}{\rA}
+  \proofstep{3}{n \EqCard m}{\rA}
   \proofstep{1,2}{n < m\lor m < n\lor n=m}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m<n\lor n<m\lor m=n}{1,2}}
 
   \proofstep{5}{n < m}{\rA}
-  \proofstep{1,2,5}{\neg(\NatSeg{n} \EqCard \NatSeg{m})}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash \neg(\NatSeg{m} \EqCard \NatSeg{n})}{1,2,5}}
+  \proofstep{1,2,5}{\neg(n \EqCard m)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash \neg(m \EqCard n)}{1,2,5}}
   \proofstep{1,2,3,5}{n=m}{\FormulaRefAuto{P,\,\neg P \vdash Q}{3,6}}
 
   \proofstep{8}{m < n}{\rA}
-  \proofstep{3}{\NatSeg{m} \EqCard \NatSeg{n}}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{3}}
-  \proofstep{2,1,8}{\neg(\NatSeg{m} \EqCard \NatSeg{n})}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash \neg(\NatSeg{m} \EqCard \NatSeg{n})}{2,1,8}}
+  \proofstep{3}{m \EqCard n}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{3}}
+  \proofstep{2,1,8}{\neg(m \EqCard n)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m < n \vdash \neg(m \EqCard n)}{2,1,8}}
   \proofstep{1,2,3,8}{n=m}{\FormulaRefAuto{P,\,\neg P \vdash Q}{9,10}}
 
   \proofstep{12}{n=m}{\rA}
@@ -5077,7 +5092,7 @@ das gefundene Extremum zurück.
 \FormulaThmDeltaK[Eindeutigkeit der endlichen Kardinalzahl]{%
   \begin{aligned}[t]
     &n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep{}\\
-    &\NatSeg{n} \EqCard M\dsep \NatSeg{m} \EqCard M \vdash n=m
+    &n \EqCard M\dsep m \EqCard M \vdash n=m
   \end{aligned}
 }{FiniteCardWitnessUnique}{%
   \DeltaRow{Mengen}{M\dsep n\dsep m}
@@ -5086,45 +5101,45 @@ das gefundene Extremum zurück.
 \begin{tabproof}
   \proofstep{1}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{m\in\mathbb{N}}{\rA}
-  \proofstep{3}{\NatSeg{n} \EqCard M}{\rA}
-  \proofstep{4}{\NatSeg{m} \EqCard M}{\rA}
+  \proofstep{3}{n \EqCard M}{\rA}
+  \proofstep{4}{m \EqCard M}{\rA}
 
-  \proofstep{4}{M \EqCard \NatSeg{m}}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{4}}
-  \proofstep{3,4}{\NatSeg{n} \EqCard \NatSeg{m}}{%
+  \proofstep{4}{M \EqCard m}{\FormulaRefAuto{A \EqCard B \vdash B \EqCard A}{4}}
+  \proofstep{3,4}{n \EqCard m}{%
     \FormulaRefAuto{A \EqCard B \dsep B \EqCard C \vdash A \EqCard C}{3,5}}
   \proofstep{1,2,3,4}{n=m}{%
-    \FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep \NatSeg{n} \EqCard \NatSeg{m} \vdash n=m}{1,2,6}}
+    \FormulaRefAuto{n\in\mathbb{N}\dsep m\in\mathbb{N}\dsep n \EqCard m \vdash n=m}{1,2,6}}
 \end{tabproof}
 \subsection{Definition der Kardinalzahl}
 
 \FormulaThmDeltaK[Wohldefiniertheit der endlichen Kardinalzahl]{%
-  \Finite{M}\vdash \exists! n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)
+  \Finite{M}\vdash \exists! n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)
 }{FiniteCardWellDefined}{%
   \DeltaRow{Mengen}{M\dsep n\dsep m}
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)}{%
-    \FormulaRefAuto{FiniteWitnessAxiom}[ax]{1}}
+  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{%
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
 
-  \proofstep{3}{n\in\mathbb{N}\land \NatSeg{n} \EqCard M}{\rA}
+  \proofstep{3}{n\in\mathbb{N}\land n \EqCard M}{\rA}
   \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
-  \proofstep{3}{\NatSeg{n} \EqCard M}{\rAEb{3}}
+  \proofstep{3}{n \EqCard M}{\rAEb{3}}
 
-  \proofstep{6}{m\in\mathbb{N}\land \NatSeg{m} \EqCard M}{\rA}
+  \proofstep{6}{m\in\mathbb{N}\land m \EqCard M}{\rA}
   \proofstep{6}{m\in\mathbb{N}}{\rAEa{6}}
-  \proofstep{6}{\NatSeg{m} \EqCard M}{\rAEb{6}}
+  \proofstep{6}{m \EqCard M}{\rAEb{6}}
 
   \proofstep{3,6}{n=m}{%
     \FormulaRefAuto{FiniteCardWitnessUnique}[thm]{4,7,5,8}}
 
-  \proofstep{1}{\exists! n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)}{\UEI{2,3,6,9}}
+  \proofstep{1}{\exists! n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{\UEI{2,3,6,9}}
 \end{tabproof}
 
 \FormulaDefDeltaK[Kardinalzahl einer endlichen Menge]{%
   \Finite{M}\vdash
   \tCard(M) \coloneqq
-  \iota n\,\bigl(n\in\mathbb{N}\land \NatSeg{n} \EqCard M\bigr)
+  \iota n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)
 }{FiniteCardinality}{%
   \DeltaRow{Mengen}{M\dsep n}
   \DeltaRow{Termsymbol}{\tCard}
@@ -5139,28 +5154,28 @@ das gefundene Extremum zurück.
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \NatSeg{\tCard(M)}\EqCard M}{%
+  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \tCard(M)\EqCard M}{%
     \FormulaRefAuto{FiniteCardinality}[def]{1}}
   \proofstep{1}{\tCard(M)\in\mathbb{N}}{\rAEa{2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Kardinalzahl einer endlichen Menge zählt die Menge]{%
-  \Finite{M}\vdash \NatSeg{\tCard(M)}\EqCard M
+  \Finite{M}\vdash \tCard(M)\EqCard M
 }{FiniteCardCounts}{%
   \DeltaRow{Mengen}{M}
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \NatSeg{\tCard(M)}\EqCard M}{%
+  \proofstep{1}{\tCard(M)\in\mathbb{N}\land \tCard(M)\EqCard M}{%
     \FormulaRefAuto{FiniteCardinality}[def]{1}}
-  \proofstep{1}{\NatSeg{\tCard(M)}\EqCard M}{\rAEb{2}}
+  \proofstep{1}{\tCard(M)\EqCard M}{\rAEb{2}}
 \end{tabproof}
 
 \FormulaThmDelta[Kardinalzahlenvergleich liefert Inklusionsinjektion]{%
   \Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
   \vdash
-  \iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
-  \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}
+  \iota_{\tCard(M),\tCard(N)}\colon
+  \tCard(M)\inj \tCard(N)
 }{%
   \DeltaRow{Mengen}{M\dsep N}
 }
@@ -5172,9 +5187,9 @@ das gefundene Extremum zurück.
     \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{1}}
   \proofstep{2}{\tCard(N)\in\mathbb{N}}{%
     \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\in\mathbb{N}}{2}}
-  \proofstep{1,2,3}{\NatSeg{\tCard(M)}\subseteq \NatSeg{\tCard(N)}}{%
-    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n \leftrightarrow \NatSeg{m}\subseteq \NatSeg{n}}{4,5,3}}
-  \proofstep{1,2,3}{\iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}}{%
+  \proofstep{1,2,3}{\tCard(M)\subseteq \tCard(N)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n \leftrightarrow m\subseteq n}{4,5,3}}
+  \proofstep{1,2,3}{\iota_{\tCard(M),\tCard(N)}\colon \tCard(M)\inj \tCard(N)}{%
     \FormulaRefAuto{A\subseteq B\vdash \iota_{A,B}\colon A\inj B}{6}}
 \end{tabproof}
 
@@ -5189,15 +5204,15 @@ das gefundene Extremum zurück.
   \proofstep{1}{\Finite{M}}{\rA}
   \proofstep{2}{\Finite{N}}{\rA}
   \proofstep{3}{\tCard(M)\leq \tCard(N)}{\rA}
-  \proofstep{1}{\NatSeg{\tCard(M)}\EqCard M}{%
-    \FormulaRefAuto{\Finite{M}\vdash \NatSeg{\tCard(M)}\EqCard M}{1}}
-  \proofstep{2}{\NatSeg{\tCard(N)}\EqCard N}{%
-    \FormulaRefAuto{\Finite{M}\vdash \NatSeg{\tCard(M)}\EqCard M}{2}}
-  \proofstep{1,2,3}{\iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}}{%
+  \proofstep{1}{\tCard(M)\EqCard M}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\EqCard M}{1}}
+  \proofstep{2}{\tCard(N)\EqCard N}{%
+    \FormulaRefAuto{\Finite{M}\vdash \tCard(M)\EqCard M}{2}}
+  \proofstep{1,2,3}{\iota_{\tCard(M),\tCard(N)}\colon \tCard(M)\inj \tCard(N)}{%
     \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
     \vdash
-    \iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
-    \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}}{1,2,3}}
+    \iota_{\tCard(M),\tCard(N)}\colon
+    \tCard(M)\inj \tCard(N)}{1,2,3}}
   \proofstep{1,2,3}{\exists F\colon M\inj N}{%
     \FormulaRefAuto{A \EqCard M\dsep B \EqCard N\dsep F\colon A\inj B
     \vdash \exists G\colon M\inj N}{4,5,6}}
@@ -5319,8 +5334,8 @@ aus \(M\) enthalten ist.
   \DeltaRow{Endlichkeit}
            {\Finite{M}}
            [\parbox[t]{3cm}{%
-             \FormulaRefAuto{FiniteByBijection}[def]\\
-             \FormulaRefAuto{FiniteNatSegEqCardEquiv}[thm]}]
+             \FormulaRefAuto{FiniteBijectionEquiv}[thm]\\
+             \FormulaRefAuto{FiniteEqCardEquiv}[thm]}]
   \DeltaRow{\makecell[l]{Vereinigungs-\\ abschluss}}
            {\UnionClosedFam(M)}
            [\parbox[t]{3cm}{\FormulaRefAuto{Vereinigungsabgeschlossene Familie}}]
