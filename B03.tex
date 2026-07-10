@@ -8,7 +8,6 @@
     \usepackage{xr}
     \externaldocument{registry/_B01}
   \externaldocument{registry/_B02}
-  \externaldocument{registry/_B03}
 }{
    % Code für als Subfile eingebunden
 }
@@ -15907,8 +15906,8 @@ Aus \FormulaRefAuto{\varnothing\in\mathbb{N}} folgt, dass die Null in den natür
 
 
 \iffalse
-% Nach B04 verschoben: Dieser Block bleibt in B03 auskommentiert, damit
-% identische Aussagen nicht zusätzlich aus der B03-Registry geladen werden.
+% Nach B04 verschobener Funktionsblock. Der elementare Endlichkeitskern wird
+% weiter unten gezielt wieder aktiviert; die übrigen Dubletten bleiben inaktiv.
 \section{Grundlegende Eigenschaften von Funktionen auf und in die natürlichen Zahlen}
 
 \subsection{Funktionen von \(\mathbb{N}\)}
@@ -22355,30 +22354,70 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1}{\neg(\SuccShift{H}\colon M\sur M)}{\rCI{6,11}}
 \end{tabproof}
 
+\fi
+
 \chapter{Endliche Mengen}
 
 \section{Begriff der Endlichkeit}
 
-\FormulaDefDelta[Begriff der endlichen Menge]{%
-  \Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)
-}{
+\FormulaDefDeltaK[Begriff der endlichen Menge]{%
+  \Finite{M}\coloneqq
+  \exists n\in\mathbb{N}\,\exists F\colon n\bij M
+}{FiniteByBijection}{
   \DeltaRow{Mengen}{M\dsep n}
+  \DeltaRow{Funktionen}{F}
   \DeltaRow{\textbf{Neue Symbole}}{}
   \DeltaRow{Endlichkeit}{}
 }
 
+\FormulaThmDeltaK[Charakterisierung der Endlichkeit durch Gleichmächtigkeit]{%
+  \Finite{M}\eqvdash
+  \exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)
+}{FiniteEqCardEquiv}{%
+  \DeltaRow{Mengen}{M\dsep n}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\Finite{M}}{\rA}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{%
+      \FormulaRefAuto{FiniteByBijection}[def]{1}}
+    \proofstep{3}{n\in\mathbb{N}\land \exists F\colon n\bij M}{\rA}
+    \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
+    \proofstep{3}{\exists F\colon n\bij M}{\rAEb{3}}
+    \proofstep{3}{n\EqCard M}{%
+      \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{5}}
+    \proofstep{3}{n\in\mathbb{N}\land n\EqCard M}{\rAI{4,6}}
+    \proofstep{3}{\exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{\rEI{7}}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{\rEE{2,3,8}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{\rA}
+    \proofstep{2}{n\in\mathbb{N}\land n\EqCard M}{\rA}
+    \proofstep{2}{n\in\mathbb{N}}{\rAEa{2}}
+    \proofstep{2}{n\EqCard M}{\rAEb{2}}
+    \proofstep{2}{\exists F\colon n\bij M}{%
+      \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{4}}
+    \proofstep{2}{n\in\mathbb{N}\land \exists F\colon n\bij M}{\rAI{3,5}}
+    \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{\rEI{6}}
+    \proofstep{2}{\Finite{M}}{\FormulaRefAuto{FiniteByBijection}[def]{7}}
+    \proofstep{1}{\Finite{M}}{\rEE{1,2,8}}
+  \closeproofpart
+\end{tabproofsplit}
+
 \section{Elementare Eigenschaften endlicher Mengen}
 
-\FormulaThmDelta[Transport der Endlichkeit entlang der Gleichmächtigkeit]{%
+\FormulaThmDeltaK[Transport der Endlichkeit entlang der Gleichmächtigkeit]{%
   \Finite{M}\dsep M \EqCard N \vdash \Finite{N}%
-}{
+}{FiniteEqCardTransport}{
   \DeltaRow{Mengen}{M\dsep N\dsep n}
 }
 \begin{tabproof}
   \proofstep{1}{\Finite{M}}{\rA}
   \proofstep{2}{M \EqCard N}{\rA}
   \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{1}}
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
 
   \proofstep{4}{n\in\mathbb{N}\land n \EqCard M}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
@@ -22390,38 +22429,33 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
 
   \proofstep{1,2}{\exists n\,\bigl(n\in\mathbb{N}\land n \EqCard N\bigr)}{\rEE{3,4,9}}
   \proofstep{1,2}{\Finite{N}}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{10}}
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{10}}
 \end{tabproof}
 
 \paragraph{Explizite Bijektionen}
 
-\FormulaThmDelta[Charakterisierung der Endlichkeit durch Bijektionen]{%
-  \Finite{M}\vdash \exists n\in\mathbb{N}\,\exists F\colon n\bij M
-}{%
+\FormulaThmDeltaK[Charakterisierung der Endlichkeit durch Bijektionen]{%
+  \Finite{M}\eqvdash \exists n\in\mathbb{N}\,\exists F\colon n\bij M
+}{FiniteBijectionEquiv}{%
   \DeltaRow{Mengen}{M\dsep n}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{1}{\exists n\,\bigl(n\in\mathbb{N}\land n \EqCard M\bigr)}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{1}}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\Finite{M}}{\rA}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{%
+      \FormulaRefAuto{FiniteByBijection}[def]{1}}
+  \closeproofpart
 
-  \proofstep{3}{n\in\mathbb{N}\land n \EqCard M}{\rA}
-  \proofstep{3}{n\in\mathbb{N}}{\rAEa{3}}
-  \proofstep{3}{n \EqCard M}{\rAEb{3}}
-  \proofstep{3}{\exists F\colon n\bij M}{%
-    \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{5}}
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{\rA}
+    \proofstep{1}{\Finite{M}}{\FormulaRefAuto{FiniteByBijection}[def]{1}}
+  \closeproofpart
+\end{tabproofsplit}
 
-  \proofstep{7}{F\colon n\bij M}{\rA}
-  \proofstep{3,7}{\exists F\colon n\bij M}{\rEI{7}}
-  \proofstep{3,7}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{\rEI{\rAI{4,8}}}
-
-  \proofstep{1}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{\rEE{2,3,9}}
-\end{tabproof}
-
-\FormulaThmDelta[Transport der Endlichkeit mittels Bijektion]{%
+\FormulaThmDeltaK[Transport der Endlichkeit mittels Bijektion]{%
   \Finite{M}\dsep F\colon M\bij N \vdash \Finite{N}
-}{%
+}{FiniteBijectionTransport}{%
   \DeltaRow{Mengen}{M\dsep N}
   \DeltaRow{Funktionen}{F}
 }
@@ -22431,7 +22465,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{M \EqCard N}{%
     \FormulaRefAuto{A \EqCard B \coloneqq \exists F\colon A\bij B}{2}}
   \proofstep{1,2}{\Finite{N}}{%
-    \FormulaRefAuto{\Finite{M}\dsep M \EqCard N \vdash \Finite{N}}{1,3}}
+    \FormulaRefAuto{FiniteEqCardTransport}[thm]{1,3}}
 \end{tabproof}
 
 \section{Beispiele endlicher Mengen}
@@ -22472,6 +22506,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2}{\iota_{A,A\cup\{a\}}\circ F(u)=F(u)}{\rIE{4,7}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDelta[Werte der vorangestellten Inklusionsabbildung auf kleineren Punkten]{%
   n\in\mathbb{N}\dsep u\in\mathbb{N}\dsep F\colon n\bij A\dsep u<n \vdash
   \iota_{A,A\cup\{a\}}\circ F(u)=F(u)
@@ -22491,6 +22526,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \FormulaRefAuto{F\colon n\bij A \dsep u\in n \vdash \iota_{A,A\cup\{a\}}\circ F(u)=F(u)}{3,5}}
 \end{tabproof}
 
+\fi
+
 \FormulaThmDelta[Werte der adjungierten Abbildung auf alten Punkten]{%
   n\in\mathbb{N}\dsep F\colon n\bij A\dsep u\in n \vdash
   \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)
@@ -22505,7 +22542,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{\iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{%
     \FormulaRefAuto{F\colon n\bij A \vdash \iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{2}}
   \proofstep{}{a\in A\cup\{a\}}{\FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstep{1}{n\notin n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
+  \proofstep{}{n\notin n}{\FormulaRefAuto{a\not\in a}}
   \proofstep{1,2,3}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=\iota_{A,A\cup\{a\}}\circ F(u)}{%
     \FormulaRefAuto{a\notin A \dsep f\colon A\to M \dsep b\in M \vdash \forall x\in A\,\ExtMap{f}{a}{b}(x)=f(x)}{6,4,5}}
   \proofstep{2,3}{\iota_{A,A\cup\{a\}}\circ F(u)=F(u)}{%
@@ -22513,6 +22550,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2,3}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)}{\rIE{7,8}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDelta[Werte der adjungierten Abbildung auf kleineren Punkten]{%
   n\in\mathbb{N}\dsep u\in\mathbb{N}\dsep F\colon n\bij A\dsep u < n \vdash
   \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)
@@ -22532,6 +22570,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \FormulaRefAuto{n\in\mathbb{N}\dsep F\colon n\bij A\dsep u\in n \vdash \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=F(u)}{1,3,5}}
 \end{tabproof}
 
+\fi
+
 \FormulaThmDelta[Wert der adjungierten Abbildung am neuen Punkt]{%
   n\in\mathbb{N}\dsep F\colon n\bij A \vdash
   \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(n)=a
@@ -22545,7 +22585,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{\iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{%
     \FormulaRefAuto{F\colon n\bij A \vdash \iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{2}}
   \proofstep{}{a\in A\cup\{a\}}{\FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstep{1}{n\notin n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
+  \proofstep{}{n\notin n}{\FormulaRefAuto{a\not\in a}}
   \proofstep{1,2}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(n)=a}{%
     \FormulaRefAuto{a\notin A \dsep f\colon A\to M \dsep b\in M \vdash \ExtMap{f}{a}{b}(a)=b}{5,3,4}}
 \end{tabproof}
@@ -22563,7 +22603,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{\iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{%
     \FormulaRefAuto{F\colon n\bij A \vdash \iota_{A,A\cup\{a\}}\circ F\colon n\to A\cup\{a\}}{2}}
   \proofstep{}{a\in A\cup\{a\}}{\FormulaRefAuto{a\in A\cup\{a\}}}
-  \proofstep{1}{n\notin n}{\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}
+  \proofstep{}{n\notin n}{\FormulaRefAuto{a\not\in a}}
   \proofstep{1,2}{\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}\colon (n\cup\{n\})\to A\cup\{a\}}{%
     \FormulaRefAuto{a\notin A \dsep f\colon A\to M \dsep b\in M \vdash \ExtMap{f}{a}{b}\colon (A\cup\{a\})\to M}{5,3,4}}
 \end{tabproof}
@@ -22604,6 +22644,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \FormulaRefAuto{Injektivität}{6,3,4,9}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDeltaR[Fall $x<n,\; y<n$ der adjungierten Abbildung]{%
   \begin{aligned}[t]
     &n\in\mathbb{N}\dsep x\in\mathbb{N}\dsep y\in\mathbb{N}\dsep{}\\
@@ -22646,6 +22687,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
       \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(y)\vdash x=y}{1,4,8,9,7}}
 \end{tabproof}
 
+\fi
+
 \FormulaThmDeltaR[Fall $x\in n,\; y=n$ der adjungierten Abbildung]{%
   \begin{aligned}[t]
     &a\notin A\dsep n\in\mathbb{N}\dsep F\colon n\bij A\dsep{}\\
@@ -22686,6 +22729,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2,3,4,5}{x=y}{\rCE{13}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDeltaR[Fall $x<n,\; y=n$ der adjungierten Abbildung]{%
   \begin{aligned}[t]
     &a\notin A\dsep n\in\mathbb{N}\dsep x\in\mathbb{N}\dsep{}\\
@@ -22725,6 +22769,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
       \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=
       \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(y)\vdash x=y}{1,2,4,8,6,7}}
 \end{tabproof}
+
+\fi
 
 \FormulaThmDeltaR[Fall $x=n,\; y=n$ der adjungierten Abbildung]{%
   \begin{aligned}[t]
@@ -22882,6 +22928,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\iffalse
 \FormulaThmDeltaR[Injektivität der adjungierten Abbildung in Ordnungssprache]{%
   \begin{aligned}[t]
     &a\notin A \dsep n\in\mathbb{N}\dsep x\in\mathbb{N}\dsep y\in\mathbb{N}\dsep{}\\
@@ -22935,6 +22982,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     }{1,2,5,12,13,8}}
 \end{tabproof}
 
+\fi
+
 \FormulaThmDelta[Fall $z\in A$ der Surjektivität der adjungierten Abbildung]{%
   n\in\mathbb{N}\dsep F\colon n\bij A\dsep z\in A \vdash
   \exists x\in n\cup\{n\}\,\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=z
@@ -22967,6 +23016,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \rEE{5,6,12}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDelta[Fall $z\in A$ der Surjektivität der adjungierten Abbildung in Ordnungssprache]{%
   n\in\mathbb{N}\dsep F\colon n\bij A\dsep z\in A \vdash
   \exists x\in\mathbb{N}\,\bigl(x<n\land
@@ -23004,6 +23054,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \rEE{5,6,15}}
 \end{tabproof}
 
+\fi
+
 \FormulaThmDelta[Fall $z=a$ der Surjektivität der adjungierten Abbildung]{%
   n\in\mathbb{N}\dsep F\colon n\bij A\dsep z=a \vdash
   \exists x\in n\cup\{n\}\,\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(x)=z
@@ -23024,6 +23076,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2,3}{\exists u\in n\cup\{n\}\,\ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=z}{\rEI{\rAI{4,7}}}
 \end{tabproof}
 
+\iffalse
 \FormulaThmDelta[Fall $z=a$ der Surjektivität der adjungierten Abbildung in Ordnungssprache]{%
   n\in\mathbb{N}\dsep F\colon n\bij A\dsep z=a \vdash
   \exists x\in\mathbb{N}\,\bigl(x\leq n\land
@@ -23048,6 +23101,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2,3}{\exists u\in\mathbb{N}\,\bigl(u\leq n\land \ExtMap{\iota_{A,A\cup\{a\}}\circ F}{n}{a}(u)=z\bigr)}{%
     \rEI{\rAI{1,9}}}
 \end{tabproof}
+
+\fi
 
 \FormulaThmDelta[Surjektivität der adjungierten Abbildung]{%
   \begin{aligned}[t]
@@ -23140,6 +23195,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\iffalse
 \FormulaThmDelta[Surjektivität der adjungierten Abbildung in Ordnungssprache]{%
   \begin{aligned}[t]
     &a\notin A \dsep n\in\mathbb{N}\dsep F\colon n\bij A\dsep z\in A\cup\{a\}\\
@@ -23267,6 +23323,8 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\fi
+
 \paragraph{Bijektivität}
 \FormulaThmDelta[Adjunktion einer Bijektion]{%
   a\notin A \dsep n\in\mathbb{N}\dsep F\colon n\bij A \vdash
@@ -23325,9 +23383,9 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
 
 \paragraph{Erhaltung der Endlichkeit}
 
-\FormulaThmDelta[Adjunktion eines neuen Elements erhält Endlichkeit]{%
+\FormulaThmDeltaK[Adjunktion eines neuen Elements erhält Endlichkeit]{%
   a\notin A \dsep \Finite{A} \vdash \Finite{A\cup\{a\}}
-}{%
+}{FiniteAdjunction}{%
   \DeltaRow{Mengen}{A\dsep a\dsep n\dsep m}
   \DeltaRow{Funktionen}{F\dsep G}
 }
@@ -23336,7 +23394,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{\Finite{A}}{\rA}
 
   \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon n\bij A}{%
-    \FormulaRefAuto{\Finite{M}\vdash \exists n\in\mathbb{N}\,\exists F\colon n\bij M}{2}}
+    \FormulaRefAuto{FiniteBijectionEquiv}[thm]{2}}
 
   \proofstep{4}{n\in\mathbb{N}\land \exists F\colon n\bij A}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
@@ -23356,7 +23414,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,5,7}{\exists m\in \mathbb{N}\,m \EqCard (A\cup\{a\})}{%
     \rEI{\rAI{11,10}}}
   \proofstep{1,5,7}{\Finite{A\cup\{a\}}}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{12}}
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{12}}
 
   \proofstep{1,4}{\Finite{A\cup\{a\}}}{\rEE{6,7,13}}
   \proofstep{1,2}{\Finite{A\cup\{a\}}}{\rEE{3,4,14}}
@@ -23383,7 +23441,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstepwidestar[1]{n\subseteq \Succ(n)}{%
     \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq \Succ(n)}{1}}
   \proofstepwidestar[1]{n\in \Succ(n)}{%
-    \FormulaRefAuto{n\in\mathbb{N}\vdash n\in \Succ(n)}{1}}
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}{3},\FormulaRefAuto{a\in A\cup\{a\}}}}
   \proofstepwidestar[1]{\{n\}\subseteq \Succ(n)}{%
     \FormulaRefAuto{x\in A \vdash \{x\}\subseteq A}{5}}
   \proofstepwidestar[1,2]{F[n\cup\{n\}]=F[n]\cup F[\{n\}]}{%
@@ -23535,9 +23593,9 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
 
 \subsection{Vereinigung endlicher Mengen ist endlich}
 
-\FormulaThmDelta[Vereinigung endlicher Mengen ist endlich]{%
+\FormulaThmDeltaK[Vereinigung endlicher Mengen ist endlich]{%
   \Finite{A}\dsep \Finite{B} \vdash \Finite{A\cup B}
-}{%
+}{FiniteUnion}{%
   \DeltaRow{Mengen}{A\dsep B\dsep n}
   \DeltaRow{Funktionen}{F}
 }
@@ -23546,7 +23604,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{2}{\Finite{B}}{\rA}
 
   \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon n\bij B}{%
-    \FormulaRefAuto{\Finite{M}\vdash \exists n\in\mathbb{N}\,\exists F\colon n\bij M}{2}}
+    \FormulaRefAuto{FiniteBijectionEquiv}[thm]{2}}
 
   \proofstep{4}{n\in\mathbb{N}\land \exists F\colon n\bij B}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
@@ -23566,11 +23624,12 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,2}{\Finite{A\cup B}}{\rEE{3,4,13}}
 \end{tabproof}
 
+\iffalse
 \subsection{Ein- und Paarmengen}
 
-\FormulaThmDelta[Einermengen sind endlich]{%
+\FormulaThmDeltaK[Einermengen sind endlich]{%
   \Finite{\{A\}}
-}{%
+}{FiniteSingleton}{%
   \DeltaRow{Mengen}{A}
 }
 \begin{tabproof}
@@ -23586,9 +23645,9 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{}{\Finite{\{A\}}}{\rIE{5,3}}
 \end{tabproof}
 
-\FormulaThmDelta[Paarmengen sind endlich]{%
+\FormulaThmDeltaK[Paarmengen sind endlich]{%
   \Finite{\{A,B\}}
-}{%
+}{FinitePair}{%
   \DeltaRow{Mengen}{A\dsep B}
 }
 \begin{tabproof}
@@ -23604,11 +23663,13 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{}{\Finite{\{A,B\}}}{\rIE{5,3}}
 \end{tabproof}
 
+\fi
+
 \subsection{Teilmengen natürlicher Zahlen sind endlich}
 
-\FormulaThmDelta[Die leere Menge ist endlich]{%
+\FormulaThmDeltaK[Die leere Menge ist endlich]{%
   \Finite{\varnothing}
-}{%
+}{FiniteEmpty}{%
   \DeltaRow{Mengen}{n}
 }
 \begin{tabproof}
@@ -23617,7 +23678,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{}{\varnothing\in\mathbb{N}\land \varnothing \EqCard \varnothing}{\rAI{1,2}}
   \proofstep{}{\exists n\in\mathbb{N}\,n \EqCard \varnothing}{\rEI{3}}
   \proofstep{}{\Finite{\varnothing}}{%
-    \FormulaRefAuto{\Finite{M}\coloneqq \exists n\in\mathbb{N}\,\bigl(n \EqCard M\bigr)}{4}}
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{4}}
 \end{tabproof}
 
 \FormulaThmDelta[Induktionsanfang für endliche Teilmengen natürlicher Zahlen]{%
@@ -23653,7 +23714,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
 
   \proofstep{8}{n\in C\cap n}{\rA}
   \proofstep{8}{n\in n}{\FormulaRefAuto{x\in A\cap B\vdash x\in B}{8}}
-  \proofstep{1,8}{\bot}{\rBI{9,\FormulaRefAuto{n\in\mathbb{N}\vdash n\notin n}{1}}}
+  \proofstep{1,8}{\bot}{\rBI{9,\FormulaRefAuto{a\not\in a}}}
   \proofstep{1}{n\notin C\cap n}{\rCI{8,10}}
 
   \proofstep{1,2,4}{\Finite{(C\cap n)\cup\{n\}}}{%
@@ -23810,6 +23871,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\iffalse
 \FormulaThmDelta[Durch eine strikte natuerliche Schranke begrenzte Teilmengen sind endlich]{%
   n\in\mathbb{N}\dsep C\subseteq\mathbb{N}\dsep
   \forall x\in C\,\bigl(x<n\bigr)\vdash \Finite{C}
@@ -23861,11 +23923,13 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
 \end{tabproof}
 
 
+\fi
+
 \subsection{Teilmengen endlicher Mengen sind endlich}
 
-\FormulaThmDelta[Teilmengen endlicher Mengen sind endlich]{%
+\FormulaThmDeltaK[Teilmengen endlicher Mengen sind endlich]{%
   T\subseteq M\dsep \Finite{M} \vdash \Finite{T}
-}{%
+}{FiniteSubset}{%
   \DeltaRow{Mengen}{T\dsep M\dsep n}
   \DeltaRow{Funktionen}{F}
 }
@@ -23873,7 +23937,7 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1}{T\subseteq M}{\rA}
   \proofstep{2}{\Finite{M}}{\rA}
   \proofstep{2}{\exists n\in\mathbb{N}\,\exists F\colon n\bij M}{%
-    \FormulaRefAuto{\Finite{M}\vdash \exists n\in\mathbb{N}\,\exists F\colon n\bij M}{2}}
+    \FormulaRefAuto{FiniteBijectionEquiv}[thm]{2}}
   \proofstep{4}{n\in\mathbb{N}\land \exists F\colon n\bij M}{\rA}
   \proofstep{4}{n\in\mathbb{N}}{\rAEa{4}}
   \proofstep{4}{\exists F\colon n\bij M}{\rAEb{4}}
@@ -23885,14 +23949,15 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1,7}{F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}{%
     \FormulaRefAuto{F\colon A\bij B \dsep T\subseteq B \vdash F\restriction_{F^{-1}[T]}\colon F^{-1}[T]\bij T}{7,1}}
   \proofstep{1,4,7}{\Finite{T}}{%
-    \FormulaRefAuto{\Finite{M}\dsep F\colon M\bij N \vdash \Finite{N}}{9,10}}
+    \FormulaRefAuto{FiniteBijectionTransport}[thm]{9,10}}
   \proofstep{1,4}{\Finite{T}}{\rEE{6,7,11}}
   \proofstep{1,2}{\Finite{T}}{\rEE{3,4,12}}
 \end{tabproof}
 
-\FormulaThmDelta[Enthaltende Teilfamilie einer endlichen Familie ist endlich]{%
+\iffalse
+\FormulaThmDeltaK[Enthaltende Teilfamilie einer endlichen Familie ist endlich]{%
   \Finite{M}\vdash \Finite{\FamContaining{M}{a}}
-}{%
+}{FiniteContainingSubfamily}{%
   \DeltaRow{Mengen}{M\dsep a}
 }
 \begin{tabproof}
@@ -23903,9 +23968,9 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{2,1}}
 \end{tabproof}
 
-\FormulaThmDelta[Vermeidende Teilfamilie einer endlichen Familie ist endlich]{%
+\FormulaThmDeltaK[Vermeidende Teilfamilie einer endlichen Familie ist endlich]{%
   \Finite{M}\vdash \Finite{\FamAvoiding{M}{a}}
-}{%
+}{FiniteAvoidingSubfamily}{%
   \DeltaRow{Mengen}{M\dsep a}
 }
 \begin{tabproof}
@@ -23916,11 +23981,13 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
     \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{2,1}}
 \end{tabproof}
 
+\fi
+
 \subsection{Bilder endlicher Mengen sind endlich}
 
-\FormulaThmDelta[Bilder endlicher Mengen sind endlich]{%
+\FormulaThmDeltaK[Bilder endlicher Mengen sind endlich]{%
   C\subseteq A\dsep F\colon A\to B\dsep \Finite{C} \vdash \Finite{F[C]}
-}{%
+}{FiniteImage}{%
   \DeltaRow{Mengen}{A\dsep B\dsep C}
   \DeltaRow{Funktionen}{F\dsep G}
 }
@@ -23941,9 +24008,14 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{3,6}{\Finite{G[F[C]]}}{%
     \FormulaRefAuto{T\subseteq M\dsep \Finite{M} \vdash \Finite{T}}{9,3}}
   \proofstep{3,6}{\Finite{F[C]}}{%
-    \FormulaRefAuto{\Finite{M}\dsep F\colon M\bij N \vdash \Finite{N}}{10,7}}
+    \FormulaRefAuto{FiniteBijectionTransport}[thm]{10,7}}
   \proofstep{1,2,3}{\Finite{F[C]}}{\rEE{5,6,11}}
 \end{tabproof}
+
+\iffalse
+
+% Die weiterführende Endlichkeitstheorie und die anschließende Arithmetik
+% bleiben in B03 deaktiviert; ihre Peano-Fassungen stehen in B04/B05.
 
 \subsection{Potenzmengen natürlicher Zahlen sind endlich}
 
