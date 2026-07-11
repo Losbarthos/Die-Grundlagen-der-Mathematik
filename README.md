@@ -30,6 +30,29 @@ Inhalte werden fortlaufend erweitert, umgestellt, präzisiert und vereinheitlich
 This project is a work in progress.
 Content is continuously being extended, reorganized, refined, and unified.
 
+## Build
+
+Der Gesamtband wird mit LuaLaTeX über `latexmk` gebaut:
+
+```powershell
+latexmk -lualatex -interaction=nonstopmode -halt-on-error main.tex
+```
+
+Für Standalone-Builds werden zunächst die Querverweisdateien der früheren
+Bände frisch im Verzeichnis `registry/` erzeugt:
+
+```powershell
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B01 B01.tex
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B02 B02.tex
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B03 B03.tex
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B03.tex
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B04.tex
+latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B05.tex
+```
+
+Die dabei entstehenden PDFs, LaTeX-Nebendateien, Registries und Debug-Logs
+sind generiert und werden nicht versioniert.
+
 ## Mitwirkung / Contributing
 
 Hinweise, Korrekturen und konstruktive Vorschläge sind willkommen, insbesondere zu:
