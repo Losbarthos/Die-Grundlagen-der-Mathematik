@@ -1,0 +1,143 @@
+name: Build verified registry cache
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.tex'
+      - .gitattributes
+      - .gitignore
+      - band-dependencies.tsv
+      - cache-inputs.tsv
+      - latexmkrc
+      - tex/**
+      - scripts/**
+      - .github/workflows/**
+
+permissions:
+  contents: read
+
+concurrency:
+  group: registry-cache-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install LuaLaTeX and audit tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            ca-certificates \
+            curl \
+            latexmk \
+            poppler-utils \
+            texlive-fonts-recommended \
+            texlive-lang-german \
+            texlive-latex-extra \
+            texlive-luatex \
+            unzip
+
+      - name: Install current official latexmk and require 4.84 or newer
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          trap 'rm -rf "$work"' EXIT
+          curl --fail --location --silent --show-error \
+            https://mirrors.ctan.org/support/latexmk.zip \
+            --output "$work/latexmk.zip"
+          unzip -q "$work/latexmk.zip" -d "$work/unpacked"
+          mapfile -t candidates < <(find "$work/unpacked" -type f -name latexmk.pl -print)
+          if [[ "${#candidates[@]}" -ne 1 ]]; then
+            printf 'Expected one latexmk.pl in the official archive, found %s\n' \
+              "${#candidates[@]}" >&2
+            exit 1
+          fi
+          sudo install -m 0755 "${candidates[0]}" /usr/local/bin/latexmk
+          version_text="$(latexmk -version)"
+          printf '%s\n' "$version_text"
+          LATEXMK_VERSION_TEXT="$version_text" perl -e '
+            my $text = $ENV{LATEXMK_VERSION_TEXT} // q{};
+            $text =~ /Version\s+([0-9]+)\.([0-9]+)/
+              or die "Cannot parse latexmk version\n";
+            my ($major, $minor) = ($1, $2);
+            die "latexmk $major.$minor is older than required 4.84\n"
+              if $major < 4 || ($major == 4 && $minor < 84);
+          '
+
+      - name: Clean-build B05, pack, and verify cache
+        shell: pwsh
+        run: |
+          ./scripts/registry-cache.ps1 -Mode Pack -RequireToolMatch
+          ./scripts/registry-cache.ps1 -Mode Verify -RequireToolMatch
+
+      - name: Archive cache with its outer directory and test layout
+        id: archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="registry-cache-${GITHUB_SHA}.tar.gz"
+          tar \
+            --sort=name \
+            --mtime='@0' \
+            --owner=0 \
+            --group=0 \
+            --numeric-owner \
+            -czf "$archive" \
+            registry-cache
+          mapfile -t roots < <(tar -tzf "$archive" | cut -d/ -f1 | sort -u)
+          [[ "${#roots[@]}" -eq 1 && "${roots[0]}" == registry-cache ]]
+
+          extract_root=".registry-cache-layout-test"
+          rm -rf "$extract_root"
+          mkdir "$extract_root"
+          tar -xzf "$archive" -C "$extract_root"
+          test -f "$extract_root/registry-cache/manifest.tsv"
+          diff -qr registry-cache "$extract_root/registry-cache"
+
+          mv registry-cache .registry-cache-original
+          mv "$extract_root/registry-cache" registry-cache
+          diff -qr registry-cache .registry-cache-original
+          rm -rf .registry-cache-original "$extract_root"
+          pwsh -NoProfile -File ./scripts/registry-cache.ps1 \
+            -Mode Verify -RequireToolMatch
+          printf 'path=%s\n' "$archive" >> "$GITHUB_OUTPUT"
+
+      - name: Exercise real latexmkrc cache restore and skip
+        shell: bash
+        run: |
+          set -euo pipefail
+          for band in B01 B02 B03 B04; do
+            for suffix in aux pdf registry.tsv debug.log; do
+              rm -f "registry/_${band}.${suffix}"
+            done
+          done
+          latexmk \
+            -lualatex \
+            -interaction=nonstopmode \
+            -halt-on-error \
+            -file-line-error \
+            B05.tex 2>&1 | tee latexmk-cache-restore.log
+          grep -F 'restored verified B05 predecessor cache' latexmk-cache-restore.log
+          grep -F 'skipping B01--B04 precursor builds' latexmk-cache-restore.log
+          if grep -E 'latexmkrc: updating B0[1-4]' latexmk-cache-restore.log; then
+            echo 'A predecessor was rebuilt instead of restored from cache.' >&2
+            exit 1
+          fi
+
+      - name: Upload single content-addressed cache archive
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.archive.outputs.path }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 30

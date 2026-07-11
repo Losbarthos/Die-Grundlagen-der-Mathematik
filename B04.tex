@@ -5,10 +5,7 @@
 \documentclass[main.tex]{subfiles}
 
 \ifSubfilesClassLoaded{
-  \usepackage{xr-hyper}
-  \externaldocument{registry/_B01}
-  \externaldocument{registry/_B02}
-  \externaldocument{registry/_B03}
+  \BandSetupStandalone{B04}
 }{
 }
 
@@ -16,39 +13,19 @@
 \author{Martin Kunze}
 \date{}
 \setcounter{file}{4}
-
-\ifSubfilesClassLoaded{
-  \directlua{
-    thmlookup.registry_path = "\luaescapestring{\detokenize{registry/_B04.registry.tsv}}";
-    thmlookup.debug_path    = "\luaescapestring{\detokenize{registry/_B04.debug.log}}";
-    thmlookup.prepare_run();
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B01.registry.tsv}}");
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B02.registry.tsv}}");
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B03.registry.tsv}}");
-    texio.write_nl("thmlookup: loaded B01-B03 registries for B04")
-  }
-}{
-}
 
 \begin{document}
 
 \title{Bd. 04 - Die natürlichen Zahlen aus den Peano-Axiomen}
 \author{Martin Kunze}
 \date{}
+\hypersetup{pageanchor=false}
 \maketitle
+\hypersetup{pageanchor=true}
 \setcounter{tocdepth}{3}
 \tableofcontents
 \setcounter{file}{4}
 \renewcommand{\FormulaBandID}{4}
-
-% Auch beim Einbinden über main.tex wird die B04-Präambel nicht ausgewertet.
-% Daher die Struktur-Registries früherer Bände hier nochmals idempotent laden.
-\directlua{
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B01.registry.tsv}}]==]);
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B02.registry.tsv}}]==]);
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B03.registry.tsv}}]==]);
-  texio.write_nl([==[thmlookup: B04 loaded B01-B03 registries]==])
-}
 
 \chapter{Einleitung}
 
@@ -8409,9 +8386,9 @@ Mit dem Zahlzeichen \(1\) schreiben wir Nachfolgerabstände bevorzugt als
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDelta[Trichotomie der natürlichen Ordnung]{%
+\FormulaThmDeltaK[Trichotomie der natürlichen Ordnung]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m<n\lor n<m\lor m=n%
-}{%
+}{PeanoOrderTrichotomy}{%
   \DeltaRow{Mengen}{m\dsep n}%
 }
 \begin{tabproofsplitwide}
@@ -9662,7 +9639,7 @@ $x_0$ aus.
       \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{2,3}}
     \proofstepwidestar[]{\NatSeg{0}=\varnothing}{\FormulaRefAuto{PeanoNatSegZero}}
     \proofstepwidestar[2]{F(0)\in\varnothing}{\rIE{5,4}}
-    \proofstepwidestar[]{F(0)\notin\varnothing}{\FormulaRefAuto{x\notin\varnothing}}
+    \proofstepwidestar[]{F(0)\notin\varnothing}{\FormulaRefAuto{x\not\in\varnothing}}
     \proofstepwidestar[2]{\bot}{\rBI{6,7}}
     \proofstepwidestar[1]{\bot}{\rEE{1,2,8}}
     \proofstepwidestar[]{\neg\exists F\colon\mathbb{N}\inj\NatSeg{0}}{\rCI{1,9}}
@@ -9703,6 +9680,151 @@ $x_0$ aus.
         PeanoNatSegNoNatInjectionBase,PeanoNatSegNoNatInjectionStep,1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
+
+
+\FormulaThmDeltaK[Schrittweise Inklusionen induzieren Monotonie]{%
+  \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep
+  k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n
+  \vdash F(\Succ(k))\subseteq F(n)%
+}{B04PeanoStrictMonotoneSucc}{%
+  \DeltaRow{Mengen}{k\dsep n\dsep u}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)
+    \vdash
+    \forall k\in\mathbb{N}\,\bigl(k<0\rightarrow
+      F(\Succ(k))\subseteq F(0)\bigr)%
+  }{%
+    \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)
+    \vdash
+    \forall k\in\mathbb{N}\,\bigl(k<0\rightarrow
+      F(\Succ(k))\subseteq F(0)\bigr)%
+  }[B04PeanoStrictMonotoneSuccBase]
+    \proofstepwidestar[1]{%
+      \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)}{\rA}
+    \proofstepwidestar[2]{k\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{k<0}{\rA}
+    \proofstepwidestar[2]{\neg(k<0)}{%
+      \FormulaRefAuto{PeanoNoLtZero}[thm]{2}}
+    \proofstepwidestar[2,3]{F(\Succ(k))\subseteq F(0)}{%
+      \FormulaRefAuto{P,\,\neg P\vdash Q}{3,4}}
+    \proofstepwidestar[2]{%
+      k<0\rightarrow F(\Succ(k))\subseteq F(0)}{\rRI{3,5}}
+    \proofstepwidestar[]{%
+      \forall k\in\mathbb{N}\,\bigl(k<0\rightarrow
+        F(\Succ(k))\subseteq F(0)\bigr)}{\rUI{\rRI{2,6}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &\forall v\in\mathbb{N}\,\bigl(F(v)\subseteq F(\Succ(v))\bigr)
+       \dsep u\in\mathbb{N}\dsep{}\\
+      &\forall k\in\mathbb{N}\,\bigl(k<u\rightarrow
+        F(\Succ(k))\subseteq F(u)\bigr)
+      \vdash{}\\
+      &\forall k\in\mathbb{N}\,\bigl(k<\Succ(u)\rightarrow
+        F(\Succ(k))\subseteq F(\Succ(u))\bigr)
+    \end{aligned}%
+  }{%
+    \forall v\in\mathbb{N}\,\bigl(F(v)\subseteq F(\Succ(v))\bigr)
+    \dsep u\in\mathbb{N}\dsep
+    \forall k\in\mathbb{N}\,\bigl(k<u\rightarrow
+      F(\Succ(k))\subseteq F(u)\bigr)
+    \vdash
+    \forall k\in\mathbb{N}\,\bigl(k<\Succ(u)\rightarrow
+      F(\Succ(k))\subseteq F(\Succ(u))\bigr)%
+  }[B04PeanoStrictMonotoneSuccStep]
+    \proofstepwidestar[1]{%
+      \forall v\in\mathbb{N}\,\bigl(F(v)\subseteq F(\Succ(v))\bigr)}{\rA}
+    \proofstepwidestar[2]{u\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{%
+      \forall k\in\mathbb{N}\,\bigl(k<u\rightarrow
+        F(\Succ(k))\subseteq F(u)\bigr)}{\rA}
+    \proofstepwidestar[4]{k\in\mathbb{N}}{\rA}
+    \proofstepwidestar[5]{k<\Succ(u)}{\rA}
+    \proofstepwidestar[2,4,5]{k<u\lor k=u}{%
+      \FormulaRefAuto{PeanoStrictSuccSplit}[thm]{4,2,5}}
+    \proofstepwidestar[7]{k<u}{\rA}
+    \proofstepwidestar[3,4,7]{F(\Succ(k))\subseteq F(u)}{%
+      \rRE{7,\rRE{4,\rUE{3}}}}
+    \proofstepwidestar[1,2]{F(u)\subseteq F(\Succ(u))}{%
+      \rRE{2,\rUE{1}}}
+    \proofstepwidestar[1,2,3,4,7]{%
+      F(\Succ(k))\subseteq F(\Succ(u))}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash
+        A\subseteq C}{8,9}}
+    \proofstepwidestar[11]{k=u}{\rA}
+    \proofstepwidestar[11]{\Succ(k)=\Succ(u)}{\rIE{11}}
+    \proofstepwidestar[11]{F(\Succ(k))=F(\Succ(u))}{\rIE{12}}
+    \proofstepwidestar[11]{F(\Succ(k))\subseteq F(\Succ(u))}{%
+      \FormulaRefAuto{A=B\vdash A\subseteq B}{13}}
+    \proofstepwidestar[1,2,3,4,5]{%
+      F(\Succ(k))\subseteq F(\Succ(u))}{\rOE{6,7,10,11,14}}
+    \proofstepwidestar[1,2,3,4]{%
+      k<\Succ(u)\rightarrow F(\Succ(k))\subseteq F(\Succ(u))}{\rRI{5,15}}
+    \proofstepwidestar[1,2,3]{%
+      \forall k\in\mathbb{N}\,\bigl(k<\Succ(u)\rightarrow
+        F(\Succ(k))\subseteq F(\Succ(u))\bigr)}{\rUI{\rRI{4,16}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{%
+      \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)}{\rA}
+    \proofstepwidestar[2]{k\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[4]{k<n}{\rA}
+    \proofstepwidestar[1,3]{%
+      \forall k\in\mathbb{N}\,\bigl(k<n\rightarrow
+        F(\Succ(k))\subseteq F(n)\bigr)}{%
+      \FormulaRefAuto{PeanoInductionRule}[ax]{IA,IS,3}}
+    \proofstepwidestar[1,2,3]{%
+      k<n\rightarrow F(\Succ(k))\subseteq F(n)}{\rRE{2,\rUE{5}}}
+    \proofstepwidestar[1,2,3,4]{F(\Succ(k))\subseteq F(n)}{\rRE{6,4}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Strikte Punkttrennung liefert Injektivität]{%
+  F\colon\mathbb{N}\to M\dsep
+  \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)
+  \vdash F\colon\mathbb{N}\inj M%
+}{B04PeanoStrictSeparationInjection}{%
+  \DeltaRow{Mengen}{M\dsep k\dsep n}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon\mathbb{N}\to M}{\rA}
+  \proofstep{2}{%
+    \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)}{\rA}
+  \proofstep{3}{k\in\mathbb{N}}{\rA}
+  \proofstep{4}{n\in\mathbb{N}}{\rA}
+  \proofstep{5}{F(k)=F(n)}{\rA}
+  \proofstep{3,4}{k<n\lor n<k\lor k=n}{%
+    \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{3,4}}
+  \proofstep{7}{k<n}{\rA}
+  \proofstep{2,3,4,7}{F(k)\neq F(n)}{%
+    \rRE{7,\rRE{4,\rRE{3,\rUE{2}}}}}
+  \proofstep{2,3,4,5,7}{k=n}{%
+    \FormulaRefAuto{P,\,\neg P\vdash Q}{5,8}}
+  \proofstep{10}{n<k}{\rA}
+  \proofstep{2,3,4,10}{F(n)\neq F(k)}{%
+    \rRE{10,\rRE{3,\rRE{4,\rUE{2}}}}}
+  \proofstep{5}{F(n)=F(k)}{\FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{2,3,4,5,10}{k=n}{%
+    \FormulaRefAuto{P,\,\neg P\vdash Q}{12,11}}
+  \proofstep{14}{k=n}{\rA}
+  \proofstep{14}{k=n}{\FormulaRefAuto{P\vdash P}{14}}
+  \proofstep{2,3,4,5}{k=n}{%
+    \FormulaRefAuto{P_1\lor P_2\lor P_3\dsep
+      [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\vdash R}{%
+      6,7,9,10,13,14,15}}
+  \proofstep{1,2}{%
+    \forall k,n\in\mathbb{N}\,\bigl(F(k)=F(n)\rightarrow k=n\bigr)}{%
+    \rUI{\rRI{3,\rRI{4,\rRI{5,16}}}}}
+  \proofstep{1,2}{F\colon\mathbb{N}\inj M}{%
+    \FormulaRefAuto{Injektive Funktion}{1,17}}
+\end{tabproof}
 
 
 

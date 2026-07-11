@@ -5,9 +5,7 @@
 
 
 \ifSubfilesClassLoaded{
-    \usepackage{xr-hyper}
-    \externaldocument{registry/_B01}
-  \externaldocument{registry/_B02}
+  \BandSetupStandalone{B03}
 }{
    % Code für als Subfile eingebunden
 }
@@ -17,18 +15,6 @@
 \date{}
 
 % Standalone-B03: feste Registry/Debug-Dateien + Cross-Band-Load
-\ifSubfilesClassLoaded{
-  \directlua{
-    thmlookup.registry_path = "registry/_B03.registry.tsv";
-    thmlookup.debug_path    = "registry/_B03.debug.log";
-    thmlookup.prepare_run();
-    thmlookup.load_registry_file("registry/_B01.registry.tsv");
-    thmlookup.load_registry_file("registry/_B02.registry.tsv");
-    texio.write_nl("thmlookup: loaded B02 registry")
-  }
-}{}
-
-
 \begin{document}
 
 \title{Bd. 03 - Mengenlehre}
@@ -23039,6 +23025,295 @@ festgelegt.
   \DeltaRow{Mengen}{A\dsep M\dsep a}%
   \DeltaRow{Prädikat}{P}%
 }
+
+\subsection{Charakterisierung durch von-Neumann-Zahlen}
+
+In diesem Abschnitt ist die natürliche Zahl \(n\) selbst das von-Neumann-
+Anfangssegment.  Die Charakterisierung wird in beiden Richtungen unmittelbar
+aus den drei Endlichkeitsaxiomen und den bereits bewiesenen Sätzen über
+natürliche Zahlen und Gleichmächtigkeit hergeleitet.
+
+\FormulaThmDeltaK[Von-Neumann-Zeuge für endliche Mengen]{%
+  \Finite{M}\vdash
+  \exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)%
+}{B03FiniteVonNeumannEqCardForward}{%
+  \DeltaRow{Mengen}{A\dsep M\dsep a\dsep n\dsep m}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    \exists n\in\mathbb{N}\,\bigl(n\EqCard\varnothing\bigr)%
+  }{%
+    \exists n\in\mathbb{N}\,\bigl(n\EqCard\varnothing\bigr)%
+  }[B03FiniteVonNeumannEqCardForwardBase]
+    \proofstepwidestar[]{\varnothing\in\mathbb{N}}{%
+      \FormulaRefAuto{\varnothing\in\mathbb{N}}}
+    \proofstepwidestar[]{\varnothing\EqCard\varnothing}{%
+      \FormulaRefAuto{EqCardReflexive}[thm]}
+    \proofstepwidestar[]{%
+      \varnothing\in\mathbb{N}\land
+      \varnothing\EqCard\varnothing}{\rAI{1,2}}
+    \proofstepwidestar[]{%
+      \exists n\in\mathbb{N}\,\bigl(n\EqCard\varnothing\bigr)}{\rEI{3}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &\Finite{A}\dsep
+       \exists n\in\mathbb{N}\,\bigl(n\EqCard A\bigr)
+       \dsep a\notin A\vdash{}\\
+      &\exists m\in\mathbb{N}\,\bigl(m\EqCard A\cup\{a\}\bigr)
+    \end{aligned}%
+  }{%
+    \Finite{A}\dsep
+    \exists n\in\mathbb{N}\,\bigl(n\EqCard A\bigr)
+    \dsep a\notin A\vdash
+    \exists m\in\mathbb{N}\,\bigl(m\EqCard A\cup\{a\}\bigr)%
+  }[B03FiniteVonNeumannEqCardForwardStep]
+    \proofstepwidestar[1]{\Finite{A}}{\rA}
+    \proofstepwidestar[2]{%
+      \exists n\in\mathbb{N}\,\bigl(n\EqCard A\bigr)}{\rA}
+    \proofstepwidestar[3]{a\notin A}{\rA}
+    \proofstepwidestar[4]{n\in\mathbb{N}\land n\EqCard A}{\rA}
+    \proofstepwidestar[4]{n\in\mathbb{N}}{\rAEa{4}}
+    \proofstepwidestar[4]{n\EqCard A}{\rAEb{4}}
+    \proofstepwidestar[]{n\notin n}{\FormulaRefAuto{a\not\in a}}
+    \proofstepwidestar[3,4]{%
+      n\cup\{n\}\EqCard A\cup\{a\}}{%
+      \FormulaRefAuto{EqCardFreshAdjunction}[thm]{6,7,3}}
+    \proofstepwidestar[4]{(n\cup\{n\})\in\mathbb{N}}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash
+        (n\cup\{n\})\in\mathbb{N}}{5}}
+    \proofstepwidestar[3,4]{%
+      (n\cup\{n\})\in\mathbb{N}\land
+      n\cup\{n\}\EqCard A\cup\{a\}}{\rAI{9,8}}
+    \proofstepwidestar[3,4]{%
+      \exists m\in\mathbb{N}\,\bigl(m\EqCard A\cup\{a\}\bigr)}{\rEI{10}}
+    \proofstepwidestar[2,3]{%
+      \exists m\in\mathbb{N}\,\bigl(m\EqCard A\cup\{a\}\bigr)}{%
+      \rEE{2,4,11}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{\Finite{M}}{\rA}
+    \proofstepwidestar[1]{%
+      \exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{%
+      \FormulaRefAuto{FiniteInductionRule}[ax]{IA,IS,1}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Einschränkung einer Nachfolgerbijektion]{%
+  n\in\mathbb{N}\dsep F\colon\Succ(n)\bij M
+  \vdash n\EqCard F[n]%
+}{B03VonNeumannSuccRestrictionEqCard}{%
+  \DeltaRow{Mengen}{M\dsep n}%
+  \DeltaRow{Funktionen}{F\dsep G}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\bij M}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\to M}{\FormulaRefAuto{Bijektive Funktion}{2}}
+  \proofstep{2}{F\colon\Succ(n)\inj M}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}{2}}
+  \proofstep{1}{n\subseteq\Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq\Succ(n)}{1}}
+  \proofstep{1,2}{F\restriction_n\colon n\inj M}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep C\subseteq A
+      \vdash F\restriction_C\colon C\inj B}{4,5}}
+  \proofstep{1,2}{%
+    F\restriction_n\colon n\bij(F\restriction_n)[n]}{%
+    \FormulaRefAuto{F\colon A\inj B\vdash F\colon A\bij F[A]}{6}}
+  \proofstep{1,2}{(F\restriction_n)[n]=F[n]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+      \vdash (F\restriction_C)[C]=F[C]}{5,3}}
+  \proofstep{1,2}{F\restriction_n\colon n\bij F[n]}{\rIE{8,7}}
+  \proofstep{1,2}{\exists G\colon n\bij F[n]}{\rEI{9}}
+  \proofstep{1,2}{n\EqCard F[n]}{%
+    \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Das neue Bild liegt nicht im alten Bild]{%
+  n\in\mathbb{N}\dsep F\colon\Succ(n)\bij M
+  \vdash F(n)\notin F[n]%
+}{B03VonNeumannSuccFreshImage}{%
+  \DeltaRow{Mengen}{M\dsep n}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\bij M}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\inj M}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}{2}}
+  \proofstep{1}{n\subseteq\Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq\Succ(n)}{1}}
+  \proofstep{1}{n\in\powerset(\Succ(n))}{%
+    \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}{4}}
+  \proofstep{1}{n\in\Succ(n)}{%
+    \rIE{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{n\in\mathbb{N}\vdash
+          \Succ(n)=n\cup\{n\}}{1}},%
+      \FormulaRefAuto{a\in A\cup\{a\}}}}
+  \proofstep{7}{F(n)\in F[n]}{\rA}
+  \proofstep{1,2,7}{n\in n}{%
+    \FormulaRefAuto{%
+      F\colon A\inj B\dsep Y\in\powerset(A)\dsep x\in A\dsep
+      F(x)\in F[Y]\vdash x\in Y}{3,5,6,7}}
+  \proofstep{}{n\notin n}{\FormulaRefAuto{a\not\in a}}
+  \proofstep{1,2,7}{\bot}{\rBI{8,9}}
+  \proofstep{1,2}{F(n)\notin F[n]}{\rCI{7,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Bildzerlegung einer Nachfolgerbijektion]{%
+  n\in\mathbb{N}\dsep F\colon\Succ(n)\bij M
+  \vdash F[n]\cup\{F(n)\}=M%
+}{B03VonNeumannSuccImageDecomposition}{%
+  \DeltaRow{Mengen}{M\dsep n}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\bij M}{\rA}
+  \proofstep{2}{F\colon\Succ(n)\to M}{\FormulaRefAuto{Bijektive Funktion}{2}}
+  \proofstep{1}{\Succ(n)=n\cup\{n\}}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash\Succ(n)=n\cup\{n\}}{1}}
+  \proofstep{1}{n\subseteq\Succ(n)}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n\subseteq\Succ(n)}{1}}
+  \proofstep{1}{n\in\Succ(n)}{%
+    \rIE{%
+      \FormulaRefAuto{a=b\vdash b=a}{4},%
+      \FormulaRefAuto{a\in A\cup\{a\}}}}
+  \proofstep{1}{\{n\}\subseteq\Succ(n)}{%
+    \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}{6}}
+  \proofstep{1,2}{F[n\cup\{n\}]=F[n]\cup F[\{n\}]}{%
+    \FormulaRefAuto{%
+      F\colon M\to N\dsep A\subseteq M\dsep B\subseteq M
+      \vdash F[A\cup B]=F[A]\cup F[B]}{3,5,7}}
+  \proofstep{1,2}{F[\{n\}]=\{F(n)\}}{%
+    \FormulaRefAuto{x\in A\dsep F\colon A\to B
+      \vdash F[\{x\}]=\{F(x)\}}{6,3}}
+  \proofstep{1,2}{F[\Succ(n)]=F[n]\cup\{F(n)\}}{%
+    \rIE{4,\rIE{9,8}}}
+  \proofstep{2}{F[\Succ(n)]=M}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}{2}}
+  \proofstep{1,2}{F[n]\cup\{F(n)\}=M}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{10,11}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Endlichkeit aus einem von-Neumann-Zeugen]{%
+  n\in\mathbb{N}\dsep n\EqCard M\vdash \Finite{M}%
+}{B03FiniteVonNeumannEqCardReverse}{%
+  \DeltaRow{Mengen}{A\dsep M\dsep n}%
+  \DeltaRow{Funktionen}{F}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    \forall M\,\bigl((\varnothing\EqCard M)\rightarrow\Finite{M}\bigr)%
+  }{%
+    \forall M\,\bigl((\varnothing\EqCard M)\rightarrow\Finite{M}\bigr)%
+  }[B03FiniteVonNeumannEqCardReverseBase]
+    \proofstepwidestar[1]{\varnothing\EqCard M}{\rA}
+    \proofstepwidestar[1]{\exists F\colon\varnothing\bij M}{%
+      \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{1}}
+    \proofstepwidestar[3]{F\colon\varnothing\bij M}{\rA}
+    \proofstepwidestar[3]{F\colon\varnothing\to M}{%
+      \FormulaRefAuto{Bijektive Funktion}{3}}
+    \proofstepwidestar[3]{F[\varnothing]=\varnothing}{%
+      \FormulaRefAuto{F\colon A\to B\vdash F[\varnothing]=\varnothing}{4}}
+    \proofstepwidestar[3]{F[\varnothing]=M}{%
+      \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}{3}}
+    \proofstepwidestar[3]{\varnothing=F[\varnothing]}{%
+      \FormulaRefAuto{a=b\vdash b=a}{5}}
+    \proofstepwidestar[3]{\varnothing=M}{%
+      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}{7,6}}
+    \proofstepwidestar[]{\Finite{\varnothing}}{%
+      \FormulaRefAuto{FiniteEmptyAxiom}[ax]}
+    \proofstepwidestar[3]{\Finite{M}}{\rIE{8,9}}
+    \proofstepwidestar[1]{\Finite{M}}{\rEE{2,3,10}}
+    \proofstepwidestar[]{%
+      (\varnothing\EqCard M)\rightarrow\Finite{M}}{\rRI{1,11}}
+    \proofstepwidestar[]{%
+      \forall M\,\bigl((\varnothing\EqCard M)\rightarrow\Finite{M}\bigr)}{%
+      \rUI{12}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &n\in\mathbb{N}\dsep
+       \forall A\,\bigl((n\EqCard A)\rightarrow\Finite{A}\bigr)
+       \vdash{}\\
+      &\forall M\,\bigl((\Succ(n)\EqCard M)\rightarrow\Finite{M}\bigr)
+    \end{aligned}%
+  }{%
+    n\in\mathbb{N}\dsep
+    \forall A\,\bigl((n\EqCard A)\rightarrow\Finite{A}\bigr)
+    \vdash
+    \forall M\,\bigl((\Succ(n)\EqCard M)\rightarrow\Finite{M}\bigr)%
+  }[B03FiniteVonNeumannEqCardReverseStep]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{%
+      \forall A\,\bigl((n\EqCard A)\rightarrow\Finite{A}\bigr)}{\rA}
+    \proofstepwidestar[3]{\Succ(n)\EqCard M}{\rA}
+    \proofstepwidestar[3]{\exists F\colon\Succ(n)\bij M}{%
+      \FormulaRefAuto{A\EqCard B\coloneqq \exists F\colon A\bij B}{3}}
+    \proofstepwidestar[5]{F\colon\Succ(n)\bij M}{\rA}
+    \proofstepwidestar[1,5]{n\EqCard F[n]}{%
+      \FormulaRefAuto{B03VonNeumannSuccRestrictionEqCard}[thm]{1,5}}
+    \proofstepwidestar[2]{%
+      (n\EqCard F[n])\rightarrow\Finite{F[n]}}{\rUE{2}}
+    \proofstepwidestar[1,2,5]{\Finite{F[n]}}{\rRE{7,6}}
+    \proofstepwidestar[1,5]{F(n)\notin F[n]}{%
+      \FormulaRefAuto{B03VonNeumannSuccFreshImage}[thm]{1,5}}
+    \proofstepwidestar[1,2,5]{\Finite{F[n]\cup\{F(n)\}}}{%
+      \FormulaRefAuto{FiniteAdjunctionAxiom}[ax]{9,8}}
+    \proofstepwidestar[1,5]{F[n]\cup\{F(n)\}=M}{%
+      \FormulaRefAuto{B03VonNeumannSuccImageDecomposition}[thm]{1,5}}
+    \proofstepwidestar[1,2,5]{\Finite{M}}{\rIE{11,10}}
+    \proofstepwidestar[1,2,3]{\Finite{M}}{\rEE{4,5,12}}
+    \proofstepwidestar[1,2]{%
+      (\Succ(n)\EqCard M)\rightarrow\Finite{M}}{\rRI{3,13}}
+    \proofstepwidestar[1,2]{%
+      \forall M\,\bigl((\Succ(n)\EqCard M)\rightarrow\Finite{M}\bigr)}{%
+      \rUI{14}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{n\EqCard M}{\rA}
+    \proofstepwidestar[1]{%
+      \forall A\,\bigl((n\EqCard A)\rightarrow\Finite{A}\bigr)}{%
+      \FormulaRefAuto{%
+        P(\varnothing)\dsep
+        [x\in\mathbb{N},P(x)]\vdots P(\Succ(x))\dsep
+        n\in\mathbb{N}\vdash P(n)}{IA,IS,1}}
+    \proofstepwidestar[1]{%
+      (n\EqCard M)\rightarrow\Finite{M}}{\rUE{3}}
+    \proofstepwidestar[1,2]{\Finite{M}}{\rRE{4,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Charakterisierung der Endlichkeit durch von-Neumann-Zahlen]{%
+  \Finite{M}\eqvdash
+  \exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)%
+}{FiniteVonNeumannEqCardEquiv}{%
+  \DeltaRow{Mengen}{M\dsep n}%
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\Finite{M}}{\rA}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{%
+      \FormulaRefAuto{B03FiniteVonNeumannEqCardForward}[thm]{1}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\exists n\in\mathbb{N}\,\bigl(n\EqCard M\bigr)}{\rA}
+    \proofstep{2}{n\in\mathbb{N}\land n\EqCard M}{\rA}
+    \proofstep{2}{n\in\mathbb{N}}{\rAEa{2}}
+    \proofstep{2}{n\EqCard M}{\rAEb{2}}
+    \proofstep{2}{\Finite{M}}{%
+      \FormulaRefAuto{B03FiniteVonNeumannEqCardReverse}[thm]{3,4}}
+    \proofstep{1}{\Finite{M}}{\rEE{1,2,5}}
+  \closeproofpart
+\end{tabproofsplit}
 
 % Die frühere definitionelle Fassung wird nicht mehr registriert.  Der
 % folgende alte Herleitungsblock bleibt nur als historische Arbeitsfassung

@@ -20,6 +20,7 @@
 
 
 \input{tex/impl/thmlookup.tex}
+\input{tex/impl/band-dependencies.tex}
 \input{tex/impl/formula-envs.tex}
 \input{tex/impl/proof-tables.tex} 
 \input{tex/impl/commands.tex}
@@ -28,36 +29,6 @@
 \newenvironment{RuleSchema}{\begin{samepage}}{\end{samepage}}
 
 \newcounter{file}
-
-% --- thmlookup: pro Band in eigene Dateien schreiben ---
-\directlua{
-  function thmlookup.set_band_output(tag)
-    local base = "\luaescapestring{\detokenize{registry/_}}" .. tag
-    local reg  = base .. ".registry.tsv"
-    local dbg  = base .. ".debug.log"
-
-    thmlookup.registry_path = reg
-    thmlookup.debug_path    = dbg
-    thmlookup.prepare_run()
-
-    texio.write_nl("thmlookup: output -> " .. thmlookup.registry_path)
-  end
-}
-
-\newcommand{\ThmLookupBand}[1]{%
-  \directlua{thmlookup.set_band_output([==[\luaescapestring{\detokenize{#1}}]==])}%
-}
-
-\newcommand{\ThmLookupLoadBandRegistries}[1]{%
-  \directlua{
-    local list = [==[\luaescapestring{\detokenize{#1}}]==]
-    for tag in string.gmatch(list, [==[[^, ]+]==]) do
-      thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_}}]==] .. tag .. [==[.registry.tsv]==])
-    end
-  }%
-}
-
-
 
 % --- Warnschwellen ---
 \hbadness=10000
@@ -68,27 +39,23 @@
 
 \begin{document}
 
-\ThmLookupBand{B01}
+\BandStartInMain{B01}
 \subfile{B01}
 
 \clearpage
-\ThmLookupBand{B02}
-\ThmLookupLoadBandRegistries{B01}
+\BandStartInMain{B02}
 \subfile{B02}
 
 \clearpage
-\ThmLookupBand{B03}
-\ThmLookupLoadBandRegistries{B01,B02}
+\BandStartInMain{B03}
 \subfile{B03}
 
 \clearpage
-\ThmLookupBand{B04}
-\ThmLookupLoadBandRegistries{B01,B02,B03}
+\BandStartInMain{B04}
 \subfile{B04}
 
 \clearpage
-\ThmLookupBand{B05}
-\ThmLookupLoadBandRegistries{B01,B02,B03,B04}
+\BandStartInMain{B05}
 \subfile{B05}
 
 

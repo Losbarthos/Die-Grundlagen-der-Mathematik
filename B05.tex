@@ -5,10 +5,7 @@
 \documentclass[main.tex]{subfiles}
 
 \ifSubfilesClassLoaded{
-  \usepackage{xr-hyper}
-  \externaldocument{registry/_B01}
-  \externaldocument{registry/_B02}
-  \externaldocument{registry/_B03}
+  \BandSetupStandalone{B05}
 }{
 }
 
@@ -16,41 +13,19 @@
 \author{Martin Kunze}
 \date{}
 \setcounter{file}{5}
-
-\ifSubfilesClassLoaded{
-  \directlua{
-    thmlookup.registry_path = "\luaescapestring{\detokenize{registry/_B05.registry.tsv}}";
-    thmlookup.debug_path    = "\luaescapestring{\detokenize{registry/_B05.debug.log}}";
-    thmlookup.prepare_run();
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B01.registry.tsv}}");
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B02.registry.tsv}}");
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B03.registry.tsv}}");
-    thmlookup.load_registry_file("\luaescapestring{\detokenize{registry/_B04.registry.tsv}}");
-    texio.write_nl("thmlookup: loaded B01-B04 registries for B05")
-  }
-}{
-}
 
 \begin{document}
 
 \title{Bd. 05 - Axiomatischer Aufbau der endlichen Mengen}
 \author{Martin Kunze}
 \date{}
+\hypersetup{pageanchor=false}
 \maketitle
+\hypersetup{pageanchor=true}
 \setcounter{tocdepth}{3}
 \tableofcontents
 \setcounter{file}{5}
 \renewcommand{\FormulaBandID}{5}
-
-% Auch beim Einbinden ueber main.tex wird die B05-Praeambel nicht ausgewertet.
-% Daher werden die Struktur-Registries frueherer Baende hier nochmals idempotent geladen.
-\directlua{
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B01.registry.tsv}}]==]);
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B02.registry.tsv}}]==]);
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B03.registry.tsv}}]==]);
-  thmlookup.load_registry_file([==[\luaescapestring{\detokenize{registry/_B04.registry.tsv}}]==]);
-  texio.write_nl([==[thmlookup: B05 loaded B01-B04 registries]==])
-}
 
 \chapter{Axiomatische Grundlage}
 
@@ -169,7 +144,7 @@ verweisen, ohne zusätzliche Annahmen einzuführen.
     \proofstepwidestar[4]{c\notin C}{\rA}
     \proofstepwidestar[5]{C\cup\{c\}\subseteq A}{\rA}
     \proofstepwidestar[5]{C\subseteq A}{%
-      \FormulaRefAuto{A\subseteq A\cup B\dsep A\cup B\subseteq C\vdash A\subseteq C}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}{%
         \FormulaRefAuto{A\subseteq A\cup B},5}}
     \proofstepwidestar[5]{c\in A}{%
       \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{5,\FormulaRefAuto{a\in A\cup\{a\}}}}
@@ -3809,11 +3784,7 @@ d_k\in F_n\land d_n\notin F_n
   \proofstep{1,2,3,4}{%
     \RecFun{b_0}{S}(\Succ(k))\subseteq \RecFun{b_0}{S}(n)
   }{%
-    \FormulaRefAuto{%
-      \forall u\in\mathbb{N}\,\bigl(F(u)\subseteq F(\Succ(u))\bigr)\dsep
-      k\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k<n
-      \vdash F(\Succ(k))\subseteq F(n)
-    }{7,2,3,4}}
+    \FormulaRefAuto{B04PeanoStrictMonotoneSucc}[thm]{7,2,3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Frischwert liegt im Zuwachs]{%
@@ -4016,11 +3987,7 @@ d_k\in F_n\land d_n\notin F_n
   }{%
     \FormulaRefAuto{\GrowFresh(M,B,b_0,S,D)\vdash \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow \FreshSeq{b_0}{S}{D}(k)\neq \FreshSeq{b_0}{S}{D}(n)\bigr)}{1}}
   \proofstep{1}{\FreshSeq{b_0}{S}{D}\colon \mathbb{N}\inj M}{%
-    \FormulaRefAuto{%
-      F\colon \mathbb{N}\to M\dsep
-      \forall k,n\in\mathbb{N}\,\bigl(k<n\rightarrow F(k)\neq F(n)\bigr)
-      \vdash F\colon \mathbb{N}\inj M
-    }{2,3}}
+    \FormulaRefAuto{B04PeanoStrictSeparationInjection}[thm]{2,3}}
 \end{tabproof}
 
 \subparagraph{Anwendung auf Tarski-Endlichkeit}

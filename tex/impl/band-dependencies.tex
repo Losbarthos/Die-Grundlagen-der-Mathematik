@@ -1,0 +1,21 @@
+% TeX-Schnittstelle fuer den zentralen Bandgraphen in band-dependencies.tsv.
+% xr-hyper liest die AUX-Dateien; dieselbe Vorgängerliste steuert die
+% thmlookup-Registries und die externen PDF-Ziele.
+\RequirePackage{xr-hyper}
+
+\directlua{
+  local path = kpse.find_file("tex/impl/band-dependencies.lua")
+  if not path then
+    error("cannot find tex/impl/band-dependencies.lua")
+  end
+  banddeps = dofile(path)
+}
+
+\newcommand{\BandSetupStandalone}[1]{%
+  \directlua{banddeps.emit_external_documents([==[\luaescapestring{\detokenize{#1}}]==])}%
+  \directlua{banddeps.setup_standalone([==[\luaescapestring{\detokenize{#1}}]==])}%
+}
+
+\newcommand{\BandStartInMain}[1]{%
+  \directlua{banddeps.start_band_in_main([==[\luaescapestring{\detokenize{#1}}]==])}%
+}

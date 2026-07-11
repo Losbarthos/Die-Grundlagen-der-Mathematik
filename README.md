@@ -32,52 +32,119 @@ Content is continuously being extended, reorganized, refined, and unified.
 
 ## Build
 
-Der Gesamtband wird mit LuaLaTeX über `latexmk` gebaut:
+Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error main.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Build von B03
+### Standalone-Bände B03 bis B05
 
-Vorausgesetzt werden PowerShell sowie `latexmk`, `lualatex` und `pdftotext`
-im `PATH`. Aus einem sauberen Checkout genügt unter Windows PowerShell ein
+Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
+
+| Zielband | transitive Vorgänger in Build-Reihenfolge |
+| --- | --- |
+| B03 | B01, B02 |
+| B04 | B01, B02, B03 |
+| B05 | B01, B02, B03, B04 |
+
+TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
+ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
+`B04.tex` → `registry/_B04`; sie ist absichtlich keine unveränderte
+tex→aux-Standardregel.
+
+Vorausgesetzt werden PowerShell, `latexmk`, `lualatex` und `pdftotext` im
+`PATH`. Ein sauberer Build samt vollständigem Referenzaudit ist jeweils ein
 Befehl:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B03
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B04
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B05
 ```
 
-Mit PowerShell 7 (`pwsh`) lautet derselbe Aufruf:
+Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
+`-Target` bleibt B03 der Standard.
+
+Das Skript löscht für den gewählten Graphen alle bekannten Altartefakte und
+baut jeden Vorgänger mit festem Jobnamen, zum Beispiel:
+
+```text
+latexmk -norc -gg -lualatex ... -outdir=registry -jobname=_B04 B04.tex
+```
+
+Erst danach wird der Zielband im Projektverzeichnis gebaut. Für jeden
+Vorgänger müssen anschließend
+`registry/_Bxx.{aux,pdf,registry.tsv,debug.log}` frisch vorhanden sein. Das
+Audit prüft zusätzlich:
+
+- Registry-Labels gegen die jeweilige AUX-Datei;
+- alle Stufenlogs auf undefinierte oder mehrdeutige Referenzen, fehlende
+  AUX-/Registry-Importe und doppelte Ziele;
+- alle Debuglogs auf `none`, `ambiguous-*` und `duplicate-register`;
+- den extrahierten PDF-Text auf die bekannten Fehlermarker;
+- jede externe PDF-Aktion auf eine vorhandene Datei und Named Destination.
+
+Für B05 ist mindestens ein erfolgreicher Link nach `registry/_B04.pdf`
+zwingend.
+
+### Overleaf und direkter latexmk-Aufruf
+
+Die root-level `latexmkrc` setzt LuaLaTeX und führt vor einem Standalone-Ziel
+alle Vorgänger topologisch aus. Sie folgt dem
+[offiziellen xr/latexmk-Prinzip von Overleaf](https://www.overleaf.com/learn/how-to/Cross_referencing_with_the_xr_package_in_Overleaf),
+verwendet wegen der abweichenden Basispfade aber eine explizite
+`Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
+Benötigt wird latexmk 4.84 oder neuer.
+
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B05.tex`:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/build-b03.ps1
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B05.tex
 ```
 
-Das Skript entfernt zunächst gezielt alte Lua-Registries und Debug-Logs. Danach
-baut es B01 und B02 mit festen Jobnamen im Verzeichnis `registry/` und erst
-anschließend B03 im Projektverzeichnis. Damit werden alle benötigten `.aux`- und
-`.registry.tsv`-Dateien frisch in Abhängigkeitsreihenfolge erzeugt; die extern
-verlinkten PDFs `_B01.pdf` und `_B02.pdf` bleiben neben den `.aux`-Dateien
-erhalten. Abschließend prüft das Skript `B03.log`,
-`registry/_B03.debug.log` und den extrahierten Text aus `B03.pdf` auf fehlende
-oder mehrdeutige Referenzen. Das Ergebnis liegt als `B03.pdf` im
-Projektverzeichnis.
-
-Die entsprechende manuelle Befehlsfolge, einschließlich der Vorstufen für
-spätere Standalone-Bände, lautet:
+Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
+LuaLaTeX-Lauf, weil direkt aus Lua gelesene Registry-Dateien nicht in der
+üblichen `.fls`-Abhängigkeitsliste erscheinen. Ein vollständiger erzwungener
+Neuaufbau ohne Cache ist möglich mit:
 
 ```powershell
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B01 B01.tex
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B02 B02.tex
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B03 B03.tex
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B03.tex
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B04.tex
-latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error B05.tex
+$env:DGM_LATEXMK_FORCE_DEPS = '1'
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B05.tex
 ```
 
-Die dabei entstehenden PDFs, LaTeX-Nebendateien, Registries und Debug-Logs
-sind generiert und werden nicht versioniert.
+### Verifizierter Registry-Cache für B05
+
+Ein sauberer B05-Vorlauf ist lang und kann ein Overleaf-Zeitlimit
+überschreiten. Der Workflow `.github/workflows/registry-cache.yml` baut B05
+deshalb in CI sauber, auditiert ihn und veröffentlicht
+`registry-cache-<commit>.tar.gz`. Das Archiv enthält den äußeren Ordner
+`registry-cache/` und ist genau an den angegebenen Commit gebunden.
+
+Für Overleaf wird das zum Commit passende Archiv im Projektwurzelverzeichnis
+entpackt, sodass `registry-cache/manifest.tsv` existiert. Der normale
+`latexmk`-Aufruf für B05 validiert vor jeder Verwendung:
+
+- die exakte, zentral in `cache-inputs.tsv` beschriebene Quellmenge;
+- Größe und SHA-256 jeder Quelle und jedes Cache-Artefakts;
+- die vollständige Manifest- und Verzeichnisstruktur.
+
+Erst nach vollständiger Prüfung werden die 16 Pflichtartefakte für B01–B04
+transaktional nach `registry/` übernommen. Ein falscher Hash, eine zusätzliche
+Datei, ein unvollständiges Manifest oder ein falsches Entpacklayout bricht den
+Build laut ab; ein Cache wird nie stillschweigend veraltet benutzt.
+
+Lokal besitzt der Pack-Befehl den sauberen B05-Build selbst und vergleicht die
+Quellhashes vor und nach dem Lauf:
+
+```powershell
+pwsh -NoProfile -File ./scripts/registry-cache.ps1 -Mode Pack
+pwsh -NoProfile -File ./scripts/registry-cache.ps1 -Mode Verify
+pwsh -NoProfile -File ./scripts/registry-cache.ps1 -Mode Restore
+```
+
+Die PDFs, LaTeX-Nebendateien, Registries, Debuglogs und Cachearchive sind
+generiert und werden nicht versioniert.
 
 ## Mitwirkung / Contributing
 

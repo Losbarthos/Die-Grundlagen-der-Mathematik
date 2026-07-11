@@ -6,8 +6,19 @@ local M = thmlookup or {}
 
 -- ---------- config ----------
 local job = (tex and tex.jobname) or "main"
-M.registry_path = "thmlookup." .. job .. ".registry.tsv"
-M.debug_path    = "thmlookup." .. job .. ".debug.log"
+-- Standalone-Baende werden sowohl als Bxx.pdf (Zielband) als auch mit dem
+-- festen Jobnamen _Bxx im Verzeichnis registry/ (Vorgaenger) gebaut.  Lege
+-- ihre Lua-Ausgaben von Anfang an am kanonischen Ort ab; andernfalls wuerde
+-- thmlookup.tex zunaechst verwaiste thmlookup.<job>.*-Dateien anlegen, bevor
+-- die jeweilige Subfile-Praeambel den Pfad korrigieren kann.
+local band = job:match("^_?(B%d%d)$")
+if band then
+  M.registry_path = "registry/_" .. band .. ".registry.tsv"
+  M.debug_path    = "registry/_" .. band .. ".debug.log"
+else
+  M.registry_path = "thmlookup." .. job .. ".registry.tsv"
+  M.debug_path    = "thmlookup." .. job .. ".debug.log"
+end
 
 M.format_version = "1"
 
@@ -743,6 +754,8 @@ function M.prepare_run()
 
   local g = io.open(M.debug_path, "w")
   if g then g:write(""); g:close() end
+
+  M.prepared_registry_path = M.registry_path
 end
 
 -- Lädt eine Registry-Datei (TSV) in den aktuellen Speicherindex (M.by_key)
