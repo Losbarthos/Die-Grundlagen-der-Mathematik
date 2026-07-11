@@ -38,8 +38,34 @@ Der Gesamtband wird mit LuaLaTeX über `latexmk` gebaut:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Für Standalone-Builds werden zunächst die Querverweisdateien der früheren
-Bände frisch im Verzeichnis `registry/` erzeugt:
+### Standalone-Build von B03
+
+Vorausgesetzt werden PowerShell sowie `latexmk`, `lualatex` und `pdftotext`
+im `PATH`. Aus einem sauberen Checkout genügt unter Windows PowerShell ein
+Befehl:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1
+```
+
+Mit PowerShell 7 (`pwsh`) lautet derselbe Aufruf:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-b03.ps1
+```
+
+Das Skript entfernt zunächst gezielt alte Lua-Registries und Debug-Logs. Danach
+baut es B01 und B02 mit festen Jobnamen im Verzeichnis `registry/` und erst
+anschließend B03 im Projektverzeichnis. Damit werden alle benötigten `.aux`- und
+`.registry.tsv`-Dateien frisch in Abhängigkeitsreihenfolge erzeugt; die extern
+verlinkten PDFs `_B01.pdf` und `_B02.pdf` bleiben neben den `.aux`-Dateien
+erhalten. Abschließend prüft das Skript `B03.log`,
+`registry/_B03.debug.log` und den extrahierten Text aus `B03.pdf` auf fehlende
+oder mehrdeutige Referenzen. Das Ergebnis liegt als `B03.pdf` im
+Projektverzeichnis.
+
+Die entsprechende manuelle Befehlsfolge, einschließlich der Vorstufen für
+spätere Standalone-Bände, lautet:
 
 ```powershell
 latexmk -gg -lualatex -interaction=nonstopmode -halt-on-error -outdir=registry -jobname=_B01 B01.tex
