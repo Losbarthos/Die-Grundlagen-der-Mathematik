@@ -1,0 +1,2148 @@
+%============================================================
+%  Bd. 06 - Axiomatischer Aufbau der Halbverbände und Verbände
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B06}
+}{
+}
+
+\title{Bd. 06 - Axiomatischer Aufbau der Halbverbände und Verbände}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{6}
+
+\begin{document}
+
+\title{Bd. 06 - Axiomatischer Aufbau der Halbverbände und Verbände}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{6}
+\renewcommand{\FormulaBandID}{6}
+
+\chapter{Algebraische Halbverbände}
+
+Band~03 entwickelt partielle Ordnungen sowie obere und untere Schranken,
+Infima und Suprema. Der vorliegende Band geht den umgekehrten Weg: Eine
+einzige binäre Operation wird axiomatisch festgelegt, und aus ihren
+algebraischen Gesetzen wird eine partielle Ordnung gewonnen.
+
+Die im Deutschen ebenfalls gebräuchliche Bezeichnung \emph{Halbgitter}
+wird im Folgenden synonym zu \emph{Halbverband} verwendet. Wir schreiben
+\(J\) für eine als Supremum gedachte Operation und \(K\) für eine als
+Infimum gedachte Operation. Dadurch bleiben die logischen Zeichen
+\(\land\) und \(\lor\) aus den Bänden~01 und~02 unverwechselt.
+
+\section{Supremums-Halbverbände}
+
+\subsection{Axiomatische Definition}
+
+\FormulaDefDeltaK[Begriff des Supremums-Halbverbandes]{%
+  \JoinSemi{J,A}%
+}{JoinSemilattice}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Binäre Operation}{J\colon A\times A\to A}
+  \DeltaRow{Assoziativität}{%
+    x,y,z\in A\vdash J(J(x,y),z)=J(x,J(y,z))}
+  \DeltaRow{Kommutativität}{%
+    x,y\in A\vdash J(x,y)=J(y,x)}
+  \DeltaRow{Idempotenz}{x\in A\vdash J(x,x)=x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Supremums-Halbverband}{\JoinSemi{J,A}}
+}
+
+Die drei eigentlichen Strukturgesetze sind also Assoziativität,
+Kommutativität und Idempotenz. Die Typisierung als Abbildung
+\(A\times A\to A\) hält zusätzlich den Abschluss der Operation fest.
+
+\FormulaDefDeltaK[Vom Supremums-Halbverband induzierte Relation]{%
+  \begin{aligned}[t]
+    &\JoinOrd{J,A}\subseteq A\times A,\\
+    &x,y\in A\vdash
+      \bigl((x,y)\in\JoinOrd{J,A}\leftrightarrow J(x,y)=y\bigr)
+  \end{aligned}
+}{JoinOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Relationen}{\JoinOrd{J,A}}
+  \DeltaRow{Träger}{\JoinOrd{J,A}\subseteq A\times A}
+  \DeltaRow{Charakterisierung}{%
+    x,y\in A\vdash
+    \bigl((x,y)\in\JoinOrd{J,A}\leftrightarrow J(x,y)=y\bigr)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Induzierte Relation}{\JoinOrd{J,A}}
+}
+
+Die zugehörige Schreibweise ist
+\[
+  x\preceq_J y
+  \quad:\Longleftrightarrow\quad
+  (x,y)\in\JoinOrd{J,A}
+  \quad\Longleftrightarrow\quad
+  J(x,y)=y.
+\]
+
+\subsection{Die induzierte partielle Ordnung}
+
+\FormulaThmDeltaK[Träger und Auswertung der induzierten Relation]{%
+  \JoinSemi{J,A}\dsep (x,y)\in\JoinOrd{J,A}
+  \vdash x\in A\land y\in A\land J(x,y)=y
+}{JoinOrderMembers}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Relationen}{\JoinOrd{J,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{(x,y)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{}{\JoinOrd{J,A}\subseteq A\times A}{%
+    \FormulaRefAuto{JoinOrder}[def]}
+  \proofstep{2}{(x,y)\in A\times A}{%
+    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{3,2}}
+  \proofstep{2}{x\in A\land y\in A}{%
+    \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{4}}
+  \proofstep{2}{x\in A}{\rAEa{5}}
+  \proofstep{2}{y\in A}{\rAEb{5}}
+  \proofstep{2}{%
+    (x,y)\in\JoinOrd{J,A}\leftrightarrow J(x,y)=y}{%
+    \FormulaRefAuto{JoinOrder}[def]{6,7}}
+  \proofstep{2}{J(x,y)=y}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{8,2}}
+  \proofstep{1,2}{x\in A\land y\in A\land J(x,y)=y}{%
+    \rAI{\rAI{6,7},9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Reflexivität der induzierten Relation]{%
+  \JoinSemi{J,A}\dsep x\in A\vdash (x,x)\in\JoinOrd{J,A}
+}{JoinOrderReflexive}{%
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1,2}{J(x,x)=x}{\FormulaRefAuto{JoinSemilattice}[def]{1,2}}
+  \proofstep{2}{%
+    (x,x)\in\JoinOrd{J,A}\leftrightarrow J(x,x)=x}{%
+    \FormulaRefAuto{JoinOrder}[def]{2,2}}
+  \proofstep{1,2}{(x,x)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Antisymmetrie der induzierten Relation]{%
+  \begin{aligned}[t]
+    &\JoinSemi{J,A}\dsep (x,y)\in\JoinOrd{J,A}
+      \dsep (y,x)\in\JoinOrd{J,A}\vdash x=y
+  \end{aligned}
+}{JoinOrderAntisymmetric}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{(x,y)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{3}{(y,x)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{1,2}{x\in A\land y\in A\land J(x,y)=y}{%
+    \FormulaRefAuto{JoinOrderMembers}[thm]{1,2}}
+  \proofstep{1,3}{y\in A\land x\in A\land J(y,x)=x}{%
+    \FormulaRefAuto{JoinOrderMembers}[thm]{1,3}}
+  \proofstep{1,2}{J(x,y)=y}{\FormulaRefAuto{P\land Q\land R\vdash R}{4}}
+  \proofstep{1,3}{J(y,x)=x}{\FormulaRefAuto{P\land Q\land R\vdash R}{5}}
+  \proofstep{1,2}{x\in A}{\rAEa{\rAEa{4}}}
+  \proofstep{1,2}{y\in A}{\FormulaRefAuto{P\land Q\land R\vdash Q}{4}}
+  \proofstep{1,2}{J(x,y)=J(y,x)}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,8,9}}
+  \proofstep{1,2,3}{y=x}{%
+    \FormulaRefAuto{a=b,\, b=c\vdash a=c}{6,\rIE{10,7}}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{a=b\vdash b=a}{11}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Transitivität der induzierten Relation]{%
+  \begin{aligned}[t]
+    &\JoinSemi{J,A}\dsep (x,y)\in\JoinOrd{J,A}
+      \dsep (y,z)\in\JoinOrd{J,A}\vdash (x,z)\in\JoinOrd{J,A}
+  \end{aligned}
+}{JoinOrderTransitive}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{(x,y)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{3}{(y,z)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{1,2}{x\in A\land y\in A\land J(x,y)=y}{%
+    \FormulaRefAuto{JoinOrderMembers}[thm]{1,2}}
+  \proofstep{1,3}{y\in A\land z\in A\land J(y,z)=z}{%
+    \FormulaRefAuto{JoinOrderMembers}[thm]{1,3}}
+  \proofstep{1,2}{x\in A}{\rAEa{\rAEa{4}}}
+  \proofstep{1,2}{y\in A}{\FormulaRefAuto{P\land Q\land R\vdash Q}{4}}
+  \proofstep{1,3}{z\in A}{\FormulaRefAuto{P\land Q\land R\vdash Q}{5}}
+  \proofstep{1,2}{J(x,y)=y}{\FormulaRefAuto{P\land Q\land R\vdash R}{4}}
+  \proofstep{1,3}{J(y,z)=z}{\FormulaRefAuto{P\land Q\land R\vdash R}{5}}
+  \proofstep{1,2,3}{J(x,J(y,z))=J(x,z)}{\rIE{10,\rII}}
+  \proofstep{1,2,3}{J(J(x,y),z)=J(y,z)}{\rIE{9,\rII}}
+  \proofstep{1,2,3}{J(J(x,y),z)=J(x,J(y,z))}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,6,7,8}}
+  \proofstep{1,2,3}{J(x,z)=z}{%
+    \FormulaRefAuto{a=b,\,a=c\vdash b=c}{%
+      \rIE{13,12},\rIE{11,10}}}
+  \proofstep{1,2,3}{%
+    (x,z)\in\JoinOrd{J,A}\leftrightarrow J(x,z)=z}{%
+    \FormulaRefAuto{JoinOrder}[def]{6,8}}
+  \proofstep{1,2,3}{(x,z)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{15,14}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein Supremums-Halbverband induziert eine partielle Ordnung]{%
+  \JoinSemi{J,A}\vdash \PartOrd{\JoinOrd{J,A},A}
+}{JoinSemilatticeInducesOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Relationen}{\JoinOrd{J,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{}{\JoinOrd{J,A}\subseteq A\times A}{%
+    \FormulaRefAuto{JoinOrder}[def]}
+  \proofstep{1}{x\in A\vdash (x,x)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinOrderReflexive}[thm]{1}}
+  \proofstep{1}{%
+    (x,y)\in\JoinOrd{J,A}\dsep (y,z)\in\JoinOrd{J,A}
+    \vdash (x,z)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinOrderTransitive}[thm]{1}}
+  \proofstep{1}{%
+    (x,y)\in\JoinOrd{J,A}\dsep (y,x)\in\JoinOrd{J,A}
+    \vdash x=y}{%
+    \FormulaRefAuto{JoinOrderAntisymmetric}[thm]{1}}
+  \proofstep{1}{\PartOrd{\JoinOrd{J,A},A}}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{2,3,4,5}}
+\end{tabproof}
+
+\subsection{Universelle Eigenschaft der Operation}
+
+\FormulaDefDeltaK[Supremum eines Elementpaares]{%
+  \PairSup{R}{A}{x}{y}{u}%
+}{PairSupremum}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u\dsep v}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Elemente}{x,y,u\in A}
+  \DeltaRow{Obere Schranken}{(x,u)\in R\dsep (y,u)\in R}
+  \DeltaRow{Kleinste obere Schranke}{%
+    v\in A\dsep (x,v)\in R\dsep (y,v)\in R\vdash (u,v)\in R}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Paarsupremum}{\PairSup{R}{A}{x}{y}{u}}
+}
+
+\FormulaThmDeltaK[Der erste Operand liegt unter dem algebraischen Supremum]{%
+  \JoinSemi{J,A}\dsep x,y\in A
+  \vdash (x,J(x,y))\in\JoinOrd{J,A}
+}{JoinUpperLeft}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{1,2,3}{J(x,y)\in A}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,2,3}}
+  \proofstep{1,2}{J(x,x)=x}{\FormulaRefAuto{JoinSemilattice}[def]{1,2}}
+  \proofstep{1,2,3}{J(J(x,x),y)=J(x,y)}{\rIE{5,\rII}}
+  \proofstep{1,2,3}{J(J(x,x),y)=J(x,J(x,y))}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,2,2,3}}
+  \proofstep{1,2,3}{J(x,J(x,y))=J(x,y)}{%
+    \FormulaRefAuto{a=b,\,a=c\vdash b=c}{7,6}}
+  \proofstep{1,2,3}{%
+    (x,J(x,y))\in\JoinOrd{J,A}
+    \leftrightarrow J(x,J(x,y))=J(x,y)}{%
+    \FormulaRefAuto{JoinOrder}[def]{2,4}}
+  \proofstep{1,2,3}{(x,J(x,y))\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{9,8}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Der zweite Operand liegt unter dem algebraischen Supremum]{%
+  \JoinSemi{J,A}\dsep x,y\in A
+  \vdash (y,J(x,y))\in\JoinOrd{J,A}
+}{JoinUpperRight}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{1,2,3}{(y,J(y,x))\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinUpperLeft}[thm]{1,3,2}}
+  \proofstep{1,2,3}{J(y,x)=J(x,y)}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,3,2}}
+  \proofstep{1,2,3}{(y,J(x,y))\in\JoinOrd{J,A}}{\rIE{5,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Minimalität des algebraischen Supremums]{%
+  \begin{aligned}[t]
+    &\JoinSemi{J,A}\dsep x,y,u\in A\dsep
+      (x,u)\in\JoinOrd{J,A}\dsep (y,u)\in\JoinOrd{J,A}\vdash{}\\
+    &(J(x,y),u)\in\JoinOrd{J,A}
+  \end{aligned}
+}{JoinLeastUpper}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{4}{u\in A}{\rA}
+  \proofstep{5}{(x,u)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{6}{(y,u)\in\JoinOrd{J,A}}{\rA}
+  \proofstep{1,5}{J(x,u)=u}{%
+    \FormulaRefAuto{P\land Q\land R\vdash R}{%
+      \FormulaRefAuto{JoinOrderMembers}[thm]{1,5}}}
+  \proofstep{1,6}{J(y,u)=u}{%
+    \FormulaRefAuto{P\land Q\land R\vdash R}{%
+      \FormulaRefAuto{JoinOrderMembers}[thm]{1,6}}}
+  \proofstep{1,2,3}{J(x,y)\in A}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,2,3}}
+  \proofstep{1,2,3,4}{J(J(x,y),u)=J(x,J(y,u))}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,2,3,4}}
+  \proofstep{1,2,3,4,6}{J(x,J(y,u))=J(x,u)}{\rIE{8,\rII}}
+  \proofstep{1,2,3,4,5,6}{J(J(x,y),u)=u}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{10,\rIE{11,7}}}
+  \proofstep{1,2,3,4}{%
+    (J(x,y),u)\in\JoinOrd{J,A}
+    \leftrightarrow J(J(x,y),u)=u}{%
+    \FormulaRefAuto{JoinOrder}[def]{9,4}}
+  \proofstep{1,2,3,4,5,6}{(J(x,y),u)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{13,12}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Halbverbandsoperation ist das Paarsupremum]{%
+  \JoinSemi{J,A}\dsep x,y\in A
+  \vdash \PairSup{\JoinOrd{J,A}}{A}{x}{y}{J(x,y)}
+}{JoinIsPairSupremum}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\JoinSemi{J,A}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{3}{y\in A}{\rA}
+  \proofstep{1,2,3}{J(x,y)\in A}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{1,2,3}}
+  \proofstep{1,2,3}{(x,J(x,y))\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinUpperLeft}[thm]{1,2,3}}
+  \proofstep{1,2,3}{(y,J(x,y))\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinUpperRight}[thm]{1,2,3}}
+  \proofstep{1}{%
+    \begin{aligned}[t]
+      &u\in A\dsep (x,u)\in\JoinOrd{J,A}
+       \dsep (y,u)\in\JoinOrd{J,A}\vdash{}\\
+      &(J(x,y),u)\in\JoinOrd{J,A}
+    \end{aligned}}{%
+    \FormulaRefAuto{JoinLeastUpper}[thm]{1,2,3}}
+  \proofstep{1,2,3}{\PairSup{\JoinOrd{J,A}}{A}{x}{y}{J(x,y)}}{%
+    \FormulaRefAuto{PairSupremum}[def]{\rAI{\rAI{2,3},4},5,6,7}}
+\end{tabproof}
+
+\section{Die ordnungstheoretische Charakterisierung}
+
+\FormulaDefDeltaK[Operation der Paarsuprema]{%
+  \PairJoinOp{J,R,A}%
+}{PairJoinOperation}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Binäre Operation}{J\colon A\times A\to A}
+  \DeltaRow{Paarsuprema}{%
+    x,y\in A\vdash \PairSup{R}{A}{x}{y}{J(x,y)}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Paarsupremumsoperation}{\PairJoinOp{J,R,A}}
+}
+
+\FormulaThmDeltaK[Eindeutigkeit des Paarsupremums]{%
+  \begin{aligned}[t]
+    &\PartOrd{R,A}\dsep \PairSup{R}{A}{x}{y}{u}
+      \dsep \PairSup{R}{A}{x}{y}{v}\vdash u=v
+  \end{aligned}
+}{PairSupremumUnique}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u\dsep v}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproof}
+  \proofstep{1}{\PartOrd{R,A}}{\rA}
+  \proofstep{2}{\PairSup{R}{A}{x}{y}{u}}{\rA}
+  \proofstep{3}{\PairSup{R}{A}{x}{y}{v}}{\rA}
+  \proofstep{2}{u\in A}{\FormulaRefAuto{PairSupremum}[def]{2}}
+  \proofstep{3}{v\in A}{\FormulaRefAuto{PairSupremum}[def]{3}}
+  \proofstep{3}{(x,v)\in R}{\FormulaRefAuto{PairSupremum}[def]{3}}
+  \proofstep{3}{(y,v)\in R}{\FormulaRefAuto{PairSupremum}[def]{3}}
+  \proofstep{2,3}{(u,v)\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{2,5,6,7}}
+  \proofstep{2}{(x,u)\in R}{\FormulaRefAuto{PairSupremum}[def]{2}}
+  \proofstep{2}{(y,u)\in R}{\FormulaRefAuto{PairSupremum}[def]{2}}
+  \proofstep{2,3}{(v,u)\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{3,4,9,10}}
+  \proofstep{1,2,3}{u=v}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,8,11}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Idempotenz einer Paarsupremumsoperation]{%
+  \PartOrd{R,A}\dsep \PairJoinOp{J,R,A}\dsep x\in A
+  \vdash J(x,x)=x
+}{PairJoinIdempotent}{%
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\PartOrd{R,A}}{\rA}
+  \proofstep{2}{\PairJoinOp{J,R,A}}{\rA}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{2,3}{\PairSup{R}{A}{x}{x}{J(x,x)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,3,3}}
+  \proofstep{1,3}{(x,x)\in R}{\FormulaRefAuto{Partielle Ordnung}[def]{1,3}}
+  \proofstep{1,3}{\PairSup{R}{A}{x}{x}{x}}{%
+    \FormulaRefAuto{PairSupremum}[def]{\rAI{\rAI{3,3},3},5,5,5}}
+  \proofstep{1,2,3}{J(x,x)=x}{%
+    \FormulaRefAuto{PairSupremumUnique}[thm]{1,4,6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Kommutativität einer Paarsupremumsoperation]{%
+  \PartOrd{R,A}\dsep \PairJoinOp{J,R,A}\dsep x,y\in A
+  \vdash J(x,y)=J(y,x)
+}{PairJoinCommutative}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\PartOrd{R,A}}{\rA}
+  \proofstep{2}{\PairJoinOp{J,R,A}}{\rA}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{4}{y\in A}{\rA}
+  \proofstep{2,3,4}{\PairSup{R}{A}{x}{y}{J(x,y)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,3,4}}
+  \proofstep{2,3,4}{\PairSup{R}{A}{y}{x}{J(y,x)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,4,3}}
+  \proofstep{2,3,4}{(y,J(y,x))\in R}{\FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstep{2,3,4}{(x,J(y,x))\in R}{\FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstep{2,3,4}{J(y,x)\in A}{\FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstep{1,2,3,4}{\PairSup{R}{A}{x}{y}{J(y,x)}}{%
+    \text{Symmetrie der Bedingungen aus 6--9}}
+  \proofstep{1,2,3,4}{J(x,y)=J(y,x)}{%
+    \FormulaRefAuto{PairSupremumUnique}[thm]{1,5,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Assoziativität einer Paarsupremumsoperation]{%
+  \begin{aligned}[t]
+    &\PartOrd{R,A}\dsep \PairJoinOp{J,R,A}\dsep x,y,z\in A\vdash{}\\
+    &J(J(x,y),z)=J(x,J(y,z))
+  \end{aligned}
+}{PairJoinAssociative}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+  \proofstepwidestar[2]{\PairJoinOp{J,R,A}}{\rA}
+  \proofstepwidestar[3]{x\in A}{\rA}
+  \proofstepwidestar[4]{y\in A}{\rA}
+  \proofstepwidestar[5]{z\in A}{\rA}
+  \proofstepwidestar[2,3,4]{\PairSup{R}{A}{x}{y}{J(x,y)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,3,4}}
+  \proofstepwidestar[2,4,5]{\PairSup{R}{A}{y}{z}{J(y,z)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,4,5}}
+  \proofstepwidestar[2,3,4]{J(x,y)\in A}{\FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstepwidestar[2,4,5]{J(y,z)\in A}{\FormulaRefAuto{PairSupremum}[def]{7}}
+  \proofstepwidestar[2,3,4,5]{\PairSup{R}{A}{J(x,y)}{z}{J(J(x,y),z)}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,8,5}}
+  \proofstepwidestar[2,3,4,5]{\PairSup{R}{A}{x}{J(y,z)}{J(x,J(y,z))}}{%
+    \FormulaRefAuto{PairJoinOperation}[def]{2,3,9}}
+  \proofstepwidestar[2,3,4,5]{(x,J(x,J(y,z)))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{11}}
+  \proofstepwidestar[2,3,4,5]{(J(y,z),J(x,J(y,z)))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{11}}
+  \proofstepwidestar[2,3,4,5]{(y,J(y,z))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{7}}
+  \proofstepwidestar[2,3,4,5]{(z,J(y,z))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{7}}
+  \proofstepwidestar[1,2,3,4,5]{(y,J(x,J(y,z)))\in R}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,14,13}}
+  \proofstepwidestar[1,2,3,4,5]{(z,J(x,J(y,z)))\in R}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,15,13}}
+  \proofstepwidestar[1,2,3,4,5]{(J(x,y),J(x,J(y,z)))\in R}{%
+    \text{Paarsupremum aus 6 und 11--16}}
+  \proofstepwidestar[1,2,3,4,5]{(J(J(x,y),z),J(x,J(y,z)))\in R}{%
+    \text{Paarsupremum aus 10, 11, 17, 18}}
+  \proofstepwidestar[2,3,4,5]{(J(x,y),J(J(x,y),z))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{10}}
+  \proofstepwidestar[2,3,4,5]{(z,J(J(x,y),z))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{10}}
+  \proofstepwidestar[2,3,4,5]{(x,J(x,y))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstepwidestar[2,3,4,5]{(y,J(x,y))\in R}{%
+    \FormulaRefAuto{PairSupremum}[def]{6}}
+  \proofstepwidestar[1,2,3,4,5]{(x,J(J(x,y),z))\in R}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,22,20}}
+  \proofstepwidestar[1,2,3,4,5]{(y,J(J(x,y),z))\in R}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,23,20}}
+  \proofstepwidestar[1,2,3,4,5]{(J(y,z),J(J(x,y),z))\in R}{%
+    \text{Paarsupremum aus 7, 8, 21, 24}}
+  \proofstepwidestar[1,2,3,4,5]{(J(x,J(y,z)),J(J(x,y),z))\in R}{%
+    \text{Paarsupremum aus 8, 11, 24, 26}}
+  \proofstepwidestar[1,2,3,4,5]{J(J(x,y),z)=J(x,J(y,z))}{%
+    \FormulaRefAuto{Partielle Ordnung}[def]{1,19,27}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung durch Paarsuprema]{%
+  \PartOrd{R,A}\dsep \PairJoinOp{J,R,A}\vdash \JoinSemi{J,A}
+}{PairJoinCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\PartOrd{R,A}}{\rA}
+  \proofstep{2}{\PairJoinOp{J,R,A}}{\rA}
+  \proofstep{2}{J\colon A\times A\to A}{\FormulaRefAuto{PairJoinOperation}[def]{2}}
+  \proofstep{1,2}{%
+    x,y,z\in A\vdash J(J(x,y),z)=J(x,J(y,z))}{%
+    \FormulaRefAuto{PairJoinAssociative}[thm]{1,2}}
+  \proofstep{1,2}{x,y\in A\vdash J(x,y)=J(y,x)}{%
+    \FormulaRefAuto{PairJoinCommutative}[thm]{1,2}}
+  \proofstep{1,2}{x\in A\vdash J(x,x)=x}{%
+    \FormulaRefAuto{PairJoinIdempotent}[thm]{1,2}}
+  \proofstep{1,2}{\JoinSemi{J,A}}{%
+    \FormulaRefAuto{JoinSemilattice}[def]{3,4,5,6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Paarsupremumsoperation gewinnt die Ordnung zurück]{%
+  \begin{aligned}[t]
+    &\PartOrd{R,A}\dsep \PairJoinOp{J,R,A}\dsep x,y\in A\vdash{}\\
+    &(x,y)\in R\leftrightarrow (x,y)\in\JoinOrd{J,A}
+  \end{aligned}
+}{PairJoinRecoversOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationen}{R\dsep \JoinOrd{J,A}}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{\PairJoinOp{J,R,A}}{\rA}
+    \proofstepwidestar[3]{x\in A}{\rA}
+    \proofstepwidestar[4]{y\in A}{\rA}
+    \proofstepwidestar[5]{(x,y)\in R}{\rA}
+    \proofstepwidestar[1,4]{(y,y)\in R}{%
+      \FormulaRefAuto{Partielle Ordnung}[def]{1,4}}
+    \proofstepwidestar[2,3,4]{\PairSup{R}{A}{x}{y}{J(x,y)}}{%
+      \FormulaRefAuto{PairJoinOperation}[def]{2,3,4}}
+    \proofstepwidestar[2,3,4]{J(x,y)\in A}{%
+      \FormulaRefAuto{PairSupremum}[def]{7}}
+    \proofstepwidestar[1,2,3,4,5]{(J(x,y),y)\in R}{%
+      \FormulaRefAuto{PairSupremum}[def]{7,4,5,6}}
+    \proofstepwidestar[2,3,4]{(y,J(x,y))\in R}{%
+      \FormulaRefAuto{PairSupremum}[def]{7}}
+    \proofstepwidestar[1,2,3,4,5]{J(x,y)=y}{%
+      \FormulaRefAuto{Partielle Ordnung}[def]{1,9,10}}
+    \proofstepwidestar[1,2,3,4,5]{(x,y)\in\JoinOrd{J,A}}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{JoinOrder}[def]{3,4},11}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{\PairJoinOp{J,R,A}}{\rA}
+    \proofstepwidestar[3]{x\in A}{\rA}
+    \proofstepwidestar[4]{y\in A}{\rA}
+    \proofstepwidestar[5]{(x,y)\in\JoinOrd{J,A}}{\rA}
+    \proofstepwidestar[3,4,5]{J(x,y)=y}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{JoinOrder}[def]{3,4},5}}
+    \proofstepwidestar[2,3,4]{\PairSup{R}{A}{x}{y}{J(x,y)}}{%
+      \FormulaRefAuto{PairJoinOperation}[def]{2,3,4}}
+    \proofstepwidestar[2,3,4]{(x,J(x,y))\in R}{%
+      \FormulaRefAuto{PairSupremum}[def]{7}}
+    \proofstepwidestar[2,3,4,5]{(x,y)\in R}{\rIE{6,8}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Damit ist die zentrale Äquivalenz bewiesen:
+\[
+  \boxed{
+    \begin{aligned}
+      &\text{assoziative, kommutative und idempotente binäre Operation}\\
+      &\qquad\Longleftrightarrow\\
+      &\text{partielle Ordnung mit Suprema aller Elementpaare.}
+    \end{aligned}}
+\]
+
+\section{Infimums-Halbverbände und Dualität}
+
+\FormulaDefDeltaK[Begriff des Infimums-Halbverbandes]{%
+  \MeetSemi{K,A}%
+}{MeetSemilattice}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{K}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Binäre Operation}{K\colon A\times A\to A}
+  \DeltaRow{Assoziativität}{%
+    x,y,z\in A\vdash K(K(x,y),z)=K(x,K(y,z))}
+  \DeltaRow{Kommutativität}{%
+    x,y\in A\vdash K(x,y)=K(y,x)}
+  \DeltaRow{Idempotenz}{x\in A\vdash K(x,x)=x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Infimums-Halbverband}{\MeetSemi{K,A}}
+}
+
+Algebraisch besitzen Infimums- und Supremums-Halbverbände dieselben drei
+Gesetze. Der Unterschied entsteht erst durch die Richtung der induzierten
+Ordnung.
+
+\FormulaThmDeltaK[Algebraische Dualität der Halbverbände]{%
+  \JoinSemi{K,A}\eqvdash \MeetSemi{K,A}
+}{SemilatticeAlgebraicDuality}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{K}
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\JoinSemi{K,A}}{\rA}
+    \proofstep{1}{K\colon A\times A\to A}{\FormulaRefAuto{JoinSemilattice}[def]{1}}
+    \proofstep{1}{x,y,z\in A\vdash K(K(x,y),z)=K(x,K(y,z))}{%
+      \FormulaRefAuto{JoinSemilattice}[def]{1}}
+    \proofstep{1}{x,y\in A\vdash K(x,y)=K(y,x)}{%
+      \FormulaRefAuto{JoinSemilattice}[def]{1}}
+    \proofstep{1}{x\in A\vdash K(x,x)=x}{%
+      \FormulaRefAuto{JoinSemilattice}[def]{1}}
+    \proofstep{1}{\MeetSemi{K,A}}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{2,3,4,5}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\MeetSemi{K,A}}{\rA}
+    \proofstep{1}{K\colon A\times A\to A}{\FormulaRefAuto{MeetSemilattice}[def]{1}}
+    \proofstep{1}{x,y,z\in A\vdash K(K(x,y),z)=K(x,K(y,z))}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{1}}
+    \proofstep{1}{x,y\in A\vdash K(x,y)=K(y,x)}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{1}}
+    \proofstep{1}{x\in A\vdash K(x,x)=x}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{1}}
+    \proofstep{1}{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{JoinSemilattice}[def]{2,3,4,5}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaDefDeltaK[Vom Infimums-Halbverband induzierte Relation]{%
+  \begin{aligned}[t]
+    &\MeetOrd{K,A}\subseteq A\times A,\\
+    &x,y\in A\vdash
+      \bigl((x,y)\in\MeetOrd{K,A}\leftrightarrow K(x,y)=x\bigr)
+  \end{aligned}
+}{MeetOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{K}
+  \DeltaRow{Relationen}{\MeetOrd{K,A}}
+  \DeltaRow{Träger}{\MeetOrd{K,A}\subseteq A\times A}
+  \DeltaRow{Charakterisierung}{%
+    x,y\in A\vdash
+    \bigl((x,y)\in\MeetOrd{K,A}\leftrightarrow K(x,y)=x\bigr)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Induzierte Relation}{\MeetOrd{K,A}}
+}
+
+\FormulaDefDeltaK[Infimum eines Elementpaares]{%
+  \PairInf{R}{A}{x}{y}{u}%
+}{PairInfimum}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u\dsep v}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{Elemente}{x,y,u\in A}
+  \DeltaRow{Untere Schranken}{(u,x)\in R\dsep (u,y)\in R}
+  \DeltaRow{Größte untere Schranke}{%
+    v\in A\dsep (v,x)\in R\dsep (v,y)\in R\vdash (v,u)\in R}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Paarinfimum}{\PairInf{R}{A}{x}{y}{u}}
+}
+
+\FormulaThmDeltaK[Die beiden induzierten Ordnungen sind dual]{%
+  \begin{aligned}[t]
+    &\MeetSemi{K,A}\dsep x,y\in A\vdash{}\\
+    &(x,y)\in\MeetOrd{K,A}
+      \leftrightarrow (y,x)\in\JoinOrd{K,A}
+  \end{aligned}
+}{MeetJoinOrderDual}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{K}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+  \proofstepwidestar[2]{x\in A}{\rA}
+  \proofstepwidestar[3]{y\in A}{\rA}
+  \proofstepwide[1,2,3]{(x,y)\in\MeetOrd{K,A}}{\leftrightarrow}{K(x,y)=x}{%
+    \FormulaRefAuto{MeetOrder}[def]{2,3}}
+  \proofstepwide[1,2,3]{}{\leftrightarrow}{K(y,x)=x}{%
+    \rLRS{\FormulaRefAuto{MeetSemilattice}[def]{1,2,3},4}}
+  \proofstepwide[1,2,3]{}{\leftrightarrow}{(y,x)\in\JoinOrd{K,A}}{%
+    \FormulaRefAuto{JoinOrder}[def]{3,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein Infimums-Halbverband induziert eine partielle Ordnung]{%
+  \MeetSemi{K,A}\vdash \PartOrd{\MeetOrd{K,A},A}
+}{MeetSemilatticeInducesOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{K}
+  \DeltaRow{Relationen}{\MeetOrd{K,A}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{Reflexivität}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[1]{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{SemilatticeAlgebraicDuality}[thm]{1}}
+    \proofstepwidestar[1,2]{(x,x)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{JoinOrderReflexive}[thm]{3,2}}
+    \proofstepwidestar[1,2]{(x,x)\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,2,2,4}}
+  \closeproofpartwide
+
+  \proofpartwide{Transitivität}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{(x,y)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[3]{(y,z)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[]{\MeetOrd{K,A}\subseteq A\times A}{%
+      \FormulaRefAuto{MeetOrder}[def]}
+    \proofstepwidestar[2]{x\in A\land y\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,2}}}
+    \proofstepwidestar[3]{y\in A\land z\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,3}}}
+    \proofstepwidestar[1,2]{(y,x)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,\rAEa{5},\rAEb{5},2}}
+    \proofstepwidestar[1,3]{(z,y)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,\rAEa{6},\rAEb{6},3}}
+    \proofstepwidestar[1]{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{SemilatticeAlgebraicDuality}[thm]{1}}
+    \proofstepwidestar[1,2,3]{(z,x)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{JoinOrderTransitive}[thm]{9,8,7}}
+    \proofstepwidestar[1,2,3]{(x,z)\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,\rAEa{5},\rAEb{6},10}}
+  \closeproofpartwide
+
+  \proofpartwide{Antisymmetrie}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{(x,y)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[3]{(y,x)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[]{\MeetOrd{K,A}\subseteq A\times A}{%
+      \FormulaRefAuto{MeetOrder}[def]}
+    \proofstepwidestar[2]{x\in A\land y\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,2}}}
+    \proofstepwidestar[1,2]{(y,x)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,\rAEa{5},\rAEb{5},2}}
+    \proofstepwidestar[1,3]{(x,y)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,\rAEb{5},\rAEa{5},3}}
+    \proofstepwidestar[1]{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{SemilatticeAlgebraicDuality}[thm]{1}}
+    \proofstepwidestar[1,2,3]{x=y}{%
+      \FormulaRefAuto{JoinOrderAntisymmetric}[thm]{8,7,6}}
+  \closeproofpartwide
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[]{\MeetOrd{K,A}\subseteq A\times A}{%
+      \FormulaRefAuto{MeetOrder}[def]}
+    \proofstepwidestar[1]{x\in A\vdash (x,x)\in\MeetOrd{K,A}}{%
+      \text{Beweisteil Reflexivität}}
+    \proofstepwidestar[1]{%
+      (x,y)\in\MeetOrd{K,A}\dsep (y,z)\in\MeetOrd{K,A}
+      \vdash (x,z)\in\MeetOrd{K,A}}{%
+      \text{Beweisteil Transitivität}}
+    \proofstepwidestar[1]{%
+      (x,y)\in\MeetOrd{K,A}\dsep (y,x)\in\MeetOrd{K,A}\vdash x=y}{%
+      \text{Beweisteil Antisymmetrie}}
+    \proofstepwidestar[1]{\PartOrd{\MeetOrd{K,A},A}}{%
+      \FormulaRefAuto{Partielle Ordnung}[def]{2,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Die Halbverbandsoperation ist das Paarinfimum]{%
+  \MeetSemi{K,A}\dsep x,y\in A
+  \vdash \PairInf{\MeetOrd{K,A}}{A}{x}{y}{K(x,y)}
+}{MeetIsPairInfimum}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep u}
+  \DeltaRow{Funktionen}{K}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{Untere Schranken}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[3]{y\in A}{\rA}
+    \proofstepwidestar[1]{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{SemilatticeAlgebraicDuality}[thm]{1}}
+    \proofstepwidestar[1,2,3]{K(x,y)\in A}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{1,2,3}}
+    \proofstepwidestar[1,2,3]{(x,K(x,y))\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{JoinUpperLeft}[thm]{4,2,3}}
+    \proofstepwidestar[1,2,3]{(K(x,y),x)\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,5,2,6}}
+    \proofstepwidestar[1,2,3]{(y,K(x,y))\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{JoinUpperRight}[thm]{4,2,3}}
+    \proofstepwidestar[1,2,3]{(K(x,y),y)\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,5,3,8}}
+  \closeproofpartwide
+
+  \proofpartwide{Größte untere Schranke}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[3]{y\in A}{\rA}
+    \proofstepwidestar[4]{u\in A}{\rA}
+    \proofstepwidestar[5]{(u,x)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[6]{(u,y)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[1,2,4,5]{(x,u)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,4,2,5}}
+    \proofstepwidestar[1,3,4,6]{(y,u)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,4,3,6}}
+    \proofstepwidestar[1]{\JoinSemi{K,A}}{%
+      \FormulaRefAuto{SemilatticeAlgebraicDuality}[thm]{1}}
+    \proofstepwidestar[1,2,3,4,5,6]{(K(x,y),u)\in\JoinOrd{K,A}}{%
+      \FormulaRefAuto{JoinLeastUpper}[thm]{9,2,3,4,7,8}}
+    \proofstepwidestar[1,2,3]{K(x,y)\in A}{%
+      \FormulaRefAuto{PairSupremum}[def]{%
+        \FormulaRefAuto{JoinIsPairSupremum}[thm]{9,2,3}}}
+    \proofstepwidestar[1,2,3,4,5,6]{(u,K(x,y))\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{MeetJoinOrderDual}[thm]{1,4,11,10}}
+  \closeproofpartwide
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[3]{y\in A}{\rA}
+    \proofstepwidestar[1,2,3]{K(x,y)\in A}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{1,2,3}}
+    \proofstepwidestar[1,2,3]{(K(x,y),x)\in\MeetOrd{K,A}}{%
+      \text{Beweisteil Untere Schranken}}
+    \proofstepwidestar[1,2,3]{(K(x,y),y)\in\MeetOrd{K,A}}{%
+      \text{Beweisteil Untere Schranken}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+        &u\in A\dsep (u,x)\in\MeetOrd{K,A}
+        \dsep (u,y)\in\MeetOrd{K,A}\vdash{}\\
+        &(u,K(x,y))\in\MeetOrd{K,A}
+      \end{aligned}}{%
+      \text{Beweisteil Größte untere Schranke}}
+    \proofstepwidestar[1,2,3]{\PairInf{\MeetOrd{K,A}}{A}{x}{y}{K(x,y)}}{%
+      \FormulaRefAuto{PairInfimum}[def]{\rAI{\rAI{2,3},4},5,6,7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\chapter{Verbände}
+
+\section{Zwei kompatible Halbverbände}
+
+Zwei beliebige Halbverbandsoperationen auf derselben Menge müssen nicht
+dieselbe Ordnung erzeugen. Die Absorptionsgesetze sind genau die zusätzliche
+Verträglichkeitsbedingung, welche beide Ordnungen miteinander identifiziert.
+
+\FormulaDefDeltaK[Begriff des algebraischen Verbandes]{%
+  \LatticeAlg{K,J,A}%
+}{AlgebraicLattice}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{K\dsep J}
+  \DeltaRow{Infimums-Halbverband}{\MeetSemi{K,A}}
+  \DeltaRow{Supremums-Halbverband}{\JoinSemi{J,A}}
+  \DeltaRow{Erstes Absorptionsgesetz}{%
+    x,y\in A\vdash K(x,J(x,y))=x}
+  \DeltaRow{Zweites Absorptionsgesetz}{%
+    x,y\in A\vdash J(x,K(x,y))=x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Verbände}{\LatticeAlg{K,J,A}}
+}
+
+\FormulaThmDeltaK[Übereinstimmung der beiden Verbandsordnungen]{%
+  \begin{aligned}[t]
+    &\LatticeAlg{K,J,A}\dsep x,y\in A\vdash{}\\
+    &(x,y)\in\MeetOrd{K,A}
+      \leftrightarrow (x,y)\in\JoinOrd{J,A}
+  \end{aligned}
+}{LatticeOrdersCoincide}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{K\dsep J}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{\LatticeAlg{K,J,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[3]{y\in A}{\rA}
+    \proofstepwidestar[4]{(x,y)\in\MeetOrd{K,A}}{\rA}
+    \proofstepwidestar[1]{\MeetSemi{K,A}}{\FormulaRefAuto{AlgebraicLattice}[def]{1}}
+    \proofstepwidestar[1]{\JoinSemi{J,A}}{\FormulaRefAuto{AlgebraicLattice}[def]{1}}
+    \proofstepwidestar[2,3,4]{K(x,y)=x}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{MeetOrder}[def]{2,3},4}}
+    \proofstepwidestar[1,2,3]{K(y,x)=K(x,y)}{%
+      \FormulaRefAuto{MeetSemilattice}[def]{5,3,2}}
+    \proofstepwidestar[1,2,3,4]{K(y,x)=x}{\rIE{7,8}}
+    \proofstepwidestar[1,2,3]{J(y,K(y,x))=y}{%
+      \FormulaRefAuto{AlgebraicLattice}[def]{1,3,2}}
+    \proofstepwidestar[1,2,3,4]{J(y,x)=y}{\rIE{9,10}}
+    \proofstepwidestar[1,2,3]{J(y,x)=J(x,y)}{%
+      \FormulaRefAuto{JoinSemilattice}[def]{6,3,2}}
+    \proofstepwidestar[1,2,3,4]{J(x,y)=y}{%
+      \FormulaRefAuto{a=b,\,a=c\vdash b=c}{12,11}}
+    \proofstepwidestar[1,2,3,4]{(x,y)\in\JoinOrd{J,A}}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{JoinOrder}[def]{2,3},13}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{\LatticeAlg{K,J,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[3]{y\in A}{\rA}
+    \proofstepwidestar[4]{(x,y)\in\JoinOrd{J,A}}{\rA}
+    \proofstepwidestar[2,3,4]{J(x,y)=y}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{JoinOrder}[def]{2,3},4}}
+    \proofstepwidestar[1,2,3]{K(x,J(x,y))=x}{%
+      \FormulaRefAuto{AlgebraicLattice}[def]{1,2,3}}
+    \proofstepwidestar[1,2,3,4]{K(x,y)=x}{\rIE{5,6}}
+    \proofstepwidestar[1,2,3,4]{(x,y)\in\MeetOrd{K,A}}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{MeetOrder}[def]{2,3},7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Somit gilt in jedem Verband die charakteristische Dreifachäquivalenz
+\[
+  x\preceq y
+  \quad\Longleftrightarrow\quad
+  K(x,y)=x
+  \quad\Longleftrightarrow\quad
+  J(x,y)=y.
+\]
+
+\section{Das Potenzmengengitter}
+
+Für eine Menge \(S\) liefern Durchschnitt und Vereinigung das grundlegende
+Beispiel. Die folgenden Gesetze sind bereits in Band~03 bewiesen; hier werden
+sie erstmals als eine einzige algebraische Struktur gelesen.
+
+\FormulaThmDeltaK[Verbandsgesetze von Durchschnitt und Vereinigung]{%
+  \begin{aligned}[t]
+    &X,Y,Z\in\powerset(S)\vdash{}\\
+    &(X\cap Y)\cap Z=X\cap(Y\cap Z),\quad X\cap Y=Y\cap X,
+      \quad X\cap X=X,\\
+    &(X\cup Y)\cup Z=X\cup(Y\cup Z),\quad X\cup Y=Y\cup X,
+      \quad X\cup X=X,\\
+    &X\cap(X\cup Y)=X,\qquad X\cup(X\cap Y)=X.
+  \end{aligned}
+}{PowerSetLatticeLaws}{%
+  \DeltaRow{Mengen}{S\dsep X\dsep Y\dsep Z}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in\powerset(S)}{\rA}
+  \proofstepwidestar[2]{Y\in\powerset(S)}{\rA}
+  \proofstepwidestar[3]{Z\in\powerset(S)}{\rA}
+  \proofstepwidestar[]{(X\cap Y)\cap Z=X\cap(Y\cap Z)}{%
+    \FormulaRefAuto{(A \cap B) \cap C = A \cap (B \cap C)}}
+  \proofstepwidestar[]{X\cap Y=Y\cap X}{%
+    \FormulaRefAuto{A \cap B = B \cap A}}
+  \proofstepwidestar[]{X=X\cap X}{%
+    \FormulaRefAuto{A = A \cap A}}
+  \proofstepwidestar[]{X\cap X=X}{%
+    \FormulaRefAuto{a=b\vdash b=a}{6}}
+  \proofstepwidestar[]{(X\cup Y)\cup Z=X\cup(Y\cup Z)}{%
+    \FormulaRefAuto{(A \cup B) \cup C = A \cup (B \cup C)}}
+  \proofstepwidestar[]{X\cup Y=Y\cup X}{%
+    \FormulaRefAuto{A \cup B = B \cup A}}
+  \proofstepwidestar[]{X\cup X=X}{%
+    \FormulaRefAuto{A \cup A = A}}
+  \proofstepwidestar[]{X\subseteq X\cup Y}{%
+    \FormulaRefAuto{A \subseteq A \cup B}}
+  \proofstepwidestar[]{X\cap(X\cup Y)=X}{%
+    \FormulaRefAuto{A \subseteq B \eqvdash A \cap B = A}{11}}
+  \proofstepwidestar[]{X\cap Y\subseteq X}{%
+    \FormulaRefAuto{A \cap B \subseteq A}}
+  \proofstepwidestar[]{X\cup(X\cap Y)\subseteq X}{%
+    \FormulaRefAuto{A \subseteq C,\, B \subseteq C \vdash A \cup B \subseteq C}{%
+      \FormulaRefAuto{A\subseteq A},13}}
+  \proofstepwidestar[]{X\subseteq X\cup(X\cap Y)}{%
+    \FormulaRefAuto{A \subseteq A \cup B}}
+  \proofstepwidestar[]{X\cup(X\cap Y)=X}{%
+    \FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{14,15}}
+\end{tabproofwide}
+
+Die induzierte Ordnung ist genau die Inklusion, denn Band~03 zeigt
+\[
+  X\subseteq Y
+  \quad\Longleftrightarrow\quad
+  X\cup Y=Y
+  \quad\Longleftrightarrow\quad
+  X\cap Y=X.
+\]
+
+\chapter{Frankls Vermutung in Halbverbandsform}
+
+\section{Endliche Join-Halbverbände mit Nullpunkt}
+
+Die in Band~05 eingeführte Frankl-Vermutung besitzt eine rein
+halbverbandstheoretische Form. Damit die Formulierung exakt äquivalent ist,
+muss der Halbverband einen Nullpunkt besitzen. Dieser entspricht in einer
+vereinigungsabgeschlossenen Familie der leeren Menge.
+
+\FormulaDefDeltaK[Join-Halbverband mit Nullpunkt]{%
+  \ZeroJoinSemi{J,A,0}%
+}{ZeroJoinSemilattice}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{Supremums-Halbverband}{\JoinSemi{J,A}}
+  \DeltaRow{Nullpunkt}{0\in A}
+  \DeltaRow{Neutrales Gesetz}{x\in A\vdash J(0,x)=x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Join-Halbverbände mit Nullpunkt}{\ZeroJoinSemi{J,A,0}}
+}
+
+\FormulaThmDeltaK[Der Nullpunkt ist das kleinste Element]{%
+  \ZeroJoinSemi{J,A,0}\dsep x\in A
+  \vdash (0,x)\in\JoinOrd{J,A}
+}{ZeroJoinLeast}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproof}
+  \proofstep{1}{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{1}{0\in A}{\FormulaRefAuto{ZeroJoinSemilattice}[def]{1}}
+  \proofstep{1,2}{J(0,x)=x}{\FormulaRefAuto{ZeroJoinSemilattice}[def]{1,2}}
+  \proofstep{1,2}{%
+    (0,x)\in\JoinOrd{J,A}\leftrightarrow J(0,x)=x}{%
+    \FormulaRefAuto{JoinOrder}[def]{3,2}}
+  \proofstep{1,2}{(0,x)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{5,4}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Join-Irreduzibles Element]{%
+  \JoinIrr{J,A,0}{j}%
+}{JoinIrreducible}{%
+  \DeltaRow{Mengen}{A\dsep 0\dsep j\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+  \DeltaPrem{Null-Halbverband}{\ZeroJoinSemi{J,A,0}}
+  \DeltaRow{Nichtnull-Element}{j\in A\dsep j\neq 0}
+  \DeltaRow{Irreduzibilität}{%
+    x,y\in A\dsep J(x,y)=j\vdash x=j\lor y=j}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Join-Irreduzible}{\JoinIrr{J,A,0}{j}}
+}
+
+\FormulaDefDeltaK[Hauptfilter eines Elements]{%
+  \PrincipalFilter{R,A}{j}
+  \coloneqq \{x\in A\mid (j,x)\in R\}%
+}{PrincipalFilter}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Hauptfilter}{\PrincipalFilter{R,A}{j}}
+}
+
+\FormulaThmDeltaK[Charakterisierung des Halbverbandshauptfilters]{%
+  \begin{aligned}[t]
+    &\JoinSemi{J,A}\dsep j,x\in A\vdash{}\\
+    &x\in\PrincipalFilter{\JoinOrd{J,A},A}{j}
+      \leftrightarrow J(j,x)=x
+  \end{aligned}
+}{JoinPrincipalFilterChar}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep x}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\JoinSemi{J,A}}{\rA}
+  \proofstepwidestar[2]{j\in A}{\rA}
+  \proofstepwidestar[3]{x\in A}{\rA}
+  \proofstepwide[2,3]{x\in\PrincipalFilter{\JoinOrd{J,A},A}{j}}{\leftrightarrow}{%
+    (j,x)\in\JoinOrd{J,A}}{\FormulaRefAuto{PrincipalFilter}[def]}
+  \proofstepwide[2,3]{}{\leftrightarrow}{J(j,x)=x}{%
+    \FormulaRefAuto{JoinOrder}[def]{2,3}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Injektive Form von höchstens der Hälfte]{%
+  B\subseteq A\vdash
+  \AtMostHalf{B}{A}\coloneqq
+  \exists F\colon B\inj A\setminus B
+}{AtMostHalf}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Höchstens die Hälfte}{\AtMostHalf{B}{A}}
+}
+
+\FormulaDefDeltaK[Seltenes Element einer endlichen Familie]{%
+  \RareOcc{a}{M}\coloneqq
+  a\in\bigcup M\land
+  \exists F\colon \FamContaining{M}{a}\inj\FamAvoiding{M}{a}
+}{RareOccurrence}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Teilmengenfamilien}{%
+    \FamContaining{M}{a}\dsep\FamAvoiding{M}{a}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Seltene Elemente}{\RareOcc{a}{M}}
+}
+
+\FormulaDefDeltaK[Frankl-Eigenschaft eines Join-Halbverbandes]{%
+  \FranklSemi{J,A,0}\coloneqq
+  \exists j\Bigl(
+    \JoinIrr{J,A,0}{j}\land
+    \AtMostHalf{\PrincipalFilter{\JoinOrd{J,A},A}{j}}{A}
+  \Bigr)
+}{FranklSemilatticeProperty}{%
+  \DeltaRow{Mengen}{A\dsep 0\dsep j}
+  \DeltaRow{Funktionen}{J\dsep F}
+  \DeltaPrem{Null-Halbverband}{\ZeroJoinSemi{J,A,0}}
+  \DeltaRow{Hauptfilter}{\PrincipalFilter{\JoinOrd{J,A},A}{j}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Frankl-Halbverbände}{\FranklSemi{J,A,0}}
+}
+
+Die rein halbverbandstheoretische Frankl-Vermutung lautet damit:
+
+\begin{samepage}
+\begin{center}
+\fbox{\begin{minipage}{0.88\linewidth}
+\textbf{Frankl-Vermutung für Join-Halbverbände.}
+Ist \((A,J,0)\) ein endlicher Join-Halbverband mit Nullpunkt und besitzt
+\(A\) ein von \(0\) verschiedenes Element, dann gilt
+\[
+  \FranklSemi{J,A,0}.
+\]
+Äquivalent existieren ein join-irreduzibles \(j\) und eine Injektion
+\[
+  \PrincipalFilter{\JoinOrd{J,A},A}{j}
+  \longrightarrow
+  A\setminus\PrincipalFilter{\JoinOrd{J,A},A}{j}.
+\]
+\end{minipage}}
+\end{center}
+\end{samepage}
+
+Diese Aussage wird bewusst weder als Axiom noch als Theorem registriert. Sie
+ist mit Stand vom 18.~Juli~2026 weiterhin offen. Bewiesen werden im Folgenden
+ihre exakte Äquivalenz zur Mengenform aus Band~05 und einige Spezialfälle.
+
+\begin{remark}
+Der Nullpunkt ist wesentlich. Betrachte den dreielementigen Join-Halbverband
+\[
+  A=\{a,b,1\},\qquad J(a,b)=1.
+\]
+Hier sind \(a\) und \(b\) die einzigen join-irreduziblen Elemente. Beide
+Hauptfilter haben zwei Elemente, ihre
+Komplemente aber nur eines. Es kann daher keine Injektion vom Hauptfilter in
+sein Komplement geben. Nach Adjunktion eines Nullpunkts entsteht das
+viergliedrige boolesche Gitter; dort haben die entsprechenden Hauptfilter
+genau zwei Elemente.
+\end{remark}
+
+\section{Zwei vollständig bewiesene Spezialfälle}
+
+Zunächst isolieren wir eine elementare Abbildung, die auch außerhalb der
+Frankl-Frage nützlich ist.
+
+\FormulaThmDeltaK[Eine Einermenge injiziert in jede nichtleere Menge]{%
+  b\in B\vdash \exists F\colon\{a\}\inj B
+}{SingletonInjectionIntoNonempty}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep a\dsep b\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\dsep\ConstFun{\{a\}}{B}{b}}
+}
+\begin{tabproof}
+  \proofstep{1}{b\in B}{\rA}
+  \proofstep{1}{\ConstFun{\{a\}}{B}{b}\colon\{a\}\to B}{%
+    \FormulaRefAuto{b\in B\vdash \ConstFun{A}{B}{b}\colon A\to B}{1}}
+  \proofstep{3}{x\in\{a\}}{\rA}
+  \proofstep{4}{y\in\{a\}}{\rA}
+  \proofstep{5}{\ConstFun{\{a\}}{B}{b}(x)=
+    \ConstFun{\{a\}}{B}{b}(y)}{\rA}
+  \proofstep{3}{x=a}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}{3}}
+  \proofstep{4}{y=a}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}{4}}
+  \proofstep{3,4}{x=y}{%
+    \FormulaRefAuto{a=b,\,c=b\vdash a=c}{6,7}}
+  \proofstep{1}{\ConstFun{\{a\}}{B}{b}\colon\{a\}\inj B}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{2,3,4,5,8}}
+  \proofstep{1}{\exists F\colon\{a\}\inj B}{\rEI{9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Join-irreduzibles größtes Element erfüllt Frankl]{%
+  \begin{aligned}[t]
+    &\ZeroJoinSemi{J,A,0}\dsep \JoinIrr{J,A,0}{t}\dsep
+      \forall x\in A\,(x,t)\in\JoinOrd{J,A}\vdash{}\\
+    &\FranklSemi{J,A,0}
+  \end{aligned}
+}{JoinIrreducibleTopFrankl}{%
+  \DeltaRow{Mengen}{A\dsep 0\dsep t\dsep x}
+  \DeltaRow{Funktionen}{J\dsep F}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{Der Hauptfilter ist eine Einermenge}
+    \proofstepwidestar[1]{\ZeroJoinSemi{J,A,0}}{\rA}
+    \proofstepwidestar[2]{\JoinIrr{J,A,0}{t}}{\rA}
+    \proofstepwidestar[3]{\forall x\in A\,(x,t)\in\JoinOrd{J,A}}{\rA}
+    \proofstepwidestar[2]{t\in A}{\FormulaRefAuto{JoinIrreducible}[def]{2}}
+    \proofstepwidestar[1]{\JoinSemi{J,A}}{\FormulaRefAuto{ZeroJoinSemilattice}[def]{1}}
+    \proofstepwidestar[4,5]{(t,t)\in\JoinOrd{J,A}}{%
+      \FormulaRefAuto{JoinOrderReflexive}[thm]{5,4}}
+    \proofstepwidestar[4,6]{t\in\PrincipalFilter{\JoinOrd{J,A},A}{t}}{%
+      \FormulaRefAuto{PrincipalFilter}[def]{4,6}}
+    \proofstepwidestar[8]{x\in\PrincipalFilter{\JoinOrd{J,A},A}{t}}{\rA}
+    \proofstepwidestar[8]{x\in A\land(t,x)\in\JoinOrd{J,A}}{%
+      \FormulaRefAuto{PrincipalFilter}[def]{8}}
+    \proofstepwidestar[8]{x\in A}{\rAEa{9}}
+    \proofstepwidestar[8]{(t,x)\in\JoinOrd{J,A}}{\rAEb{9}}
+    \proofstepwidestar[3,8]{(x,t)\in\JoinOrd{J,A}}{\rRE{10,\rUE{3}}}
+    \proofstepwidestar[1,3,8]{x=t}{%
+      \FormulaRefAuto{JoinOrderAntisymmetric}[thm]{5,12,11}}
+    \proofstepwidestar[1,2,3]{%
+      \PrincipalFilter{\JoinOrd{J,A},A}{t}=\{t\}}{%
+      \text{Extensionalität aus 7 und 13}}
+  \closeproofpartwide
+
+  \proofpartwide{Injektion in das Komplement}
+    \proofstepwidestar[1]{\ZeroJoinSemi{J,A,0}}{\rA}
+    \proofstepwidestar[2]{\JoinIrr{J,A,0}{t}}{\rA}
+    \proofstepwidestar[3]{\forall x\in A\,(x,t)\in\JoinOrd{J,A}}{\rA}
+    \proofstepwidestar[1]{0\in A}{\FormulaRefAuto{ZeroJoinSemilattice}[def]{1}}
+    \proofstepwidestar[2]{t\neq0}{\FormulaRefAuto{JoinIrreducible}[def]{2}}
+    \proofstepwidestar[1,2]{0\in A\setminus\{t\}}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}{%
+        \rAI{4,\FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{%
+          \FormulaRefAuto{a=b\vdash b=a}{5}}}}}
+    \proofstepwidestar[1,2]{\exists F\colon\{t\}\inj A\setminus\{t\}}{%
+      \FormulaRefAuto{SingletonInjectionIntoNonempty}[thm]{6}}
+    \proofstepwidestar[1,2,3]{%
+      \PrincipalFilter{\JoinOrd{J,A},A}{t}=\{t\}}{%
+      \text{erster Beweisteil}}
+    \proofstepwidestar[]{\{t\}\subseteq A}{%
+      \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}{%
+        \FormulaRefAuto{JoinIrreducible}[def]{2}}}
+    \proofstepwidestar[1,2,3]{%
+      \AtMostHalf{\PrincipalFilter{\JoinOrd{J,A},A}{t}}{A}}{%
+      \FormulaRefAuto{AtMostHalf}[def]{\rIE{8,9},\rIE{8,7}}}
+    \proofstepwidestar[1,2,3]{\FranklSemi{J,A,0}}{%
+      \FormulaRefAuto{FranklSemilatticeProperty}[def]{%
+        \rEI{\rAI{2,10}}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Endliche Ketten erfüllen die Halbverbandsform]{%
+  \begin{aligned}[t]
+    &\ZeroJoinSemi{J,A,0}\dsep \Finite A\dsep
+      \TotOrd{\JoinOrd{J,A},A}\dsep
+      t\in A\dsep{}\\
+    &\forall x\in A\,(x,t)\in\JoinOrd{J,A}\dsep
+      t\neq0\vdash{}\\
+    &\FranklSemi{J,A,0}
+  \end{aligned}
+}{FranklJoinChains}{%
+  \DeltaRow{Mengen}{A\dsep 0\dsep t\dsep x\dsep y}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[2]{\Finite A}{\rA}
+  \proofstepwidestar[3]{\TotOrd{\JoinOrd{J,A},A}}{\rA}
+  \proofstepwidestar[4]{t\in A}{\rA}
+  \proofstepwidestar[5]{\forall x\in A\,(x,t)\in\JoinOrd{J,A}}{\rA}
+  \proofstepwidestar[6]{t\neq0}{\rA}
+  \proofstepwidestar[7]{x\in A}{\rA}
+  \proofstepwidestar[8]{y\in A}{\rA}
+  \proofstepwidestar[9]{J(x,y)=t}{\rA}
+  \proofstepwidestar[3,7,8]{%
+    (x,y)\in\JoinOrd{J,A}\lor(y,x)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{Totale Ordnung}[def]{3,7,8}}
+  \proofstepwidestar[11]{(x,y)\in\JoinOrd{J,A}}{\rA}
+  \proofstepwidestar[1,7,8,11]{J(x,y)=y}{%
+    \text{Ordnungscharakterisierung aus 1 und 11}}
+  \proofstepwidestar[7,8,9,11]{y=t}{%
+    \FormulaRefAuto{a=b,\,a=c\vdash b=c}{12,9}}
+  \proofstepwidestar[7,8,9,11]{x=t\lor y=t}{\rOIb{13}}
+  \proofstepwidestar[15]{(y,x)\in\JoinOrd{J,A}}{\rA}
+  \proofstepwidestar[1,7,8,15]{J(y,x)=x}{%
+    \text{Ordnungscharakterisierung aus 1 und 15}}
+  \proofstepwidestar[1,7,8]{J(y,x)=J(x,y)}{%
+    \text{Kommutativität aus 1, 7 und 8}}
+  \proofstepwidestar[7,8,9,15]{x=t}{%
+    \FormulaRefAuto{a=b,\,a=c\vdash b=c}{%
+      \rIE{17,16},9}}
+  \proofstepwidestar[7,8,9,15]{x=t\lor y=t}{\rOIa{18}}
+  \proofstepwidestar[3,7,8,9]{x=t\lor y=t}{%
+    \rOE{10,11,14,15,19}}
+  \proofstepwidestar[1,3,4,5,6]{\JoinIrr{J,A,0}{t}}{%
+    \FormulaRefAuto{JoinIrreducible}[def]{4,6,7,8,9,20}}
+  \proofstepwidestar[1,3,4,5,6]{\FranklSemi{J,A,0}}{%
+    \FormulaRefAuto{JoinIrreducibleTopFrankl}[thm]{1,21,5}}
+\end{tabproofwide}
+
+Der Endlichkeitsparameter wird im letzten Beweis nur benötigt, um die
+Kettenaussage als Spezialfall der endlichen Frankl-Vermutung einzuordnen. Ist
+ein größtes Element bereits gegeben, funktioniert die Injektion unabhängig
+von der Endlichkeit.
+
+\section{Endliche Ordnungslemmata}
+
+Für die Übersetzung zwischen Mengenfamilien und Halbverbänden werden zwei
+elementare Endlichkeitslemmata benötigt. Wir geben die Induktionsidee jeweils
+vor der Lemmon-Tabelle an, damit insbesondere der verwendete Auswahlgrund
+sichtbar bleibt.
+
+\FormulaThmDeltaK[Maximales Element einer endlichen Teilordnung]{%
+  \begin{aligned}[t]
+    &\PartOrd{R,A}\dsep \Finite B\dsep
+      B\neq\varnothing\dsep B\subseteq A\vdash{}\\
+    &\exists m\in B\,\forall b\in B\,
+      \bigl((m,b)\in R\to b=m\bigr)
+  \end{aligned}
+}{FinitePosetMaximalElement}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep b\dsep c\dsep m}
+  \DeltaRow{Relationen}{R}
+}
+
+Wir wenden die Endlichkeitsinduktion auf die Aussage an, dass jede nichtleere
+Teilmenge von \(A\) ein maximales Element besitzt. Beim Übergang von \(C\) zu
+\(C\cup\{c\}\) ist für \(C=\varnothing\) das Element \(c\) maximal. Andernfalls
+sei \(m\) maximal in \(C\). Gilt \((m,c)\in R\), so ist \(c\) maximal in
+\(C\cup\{c\}\); andernfalls bleibt \(m\) maximal. Transitivität und
+Antisymmetrie schließen im ersten Fall ein echtes Element oberhalb von \(c\)
+aus.
+\[
+  P(C)\quad:\Longleftrightarrow\quad
+  \Bigl(C\subseteq A\land C\neq\varnothing\to
+    \exists m\in C\,\forall b\in C\,((m,b)\in R\to b=m)\Bigr).
+\]
+
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    P(\varnothing)
+  }{%
+    P(\varnothing)
+  }[FinitePosetMaximalElementBase]
+    \proofstepwidestar[1]{%
+      \varnothing\subseteq A\land\varnothing\neq\varnothing}{\rA}
+    \proofstepwidestar[]{\varnothing=\varnothing}{\rII}
+    \proofstepwidestar[1]{\bot}{\rCE{2,\rAEb{1}}}
+    \proofstepwidestar[]{P(\varnothing)}{\rRI{1,
+      \FormulaRefAuto{\bot\vdash P}{3}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \PartOrd{R,A}\dsep\Finite C\dsep c\notin C\dsep P(C)
+    \vdash P(C\cup\{c\})
+  }{%
+    \PartOrd{R,A}\dsep\Finite C\dsep c\notin C\dsep P(C)
+    \vdash P(C\cup\{c\})
+  }[FinitePosetMaximalElementStep]
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{\Finite C}{\rA}
+    \proofstepwidestar[3]{c\notin C}{\rA}
+    \proofstepwidestar[4]{P(C)}{\rA}
+    \proofstepwidestar[5]{%
+      C\cup\{c\}\subseteq A\land C\cup\{c\}\neq\varnothing}{\rA}
+    \proofstepwidestar[1,3,4,5]{P(C\cup\{c\})}{%
+      \text{Fallunterscheidung wie oben}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{\Finite B}{\rA}
+    \proofstepwidestar[3]{B\neq\varnothing}{\rA}
+    \proofstepwidestar[4]{B\subseteq A}{\rA}
+    \proofstepwidestar[1,2]{P(B)}{%
+      \FormulaRefAuto{FiniteInductionRule}[ax]{IA,IS,2}}
+    \proofstepwidestar[1,2,3,4]{%
+      \exists m\in B\,\forall b\in B\,((m,b)\in R\to b=m)}{%
+      \rRE{5,\rAI{4,3}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Minimales Element einer endlichen Teilordnung]{%
+  \begin{aligned}[t]
+    &\PartOrd{R,A}\dsep \Finite B\dsep
+      B\neq\varnothing\dsep B\subseteq A\vdash{}\\
+    &\exists m\in B\,\forall b\in B\,
+      \bigl((b,m)\in R\to b=m\bigr)
+  \end{aligned}
+}{FinitePosetMinimalElement}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b\dsep m}
+  \DeltaRow{Relationen}{R}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+  \proofstepwidestar[2]{\Finite B}{\rA}
+  \proofstepwidestar[3]{B\neq\varnothing}{\rA}
+  \proofstepwidestar[4]{B\subseteq A}{\rA}
+  \proofstepwidestar[1,2,3,4]{%
+    \begin{aligned}[t]
+      &\exists m\in B\,\forall b\in B\\
+      &\qquad ((b,m)\in R\to b=m)
+    \end{aligned}}{%
+    \text{dualer Induktionsbeweis}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Menge der Join-Irreduziblen]{%
+  \JoinIrrSet{J,A,0}
+  \coloneqq\{j\in A\mid\JoinIrr{J,A,0}{j}\}
+}{JoinIrreducibleSet}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep 0}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Join-Irreduzible}{\JoinIrrSet{J,A,0}}
+}
+
+\FormulaThmDeltaK[Paarinfima in endlichen Null-Halbverbänden]{%
+  \begin{aligned}[t]
+    &\Finite A\dsep\ZeroJoinSemi{J,A,0}\dsep x,y\in A\vdash{}\\
+    &\exists m\in A\,
+      \PairInf{\JoinOrd{J,A}}{A}{x}{y}{m}
+  \end{aligned}
+}{FiniteZeroJoinSemilatticePairInfima}{%
+  \DeltaRow{Mengen}{A\dsep D\dsep d\dsep e\dsep m\dsep x\dsep y\dsep 0}
+  \DeltaRow{Funktionen}{J}
+}
+
+Setze für feste \(x,y\in A\)
+\[
+  D\coloneqq
+  \{d\in A\mid
+    (d,x)\in\JoinOrd{J,A}\land(d,y)\in\JoinOrd{J,A}\}.
+\]
+Wegen des Nullpunkts ist \(D\) nichtleer. Sind \(d,e\in D\), so ist auch
+\(J(d,e)\in D\): Das algebraische Join liegt unter jeder gemeinsamen oberen
+Schranke von \(d\) und \(e\), insbesondere unter \(x\) und \(y\). Ein
+maximales \(m\in D\) ist deshalb bereits das größte Element von \(D\), denn
+für \(d\in D\) liegt \(J(m,d)\) wieder in \(D\) und oberhalb von \(m\).
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite A}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[3]{x\in A}{\rA}
+  \proofstepwidestar[4]{y\in A}{\rA}
+  \proofstepwidestar[2]{\PartOrd{\JoinOrd{J,A},A}}{%
+    \FormulaRefAuto{JoinSemilatticeInducesOrder}[thm]{%
+      \FormulaRefAuto{ZeroJoinSemilattice}[def]{2}}}
+  \proofstepwidestar[2,3,4]{0\in D}{%
+    \FormulaRefAuto{ZeroJoinLeast}[thm]{2,3,4}}
+  \proofstepwidestar[]{D\subseteq A}{\text{Definition von }D}
+  \proofstepwidestar[1]{\Finite D}{%
+    \FormulaRefAuto{FiniteSubset}[thm]{7,1}}
+  \proofstepwidestar[2,3,4]{%
+    d,e\in D\vdash J(d,e)\in D}{%
+    \FormulaRefAuto{JoinIsPairSupremum}[thm]{%
+      \FormulaRefAuto{ZeroJoinSemilattice}[def]{2}}}
+  \proofstepwidestar[1,2,3,4]{%
+    \begin{aligned}[t]
+      &\exists m\in D\,\forall d\in D\\
+      &\qquad ((m,d)\in\JoinOrd{J,A}\to d=m)
+    \end{aligned}}{%
+    \FormulaRefAuto{FinitePosetMaximalElement}[thm]{5,6,7,8}}
+  \proofstepwidestar[10]{%
+    \begin{aligned}[t]
+      &m\in D\land\forall d\in D\\
+      &\qquad ((m,d)\in\JoinOrd{J,A}\to d=m)
+    \end{aligned}}{\rA}
+  \proofstepwidestar[9,11]{%
+    \forall d\in D\,(d,m)\in\JoinOrd{J,A}}{%
+    \text{Join-Abschluss und Maximalität}}
+  \proofstepwidestar[3,4,11,12]{%
+    \PairInf{\JoinOrd{J,A}}{A}{x}{y}{m}}{%
+    \FormulaRefAuto{PairInfimum}[def]}
+  \proofstepwidestar[1,2,3,4]{%
+    \exists m\in A\,\PairInf{\JoinOrd{J,A}}{A}{x}{y}{m}}{%
+    \rEE{10,11,\rEI{13}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Join-Irreduzible trennen Elemente]{%
+  \begin{aligned}[t]
+    &\Finite A\dsep\ZeroJoinSemi{J,A,0}\dsep x,y\in A\dsep
+      (x,y)\notin\JoinOrd{J,A}\vdash{}\\
+    &\exists j\in\JoinIrrSet{J,A,0}\,
+      \bigl((j,x)\in\JoinOrd{J,A}\land
+            (j,y)\notin\JoinOrd{J,A}\bigr)
+  \end{aligned}
+}{JoinIrreduciblesSeparate}{%
+  \DeltaRow{Mengen}{A\dsep D\dsep j\dsep u\dsep v\dsep x\dsep y\dsep 0}
+  \DeltaRow{Funktionen}{J}
+}
+
+Hier ist die nichtleere endliche Menge
+\[
+  D\coloneqq\{d\in A\mid
+    (d,x)\in\JoinOrd{J,A}\land(d,y)\notin\JoinOrd{J,A}\}
+\]
+zu betrachten. Ein minimales \(j\in D\) ist von \(0\) verschieden. Gilt
+\(J(u,v)=j\) und sind \(u,v\neq j\), dann liegen \(u\) und \(v\) echt unter
+\(j\). Wegen der Minimalität liegen beide unter \(y\); damit läge auch ihr
+Join \(j\) unter \(y\), im Widerspruch zu \(j\in D\).
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite A}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[3]{x\in A\land y\in A}{\rA}
+  \proofstepwidestar[4]{(x,y)\notin\JoinOrd{J,A}}{\rA}
+  \proofstepwidestar[1,2,3,4]{%
+    D\neq\varnothing\land D\subseteq A\land\Finite D}{%
+    \text{\(x\in D\) und }\FormulaRefAuto{FiniteSubset}[thm]}
+  \proofstepwidestar[2]{\PartOrd{\JoinOrd{J,A},A}}{%
+    \FormulaRefAuto{JoinSemilatticeInducesOrder}[thm]{%
+      \FormulaRefAuto{ZeroJoinSemilattice}[def]{2}}}
+  \proofstepwidestar[1,2,3,4]{%
+    \exists j\in D\,\forall d\in D\,
+      ((d,j)\in\JoinOrd{J,A}\to d=j)}{%
+    \FormulaRefAuto{FinitePosetMinimalElement}[thm]{5,6}}
+  \proofstepwidestar[7]{j\in D\land
+    \forall d\in D\,((d,j)\in\JoinOrd{J,A}\to d=j)}{\rA}
+  \proofstepwidestar[2,8]{\JoinIrr{J,A,0}{j}}{%
+    \text{Minimalitätsargument wie oben}}
+  \proofstepwidestar[8]{%
+    (j,x)\in\JoinOrd{J,A}\land
+    (j,y)\notin\JoinOrd{J,A}}{\text{Definition von }D}
+  \proofstepwidestar[2,8,9]{j\in\JoinIrrSet{J,A,0}}{%
+    \FormulaRefAuto{JoinIrreducibleSet}[def]{9}}
+  \proofstepwidestar[1,2,3,4]{%
+    \begin{aligned}[t]
+      &\exists j\in\JoinIrrSet{J,A,0}\,\bigl(
+        (j,x)\in\JoinOrd{J,A}\land{}\\
+      &\qquad (j,y)\notin\JoinOrd{J,A}\bigr)
+    \end{aligned}}{\rEE{7,8,\rEI{\rAI{11,10}}}}
+\end{tabproofwide}
+
+\section{Vom Halbverband zur Vereinigungsfamilie}
+
+\FormulaDefDeltaK[Join-Irreduzible unter einem Element]{%
+  \IrrBelow{J,A,0}{x}
+  \coloneqq
+  \{j\in\JoinIrrSet{J,A,0}\mid(j,x)\in\JoinOrd{J,A}\}
+}{IrreduciblesBelow}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Irreduziblenprofil}{\IrrBelow{J,A,0}{x}}
+}
+
+\FormulaDefDeltaK[Kanonische Profilfamilien]{%
+  \begin{aligned}[t]
+    \CanonicalMeetFamily{J,A,0}
+      &\coloneqq\{\IrrBelow{J,A,0}{x}\mid x\in A\},\\
+    \mathcal U_{J,A,0}
+      &\coloneqq
+      \{\JoinIrrSet{J,A,0}\setminus\IrrBelow{J,A,0}{x}\mid x\in A\}
+  \end{aligned}
+}{CanonicalProfileFamilies}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J}
+  \DeltaRow{\textbf{Neue Symbole}}{}
+  \DeltaPrem{Schnittprofilfamilie}{\CanonicalMeetFamily{J,A,0}}
+  \DeltaPrem{Komplementprofilfamilie}{\mathcal U_{J,A,0}}
+}
+
+Die erste Profilfamilie ist schnittabgeschlossen. Ist \(m\) das Paarinfimum
+von \(x\) und \(y\), so folgt unmittelbar aus dessen universeller Eigenschaft
+\[
+  \IrrBelow{J,A,0}{m}
+  =
+  \IrrBelow{J,A,0}{x}\cap\IrrBelow{J,A,0}{y}.
+\]
+Die Komplementprofilfamilie ist daher nach de~Morgan
+vereinigungsabgeschlossen. Entscheidend ist außerdem, dass die Profile alle
+Elemente unterscheiden.
+
+\FormulaThmDeltaK[Die kanonische Profilabbildung ist bijektiv]{%
+  \begin{aligned}[t]
+    &\Finite A\dsep\ZeroJoinSemi{J,A,0}\vdash{}\\
+    &\exists c\colon A\bij\mathcal U_{J,A,0}\,
+      \forall x\in A\,
+      \bigl(c(x)=
+        \JoinIrrSet{J,A,0}\setminus\IrrBelow{J,A,0}{x}\bigr)
+  \end{aligned}
+}{CanonicalProfileBijection}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep x\dsep y\dsep 0}
+  \DeltaRow{Funktionen}{J\dsep c}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite A}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      c(x)&\coloneqq{}\\[-2pt]
+        &\JoinIrrSet{J,A,0}\setminus\IrrBelow{J,A,0}{x}
+    \end{aligned}}{%
+    \text{Festlegung}}
+  \proofstepwidestar[2,3]{c\colon A\to\mathcal U_{J,A,0}}{%
+    \FormulaRefAuto{CanonicalProfileFamilies}[def]}
+  \proofstepwidestar[2,3]{%
+    \forall Y\in\mathcal U_{J,A,0}\,\exists x\in A\,(c(x)=Y)}{%
+    \FormulaRefAuto{CanonicalProfileFamilies}[def]}
+  \proofstepwidestar[6]{x,y\in A\land c(x)=c(y)}{\rA}
+  \proofstepwidestar[1,2,6]{%
+    (x,y)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinIrreduciblesSeparate}[thm]{%
+      \text{Kontraposition}}}
+  \proofstepwidestar[1,2,6]{%
+    (y,x)\in\JoinOrd{J,A}}{%
+    \FormulaRefAuto{JoinIrreduciblesSeparate}[thm]{%
+      \text{Kontraposition}}}
+  \proofstepwidestar[2,6]{x=y}{%
+    \FormulaRefAuto{JoinOrderAntisymmetric}[thm]{%
+      \FormulaRefAuto{ZeroJoinSemilattice}[def]{2},7,8}}
+  \proofstepwidestar[1,2,3]{c\colon A\bij\mathcal U_{J,A,0}}{%
+    \text{Bijektivität aus 4, 5, 6 und 9}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\exists c\colon A\bij\mathcal U_{J,A,0}\,
+        \forall x\in A\,\bigl(c(x)={}\\
+      &\qquad
+        \JoinIrrSet{J,A,0}\setminus\IrrBelow{J,A,0}{x}\bigr)
+    \end{aligned}}{\rEI{10}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Kanonische Familie ist eine Frankl-Familie]{%
+  \begin{aligned}[t]
+    &\Finite A\dsep\ZeroJoinSemi{J,A,0}\dsep
+      \exists x\in A\,(x\neq0)\vdash{}\\
+    &\FranklFam{\mathcal U_{J,A,0}}
+  \end{aligned}
+}{CanonicalUnionFamilyIsFranklFamily}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep Y\dsep x\dsep y\dsep m\dsep 0}
+  \DeltaRow{Funktionen}{J\dsep c}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite A}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[3]{\exists x\in A\,(x\neq0)}{\rA}
+  \proofstepwidestar[1,2]{c\colon A\bij\mathcal U_{J,A,0}}{%
+    \FormulaRefAuto{CanonicalProfileBijection}[thm]{1,2}}
+  \proofstepwidestar[1,4]{\Finite{\mathcal U_{J,A,0}}}{%
+    \FormulaRefAuto{FiniteImage}[thm]}
+  \proofstepwidestar[2]{0\in A}{%
+    \FormulaRefAuto{ZeroJoinSemilattice}[def]{2}}
+  \proofstepwidestar[4,6]{\mathcal U_{J,A,0}\neq\varnothing}{%
+    \FormulaRefAuto{A\neq\varnothing \eqvdash \exists x\,(x \in A)}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      X,Y\in\mathcal U_{J,A,0}\vdash{}\\[-2pt]
+      X\cup Y\in\mathcal U_{J,A,0}
+    \end{aligned}}{%
+    \FormulaRefAuto{FiniteZeroJoinSemilatticePairInfima}[thm]}
+  \proofstepwidestar[1,2,3]{\JoinIrrSet{J,A,0}\neq\varnothing}{%
+    \FormulaRefAuto{JoinIrreduciblesSeparate}[thm]}
+  \proofstepwidestar[1,2,3]{%
+    \bigcup\mathcal U_{J,A,0}\neq\varnothing}{%
+    \text{\(c(0)=\JoinIrrSet{J,A,0}\) und 9}}
+  \proofstepwidestar[1,2,3]{\FranklFam{\mathcal U_{J,A,0}}}{%
+    \FormulaRefAuto{Frankl-Familie}[def]{5,7,8,10}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Transport eines halbhäufigen Profilelements]{%
+  \begin{aligned}[t]
+    &\Finite A\dsep\ZeroJoinSemi{J,A,0}\dsep
+      \exists x\in A\,(x\neq0)\dsep
+      \HalfOcc{j}{\mathcal U_{J,A,0}}\vdash{}\\
+    &\FranklSemi{J,A,0}
+  \end{aligned}
+}{CanonicalHalfOccurrenceTransport}{%
+  \DeltaRow{Mengen}{A\dsep j\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J\dsep c\dsep F}
+}
+
+Für die kanonische Bijektion \(c\) gilt für jedes \(x\in A\)
+\[
+  \begin{aligned}
+  j\notin c(x)
+  &\ \Longleftrightarrow\
+    j\in\IrrBelow{J,A,0}{x}\\
+  &\ \Longleftrightarrow\
+    x\in\PrincipalFilter{\JoinOrd{J,A},A}{j}.
+  \end{aligned}
+\]
+Da jedes Mitglied von \(\mathcal U_{J,A,0}\) eine Teilmenge von
+\(\JoinIrrSet{J,A,0}\) ist, liefert
+\(j\in\bigcup\mathcal U_{J,A,0}\) zugleich die benötigte
+Join-Irreduzibilität. Die in \(\HalfOcc{j}{\mathcal U_{J,A,0}}\) enthaltene
+Injektion wird nun entlang \(c\) transportiert.
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite A}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[3]{\exists x\in A\,(x\neq0)}{\rA}
+  \proofstepwidestar[4]{\HalfOcc{j}{\mathcal U_{J,A,0}}}{\rA}
+  \proofstepwidestar[1,2]{c\colon A\bij\mathcal U_{J,A,0}}{%
+    \FormulaRefAuto{CanonicalProfileBijection}[thm]{1,2}}
+  \proofstepwidestar[4]{j\in\bigcup\mathcal U_{J,A,0}}{%
+    \FormulaRefAuto{Halbhäufiges Element}[def]{4}}
+  \proofstepwidestar[6]{j\in\JoinIrrSet{J,A,0}}{%
+    \FormulaRefAuto{CanonicalProfileFamilies}[def]}
+  \proofstepwidestar[2,7]{\JoinIrr{J,A,0}{j}}{%
+    \FormulaRefAuto{JoinIrreducibleSet}[def]{7}}
+  \proofstepwidestar[2,5,7]{%
+    c^{-1}[\FamAvoiding{\mathcal U_{J,A,0}}{j}]
+    =\PrincipalFilter{\JoinOrd{J,A},A}{j}}{%
+    \FormulaRefAuto{IrreduciblesBelow}[def]}
+  \proofstepwidestar[2,5,7]{%
+    c^{-1}[\FamContaining{\mathcal U_{J,A,0}}{j}]
+    =A\setminus\PrincipalFilter{\JoinOrd{J,A},A}{j}}{%
+    \FormulaRefAuto{IrreduciblesBelow}[def]}
+  \proofstepwidestar[1,2,4,5,7]{%
+    \AtMostHalf{\PrincipalFilter{\JoinOrd{J,A},A}{j}}{A}}{%
+    \text{Injektionstransport entlang 9 und 10}}
+  \proofstepwidestar[1,2,3,4]{\FranklSemi{J,A,0}}{%
+    \FormulaRefAuto{FranklSemilatticeProperty}[def]{%
+      \rEI{\rAI{8,11}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Mengenform impliziert Halbverbandsform]{%
+  \begin{aligned}[t]
+    &\forall M\,(\FranklFam M\to\Frankl M)\dsep
+      \Finite A\dsep{}\\
+    &\ZeroJoinSemi{J,A,0}\dsep
+      \exists x\in A\,(x\neq0)\vdash{}\\
+    &\FranklSemi{J,A,0}
+  \end{aligned}
+}{FranklSetImpliesSemilattice}{%
+  \DeltaRow{Mengen}{A\dsep M\dsep x\dsep 0}
+  \DeltaRow{Funktionen}{J}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\forall M\,(\FranklFam M\to\Frankl M)}{\rA}
+  \proofstepwidestar[2]{\Finite A}{\rA}
+  \proofstepwidestar[3]{\ZeroJoinSemi{J,A,0}}{\rA}
+  \proofstepwidestar[4]{\exists x\in A\,(x\neq0)}{\rA}
+  \proofstepwidestar[2,3,4]{\FranklFam{\mathcal U_{J,A,0}}}{%
+    \FormulaRefAuto{CanonicalUnionFamilyIsFranklFamily}[thm]{2,3,4}}
+  \proofstepwidestar[1,2,3,4]{\Frankl{\mathcal U_{J,A,0}}}{%
+    \rRE{\rUE{1},5}}
+  \proofstepwidestar[1,2,3,4]{%
+    \exists j\,\HalfOcc{j}{\mathcal U_{J,A,0}}}{%
+    \FormulaRefAuto{Frankl-Eigenschaft}[def]{6}}
+  \proofstepwidestar[8]{\HalfOcc{j}{\mathcal U_{J,A,0}}}{\rA}
+  \proofstepwidestar[2,3,4,8]{\FranklSemi{J,A,0}}{%
+    \FormulaRefAuto{CanonicalHalfOccurrenceTransport}[thm]{2,3,4,8}}
+  \proofstepwidestar[1,2,3,4]{\FranklSemi{J,A,0}}{\rEE{7,8,9}}
+\end{tabproofwide}
+
+\section{Von der Vereinigungsfamilie zum Halbverband}
+
+\FormulaDefDeltaK[Schnittabgeschlossene Familie]{%
+  \InterClosedFam L
+  \coloneqq
+  \forall X\in L\,\forall Y\in L\,(X\cap Y\in L)
+}{IntersectionClosedFamily}{%
+  \DeltaRow{Mengen}{L\dsep X\dsep Y}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Schnittabgeschlossene Familien}{\InterClosedFam L}
+}
+
+\par\medskip
+Sei nun \(M\) eine Frankl-Familie. Wir verwenden die folgenden vier
+kanonischen Objekte:
+\[
+  \begin{aligned}
+    U_M&\coloneqq\bigcup M,&
+    M^\circ&\coloneqq M\cup\{\varnothing\},\\
+    \mathcal L_M
+      &\coloneqq\{U_M\setminus X\mid X\in M^\circ\},&
+    \mathcal R_M
+      &\coloneqq
+        \{(X,Y)\in\mathcal L_M\times\mathcal L_M\mid X\subseteq Y\}.
+  \end{aligned}
+\]
+\par\noindent
+Für \(X,Y\in\mathcal L_M\) setzen wir außerdem
+\[
+  \mathcal J_M(X,Y)
+  \coloneqq
+  \bigcap\{Z\in\mathcal L_M\mid X\subseteq Z\land Y\subseteq Z\}.
+\]
+Die Menge unter dem Durchschnitt ist nichtleer, weil sie \(U_M\) enthält.
+Die explizite Relation \(\mathcal R_M\) verhindert eine Mehrdeutigkeit:
+Im folgenden Halbverband ist die induzierte Ordnung tatsächlich die
+Inklusion.
+
+\FormulaDefDeltaK[Komplementduale Konstruktion]{%
+  \begin{aligned}[t]
+    U_M&\coloneqq\bigcup M,&
+    M^\circ&\coloneqq M\cup\{\varnothing\},\\
+    \mathcal L_M
+      &\coloneqq\{U_M\setminus X\mid X\in M^\circ\},&
+    \mathcal R_M
+      &\coloneqq
+        \{(X,Y)\in\mathcal L_M^2\mid X\subseteq Y\},\\
+    \mathcal J_M(X,Y)
+      &\coloneqq
+        \bigcap\{Z\in\mathcal L_M\mid X\cup Y\subseteq Z\}.
+  \end{aligned}
+}{FranklComplementConstruction}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep Z}
+  \DeltaRow{Relationen}{\mathcal R_M}
+  \DeltaRow{Funktionen}{\mathcal J_M}
+}
+
+\FormulaThmDeltaK[Komplementdual einer Frankl-Familie]{%
+  \begin{aligned}[t]
+    \FranklFam M\vdash{}&
+      \Finite{\mathcal L_M}
+      \land\InterClosedFam{\mathcal L_M}\\
+    &{}\land
+      \ZeroJoinSemi{\mathcal J_M,\mathcal L_M,\varnothing}\\
+    &{}\land
+      \JoinOrd{\mathcal J_M,\mathcal L_M}=\mathcal R_M\\
+    &{}\land
+      \exists X\in\mathcal L_M\,(X\neq\varnothing).
+  \end{aligned}
+}{FranklComplementFiniteLattice}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep Z}
+  \DeltaRow{Relationen}{\mathcal R_M}
+  \DeltaRow{Funktionen}{\mathcal J_M}
+}
+
+Da \(M\) endlich, nichtleer und vereinigungsabgeschlossen ist, liegt
+\(U_M=\bigcup M\) selbst in \(M\); dies folgt durch Endlichkeitsinduktion
+über die Mitglieder von \(M\). Also enthält \(M^\circ\) sowohl
+\(\varnothing\) als auch \(U_M\), während \(\mathcal L_M\) sowohl \(U_M\)
+als auch \(\varnothing\) enthält. Die Komplementabbildung
+\(X\mapsto U_M\setminus X\) ist eine Involution und somit eine Bijektion von
+\(M^\circ\) auf \(\mathcal L_M\).
+
+Der Vereinigungsabschluss von \(M^\circ\) wird durch de~Morgan zum
+Schnittabschluss von \(\mathcal L_M\). Der Schnitt aller gemeinsamen oberen
+Schranken von \(X,Y\) ist daher wieder Mitglied von \(\mathcal L_M\) und
+deren kleinste gemeinsame obere Schranke. Die bereits bewiesene
+ordnungstheoretische Charakterisierung macht \(\mathcal J_M\) zu einer
+Join-Halbverbandsoperation.
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\FranklFam M}{\rA}
+  \proofstepwidestar[1]{M\neq\varnothing}{%
+    \FormulaRefAuto{FranklFamNonempty}[thm]{1}}
+  \proofstepwidestar[1]{\Finite M}{%
+    \FormulaRefAuto{FranklFamFinite}[thm]{1}}
+  \proofstepwidestar[1]{\UnionClosedFam(M)}{%
+    \FormulaRefAuto{FranklFamUnionClosed}[thm]{1}}
+  \proofstepwidestar[1]{U_M\neq\varnothing}{%
+    \FormulaRefAuto{FranklFamCarrierNonempty}[thm]{1}}
+  \proofstepwidestar[1]{U_M\in M}{%
+    \text{Endlichkeitsinduktion und Vereinigungsabschluss}}
+  \proofstepwidestar[1]{\varnothing,U_M\in\mathcal L_M}{%
+    \FormulaRefAuto{FranklComplementConstruction}[def];
+    \text{ Komplementinvolution}}
+  \proofstepwidestar[1,3]{\Finite{\mathcal L_M}}{%
+    \text{Komplementbijection}}
+  \proofstepwidestar[1]{\InterClosedFam{\mathcal L_M}}{%
+    \FormulaRefAuto{IntersectionClosedFamily}[def];
+    \text{ de~Morgan}}
+  \proofstepwidestar[1]{\PartOrd{\mathcal R_M,\mathcal L_M}}{%
+    \FormulaRefAuto{Partielle Ordnung}[def];
+    \text{ Inklusionsordnung}}
+  \proofstepwidestar[1]{%
+    \PairJoinOp{\mathcal J_M,\mathcal R_M,\mathcal L_M}}{%
+    \text{Schnittcharakterisierung}}
+  \proofstepwidestar[1]{\JoinSemi{\mathcal J_M,\mathcal L_M}}{%
+    \FormulaRefAuto{PairJoinCharacterization}[thm]{10,11}}
+  \proofstepwidestar[1]{%
+    \JoinOrd{\mathcal J_M,\mathcal L_M}=\mathcal R_M}{%
+    \FormulaRefAuto{PairJoinRecoversOrder}[thm]{10,11};
+    \FormulaRefAuto{FranklComplementConstruction}[def]}
+  \proofstepwidestar[1]{%
+    \ZeroJoinSemi{\mathcal J_M,\mathcal L_M,\varnothing}}{%
+    \FormulaRefAuto{ZeroJoinSemilattice}[def]{7,12,13}}
+  \proofstepwidestar[1]{%
+    \exists X\in\mathcal L_M\,(X\neq\varnothing)}{%
+    \rEI{\rAI{\FormulaRefAuto{FranklComplementConstruction}[def],5}}}
+  \proofstepwidestar[1]{\text{behauptete Konjunktion}}{%
+    \rAI{8,9,14,13,15}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Privater Punkt eines Join-Irreduziblen]{%
+  \begin{aligned}[t]
+    &\Finite L\dsep
+      \ZeroJoinSemi{J,L,\varnothing}\dsep
+      \InterClosedFam L\dsep{}\\
+    &\forall Q,S\in L\,
+      \bigl((Q,S)\in\JoinOrd{J,L}\leftrightarrow Q\subseteq S\bigr)
+      \dsep\JoinIrr{J,L,\varnothing}{P}\vdash{}\\
+    &\exists a\in P\,\forall Q\in L\,
+      \bigl(a\in Q\leftrightarrow
+        Q\in\PrincipalFilter{\JoinOrd{J,L},L}{P}\bigr)
+  \end{aligned}
+}{JoinIrreduciblePrivatePoint}{%
+  \DeltaRow{Mengen}{L\dsep D\dsep P\dsep P_\ast\dsep Q\dsep S\dsep a}
+  \DeltaRow{Funktionen}{J}
+}
+
+Sei
+\[
+  D\coloneqq
+  \{Q\in L\mid
+    (Q,P)\in\JoinOrd{J,L}\land Q\neq P\}
+\]
+die Menge der echten unteren Elemente von \(P\). Sie enthält
+\(\varnothing\). Der Join zweier Mitglieder von \(D\) bleibt in \(D\), denn
+andernfalls wäre \(P\) der Join zweier echter unterer Elemente. Ein maximales
+\(P_\ast\in D\) ist deshalb das größte Element von \(D\): Für \(Q\in D\)
+liegt \(J(P_\ast,Q)\) wieder in \(D\) und oberhalb von \(P_\ast\).
+
+Wähle \(a\in P\setminus P_\ast\). Aus \(P\subseteq Q\) folgt sofort
+\(a\in Q\). Gälte umgekehrt \(a\in Q\), aber \(P\nsubseteq Q\), so wäre
+\(P\cap Q\) ein echtes unteres Element von \(P\) und daher in
+\(P_\ast\) enthalten. Das widerspricht
+\(a\in P\cap Q\) und \(a\notin P_\ast\).
+\[
+  H_P^L\coloneqq\PrincipalFilter{\JoinOrd{J,L},L}{P}.
+\]
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite L}{\rA}
+  \proofstepwidestar[2]{\ZeroJoinSemi{J,L,\varnothing}}{\rA}
+  \proofstepwidestar[3]{\InterClosedFam L}{\rA}
+  \proofstepwidestar[4]{%
+    \forall Q,S\in L\,
+      ((Q,S)\in\JoinOrd{J,L}\leftrightarrow Q\subseteq S)}{\rA}
+  \proofstepwidestar[5]{\JoinIrr{J,L,\varnothing}{P}}{\rA}
+  \proofstepwidestar[1,2,5]{%
+    D\neq\varnothing\land D\subseteq L\land\Finite D}{%
+    \text{\(\varnothing\in D\) und }
+    \FormulaRefAuto{FiniteSubset}[thm]}
+  \proofstepwidestar[2,5]{Q,S\in D\vdash J(Q,S)\in D}{%
+    \FormulaRefAuto{JoinIrreducible}[def]{5}}
+  \proofstepwidestar[1,2,5]{%
+    \begin{aligned}[t]
+      &\exists P_\ast\in D\,\forall Q\in D\\
+      &\qquad ((P_\ast,Q)\in\JoinOrd{J,L}\to Q=P_\ast)
+    \end{aligned}}{%
+    \FormulaRefAuto{FinitePosetMaximalElement}[thm]{6}}
+  \proofstepwidestar[7,8]{%
+    \forall Q\in D\,(Q,P_\ast)\in\JoinOrd{J,L}}{%
+    \text{Join-Abschluss und Maximalität}}
+  \proofstepwidestar[4,8,9]{%
+    \forall Q\in D\,(Q\subseteq P_\ast)}{%
+    \rUE{4}}
+  \proofstepwidestar[4,8]{P_\ast\subsetneq P}{%
+    \text{Definition von }D}
+  \proofstepwidestar[4,8]{\exists a\in P\setminus P_\ast}{%
+    \FormulaRefAuto{A\subset B\vdash \exists x\in B\setminus A}{11}}
+  \proofstepwidestar[3,4,8,12]{%
+    \forall Q\in L\,(a\in Q\leftrightarrow P\subseteq Q)}{%
+    \text{Schnittargument wie oben}}
+  \proofstepwidestar[2,4,8,12]{%
+    \forall Q\in L\,(a\in Q\leftrightarrow Q\in H_P^L)}{%
+    \FormulaRefAuto{PrincipalFilter}[def]}
+  \proofstepwidestar[1,2,3,4,5]{%
+    \exists a\in P\,\forall Q\in L\,
+      (a\in Q\leftrightarrow Q\in H_P^L)}{%
+    \rEE{8,12,\rEI{14}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Halbverbandsform impliziert Mengenform]{%
+  \begin{aligned}[t]
+    &\FranklFam M\dsep{}\\
+    &\forall A\,\forall J\,\forall o\,\Bigl(
+      \Finite A\land\ZeroJoinSemi{J,A,o}\land{}\\
+    &\qquad
+      \exists x\in A\,(x\neq o)
+      \to\FranklSemi{J,A,o}\Bigr)
+      \vdash\Frankl M
+  \end{aligned}
+}{FranklSemilatticeImpliesSet}{%
+  \DeltaRow{Mengen}{A\dsep M\dsep\mathcal L_M\dsep
+    P\dsep Q\dsep X\dsep a\dsep o}
+  \DeltaRow{Funktionen}{J\dsep\mathcal J_M\dsep c\dsep F}
+}
+
+\par\medskip
+Die Komplementbijection
+\[
+  c\colon M^\circ\longrightarrow\mathcal L_M,
+  \qquad c(X)=U_M\setminus X
+\]
+identifiziert nach dem Privatpunktlemma die beiden Seiten wie folgt:
+\[
+  H_P\coloneqq
+  \PrincipalFilter{
+    \JoinOrd{\mathcal J_M,\mathcal L_M},\mathcal L_M}{P}.
+\]
+\[
+  \begin{aligned}
+    \FamAvoiding{{M^\circ}}{a}
+      &\ \xleftrightarrow[\ c\ ]{\ \mathrm{bijektiv}\ }\ 
+      H_P,\\
+    \FamContaining{{M^\circ}}{a}
+      &\ \xleftrightarrow[\ c\ ]{\ \mathrm{bijektiv}\ }\ 
+      \mathcal L_M\setminus H_P.
+  \end{aligned}
+\]
+Die Hauptfilterinjektion wird daher zu einer Injektion von der vermeidenden
+in die enthaltende Teilfamilie. Die zusätzlich eingefügte leere Menge liegt
+nur auf der vermeidenden Seite; durch Einschränkung der Definitionsmenge
+erhält man die für \(M\) verlangte Injektion.
+\[
+  G\colon H_P\inj\mathcal L_M\setminus H_P
+  \quad\Longrightarrow\quad
+  F_G(X)\coloneqq c^{-1}\!\bigl(G(c(X))\bigr).
+\]
+Für \(X\in\FamAvoiding{{M^\circ}}{a}\) ist \(c(X)\in H_P\), während
+\(c^{-1}(G(c(X)))\) zu \(\FamContaining{{M^\circ}}{a}\) gehört.
+Als Komposition injektiver Abbildungen ist \(F_G\) injektiv.
+
+In der folgenden Lemmon-Tabelle bezeichnet \(\FranklJoinStatement\) genau die
+globale Halbverbandsannahme aus der Theoremzeile.
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\FranklJoinStatement}{\rA}
+  \proofstepwidestar[2]{\FranklFam M}{\rA}
+  \proofstepwidestar[2]{\Finite{\mathcal L_M}}{%
+    \FormulaRefAuto{FranklComplementFiniteLattice}[thm]{2}}
+  \proofstepwidestar[2]{\InterClosedFam{\mathcal L_M}}{%
+    \FormulaRefAuto{FranklComplementFiniteLattice}[thm]{2}}
+  \proofstepwidestar[2]{%
+    \ZeroJoinSemi{\mathcal J_M,\mathcal L_M,\varnothing}}{%
+    \FormulaRefAuto{FranklComplementFiniteLattice}[thm]{2}}
+  \proofstepwidestar[2]{%
+    \JoinOrd{\mathcal J_M,\mathcal L_M}=\mathcal R_M}{%
+    \FormulaRefAuto{FranklComplementFiniteLattice}[thm]{2}}
+  \proofstepwidestar[2]{%
+    \exists X\in\mathcal L_M\,(X\neq\varnothing)}{%
+    \FormulaRefAuto{FranklComplementFiniteLattice}[thm]{2}}
+  \proofstepwidestar[1,2,3,5,7]{%
+    \FranklSemi{\mathcal J_M,\mathcal L_M,\varnothing}}{%
+    \text{Instanz von }\FranklJoinStatement}
+  \proofstepwidestar[1,2,3,5,7]{%
+    \begin{aligned}[t]
+      &\exists P\Bigl(\JoinIrr{\mathcal J_M,\mathcal L_M,\varnothing}{P}
+        \land{}\\[-2pt]
+      &\qquad\AtMostHalf{H_P}{\mathcal L_M}\Bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{FranklSemilatticeProperty}[def]{8}}
+  \proofstepwidestar[10]{%
+    \begin{aligned}[t]
+      &\JoinIrr{\mathcal J_M,\mathcal L_M,\varnothing}{P}\land{}\\[-2pt]
+      &\qquad\AtMostHalf{H_P}{\mathcal L_M}
+    \end{aligned}}{\rA}
+  \proofstepwidestar[6]{%
+    \begin{aligned}[t]
+      &\forall Q,S\in\mathcal L_M\\
+      &\quad (Q,S)\in\JoinOrd{\mathcal J_M,\mathcal L_M}\\[-2pt]
+      &\qquad\leftrightarrow Q\subseteq S
+    \end{aligned}}{%
+    \FormulaRefAuto{FranklComplementConstruction}[def]{6}}
+  \proofstepwidestar[3,4,5,10,11]{%
+    \begin{aligned}[t]
+      &\exists a\in P\,\forall Q\in\mathcal L_M\\
+      &\qquad (a\in Q\leftrightarrow Q\in H_P)
+    \end{aligned}}{%
+    \FormulaRefAuto{JoinIrreduciblePrivatePoint}[thm]}
+  \proofstepwidestar[13]{%
+    a\in P\land\forall Q\in\mathcal L_M\,
+      (a\in Q\leftrightarrow Q\in H_P)}{\rA}
+  \proofstepwidestar[2,10,13]{%
+    \begin{aligned}[t]
+      &\exists F\colon\FamAvoiding{{M^\circ}}{a}\\[-2pt]
+      &\qquad\inj\FamContaining{{M^\circ}}{a}
+    \end{aligned}}{%
+    \text{Transport \(F_G=c^{-1}\circ G\circ c\)}}
+  \proofstepwidestar[2,13]{a\in U_M}{%
+    \FormulaRefAuto{FranklComplementConstruction}[def]}
+  \proofstepwidestar[2,13]{%
+    \FamContaining{{M^\circ}}{a}=\FamContaining{M}{a}}{%
+    \text{\(\varnothing\) enthält \(a\) nicht}}
+  \proofstepwidestar[2,13]{%
+    \FamAvoiding{M}{a}\subseteq\FamAvoiding{{M^\circ}}{a}}{%
+    \FormulaRefAuto{FranklComplementConstruction}[def]}
+  \proofstepwidestar[2,13,14,15,16,17]{\HalfOcc{a}{M}}{%
+    \FormulaRefAuto{Halbhäufiges Element}[def]{15,14,16,17}}
+  \proofstepwidestar[18]{\Frankl M}{%
+    \FormulaRefAuto{Frankl-Eigenschaft}[def]{\rEI{18}}}
+  \proofstepwidestar[1,2]{\Frankl M}{%
+    \rEE{9,10,\rEE{12,13,19}}}
+\end{tabproofwide}
+
+\section{Globaler Äquivalenzsatz}
+
+\FormulaThmDeltaK[Globale Äquivalenz der beiden Frankl-Formen]{%
+  \begin{aligned}[t]
+    &\forall M\,(\FranklFam M\to\Frankl M)\\
+    &\quad\leftrightarrow\\
+    &\forall A\,\forall J\,\forall o\,\Bigl(
+      \Finite A\land\ZeroJoinSemi{J,A,o}\land{}\\
+    &\qquad
+      \exists x\in A\,(x\neq o)
+      \to\FranklSemi{J,A,o}\Bigr)
+  \end{aligned}
+}{FranklSetSemilatticeEquivalence}{%
+  \DeltaRow{Mengen}{A\dsep M\dsep x\dsep o}
+  \DeltaRow{Funktionen}{J}
+}
+Für die beiden vollständig ausgeschriebenen Seiten verwenden wir in der
+Lemmon-Tabelle die Abkürzungen
+\(\FranklSetStatement\) und \(\FranklJoinStatement\).
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{\FranklSetStatement}{\rA}
+    \proofstepwidestar[2]{\Finite A}{\rA}
+    \proofstepwidestar[3]{\ZeroJoinSemi{J,A,o}}{\rA}
+    \proofstepwidestar[4]{\exists x\in A\,(x\neq o)}{\rA}
+    \proofstepwidestar[1,2,3,4]{\FranklSemi{J,A,o}}{%
+      \FormulaRefAuto{FranklSetImpliesSemilattice}[thm]{1,2,3,4}}
+    \proofstepwidestar[1]{\FranklJoinStatement}{%
+      \text{Implikations- und dreifache Allquantoreinführung}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{\FranklJoinStatement}{\rA}
+    \proofstepwidestar[2]{\FranklFam M}{\rA}
+    \proofstepwidestar[1,2]{\Frankl M}{%
+      \FormulaRefAuto{FranklSemilatticeImpliesSet}[thm]{1,2}}
+    \proofstepwidestar[1]{\FranklSetStatement}{%
+      \text{Implikations- und Allquantoreinführung}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Der Äquivalenzsatz beweist die Übersetzung, nicht die Frankl-Vermutung selbst:
+\(\FranklSetStatement\Longleftrightarrow\FranklJoinStatement\).
+Ein künftiger Beweis oder ein Gegenbeispiel lässt sich damit ohne Verlust
+zwischen beiden Sprachen übertragen.
+
+\section{Status und Literaturhinweise}
+
+Die Frankl-Vermutung ist mit Stand vom 18.~Juli~2026 offen; siehe
+\href{https://doi.org/10.23952/jano.8.2026.1.02}%
+  {van der Hout--Roos, \emph{On the Union-Closed Sets Conjecture}, 2026}.
+Äquivalente Fassungen behandelt
+\href{https://doi.org/10.1016/0097-3165(92)90068-6}%
+  {Poonen, \emph{Union-closed families}, 1992}.
+
+In Gitterform besitzt jedes endliche nichttriviale Gitter ein bezüglich des
+Joins irreduzibles Element unter höchstens der Hälfte seiner Elemente; siehe
+\href{https://arxiv.org/abs/2503.00277}%
+  {Bouchard (2025)}. Für untere semimodulare Gitter ist sie bewiesen; siehe
+\href{https://doi.org/10.1007/s003730050008}%
+  {Reinhold (2000)}.
+
+\begin{remark}
+Der allgemeine quantitative Ersatz ist schwächer als die Hälfte:
+\href{https://doi.org/10.37236/12232}%
+  {Alweiss--Huang--Sellke, \emph{Improved lower bound for the union-closed
+  sets conjecture}, 2024} beweisen die Schranke \((3-\sqrt5)/2\).
+Die Übersetzung ergibt daraus ein Join-Irreduzibles \(j\) mit
+\[
+  \lvert\PrincipalFilter{\JoinOrd{J,A},A}{j}\rvert
+  \leq \frac{\sqrt5-1}{2}\,\lvert A\rvert.
+\]
+Dieser externe Satz wird nur eingeordnet, nicht als intern bewiesenes Theorem
+registriert.
+\end{remark}
+
+\end{document}

@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B05
+### Standalone-Bände B03 bis B06
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -47,6 +47,7 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B03 | B01, B02 |
 | B04 | B01, B02, B03 |
 | B05 | B01, B02, B03, B04 |
+| B06 | B01, B02, B03, B04, B05 |
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
@@ -61,6 +62,7 @@ Befehl:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B03
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B04
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B05
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B06
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -85,8 +87,9 @@ Audit prüft zusätzlich:
 - den extrahierten PDF-Text auf die bekannten Fehlermarker;
 - jede externe PDF-Aktion auf eine vorhandene Datei und Named Destination.
 
-Für B05 ist mindestens ein erfolgreicher Link nach `registry/_B04.pdf`
-zwingend.
+Für jeden Zielband ist mindestens ein erfolgreicher Link zum letzten in der
+Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B06 also nach
+`registry/_B05.pdf`.
 
 ### Overleaf und direkter latexmk-Aufruf
 
@@ -97,16 +100,17 @@ verwendet wegen der abweichenden Basispfade aber eine explizite
 `Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
 Benötigt wird latexmk 4.84 oder neuer.
 
-Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B05.tex`:
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B06.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B05.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B06.tex
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
 LuaLaTeX-Lauf, weil direkt aus Lua gelesene Registry-Dateien nicht in der
-üblichen `.fls`-Abhängigkeitsliste erscheinen. Ein vollständiger erzwungener
-Neuaufbau ohne Cache ist möglich mit:
+üblichen `.fls`-Abhängigkeitsliste erscheinen. Der optionale verifizierte
+Cache betrifft derzeit nur B05 als direktes Ziel. Ein vollständiger erzwungener
+B05-Neuaufbau ohne Cache ist möglich mit:
 
 ```powershell
 $env:DGM_LATEXMK_FORCE_DEPS = '1'

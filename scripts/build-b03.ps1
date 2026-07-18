@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [ValidateSet('B03', 'B04', 'B05')]
+    [ValidateSet('B03', 'B04', 'B05', 'B06')]
     [string]$Target = 'B03'
 )
 
@@ -97,7 +97,7 @@ function Read-BandDependencyGraph {
             )
         }
 
-        if ($band -notmatch '^B0[1-5]$') {
+        if ($band -notmatch '^B[0-9]{2}$') {
             throw "Invalid band '$band' at ${Path}:${lineNumber}."
         }
         if ($graph.ContainsKey($band)) {
@@ -119,7 +119,7 @@ function Read-BandDependencyGraph {
         }
 
         foreach ($predecessor in $predecessors) {
-            if ($predecessor -notmatch '^B0[1-5]$') {
+            if ($predecessor -notmatch '^B[0-9]{2}$') {
                 throw "Invalid predecessor '$predecessor' for $band at ${Path}:${lineNumber}."
             }
             if ($predecessor -eq $band) {
@@ -341,7 +341,7 @@ function Assert-CleanLog {
         'There were multiply-defined labels',
         'multiply defined',
         'LABELS NOT IMPORTED',
-        'No file\s+registry[/\\]_B0[1-5]\.aux',
+        'No file\s+registry[/\\]_B[0-9]{2}\.aux',
         'referenced but does not exist',
         'Invalid page number',
         'ignoring duplicate destination',
@@ -643,8 +643,10 @@ try {
         Assert-CleanPdfText -RelativePath $stage.Pdf
 
         $requiredExternalPdf = $null
-        if ($stage.RootTarget -and $stage.Band -eq 'B05') {
-            $requiredExternalPdf = "$($graph['B04'].ArtifactBase).pdf"
+        $directPredecessors = @($graph[$stage.Band].Predecessors)
+        if ($stage.RootTarget -and $directPredecessors.Count -gt 0) {
+            $lastPredecessor = $directPredecessors[-1]
+            $requiredExternalPdf = "$($graph[$lastPredecessor].ArtifactBase).pdf"
         }
         Assert-ExternalPdfTargets `
             -RelativePath $stage.Pdf `
