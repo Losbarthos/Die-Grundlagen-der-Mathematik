@@ -5734,6 +5734,137 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
   \DeltaPrem{Partielle Ordnungen}{}
 }
 
+\subsection{Duale Relation einer partiellen Ordnung}
+
+\FormulaDefDeltaK[Duale Relation auf einem Träger]{%
+  \begin{aligned}[t]
+    &R_A^{\mathrm{op}}\subseteq A\times A,\\
+    &x,y\in A\vdash
+      \bigl((x,y)\in R_A^{\mathrm{op}}\leftrightarrow (y,x)\in R\bigr)
+  \end{aligned}
+}{OrderDualRelation}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationen}{R\dsep R_A^{\mathrm{op}}}
+  \DeltaRow{Träger}{R_A^{\mathrm{op}}\subseteq A\times A}
+  \DeltaRow{Auswertung}{%
+    x,y\in A\vdash
+    \bigl((x,y)\in R_A^{\mathrm{op}}\leftrightarrow (y,x)\in R\bigr)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Duale Relation}{R_A^{\mathrm{op}}}
+}
+
+\FormulaThmDeltaK[Die duale Relation einer partiellen Ordnung ist partiell geordnet]{%
+  \PartOrd{R,A}\vdash\PartOrd{R_A^{\mathrm{op}},A}
+}{OrderDualPartialOrder}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R\dsep R_A^{\mathrm{op}}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Reflexivität]{%
+    \PartOrd{R,A}\dsep x\in A\vdash(x,x)\in R_A^{\mathrm{op}}
+  }{%
+    \PartOrd{R,A}\dsep x\in A\vdash(x,x)\in R_A^{\mathrm{op}}
+  }[OrderDualReflexive]
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[2]{(x,x)\in R}{%
+      \FormulaRefAuto{x\in A \vdash (x,x)\in R}{2}}
+    \proofstepwidestar[2]{%
+      (x,x)\in R_A^{\mathrm{op}}\leftrightarrow(x,x)\in R}{%
+      \FormulaRefAuto{OrderDualRelation}[def]{2,2}}
+    \proofstepwidestar[1,2]{(x,x)\in R_A^{\mathrm{op}}}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{4,3}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Transitivität]{%
+    \begin{aligned}[t]
+      &\PartOrd{R,A}\dsep(x,y)\in R_A^{\mathrm{op}}
+        \dsep(y,z)\in R_A^{\mathrm{op}}\vdash{}\\
+      &(x,z)\in R_A^{\mathrm{op}}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\PartOrd{R,A}\dsep(x,y)\in R_A^{\mathrm{op}}
+        \dsep(y,z)\in R_A^{\mathrm{op}}\vdash{}\\
+      &(x,z)\in R_A^{\mathrm{op}}
+    \end{aligned}
+  }[OrderDualTransitive]
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{(x,y)\in R_A^{\mathrm{op}}}{\rA}
+    \proofstepwidestar[3]{(y,z)\in R_A^{\mathrm{op}}}{\rA}
+    \proofstepwidestar[]{R_A^{\mathrm{op}}\subseteq A\times A}{%
+      \FormulaRefAuto{OrderDualRelation}[def]}
+    \proofstepwidestar[2]{x\in A\land y\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,2}}}
+    \proofstepwidestar[3]{y\in A\land z\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,3}}}
+    \proofstepwidestar[2]{(y,x)\in R}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{OrderDualRelation}[def]{\rAEa{5},\rAEb{5}},2}}
+    \proofstepwidestar[3]{(z,y)\in R}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{OrderDualRelation}[def]{\rAEa{6},\rAEb{6}},3}}
+    \proofstepwidestar[2,3]{(z,x)\in R}{%
+      \FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R
+        \vdash (x,z)\in R}{8,7}}
+    \proofstepwidestar[2,3]{%
+      (x,z)\in R_A^{\mathrm{op}}\leftrightarrow(z,x)\in R}{%
+      \FormulaRefAuto{OrderDualRelation}[def]{\rAEa{5},\rAEb{6}}}
+    \proofstepwidestar[1,2,3]{(x,z)\in R_A^{\mathrm{op}}}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{10,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Antisymmetrie]{%
+    \begin{aligned}[t]
+      &\PartOrd{R,A}\dsep(x,y)\in R_A^{\mathrm{op}}
+        \dsep(y,x)\in R_A^{\mathrm{op}}\vdash x=y
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\PartOrd{R,A}\dsep(x,y)\in R_A^{\mathrm{op}}
+        \dsep(y,x)\in R_A^{\mathrm{op}}\vdash x=y
+    \end{aligned}
+  }[OrderDualAntisymmetric]
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[2]{(x,y)\in R_A^{\mathrm{op}}}{\rA}
+    \proofstepwidestar[3]{(y,x)\in R_A^{\mathrm{op}}}{\rA}
+    \proofstepwidestar[]{R_A^{\mathrm{op}}\subseteq A\times A}{%
+      \FormulaRefAuto{OrderDualRelation}[def]}
+    \proofstepwidestar[2]{x\in A\land y\in A}{%
+      \FormulaRefAuto{(a,b)\in A\times B \eqvdash a\in A \land b\in B}{%
+        \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,2}}}
+    \proofstepwidestar[2]{(y,x)\in R}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{OrderDualRelation}[def]{\rAEa{5},\rAEb{5}},2}}
+    \proofstepwidestar[3]{(x,y)\in R}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{OrderDualRelation}[def]{\rAEb{5},\rAEa{5}},3}}
+    \proofstepwidestar[2,3]{x=y}{%
+      \FormulaRefAuto{(x,y)\in R \dsep (y,x)\in R
+        \vdash x=y}{7,6}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{\PartOrd{R,A}}{\rA}
+    \proofstepwidestar[]{R_A^{\mathrm{op}}\subseteq A\times A}{%
+      \FormulaRefAuto{OrderDualRelation}[def]}
+    \proofstepwidestar[1]{x\in A\vdash(x,x)\in R_A^{\mathrm{op}}}{%
+      \FormulaRefAuto{OrderDualReflexive}[thm]{1}}
+    \proofstepwidestar[1]{%
+      (x,y)\in R_A^{\mathrm{op}}\dsep(y,z)\in R_A^{\mathrm{op}}
+      \vdash(x,z)\in R_A^{\mathrm{op}}}{%
+      \FormulaRefAuto{OrderDualTransitive}[thm]{1}}
+    \proofstepwidestar[1]{%
+      (x,y)\in R_A^{\mathrm{op}}\dsep(y,x)\in R_A^{\mathrm{op}}
+      \vdash x=y}{%
+      \FormulaRefAuto{OrderDualAntisymmetric}[thm]{1}}
+    \proofstepwidestar[1]{\PartOrd{R_A^{\mathrm{op}},A}}{%
+      \FormulaRefAuto{Partielle Ordnung}[def]{2,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
 \subsection{Axiom einer totalen Ordnung}
 
 \FormulaAxiomDelta[Vergleichbarkeit]{%
@@ -5804,13 +5935,13 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 % ------------------------------------------------------------
 % (2) Definition: Minimum als \iota-Term (partielle Definition)
 % ------------------------------------------------------------
-\FormulaDefDelta[Minimum]{%
+\FormulaDefDeltaK[Minimum]{%
   \begin{aligned}
     &\exists m\in T\,\forall x\in T\,\bigl((m,x)\in R\bigr)\\
     &\vdash \Min{R,A}(T)\coloneqq
       \iota m\in T\,\forall x\in T\,\bigl((m,x)\in R\bigr)
   \end{aligned}%
-}{
+}{Minimum}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep m \dsep x}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
@@ -5849,13 +5980,13 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 % ------------------------------------------------------------
 % (4) Definition: Maximum als \iota-Term (partielle Definition)
 % ------------------------------------------------------------
-\FormulaDefDelta[Maximum]{%
+\FormulaDefDeltaK[Maximum]{%
   \begin{aligned}
     &\exists m\in T\,\forall x\in T\,\bigl((x,m)\in R\bigr)\\
     &\vdash \Max{R,A}(T)\coloneqq
       \iota m\in T\,\forall x\in T\,\bigl((x,m)\in R\bigr)
   \end{aligned}%
-}{
+}{Maximum}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep m \dsep x}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
@@ -5870,47 +6001,737 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 
 \subsubsection{Untere und obere Schrankenmengen}
 
-\FormulaDefDelta[Untere Schrankenmenge]{%
+\FormulaDefDeltaK[Untere Schrankenmenge]{%
   T\subseteq A \vdash
   \LB_{R,A}(T)\coloneqq
   \{\, a\in A \mid \forall x\in T\,\bigl((a,x)\in R\bigr)\,\}%
-}{
+}{LowerBoundSet}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep a \dsep x}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
 
-\FormulaDefDelta[Obere Schrankenmenge]{%
+\FormulaDefDeltaK[Obere Schrankenmenge]{%
   T\subseteq A \vdash
   \UB_{R,A}(T)\coloneqq
   \{\, a\in A \mid \forall x\in T\,\bigl((x,a)\in R\bigr)\,\}%
-}{
+}{UpperBoundSet}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep a \dsep x}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
 
 \subsubsection{Infimum und Supremum}
 
-\FormulaDefDelta[Infimum]{%
+\FormulaDefDeltaK[Infimum]{%
   \begin{aligned}
     &T\subseteq A \dsep \exists m\in \LB_{R,A}(T)\,
       \forall a\in \LB_{R,A}(T)\,\bigl((a,m)\in R\bigr)\\
     &\vdash \inf_{R,A}(T)\coloneqq \Max{R,A}\bigl(\LB_{R,A}(T)\bigr)
   \end{aligned}%
-}{
+}{Infimum}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep m \dsep a}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
 
-\FormulaDefDelta[Supremum]{%
+\FormulaDefDeltaK[Supremum]{%
   \begin{aligned}
     &T\subseteq A \dsep \exists m\in \UB_{R,A}(T)\,
       \forall a\in \UB_{R,A}(T)\,\bigl((m,a)\in R\bigr)\\
     &\vdash \sup_{R,A}(T)\coloneqq \Min{R,A}\bigl(\UB_{R,A}(T)\bigr)
   \end{aligned}%
-}{
+}{Supremum}{
   \DeltaRow{Mengen}{A \dsep R \dsep T \dsep m \dsep a}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
 }
+
+\FormulaThmDeltaK[Charakterisierung der oberen Schrankenmenge]{%
+  T\subseteq A\vdash
+  \Bigl(u\in\UB_{R,A}(T)\leftrightarrow
+    \bigl(u\in A\land\forall x\in T\,((x,u)\in R)\bigr)\Bigr)
+}{UpperBoundSetCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[1]{%
+    u\in\UB_{R,A}(T)\leftrightarrow
+    \bigl(u\in A\land\forall x\in T\,((x,u)\in R)\bigr)}{%
+    \FormulaRefAuto{UpperBoundSet}[def]{1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die obere Schrankenmenge liegt im Träger]{%
+  T\subseteq A\vdash\UB_{R,A}(T)\subseteq A
+}{UpperBoundSetSubsetCarrier}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{u\in\UB_{R,A}(T)}{\rA}
+  \proofstep{1,2}{u\in A\land\forall x\in T\,((x,u)\in R)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{UpperBoundSetCharacterization}[thm]{1},2}}
+  \proofstep{1,2}{u\in A}{\rAEa{3}}
+  \proofstep{1}{\UB_{R,A}(T)\subseteq A}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,4}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Charakterisierung der unteren Schrankenmenge]{%
+  T\subseteq A\vdash
+  \Bigl(u\in\LB_{R,A}(T)\leftrightarrow
+    \bigl(u\in A\land\forall x\in T\,((u,x)\in R)\bigr)\Bigr)
+}{LowerBoundSetCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[1]{%
+    u\in\LB_{R,A}(T)\leftrightarrow
+    \bigl(u\in A\land\forall x\in T\,((u,x)\in R)\bigr)}{%
+    \FormulaRefAuto{LowerBoundSet}[def]{1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die untere Schrankenmenge liegt im Träger]{%
+  T\subseteq A\vdash\LB_{R,A}(T)\subseteq A
+}{LowerBoundSetSubsetCarrier}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{u\in\LB_{R,A}(T)}{\rA}
+  \proofstep{1,2}{u\in A\land\forall x\in T\,((u,x)\in R)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{LowerBoundSetCharacterization}[thm]{1},2}}
+  \proofstep{1,2}{u\in A}{\rAEa{3}}
+  \proofstep{1}{\LB_{R,A}(T)\subseteq A}{%
+    \FormulaRefAuto{A \subseteq B \coloneq
+      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,4}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Charakterisierung der oberen Schranken eines Elementpaares]{%
+  x,y\in A\vdash
+  \Bigl(u\in\UB_{R,A}(\{x,y\})\leftrightarrow
+    \bigl(u\in A\land(x,u)\in R\land(y,u)\in R\bigr)\Bigr)
+}{PairUpperBoundSetCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep u\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{x\in A}{\rA}
+    \proofstepwidestar[2]{y\in A}{\rA}
+    \proofstepwidestar[3]{u\in\UB_{R,A}(\{x,y\})}{\rA}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{%
+      \FormulaRefAuto{a \in A,\, b \in A \vdash \{a,b\} \subseteq A}{1,2}}
+    \proofstepwidestar[1,2,3]{%
+      u\in A\land\forall z\in\{x,y\}\,((z,u)\in R)}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{UpperBoundSetCharacterization}[thm]{4},3}}
+    \proofstepwidestar[1,2,3]{u\in A}{\rAEa{5}}
+    \proofstepwidestar[]{x\in\{x,y\}}{\FormulaRefAuto{a \in \{a,b\}}}
+    \proofstepwidestar[]{y\in\{x,y\}}{\FormulaRefAuto{b \in \{a,b\}}}
+    \proofstepwidestar[1,2,3]{(x,u)\in R}{\rRE{7,\rUE{\rAEb{5}}}}
+    \proofstepwidestar[1,2,3]{(y,u)\in R}{\rRE{8,\rUE{\rAEb{5}}}}
+    \proofstepwidestar[1,2,3]{%
+      u\in A\land(x,u)\in R\land(y,u)\in R}{\rAI{6,\rAI{9,10}}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{x\in A}{\rA}
+    \proofstepwidestar[2]{y\in A}{\rA}
+    \proofstepwidestar[3]{u\in A\land(x,u)\in R\land(y,u)\in R}{\rA}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{%
+      \FormulaRefAuto{a \in A,\, b \in A \vdash \{a,b\} \subseteq A}{1,2}}
+    \proofstepwidestar[5]{z\in\{x,y\}}{\rA}
+    \proofstepwidestar[5]{z=x\lor z=y}{%
+      \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{5}}
+    \proofstepwidestar[7]{z=x}{\rA}
+    \proofstepwidestar[3,7]{(z,u)\in R}{\rIE{7,\rAEa{\rAEb{3}}}}
+    \proofstepwidestar[9]{z=y}{\rA}
+    \proofstepwidestar[3,9]{(z,u)\in R}{\rIE{9,\rAEb{\rAEb{3}}}}
+    \proofstepwidestar[3,5]{(z,u)\in R}{\rOE{6,7,8,9,10}}
+    \proofstepwidestar[3]{\forall z\in\{x,y\}\,((z,u)\in R)}{%
+      \rUI{\rRI{5,11}}}
+    \proofstepwidestar[3]{%
+      u\in A\land\forall z\in\{x,y\}\,((z,u)\in R)}{%
+      \rAI{\rAEa{3},12}}
+    \proofstepwidestar[1,2,3]{u\in\UB_{R,A}(\{x,y\})}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{UpperBoundSetCharacterization}[thm]{4},13}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Charakterisierung der unteren Schranken eines Elementpaares]{%
+  x,y\in A\vdash
+  \Bigl(d\in\LB_{R,A}(\{x,y\})\leftrightarrow
+    \bigl(d\in A\land(d,x)\in R\land(d,y)\in R\bigr)\Bigr)
+}{PairLowerBoundSetCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep d\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{x\in A}{\rA}
+    \proofstepwidestar[2]{y\in A}{\rA}
+    \proofstepwidestar[3]{d\in\LB_{R,A}(\{x,y\})}{\rA}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A\cup A}{%
+      \FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{1,2}}
+    \proofstepwidestar[]{A\cup A=A}{\FormulaRefAuto{A\cup A=A}}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{\rIE{5,4}}
+    \proofstepwidestar[1,2,3]{%
+      d\in A\land\forall z\in\{x,y\}\,((d,z)\in R)}{%
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{LowerBoundSetCharacterization}[thm]{6},3}}
+    \proofstepwidestar[1,2,3]{d\in A}{\rAEa{7}}
+    \proofstepwidestar[]{x\in\{x,y\}}{\FormulaRefAuto{a \in \{a,b\}}}
+    \proofstepwidestar[]{y\in\{x,y\}}{\FormulaRefAuto{b \in \{a,b\}}}
+    \proofstepwidestar[1,2,3]{(d,x)\in R}{\rRE{9,\rUE{\rAEb{7}}}}
+    \proofstepwidestar[1,2,3]{(d,y)\in R}{\rRE{10,\rUE{\rAEb{7}}}}
+    \proofstepwidestar[1,2,3]{%
+      d\in A\land(d,x)\in R\land(d,y)\in R}{\rAI{8,\rAI{11,12}}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{x\in A}{\rA}
+    \proofstepwidestar[2]{y\in A}{\rA}
+    \proofstepwidestar[3]{d\in A\land(d,x)\in R\land(d,y)\in R}{\rA}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A\cup A}{%
+      \FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{1,2}}
+    \proofstepwidestar[]{A\cup A=A}{\FormulaRefAuto{A\cup A=A}}
+    \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{\rIE{5,4}}
+    \proofstepwidestar[7]{z\in\{x,y\}}{\rA}
+    \proofstepwidestar[7]{z=x\lor z=y}{%
+      \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{7}}
+    \proofstepwidestar[9]{z=x}{\rA}
+    \proofstepwidestar[3,9]{(d,z)\in R}{\rIE{9,\rAEa{\rAEb{3}}}}
+    \proofstepwidestar[11]{z=y}{\rA}
+    \proofstepwidestar[3,11]{(d,z)\in R}{\rIE{11,\rAEb{\rAEb{3}}}}
+    \proofstepwidestar[3,7]{(d,z)\in R}{\rOE{8,9,10,11,12}}
+    \proofstepwidestar[3]{\forall z\in\{x,y\}\,((d,z)\in R)}{%
+      \rUI{\rRI{7,13}}}
+    \proofstepwidestar[3]{%
+      d\in A\land\forall z\in\{x,y\}\,((d,z)\in R)}{%
+      \rAI{\rAEa{3},14}}
+    \proofstepwidestar[1,2,3]{d\in\LB_{R,A}(\{x,y\})}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{LowerBoundSetCharacterization}[thm]{6},15}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Das Supremum ist eine obere Schranke]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)\vdash{}\\
+    &\sup_{R,A}(T)\in\UB_{R,A}(T)
+  \end{aligned}
+}{SupremumBelongsUpperBounds}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in\UB_{R,A}(T)\,
+      \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rA}
+  \proofstepwidestar[2]{%
+    \Min{R,A}\bigl(\UB_{R,A}(T)\bigr)\in\UB_{R,A}(T)}{%
+    \FormulaRefAuto{Minimum}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \sup_{R,A}(T)=\Min{R,A}\bigl(\UB_{R,A}(T)\bigr)}{%
+    \FormulaRefAuto{Supremum}[def]{1,2}}
+  \proofstepwidestar[1,2]{\sup_{R,A}(T)\in\UB_{R,A}(T)}{\rIE{4,3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Das Supremum liegt im Träger]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)\vdash{}\\
+    &\sup_{R,A}(T)\in A
+  \end{aligned}
+}{SupremumInCarrier}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{%
+    \exists m\in\UB_{R,A}(T)\,
+      \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rA}
+  \proofstep{1,2}{\sup_{R,A}(T)\in\UB_{R,A}(T)}{%
+    \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{1,2}}
+  \proofstep{1}{\UB_{R,A}(T)\subseteq A}{%
+    \FormulaRefAuto{UpperBoundSetSubsetCarrier}[thm]{1}}
+  \proofstep{1,2}{\sup_{R,A}(T)\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Jedes Element liegt unter dem Supremum]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+      \dsep x\in T\vdash{}\\
+    &(x,\sup_{R,A}(T))\in R
+  \end{aligned}
+}{SupremumDominatesMember}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{%
+    \exists m\in\UB_{R,A}(T)\,
+      \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rA}
+  \proofstep{3}{x\in T}{\rA}
+  \proofstep{1,2}{\sup_{R,A}(T)\in\UB_{R,A}(T)}{%
+    \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{1,2}}
+  \proofstep{1,2}{%
+    \sup_{R,A}(T)\in A\land
+      \forall y\in T\,((y,\sup_{R,A}(T))\in R)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{UpperBoundSetCharacterization}[thm]{1},4}}
+  \proofstep{1,2,3}{(x,\sup_{R,A}(T))\in R}{\rRE{3,\rUE{\rAEb{5}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Das Supremum ist die kleinste obere Schranke]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\UB_{R,A}(T)\,
+        \forall b\in\UB_{R,A}(T)\,((m,b)\in R)
+      \dsep a\in\UB_{R,A}(T)\vdash{}\\
+    &(\sup_{R,A}(T),a)\in R
+  \end{aligned}
+}{SupremumLeastUpperBound}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a\dsep b}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in\UB_{R,A}(T)\,
+      \forall b\in\UB_{R,A}(T)\,((m,b)\in R)}{\rA}
+  \proofstepwidestar[3]{a\in\UB_{R,A}(T)}{\rA}
+  \proofstepwidestar[2,3]{%
+    \bigl(\Min{R,A}(\UB_{R,A}(T)),a\bigr)\in R}{%
+    \FormulaRefAuto{Minimum}[def]{2,3}}
+  \proofstepwidestar[1,2]{%
+    \sup_{R,A}(T)=\Min{R,A}\bigl(\UB_{R,A}(T)\bigr)}{%
+    \FormulaRefAuto{Supremum}[def]{1,2}}
+  \proofstepwidestar[1,2,3]{(\sup_{R,A}(T),a)\in R}{\rIE{5,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung eines Supremumskandidaten]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep u\in\UB_{R,A}(T)\dsep
+      \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\vdash{}\\
+    &u=\sup_{R,A}(T)
+  \end{aligned}
+}{SupremumCandidateEqualsSupremum}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{u\in\UB_{R,A}(T)}{\rA}
+  \proofstepwidestar[3]{\forall a\in\UB_{R,A}(T)\,((u,a)\in R)}{\rA}
+  \proofstepwidestar[2,3]{%
+    \exists m\in\UB_{R,A}(T)\,
+      \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rEI{\rAI{2,3}}}
+  \proofstepwidestar[1,2,3]{\sup_{R,A}(T)\in\UB_{R,A}(T)}{%
+    \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{1,4}}
+  \proofstepwidestar[1,2,3]{(u,\sup_{R,A}(T))\in R}{\rRE{5,\rUE{3}}}
+  \proofstepwidestar[1,2,3]{(\sup_{R,A}(T),u)\in R}{%
+    \FormulaRefAuto{SupremumLeastUpperBound}[thm]{1,4,2}}
+  \proofstepwidestar[1,2,3]{u=\sup_{R,A}(T)}{%
+    \FormulaRefAuto{(x,y)\in R \dsep (y,x)\in R \vdash x=y}[ax]{6,7}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung der Gleichheit mit dem Supremum]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+      \dsep u\in A\vdash{}\\
+    &u=\sup_{R,A}(T)\leftrightarrow
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+  \end{aligned}
+}{SupremumEqualityCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep u\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Hinrichtung]{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\UB_{R,A}(T)\,
+          \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+        \dsep u\in A\vdash{}\\
+      &u=\sup_{R,A}(T)\to
+        \Bigl(u\in\UB_{R,A}(T)\land
+          \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\UB_{R,A}(T)\,
+          \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+        \dsep u\in A\vdash{}\\
+      &u=\sup_{R,A}(T)\to
+        \Bigl(u\in\UB_{R,A}(T)\land
+          \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+    \end{aligned}
+  }[SupremumEqualityForward]
+    \proofstepwidestar[1]{T\subseteq A}{\rA}
+    \proofstepwidestar[2]{%
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rA}
+    \proofstepwidestar[3]{u\in A}{\rA}
+    \proofstepwidestar[4]{u=\sup_{R,A}(T)}{\rA}
+    \proofstepwidestar[1,2]{\sup_{R,A}(T)\in\UB_{R,A}(T)}{%
+      \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{1,2}}
+    \proofstepwidestar[1,2,4]{u\in\UB_{R,A}(T)}{\rIE{4,5}}
+    \proofstepwidestar[7]{a\in\UB_{R,A}(T)}{\rA}
+    \proofstepwidestar[1,2,7]{(\sup_{R,A}(T),a)\in R}{%
+      \FormulaRefAuto{SupremumLeastUpperBound}[thm]{1,2,7}}
+    \proofstepwidestar[1,2,4,7]{(u,a)\in R}{\rIE{4,8}}
+    \proofstepwidestar[1,2,4]{%
+      \forall a\in\UB_{R,A}(T)\,((u,a)\in R)}{\rUI{\rRI{7,9}}}
+    \proofstepwidestar[1,2,4]{%
+      u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)}{\rAI{6,10}}
+    \proofstepwidestar[1,2,3]{%
+      u=\sup_{R,A}(T)\to
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)}{%
+      \rRI{4,11}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Rückrichtung]{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\UB_{R,A}(T)\,
+          \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+        \dsep u\in A\vdash{}\\
+      &\Bigl(u\in\UB_{R,A}(T)\land
+          \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+        \to u=\sup_{R,A}(T)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\UB_{R,A}(T)\,
+          \forall a\in\UB_{R,A}(T)\,((m,a)\in R)
+        \dsep u\in A\vdash{}\\
+      &\Bigl(u\in\UB_{R,A}(T)\land
+          \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+        \to u=\sup_{R,A}(T)
+    \end{aligned}
+  }[SupremumEqualityBackward]
+    \proofstepwidestar[1]{T\subseteq A}{\rA}
+    \proofstepwidestar[2]{%
+      \exists m\in\UB_{R,A}(T)\,
+        \forall a\in\UB_{R,A}(T)\,((m,a)\in R)}{\rA}
+    \proofstepwidestar[3]{u\in A}{\rA}
+    \proofstepwidestar[4]{%
+      u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)}{\rA}
+    \proofstepwidestar[1,4]{u=\sup_{R,A}(T)}{%
+      \FormulaRefAuto{SupremumCandidateEqualsSupremum}[thm]{%
+        1,\rAEa{4},\rAEb{4}}}
+    \proofstepwidestar[1,2,3]{%
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+      \to u=\sup_{R,A}(T)}{\rRI{4,5}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[]{%
+      u=\sup_{R,A}(T)\to
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)}{%
+      \FormulaRefAuto{SupremumEqualityForward}[thm]}
+    \proofstepwidestar[]{%
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)
+      \to u=\sup_{R,A}(T)}{%
+      \FormulaRefAuto{SupremumEqualityBackward}[thm]}
+    \proofstepwidestar[]{%
+      u=\sup_{R,A}(T)\leftrightarrow
+      \Bigl(u\in\UB_{R,A}(T)\land
+        \forall a\in\UB_{R,A}(T)\,((u,a)\in R)\Bigr)}{\rLRI{1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Das Infimum ist eine untere Schranke]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)\vdash{}\\
+    &\inf_{R,A}(T)\in\LB_{R,A}(T)
+  \end{aligned}
+}{InfimumBelongsLowerBounds}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in\LB_{R,A}(T)\,
+      \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rA}
+  \proofstepwidestar[2]{%
+    \Max{R,A}\bigl(\LB_{R,A}(T)\bigr)\in\LB_{R,A}(T)}{%
+    \FormulaRefAuto{Maximum}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \inf_{R,A}(T)=\Max{R,A}\bigl(\LB_{R,A}(T)\bigr)}{%
+    \FormulaRefAuto{Infimum}[def]{1,2}}
+  \proofstepwidestar[1,2]{\inf_{R,A}(T)\in\LB_{R,A}(T)}{\rIE{4,3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Das Infimum liegt im Träger]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)\vdash{}\\
+    &\inf_{R,A}(T)\in A
+  \end{aligned}
+}{InfimumInCarrier}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{%
+    \exists m\in\LB_{R,A}(T)\,
+      \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rA}
+  \proofstep{1,2}{\inf_{R,A}(T)\in\LB_{R,A}(T)}{%
+    \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{1,2}}
+  \proofstep{1}{\LB_{R,A}(T)\subseteq A}{%
+    \FormulaRefAuto{LowerBoundSetSubsetCarrier}[thm]{1}}
+  \proofstep{1,2}{\inf_{R,A}(T)\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Das Infimum liegt unter jedem Element]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+      \dsep x\in T\vdash{}\\
+    &(\inf_{R,A}(T),x)\in R
+  \end{aligned}
+}{InfimumBelowMember}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a\dsep x}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproof}
+  \proofstep{1}{T\subseteq A}{\rA}
+  \proofstep{2}{%
+    \exists m\in\LB_{R,A}(T)\,
+      \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rA}
+  \proofstep{3}{x\in T}{\rA}
+  \proofstep{1,2}{\inf_{R,A}(T)\in\LB_{R,A}(T)}{%
+    \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{1,2}}
+  \proofstep{1,2}{%
+    \inf_{R,A}(T)\in A\land
+      \forall y\in T\,((\inf_{R,A}(T),y)\in R)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{LowerBoundSetCharacterization}[thm]{1},4}}
+  \proofstep{1,2,3}{(\inf_{R,A}(T),x)\in R}{\rRE{3,\rUE{\rAEb{5}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Das Infimum ist die größte untere Schranke]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\LB_{R,A}(T)\,
+        \forall b\in\LB_{R,A}(T)\,((b,m)\in R)
+      \dsep a\in\LB_{R,A}(T)\vdash{}\\
+    &(a,\inf_{R,A}(T))\in R
+  \end{aligned}
+}{InfimumGreatestLowerBound}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep a\dsep b}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in\LB_{R,A}(T)\,
+      \forall b\in\LB_{R,A}(T)\,((b,m)\in R)}{\rA}
+  \proofstepwidestar[3]{a\in\LB_{R,A}(T)}{\rA}
+  \proofstepwidestar[2,3]{%
+    \bigl(a,\Max{R,A}(\LB_{R,A}(T))\bigr)\in R}{%
+    \FormulaRefAuto{Maximum}[def]{2,3}}
+  \proofstepwidestar[1,2]{%
+    \inf_{R,A}(T)=\Max{R,A}\bigl(\LB_{R,A}(T)\bigr)}{%
+    \FormulaRefAuto{Infimum}[def]{1,2}}
+  \proofstepwidestar[1,2,3]{(a,\inf_{R,A}(T))\in R}{\rIE{5,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung eines Infimumskandidaten]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep u\in\LB_{R,A}(T)\dsep
+      \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\vdash{}\\
+    &u=\inf_{R,A}(T)
+  \end{aligned}
+}{InfimumCandidateEqualsInfimum}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep u\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{u\in\LB_{R,A}(T)}{\rA}
+  \proofstepwidestar[3]{\forall a\in\LB_{R,A}(T)\,((a,u)\in R)}{\rA}
+  \proofstepwidestar[2,3]{%
+    \exists m\in\LB_{R,A}(T)\,
+      \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rEI{\rAI{2,3}}}
+  \proofstepwidestar[1,2,3]{\inf_{R,A}(T)\in\LB_{R,A}(T)}{%
+    \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{1,4}}
+  \proofstepwidestar[1,2,3]{(\inf_{R,A}(T),u)\in R}{\rRE{5,\rUE{3}}}
+  \proofstepwidestar[1,2,3]{(u,\inf_{R,A}(T))\in R}{%
+    \FormulaRefAuto{InfimumGreatestLowerBound}[thm]{1,4,2}}
+  \proofstepwidestar[1,2,3]{u=\inf_{R,A}(T)}{%
+    \FormulaRefAuto{(x,y)\in R \dsep (y,x)\in R \vdash x=y}[ax]{7,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung der Gleichheit mit dem Infimum]{%
+  \begin{aligned}[t]
+    &T\subseteq A\dsep
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+      \dsep u\in A\vdash{}\\
+    &u=\inf_{R,A}(T)\leftrightarrow
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+  \end{aligned}
+}{InfimumEqualityCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep R\dsep T\dsep m\dsep u\dsep a}
+  \DeltaRow{Relationen}{R}
+  \DeltaPrem{Partielle Ordnung}{\PartOrd{R,A}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Hinrichtung]{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\LB_{R,A}(T)\,
+          \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+        \dsep u\in A\vdash{}\\
+      &u=\inf_{R,A}(T)\to
+        \Bigl(u\in\LB_{R,A}(T)\land
+          \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\LB_{R,A}(T)\,
+          \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+        \dsep u\in A\vdash{}\\
+      &u=\inf_{R,A}(T)\to
+        \Bigl(u\in\LB_{R,A}(T)\land
+          \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+    \end{aligned}
+  }[InfimumEqualityForward]
+    \proofstepwidestar[1]{T\subseteq A}{\rA}
+    \proofstepwidestar[2]{%
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rA}
+    \proofstepwidestar[3]{u\in A}{\rA}
+    \proofstepwidestar[4]{u=\inf_{R,A}(T)}{\rA}
+    \proofstepwidestar[1,2]{\inf_{R,A}(T)\in\LB_{R,A}(T)}{%
+      \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{1,2}}
+    \proofstepwidestar[1,2,4]{u\in\LB_{R,A}(T)}{\rIE{4,5}}
+    \proofstepwidestar[7]{a\in\LB_{R,A}(T)}{\rA}
+    \proofstepwidestar[1,2,7]{(a,\inf_{R,A}(T))\in R}{%
+      \FormulaRefAuto{InfimumGreatestLowerBound}[thm]{1,2,7}}
+    \proofstepwidestar[1,2,4,7]{(a,u)\in R}{\rIE{4,8}}
+    \proofstepwidestar[1,2,4]{%
+      \forall a\in\LB_{R,A}(T)\,((a,u)\in R)}{\rUI{\rRI{7,9}}}
+    \proofstepwidestar[1,2,4]{%
+      u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)}{\rAI{6,10}}
+    \proofstepwidestar[1,2,3]{%
+      u=\inf_{R,A}(T)\to
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)}{%
+      \rRI{4,11}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Rückrichtung]{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\LB_{R,A}(T)\,
+          \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+        \dsep u\in A\vdash{}\\
+      &\Bigl(u\in\LB_{R,A}(T)\land
+          \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+        \to u=\inf_{R,A}(T)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &T\subseteq A\dsep
+        \exists m\in\LB_{R,A}(T)\,
+          \forall a\in\LB_{R,A}(T)\,((a,m)\in R)
+        \dsep u\in A\vdash{}\\
+      &\Bigl(u\in\LB_{R,A}(T)\land
+          \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+        \to u=\inf_{R,A}(T)
+    \end{aligned}
+  }[InfimumEqualityBackward]
+    \proofstepwidestar[1]{T\subseteq A}{\rA}
+    \proofstepwidestar[2]{%
+      \exists m\in\LB_{R,A}(T)\,
+        \forall a\in\LB_{R,A}(T)\,((a,m)\in R)}{\rA}
+    \proofstepwidestar[3]{u\in A}{\rA}
+    \proofstepwidestar[4]{%
+      u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)}{\rA}
+    \proofstepwidestar[1,4]{u=\inf_{R,A}(T)}{%
+      \FormulaRefAuto{InfimumCandidateEqualsInfimum}[thm]{%
+        1,\rAEa{4},\rAEb{4}}}
+    \proofstepwidestar[1,2,3]{%
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+      \to u=\inf_{R,A}(T)}{\rRI{4,5}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[]{%
+      u=\inf_{R,A}(T)\to
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)}{%
+      \FormulaRefAuto{InfimumEqualityForward}[thm]}
+    \proofstepwidestar[]{%
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)
+      \to u=\inf_{R,A}(T)}{%
+      \FormulaRefAuto{InfimumEqualityBackward}[thm]}
+    \proofstepwidestar[]{%
+      u=\inf_{R,A}(T)\leftrightarrow
+      \Bigl(u\in\LB_{R,A}(T)\land
+        \forall a\in\LB_{R,A}(T)\,((a,u)\in R)\Bigr)}{\rLRI{1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 
 \subsection{Restriktion einer partiellen Ordnung}
