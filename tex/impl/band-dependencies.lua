@@ -67,7 +67,7 @@ local function read_graph()
         end
 
         local predecessors = {}
-        if predecessor_text ~= "" then
+        if predecessor_text ~= "" and predecessor_text ~= "-" then
           for predecessor in predecessor_text:gmatch("[^,]+") do
             if not predecessor:match("^B%d%d$") then
               fail("invalid predecessor for " .. tag .. ": " .. predecessor)

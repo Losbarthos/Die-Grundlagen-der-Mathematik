@@ -89,9 +89,11 @@ function Read-BandDependencyGraph {
         $source = ConvertTo-RepoRelativePath $columns[1].Trim()
         $artifactBase = ConvertTo-RepoRelativePath $columns[2].Trim()
         $predecessors = @()
-        if (-not [string]::IsNullOrWhiteSpace($columns[3])) {
+        $predecessorText = $columns[3].Trim()
+        if (-not [string]::IsNullOrWhiteSpace($predecessorText) -and
+            $predecessorText -ne '-') {
             $predecessors = @(
-                $columns[3] -split '[, ]+' |
+                $predecessorText -split '[, ]+' |
                     ForEach-Object { $_.Trim() } |
                     Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
             )
