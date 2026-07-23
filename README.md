@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B06
+### Standalone-Bände B03 bis B10
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -48,6 +48,30 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B04 | B01, B02, B03 |
 | B05 | B01, B02, B03, B04 |
 | B06 | B01, B02, B03, B04, B05 |
+| B07 | B01, B02, B03, B04, B05, B06 |
+| B08 | B01, B02, B03, B04, B05, B06, B07 |
+| B09 | B01, B02, B03, B04, B05, B06, B07, B08 |
+| B10 | B01, B02, B03, B04, B05, B06, B07, B08, B09 |
+
+Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
+
+| Band | Thema |
+| --- | --- |
+| B01 | Logische Grundbegriffe |
+| B02 | Logische Sätze |
+| B03 | Mengenlehre und funktionsfreie ZFC-Schemata |
+| B04 | Funktionen |
+| B05 | Äquivalenzrelationen und Quotienten |
+| B06 | Ordnungsrelationen |
+| B07 | Natürliche Zahlen |
+| B08 | Endliche Mengen |
+| B09 | Halbverbände, Verbände und Beschränktheit |
+| B10 | Frankls Vermutung |
+
+Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
+So bleiben etwa arithmetische Funktionen in B07, während ihre allgemeinen
+Eigenschaften bereits in B04 bewiesen werden. Die Nummerierung bezeichnet
+damit eine Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
@@ -63,6 +87,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B04
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B05
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B06
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B07
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B08
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B09
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B10
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -88,8 +116,8 @@ Audit prüft zusätzlich:
 - jede externe PDF-Aktion auf eine vorhandene Datei und Named Destination.
 
 Für jeden Zielband ist mindestens ein erfolgreicher Link zum letzten in der
-Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B06 also nach
-`registry/_B05.pdf`.
+Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B10 also nach
+`registry/_B09.pdf`.
 
 ### Overleaf und direkter latexmk-Aufruf
 
@@ -100,10 +128,10 @@ verwendet wegen der abweichenden Basispfade aber eine explizite
 `Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
 Benötigt wird latexmk 4.84 oder neuer.
 
-Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B06.tex`:
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B10.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B06.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B10.tex
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
@@ -119,9 +147,10 @@ latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B05.t
 
 ### Verifizierter Registry-Cache für B05
 
-Ein sauberer B05-Vorlauf ist lang und kann ein Overleaf-Zeitlimit
-überschreiten. Der Workflow `.github/workflows/registry-cache.yml` baut B05
-deshalb in CI sauber, auditiert ihn und veröffentlicht
+Die bestehende Cache-Infrastruktur bleibt für einen direkten
+Standalone-Build von B05 nutzbar; sie ist für die neue Bandgliederung jedoch
+nicht erforderlich. Der Workflow `.github/workflows/registry-cache.yml`
+baut B05 in CI sauber, auditiert ihn und veröffentlicht
 `registry-cache-<commit>.tar.gz`. Das Archiv enthält den äußeren Ordner
 `registry-cache/` und ist genau an den angegebenen Commit gebunden.
 

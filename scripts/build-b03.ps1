@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [ValidateSet('B03', 'B04', 'B05', 'B06')]
+    [ValidateSet('B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10')]
     [string]$Target = 'B03'
 )
 
