@@ -456,45 +456,307 @@ Band~03 seine äquivalente Funktionsfassung.
     \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
   \Bigr)%
 }{ReplacementFunctionSchema}{%
-  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y\dsep z\dsep\vec p}
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep x\dsep y\dsep z\dsep\vec p}
   \DeltaRow{Formel der Mengensprache}{\varphi(x,y,\vec p)}
   \DeltaRow{Wertterm (Termschema)}{t_{\varphi}}
 }
 
-Für den Beweis verwenden wir im funktionsfreien Ersetzungsschema die Formel
-\[
-  \psi(x,y,\vec p)\coloneqq \bigl(y=t_{\varphi}(x)\bigr).
-\]
-Sobald der Wertterm unter der Eindeutigkeitsprämisse definiert ist, hat diese
-Gleichung für jedes \(x\in A\) genau eine Lösung.
+\emph{Beweisskizze.}
+Für \(x\in A\) ist \(t_{\varphi}(x)\) der eindeutig bestimmte
+\(\varphi\)-Wert. Daher gilt punktweise
+\(\varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)\).
+Diese Äquivalenz wird zunächst unter den beschränkten Existenzquantor
+und danach in die vom Ersetzungsschema gelieferte Mengencharakterisierung
+übertragen. Das Ersetzungsschema selbst wird dabei nur auf die ursprüngliche
+Formel \(\varphi\) angewandt.
 
-\begin{tabproof}
-  \proofstep{1}{%
-    \forall x\in A\,\exists!y\,\varphi(x,y,\vec p)
-  }{\rA}
-  \proofstep{2}{x\in A}{\rA}
-  \proofstep{1,2}{t_{\varphi}(x)=t_{\varphi}(x)}{\rII}
-  \proofstep{1,2}{%
-    \exists y\,\bigl(y=t_{\varphi}(x)\bigr)
-  }{\rEI{3}}
-  \proofstep{5}{y=t_{\varphi}(x)}{\rA}
-  \proofstep{6}{z=t_{\varphi}(x)}{\rA}
-  \proofstep{5,6}{y=z}{%
-    \FormulaRefAuto{a = b,\, c = b \vdash a = c}{5,6}}
-  \proofstep{1,2}{%
-    \exists!y\,\bigl(y=t_{\varphi}(x)\bigr)
-  }{\UEI{4,5,6,7}}
-  \proofstep{1}{%
-    \forall x\in A\,\exists!y\,\bigl(y=t_{\varphi}(x)\bigr)
-  }{\rUI{\rRI{2,8}}}
-  \proofstep{1}{%
-    \exists B\,\forall y\,
+\newpage
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Werttermcharakterisierung]{%
+    \begin{aligned}[t]
+      &\forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+      \dsep x\in A\vdash{}\\[-1mm]
+      &\qquad
+      \varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)
+    \end{aligned}
+  }{%
+    \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    \dsep x\in A
+    \vdash
+    \varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)
+  }[ReplacementValuePredicateEquivalence]
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    }{\rA}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[1,2]{%
+      \exists!z\,\varphi(x,z,\vec p)
+    }{\rRE{\rUE{1},2}}
+    \proofstepwidestar[1,2]{%
+      \varphi\bigl(x,t_{\varphi}(x),\vec p\bigr)
+    }{\FormulaRefAuto{FunctionalFormulaValue}[def]{1,2}}
+
+    \proofstepwidestar[5]{\varphi(x,y,\vec p)}{\rA}
+    \proofstepwidestar[1,2,5]{y=t_{\varphi}(x)}{%
+      \FormulaRefAuto{%
+        \exists! x\,P(x),\; P(a),\; P(b) \vdash a = b
+      }{3,5,4}}
+    \proofstepwidestar[1,2]{%
+      \varphi(x,y,\vec p)\rightarrow y=t_{\varphi}(x)
+    }{\rRI{5,6}}
+
+    \proofstepwidestar[8]{y=t_{\varphi}(x)}{\rA}
+    \proofstepwidestar[8]{t_{\varphi}(x)=y}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
+    \proofstepwidestar[1,2,8]{\varphi(x,y,\vec p)}{\rIE{9,4}}
+    \proofstepwidestar[1,2]{%
+      y=t_{\varphi}(x)\rightarrow\varphi(x,y,\vec p)
+    }{\rRI{8,10}}
+    \proofstepwidestar[1,2]{%
+      \varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)
+    }{\rLRI{7,11}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Existenzrichtung \(\rightarrow\)]{%
+    \begin{aligned}[t]
+      &\forall x\in A\,\exists!z\,\varphi(x,z,\vec p)\vdash{}\\[-1mm]
+      &\quad
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \rightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    \end{aligned}
+  }{%
+    \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    \vdash
+    \exists x\in A\,\varphi(x,y,\vec p)
+    \rightarrow
+    \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+  }[ReplacementValueExistentialForward]
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    }{\rA}
+    \proofstepwidestar[2]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\rA}
+    \proofstepwidestar[3]{%
+      x\in A\land\varphi(x,y,\vec p)
+    }{\rA}
+    \proofstepwidestar[3]{x\in A}{\rAEa{3}}
+    \proofstepwidestar[3]{\varphi(x,y,\vec p)}{\rAEb{3}}
+    \proofstepwidestar[1,3]{%
+      \varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)
+    }{\FormulaRefAuto{ReplacementValuePredicateEquivalence}{1,4}}
+    \proofstepwidestar[1,3]{y=t_{\varphi}(x)}{%
+      \FormulaRefAuto{P\leftrightarrow Q,\,P\vdash Q}{6,5}}
+    \proofstepwidestar[1,3]{%
+      x\in A\land y=t_{\varphi}(x)
+    }{\rAI{4,7}}
+    \proofstepwidestar[1,3]{%
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\rEI{8}}
+    \proofstepwidestar[1,2]{%
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\rEE{2,3,9}}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \rightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\rRI{2,10}}
+  \closeproofpartwideindR
+
+  \newpage
+  \proofpartwideindR[Existenzrichtung \(\leftarrow\)]{%
+    \begin{aligned}[t]
+      &\forall x\in A\,\exists!z\,\varphi(x,z,\vec p)\vdash{}\\[-1mm]
+      &\quad
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \rightarrow
+      \exists x\in A\,\varphi(x,y,\vec p)
+    \end{aligned}
+  }{%
+    \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    \vdash
+    \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    \rightarrow
+    \exists x\in A\,\varphi(x,y,\vec p)
+  }[ReplacementValueExistentialBackward]
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    }{\rA}
+    \proofstepwidestar[2]{%
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\rA}
+    \proofstepwidestar[3]{%
+      x\in A\land y=t_{\varphi}(x)
+    }{\rA}
+    \proofstepwidestar[3]{x\in A}{\rAEa{3}}
+    \proofstepwidestar[3]{y=t_{\varphi}(x)}{\rAEb{3}}
+    \proofstepwidestar[1,3]{%
+      \varphi(x,y,\vec p)\leftrightarrow y=t_{\varphi}(x)
+    }{\FormulaRefAuto{ReplacementValuePredicateEquivalence}{1,4}}
+    \proofstepwidestar[1,3]{\varphi(x,y,\vec p)}{%
+      \FormulaRefAuto{P\leftrightarrow Q,\,Q\vdash P}{6,5}}
+    \proofstepwidestar[1,3]{%
+      x\in A\land\varphi(x,y,\vec p)
+    }{\rAI{4,7}}
+    \proofstepwidestar[1,3]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\rEI{8}}
+    \proofstepwidestar[1,2]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\rEE{2,3,9}}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \rightarrow
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\rRI{2,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Existenzielle Charakterisierung]{%
+    \begin{aligned}[t]
+      &\forall x\in A\,\exists!z\,\varphi(x,z,\vec p)\vdash{}\\[-1mm]
+      &\quad
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \leftrightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    \end{aligned}
+  }{%
+    \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    \vdash
+    \exists x\in A\,\varphi(x,y,\vec p)
+    \leftrightarrow
+    \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+  }[ReplacementValueExistentialEquivalence]
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    }{\rA}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \rightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\FormulaRefAuto{ReplacementValueExistentialForward}{1}}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \rightarrow
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\FormulaRefAuto{ReplacementValueExistentialBackward}{1}}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \leftrightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\rLRI{2,3}}
+  \closeproofpartwideindR
+
+  \newpage
+  \proofpartwideindR[Mengencharakterisierung]{%
+    \begin{aligned}[t]
+      &\forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+      \dsep
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\varphi(x,y,\vec p)
+      \Bigr)
+      \vdash{}\\[-1mm]
+      &\quad
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \Bigr)
+    \end{aligned}
+  }{%
+    \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    \dsep
+    \forall y\,
     \Bigl(
-      y\in B\leftrightarrow
+      y\in C\leftrightarrow
+      \exists x\in A\,\varphi(x,y,\vec p)
+    \Bigr)
+    \vdash
+    \forall y\,
+    \Bigl(
+      y\in C\leftrightarrow
       \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
     \Bigr)
-  }{\FormulaRefAuto{ReplacementSchema}[ax]{9}}
-\end{tabproof}
+  }[ReplacementValueSetCharacterization]
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!z\,\varphi(x,z,\vec p)
+    }{\rA}
+    \proofstepwidestar[2]{%
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\varphi(x,y,\vec p)
+      \Bigr)
+    }{\rA}
+    \proofstepwidestar[2]{%
+      y\in C\leftrightarrow
+      \exists x\in A\,\varphi(x,y,\vec p)
+    }{\rUE{2}}
+    \proofstepwidestar[1]{%
+      \exists x\in A\,\varphi(x,y,\vec p)
+      \leftrightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{\FormulaRefAuto{ReplacementValueExistentialEquivalence}{1}}
+    \proofstepwidestar[1,2]{%
+      y\in C\leftrightarrow
+      \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+    }{%
+      \FormulaRefAuto{%
+        P\leftrightarrow Q,\,Q\leftrightarrow R
+        \vdash P\leftrightarrow R
+      }{3,4}}
+    \proofstepwidestar[1,2]{%
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \Bigr)
+    }{\rUI{5}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{%
+      \forall x\in A\,\exists!y\,\varphi(x,y,\vec p)
+    }{\rA}
+    \proofstepwidestar[1]{%
+      \exists B\,\forall y\,
+      \Bigl(
+        y\in B\leftrightarrow
+        \exists x\in A\,\varphi(x,y,\vec p)
+      \Bigr)
+    }{\FormulaRefAuto{ReplacementSchema}[ax]{1}}
+    \proofstepwidestar[3]{%
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\varphi(x,y,\vec p)
+      \Bigr)
+    }{\rA}
+    \proofstepwidestar[1,3]{%
+      \forall y\,
+      \Bigl(
+        y\in C\leftrightarrow
+        \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \Bigr)
+    }{\FormulaRefAuto{ReplacementValueSetCharacterization}{1,3}}
+    \proofstepwidestar[1,3]{%
+      \exists B\,\forall y\,
+      \Bigl(
+        y\in B\leftrightarrow
+        \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \Bigr)
+    }{\rEI{4}}
+    \proofstepwidestar[1]{%
+      \exists B\,\forall y\,
+      \Bigl(
+        y\in B\leftrightarrow
+        \exists x\in A\,\bigl(y=t_{\varphi}(x)\bigr)
+      \Bigr)
+    }{\rEE{2,3,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 Unter der Eindeutigkeitsprämisse gilt
 \(\varphi(x,y,\vec p)\) genau dann, wenn
@@ -511,6 +773,7 @@ Damit bleibt die bisherige Formulierung als registrierte Kurzform erhalten.
 Beide Funktionsfassungen sind abgeleitete Darstellungen desselben Axioms aus
 Band~03 und keine zusätzlichen Axiome:
 
+\newpage
 \FormulaThmDelta[Ersetzung (traditionelle Kurzform)]{%
   \exists B\;\forall y\;
   \bigl(
@@ -534,7 +797,7 @@ Band~03 und keine zusätzlichen Axiome:
       y\in B\leftrightarrow
       \exists x\in A\,y=F(x)
     \bigr)
-  }{\FormulaRefAuto{ReplacementSchema}[ax]{1}}
+  }{\FormulaRefAuto{ReplacementFunctionSchema}[thm]{1}}
 \end{tabproof}
 
 \subsection{Bildmengen-Spezialisierung}
