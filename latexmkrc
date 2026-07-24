@@ -18,28 +18,6 @@ use File::Spec;
 # when the UI has not been configured separately for this project.
 $pdf_mode = 4;
 
-# Give standalone band downloads descriptive names while keeping the short,
-# stable TeX basenames used by the dependency and cross-reference machinery.
-my %dgm_download_jobnames = (
-    B01 => 'B01 - Grundlagen der Logik',
-    B02 => 'B02 - Theoreme der Logik',
-    B03 => 'B03 - Mengenlehre',
-    B04 => 'B04 - Funktionen',
-    B05 => 'B05 - Äquivalenzrelationen',
-    B06 => 'B06 - Ordnungsrelationen',
-    B07 => 'B07 - Die natürlichen Zahlen',
-    B08 => 'B08 - Endliche Mengen',
-    B09 => 'B09 - Verbände',
-    B10 => 'B10 - Frankls Vermutung',
-);
-for my $argument (@ARGV) {
-    my $leaf = basename($argument);
-    if ($leaf =~ /\A(B(?:0[1-9]|10))\.tex\z/i) {
-        my $band = uc($1);
-        $jobname = $dgm_download_jobnames{$band};
-    }
-}
-
 # A before_xlatex hook only runs when latexmk schedules an engine pass.  Require
 # one outer pass per invocation so a changed predecessor cannot be hidden behind
 # an older, still-present imported AUX.  Nested dependency builds carry the
