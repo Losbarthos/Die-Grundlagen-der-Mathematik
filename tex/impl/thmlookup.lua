@@ -510,8 +510,8 @@ function M.register_id(id, env, label)
   local existing = M.by_id[id]
   if existing then
     -- Geladene Altlasten aus dem eigenen Vorlauf oder aus früheren Bänden
-    -- dürfen durch lokale Definitionen ersetzt werden. Damit blendet B04
-    -- B03-IDs aus, sobald der entsprechende Satz lokal vorhanden ist.
+    -- dürfen durch lokale Definitionen ersetzt werden. Damit blendet ein
+    -- Folgeband ältere IDs aus, sobald der entsprechende Satz lokal vorhanden ist.
     if existing.loaded == false then
       if existing.env == env and existing.label == label then
         return

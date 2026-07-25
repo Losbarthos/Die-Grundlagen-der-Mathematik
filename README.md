@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B10
+### Standalone-Bände B03 bis B11
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -52,6 +52,7 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B08 | B01, B02, B03, B04, B05, B06, B07 |
 | B09 | B01, B02, B03, B04, B05, B06, B07, B08 |
 | B10 | B01, B02, B03, B04, B05, B06, B07, B08, B09 |
+| B11 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -60,17 +61,18 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B01 | Logische Grundbegriffe |
 | B02 | Logische Sätze |
 | B03 | Mengenlehre und funktionsfreie ZFC-Schemata |
-| B04 | Funktionen |
-| B05 | Äquivalenzrelationen und Quotienten |
-| B06 | Ordnungsrelationen |
-| B07 | Natürliche Zahlen |
-| B08 | Endliche Mengen |
-| B09 | Halbverbände, Verbände und Beschränktheit |
-| B10 | Frankls Vermutung |
+| B04 | Totale Relationen |
+| B05 | Funktionen |
+| B06 | Äquivalenzrelationen und Quotienten |
+| B07 | Ordnungsrelationen |
+| B08 | Natürliche Zahlen |
+| B09 | Endliche Mengen |
+| B10 | Halbverbände, Verbände und Beschränktheit |
+| B11 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
-So bleiben etwa arithmetische Funktionen in B07, während ihre allgemeinen
-Eigenschaften bereits in B04 bewiesen werden. Die Nummerierung bezeichnet
+So bleiben etwa arithmetische Funktionen in B08, während ihre allgemeinen
+Eigenschaften bereits in B05 bewiesen werden. Die Nummerierung bezeichnet
 damit eine Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
@@ -91,6 +93,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B08
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B09
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B10
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B11
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -116,8 +119,8 @@ Audit prüft zusätzlich:
 - jede externe PDF-Aktion auf eine vorhandene Datei und Named Destination.
 
 Für jeden Zielband ist mindestens ein erfolgreicher Link zum letzten in der
-Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B10 also nach
-`registry/_B09.pdf`.
+Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B11 also nach
+`registry/_B10.pdf`.
 
 ### Overleaf und direkter latexmk-Aufruf
 
@@ -128,10 +131,10 @@ verwendet wegen der abweichenden Basispfade aber eine explizite
 `Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
 Benötigt wird latexmk 4.84 oder neuer.
 
-Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B10.tex`:
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B11.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B10.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B11.tex
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
