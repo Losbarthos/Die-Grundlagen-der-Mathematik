@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [ValidateSet('B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11')]
+    [ValidateSet('B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15')]
     [string]$Target = 'B03'
 )
 
@@ -462,7 +462,7 @@ function Assert-ExternalPdfTargets {
     param(
         [Parameter(Mandatory)][string]$RelativePath,
         [Parameter(Mandatory)][hashtable]$PdfAsciiCache,
-        [string]$RequiredExternalPdf
+        [string[]]$AllowedExternalPdfs = @()
     )
 
     $pdfPath = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $RelativePath))
@@ -533,13 +533,20 @@ function Assert-ExternalPdfTargets {
         }
     }
 
-    if (-not [string]::IsNullOrWhiteSpace($RequiredExternalPdf)) {
-        $requiredPath = [System.IO.Path]::GetFullPath(
-            (Join-Path $repoRoot $RequiredExternalPdf)
-        )
-        if (-not $targetCounts.ContainsKey($requiredPath) -or
-            $targetCounts[$requiredPath] -lt 1) {
-            throw "$RelativePath must contain at least one GoToR link to $RequiredExternalPdf."
+    if ($AllowedExternalPdfs.Count -gt 0) {
+        $hasDeclaredPredecessorLink = $false
+        foreach ($allowedExternalPdf in $AllowedExternalPdfs) {
+            $allowedPath = [System.IO.Path]::GetFullPath(
+                (Join-Path $repoRoot $allowedExternalPdf)
+            )
+            if ($targetCounts.ContainsKey($allowedPath) -and
+                $targetCounts[$allowedPath] -gt 0) {
+                $hasDeclaredPredecessorLink = $true
+                break
+            }
+        }
+        if (-not $hasDeclaredPredecessorLink) {
+            throw "$RelativePath must contain at least one GoToR link to a declared predecessor PDF."
         }
     }
 
@@ -644,16 +651,19 @@ try {
         Assert-CleanDebugLog -RelativePath $stage.Debug
         Assert-CleanPdfText -RelativePath $stage.Pdf
 
-        $requiredExternalPdf = $null
+        $allowedExternalPdfs = @()
         $directPredecessors = @($graph[$stage.Band].Predecessors)
         if ($stage.RootTarget -and $directPredecessors.Count -gt 0) {
-            $lastPredecessor = $directPredecessors[-1]
-            $requiredExternalPdf = "$($graph[$lastPredecessor].ArtifactBase).pdf"
+            $allowedExternalPdfs = @(
+                foreach ($predecessor in $directPredecessors) {
+                    "$($graph[$predecessor].ArtifactBase).pdf"
+                }
+            )
         }
         Assert-ExternalPdfTargets `
             -RelativePath $stage.Pdf `
             -PdfAsciiCache $pdfAsciiCache `
-            -RequiredExternalPdf $requiredExternalPdf
+            -AllowedExternalPdfs $allowedExternalPdfs
     }
 
     Write-Host "`n$Target standalone build and reference audit completed successfully."

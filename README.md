@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B11
+### Standalone-Bände B03 bis B15
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -53,6 +53,10 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B09 | B01, B02, B03, B04, B05, B06, B07, B08 |
 | B10 | B01, B02, B03, B04, B05, B06, B07, B08, B09 |
 | B11 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10 |
+| B12 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11 |
+| B13 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12 |
+| B14 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13 |
+| B15 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -63,17 +67,25 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B03 | Mengenlehre und funktionsfreie ZFC-Schemata |
 | B04 | Totale Relationen |
 | B05 | Funktionen |
-| B06 | Äquivalenzrelationen und Quotienten |
-| B07 | Ordnungsrelationen |
-| B08 | Natürliche Zahlen |
-| B09 | Endliche Mengen |
-| B10 | Halbverbände, Verbände und Beschränktheit |
-| B11 | Frankls Vermutung |
+| B06 | Injektive Funktionen |
+| B07 | Surjektive Funktionen |
+| B08 | Bijektive Funktionen |
+| B09 | Auswahlprinzip |
+| B10 | Äquivalenzrelationen und Quotienten |
+| B11 | Ordnungsrelationen |
+| B12 | Natürliche Zahlen |
+| B13 | Endliche Mengen |
+| B14 | Halbverbände, Verbände und Beschränktheit |
+| B15 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
-So bleiben etwa arithmetische Funktionen in B08, während ihre allgemeinen
-Eigenschaften bereits in B05 bewiesen werden. Die Nummerierung bezeichnet
-damit eine Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
+Allgemeine Funktionskonstruktionen stehen in B05; ihre injektiven,
+surjektiven und bijektiven Eigenschaften werden in B06--B08 entwickelt. Das
+Auswahlprinzip steht getrennt in B09, damit die elementare Surjektionstheorie
+nicht vom Auswahlaxiom abhängt. Arithmetische Funktionen bleiben in B12,
+während ihre allgemeinen Eigenschaften bereits in den Funktionsbänden
+bewiesen werden. Die Nummerierung bezeichnet damit eine Beweisreihenfolge,
+keine ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
@@ -94,6 +106,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B09
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B10
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B11
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B12
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B13
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B14
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B15
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -118,9 +134,10 @@ Audit prüft zusätzlich:
 - den extrahierten PDF-Text auf die bekannten Fehlermarker;
 - jede externe PDF-Aktion auf eine vorhandene Datei und Named Destination.
 
-Für jeden Zielband ist mindestens ein erfolgreicher Link zum letzten in der
-Abhängigkeitszeile aufgeführten Vorgänger zwingend, für B11 also nach
-`registry/_B10.pdf`.
+Für jeden Zielband ist mindestens ein erfolgreicher Link zu einem in seiner
+Abhängigkeitszeile aufgeführten Vorgänger zwingend. Dadurch prüft das Audit
+eine tatsächlich verwendete Abhängigkeit, ohne einen künstlichen Verweis auf
+den numerisch letzten Vorgänger zu verlangen.
 
 ### Overleaf und direkter latexmk-Aufruf
 
@@ -131,10 +148,10 @@ verwendet wegen der abweichenden Basispfade aber eine explizite
 `Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
 Benötigt wird latexmk 4.84 oder neuer.
 
-Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B11.tex`:
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B15.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B11.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B15.tex
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
