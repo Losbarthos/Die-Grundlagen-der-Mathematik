@@ -32,7 +32,8 @@
 Dieser Band entwickelt die Surjektivität auf Grundlage der allgemeinen
 Funktionstheorie aus Band~05. Einzelne Konstruktionen verwenden außerdem die
 in Band~06 eingeführte Injektivität. Begriff und Grundaxiom stehen am Anfang;
-anschließend folgen Bild-, Faser-, Einschränkungs- und Kompositionssätze.
+anschließend werden die Projektionen erstmals eingeführt und durch Bild-,
+Faser-, Einschränkungs- und Kompositionssätze ergänzt.
 Das Auswahlaxiom wird hier ausdrücklich nicht vorausgesetzt, sondern erst im
 eigenständigen Band~09 untersucht.
 
@@ -124,7 +125,9 @@ eigenständigen Band~09 untersucht.
   }
 \end{tabproof}
 
-\FormulaThmDelta{F\colon A\to B \vdash F\colon A\twoheadrightarrow F[A]}{
+\FormulaThmDeltaK[Korestriktion auf das Bild als surjektive Funktion]{%
+  F\colon A\to B \vdash F\colon A\sur F[A]%
+}{CorestrictionToImageSurjective}{
   \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
   \DeltaRow{Funktionen}{F}
 }
@@ -150,7 +153,7 @@ eigenständigen Band~09 untersucht.
   \proofstep{1,5}{\exists x\in A\,F(x)=y}{\rEE{6,7,12}}
   \proofstep{1}{\forall y\,(y\in F[A]\rightarrow \exists x\in A\,F(x)=y)}{\rUI{\rRI{5,13}}}
 
-  \proofstep{1}{F\colon A\twoheadrightarrow F[A]}{\FormulaRefAuto{Surjektive Funktion}{2,3,4,14}}
+  \proofstep{1}{F\colon A\sur F[A]}{\FormulaRefAuto{Surjektive Funktion}{2,3,4,14}}
 \end{tabproof}
 
 % ------------------------------------------------------------
@@ -711,7 +714,378 @@ eigenständigen Band~09 untersucht.
 
 \section{Projektionen}
 
-\paragraph{Surjektivität}
+\subsection{Die Projektionen auf die Komponenten}
+
+\subsubsection{Projektion auf die erste Komponente}
+
+\FormulaDefDelta[Funktionsvorschrift für die Projektion auf die erste Komponente]
+{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(\pi_1\)]
+{(x,y)\in A\times B \vdash t_{\pi_1}(x,y)\in A}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{1}{x\in A \land y\in B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{x\in A}{\rAEa{2}}
+  \proofstep{1}{t_{\pi_1}(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}{1}}
+  \proofstep{1}{t_{\pi_1}(x,y)\in A}{\rIE{4,3}}
+\end{tabproof}
+
+
+
+\FormulaThmDelta[Projektion auf die erste Komponente als Funktion]{%
+\exists! F\colon A\times B\to A\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_1}(x,y)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_1}(x,y)= x}{\FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}}
+
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_1}(x,y)\in A}{\FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y)\in A}}
+
+  \proofstep{}{\exists! F\colon A\times B\to A\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_1}(x,y)}{%
+    \FormulaRefAuto{x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Projektion auf die erste Komponente]
+{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+
+\FormulaThmDelta[Projektion auf die erste Komponente]
+{\pi_1\colon A\times B\to A}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\pi_1\colon A\times B\to A}{%
+    \rAEa{\FormulaRefAuto{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta
+{\TotRel{\pi_1,A\times B,A}}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+    \proofstep{}{\pi_1\colon A\times B\to A}{\FormulaRefAuto{\pi_1\colon A\times B\to A}}
+    \proofstep{}{\TotRel{\pi_1,A\times B,A}}{\FormulaRefAuto{F\colon A\to B\vdash\TotRel{F,A,B}}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Projektion auf die erste Komponente]
+{(x,y)\in A\times B \vdash \pi_1(x,y)=x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{}{%
+    \forall x\in A\,\forall y\in B\, \pi_1(x,y)=t_{\pi_1}(x,y)}{%
+    \rAEb{\FormulaRefAuto{\pi_1\coloneqq\iota F\left(F\colon A\times B\to A \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_1}(x,y)\right)}}}
+  \proofstep{1}{\pi_1(x,y)=t_{\pi_1}(x,y)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{t_{\pi_1}(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_1}(x,y) \coloneqq x}{1}}
+  \proofstep{1}{\pi_1(x,y)=x}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
+\FormulaThmDelta
+{x\in A\dsep y\in B \vdash \pi_1(x,y)=x}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_1}}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{1,2}{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,2}}
+  \proofstep{1,2}{\pi_1(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B\vdash \pi_1(x,y)=x}{3}}
+\end{tabproof}
+
+
+\subsubsection{Projektion auf die zweite Komponente}
+
+\FormulaDefDelta[Funktionsvorschrift für die Projektion auf die zweite Komponente]
+{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+
+% — Typisierungsaxiom / Wertebereich —
+\FormulaThmDelta[Typisierungsaxiom für \(\pi_2\)]
+{(x,y)\in A\times B \vdash t_{\pi_2}(x,y)\in B}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{1}{x\in A \land y\in B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
+  \proofstep{1}{y\in B}{\rAEb{2}}
+  \proofstep{1}{t_{\pi_2}(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}{1}}
+  \proofstep{1}{t_{\pi_2}(x,y)\in B}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmDelta[Projektion auf die zweite Komponente als Funktion]{%
+\exists! F\colon A\times B\to B\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_2}(x,y)%
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+\begin{tabproof}
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_2}(x,y)= y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}}
+
+  \proofstep{}{\forall (x,y)\in A\times B\,t_{\pi_2}(x,y)\in B}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y)\in B}}
+
+  \proofstep{}{\exists! F\colon A\times B\to B\,\forall x\in A\,\forall y\in B\,F(x,y) = t_{\pi_2}(x,y)}{%
+    \FormulaRefAuto{x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B\exists! F\colon A\to B\,\forall x\in A\,F(x) = t(x)}{1,2}}
+\end{tabproof}
+
+\FormulaDefDelta[Projektion auf die zweite Komponente]
+{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+
+\FormulaThmDelta[Projektion auf die zweite Komponente]
+{\pi_2\colon A\times B\to B}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+  \proofstep{}{\pi_2\colon A\times B\to B}{%
+    \rAEa{\FormulaRefAuto{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}}}
+\end{tabproof}
+
+\FormulaThmDelta
+{\TotRel{\pi_2,A\times B,B}}
+{
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproof}
+    \proofstep{}{\pi_2\colon A\times B\to B}{\FormulaRefAuto{\pi_2\colon A\times B\to B}}
+    \proofstep{}{\TotRel{\pi_2,A\times B,B}}{\FormulaRefAuto{F\colon A\to B\vdash\TotRel{F,A,B}}{1}}
+\end{tabproof}
+
+\FormulaThmDelta[Grundgleichung der Projektion auf die zweite Komponente]
+{(x,y)\in A\times B \vdash \pi_2(x,y)=y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{(x,y)\in A\times B}{\rA}
+  \proofstep{}{%
+    \forall x\in A\,\forall y\in B\, \pi_2(x,y)=t_{\pi_2}(x,y)}{%
+    \rAEb{\FormulaRefAuto{\pi_2\coloneqq\iota F\left(F\colon A\times B\to B \land \forall x\in A\,\forall y\in B\, F(x,y)=t_{\pi_2}(x,y)\right)}}}
+  \proofstep{1}{\pi_2(x,y)=t_{\pi_2}(x,y)}{\rRE{1,\rUE{2}}}
+  \proofstep{1}{t_{\pi_2}(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash t_{\pi_2}(x,y) \coloneqq y}{1}}
+  \proofstep{1}{\pi_2(x,y)=y}{\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
+\end{tabproof}
+
+\FormulaThmDelta
+{x\in A\dsep y\in B \vdash \pi_2(x,y)=y}
+{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Funktionensymbol}{t_{\pi_2}}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{2}{y\in B}{\rA}
+  \proofstep{1,2}{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1,2}}
+  \proofstep{1,2}{\pi_2(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{3}}
+\end{tabproof}
+
+
+\subsubsection{Eigenschaften von Projektionsabbildungen}
+
+\FormulaThmDelta[Rekonstruktion aus Projektionen]{%
+  (x,y)\in A\times B \vdash (x,y) = \bigl(\pi_1(x,y),\pi_2(x,y)\bigr)
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
+  \DeltaRow{Projektion auf erste Komponente}{\pi_1:A\times B\to A}
+  \DeltaRow{Projektion auf zweite Komponente}{\pi_2:A\times B\to B}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{(x,y)\in A\times B}{\rA}
+  \proofstepwidestar[1]{x=\pi_1(x,y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{1}}}
+  \proofstepwidestar[1]{y=\pi_2(x,y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{1}}}
+  \proofstepwide[1]{(x,y)}{=}{(x,y)}{\rII}
+  \proofstepwide[1]{}{=}{(\pi_1(x,y),y)}{\rIE{2,4}}
+  \proofstepwide[1]{}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rIE{3,5}}
+  \proofstepwide[1]{(x,y)}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rChain{4,6}}
+\end{tabproofwide}
+
+\FormulaThmDelta[Element des Produkts als Paar]{%
+  z\in A\times B \vdash z = \bigl(\pi_1(z),\pi_2(z)\bigr)
+}{
+  \DeltaRow{Mengen}{A\dsep B\dsep z}
+  \DeltaRow{Projektion auf erste Komponente}{\pi_1:A\times B\to A}
+  \DeltaRow{Projektion auf zweite Komponente}{\pi_2:A\times B\to B}
+}
+\begin{tabproof}
+  \proofstep{1}{z\in A\times B}{\rA}
+
+  \proofstep{1}{\exists x\in A\,\exists y\in B\, z=(x,y)}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash \exists a \in A\, \exists b \in B\,x=(a,b)}{1}}
+
+  \proofstep{3}{x\in A\land y\in B\land z=(x,y)}{\rA}
+
+  \proofstep{3}{x\in A}{\rAEa{3}}
+
+  \proofstep{3}{y\in B}{\FormulaRefAuto{P\land Q\land R\vdash Q}{3}}
+
+  \proofstep{3}{z=(x,y)}{\rAEb{3}}
+
+  \proofstep{3}{(x,y)\in A\times B}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{4,5}}
+
+  \proofstep{3}{(x,y)=\bigl(\pi_1(x,y),\pi_2(x,y)\bigr)}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash (x,y)=\bigl(\pi_1(x,y),\pi_2(x,y)\bigr)}{7}}
+
+  \proofstep{3}{z=\bigl(\pi_1(z),\pi_2(z)\bigr)}{%
+    \rIE{6,8}}
+
+  \proofstep{1}{z=\bigl(\pi_1(z),\pi_2(z)\bigr)}{%
+    \rEE{2,3,9}}
+\end{tabproof}
+
+\FormulaThmDelta[Erste Komponente eines Produkteelements]{%
+  z\in A\times B\vdash \pi_1(z)\in A%
+}{%
+  \DeltaRow{Mengen}{z\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_1}%
+}
+\begin{tabproof}
+  \proofstep{1}{z\in A\times B}{\rA}
+  \proofstep{}{\pi_1\colon A\times B\to A}{%
+    \FormulaRefAuto{\pi_1\colon A\times B\to A}}
+  \proofstep{1}{\pi_1(z)\in A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,1}}
+\end{tabproof}
+
+\FormulaThmDelta[Zweite Komponente eines Produkteelements]{%
+  z\in A\times B\vdash \pi_2(z)\in B%
+}{%
+  \DeltaRow{Mengen}{z\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_2}%
+}
+\begin{tabproof}
+  \proofstep{1}{z\in A\times B}{\rA}
+  \proofstep{}{\pi_2\colon A\times B\to B}{%
+    \FormulaRefAuto{\pi_2\colon A\times B\to B}}
+  \proofstep{1}{\pi_2(z)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,1}}
+\end{tabproof}
+
+Die Grundgleichungen der Projektionen lassen sich unmittelbar auf Terme
+übertragen, die als Paare identifiziert sind.
+
+\FormulaThmDelta[Erste Projektion einer Paaridentität]{%
+  a=(x,y)\dsep (x,y)\in A\times B\vdash \pi_1(a)=x%
+}{%
+  \DeltaRow{Mengen}{a\dsep x\dsep y\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_1}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a=(x,y)}{\rA}
+  \proofstepwidestar[2]{(x,y)\in A\times B}{\rA}
+  \proofstepwidestar[1]{\pi_1(a)=\pi_1(a)}{\rII}
+  \proofstepwidestar[1]{\pi_1(a)=\pi_1(x,y)}{\rIE{1,3}}
+  \proofstepwidestar[2]{\pi_1(x,y)=x}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{2}}
+  \proofstepwidestar[1,2]{\pi_1(a)=x}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproofwide}
+
+\FormulaThmDelta[Zweite Projektion einer Paaridentität]{%
+  a=(x,y)\dsep (x,y)\in A\times B\vdash \pi_2(a)=y%
+}{%
+  \DeltaRow{Mengen}{a\dsep x\dsep y\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_2}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a=(x,y)}{\rA}
+  \proofstepwidestar[2]{(x,y)\in A\times B}{\rA}
+  \proofstepwidestar[1]{\pi_2(a)=\pi_2(a)}{\rII}
+  \proofstepwidestar[1]{\pi_2(a)=\pi_2(x,y)}{\rIE{1,3}}
+  \proofstepwidestar[2]{\pi_2(x,y)=y}{%
+    \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{2}}
+  \proofstepwidestar[1,2]{\pi_2(a)=y}{%
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
+\end{tabproofwide}
+
+Ist das identifizierte Objekt selbst bereits als Element eines Produkts
+typisiert, muss die Zugehörigkeit des dargestellten Paares nicht gesondert aus
+den Komponenten hergeleitet werden.
+
+\FormulaThmDelta[Erste Projektion eines identifizierten Produkteelements]{%
+  a\in A\times B\dsep a=(x,y)\vdash \pi_1(a)=x%
+}{%
+  \DeltaRow{Mengen}{a\dsep x\dsep y\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_1}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in A\times B}{\rA}
+  \proofstepwidestar[2]{a=(x,y)}{\rA}
+  \proofstepwidestar[2]{(x,y)=a}{%
+    \FormulaRefAuto{a = b \vdash b = a}{2}}
+  \proofstepwidestar[1,2]{(x,y)\in A\times B}{%
+    \FormulaRefAuto{a=b \dsep b\in A \vdash a\in A}{3,1}}
+  \proofstepwidestar[1,2]{\pi_1(a)=x}{%
+    \FormulaRefAuto{a=(x,y)\dsep (x,y)\in A\times B\vdash \pi_1(a)=x}{2,4}}
+\end{tabproofwide}
+
+\FormulaThmDelta[Zweite Projektion eines identifizierten Produkteelements]{%
+  a\in A\times B\dsep a=(x,y)\vdash \pi_2(a)=y%
+}{%
+  \DeltaRow{Mengen}{a\dsep x\dsep y\dsep A\dsep B}%
+  \DeltaRow{Funktionensymbol}{\pi_2}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in A\times B}{\rA}
+  \proofstepwidestar[2]{a=(x,y)}{\rA}
+  \proofstepwidestar[2]{(x,y)=a}{%
+    \FormulaRefAuto{a = b \vdash b = a}{2}}
+  \proofstepwidestar[1,2]{(x,y)\in A\times B}{%
+    \FormulaRefAuto{a=b \dsep b\in A \vdash a\in A}{3,1}}
+  \proofstepwidestar[1,2]{\pi_2(a)=y}{%
+    \FormulaRefAuto{a=(x,y)\dsep (x,y)\in A\times B\vdash \pi_2(a)=y}{2,4}}
+\end{tabproofwide}
+
+\subsection{Surjektivität}
+
+Die Definitionen der Projektionen stehen bewusst in diesem Band, weil ihre
+kennzeichnende Standard-Eigenschaft die Surjektivität ist. Für die erste
+Projektion genügt ein bewohnter zweiter Faktor, für die zweite ein bewohnter
+erster Faktor; bei leerer Zielmenge ist die Surjektivität ohnehin trivial.
+
+\subsubsection{Erste Projektion}
 
 \FormulaThmDelta[Surjektivität von \(\pi_1\)]{%
 x\in A \dsep b_0\in B \vdash \exists z\in A\times B\; \pi_1(z)=x
@@ -732,8 +1106,28 @@ x\in A \dsep b_0\in B \vdash \exists z\in A\times B\; \pi_1(z)=x
     \rEI{\rAI{3,4}}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Erste Projektion als surjektive Funktion]{%
+  b_0\in B \vdash \pi_1\colon A\times B\sur A%
+}{FirstProjectionSurjective}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep b_0\dsep x\dsep z}%
+}
+\begin{tabproof}
+  \proofstep{1}{b_0\in B}{\rA}
+  \proofstep{}{\pi_1\colon A\times B\to A}{%
+    \FormulaRefAuto{\pi_1\colon A\times B\to A}}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{1,3}{\exists z\in A\times B\,\pi_1(z)=x}{%
+    \FormulaRefAuto{%
+      x\in A\dsep b_0\in B\vdash
+      \exists z\in A\times B\,\pi_1(z)=x%
+    }{3,1}}
+  \proofstep{1}{\forall x\in A\,\exists z\in A\times B\,\pi_1(z)=x}{%
+    \rUI{\rRI{3,4}}}
+  \proofstep{1}{\pi_1\colon A\times B\sur A}{%
+    \FormulaRefAuto{Surjektive Funktion}{2,5}}
+\end{tabproof}
 
-\paragraph{Surjektivität}
+\subsubsection{Zweite Projektion}
 
 \FormulaThmDelta[Surjektivität von \(\pi_2\)]{%
 y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
@@ -752,6 +1146,27 @@ y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
   % Existenzzeuge z = (a0,y) für Surjektivität
   \proofstep{1,2}{\exists z\in A\times B\; \pi_2(z)=y}{%
     \rEI{\rAI{3,4}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zweite Projektion als surjektive Funktion]{%
+  a_0\in A \vdash \pi_2\colon A\times B\sur B%
+}{SecondProjectionSurjective}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep a_0\dsep y\dsep z}%
+}
+\begin{tabproof}
+  \proofstep{1}{a_0\in A}{\rA}
+  \proofstep{}{\pi_2\colon A\times B\to B}{%
+    \FormulaRefAuto{\pi_2\colon A\times B\to B}}
+  \proofstep{3}{y\in B}{\rA}
+  \proofstep{1,3}{\exists z\in A\times B\,\pi_2(z)=y}{%
+    \FormulaRefAuto{%
+      y\in B\dsep a_0\in A\vdash
+      \exists z\in A\times B\,\pi_2(z)=y%
+    }{3,1}}
+  \proofstep{1}{\forall y\in B\,\exists z\in A\times B\,\pi_2(z)=y}{%
+    \rUI{\rRI{3,4}}}
+  \proofstep{1}{\pi_2\colon A\times B\sur B}{%
+    \FormulaRefAuto{Surjektive Funktion}{2,5}}
 \end{tabproof}
 
 
@@ -961,9 +1376,9 @@ C\subseteq A \vdash F\restriction_C\colon C\twoheadrightarrow F[C]
 
 \subsection{Korestriktion auf das Bild}
 
-Die Aussage, dass jede Funktion \(F\colon A\to B\) als Abbildung
-\(F\colon A\twoheadrightarrow F[A]\) surjektiv ist, wurde bereits im
-axiomatischen Teil dieses Bandes bewiesen.
+Die Korestriktion einer Funktion auf ihr Bild wurde bereits im grundlegenden
+Aufbau dieses Bandes als surjektive Standardkonstruktion nachgewiesen. Sie wird
+im Folgenden ohne erneute Herleitung verwendet.
 
 \section{Kompositionen}
 

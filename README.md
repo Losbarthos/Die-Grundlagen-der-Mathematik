@@ -79,13 +79,17 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B15 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
-Allgemeine Funktionskonstruktionen stehen in B05; ihre injektiven,
-surjektiven und bijektiven Eigenschaften werden in B06--B08 entwickelt. Das
-Auswahlprinzip steht getrennt in B09, damit die elementare Surjektionstheorie
-nicht vom Auswahlaxiom abhängt. Arithmetische Funktionen bleiben in B12,
-während ihre allgemeinen Eigenschaften bereits in den Funktionsbänden
-bewiesen werden. Die Nummerierung bezeichnet damit eine Beweisreihenfolge,
-keine ausschließliche thematische Zuordnung.
+Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
+Allgemeine Standardkonstruktionen mit kennzeichnender Abbildungseigenschaft
+werden dagegen erstmals im passenden Eigenschaftsband eingeführt:
+Inklusionsabbildungen in B06, Projektionen in B07 sowie Identitäts- und
+Umkehrfunktionen in B08. Das Auswahlprinzip steht getrennt in B09, damit die
+elementare Surjektionstheorie nicht vom Auswahlaxiom abhängt.
+Fachspezifische Funktionen bleiben in dem Band, der die für ihre Definition
+benötigten Gegenstände einführt; insbesondere bleiben arithmetische Funktionen
+in B12. Ihre allgemeinen Eigenschaften werden mit den Sätzen aus B06--B08
+nachgewiesen. Die Nummerierung bezeichnet damit eine Beweisreihenfolge, keine
+ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
