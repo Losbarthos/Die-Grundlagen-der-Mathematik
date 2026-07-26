@@ -65,8 +65,8 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
 | Band | Thema |
 | --- | --- |
-| B01 | Logische Grundbegriffe |
-| B02 | Logische Sätze |
+| B01 | Grundlagen der Logik |
+| B02 | Theoreme der Logik |
 | B03 | Mengenlehre und funktionsfreie ZFC-Schemata |
 | B04 | Totale Relationen |
 | B05 | Funktionen |
@@ -77,7 +77,7 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B10 | Äquivalenzrelationen und Quotienten |
 | B11 | Ordnungsrelationen |
 | B12 | Natürliche Zahlen |
-| B13 | Ganze Zahlen aus Äquivalenzrelationen und erweiterten Peano-Axiomen |
+| B13 | Ganze Zahlen |
 | B14 | Endliche Mengen |
 | B15 | Halbgruppen, Monoide und Halbringe |
 | B16 | Gruppen und Ringe |
