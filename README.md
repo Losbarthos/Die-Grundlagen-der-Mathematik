@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B15
+### Standalone-Bände B03 bis B18
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -57,6 +57,9 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B13 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12 |
 | B14 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13 |
 | B15 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14 |
+| B16 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15 |
+| B17 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16 |
+| B18 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -74,22 +77,28 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B10 | Äquivalenzrelationen und Quotienten |
 | B11 | Ordnungsrelationen |
 | B12 | Natürliche Zahlen |
-| B13 | Endliche Mengen |
-| B14 | Halbverbände, Verbände und Beschränktheit |
-| B15 | Frankls Vermutung |
+| B13 | Ganze Zahlen aus Äquivalenzrelationen und erweiterten Peano-Axiomen |
+| B14 | Endliche Mengen |
+| B15 | Halbgruppen, Monoide und Halbringe |
+| B16 | Gruppen und Ringe |
+| B17 | Halbverbände, Verbände und Beschränktheit |
+| B18 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
 Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
 Allgemeine Standardkonstruktionen mit kennzeichnender Abbildungseigenschaft
 werden dagegen erstmals im passenden Eigenschaftsband eingeführt:
-Inklusionsabbildungen in B06, Projektionen in B07 sowie Identitäts- und
-Umkehrfunktionen in B08. Das Auswahlprinzip steht getrennt in B09, damit die
-elementare Surjektionstheorie nicht vom Auswahlaxiom abhängt.
+Inklusionsabbildungen und die injektive Adjunktionsabbildung in B06,
+Projektionen in B07 sowie Identitäts- und Umkehrfunktionen in B08. Das
+Auswahlprinzip steht getrennt in B09, damit die elementare
+Surjektionstheorie nicht vom Auswahlaxiom abhängt.
 Fachspezifische Funktionen bleiben in dem Band, der die für ihre Definition
-benötigten Gegenstände einführt; insbesondere bleiben arithmetische Funktionen
-in B12. Ihre allgemeinen Eigenschaften werden mit den Sätzen aus B06--B08
-nachgewiesen. Die Nummerierung bezeichnet damit eine Beweisreihenfolge, keine
-ausschließliche thematische Zuordnung.
+benötigten Gegenstände einführt; insbesondere bleiben natürliche
+arithmetische Funktionen in B12 und ganzzahlige Funktionen in B13. Die
+Bände B15 und B16 abstrahieren deren Gesetze zu Monoid-, Halbring-, Gruppen-
+und Ringstrukturen. Ihre allgemeinen Abbildungseigenschaften werden mit den
+Sätzen aus B06--B08 nachgewiesen. Die Nummerierung bezeichnet damit eine
+Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
@@ -97,8 +106,18 @@ ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
 unveränderte tex→aux-Standardregel.
 Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
 unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
-Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B15`
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B18`
 und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
+
+### PDF-Titel und File Juggler
+
+Die gemeinsame Präambel lädt `hyperref` mit der Option `pdfusetitle`.
+Dadurch werden `\title` und `\author` jedes Standalone-Bandes automatisch in
+die PDF-Metadaten `Title` und `Author` übernommen. File Juggler kann beim
+Umbenennen deshalb direkt **PDF properties → Title** verwenden; die
+Dateiendung bleibt dabei erhalten. Bei Namenskonflikten sollte
+**Rename new file** gewählt werden, damit keine vorhandene PDF überschrieben
+wird.
 
 Vorausgesetzt werden PowerShell, `latexmk`, `lualatex` und `pdftotext` im
 `PATH`. Ein sauberer Build samt vollständigem Referenzaudit ist jeweils ein
@@ -118,6 +137,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B13
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B14
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B15
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B16
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B17
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B18
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -158,10 +180,10 @@ Zuordnung der titelbasierten Quelldateien zu `registry/_Bxx` im dokumentierten
 Benötigt wird latexmk 4.84 oder neuer.
 
 Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei
-`Bd. 15 - Frankls Vermutung.tex`:
+`Bd. 18 - Frankls Vermutung.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 15 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 18 - Frankls Vermutung.tex"
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen

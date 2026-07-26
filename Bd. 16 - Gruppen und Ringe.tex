@@ -1,0 +1,1464 @@
+%============================================================
+%  Bd. 16 - Gruppen und Ringe
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B16}
+}{
+}
+
+\title{Bd. 16 - Gruppen und Ringe}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{16}
+
+\begin{document}
+
+\title{Bd. 16 - Gruppen und Ringe}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{16}
+\renewcommand{\FormulaBandID}{16}
+
+\chapter{Einleitung}
+
+Band~15 entwickelt Halbgruppen und Monoide aus einer binären Operation.
+Der vorliegende Band ergänzt zunächst die Existenz inverser Elemente und
+gelangt so zu Gruppen und abelschen Gruppen. Anschließend werden zwei
+Operationen auf demselben Träger miteinander verbunden: Die Addition bildet
+eine abelsche Gruppe, die Multiplikation ein Monoid, und beide Operationen
+erfüllen die Distributivgesetze. Dies führt zu Ringen mit Eins und zu
+kommutativen Ringen mit Eins.
+
+Die in Band~13 konstruierten ganzen Zahlen bilden das grundlegende Beispiel.
+Ihre bereits aus der Quotientenkonstruktion hergeleiteten Rechengesetze
+werden am Ende dieses Bandes zu den entsprechenden algebraischen
+Strukturaussagen zusammengefasst.
+
+\chapter{Gruppen}
+
+\section{Gruppen als Monoide mit Inversen}
+
+\FormulaAxiomDeltaK[Existenz eines beidseitigen Inversen]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &\exists y\in G\,
+      \bigl(x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseExistenceLaw}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaDefDeltaK[Begriff der Gruppe]{%
+  \GroupAlg{G}{\circ}{e}%
+}{GroupDef}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Monoid}{\MonoidAlg{G}{\circ}{e}}
+    [\FormulaRefAuto{MonoidDef}[def]]
+  \DeltaRow{Beidseitige Inverse}{%
+    \begin{aligned}[t]
+      &x\in G\vdash{}\\[-2pt]
+      &\exists y\in G\,
+        \bigl(x\circ y=e\land y\circ x=e\bigr)
+    \end{aligned}}
+    [\FormulaRefAuto{GroupInverseExistenceLaw}[ax]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppe}{\GroupAlg{G}{\circ}{e}}
+}
+
+\FormulaAxiomDeltaK[Monoidanteil einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\vdash\MonoidAlg{G}{\circ}{e}%
+}{GroupBaseMonoidAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaAxiomDeltaK[Inverse in einer Gruppe]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &\exists y\in G\,
+      \bigl(x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseExistenceAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\section{Grundlegende Gruppengesetze}
+
+\FormulaThmDeltaK[Halbgruppenanteil einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\vdash\SemigroupAlg{G}{\circ}%
+}{GroupBaseSemigroup}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Abgeschlossenheit der Gruppenoperation]{%
+  \GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash x\circ y\in G%
+}{GroupClosure}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{3}{y\in G}{\rA}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstep{1,2,3}{x\circ y\in G}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Assoziativität der Gruppenoperation]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\vdash{}\\
+    &(x\circ y)\circ z=x\circ(y\circ z)
+  \end{aligned}
+}{GroupAssociativity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstepwidestar[2]{x\in G}{\rA}
+  \proofstepwidestar[3]{y\in G}{\rA}
+  \proofstepwidestar[4]{z\in G}{\rA}
+  \proofstepwidestar[1]{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestar[1,2,3,4]{(x\circ y)\circ z=x\circ(y\circ z)}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{5,2,3,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Neutrales Element liegt im Gruppenträger]{%
+  \GroupAlg{G}{\circ}{e}\vdash e\in G%
+}{GroupIdentityCarrier}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{e\in G}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Linksneutralität in einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash e\circ x=x%
+}{GroupLeftIdentity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1,2}{e\circ x=x}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{3,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechtsneutralität in einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x\circ e=x%
+}{GroupRightIdentity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1,2}{x\circ e=x}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{3,2}}
+\end{tabproof}
+
+\section{Eindeutigkeit des Inversen}
+
+\FormulaThmDeltaK[Eindeutigkeit aus Links- und Rechtsinverse]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+      y\circ x=e\dsep x\circ z=e\\
+    &\vdash y=z
+  \end{aligned}
+}{GroupInverseUnique}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Einsetzen der Rechtsinverse]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y=y\circ(x\circ z)
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y=y\circ(x\circ z)%
+  }[GroupInverseUniqueRightInverseSubstitution]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwide[1,3]{y}{=}{y\circ e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupRightIdentity}[thm]{1,3}}}
+    \proofstepwide[6]{y\circ e}{=}{y\circ(x\circ z)}{\rIE{6}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y=y\circ(x\circ z)}{\rChain{7,8}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion mit der Linksinversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y\circ(x\circ z)=z
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y\circ(x\circ z)=z%
+  }[GroupInverseUniqueLeftInverseReduction]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwide[1,2,3,4]{y\circ(x\circ z)}{=}{%
+      (y\circ x)\circ z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupAssociativity}[thm]{1,3,2,4}}}
+    \proofstepwide[5]{(y\circ x)\circ z}{=}{e\circ z}{\rIE{5}}
+    \proofstepwide[1,4]{e\circ z}{=}{z}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y\circ(x\circ z)=z}{\rChain{7,8,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Verknüpfung beider Teilrechnungen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y=z
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y=z%
+  }[GroupInverseUniqueConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y=y\circ(x\circ z)}{%
+      \FormulaRefAuto{GroupInverseUniqueRightInverseSubstitution}{%
+        1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y\circ(x\circ z)=z}{%
+      \FormulaRefAuto{GroupInverseUniqueLeftInverseReduction}{%
+        1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{y=z}{\rChain{7,8}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaDefDeltaK[Inverses Element]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &x^{-1}\coloneqq
+      \iota y\,
+      \bigl(y\in G\land x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseElement}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+  \DeltaRow{Träger}{x^{-1}\in G}
+  \DeltaRow{Rechtsinverse}{x\circ x^{-1}=e}
+  \DeltaRow{Linksinverse}{x^{-1}\circ x=e}
+  \DeltaRow{Eindeutigkeit}{\FormulaRefAuto{GroupInverseUnique}[thm]}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Inverses Element}{x^{-1}}
+}
+
+\FormulaThmDeltaK[Inverses Element liegt im Gruppenträger]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x^{-1}\in G%
+}{GroupInverseCarrier}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x^{-1}\in G}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechtsinverse Gleichung]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x\circ x^{-1}=e%
+}{GroupInverseRight}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x\circ x^{-1}=e}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Linksinverse Gleichung]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x^{-1}\circ x=e%
+}{GroupInverseLeft}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x^{-1}\circ x=e}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\section{Kürzungsgesetze}
+
+\FormulaThmDeltaK[Linkskürzung in Gruppen]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+      a\circ b=a\circ c\\
+    &\vdash b=c
+  \end{aligned}
+}{GroupLeftCancellation}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Linksmultiplikation mit dem Inversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &(a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &(a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c
+    \end{aligned}
+  }[GroupLeftCancellationInverseMultiplication]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2]{a^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[5,6]{%
+      a^{-1}\circ(a\circ b)=a^{-1}\circ(a\circ c)}{\rIE{5}}
+    \proofstepwide[1,2,3,6]{%
+      (a^{-1}\circ a)\circ b}{=}{a^{-1}\circ(a\circ b)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,6,2,3}}
+    \proofstepwide[1,2,4,6]{%
+      a^{-1}\circ(a\circ c)}{=}{(a^{-1}\circ a)\circ c}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupAssociativity}[thm]{1,6,2,4}}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      (a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c}{%
+      \rChain{8,7,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion auf das neutrale Element]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &e\circ b=e\circ c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &e\circ b=e\circ c
+    \end{aligned}
+  }[GroupLeftCancellationIdentityEquation]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{%
+      (a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c}{%
+      \FormulaRefAuto{GroupLeftCancellationInverseMultiplication}[thm]{%
+        1,2,3,4,5}}
+    \proofstepwidestar[1,2]{a^{-1}\circ a=e}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,2}}
+    \proofstepwidestar[1,2]{e=a^{-1}\circ a}{%
+      \FormulaRefAuto{a=b\vdash b=a}{7}}
+    \proofstepwide[1,2,3]{e\circ b}{=}{(a^{-1}\circ a)\circ b}{\rIE{8}}
+    \proofstepwide[1,2,4]{(a^{-1}\circ a)\circ c}{=}{e\circ c}{\rIE{7}}
+    \proofstepwidestar[1,2,3,4,5]{e\circ b=e\circ c}{%
+      \rChain{9,6,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Entfernen des neutralen Elements]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash b=c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash b=c
+    \end{aligned}
+  }[GroupLeftCancellationConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{e\circ b=e\circ c}{%
+      \FormulaRefAuto{GroupLeftCancellationIdentityEquation}[thm]{1,2,3,4,5}}
+    \proofstepwide[1,3]{b}{=}{e\circ b}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupLeftIdentity}[thm]{1,3}}}
+    \proofstepwide[1,4]{e\circ c}{=}{c}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5]{b=c}{\rChain{7,6,8}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Rechtskürzung in Gruppen]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+      b\circ a=c\circ a\\
+    &\vdash b=c
+  \end{aligned}
+}{GroupRightCancellation}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsmultiplikation mit dem Inversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})
+    \end{aligned}
+  }[GroupRightCancellationInverseMultiplication]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2]{a^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[5,6]{%
+      (b\circ a)\circ a^{-1}=(c\circ a)\circ a^{-1}}{\rIE{5}}
+    \proofstepwide[1,2,3,6]{%
+      b\circ(a\circ a^{-1})}{=}{(b\circ a)\circ a^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupAssociativity}[thm]{1,3,2,6}}}
+    \proofstepwide[1,2,4,6]{%
+      (c\circ a)\circ a^{-1}}{=}{c\circ(a\circ a^{-1})}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,4,2,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})}{%
+      \rChain{8,7,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion auf das neutrale Element]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ e=c\circ e
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ e=c\circ e
+    \end{aligned}
+  }[GroupRightCancellationIdentityEquation]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{%
+      b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})}{%
+      \FormulaRefAuto{GroupRightCancellationInverseMultiplication}[thm]{%
+        1,2,3,4,5}}
+    \proofstepwidestar[1,2]{a\circ a^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,2}}
+    \proofstepwidestar[1,2]{e=a\circ a^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{7}}
+    \proofstepwide[1,2,3]{b\circ e}{=}{b\circ(a\circ a^{-1})}{\rIE{8}}
+    \proofstepwide[1,2,4]{c\circ(a\circ a^{-1})}{=}{c\circ e}{\rIE{7}}
+    \proofstepwidestar[1,2,3,4,5]{b\circ e=c\circ e}{%
+      \rChain{9,6,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Entfernen des neutralen Elements]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash b=c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash b=c
+    \end{aligned}
+  }[GroupRightCancellationConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{b\circ e=c\circ e}{%
+      \FormulaRefAuto{GroupRightCancellationIdentityEquation}[thm]{1,2,3,4,5}}
+    \proofstepwide[1,3]{b}{=}{b\circ e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{GroupRightIdentity}[thm]{1,3}}}
+    \proofstepwide[1,4]{c\circ e}{=}{c}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5]{b=c}{\rChain{7,6,8}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\section{Inverse eines Produkts}
+
+\FormulaThmDeltaK[Inverse eines Produkts]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+    &(x\circ y)^{-1}=y^{-1}\circ x^{-1}
+  \end{aligned}
+}{GroupProductInverse}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsinverse des Produkts]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+      &(x\circ y)\circ(y^{-1}\circ x^{-1})=e
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y\in G
+    \vdash (x\circ y)\circ(y^{-1}\circ x^{-1})=e%
+  }[GroupProductInverseRightCandidate]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwide[1,2,3,4,5]{%
+      (x\circ y)\circ(y^{-1}\circ x^{-1})}{=}{%
+      x\circ\bigl((y\circ y^{-1})\circ x^{-1}\bigr)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,2,3,5,4}}
+    \proofstepwide[1,3]{%
+      x\circ\bigl((y\circ y^{-1})\circ x^{-1}\bigr)}{=}{%
+      x\circ(e\circ x^{-1})}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,3}}
+    \proofstepwide[1,2,4]{x\circ(e\circ x^{-1})}{=}{x\circ x^{-1}}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwide[1,2]{x\circ x^{-1}}{=}{e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,2}}
+    \proofstepwidestar[1,2,3]{%
+      (x\circ y)\circ(y^{-1}\circ x^{-1})=e}{%
+      \rChain{6,7,8,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Linksinverse des Produkts]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+      &(y^{-1}\circ x^{-1})\circ(x\circ y)=e
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y\in G
+    \vdash (y^{-1}\circ x^{-1})\circ(x\circ y)=e%
+  }[GroupProductInverseLeftCandidate]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwide[1,2,3,4,5]{%
+      (y^{-1}\circ x^{-1})\circ(x\circ y)}{=}{%
+      y^{-1}\circ\bigl((x^{-1}\circ x)\circ y\bigr)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,5,4,2,3}}
+    \proofstepwide[1,2]{%
+      y^{-1}\circ\bigl((x^{-1}\circ x)\circ y\bigr)}{=}{%
+      y^{-1}\circ(e\circ y)}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,2}}
+    \proofstepwide[1,3,5]{y^{-1}\circ(e\circ y)}{=}{y^{-1}\circ y}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,3}}
+    \proofstepwide[1,3]{y^{-1}\circ y}{=}{e}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,3}}
+    \proofstepwidestar[1,2,3]{%
+      (y^{-1}\circ x^{-1})\circ(x\circ y)=e}{%
+      \rChain{6,7,8,9}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Eindeutigkeit}
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwidestar[1,2,3]{x\circ y\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,2,3}}
+    \proofstepwidestar[1,4,5]{y^{-1}\circ x^{-1}\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,5,4}}
+    \proofstepwidestar[1,6]{(x\circ y)^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,6}}
+    \proofstepwidestar[1,2,3]{%
+      (y^{-1}\circ x^{-1})\circ(x\circ y)=e}{%
+      \FormulaRefAuto{GroupProductInverseLeftCandidate}[thm]{1,2,3}}
+    \proofstepwidestar[1,6]{%
+      (x\circ y)\circ(x\circ y)^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,6}}
+    \proofstepwidestar[1,2,3,6,7,8,9,10]{%
+      y^{-1}\circ x^{-1}=(x\circ y)^{-1}}{%
+      \FormulaRefAuto{GroupInverseUnique}[thm]{1,6,7,8,9,10}}
+    \proofstepwidestar[1,2,3]{%
+      (x\circ y)^{-1}=y^{-1}\circ x^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{11}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\chapter{Abelsche Gruppen}
+
+\FormulaAxiomDeltaK[Kommutativität einer Gruppenoperation]{%
+  \GroupAlg{G}{\circ}{e}\dsep x,y\in G
+  \vdash x\circ y=y\circ x%
+}{AbelianGroupCommutativityLaw}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaDefDeltaK[Begriff der abelschen Gruppe]{%
+  \AbelianGroupAlg{G}{\circ}{e}%
+}{AbelianGroupDef}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Gruppe}{\GroupAlg{G}{\circ}{e}}
+    [\FormulaRefAuto{GroupDef}[def]]
+  \DeltaRow{Kommutativität}{%
+    x,y\in G\vdash x\circ y=y\circ x}
+    [\FormulaRefAuto{AbelianGroupCommutativityLaw}[ax]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Abelsche Gruppe}{\AbelianGroupAlg{G}{\circ}{e}}
+}
+
+\FormulaAxiomDeltaK[Gruppenanteil einer abelschen Gruppe]{%
+  \AbelianGroupAlg{G}{\circ}{e}\vdash\GroupAlg{G}{\circ}{e}%
+}{AbelianGroupBaseGroupAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaAxiomDeltaK[Kommutativität in einer abelschen Gruppe]{%
+  \AbelianGroupAlg{G}{\circ}{e}\dsep x,y\in G
+  \vdash x\circ y=y\circ x%
+}{AbelianGroupCommutativityAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaThmDeltaK[Abelsche Gruppen sind kommutative Monoide]{%
+  \AbelianGroupAlg{G}{\circ}{e}
+  \vdash\CommutativeMonoidAlg{G}{\circ}{e}%
+}{AbelianGroupIsCommutativeMonoid}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\AbelianGroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{1}}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{2}}
+  \proofstep{1}{x,y\in G\vdash x\circ y=y\circ x}{%
+    \FormulaRefAuto{AbelianGroupCommutativityAxiom}[ax]{1}}
+  \proofstep{1}{\CommutativeMonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{CommutativeMonoidDef}[def]{3,4}}
+\end{tabproof}
+
+\chapter{Ringe mit Eins}
+
+\section{Ringaxiome}
+
+\FormulaAxiomDeltaK[Linksdistributivität]{%
+  a,b,c\in R\vdash
+  a\cdot(b+c)=a\cdot b+a\cdot c%
+}{RingLeftDistributivityLaw}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaAxiomDeltaK[Rechtsdistributivität]{%
+  a,b,c\in R\vdash
+  (a+b)\cdot c=a\cdot c+b\cdot c%
+}{RingRightDistributivityLaw}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaDefDeltaK[Begriff des Rings mit Eins]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}%
+}{RingDef}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Additive abelsche Gruppe}
+    {\AbelianGroupAlg{R}{+}{0}}
+    [\FormulaRefAuto{AbelianGroupDef}[def]]
+  \DeltaRow{Multiplikatives Monoid}
+    {\MonoidAlg{R}{\cdot}{1}}
+    [\FormulaRefAuto{MonoidDef}[def]]
+  \DeltaRow{Linksdistributivität}{%
+    \begin{aligned}[t]
+      &a,b,c\in R\vdash{}\\[-2pt]
+      &a\cdot(b+c)=a\cdot b+a\cdot c
+    \end{aligned}}
+    [\FormulaRefAuto{RingLeftDistributivityLaw}[ax]]
+  \DeltaRow{Rechtsdistributivität}{%
+    \begin{aligned}[t]
+      &a,b,c\in R\vdash{}\\[-2pt]
+      &(a+b)\cdot c=a\cdot c+b\cdot c
+    \end{aligned}}
+    [\FormulaRefAuto{RingRightDistributivityLaw}[ax]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Ring mit Eins}{\RingAlg{R}{+}{\cdot}{0}{1}}
+}
+
+\FormulaAxiomDeltaK[Additiver Anteil eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}
+  \vdash\AbelianGroupAlg{R}{+}{0}%
+}{RingAdditiveAbelianGroupAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaAxiomDeltaK[Multiplikativer Anteil eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}
+  \vdash\MonoidAlg{R}{\cdot}{1}%
+}{RingMultiplicativeMonoidAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaAxiomDeltaK[Linkes Distributivgesetz eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b,c\in R
+  \vdash a\cdot(b+c)=a\cdot b+a\cdot c%
+}{RingLeftDistributivityAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaAxiomDeltaK[Rechtes Distributivgesetz eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b,c\in R
+  \vdash (a+b)\cdot c=a\cdot c+b\cdot c%
+}{RingRightDistributivityAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\section{Kommutative Ringe}
+
+\FormulaAxiomDeltaK[Kommutativität der Ringmultiplikation]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash a\cdot b=b\cdot a%
+}{CommutativeRingMultiplicationLaw}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaDefDeltaK[Begriff des kommutativen Rings mit Eins]{%
+  \CommutativeRingAlg{R}{+}{\cdot}{0}{1}%
+}{CommutativeRingDef}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Ring mit Eins}{\RingAlg{R}{+}{\cdot}{0}{1}}
+    [\FormulaRefAuto{RingDef}[def]]
+  \DeltaRow{Kommutative Multiplikation}{%
+    a,b\in R\vdash a\cdot b=b\cdot a}
+    [\FormulaRefAuto{CommutativeRingMultiplicationLaw}[ax]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Kommutativer Ring mit Eins}
+    {\CommutativeRingAlg{R}{+}{\cdot}{0}{1}}
+}
+
+\FormulaAxiomDeltaK[Ringanteil eines kommutativen Rings]{%
+  \CommutativeRingAlg{R}{+}{\cdot}{0}{1}
+  \vdash\RingAlg{R}{+}{\cdot}{0}{1}%
+}{CommutativeRingBaseRingAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\FormulaAxiomDeltaK[Multiplikationskommutativität im kommutativen Ring]{%
+  \CommutativeRingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash a\cdot b=b\cdot a%
+}{CommutativeRingMultiplicationAxiom}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+
+\section{Abgeleitete Trägergesetze}
+
+\FormulaThmDeltaK[Additive Gruppe eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\vdash\GroupAlg{R}{+}{0}%
+}{RingAdditiveGroup}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{1}{\AbelianGroupAlg{R}{+}{0}}{%
+    \FormulaRefAuto{RingAdditiveAbelianGroupAxiom}[ax]{1}}
+  \proofstep{1}{\GroupAlg{R}{+}{0}}{%
+    \FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Multiplikative Halbgruppe eines Rings]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\vdash\SemigroupAlg{R}{\cdot}%
+}{RingMultiplicativeSemigroup}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{1}{\MonoidAlg{R}{\cdot}{1}}{%
+    \FormulaRefAuto{RingMultiplicativeMonoidAxiom}[ax]{1}}
+  \proofstep{1}{\SemigroupAlg{R}{\cdot}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Abgeschlossenheit der Ringmultiplikation]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash a\cdot b\in R%
+}{RingMultiplicationClosure}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{2}{a\in R}{\rA}
+  \proofstep{3}{b\in R}{\rA}
+  \proofstep{1}{\SemigroupAlg{R}{\cdot}}{%
+    \FormulaRefAuto{RingMultiplicativeSemigroup}[thm]{1}}
+  \proofstep{1,2,3}{a\cdot b\in R}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,2,3}}
+\end{tabproof}
+
+\section{Additives Inverses und Vorzeichen}
+
+\FormulaDefDeltaK[Additives Inverses in einem Ring]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R\vdash{}\\
+    &-a\coloneqq
+      \iota b\,
+      \bigl(b\in R\land a+b=0\land b+a=0\bigr)
+  \end{aligned}
+}{RingNegativeElement}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+  \DeltaRow{Träger}{-a\in R}
+  \DeltaRow{Rechtsinverse}{a+(-a)=0}
+  \DeltaRow{Linksinverse}{(-a)+a=0}
+  \DeltaRow{Eindeutigkeit}{\FormulaRefAuto{GroupInverseUnique}[thm]}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Additives Inverses}{-a}
+}
+
+\FormulaThmDeltaK[Additives Inverses liegt im Ringträger]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R\vdash -a\in R%
+}{RingNegativeCarrier}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{2}{a\in R}{\rA}
+  \proofstep{1,2}{-a\in R}{%
+    \FormulaRefAuto{RingNegativeElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechte additive Inversengleichung]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+  \vdash a+(-a)=0%
+}{RingNegativeRight}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{2}{a\in R}{\rA}
+  \proofstep{1,2}{a+(-a)=0}{%
+    \FormulaRefAuto{RingNegativeElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Linke additive Inversengleichung]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+  \vdash (-a)+a=0%
+}{RingNegativeLeft}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstep{2}{a\in R}{\rA}
+  \proofstep{1,2}{(-a)+a=0}{%
+    \FormulaRefAuto{RingNegativeElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Doppelte Negation]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+  \vdash -(-a)=a%
+}{RingDoubleNegative}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstepwidestar[2]{a\in R}{\rA}
+  \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+    \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+  \proofstepwidestar[1,2]{-a\in R}{%
+    \FormulaRefAuto{RingNegativeCarrier}[thm]{1,2}}
+  \proofstepwidestar[1,4]{-(-a)\in R}{%
+    \FormulaRefAuto{RingNegativeCarrier}[thm]{1,4}}
+  \proofstepwidestar[1,4]{-(-a)+(-a)=0}{%
+    \FormulaRefAuto{RingNegativeLeft}[thm]{1,4}}
+  \proofstepwidestar[1,2]{(-a)+a=0}{%
+    \FormulaRefAuto{RingNegativeLeft}[thm]{1,2}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{-(-a)=a}{%
+    \FormulaRefAuto{GroupInverseUnique}[thm]{3,4,5,2,6,7}}
+\end{tabproofwide}
+
+\section{Nullabsorption}
+
+\FormulaThmDeltaK[Linke Nullabsorption]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+  \vdash 0\cdot a=0%
+}{RingLeftZeroAbsorption}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Verdopplung]{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+    \vdash 0\cdot a=0\cdot a+0\cdot a
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+    \vdash 0\cdot a=0\cdot a+0\cdot a%
+  }[RingLeftZeroDoubling]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1]{0\in R}{%
+      \FormulaRefAuto{GroupIdentityCarrier}[thm]{3}}
+    \proofstepwide[3,4]{0+0}{=}{0}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{3,4}}
+    \proofstepwide[5]{0\cdot a}{=}{(0+0)\cdot a}{%
+      \rIE{\FormulaRefAuto{a=b\vdash b=a}{5}}}
+    \proofstepwide[1,2,4]{(0+0)\cdot a}{=}{%
+      0\cdot a+0\cdot a}{%
+      \FormulaRefAuto{RingRightDistributivityAxiom}[ax]{1,4,4,2}}
+    \proofstepwidestar[1,2]{0\cdot a=0\cdot a+0\cdot a}{%
+      \rChain{6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Kürzung}
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1,2]{0\cdot a\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{%
+        1,\FormulaRefAuto{GroupIdentityCarrier}[thm]{3},2}}
+    \proofstepwide[3,4]{0\cdot a+0}{=}{0\cdot a}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{3,4}}
+    \proofstepwide[1,2]{0\cdot a}{=}{0\cdot a+0\cdot a}{%
+      \FormulaRefAuto{RingLeftZeroDoubling}[thm]{1,2}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      0\cdot a+0=0\cdot a+0\cdot a}{\rChain{5,6}}
+    \proofstepwidestar[1,2,3,4,7]{0=0\cdot a}{%
+      \FormulaRefAuto{GroupLeftCancellation}[thm]{3,4,
+        \FormulaRefAuto{GroupIdentityCarrier}[thm]{3},4,7}}
+    \proofstepwidestar[1,2]{0\cdot a=0}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Rechte Nullabsorption]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+  \vdash a\cdot0=0%
+}{RingRightZeroAbsorption}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Verdopplung]{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+    \vdash a\cdot0=a\cdot0+a\cdot0
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a\in R
+    \vdash a\cdot0=a\cdot0+a\cdot0%
+  }[RingRightZeroDoubling]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1]{0\in R}{%
+      \FormulaRefAuto{GroupIdentityCarrier}[thm]{3}}
+    \proofstepwide[3,4]{0+0}{=}{0}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{3,4}}
+    \proofstepwide[5]{a\cdot0}{=}{a\cdot(0+0)}{%
+      \rIE{\FormulaRefAuto{a=b\vdash b=a}{5}}}
+    \proofstepwide[1,2,4]{a\cdot(0+0)}{=}{%
+      a\cdot0+a\cdot0}{%
+      \FormulaRefAuto{RingLeftDistributivityAxiom}[ax]{1,2,4,4}}
+    \proofstepwidestar[1,2]{a\cdot0=a\cdot0+a\cdot0}{%
+      \rChain{6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Kürzung}
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1,2]{a\cdot0\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{%
+        1,2,\FormulaRefAuto{GroupIdentityCarrier}[thm]{3}}}
+    \proofstepwide[3,4]{a\cdot0+0}{=}{a\cdot0}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{3,4}}
+    \proofstepwide[1,2]{a\cdot0}{=}{a\cdot0+a\cdot0}{%
+      \FormulaRefAuto{RingRightZeroDoubling}[thm]{1,2}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      a\cdot0+0=a\cdot0+a\cdot0}{\rChain{5,6}}
+    \proofstepwidestar[1,2,3,4,7]{0=a\cdot0}{%
+      \FormulaRefAuto{GroupLeftCancellation}[thm]{3,4,
+        \FormulaRefAuto{GroupIdentityCarrier}[thm]{3},4,7}}
+    \proofstepwidestar[1,2]{a\cdot0=0}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\section{Vorzeichenregeln}
+
+\FormulaThmDeltaK[Negatives Vorzeichen im linken Faktor]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash (-a)\cdot b=-(a\cdot b)%
+}{RingLeftNegativeProduct}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsinverse Eigenschaft]{%
+    \begin{aligned}[t]
+      &\RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R\vdash{}\\
+      &a\cdot b+(-a)\cdot b=0
+    \end{aligned}
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+    \vdash a\cdot b+(-a)\cdot b=0%
+  }[RingLeftNegativeRightInverse]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1,2]{-a\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,2}}
+    \proofstepwide[1,2,3,4]{a\cdot b+(-a)\cdot b}{=}{%
+      (a+(-a))\cdot b}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{RingRightDistributivityAxiom}[ax]{1,2,4,3}}}
+    \proofstepwide[1,2,3]{(a+(-a))\cdot b}{=}{0\cdot b}{%
+      \FormulaRefAuto{RingNegativeRight}[thm]{1,2}}
+    \proofstepwide[1,3]{0\cdot b}{=}{0}{%
+      \FormulaRefAuto{RingLeftZeroAbsorption}[thm]{1,3}}
+    \proofstepwidestar[1,2,3]{a\cdot b+(-a)\cdot b=0}{%
+      \rChain{5,6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Linksinverse Eigenschaft]{%
+    \begin{aligned}[t]
+      &\RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R\vdash{}\\
+      &(-a)\cdot b+a\cdot b=0
+    \end{aligned}
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+    \vdash (-a)\cdot b+a\cdot b=0%
+  }[RingLeftNegativeLeftInverse]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1,2]{-a\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,2}}
+    \proofstepwide[1,2,3,4]{(-a)\cdot b+a\cdot b}{=}{%
+      ((-a)+a)\cdot b}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{RingRightDistributivityAxiom}[ax]{1,4,2,3}}}
+    \proofstepwide[1,2,3]{((-a)+a)\cdot b}{=}{0\cdot b}{%
+      \FormulaRefAuto{RingNegativeLeft}[thm]{1,2}}
+    \proofstepwide[1,3]{0\cdot b}{=}{0}{%
+      \FormulaRefAuto{RingLeftZeroAbsorption}[thm]{1,3}}
+    \proofstepwidestar[1,2,3]{(-a)\cdot b+a\cdot b=0}{%
+      \rChain{5,6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Eindeutigkeit}
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1,2,3]{a\cdot b\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{(-a)\cdot b\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{%
+        1,\FormulaRefAuto{RingNegativeCarrier}[thm]{1,2},3}}
+    \proofstepwidestar[1,5]{-(a\cdot b)\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,5}}
+    \proofstepwidestar[1,2,3]{(-a)\cdot b+a\cdot b=0}{%
+      \FormulaRefAuto{RingLeftNegativeLeftInverse}[thm]{1,2,3}}
+    \proofstepwidestar[1,5]{a\cdot b+(-(a\cdot b))=0}{%
+      \FormulaRefAuto{RingNegativeRight}[thm]{1,5}}
+    \proofstepwidestar[1,2,3,4,5,6,7,8,9]{%
+      (-a)\cdot b=-(a\cdot b)}{%
+      \FormulaRefAuto{GroupInverseUnique}[thm]{4,5,6,7,8,9}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Negatives Vorzeichen im rechten Faktor]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash a\cdot(-b)=-(a\cdot b)%
+}{RingRightNegativeProduct}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsinverse Eigenschaft]{%
+    \begin{aligned}[t]
+      &\RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R\vdash{}\\
+      &a\cdot b+a\cdot(-b)=0
+    \end{aligned}
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+    \vdash a\cdot b+a\cdot(-b)=0%
+  }[RingRightNegativeRightInverse]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1,3]{-b\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,3}}
+    \proofstepwide[1,2,3,4]{a\cdot b+a\cdot(-b)}{=}{%
+      a\cdot(b+(-b))}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{RingLeftDistributivityAxiom}[ax]{1,2,3,4}}}
+    \proofstepwide[1,2,3]{a\cdot(b+(-b))}{=}{a\cdot0}{%
+      \FormulaRefAuto{RingNegativeRight}[thm]{1,3}}
+    \proofstepwide[1,2]{a\cdot0}{=}{0}{%
+      \FormulaRefAuto{RingRightZeroAbsorption}[thm]{1,2}}
+    \proofstepwidestar[1,2,3]{a\cdot b+a\cdot(-b)=0}{%
+      \rChain{5,6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Linksinverse Eigenschaft]{%
+    \begin{aligned}[t]
+      &\RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R\vdash{}\\
+      &a\cdot(-b)+a\cdot b=0
+    \end{aligned}
+  }{%
+    \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+    \vdash a\cdot(-b)+a\cdot b=0%
+  }[RingRightNegativeLeftInverse]
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1,3]{-b\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,3}}
+    \proofstepwide[1,2,3,4]{a\cdot(-b)+a\cdot b}{=}{%
+      a\cdot((-b)+b)}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{RingLeftDistributivityAxiom}[ax]{1,2,4,3}}}
+    \proofstepwide[1,2,3]{a\cdot((-b)+b)}{=}{a\cdot0}{%
+      \FormulaRefAuto{RingNegativeLeft}[thm]{1,3}}
+    \proofstepwide[1,2]{a\cdot0}{=}{0}{%
+      \FormulaRefAuto{RingRightZeroAbsorption}[thm]{1,2}}
+    \proofstepwidestar[1,2,3]{a\cdot(-b)+a\cdot b=0}{%
+      \rChain{5,6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Eindeutigkeit}
+    \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+    \proofstepwidestar[2]{a\in R}{\rA}
+    \proofstepwidestar[3]{b\in R}{\rA}
+    \proofstepwidestar[1]{\GroupAlg{R}{+}{0}}{%
+      \FormulaRefAuto{RingAdditiveGroup}[thm]{1}}
+    \proofstepwidestar[1,2,3]{a\cdot b\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{a\cdot(-b)\in R}{%
+      \FormulaRefAuto{RingMultiplicationClosure}[thm]{%
+        1,2,\FormulaRefAuto{RingNegativeCarrier}[thm]{1,3}}}
+    \proofstepwidestar[1,5]{-(a\cdot b)\in R}{%
+      \FormulaRefAuto{RingNegativeCarrier}[thm]{1,5}}
+    \proofstepwidestar[1,2,3]{a\cdot(-b)+a\cdot b=0}{%
+      \FormulaRefAuto{RingRightNegativeLeftInverse}[thm]{1,2,3}}
+    \proofstepwidestar[1,5]{a\cdot b+(-(a\cdot b))=0}{%
+      \FormulaRefAuto{RingNegativeRight}[thm]{1,5}}
+    \proofstepwidestar[1,2,3,4,5,6,7,8,9]{%
+      a\cdot(-b)=-(a\cdot b)}{%
+      \FormulaRefAuto{GroupInverseUnique}[thm]{4,5,6,7,8,9}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Produkt zweier negativer Faktoren]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}\dsep a,b\in R
+  \vdash (-a)\cdot(-b)=a\cdot b%
+}{RingNegativeTimesNegative}{%
+  \DeltaRow{Mengen}{R\dsep 0\dsep 1\dsep a\dsep b}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstepwidestar[2]{a\in R}{\rA}
+  \proofstepwidestar[3]{b\in R}{\rA}
+  \proofstepwide[1,2,3]{(-a)\cdot(-b)}{=}{-(a\cdot(-b))}{%
+    \FormulaRefAuto{RingLeftNegativeProduct}[thm]{%
+      1,2,\FormulaRefAuto{RingNegativeCarrier}[thm]{1,3}}}
+  \proofstepwide[1,2,3]{-(a\cdot(-b))}{=}{-(-(a\cdot b))}{%
+    \FormulaRefAuto{RingRightNegativeProduct}[thm]{1,2,3}}
+  \proofstepwide[1,2,3]{-(-(a\cdot b))}{=}{a\cdot b}{%
+    \FormulaRefAuto{RingDoubleNegative}[thm]{%
+      1,\FormulaRefAuto{RingMultiplicationClosure}[thm]{1,2,3}}}
+  \proofstepwidestar[1,2,3]{(-a)\cdot(-b)=a\cdot b}{%
+    \rChain{4,5,6}}
+\end{tabproofwide}
+
+\chapter{Die algebraische Struktur der ganzen Zahlen}
+
+In den folgenden Beweisen bezeichnen \(0_{\mathbb Z}\) und
+\(1_{\mathbb Z}\) die in Band~13 konstruierten neutralen Elemente. Sämtliche
+Rechengesetze werden aus den dort registrierten Sätzen übernommen; die
+Schlusszeilen verwenden ausschließlich die abstrakten Strukturdefinitionen
+dieses und des vorangehenden Bandes.
+
+\section{Die additive abelsche Gruppe}
+
+\FormulaThmDeltaK[Additive abelsche Gruppe der ganzen Zahlen]{%
+  \AbelianGroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}%
+}{IntegerAdditiveAbelianGroup}{%
+  \DeltaRow{Mengen}{\mathbb Z\dsep 0_{\mathbb Z}\dsep z\dsep w\dsep u}
+  \DeltaRow{Funktionen}{+}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Additive Halbgruppe]{%
+    \SemigroupAlg{\mathbb Z}{+}%
+  }{\SemigroupAlg{\mathbb Z}{+}}[IntegerAdditiveSemigroup]
+    \proofstepwidestar[]{%
+      z,w\in\mathbb Z\vdash z+w\in\mathbb Z}{%
+      \FormulaRefAuto{IntAddClosure}[thm]}
+    \proofstepwidestar[]{%
+      z,w,u\in\mathbb Z\vdash (z+w)+u=z+(w+u)}{%
+      \FormulaRefAuto{IntAddAssociative}[thm]}
+    \proofstepwidestar[]{\SemigroupAlg{\mathbb Z}{+}}{%
+      \FormulaRefAuto{SemigroupDef}[def]{1,2}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Additives Monoid]{%
+    \MonoidAlg{\mathbb Z}{+}{0_{\mathbb Z}}%
+  }{\MonoidAlg{\mathbb Z}{+}{0_{\mathbb Z}}}[IntegerAdditiveMonoid]
+    \proofstepwidestar[]{\SemigroupAlg{\mathbb Z}{+}}{%
+      \FormulaRefAuto{IntegerAdditiveSemigroup}[thm]}
+    \proofstepwidestar[]{0_{\mathbb Z}\in\mathbb Z}{%
+      \FormulaRefAuto{IntZeroCarrier}[thm]}
+    \proofstepwidestar[]{%
+      z\in\mathbb Z\vdash 0_{\mathbb Z}+z=z}{%
+      \rAEb{\FormulaRefAuto{IntAddZero}[thm]}}
+    \proofstepwidestar[]{%
+      z\in\mathbb Z\vdash z+0_{\mathbb Z}=z}{%
+      \rAEa{\FormulaRefAuto{IntAddZero}[thm]}}
+    \proofstepwidestar[]{\MonoidAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{MonoidDef}[def]{1,2,3,4}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Additive Gruppe]{%
+    \GroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}%
+  }{\GroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}}[IntegerAdditiveGroup]
+    \proofstepwidestar[]{\MonoidAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerAdditiveMonoid}[thm]}
+    \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
+    \proofstepwidestar[1]{-z\in\mathbb Z}{%
+      \FormulaRefAuto{IntNegClosure}[thm]{1}}
+    \proofstepwidestar[1]{%
+      z+(-z)=0_{\mathbb Z}\land(-z)+z=0_{\mathbb Z}}{%
+      \FormulaRefAuto{IntAddInverse}[thm]{1}}
+    \proofstepwidestar[1]{%
+      \exists w\in\mathbb Z\,
+      \bigl(z+w=0_{\mathbb Z}\land w+z=0_{\mathbb Z}\bigr)}{%
+      \rEI{\rAI{3,4}}}
+    \proofstepwidestar[]{%
+      z\in\mathbb Z\vdash
+      \exists w\in\mathbb Z\,
+      \bigl(z+w=0_{\mathbb Z}\land w+z=0_{\mathbb Z}\bigr)}{%
+      \rUI{\rRI{2,5}}}
+    \proofstepwidestar[]{\GroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{GroupDef}[def]{1,6}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Kommutativität}
+    \proofstepwidestar[]{\GroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerAdditiveGroup}[thm]}
+    \proofstepwidestar[]{%
+      z,w\in\mathbb Z\vdash z+w=w+z}{%
+      \FormulaRefAuto{IntAddCommutative}[thm]}
+    \proofstepwidestar[]{%
+      \AbelianGroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{AbelianGroupDef}[def]{1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\section{Das multiplikative kommutative Monoid}
+
+\FormulaThmDeltaK[Multiplikatives kommutatives Monoid der ganzen Zahlen]{%
+  \CommutativeMonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}%
+}{IntegerMultiplicativeCommutativeMonoid}{%
+  \DeltaRow{Mengen}{\mathbb Z\dsep 1_{\mathbb Z}\dsep z\dsep w\dsep u}
+  \DeltaRow{Funktionen}{\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Multiplikative Halbgruppe]{%
+    \SemigroupAlg{\mathbb Z}{\cdot}%
+  }{\SemigroupAlg{\mathbb Z}{\cdot}}[IntegerMultiplicativeSemigroup]
+    \proofstepwidestar[]{%
+      z,w\in\mathbb Z\vdash z\cdot w\in\mathbb Z}{%
+      \FormulaRefAuto{IntMulClosure}[thm]}
+    \proofstepwidestar[]{%
+      z,w,u\in\mathbb Z\vdash
+      (z\cdot w)\cdot u=z\cdot(w\cdot u)}{%
+      \FormulaRefAuto{IntMulAssociative}[thm]}
+    \proofstepwidestar[]{\SemigroupAlg{\mathbb Z}{\cdot}}{%
+      \FormulaRefAuto{SemigroupDef}[def]{1,2}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Multiplikatives Monoid]{%
+    \MonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}%
+  }{\MonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}[IntegerMultiplicativeMonoid]
+    \proofstepwidestar[]{\SemigroupAlg{\mathbb Z}{\cdot}}{%
+      \FormulaRefAuto{IntegerMultiplicativeSemigroup}[thm]}
+    \proofstepwidestar[]{1_{\mathbb Z}\in\mathbb Z}{%
+      \FormulaRefAuto{IntOneCarrier}[thm]}
+    \proofstepwidestar[]{%
+      z\in\mathbb Z\vdash1_{\mathbb Z}\cdot z=z}{%
+      \rAEb{\FormulaRefAuto{IntMulOne}[thm]}}
+    \proofstepwidestar[]{%
+      z\in\mathbb Z\vdash z\cdot1_{\mathbb Z}=z}{%
+      \rAEa{\FormulaRefAuto{IntMulOne}[thm]}}
+    \proofstepwidestar[]{\MonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{MonoidDef}[def]{1,2,3,4}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Kommutativität}
+    \proofstepwidestar[]{\MonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerMultiplicativeMonoid}[thm]}
+    \proofstepwidestar[]{%
+      z,w\in\mathbb Z\vdash z\cdot w=w\cdot z}{%
+      \FormulaRefAuto{IntMulCommutative}[thm]}
+    \proofstepwidestar[]{%
+      \CommutativeMonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{CommutativeMonoidDef}[def]{1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\section{Der kommutative Ring mit Eins}
+
+\FormulaThmDeltaK[Kommutativer Ring der ganzen Zahlen]{%
+  \CommutativeRingAlg{\mathbb Z}{+}{\cdot}
+    {0_{\mathbb Z}}{1_{\mathbb Z}}%
+}{IntegerCommutativeRing}{%
+  \DeltaRow{Mengen}{%
+    \mathbb Z\dsep0_{\mathbb Z}\dsep1_{\mathbb Z}
+    \dsep z\dsep w\dsep u}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Ring mit Eins]{%
+    \RingAlg{\mathbb Z}{+}{\cdot}{0_{\mathbb Z}}{1_{\mathbb Z}}%
+  }{%
+    \RingAlg{\mathbb Z}{+}{\cdot}{0_{\mathbb Z}}{1_{\mathbb Z}}%
+  }[IntegerUnitalRing]
+    \proofstepwidestar[]{%
+      \AbelianGroupAlg{\mathbb Z}{+}{0_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerAdditiveAbelianGroup}[thm]}
+    \proofstepwidestar[]{%
+      \CommutativeMonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerMultiplicativeCommutativeMonoid}[thm]}
+    \proofstepwidestar[]{%
+      \MonoidAlg{\mathbb Z}{\cdot}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{2}}
+    \proofstepwidestar[]{%
+      z,w,u\in\mathbb Z\vdash
+      z\cdot(w+u)=z\cdot w+z\cdot u}{%
+      \FormulaRefAuto{IntMulLeftDistributive}[thm]}
+    \proofstepwidestar[]{%
+      z,w,u\in\mathbb Z\vdash
+      (z+w)\cdot u=z\cdot u+w\cdot u}{%
+      \FormulaRefAuto{IntMulRightDistributive}[thm]}
+    \proofstepwidestar[]{%
+      \RingAlg{\mathbb Z}{+}{\cdot}{0_{\mathbb Z}}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{RingDef}[def]{1,3,4,5}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Kommutative Multiplikation}
+    \proofstepwidestar[]{%
+      \RingAlg{\mathbb Z}{+}{\cdot}{0_{\mathbb Z}}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerUnitalRing}[thm]}
+    \proofstepwidestar[]{%
+      z,w\in\mathbb Z\vdash z\cdot w=w\cdot z}{%
+      \FormulaRefAuto{IntMulCommutative}[thm]}
+    \proofstepwidestar[]{%
+      \CommutativeRingAlg{\mathbb Z}{+}{\cdot}
+        {0_{\mathbb Z}}{1_{\mathbb Z}}}{%
+      \FormulaRefAuto{CommutativeRingDef}[def]{1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\end{document}
