@@ -59,8 +59,16 @@ local function read_graph()
         if graph[tag] then
           fail("duplicate band " .. tag)
         end
-        if source ~= tag .. ".tex" then
-          fail("source mapping for " .. tag .. " must be " .. tag .. ".tex")
+        local normalized_source = source:gsub("\\", "/")
+        if source == ""
+           or source:find("[\r\n\t]")
+           or not normalized_source:match("%.tex$")
+           or normalized_source:match("^/")
+           or normalized_source:match("^%a:/")
+           or normalized_source:match("^%.%./")
+           or normalized_source:match("/%.%./")
+           or normalized_source:match("/%.%.$") then
+          fail("invalid source mapping for " .. tag .. ": " .. source)
         end
         if artifact_base ~= "registry/_" .. tag then
           fail("artifact mapping for " .. tag .. " must be registry/_" .. tag)
@@ -179,7 +187,8 @@ function M.setup_standalone(tag)
     thmlookup.debug_path = debug_path
   end
   local job = tex.jobname or ""
-  if job ~= tag and job ~= "_" .. tag then
+  local source_job = spec.source:gsub("\\", "/"):match("([^/]+)%.tex$")
+  if job ~= tag and job ~= "_" .. tag and job ~= source_job then
     texio.write_nl(
       "band-dependencies WARNING: target " .. tag .. " is built with unexpected jobname " .. job
     )

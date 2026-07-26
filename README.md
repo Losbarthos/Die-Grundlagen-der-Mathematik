@@ -93,8 +93,12 @@ ausschließliche thematische Zuordnung.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
-`B04.tex` → `registry/_B04`; sie ist absichtlich keine unveränderte
-tex→aux-Standardregel.
+`Bd. 04 - Totale Relationen.tex` → `registry/_B04`; sie ist absichtlich keine
+unveränderte tex→aux-Standardregel.
+Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
+unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B15`
+und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 Vorausgesetzt werden PowerShell, `latexmk`, `lualatex` und `pdftotext` im
 `PATH`. Ein sauberer Build samt vollständigem Referenzaudit ist jeweils ein
@@ -123,7 +127,7 @@ Das Skript löscht für den gewählten Graphen alle bekannten Altartefakte und
 baut jeden Vorgänger mit festem Jobnamen, zum Beispiel:
 
 ```text
-latexmk -norc -gg -lualatex ... -outdir=registry -jobname=_B04 B04.tex
+latexmk -norc -gg -lualatex ... -outdir=registry -jobname=_B04 "Bd. 04 - Totale Relationen.tex"
 ```
 
 Erst danach wird der Zielband im Projektverzeichnis gebaut. Für jeden
@@ -149,13 +153,15 @@ Die root-level `latexmkrc` setzt LuaLaTeX und führt vor einem Standalone-Ziel
 alle Vorgänger topologisch aus. Sie folgt dem
 [offiziellen xr/latexmk-Prinzip von Overleaf](https://www.overleaf.com/learn/how-to/Cross_referencing_with_the_xr_package_in_Overleaf),
 verwendet wegen der abweichenden Basispfade aber eine explizite
-`Bxx.tex`→`registry/_Bxx`-Zuordnung im dokumentierten `before_xlatex`-Hook.
+Zuordnung der titelbasierten Quelldateien zu `registry/_Bxx` im dokumentierten
+`before_xlatex`-Hook.
 Benötigt wird latexmk 4.84 oder neuer.
 
-Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei `B15.tex`:
+Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei
+`Bd. 15 - Frankls Vermutung.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B15.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 15 - Frankls Vermutung.tex"
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
@@ -166,7 +172,7 @@ B05-Neuaufbau ohne Cache ist möglich mit:
 
 ```powershell
 $env:DGM_LATEXMK_FORCE_DEPS = '1'
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error B05.tex
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 05 - Funktionen.tex"
 ```
 
 ### Verifizierter Registry-Cache für B05

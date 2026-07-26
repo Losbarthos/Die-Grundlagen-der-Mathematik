@@ -2,13 +2,15 @@
 #
 # The official latexmk xr example uses a tex -> aux custom dependency whose
 # source and destination share a basename.  This project intentionally maps,
-# for example, B03.tex to registry/_B03.aux, so that stock rule cannot express
-# the dependency.  The documented before_xlatex hook below implements the
-# equivalent preflight explicitly: before a standalone target is evaluated,
-# all of its transitive predecessors are updated in topological order.
+# for example, the title-named B03 source to registry/_B03.aux, so that stock
+# rule cannot express the dependency.  The documented before_xlatex hook below
+# implements the equivalent preflight explicitly: before a standalone target
+# is evaluated, all of its transitive predecessors are updated in topological
+# order.
 
 use Cwd qw(abs_path getcwd);
 use Digest::SHA ();
+use Encode qw(decode encode FB_CROAK);
 use File::Basename qw(basename dirname);
 use File::Copy qw(copy);
 use File::Find qw(find);
@@ -32,6 +34,24 @@ my $dgm_repo_root = abs_path($dgm_rc_dir);
 die "latexmkrc: cannot resolve repository root from " . __FILE__ . "\n"
     if !defined $dgm_repo_root;
 
+my $dgm_filesystem_encoding = 'UTF-8';
+if ($^O eq 'MSWin32') {
+    require Win32;
+    $dgm_filesystem_encoding = 'cp' . Win32::GetACP();
+}
+
+sub dgm_native_path {
+    my ($path) = @_;
+    return $path if !utf8::is_utf8($path);
+    return encode($dgm_filesystem_encoding, $path, FB_CROAK);
+}
+
+sub dgm_text_path {
+    my ($path) = @_;
+    return $path if utf8::is_utf8($path);
+    return decode($dgm_filesystem_encoding, $path, FB_CROAK);
+}
+
 my $dgm_graph_path = File::Spec->catfile(
     $dgm_repo_root,
     'band-dependencies.tsv'
@@ -44,7 +64,9 @@ my $dgm_cache_inputs_path = File::Spec->catfile(
 sub dgm_root_path {
     my ($relative) = @_;
     my @parts = split m{/}, $relative;
-    return File::Spec->catfile($dgm_repo_root, @parts);
+    return dgm_native_path(
+        File::Spec->catfile($dgm_repo_root, @parts)
+    );
 }
 
 sub dgm_trim {
@@ -94,7 +116,9 @@ sub dgm_read_graph {
             if exists $graph{$band};
 
         die "latexmkrc: $path:$line_number: invalid source '$source'\n"
-            if $source !~ m{^[A-Za-z0-9][A-Za-z0-9_.\-/]*\.tex$}
+            if $source eq ''
+                || $source !~ /\.tex\z/
+                || $source =~ /[\x00-\x1F]/
                 || $source =~ m{(?:^|/)\.\.(?:/|$)}
                 || File::Spec->file_name_is_absolute($source);
         die "latexmkrc: $path:$line_number: source does not exist: $source\n"
@@ -909,7 +933,7 @@ sub dgm_build_predecessor {
         '-file-line-error',
         "-outdir=$artifact_dir",
         "-jobname=$jobname",
-        $spec->{source};
+        dgm_native_path($spec->{source});
 
     print "latexmkrc: updating $band ($spec->{source} -> "
         . "$spec->{artifact_base}.{aux,pdf,registry.tsv,debug.log})\n";
@@ -943,6 +967,7 @@ sub dgm_prepare_band_dependencies {
 
     my $source = (defined $Psource && defined $$Psource) ? $$Psource : '';
     $source =~ s{\\}{/}g;
+    $source = dgm_text_path($source);
     my $source_leaf = basename($source);
     my $target = $dgm_band_by_source_leaf{$source_leaf};
     return 0 if !defined $target;

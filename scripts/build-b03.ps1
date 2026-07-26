@@ -232,6 +232,7 @@ function Remove-BandArtifacts {
     # are all removed so no previous run can satisfy an import accidentally.
     Remove-ArtifactFamily $Record.ArtifactBase
     Remove-ArtifactFamily $sourceBase
+    Remove-ArtifactFamily $Record.Band
     Remove-ArtifactFamily "_$($Record.Band)"
     Remove-ArtifactFamily "thmlookup.$($Record.Band)"
     Remove-ArtifactFamily "thmlookup._$($Record.Band)"
@@ -563,12 +564,11 @@ function New-BuildStage {
     $registryPath = "$($Record.ArtifactBase).registry.tsv"
     $debugPath = "$($Record.ArtifactBase).debug.log"
     if ($RootTarget) {
-        $rootBase = Get-SourceBase $Record.Source
         return [pscustomobject]@{
             Band = $Record.Band
-            Aux = "$rootBase.aux"
-            Log = "$rootBase.log"
-            Pdf = "$rootBase.pdf"
+            Aux = "$($Record.Band).aux"
+            Log = "$($Record.Band).log"
+            Pdf = "$($Record.Band).pdf"
             Registry = $registryPath
             Debug = $debugPath
             Started = $Started
@@ -640,7 +640,9 @@ try {
 
     $targetRecord = $graph[$Target]
     $targetStarted = Get-Date
-    Invoke-Latexmk -Source $targetRecord.Source
+    Invoke-Latexmk -Source $targetRecord.Source -ExtraArguments @(
+        "-jobname=$Target"
+    )
     $targetStage = New-BuildStage -Record $targetRecord -Started $targetStarted -RootTarget
     Assert-BuildStageArtifacts -Stage $targetStage
     [void]$stages.Add($targetStage)
