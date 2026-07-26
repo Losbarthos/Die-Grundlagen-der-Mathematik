@@ -81,7 +81,7 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B14 | Endliche Mengen |
 | B15 | Halbgruppen, Monoide und Halbringe |
 | B16 | Gruppen und Ringe |
-| B17 | Halbverbände, Verbände und Beschränktheit |
+| B17 | Halbverbände und Verbände |
 | B18 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
