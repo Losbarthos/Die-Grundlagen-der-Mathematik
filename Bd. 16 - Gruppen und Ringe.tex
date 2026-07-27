@@ -42,6 +42,12 @@ Ihre bereits aus der Quotientenkonstruktion hergeleiteten Rechengesetze
 werden am Ende dieses Bandes zu den entsprechenden algebraischen
 Strukturaussagen zusammengefasst.
 
+Wie in Band~15 gehört jede Operation obligatorisch zur
+Strukturbezeichnung. Daher schreiben wir beispielsweise
+\(\GroupAlg{G}{\circ}{e}\) und
+\(\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\), niemals bloß
+\(\mathsf{Grp}(G)\) oder \(\mathsf{Ring}(R)\).
+
 \chapter{Gruppen}
 
 \section{Gruppen als Monoide mit Inversen}
@@ -718,6 +724,267 @@ Strukturaussagen zusammengefasst.
     \FormulaRefAuto{CommutativeMonoidDef}[def]{3,4}}
 \end{tabproof}
 
+\chapter{Homomorphismen von Gruppen}
+
+\section{Gruppenhomomorphismen}
+
+Bei Gruppen genügt die Erhaltung der Gruppenoperation. Anders als bei
+beliebigen Monoiden folgen die Erhaltung des neutralen Elements und der
+Inversen aus der Existenz von Inversen im Ziel.
+
+\FormulaDefDeltaK[Begriff des Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupHomDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Quellgruppe}{\GroupAlg{G}{\circ}{e}}
+  \DeltaPrem{Zielgruppe}{\GroupAlg{H}{\diamond}{u}}
+  \DeltaPrem{Halbgruppenhomomorphismus}{%
+    \SemigroupHom{f}{G,\circ}{H,\diamond}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppenhomomorphismus}{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}
+}
+
+\FormulaAxiomDeltaK[Trägerabbildung eines Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash f\colon G\to H%
+}{GroupHomFunctionAxiom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Operationserhaltung eines Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep x,y\in G
+  \vdash f(x\circ y)=f(x)\diamond f(y)%
+}{GroupHomOperationAxiom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+
+\FormulaThmDeltaK[Gruppenhomomorphismen erhalten das neutrale Element]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash f(e)=u%
+}{GroupHomIdentityPreservation}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{f\colon G\to H}{%
+    \FormulaRefAuto{GroupHomFunctionAxiom}[ax]{1}}
+  \proofstepwidestar[1]{e\in G}{%
+    \FormulaRefAuto{GroupIdentityCarrier}[thm]{2}}
+  \proofstepwidestar[1]{f(e)\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{4,5}}
+  \proofstepwidestar[1]{e\circ e=e}{%
+    \FormulaRefAuto{GroupLeftIdentity}[thm]{2,5}}
+  \proofstepwidestar[1]{f(e\circ e)=f(e)}{\rIE{7}}
+  \proofstepwidestar[1]{f(e\circ e)=f(e)\diamond f(e)}{%
+    \FormulaRefAuto{GroupHomOperationAxiom}[ax]{1,5,5}}
+  \proofstepwidestar[1]{f(e)\diamond f(e)=f(e)}{\rIE{9,8}}
+  \proofstepwidestar[1]{f(e)\diamond u=f(e)}{%
+    \FormulaRefAuto{GroupRightIdentity}[thm]{3,6}}
+  \proofstepwidestar[1]{%
+    f(e)\diamond u=f(e)\diamond f(e)}{\rIE{11,%
+      \FormulaRefAuto{a=b\vdash b=a}{10}}}
+  \proofstepwidestar[1]{u=f(e)}{%
+    \FormulaRefAuto{GroupLeftCancellation}[thm]{3,6,
+      \FormulaRefAuto{GroupIdentityCarrier}[thm]{3},6,12}}
+  \proofstepwidestar[1]{f(e)=u}{%
+    \FormulaRefAuto{a=b\vdash b=a}{13}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gruppenhomomorphismen erhalten Inverse]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep x\in G
+  \vdash f(x^{-1})=f(x)^{-1}%
+}{GroupHomInversePreservation}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstepwidestar[2]{x\in G}{\rA}
+  \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{f\colon G\to H}{%
+    \FormulaRefAuto{GroupHomFunctionAxiom}[ax]{1}}
+  \proofstepwidestar[1,2]{x^{-1}\in G}{%
+    \FormulaRefAuto{GroupInverseCarrier}[thm]{3,2}}
+  \proofstepwidestar[1,2]{f(x)\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{5,2}}
+  \proofstepwidestar[1,2]{f(x^{-1})\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{5,6}}
+  \proofstepwidestar[1,2]{%
+    f(x)\diamond f(x^{-1})=f(x\circ x^{-1})}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      \FormulaRefAuto{GroupHomOperationAxiom}[ax]{1,2,6}}}
+  \proofstepwidestar[1,2]{f(x\circ x^{-1})=f(e)}{%
+    \FormulaRefAuto{GroupInverseRight}[thm]{3,2}}
+  \proofstepwidestar[1]{f(e)=u}{%
+    \FormulaRefAuto{GroupHomIdentityPreservation}[thm]{1}}
+  \proofstepwidestar[1,2]{f(x)\diamond f(x^{-1})=u}{%
+    \rChain{9,10,11}}
+  \proofstepwidestar[1,2]{%
+    f(x^{-1})\diamond f(x)=f(x^{-1}\circ x)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      \FormulaRefAuto{GroupHomOperationAxiom}[ax]{1,6,2}}}
+  \proofstepwidestar[1,2]{f(x^{-1}\circ x)=f(e)}{%
+    \FormulaRefAuto{GroupInverseLeft}[thm]{3,2}}
+  \proofstepwidestar[1,2]{f(x^{-1})\diamond f(x)=u}{%
+    \rChain{13,14,11}}
+  \proofstepwidestar[1,2]{f(x)^{-1}\in H}{%
+    \FormulaRefAuto{GroupInverseCarrier}[thm]{4,7}}
+  \proofstepwidestar[1,2]{%
+    f(x)\diamond f(x)^{-1}=u}{%
+    \FormulaRefAuto{GroupInverseRight}[thm]{4,7}}
+  \proofstepwidestar[1,2]{%
+    f(x^{-1})=f(x)^{-1}}{%
+    \FormulaRefAuto{GroupInverseUnique}[thm]{4,7,8,16,15,17}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein Gruppenhomomorphismus ist ein Monoidhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash\MonoidHom{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupHomIsMonoidHom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{2}}
+  \proofstep{1}{\MonoidAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{3}}
+  \proofstep{1}{\SemigroupHom{f}{G,\circ}{H,\diamond}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{f(e)=u}{%
+    \FormulaRefAuto{GroupHomIdentityPreservation}[thm]{1}}
+  \proofstep{1}{\MonoidHom{f}{G,\circ,e}{H,\diamond,u}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{4,5,6,7}}
+\end{tabproof}
+
+\section{Gruppenisomorphismen und Komposition}
+
+\FormulaDefDeltaK[Begriff des Gruppenisomorphismus]{%
+  \GroupIso{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupIsoDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Gruppenhomomorphismus}{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}
+  \DeltaPrem{Bijektivität}{f\colon G\bij H}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppenisomorphismus}{%
+    \GroupIso{f}{G,\circ,e}{H,\diamond,u}}
+}
+
+\FormulaThmDeltaK[Komposition von Gruppenhomomorphismen]{%
+  \begin{aligned}[t]
+    &\GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep
+      \GroupHom{g}{H,\diamond,u}{K,\bullet,v}\\
+    &\vdash\GroupHom{g\circ f}{G,\circ,e}{K,\bullet,v}
+  \end{aligned}
+}{GroupHomComposition}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep K\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{f\dsep g\dsep\circ\dsep\diamond\dsep\bullet}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstep{2}{\GroupHom{g}{H,\diamond,u}{K,\bullet,v}}{\rA}
+  \proofstep{1}{\SemigroupHom{f}{G,\circ}{H,\diamond}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{2}{\SemigroupHom{g}{H,\diamond}{K,\bullet}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{2}}
+  \proofstep{1,2}{\SemigroupHom{g\circ f}{G,\circ}{K,\bullet}}{%
+    \FormulaRefAuto{SemigroupHomComposition}[thm]{3,4}}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{2}{\GroupAlg{K}{\bullet}{v}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{2}}
+  \proofstep{1,2}{\GroupHom{g\circ f}{G,\circ,e}{K,\bullet,v}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{6,7,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Identität ist ein Gruppenisomorphismus]{%
+  \GroupAlg{G}{\circ}{e}
+  \vdash\GroupIso{\Id_G}{G,\circ,e}{G,\circ,e}%
+}{GroupIdentityIsomorphism}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstep{1}{\SemigroupIso{\Id_G}{G,\circ}{G,\circ}}{%
+    \FormulaRefAuto{SemigroupIdentityIsomorphism}[thm]{2}}
+  \proofstep{1}{\SemigroupHom{\Id_G}{G,\circ}{G,\circ}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{3}}
+  \proofstep{1}{\GroupHom{\Id_G}{G,\circ,e}{G,\circ,e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1,1,4}}
+  \proofstep{}{\Id_G\colon G\bij G}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
+  \proofstep{1}{\GroupIso{\Id_G}{G,\circ,e}{G,\circ,e}}{%
+    \FormulaRefAuto{GroupIsoDef}[def]{5,6}}
+\end{tabproof}
+
+\section{Abelsche Gruppen}
+
+Für abelsche Gruppen bleibt die Erhaltungsgleichung unverändert. Die
+Kommutativität ist eine Eigenschaft von Quell- und Zielgruppe, keine weitere
+Forderung an die Abbildung.
+
+\FormulaDefDeltaK[Homomorphismen abelscher Gruppen]{%
+  \begin{aligned}[t]
+    &\AbelianGroupHom{f}{G,\circ,e}{H,\diamond,u}\\[-2pt]
+    &\quad\coloneqq
+      \AbelianGroupAlg{G}{\circ}{e}\land
+      \AbelianGroupAlg{H}{\diamond}{u}\\[-2pt]
+    &\qquad\land\GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \end{aligned}
+}{AbelianGroupHomDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{Erhaltungsgesetz}{%
+    x,y\in G\vdash f(x\circ y)=f(x)\diamond f(y)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{AGrpHom}}
+}
+
+\FormulaDefDeltaK[Isomorphismen abelscher Gruppen]{%
+  \begin{aligned}[t]
+    &\AbelianGroupIso{f}{G,\circ,e}{H,\diamond,u}\\[-2pt]
+    &\quad\coloneqq
+      \AbelianGroupHom{f}{G,\circ,e}{H,\diamond,u}
+      \land f\colon G\bij H
+  \end{aligned}
+}{AbelianGroupIsoDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{AGrpIso}}
+}
+
+Ein Gruppenisomorphismus transportiert die Kommutativität in beiden
+Richtungen. Deshalb stimmt diese Spezialisierung mit der üblichen
+Isomorphie abelscher Gruppen überein.
+
 \chapter{Ringe mit Eins}
 
 \section{Ringaxiome}
@@ -1273,6 +1540,258 @@ Strukturaussagen zusammengefasst.
     \rChain{4,5,6}}
 \end{tabproofwide}
 
+\chapter{Homomorphismen von Ringen}
+
+\section{Der einem Ring zugrunde liegende Halbring}
+
+Die Nullabsorption wurde für Ringe aus den übrigen Ringaxiomen hergeleitet.
+Damit ist jeder Ring mit Eins insbesondere ein Halbring mit Eins. Dieses
+Resultat erlaubt es, die kanonische Abbildung aus \(\mathbb N\) ohne eine
+zweite Rekursionskonstruktion zu verwenden.
+
+\FormulaThmDeltaK[Jeder Ring mit Eins ist ein Halbring mit Eins]{%
+  \RingAlg{R}{+}{\cdot}{0}{1}
+  \vdash\SemiringAlg{R}{+}{\cdot}{0}{1}%
+}{RingUnderlyingSemiring}{%
+  \DeltaRow{Mengen}{R\dsep0\dsep1\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{+\dsep\cdot}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\RingAlg{R}{+}{\cdot}{0}{1}}{\rA}
+  \proofstepwidestar[1]{\AbelianGroupAlg{R}{+}{0}}{%
+    \FormulaRefAuto{RingAdditiveAbelianGroupAxiom}[ax]{1}}
+  \proofstepwidestar[1]{\CommutativeMonoidAlg{R}{+}{0}}{%
+    \FormulaRefAuto{AbelianGroupIsCommutativeMonoid}[thm]{2}}
+  \proofstepwidestar[1]{\MonoidAlg{R}{\cdot}{1}}{%
+    \FormulaRefAuto{RingMultiplicativeMonoidAxiom}[ax]{1}}
+  \proofstepwidestar[1]{%
+    a,b,c\in R\vdash a\cdot(b+c)=a\cdot b+a\cdot c}{%
+    \FormulaRefAuto{RingLeftDistributivityAxiom}[ax]{1}}
+  \proofstepwidestar[1]{%
+    a,b,c\in R\vdash(a+b)\cdot c=a\cdot c+b\cdot c}{%
+    \FormulaRefAuto{RingRightDistributivityAxiom}[ax]{1}}
+  \proofstepwidestar[1]{a\in R\vdash0\cdot a=0}{%
+    \FormulaRefAuto{RingLeftZeroAbsorption}[thm]{1}}
+  \proofstepwidestar[1]{a\in R\vdash a\cdot0=0}{%
+    \FormulaRefAuto{RingRightZeroAbsorption}[thm]{1}}
+  \proofstepwidestar[1]{\SemiringAlg{R}{+}{\cdot}{0}{1}}{%
+    \FormulaRefAuto{SemiringDef}[def]{3,4,5,6,7,8}}
+\end{tabproofwide}
+
+\section{Ringhomomorphismen}
+
+Da alle Ringe dieses Bandes ein ausgezeichnetes Einselement besitzen, meint
+\emph{Ringhomomorphismus} im Folgenden stets einen einserhaltenden
+Ringhomomorphismus.
+
+\FormulaDefDeltaK[Begriff des Ringhomomorphismus]{%
+  \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}%
+}{RingHomDef}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Quellring}{%
+    \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}}
+  \DeltaPrem{Zielring}{%
+    \RingAlg{S}{\boxplus}{\boxtimes}{0_S}{1_S}}
+  \DeltaPrem{Additiver Anteil}{%
+    \GroupHom{f}{R,\oplus,0_R}{S,\boxplus,0_S}}
+  \DeltaPrem{Multiplikativer Anteil}{%
+    \MonoidHom{f}{R,\odot,1_R}{S,\boxtimes,1_S}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{RingHom}}
+}
+
+\FormulaAxiomDeltaK[Trägerabbildung eines Ringhomomorphismus]{%
+  \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash f\colon R\to S%
+}{RingHomFunctionAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Additionserhaltung eines Ringhomomorphismus]{%
+  \begin{aligned}[t]
+    &\RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}\dsep x,y\in R\\
+    &\vdash f(x\oplus y)=f(x)\boxplus f(y)
+  \end{aligned}
+}{RingHomAdditionAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Multiplikationserhaltung eines Ringhomomorphismus]{%
+  \begin{aligned}[t]
+    &\RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}\dsep x,y\in R\\
+    &\vdash f(x\odot y)=f(x)\boxtimes f(y)
+  \end{aligned}
+}{RingHomMultiplicationAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Einserhaltung eines Ringhomomorphismus]{%
+  \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash f(1_R)=1_S%
+}{RingHomOneAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep1_R\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+
+\FormulaThmDeltaK[Ringhomomorphismen erhalten die Null]{%
+  \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash f(0_R)=0_S%
+}{RingHomZeroPreservation}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep0_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\begin{tabproof}
+  \proofstep{1}{%
+    \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}}{\rA}
+  \proofstep{1}{\GroupHom{f}{R,\oplus,0_R}{S,\boxplus,0_S}}{%
+    \FormulaRefAuto{RingHomDef}[def]{1}}
+  \proofstep{1}{f(0_R)=0_S}{%
+    \FormulaRefAuto{GroupHomIdentityPreservation}[thm]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ringhomomorphismen erhalten additive Inverse]{%
+  \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}\dsep x\in R
+  \vdash f(-x)=-f(x)%
+}{RingHomNegativePreservation}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep x}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\begin{tabproof}
+  \proofstep{1}{%
+    \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}}{\rA}
+  \proofstep{2}{x\in R}{\rA}
+  \proofstep{1}{\GroupHom{f}{R,\oplus,0_R}{S,\boxplus,0_S}}{%
+    \FormulaRefAuto{RingHomDef}[def]{1}}
+  \proofstep{1,2}{f(-x)=-f(x)}{%
+    \FormulaRefAuto{GroupHomInversePreservation}[thm]{3,2}}
+\end{tabproof}
+
+\section{Ringisomorphismen und kommutative Ringe}
+
+\FormulaDefDeltaK[Begriff des Ringisomorphismus]{%
+  \RingIso{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}%
+}{RingIsoDef}{%
+  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Ringhomomorphismus}{%
+    \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}}
+  \DeltaPrem{Bijektivität}{f\colon R\bij S}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Ringisomorphismus}{%
+    \RingIso{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}}
+}
+
+\FormulaThmDeltaK[Komposition von Ringhomomorphismen]{%
+  \begin{aligned}[t]
+    &\RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}\dsep{}\\[-2pt]
+    &\RingHom{g}{S,\boxplus,\boxtimes,0_S,1_S}
+      {T,\uplus,\otimes,0_T,1_T}\\
+    &\vdash
+      \RingHom{g\circ f}{R,\oplus,\odot,0_R,1_R}
+      {T,\uplus,\otimes,0_T,1_T}
+  \end{aligned}
+}{RingHomComposition}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep g\dsep\oplus\dsep\odot\dsep
+    \boxplus\dsep\boxtimes\dsep\uplus\dsep\otimes}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{%
+    \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}}{\rA}
+  \proofstepwidestar[2]{%
+    \RingHom{g}{S,\boxplus,\boxtimes,0_S,1_S}
+      {T,\uplus,\otimes,0_T,1_T}}{\rA}
+  \proofstepwidestar[1]{%
+    \GroupHom{f}{R,\oplus,0_R}{S,\boxplus,0_S}}{%
+    \FormulaRefAuto{RingHomDef}[def]{1}}
+  \proofstepwidestar[2]{%
+    \GroupHom{g}{S,\boxplus,0_S}{T,\uplus,0_T}}{%
+    \FormulaRefAuto{RingHomDef}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \GroupHom{g\circ f}{R,\oplus,0_R}{T,\uplus,0_T}}{%
+    \FormulaRefAuto{GroupHomComposition}[thm]{3,4}}
+  \proofstepwidestar[1]{%
+    \MonoidHom{f}{R,\odot,1_R}{S,\boxtimes,1_S}}{%
+    \FormulaRefAuto{RingHomDef}[def]{1}}
+  \proofstepwidestar[2]{%
+    \MonoidHom{g}{S,\boxtimes,1_S}{T,\otimes,1_T}}{%
+    \FormulaRefAuto{RingHomDef}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \MonoidHom{g\circ f}{R,\odot,1_R}{T,\otimes,1_T}}{%
+    \FormulaRefAuto{MonoidHomComposition}[thm]{6,7}}
+  \proofstepwidestar[1]{%
+    \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}}{%
+    \FormulaRefAuto{RingHomDef}[def]{1}}
+  \proofstepwidestar[2]{%
+    \RingAlg{T}{\uplus}{\otimes}{0_T}{1_T}}{%
+    \FormulaRefAuto{RingHomDef}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \RingHom{g\circ f}{R,\oplus,\odot,0_R,1_R}
+      {T,\uplus,\otimes,0_T,1_T}}{%
+    \FormulaRefAuto{RingHomDef}[def]{9,10,5,8}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Homomorphismen kommutativer Ringe]{%
+  \begin{aligned}[t]
+    &\CommutativeRingHom{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}\\
+    &\quad\coloneqq
+      \CommutativeRingAlg{R}{\oplus}{\odot}{0_R}{1_R}\land
+      \CommutativeRingAlg{S}{\boxplus}{\boxtimes}{0_S}{1_S}\\[-2pt]
+    &\qquad\land
+      \RingHom{f}{R,\oplus,\odot,0_R,1_R}
+        {S,\boxplus,\boxtimes,0_S,1_S}
+  \end{aligned}
+}{CommutativeRingHomDef}{%
+  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{KRingHom}}
+}
+
+\FormulaDefDeltaK[Isomorphismen kommutativer Ringe]{%
+  \begin{aligned}[t]
+    &\CommutativeRingIso{f}{R,\oplus,\odot,0_R,1_R}
+      {S,\boxplus,\boxtimes,0_S,1_S}\\
+    &\quad\coloneqq
+      \CommutativeRingHom{f}{R,\oplus,\odot,0_R,1_R}
+        {S,\boxplus,\boxtimes,0_S,1_S}\\[-2pt]
+    &\qquad\land f\colon R\bij S
+  \end{aligned}
+}{CommutativeRingIsoDef}{%
+  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{KRingIso}}
+}
+
+Die Kommutativität der Multiplikation ist wiederum kein zusätzliches
+Erhaltungsgesetz. Sie wird durch einen Ringisomorphismus in beide Richtungen
+transportiert.
+
 \chapter{Die algebraische Struktur der ganzen Zahlen}
 
 In den folgenden Beweisen bezeichnen \(0_{\mathbb Z}\) und
@@ -1460,5 +1979,491 @@ dieses und des vorangehenden Bandes.
       \FormulaRefAuto{CommutativeRingDef}[def]{1,2}}
   \closeproofpartwide
 \end{tabproofsplitwide}
+
+\section{Der kanonische Ringhomomorphismus aus den ganzen Zahlen}
+
+Sei \(\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\). Nach
+\FormulaRefAuto{RingUnderlyingSemiring}[thm] ist \(R\) auch ein Halbring,
+also steht die kanonische Abbildung
+\(\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}\colon\mathbb N\to R\)
+aus Band~15 zur Verfügung. Ein Differenzenpaar \((a,b)\) soll auf die
+Differenz seiner beiden Bilder abgebildet werden.
+
+\subsection{Repräsentantenunabhängigkeit}
+
+\FormulaThmDeltaK[Kreuzsummen liefern gleiche Differenzen im Ring]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep
+      p,q,r,s\in R\dsep p\oplus s=q\oplus r\\
+    &\vdash p\oplus(-q)=r\oplus(-s)
+  \end{aligned}
+}{RingCrossSumGivesDifferenceEquality}{%
+  \DeltaRow{Mengen}{R\dsep0_R\dsep1_R\dsep p\dsep q\dsep r\dsep s}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+Im folgenden Beweis kürzen wir
+\(\bar q:=-q\) und \(\bar s:=-s\) ab.
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
+  \proofstepwidestar[2]{p\in R}{\rA}
+  \proofstepwidestar[3]{q\in R}{\rA}
+  \proofstepwidestar[4]{r\in R}{\rA}
+  \proofstepwidestar[5]{s\in R}{\rA}
+  \proofstepwidestar[6]{p\oplus s=q\oplus r}{\rA}
+  \proofstepwidestar[1]{\AbelianGroupAlg{R}{\oplus}{0_R}}{%
+    \FormulaRefAuto{RingAdditiveAbelianGroupAxiom}[ax]{1}}
+  \proofstepwidestar[1]{\GroupAlg{R}{\oplus}{0_R}}{%
+    \FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{7}}
+  \proofstepwidestar[1]{\CommutativeMonoidAlg{R}{\oplus}{0_R}}{%
+    \FormulaRefAuto{AbelianGroupIsCommutativeMonoid}[thm]{7}}
+  \proofstepwidestar[1]{\CommutativeSemigroupAlg{R}{\oplus}}{%
+    \FormulaRefAuto{CommutativeMonoidIsCommutativeSemigroup}[thm]{9}}
+  \proofstepwidestar[1,3]{\bar q\in R}{%
+    \FormulaRefAuto{RingNegativeCarrier}[thm]{1,3}}
+  \proofstepwidestar[1,5]{\bar s\in R}{%
+    \FormulaRefAuto{RingNegativeCarrier}[thm]{1,5}}
+  \proofstepwide[1,2,11]{p\oplus\bar q}{=}{%
+    (p\oplus\bar q)\oplus0_R}{%
+    \parbox[t]{.22\textwidth}{\raggedright
+      \FormulaRefAuto{a=b\vdash b=a}\\
+      \FormulaRefAuto{GroupRightIdentity}[thm]\\
+      \FormulaRefAuto{GroupClosure}[thm]}}
+  \proofstepwide[1,5]{(p\oplus\bar q)\oplus0_R}{=}{%
+    (p\oplus\bar q)\oplus(s\oplus\bar s)}{%
+    \parbox[t]{.22\textwidth}{\raggedright
+      \FormulaRefAuto{a=b\vdash b=a}\\
+      \FormulaRefAuto{RingNegativeRight}[thm]}}
+  \proofstepwide[1,2,5,11,12]{%
+    (p\oplus\bar q)\oplus(s\oplus\bar s)}{=}{%
+    \bigl((p\oplus s)\oplus\bar q\bigr)\oplus\bar s}{%
+    \parbox[t]{.22\textwidth}{\raggedright
+      \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]\\
+      \FormulaRefAuto{CommutativeSemigroupCommutativityAxiom}[ax]}}
+  \proofstepwide[6]{%
+    \bigl((p\oplus s)\oplus\bar q\bigr)\oplus\bar s}{=}{%
+    \bigl((q\oplus r)\oplus\bar q\bigr)\oplus\bar s}{\rIE{6}}
+  \proofstepwide[1,3,4,11,12]{%
+    \bigl((q\oplus r)\oplus\bar q\bigr)\oplus\bar s}{=}{%
+    \bigl((q\oplus\bar q)\oplus r\bigr)\oplus\bar s}{%
+    \FormulaRefAuto{CommutativeSemigroupThreeTermExchange}[thm]{%
+      10,3,4,11}}
+  \proofstepwide[1,3,4,12]{%
+    \bigl((q\oplus\bar q)\oplus r\bigr)\oplus\bar s}{=}{%
+    (0_R\oplus r)\oplus\bar s}{%
+    \FormulaRefAuto{RingNegativeRight}[thm]{1,3}}
+  \proofstepwide[1,4,12]{(0_R\oplus r)\oplus\bar s}{=}{%
+    r\oplus\bar s}{%
+    \FormulaRefAuto{GroupLeftIdentity}[thm]{8,4}}
+  \proofstepwidestar[1,2,3,4,5,6]{%
+    p\oplus\bar q=r\oplus\bar s}{\rChain{13,14,15,16,17,18,19}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Wert eines Differenzenpaares im Zielring]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep a,b\in\mathbb N
+    \vdash{}\\[-2pt]
+    &\IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+      \coloneqq
+      \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(a)
+      \oplus
+      \bigl(
+        -\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(b)
+      \bigr)
+  \end{aligned}
+}{IntegerRingPairValueDef}{%
+  \DeltaRow{Mengen}{R\dsep0_R\dsep1_R\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Wert eines Differenzenpaares}{%
+    \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}}
+}
+
+\FormulaThmDeltaK[Der Wert eines Differenzenpaares liegt im Zielring]{%
+  \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep a,b\in\mathbb N
+  \vdash
+  \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}\in R%
+}{IntegerRingPairValueCarrier}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+Für diesen Beweis setzen wir
+\[
+  \begin{aligned}
+    \eta_R(n)
+      &:=\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n),\\
+    v_R(a,b)
+      &:=\IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}.
+  \end{aligned}
+\]
+\begin{tabproof}
+  \proofstep{1}{\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
+  \proofstep{2}{a\in\mathbb N}{\rA}
+  \proofstep{3}{b\in\mathbb N}{\rA}
+  \proofstep{1}{\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{%
+    \FormulaRefAuto{RingUnderlyingSemiring}[thm]{1}}
+  \proofstep{1}{\eta_R\colon\mathbb N\to R}{%
+    \FormulaRefAuto{NaturalSemiringMapFunction}[thm]{4}}
+  \proofstep{1,2}{\eta_R(a)\in R}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{5,2}}
+  \proofstep{1,3}{\eta_R(b)\in R}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{5,3}}
+  \proofstep{1,3}{-\eta_R(b)\in R}{%
+    \FormulaRefAuto{RingNegativeCarrier}[thm]{1,7}}
+  \proofstep{1,2,3}{%
+    \eta_R(a)\oplus\bigl(-\eta_R(b)\bigr)\in R}{%
+    \begin{gathered}
+      \FormulaRefAuto{GroupClosure}[thm]\\
+      \FormulaRefAuto{RingAdditiveGroup}[thm]
+    \end{gathered}}
+  \proofstep{1,2,3}{v_R(a,b)=\eta_R(a)\oplus\bigl(-\eta_R(b)\bigr)}{%
+    \FormulaRefAuto{IntegerRingPairValueDef}[def]{1,2,3}}
+  \proofstep{1,2,3}{v_R(a,b)\in R}{%
+    \rIE{10,9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Repräsentantenunabhängigkeit des Ganzzahlbildes]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep
+      a,b,c,d\in\mathbb N\dsep
+      \IntClass{a}{b}=\IntClass{c}{d}\\
+    &\vdash
+      \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+      =
+      \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{c}{d}
+  \end{aligned}
+}{IntegerRingMapRepresentativeIndependent}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b\dsep c\dsep d}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+Zur Entlastung der Beweiszeilen schreiben wir hier
+\[
+  \begin{aligned}
+    \eta_R(n)
+      &:=\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n),\\
+    v_R(x,y)
+      &:=\IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{x}{y}.
+  \end{aligned}
+\]
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
+  \proofstepwidestar[2]{a,b,c,d\in\mathbb N}{\rA}
+  \proofstepwidestar[3]{\IntClass{a}{b}=\IntClass{c}{d}}{\rA}
+  \proofstepwidestar[2,3]{a+d=b+c}{%
+    \FormulaRefAuto{IntegerClassEquality}[thm]{2,3}}
+  \proofstepwidestar[1]{\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{%
+    \FormulaRefAuto{RingUnderlyingSemiring}[thm]{1}}
+  \proofstepwidestar[1,2]{%
+    \eta_R(a+d)=\eta_R(a)\oplus\eta_R(d)}{%
+    \FormulaRefAuto{NaturalSemiringMapAddition}[thm]{5,2}}
+  \proofstepwidestar[1,2]{%
+    \eta_R(b+c)=\eta_R(b)\oplus\eta_R(c)}{%
+    \FormulaRefAuto{NaturalSemiringMapAddition}[thm]{5,2}}
+  \proofstepwidestar[1,2,3]{%
+    \eta_R(a+d)=\eta_R(b+c)}{\rIE{4}}
+  \proofstepwidestar[1,2,3]{%
+    \eta_R(a)\oplus\eta_R(d)
+    =
+    \eta_R(b)\oplus\eta_R(c)}{%
+    \rIE{6,7,8}}
+  \proofstepwidestar[1,2,3]{%
+    \eta_R(a)\oplus\bigl(-\eta_R(b)\bigr)
+    =
+    \eta_R(c)\oplus\bigl(-\eta_R(d)\bigr)}{%
+    \parbox[t]{.25\textwidth}{\raggedright
+      \FormulaRefAuto{RingCrossSumGivesDifferenceEquality}[thm]\\
+      mit \FormulaRefAuto{NaturalSemiringMapFunction}[thm]\\
+      und \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}}}
+  \proofstepwidestar[1,2]{v_R(a,b)=\eta_R(a)\oplus\bigl(-\eta_R(b)\bigr)}{%
+    \FormulaRefAuto{IntegerRingPairValueDef}[def]{1,2}}
+  \proofstepwidestar[1,2]{v_R(c,d)=\eta_R(c)\oplus\bigl(-\eta_R(d)\bigr)}{%
+    \FormulaRefAuto{IntegerRingPairValueDef}[def]{1,2}}
+  \proofstepwidestar[1,2,3]{v_R(a,b)=v_R(c,d)}{%
+    \rIE{11,12,10}}
+\end{tabproofwide}
+
+\subsection{Quotientenabstieg}
+
+\FormulaThmDeltaK[Eindeutiger Quotientenabstieg des Ganzzahlbildes]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\vdash{}\\[-2pt]
+    &\exists! f\Bigl(
+      f\colon\mathbb Z\to R\land
+      \forall a,b\in\mathbb N\,
+      f(\IntClass{a}{b})
+      =
+      \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+    \Bigr)
+  \end{aligned}
+}{IntegerRingMapQuotientDescent}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b\dsep c\dsep d\dsep z\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot}
+  \DeltaRow{Repräsentanten}{%
+    \FormulaRefAuto{IntegerPairRepresentative}[thm]}
+  \DeltaRow{Werte im Zielring}{%
+    \FormulaRefAuto{IntegerRingPairValueCarrier}[thm]}
+  \DeltaRow{Repräsentantenunabhängigkeit}{%
+    \FormulaRefAuto{IntegerRingMapRepresentativeIndependent}[thm]}
+}
+
+\paragraph{Beweis.}
+Für \(z\in\mathbb Z\) wähle nach
+\FormulaRefAuto{IntegerPairRepresentative}[thm] einen Repräsentanten
+\(z=\IntClass{a}{b}\). Nach
+\FormulaRefAuto{IntegerRingPairValueCarrier}[thm] liegt
+\[
+  \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+\]
+in \(R\). Ist auch \(z=\IntClass{c}{d}\), so gilt
+\(\IntClass{a}{b}=\IntClass{c}{d}\), und
+\FormulaRefAuto{IntegerRingMapRepresentativeIndependent}[thm] zeigt die
+Gleichheit der beiden Werte. Somit existiert für jedes \(z\in\mathbb Z\)
+genau ein \(u\in R\) mit
+\[
+ \exists a,b\in\mathbb N\,
+ \left(
+   z=\IntClass{a}{b}\land
+   u=\IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+ \right).
+\]
+Bezeichne diesen eindeutigen Wert mit \(t_R(z)\). Der Funktionssatz
+\FormulaRefAuto{Funktion}[thm] liefert genau eine Abbildung
+\(f\colon\mathbb Z\to R\) mit \(f(z)=t_R(z)\) für alle
+\(z\in\mathbb Z\). Für \(a,b\in\mathbb N\) folgt unmittelbar
+\[
+ f(\IntClass{a}{b})
+ =
+ \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}.
+\]
+Umgekehrt ist jede Abbildung mit dieser Klassenregel nach Wahl eines
+Repräsentanten an jedem \(z\in\mathbb Z\) gleich \(t_R(z)\). Daher ist sie
+punktweise gleich \(f\), womit sowohl die Existenz als auch die Eindeutigkeit
+der behaupteten Abbildung bewiesen sind.
+\hfill\(\square\)
+
+\FormulaDefDeltaK[Kanonische Abbildung aus den ganzen Zahlen]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\vdash{}\\[-2pt]
+    &\IntegerRingMap{R,\oplus,\odot,0_R,1_R}
+      \coloneqq
+      \iota f\Bigl(
+        f\colon\mathbb Z\to R\land
+        \forall a,b\in\mathbb N\,
+        f(\IntClass{a}{b})
+        =
+        \IntegerRingPairValue{R,\oplus,\odot,0_R,1_R}{a}{b}
+      \Bigr)
+  \end{aligned}
+}{IntegerRingMapDef}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot}
+  \DeltaRow{Repräsentanten}{%
+    \FormulaRefAuto{IntegerPairRepresentative}[thm]}
+  \DeltaRow{Repräsentantenunabhängigkeit}{%
+    \FormulaRefAuto{IntegerRingMapRepresentativeIndependent}[thm]}
+  \DeltaRow{Existenz und Eindeutigkeit}{%
+    \FormulaRefAuto{IntegerRingMapQuotientDescent}[thm]}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Kanonische Abbildung}{%
+    \IntegerRingMap{R,\oplus,\odot,0_R,1_R}}
+}
+
+\FormulaAxiomDeltaK[Trägerabbildung der kanonischen Ganzzahlabbildung]{%
+  \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}
+  \vdash
+  \IntegerRingMap{R,\oplus,\odot,0_R,1_R}
+  \colon\mathbb Z\to R%
+}{IntegerRingMapFunction}{%
+  \DeltaRow{Mengen}{R}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Auswertung an einer Ganzzahlklasse]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep a,b\in\mathbb N\\
+    &\vdash
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(\IntClass{a}{b})
+      =
+      \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(a)
+      \oplus
+      \bigl(-\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(b)\bigr)
+  \end{aligned}
+}{IntegerRingMapClassValue}{%
+  \DeltaRow{Mengen}{R\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+
+\subsection{Erhaltung der Ringoperationen}
+
+\FormulaThmDeltaK[Die kanonische Ganzzahlabbildung erhält die Addition]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep z,w\in\mathbb Z\\
+    &\vdash
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(z+w)
+      =
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(z)
+      \oplus
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(w)
+  \end{aligned}
+}{IntegerRingMapAddition}{%
+  \DeltaRow{Mengen}{R\dsep z\dsep w}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+
+\paragraph{Beweis.}
+Wähle nach \FormulaRefAuto{IntegerPairRepresentative}[thm]
+\(z=\IntClass{a}{b}\) und \(w=\IntClass{c}{d}\). Aus der Definition der
+Ganzzahladdition und aus
+\FormulaRefAuto{NaturalSemiringMapAddition}[thm] folgt. Dabei stehen
+\(\eta_R\) und \(\zeta_R\) im Folgenden abkürzend für
+\(\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}\) beziehungsweise
+\(\IntegerRingMap{R,\oplus,\odot,0_R,1_R}\):
+\[
+\begin{aligned}
+ \zeta_R(z+w)
+ &=\eta_R(a+c)\oplus\bigl(-\eta_R(b+d)\bigr)\\
+ &=(\eta_R(a)\oplus\eta_R(c))
+   \oplus\bigl(-(\eta_R(b)\oplus\eta_R(d))\bigr)\\
+ &=\bigl(\eta_R(a)\oplus(-\eta_R(b))\bigr)
+   \oplus\bigl(\eta_R(c)\oplus(-\eta_R(d))\bigr)\\
+ &=\zeta_R(z)\oplus\zeta_R(w).
+\end{aligned}
+\]
+Die dritte Gleichheit verwendet Assoziativität und Kommutativität der
+additiven abelschen Gruppe.
+\hfill\(\square\)
+
+\FormulaThmDeltaK[Die kanonische Ganzzahlabbildung erhält die Multiplikation]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep z,w\in\mathbb Z\\
+    &\vdash
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(z\cdot w)
+      =
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(z)
+      \odot
+      \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(w)
+  \end{aligned}
+}{IntegerRingMapMultiplication}{%
+  \DeltaRow{Mengen}{R\dsep z\dsep w}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+
+\paragraph{Beweis.}
+Für \(z=\IntClass{a}{b}\) und \(w=\IntClass{c}{d}\) gilt nach der
+Multiplikationsdefinition in Band~13
+\[
+ zw=\IntClass{ac+bd}{ad+bc}.
+\]
+Mit der Additions- und Multiplikationserhaltung von \(\eta_R\), den beiden
+Distributivgesetzen und den Vorzeichenregeln folgt
+\[
+\begin{aligned}
+ \zeta_R(zw)
+ &=\eta_R(ac+bd)\oplus\bigl(-\eta_R(ad+bc)\bigr)\\
+ &=(\eta_R(a)\odot\eta_R(c))
+   \oplus(\eta_R(b)\odot\eta_R(d))\\[-2pt]
+ &\quad{}\oplus\bigl(
+     -\bigl((\eta_R(a)\odot\eta_R(d))
+       \oplus(\eta_R(b)\odot\eta_R(c))\bigr)
+   \bigr)\\
+ &=\bigl(\eta_R(a)\oplus(-\eta_R(b))\bigr)\\[-2pt]
+ &\quad{}\odot
+   \bigl(\eta_R(c)\oplus(-\eta_R(d))\bigr)\\
+ &=\zeta_R(z)\odot\zeta_R(w).
+\end{aligned}
+\]
+Die Rechnung benötigt keine Kommutativität des Zielrings; die Reihenfolge
+der Faktoren stimmt mit der Definition
+\((a,b)(c,d)=(ac+bd,ad+bc)\) überein.
+\hfill\(\square\)
+
+\FormulaThmDeltaK[Null- und Einserhaltung der kanonischen Ganzzahlabbildung]{%
+  \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}
+  \vdash
+  \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(0_{\mathbb Z})=0_R
+  \land
+  \IntegerRingMap{R,\oplus,\odot,0_R,1_R}(1_{\mathbb Z})=1_R%
+}{IntegerRingMapConstants}{%
+  \DeltaRow{Mengen}{R\dsep0_{\mathbb Z}\dsep1_{\mathbb Z}}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+
+\paragraph{Beweis.}
+Nach \FormulaRefAuto{IntegerZeroClass}[thm] und der Definition von
+\(1_{\mathbb Z}=\IntClass{1}{0}\) erhält man
+\[
+ \zeta_R(0_{\mathbb Z})
+ =\eta_R(0)\oplus(-\eta_R(0))=0_R,\qquad
+ \zeta_R(1_{\mathbb Z})
+ =\eta_R(1)\oplus(-\eta_R(0))=1_R.
+\]
+Dabei werden
+\FormulaRefAuto{NaturalSemiringMapZero}[thm],
+\FormulaRefAuto{NaturalSemiringMapOne}[thm] und die additiven
+Gruppengesetze verwendet.
+\hfill\(\square\)
+
+\FormulaThmDeltaK[Die kanonische Ganzzahlabbildung ist ein Ringhomomorphismus]{%
+  \RingAlg{R}{\oplus}{\odot}{0_R}{1_R}
+  \vdash
+  \RingHom{\IntegerRingMap{R,\oplus,\odot,0_R,1_R}}
+    {\mathbb Z,+,\cdot,0_{\mathbb Z},1_{\mathbb Z}}
+    {R,\oplus,\odot,0_R,1_R}%
+}{IntegerRingCanonicalHomomorphism}{%
+  \DeltaRow{Mengen}{R}
+  \DeltaRow{Funktionen}{\oplus\dsep\odot}
+}
+
+\paragraph{Beweis.}
+Die Additionserhaltung zusammen mit der Nullerhaltung macht \(\zeta_R\)
+zu einem Homomorphismus der additiven Gruppen; die Inversenerhaltung folgt
+dabei aus \FormulaRefAuto{GroupHomInversePreservation}[thm].
+Die Multiplikationserhaltung und die Einserhaltung machen dieselbe Abbildung
+zu einem Homomorphismus der multiplikativen Monoide. Mit
+\FormulaRefAuto{RingHomDef}[def] folgt die Behauptung.
+\hfill\(\square\)
+
+\FormulaThmDeltaK[Universelle Eigenschaft der ganzen Zahlen]{%
+  \begin{aligned}[t]
+    &\RingAlg{R}{\oplus}{\odot}{0_R}{1_R}\vdash{}\\[-2pt]
+    &\exists! f\,
+      \RingHom{f}
+        {\mathbb Z,+,\cdot,0_{\mathbb Z},1_{\mathbb Z}}
+        {R,\oplus,\odot,0_R,1_R}
+  \end{aligned}
+}{IntegerRingUniversalHomomorphism}{%
+  \DeltaRow{Mengen}{R}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot}
+}
+
+\paragraph{Beweis.}
+Die Existenz liefert
+\FormulaRefAuto{IntegerRingCanonicalHomomorphism}[thm]. Sei umgekehrt
+\(f\) ein einserhaltender Ringhomomorphismus. Seine Einschränkung entlang
+der natürlichen Einbettung
+\(\IntEmbed\colon\mathbb N\to\mathbb Z\) ist ein
+Halbringhomomorphismus in den dem Zielring zugrunde liegenden Halbring:
+Die Additions- und Multiplikationserhaltung von \(\IntEmbed\) wurden in
+Band~13 bewiesen, und \(f\) erhält beide Operationen sowie \(0\) und \(1\).
+Nach \FormulaRefAuto{NaturalSemiringUniversalHomomorphism}[thm] gilt daher
+\[
+ f(\IntEmbed(n))
+ =\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n)
+ \qquad(n\in\mathbb N).
+\]
+Jede Klasse besitzt die Darstellung
+\(\IntClass{a}{b}=\IntEmbed(a)+(-\IntEmbed(b))\). Mit der Additions- und
+Inversenerhaltung folgt
+\[
+\begin{aligned}
+ f(\IntClass{a}{b})
+ &=f(\IntEmbed(a))\oplus\bigl(-f(\IntEmbed(b))\bigr)\\
+ &=\eta_R(a)\oplus(-\eta_R(b))
+ =\zeta_R(\IntClass{a}{b}).
+\end{aligned}
+\]
+Da jede ganze Zahl einen solchen Repräsentanten besitzt, sind \(f\) und
+\(\zeta_R\) punktweise gleich und damit dieselbe Funktion.
+\hfill\(\square\)
 
 \end{document}

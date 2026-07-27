@@ -42,43 +42,50 @@ Ununterscheidbarkeitsquotient spezialisiert beide Konstruktionen.
 \section{Axiome einer Äquivalenzrelation}
 
 \FormulaAxiomDeltaK[Reflexivität]{%
-  x\in A \vdash (x,x)\in R%
+  x\in A \vdash x\sim x%
 }{EqRelReflexivity}{
-  \DeltaRow{Mengen}{A \dsep R \dsep x}
+  \DeltaRow{Mengen}{A \dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 
 \FormulaAxiomDeltaK[Symmetrie]{%
-  (x,y)\in R \vdash (y,x)\in R%
+  x\sim y \vdash y\sim x%
 }{EqRelSymmetry}{
-  \DeltaRow{Mengen}{A \dsep R \dsep x \dsep y}
+  \DeltaRow{Mengen}{A \dsep x \dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 
 \FormulaAxiomDeltaK[Transitivität]{%
-  (x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R%
+  x\sim y \dsep y\sim z \vdash x\sim z%
 }{EqRelTransitivity}{
-  \DeltaRow{Mengen}{A \dsep R \dsep x \dsep y \dsep z}
+  \DeltaRow{Mengen}{A \dsep x \dsep y \dsep z}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 
 \section{Definition der Äquivalenzrelation}
 
-\FormulaDefDeltaK[Begriff der Äquivalenzrelation]{\EqRel{R,A}}{EqRelDef}{
-  \DeltaRow{Mengen}{A \dsep R \dsep x \dsep y \dsep z}
+\FormulaDefDeltaK[Begriff der Äquivalenzrelation]{\EqRel{A,\sim}}{EqRelDef}{
+  \DeltaRow{Mengen}{A \dsep x \dsep y \dsep z}
+  \DeltaRow{Relationsoperatoren}{\sim}
   \DeltaRow{\textbf{Axiome}}{}
-  \DeltaRow{Relation auf \(A\)}
-           {R \subseteq A \times A}
-           [\FormulaRefAuto{F \subseteq A \times B}]
+  \DeltaRow{Binärer Relationsoperator}
+           {\sim\ \text{auf }A}
   \DeltaRow{Reflexivität}
-           {x\in A \vdash (x,x)\in R}
-           [\FormulaRefAuto{x\in A \vdash (x,x)\in R}]
+           {x\in A \vdash x\sim x}
+           [\FormulaRefAuto{EqRelReflexivity}[ax]]
   \DeltaRow{Symmetrie}
-           {(x,y)\in R \vdash (y,x)\in R}
-           [\FormulaRefAuto{(x,y)\in R \vdash (y,x)\in R}]
+           {x\sim y \vdash y\sim x}
+           [\FormulaRefAuto{EqRelSymmetry}[ax]]
   \DeltaRow{Transitivität}
-           {(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}
-           [\FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}]
+           {x\sim y \dsep y\sim z \vdash x\sim z}
+           [\FormulaRefAuto{EqRelTransitivity}[ax]]
   \DeltaRow{\textbf{Neue Symbole}}{}
-  \DeltaPrem{Äquivalenzrelationen}{}
+  \DeltaPrem{Äquivalenzrelation}{\EqRel{A,\sim}}
 }
+
+Eine Äquivalenzrelation wird damit nicht durch einen austauschbaren
+Buchstaben \(R\), sondern durch ihren binären Relationsoperator bezeichnet.
+Die Aussage \(x\sim y\) ist seine durchgängig verwendete Infixnotation.
 
 \chapter{Beispiele für Äquivalenzrelationen}
 
@@ -90,170 +97,125 @@ Ununterscheidbarkeitsrelation (indiscernibility relation): Zwei Elemente des
 Trägers \(\bigcup M\) sind bezüglich \(M\) ununterscheidbar, wenn sie in jedem
 Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 
-\FormulaDefDeltaK[Ununterscheidbarkeitsrelation einer Mengenfamilie]{%
-  \SameOccRel{M}\coloneqq
-  \{(a,b)\in \bigcup M\times\bigcup M\mid
-  \forall X\in M\,(a\in X\leftrightarrow b\in X)\}
+\FormulaDefDeltaK[Ununterscheidbarkeitsoperator einer Mengenfamilie]{%
+  \begin{aligned}[t]
+    &a,b\in\bigcup M\vdash{}\\
+    &a\mathrel{\SameOccRel{M}}b
+      \coloneqq \forall X\in M\,(a\in X\leftrightarrow b\in X)
+  \end{aligned}
 }{SameOccRelDef}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Neue Symbole}{\SameOccRel{M}}
 }
 
-\FormulaThmDeltaK[Charakterisierung der Ununterscheidbarkeitsrelation]{%
-  (a,b)\in \SameOccRel{M}
-  \eqvdash
-  a\in\bigcup M\land b\in\bigcup M\land
-  \forall X\in M\,(a\in X\leftrightarrow b\in X)
+\FormulaThmDeltaK[Charakterisierung des Ununterscheidbarkeitsoperators]{%
+  a,b\in\bigcup M\vdash
+  \Bigl(a\mathrel{\SameOccRel{M}}b
+  \leftrightarrow
+  \forall X\in M\,(a\in X\leftrightarrow b\in X)\Bigr)
 }{SameOccRelChar}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
-}
-\begin{tabproofsplit}
-\proofpart{\(\vdash\)}
-  \proofstep{1}{(a,b)\in \SameOccRel{M}}{\rA}
-  \proofstep{}{%
-    \SameOccRel{M}\coloneqq
-    \{(a,b)\in \bigcup M\times\bigcup M\mid
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)\}}{%
-    \FormulaRefAuto{SameOccRelDef}}
-  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,1}}
-  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M}{\rAEa{3}}
-  \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAEb{3}}
-  \proofstep{1}{a\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{4}}
-  \proofstep{1}{b\in\bigcup M}{\FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{4}}
-  \proofstep{1}{a\in\bigcup M\land b\in\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{6,\rAI{7,5}}}
-\closeproofpart
-
-\proofpart{\(\dashv\)}
-  \proofstep{1}{a\in\bigcup M\land b\in\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rA}
-  \proofstep{}{%
-    \SameOccRel{M}\coloneqq
-    \{(a,b)\in \bigcup M\times\bigcup M\mid
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)\}}{%
-    \FormulaRefAuto{SameOccRelDef}}
-  \proofstep{1}{a\in\bigcup M}{\rAEa{1}}
-  \proofstep{1}{b\in\bigcup M}{\rAEa{\rAEb{1}}}
-  \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAEb{\rAEb{1}}}
-  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}}
-  \proofstep{1}{(a,b)\in\bigcup M\times\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow b\in X)}{\rAI{6,5}}
-  \proofstep{1}{(a,b)\in \SameOccRel{M}}{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,7}}
-\closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmDeltaK[Trägerbedingung der Ununterscheidbarkeitsrelation]{%
-  \SameOccRel{M}\subseteq\bigcup M\times\bigcup M
-}{SameOccRelCarrier}{%
-  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b\dsep c}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{(a,b)\in \SameOccRel{M}}{\rA}
-  \proofstepwidestar[1]{a\in\bigcup M\land b\in\bigcup M\land
+  \proofstepwidestar[1]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[2]{b\in\bigcup M}{\rA}
+  \proofstepwidestar[1,2]{%
+    a\mathrel{\SameOccRel{M}}b
+    \leftrightarrow
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \FormulaRefAuto{SameOccRelChar}{1}}
-  \proofstepwidestar[1]{a\in\bigcup M}{\rAEa{2}}
-  \proofstepwidestar[1]{b\in\bigcup M}{\rAEa{\rAEb{2}}}
-  \proofstepwidestar[1]{(a,b)\in\bigcup M\times\bigcup M}{%
-    \FormulaRefAuto{a\in A\dsep b\in B\vdash (a,b)\in A\times B}{3,4}}
-  \proofstepwidestar[]{\SameOccRel{M}\subseteq\bigcup M\times\bigcup M}{%
-    \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,5}}}}
+    \FormulaRefAuto{SameOccRelDef}[def]{1,2}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Reflexivität der Ununterscheidbarkeitsrelation]{%
-  a\in\bigcup M \vdash (a,a)\in \SameOccRel{M}
+  a\in\bigcup M \vdash a\mathrel{\SameOccRel{M}}a
 }{SameOccRelReflexivity}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproof}
   \proofstep{1}{a\in\bigcup M}{\rA}
   \proofstep{2}{X\in M}{\rA}
   \proofstep{1,2}{a\in X\leftrightarrow a\in X}{\FormulaRefAuto{P\leftrightarrow P}}
   \proofstep{1}{\forall X\in M\,(a\in X\leftrightarrow a\in X)}{\rUI{\rRI{2,3}}}
-  \proofstep{1}{a\in\bigcup M\land a\in\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow a\in X)}{\rAI{1,\rAI{1,4}}}
-  \proofstep{1}{(a,a)\in \SameOccRel{M}}{%
-    \FormulaRefAuto{SameOccRelChar}{5}}
+  \proofstep{1}{a\mathrel{\SameOccRel{M}}a}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{1,1},4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Symmetrie der Ununterscheidbarkeitsrelation]{%
-  (a,b)\in \SameOccRel{M} \vdash (b,a)\in \SameOccRel{M}
+  a\mathrel{\SameOccRel{M}}b \vdash b\mathrel{\SameOccRel{M}}a
 }{SameOccRelSymmetry}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{(a,b)\in \SameOccRel{M}}{\rA}
-  \proofstepwidestar[1]{a\in\bigcup M\land b\in\bigcup M\land
+  \proofstepwidestar[1]{a\mathrel{\SameOccRel{M}}b}{\rA}
+  \proofstepwidestar[2]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[3]{b\in\bigcup M}{\rA}
+  \proofstepwidestar[1,2,3]{%
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \FormulaRefAuto{SameOccRelChar}{1}}
-  \proofstepwidestar[1]{b\in\bigcup M}{\rAEa{\rAEb{2}}}
-  \proofstepwidestar[1]{a\in\bigcup M}{\rAEa{2}}
-  \proofstepwidestar[1]{\forall X\in M\,(b\in X\leftrightarrow a\in X)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{2,3},1}}
+  \proofstepwidestar[1,2,3]{\forall X\in M\,(b\in X\leftrightarrow a\in X)}{%
     \FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x))\vdash
-    \forall x(Q(x)\leftrightarrow P(x))}{\rAEb{\rAEb{2}}}}
-  \proofstepwidestar[1]{b\in\bigcup M\land a\in\bigcup M\land
-    \forall X\in M\,(b\in X\leftrightarrow a\in X)}{\rAI{3,\rAI{4,5}}}
-  \proofstepwidestar[1]{(b,a)\in \SameOccRel{M}}{%
-    \FormulaRefAuto{SameOccRelChar}{6}}
+    \forall x(Q(x)\leftrightarrow P(x))}{4}}
+  \proofstepwidestar[1,2,3]{b\mathrel{\SameOccRel{M}}a}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{3,2},5}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Transitivität der Ununterscheidbarkeitsrelation]{%
-  (a,b)\in \SameOccRel{M}\dsep (b,c)\in \SameOccRel{M}
-  \vdash (a,c)\in \SameOccRel{M}
+  a\mathrel{\SameOccRel{M}}b\dsep b\mathrel{\SameOccRel{M}}c
+  \vdash a\mathrel{\SameOccRel{M}}c
 }{SameOccRelTransitivity}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b\dsep c}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{(a,b)\in \SameOccRel{M}}{\rA}
-  \proofstepwidestar[2]{(b,c)\in \SameOccRel{M}}{\rA}
-  \proofstepwidestar[1]{a\in\bigcup M\land b\in\bigcup M\land
+  \proofstepwidestar[1]{a\mathrel{\SameOccRel{M}}b}{\rA}
+  \proofstepwidestar[2]{b\mathrel{\SameOccRel{M}}c}{\rA}
+  \proofstepwidestar[3]{a\in\bigcup M}{\rA}
+  \proofstepwidestar[4]{b\in\bigcup M}{\rA}
+  \proofstepwidestar[5]{c\in\bigcup M}{\rA}
+  \proofstepwidestar[1,3,4]{%
     \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
-    \FormulaRefAuto{SameOccRelChar}{1}}
-  \proofstepwidestar[2]{b\in\bigcup M\land c\in\bigcup M\land
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{3,4},1}}
+  \proofstepwidestar[2,4,5]{%
     \forall X\in M\,(b\in X\leftrightarrow c\in X)}{%
-    \FormulaRefAuto{SameOccRelChar}{2}}
-  \proofstepwidestar[1]{a\in\bigcup M}{\rAEa{3}}
-  \proofstepwidestar[2]{c\in\bigcup M}{\rAEa{\rAEb{4}}}
-  \proofstepwidestar[1,2]{\forall X\in M\,(a\in X\leftrightarrow c\in X)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{4,5},2}}
+  \proofstepwidestar[1,2,3,4,5]{%
+    \forall X\in M\,(a\in X\leftrightarrow c\in X)}{%
     \FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)),
     \forall x(Q(x)\leftrightarrow R(x))\vdash
-    \forall x(P(x)\leftrightarrow R(x))}{\rAEb{\rAEb{3}},\rAEb{\rAEb{4}}}}
-  \proofstepwidestar[1,2]{a\in\bigcup M\land c\in\bigcup M\land
-    \forall X\in M\,(a\in X\leftrightarrow c\in X)}{\rAI{5,\rAI{6,7}}}
-  \proofstepwidestar[1,2]{(a,c)\in \SameOccRel{M}}{%
-    \FormulaRefAuto{SameOccRelChar}{8}}
+    \forall x(P(x)\leftrightarrow R(x))}{6,7}}
+  \proofstepwidestar[1,2,3,4,5]{a\mathrel{\SameOccRel{M}}c}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{SameOccRelChar}[thm]{3,5},8}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Ununterscheidbarkeitsrelation ist Äquivalenzrelation]{%
-  \EqRel{\SameOccRel{M},\bigcup M}
+  \EqRel{\bigcup M,\SameOccRel{M}}
 }{SameOccRelEqRel}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b\dsep c}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproof}
-  \proofstep{}{\SameOccRel{M}\subseteq\bigcup M\times\bigcup M}{%
-    \FormulaRefAuto{SameOccRelCarrier}}
-  \proofstep{}{a\in\bigcup M \rightarrow (a,a)\in \SameOccRel{M}}{%
+  \proofstep{}{a\in\bigcup M \rightarrow a\mathrel{\SameOccRel{M}}a}{%
     \FormulaRefAuto{SameOccRelReflexivity}}
-  \proofstep{}{(a,b)\in \SameOccRel{M} \rightarrow (b,a)\in \SameOccRel{M}}{%
+  \proofstep{}{%
+    a\mathrel{\SameOccRel{M}}b \rightarrow b\mathrel{\SameOccRel{M}}a}{%
     \FormulaRefAuto{SameOccRelSymmetry}}
   \proofstep{}{%
-    \bigl((a,b)\in \SameOccRel{M}\land (b,c)\in \SameOccRel{M}\bigr)
-    \rightarrow (a,c)\in \SameOccRel{M}}{%
+    \bigl(a\mathrel{\SameOccRel{M}}b\land
+          b\mathrel{\SameOccRel{M}}c\bigr)
+    \rightarrow a\mathrel{\SameOccRel{M}}c}{%
     \FormulaRefAuto{SameOccRelTransitivity}}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
-    \FormulaRefAuto{EqRelDef}{1,2,3,4}}
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
+    \FormulaRefAuto{EqRelDef}{1,2,3}}
 \end{tabproof}
 
 \section{Gleichmächtigkeit}
@@ -374,191 +336,27 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
   \closeproofpartindR
 \end{tabproofsplit}
 
-\subsection{Die Gleichmächtigkeitsrelation auf einer Mengenfamilie}
+\subsection{Gleichmächtigkeit als Äquivalenzrelation}
 
-Die Aussage \(A\EqCard B\) ist zunächst für beliebige Mengen formuliert.
-Damit daraus im Sinn des hier verwendeten Relationsbegriffs eine Relation auf
-einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
-
-\FormulaDefDeltaK[Gleichmächtigkeitsrelation auf einer Mengenfamilie]{%
-  \EqCardRel{M}\coloneqq
-  \{(A,B)\in M\times M\mid A\EqCard B\}
-}{EqCardRelDef}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B\dsep C}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-  \DeltaRow{Neue Symbole}{\EqCardRel{M}}
-}
-
-\FormulaThmDeltaK[Charakterisierung der Gleichmächtigkeitsrelation]{%
-  (A,B)\in\EqCardRel{M}
-  \eqvdash
-  A\in M\land B\in M\land A\EqCard B
-}{EqCardRelChar}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-}
-\begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{(A,B)\in\EqCardRel{M}}{\rA}
-    \proofstep{}{%
-      \EqCardRel{M}\coloneqq
-      \{(A,B)\in M\times M\mid A\EqCard B\}}{%
-      \FormulaRefAuto{EqCardRelDef}}
-    \proofstep{1}{%
-      (A,B)\in M\times M\land A\EqCard B}{%
-      \FormulaRefAuto{x\in\{u\in A\mid P(u)\}
-        \eqvdash x\in A\land P(x)}{2,1}}
-    \proofstep{1}{(A,B)\in M\times M}{\rAEa{3}}
-    \proofstep{1}{A\EqCard B}{\rAEb{3}}
-    \proofstep{1}{A\in M}{%
-      \FormulaRefAuto{(a,b)\in A\times B\vdash a\in A}{4}}
-    \proofstep{1}{B\in M}{%
-      \FormulaRefAuto{(a,b)\in A\times B\vdash b\in B}{4}}
-    \proofstep{1}{A\in M\land B\in M\land A\EqCard B}{%
-      \rAI{6,\rAI{7,5}}}
-  \closeproofpart
-
-  \proofpart{\(\dashv\)}
-    \proofstep{1}{A\in M\land B\in M\land A\EqCard B}{\rA}
-    \proofstep{}{%
-      \EqCardRel{M}\coloneqq
-      \{(A,B)\in M\times M\mid A\EqCard B\}}{%
-      \FormulaRefAuto{EqCardRelDef}}
-    \proofstep{1}{A\in M}{\rAEa{1}}
-    \proofstep{1}{B\in M}{\rAEa{\rAEb{1}}}
-    \proofstep{1}{A\EqCard B}{\rAEb{\rAEb{1}}}
-    \proofstep{1}{(A,B)\in M\times M}{%
-      \FormulaRefAuto{a\in A\dsep b\in B
-        \vdash (a,b)\in A\times B}{3,4}}
-    \proofstep{1}{(A,B)\in M\times M\land A\EqCard B}{%
-      \rAI{6,5}}
-    \proofstep{1}{(A,B)\in\EqCardRel{M}}{%
-      \FormulaRefAuto{x\in\{u\in A\mid P(u)\}
-        \eqvdash x\in A\land P(x)}{2,7}}
-  \closeproofpart
-\end{tabproofsplit}
-
-\FormulaThmDeltaK[Trägerbedingung der Gleichmächtigkeitsrelation]{%
-  \EqCardRel{M}\subseteq M\times M
-}{EqCardRelCarrier}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{(A,B)\in\EqCardRel{M}}{\rA}
-  \proofstepwidestar[1]{A\in M\land B\in M\land A\EqCard B}{%
-    \FormulaRefAuto{EqCardRelChar}{1}}
-  \proofstepwidestar[1]{A\in M}{\rAEa{2}}
-  \proofstepwidestar[1]{B\in M}{\rAEa{\rAEb{2}}}
-  \proofstepwidestar[1]{(A,B)\in M\times M}{%
-    \FormulaRefAuto{a\in A\dsep b\in B
-      \vdash (a,b)\in A\times B}{3,4}}
-  \proofstepwidestar[]{\EqCardRel{M}\subseteq M\times M}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{1,5}}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Reflexivität der Gleichmächtigkeitsrelation]{%
-  A\in M\vdash (A,A)\in\EqCardRel{M}
-}{EqCardRelReflexivity}{%
-  \DeltaRow{Mengen}{M\dsep A}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-}
-\begin{tabproof}
-  \proofstep{1}{A\in M}{\rA}
-  \proofstep{}{A\EqCard A}{\FormulaRefAuto{EqCardReflexive}}
-  \proofstep{1}{A\in M\land A\in M\land A\EqCard A}{%
-    \rAI{1,\rAI{1,2}}}
-  \proofstep{1}{(A,A)\in\EqCardRel{M}}{%
-    \FormulaRefAuto{EqCardRelChar}{3}}
-\end{tabproof}
-
-\FormulaThmDeltaK[Symmetrie der Gleichmächtigkeitsrelation]{%
-  (A,B)\in\EqCardRel{M}\vdash (B,A)\in\EqCardRel{M}
-}{EqCardRelSymmetry}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{(A,B)\in\EqCardRel{M}}{\rA}
-  \proofstepwidestar[1]{A\in M\land B\in M\land A\EqCard B}{%
-    \FormulaRefAuto{EqCardRelChar}{1}}
-  \proofstepwidestar[1]{B\in M}{\rAEa{\rAEb{2}}}
-  \proofstepwidestar[1]{A\in M}{\rAEa{2}}
-  \proofstepwidestar[1]{A\EqCard B}{\rAEb{\rAEb{2}}}
-  \proofstepwidestar[1]{B\EqCard A}{%
-    \FormulaRefAuto{EqCardSymmetric}{5}}
-  \proofstepwidestar[1]{B\in M\land A\in M\land B\EqCard A}{%
-    \rAI{3,\rAI{4,6}}}
-  \proofstepwidestar[1]{(B,A)\in\EqCardRel{M}}{%
-    \FormulaRefAuto{EqCardRelChar}{7}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Transitivität der Gleichmächtigkeitsrelation]{%
-  (A,B)\in\EqCardRel{M}\dsep (B,C)\in\EqCardRel{M}
-  \vdash (A,C)\in\EqCardRel{M}
-}{EqCardRelTransitivity}{%
-  \DeltaRow{Mengen}{M\dsep A\dsep B\dsep C}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
-}
-\begin{tabproofsplitwide}
-  \proofpartwideindR[Gleichmächtigkeit der äußeren Mengen]{%
-    (A,B)\in\EqCardRel{M}\dsep (B,C)\in\EqCardRel{M}
-    \vdash A\EqCard C
-  }{%
-    (A,B)\in\EqCardRel{M}\dsep (B,C)\in\EqCardRel{M}
-    \vdash A\EqCard C
-  }[EqCardRelTransitivityOuterSets]
-    \proofstepwidestar[1]{(A,B)\in\EqCardRel{M}}{\rA}
-    \proofstepwidestar[2]{(B,C)\in\EqCardRel{M}}{\rA}
-    \proofstepwidestar[1]{A\in M\land B\in M\land A\EqCard B}{%
-      \FormulaRefAuto{EqCardRelChar}{1}}
-    \proofstepwidestar[2]{B\in M\land C\in M\land B\EqCard C}{%
-      \FormulaRefAuto{EqCardRelChar}{2}}
-    \proofstepwidestar[1]{A\EqCard B}{\rAEb{\rAEb{3}}}
-    \proofstepwidestar[2]{B\EqCard C}{\rAEb{\rAEb{4}}}
-    \proofstepwidestar[1,2]{A\EqCard C}{%
-      \FormulaRefAuto{EqCardTransitive}{5,6}}
-  \closeproofpartwideindR
-
-  \proofpartwide{Einsetzen in die Gleichmächtigkeitsrelation}
-    \proofstepwidestar[1]{(A,B)\in\EqCardRel{M}}{\rA}
-    \proofstepwidestar[2]{(B,C)\in\EqCardRel{M}}{\rA}
-    \proofstepwidestar[1]{A\in M\land B\in M\land A\EqCard B}{%
-      \FormulaRefAuto{EqCardRelChar}{1}}
-    \proofstepwidestar[2]{B\in M\land C\in M\land B\EqCard C}{%
-      \FormulaRefAuto{EqCardRelChar}{2}}
-    \proofstepwidestar[1]{A\in M}{\rAEa{3}}
-    \proofstepwidestar[2]{C\in M}{\rAEa{\rAEb{4}}}
-    \proofstepwidestar[1,2]{A\EqCard C}{%
-      \FormulaRefAuto{EqCardRelTransitivityOuterSets}{1,2}}
-    \proofstepwidestar[1,2]{A\in M\land C\in M\land A\EqCard C}{%
-      \rAI{5,\rAI{6,7}}}
-    \proofstepwidestar[1,2]{(A,C)\in\EqCardRel{M}}{%
-      \FormulaRefAuto{EqCardRelChar}{8}}
-  \closeproofpartwide
-\end{tabproofsplitwide}
+Der Relationsoperator \(\EqCard\) ist bereits für beliebige Mengen definiert.
+Auf jeder Mengenfamilie \(M\) wird er daher lediglich mit dem Träger
+zusammen angegeben; eine zusätzliche Menge geordneter Paare ist nicht nötig.
 
 \FormulaThmDeltaK[Gleichmächtigkeit ist eine Äquivalenzrelation]{%
-  \EqRel{\EqCardRel{M},M}
+  \EqRel{M,\EqCard}
 }{EqCardRelEqRel}{%
   \DeltaRow{Mengen}{M\dsep A\dsep B\dsep C}
-  \DeltaRow{Relationen}{\EqCardRel{M}}
+  \DeltaRow{Relationsoperatoren}{\EqCard}
 }
 \begin{tabproof}
-  \proofstep{}{\EqCardRel{M}\subseteq M\times M}{%
-    \FormulaRefAuto{EqCardRelCarrier}}
-  \proofstep{}{A\in M\rightarrow(A,A)\in\EqCardRel{M}}{%
-    \FormulaRefAuto{EqCardRelReflexivity}}
-  \proofstep{}{(A,B)\in\EqCardRel{M}\rightarrow
-    (B,A)\in\EqCardRel{M}}{%
-    \FormulaRefAuto{EqCardRelSymmetry}}
+  \proofstep{}{A\EqCard A}{\FormulaRefAuto{EqCardReflexive}}
+  \proofstep{}{A\EqCard B\rightarrow B\EqCard A}{%
+    \FormulaRefAuto{EqCardSymmetric}}
   \proofstep{}{%
-    \bigl((A,B)\in\EqCardRel{M}\land(B,C)\in\EqCardRel{M}\bigr)
-    \rightarrow(A,C)\in\EqCardRel{M}}{%
-    \FormulaRefAuto{EqCardRelTransitivity}}
-  \proofstep{}{\EqRel{\EqCardRel{M},M}}{%
-    \FormulaRefAuto{EqRelDef}{1,2,3,4}}
+    \bigl(A\EqCard B\land B\EqCard C\bigr)
+    \rightarrow A\EqCard C}{\FormulaRefAuto{EqCardTransitive}}
+  \proofstep{}{\EqRel{M,\EqCard}}{%
+    \FormulaRefAuto{EqRelDef}{1,2,3}}
 \end{tabproof}
 
 \subsection{Weitere Folgerungen}
@@ -695,422 +493,422 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 \section{Äquivalenzklassen}
 
 \FormulaDefDeltaK[Äquivalenzklasse eines Elements]{%
-  \EqRel{R,A}\dsep x\in A\vdash
-  \EqClass{x}{R}{A}\coloneqq
-  \{y\in A\mid (x,y)\in R\}
+  \EqRel{A,\sim}\dsep x\in A\vdash
+  \EqClass{x}{\sim}{A}\coloneqq
+  \{y\in A\mid x\sim y\}
 }{EqClassDef}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Neue Symbole}{\EqClass{x}{R}{A}}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Neue Symbole}{\EqClass{x}{\sim}{A}}
 }
 
 \FormulaThmDeltaK[Charakterisierung der Äquivalenzklasse]{%
-  \EqRel{R,A}\dsep x\in A
+  \EqRel{A,\sim}\dsep x\in A
   \vdash
-  y\in \EqClass{x}{R}{A}
+  y\in \EqClass{x}{\sim}{A}
   \leftrightarrow
-  y\in A\land (x,y)\in R
+  y\in A\land x\sim y
 }{EqClassChar}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproofsplit}
   \proofpartindR[Hinrichtung]{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in \EqClass{x}{R}{A}
-    \rightarrow y\in A\land (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in \EqClass{x}{\sim}{A}
+    \rightarrow y\in A\land x\sim y%
   }{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in \EqClass{x}{R}{A}
-    \rightarrow y\in A\land (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in \EqClass{x}{\sim}{A}
+    \rightarrow y\in A\land x\sim y%
   }[EqClassCharForwardDirection]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{1,2}{%
-      \EqClass{x}{R}{A}\coloneqq
-      \{y\in A\mid (x,y)\in R\}}{%
+      \EqClass{x}{\sim}{A}\coloneqq
+      \{y\in A\mid x\sim y\}}{%
       \FormulaRefAuto{EqClassDef}{1,2}}
-    \proofstep{4}{y\in \EqClass{x}{R}{A}}{\rA}
-    \proofstep{1,2,4}{y\in A\land (x,y)\in R}{%
+    \proofstep{4}{y\in \EqClass{x}{\sim}{A}}{\rA}
+    \proofstep{1,2,4}{y\in A\land x\sim y}{%
       \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash
         x \in A \land P(x)}{3,4}}
     \proofstep{1,2}{%
-      y\in \EqClass{x}{R}{A}
-      \rightarrow y\in A\land (x,y)\in R}{\rRI{4,5}}
+      y\in \EqClass{x}{\sim}{A}
+      \rightarrow y\in A\land x\sim y}{\rRI{4,5}}
   \closeproofpartindR
 
   \proofpartindR[Rückrichtung]{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in A\land (x,y)\in R
-    \rightarrow y\in \EqClass{x}{R}{A}%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in A\land x\sim y
+    \rightarrow y\in \EqClass{x}{\sim}{A}%
   }{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in A\land (x,y)\in R
-    \rightarrow y\in \EqClass{x}{R}{A}%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in A\land x\sim y
+    \rightarrow y\in \EqClass{x}{\sim}{A}%
   }[EqClassCharBackwardDirection]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{1,2}{%
-      \EqClass{x}{R}{A}\coloneqq
-      \{y\in A\mid (x,y)\in R\}}{%
+      \EqClass{x}{\sim}{A}\coloneqq
+      \{y\in A\mid x\sim y\}}{%
       \FormulaRefAuto{EqClassDef}{1,2}}
-    \proofstep{4}{y\in A\land (x,y)\in R}{\rA}
-    \proofstep{1,2,4}{y\in \EqClass{x}{R}{A}}{%
+    \proofstep{4}{y\in A\land x\sim y}{\rA}
+    \proofstep{1,2,4}{y\in \EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash
         x \in A \land P(x)}{3,4}}
     \proofstep{1,2}{%
-      y\in A\land (x,y)\in R
-      \rightarrow y\in \EqClass{x}{R}{A}}{\rRI{4,5}}
+      y\in A\land x\sim y
+      \rightarrow y\in \EqClass{x}{\sim}{A}}{\rRI{4,5}}
   \closeproofpartindR
 
   \proofpartindR[Zusammenführung]{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in \EqClass{x}{R}{A}
-    \leftrightarrow y\in A\land (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in \EqClass{x}{\sim}{A}
+    \leftrightarrow y\in A\land x\sim y%
   }{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    y\in \EqClass{x}{R}{A}
-    \leftrightarrow y\in A\land (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    y\in \EqClass{x}{\sim}{A}
+    \leftrightarrow y\in A\land x\sim y%
   }[EqClassCharEquivalenceConclusion]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{1,2}{%
-      y\in \EqClass{x}{R}{A}
-      \rightarrow y\in A\land (x,y)\in R}{%
+      y\in \EqClass{x}{\sim}{A}
+      \rightarrow y\in A\land x\sim y}{%
       \FormulaRefAuto{EqClassCharForwardDirection}{1,2}}
     \proofstep{1,2}{%
-      y\in A\land (x,y)\in R
-      \rightarrow y\in \EqClass{x}{R}{A}}{%
+      y\in A\land x\sim y
+      \rightarrow y\in \EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{EqClassCharBackwardDirection}{1,2}}
     \proofstep{1,2}{%
-      y\in \EqClass{x}{R}{A}
-      \leftrightarrow y\in A\land (x,y)\in R}{\rLRI{3,4}}
+      y\in \EqClass{x}{\sim}{A}
+      \leftrightarrow y\in A\land x\sim y}{\rLRI{3,4}}
   \closeproofpartindR
 \end{tabproofsplit}
 
 \FormulaThmDeltaK[Repräsentant liegt in seiner Äquivalenzklasse]{%
-  \EqRel{R,A}\dsep x\in A
+  \EqRel{A,\sim}\dsep x\in A
   \vdash
-  x\in \EqClass{x}{R}{A}
+  x\in \EqClass{x}{\sim}{A}
 }{EqClassRepresentative}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
-  \proofstep{1,2}{(x,x)\in R}{\FormulaRefAuto{EqRelDef}{1,2}}
-  \proofstep{1,2}{x\in A\land (x,x)\in R}{\rAI{2,3}}
-  \proofstep{1,2}{x\in \EqClass{x}{R}{A}\leftrightarrow
-    x\in A\land (x,x)\in R}{\FormulaRefAuto{EqClassChar}{1,2}}
-  \proofstep{1,2}{x\in \EqClass{x}{R}{A}}{%
+  \proofstep{1,2}{x\sim x}{\FormulaRefAuto{EqRelDef}{1,2}}
+  \proofstep{1,2}{x\in A\land x\sim x}{\rAI{2,3}}
+  \proofstep{1,2}{x\in \EqClass{x}{\sim}{A}\leftrightarrow
+    x\in A\land x\sim x}{\FormulaRefAuto{EqClassChar}{1,2}}
+  \proofstep{1,2}{x\in \EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{5,4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Elemente einer Äquivalenzklasse liegen im Grundbereich]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in \EqClass{x}{R}{A}
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in \EqClass{x}{\sim}{A}
   \vdash y\in A
 }{EqClassElementInCarrier}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
-  \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
-  \proofstep{1,2}{y\in \EqClass{x}{R}{A}\leftrightarrow
-    y\in A\land (x,y)\in R}{\FormulaRefAuto{EqClassChar}{1,2}}
-  \proofstep{1,2,3}{y\in A\land (x,y)\in R}{%
+  \proofstep{3}{y\in \EqClass{x}{\sim}{A}}{\rA}
+  \proofstep{1,2}{y\in \EqClass{x}{\sim}{A}\leftrightarrow
+    y\in A\land x\sim y}{\FormulaRefAuto{EqClassChar}{1,2}}
+  \proofstep{1,2,3}{y\in A\land x\sim y}{%
     \FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{4,3}}
   \proofstep{1,2,3}{y\in A}{\rAEa{5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Elemente einer Äquivalenzklasse sind äquivalent zum Repräsentanten]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in \EqClass{x}{R}{A}
-  \vdash (x,y)\in R
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in \EqClass{x}{\sim}{A}
+  \vdash x\sim y
 }{EqClassElementRelated}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
-  \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
-  \proofstep{1,2}{y\in \EqClass{x}{R}{A}\leftrightarrow
-    y\in A\land (x,y)\in R}{\FormulaRefAuto{EqClassChar}{1,2}}
-  \proofstep{1,2,3}{y\in A\land (x,y)\in R}{%
+  \proofstep{3}{y\in \EqClass{x}{\sim}{A}}{\rA}
+  \proofstep{1,2}{y\in \EqClass{x}{\sim}{A}\leftrightarrow
+    y\in A\land x\sim y}{\FormulaRefAuto{EqClassChar}{1,2}}
+  \proofstep{1,2,3}{y\in A\land x\sim y}{%
     \FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{4,3}}
-  \proofstep{1,2,3}{(x,y)\in R}{\rAEb{5}}
+  \proofstep{1,2,3}{x\sim y}{\rAEb{5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Äquivalente Elemente haben dieselbe Äquivalenzklasse]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep x\sim y
   \vdash
-  \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
+  \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
 }{EqClassEqualFromRel}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y\dsep z}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Teilmengenrichtung \(\EqClass{x}{R}{A}\subseteq\EqClass{y}{R}{A}\)]{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+  \proofpartwideindR[Teilmengenrichtung \(\EqClass{x}{\sim}{A}\subseteq\EqClass{y}{\sim}{A}\)]{%
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep x\sim y
     \vdash
-    \EqClass{x}{R}{A}\subseteq\EqClass{y}{R}{A}
+    \EqClass{x}{\sim}{A}\subseteq\EqClass{y}{\sim}{A}
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep x\sim y
     \vdash
-    \EqClass{x}{R}{A}\subseteq\EqClass{y}{R}{A}
+    \EqClass{x}{\sim}{A}\subseteq\EqClass{y}{\sim}{A}
   }[EqClassEqualFromRelSubsetLeft]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
-    \proofstepwidestar[4]{(x,y)\in R}{\rA}
-    \proofstepwidestar[5]{z\in \EqClass{x}{R}{A}}{\rA}
+    \proofstepwidestar[4]{x\sim y}{\rA}
+    \proofstepwidestar[5]{z\in \EqClass{x}{\sim}{A}}{\rA}
     \proofstepwidestar[1,2,5]{z\in A}{%
       \FormulaRefAuto{EqClassElementInCarrier}{1,2,5}}
-    \proofstepwidestar[1,2,5]{(x,z)\in R}{%
+    \proofstepwidestar[1,2,5]{x\sim z}{%
       \FormulaRefAuto{EqClassElementRelated}{1,2,5}}
-    \proofstepwidestar[1,4]{(y,x)\in R}{\FormulaRefAuto{EqRelSymmetry}{4}}
-    \proofstepwidestar[1,2,4,5]{(y,z)\in R}{%
-      \FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}[ax]{8,7}}
-    \proofstepwidestar[1,2,3,4,5]{z\in A\land (y,z)\in R}{\rAI{6,9}}
-    \proofstepwidestar[1,3]{z\in \EqClass{y}{R}{A}\leftrightarrow
-      z\in A\land (y,z)\in R}{\FormulaRefAuto{EqClassChar}{1,3}}
-    \proofstepwidestar[1,2,3,4,5]{z\in \EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,4]{y\sim x}{\FormulaRefAuto{EqRelSymmetry}{4}}
+    \proofstepwidestar[1,2,4,5]{y\sim z}{%
+      \FormulaRefAuto{x\sim y \dsep y\sim z \vdash x\sim z}[ax]{8,7}}
+    \proofstepwidestar[1,2,3,4,5]{z\in A\land y\sim z}{\rAI{6,9}}
+    \proofstepwidestar[1,3]{z\in \EqClass{y}{\sim}{A}\leftrightarrow
+      z\in A\land y\sim z}{\FormulaRefAuto{EqClassChar}{1,3}}
+    \proofstepwidestar[1,2,3,4,5]{z\in \EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{11,10}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}\subseteq\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}\subseteq\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{A\subseteq B \coloneq
       \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{5,12}}}}
   \closeproofpartwideind
 
-  \proofpartwideindR[Teilmengenrichtung \(\EqClass{y}{R}{A}\subseteq\EqClass{x}{R}{A}\)]{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+  \proofpartwideindR[Teilmengenrichtung \(\EqClass{y}{\sim}{A}\subseteq\EqClass{x}{\sim}{A}\)]{%
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep x\sim y
     \vdash
-    \EqClass{y}{R}{A}\subseteq\EqClass{x}{R}{A}
+    \EqClass{y}{\sim}{A}\subseteq\EqClass{x}{\sim}{A}
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep (x,y)\in R
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep x\sim y
     \vdash
-    \EqClass{y}{R}{A}\subseteq\EqClass{x}{R}{A}
+    \EqClass{y}{\sim}{A}\subseteq\EqClass{x}{\sim}{A}
   }[EqClassEqualFromRelSubsetRight]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
-    \proofstepwidestar[4]{(x,y)\in R}{\rA}
-    \proofstepwidestar[5]{z\in \EqClass{y}{R}{A}}{\rA}
+    \proofstepwidestar[4]{x\sim y}{\rA}
+    \proofstepwidestar[5]{z\in \EqClass{y}{\sim}{A}}{\rA}
     \proofstepwidestar[1,3,5]{z\in A}{%
       \FormulaRefAuto{EqClassElementInCarrier}{1,3,5}}
-    \proofstepwidestar[1,3,5]{(y,z)\in R}{%
+    \proofstepwidestar[1,3,5]{y\sim z}{%
       \FormulaRefAuto{EqClassElementRelated}{1,3,5}}
-    \proofstepwidestar[1,3,4,5]{(x,z)\in R}{%
-      \FormulaRefAuto{(x,y)\in R \dsep (y,z)\in R \vdash (x,z)\in R}[ax]{4,7}}
-    \proofstepwidestar[1,2,3,4,5]{z\in A\land (x,z)\in R}{\rAI{6,8}}
-    \proofstepwidestar[1,2]{z\in \EqClass{x}{R}{A}\leftrightarrow
-      z\in A\land (x,z)\in R}{\FormulaRefAuto{EqClassChar}{1,2}}
-    \proofstepwidestar[1,2,3,4,5]{z\in \EqClass{x}{R}{A}}{%
+    \proofstepwidestar[1,3,4,5]{x\sim z}{%
+      \FormulaRefAuto{x\sim y \dsep y\sim z \vdash x\sim z}[ax]{4,7}}
+    \proofstepwidestar[1,2,3,4,5]{z\in A\land x\sim z}{\rAI{6,8}}
+    \proofstepwidestar[1,2]{z\in \EqClass{x}{\sim}{A}\leftrightarrow
+      z\in A\land x\sim z}{\FormulaRefAuto{EqClassChar}{1,2}}
+    \proofstepwidestar[1,2,3,4,5]{z\in \EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{10,9}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{y}{R}{A}\subseteq\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{y}{\sim}{A}\subseteq\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{A\subseteq B \coloneq
       \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{5,11}}}}
   \closeproofpartwideind
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
-    \proofstepwidestar[4]{(x,y)\in R}{\rA}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}\subseteq\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[4]{x\sim y}{\rA}
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}\subseteq\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{EqClassEqualFromRelSubsetLeft}{1,2,3,4}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{y}{R}{A}\subseteq\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{y}{\sim}{A}\subseteq\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{EqClassEqualFromRelSubsetRight}{1,2,3,4}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{5,6}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Gleiche Äquivalenzklassen liefern Äquivalenz]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in A\dsep
-  \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in A\dsep
+  \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
   \vdash
-  (x,y)\in R
+  x\sim y
 }{EqClassRelFromEqual}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
   \proofstep{3}{y\in A}{\rA}
-  \proofstep{4}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{\rA}
-  \proofstep{1,2}{x\in \EqClass{x}{R}{A}}{%
+  \proofstep{4}{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{\rA}
+  \proofstep{1,2}{x\in \EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{EqClassRepresentative}{1,2}}
-  \proofstep{1,2,4}{x\in \EqClass{y}{R}{A}}{\rIE{4,5}}
-  \proofstep{1,2,3,4}{(y,x)\in R}{%
+  \proofstep{1,2,4}{x\in \EqClass{y}{\sim}{A}}{\rIE{4,5}}
+  \proofstep{1,2,3,4}{y\sim x}{%
     \FormulaRefAuto{EqClassElementRelated}{1,3,6}}
-  \proofstep{1,2,3,4}{(x,y)\in R}{\FormulaRefAuto{EqRelSymmetry}{7}}
+  \proofstep{1,2,3,4}{x\sim y}{\FormulaRefAuto{EqRelSymmetry}{7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Charakterisierung gleicher Äquivalenzklassen]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in A
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in A
   \vdash
-  \bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
+  \bigl(\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}\bigr)
   \leftrightarrow
-  (x,y)\in R
+  x\sim y
 }{EqClassEqualIffRel}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproofsplit}
   \proofpartindR[Von gleichen Klassen zur Relation]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep x\in A\dsep y\in A\vdash{}\\
-      &\EqClass{x}{R}{A}=\EqClass{y}{R}{A}
-      \rightarrow (x,y)\in R
+      &\EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash{}\\
+      &\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
+      \rightarrow x\sim y
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\vdash
-    \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
-    \rightarrow (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash
+    \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
+    \rightarrow x\sim y%
   }[EqClassEqualIffRelForwardDirection]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{3}{y\in A}{\rA}
-    \proofstep{4}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{\rA}
-    \proofstep{1,2,3,4}{(x,y)\in R}{%
+    \proofstep{4}{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{\rA}
+    \proofstep{1,2,3,4}{x\sim y}{%
       \FormulaRefAuto{EqClassRelFromEqual}{1,2,3,4}}
     \proofstep{1,2,3}{%
-      \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
-      \rightarrow (x,y)\in R}{\rRI{4,5}}
+      \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
+      \rightarrow x\sim y}{\rRI{4,5}}
   \closeproofpartindR
 
   \proofpartindR[Von der Relation zu gleichen Klassen]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep x\in A\dsep y\in A\vdash{}\\
-      &(x,y)\in R
-      \rightarrow \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
+      &\EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash{}\\
+      &x\sim y
+      \rightarrow \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\vdash
-    (x,y)\in R
-    \rightarrow \EqClass{x}{R}{A}=\EqClass{y}{R}{A}%
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash
+    x\sim y
+    \rightarrow \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}%
   }[EqClassEqualIffRelBackwardDirection]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{3}{y\in A}{\rA}
-    \proofstep{4}{(x,y)\in R}{\rA}
-    \proofstep{1,2,3,4}{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \proofstep{4}{x\sim y}{\rA}
+    \proofstep{1,2,3,4}{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{EqClassEqualFromRel}{1,2,3,4}}
     \proofstep{1,2,3}{%
-      (x,y)\in R
-      \rightarrow \EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{\rRI{4,5}}
+      x\sim y
+      \rightarrow \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{\rRI{4,5}}
   \closeproofpartindR
 
   \proofpartindR[Zusammenführung]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep x\in A\dsep y\in A\vdash{}\\
-      &\bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
-      \leftrightarrow (x,y)\in R
+      &\EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash{}\\
+      &\bigl(\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}\bigr)
+      \leftrightarrow x\sim y
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A\vdash
-    \bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
-    \leftrightarrow (x,y)\in R%
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A\vdash
+    \bigl(\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}\bigr)
+    \leftrightarrow x\sim y%
   }[EqClassEqualIffRelConclusion]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{3}{y\in A}{\rA}
     \proofstep{1,2,3}{%
-      \EqClass{x}{R}{A}=\EqClass{y}{R}{A}
-      \rightarrow (x,y)\in R}{%
+      \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}
+      \rightarrow x\sim y}{%
       \FormulaRefAuto{EqClassEqualIffRelForwardDirection}{1,2,3}}
     \proofstep{1,2,3}{%
-      (x,y)\in R
-      \rightarrow \EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+      x\sim y
+      \rightarrow \EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{EqClassEqualIffRelBackwardDirection}{1,2,3}}
     \proofstep{1,2,3}{%
-      \bigl(\EqClass{x}{R}{A}=\EqClass{y}{R}{A}\bigr)
-      \leftrightarrow (x,y)\in R}{\rLRI{4,5}}
+      \bigl(\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}\bigr)
+      \leftrightarrow x\sim y}{\rLRI{4,5}}
   \closeproofpartindR
 \end{tabproofsplit}
 
 \section{Quotientenmengen}
 
 \FormulaDefDeltaK[Quotientenmenge einer Äquivalenzrelation]{%
-  \EqRel{R,A}\vdash
-  \QuotientSet{A}{R}\coloneqq
+  \EqRel{A,\sim}\vdash
+  \QuotientSet{A}{\sim}\coloneqq
   \{C\in\powerset(A)\mid
-  \exists x\in A\,C=\EqClass{x}{R}{A}\}
+  \exists x\in A\,C=\EqClass{x}{\sim}{A}\}
 }{QuotientSetDef}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
-  \DeltaRow{Neue Symbole}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep C\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{\sim}{A}}
+  \DeltaRow{Neue Symbole}{\QuotientSet{A}{\sim}}
 }
 
 \FormulaThmDeltaK[Charakterisierung der Quotientenmenge]{%
-  \EqRel{R,A}
+  \EqRel{A,\sim}
   \vdash
-  C\in \QuotientSet{A}{R}
+  C\in \QuotientSet{A}{\sim}
   \leftrightarrow
   C\in\powerset(A)\land
-  \exists x\in A\,C=\EqClass{x}{R}{A}
+  \exists x\in A\,C=\EqClass{x}{\sim}{A}
 }{QuotientSetChar}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
+  \DeltaRow{Mengen}{A\dsep C\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{\sim}{A}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{1}{%
-    \QuotientSet{A}{R}\coloneqq
+    \QuotientSet{A}{\sim}\coloneqq
     \{C\in\powerset(A)\mid
-    \exists x\in A\,C=\EqClass{x}{R}{A}\}}{%
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}\}}{%
     \FormulaRefAuto{QuotientSetDef}{1}}
 
-  \proofstep{3}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{3}{C\in \QuotientSet{A}{\sim}}{\rA}
   \proofstep{1,3}{C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,3}}
-  \proofstep{1}{C\in \QuotientSet{A}{R}
+  \proofstep{1}{C\in \QuotientSet{A}{\sim}
     \rightarrow C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rRI{3,4}}
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{\rRI{3,4}}
 
   \proofstep{6}{C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rA}
-  \proofstep{1,6}{C\in \QuotientSet{A}{R}}{%
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{\rA}
+  \proofstep{1,6}{C\in \QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{2,6}}
   \proofstep{1}{C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}
-    \rightarrow C\in \QuotientSet{A}{R}}{\rRI{6,7}}
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}
+    \rightarrow C\in \QuotientSet{A}{\sim}}{\rRI{6,7}}
 
-  \proofstep{1}{C\in \QuotientSet{A}{R}
+  \proofstep{1}{C\in \QuotientSet{A}{\sim}
     \leftrightarrow
     C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{\rLRI{5,8}}
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{\rLRI{5,8}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Äquivalenzklasse liegt in der Quotientenmenge]{%
-  \EqRel{R,A}\dsep x\in A
+  \EqRel{A,\sim}\dsep x\in A
   \vdash
-  \EqClass{x}{R}{A}\in \QuotientSet{A}{R}
+  \EqClass{x}{\sim}{A}\in \QuotientSet{A}{\sim}
 }{EqClassInQuotient}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{\sim}{A}}
 }
 \begin{tabproofsplit}
   \proofpartindR[Teilmenge des Grundbereichs]{%
-    \EqRel{R,A}\dsep x\in A
-    \vdash \EqClass{x}{R}{A}\subseteq A%
+    \EqRel{A,\sim}\dsep x\in A
+    \vdash \EqClass{x}{\sim}{A}\subseteq A%
   }{%
-    \EqRel{R,A}\dsep x\in A
-    \vdash \EqClass{x}{R}{A}\subseteq A%
+    \EqRel{A,\sim}\dsep x\in A
+    \vdash \EqClass{x}{\sim}{A}\subseteq A%
   }[EqClassSubsetCarrierForQuotient]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
-    \proofstep{3}{y\in \EqClass{x}{R}{A}}{\rA}
+    \proofstep{3}{y\in \EqClass{x}{\sim}{A}}{\rA}
     \proofstep{1,2,3}{y\in A}{%
       \FormulaRefAuto{EqClassElementInCarrier}{1,2,3}}
-    \proofstep{1,2}{\EqClass{x}{R}{A}\subseteq A}{%
+    \proofstep{1,2}{\EqClass{x}{\sim}{A}\subseteq A}{%
       \FormulaRefAuto{A\subseteq B \coloneq
         \forall x\,(x\in A \rightarrow x\in B)}{%
         \rUI{\rRI{3,4}}}}
@@ -1118,67 +916,67 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 
   \proofpartindR[Zeuge der Quotientendefinition]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep x\in A\vdash{}\\
-      &\EqClass{x}{R}{A}\in\powerset(A)\land
+      &\EqRel{A,\sim}\dsep x\in A\vdash{}\\
+      &\EqClass{x}{\sim}{A}\in\powerset(A)\land
       \exists z\in A\,
-        \EqClass{x}{R}{A}=\EqClass{z}{R}{A}
+        \EqClass{x}{\sim}{A}=\EqClass{z}{\sim}{A}
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep x\in A\vdash
-    \EqClass{x}{R}{A}\in\powerset(A)\land
+    \EqRel{A,\sim}\dsep x\in A\vdash
+    \EqClass{x}{\sim}{A}\in\powerset(A)\land
     \exists z\in A\,
-      \EqClass{x}{R}{A}=\EqClass{z}{R}{A}%
+      \EqClass{x}{\sim}{A}=\EqClass{z}{\sim}{A}%
   }[EqClassQuotientMembershipWitness]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
-    \proofstep{1,2}{\EqClass{x}{R}{A}\subseteq A}{%
+    \proofstep{1,2}{\EqClass{x}{\sim}{A}\subseteq A}{%
       \FormulaRefAuto{EqClassSubsetCarrierForQuotient}{1,2}}
-    \proofstep{1,2}{\EqClass{x}{R}{A}\in\powerset(A)}{%
+    \proofstep{1,2}{\EqClass{x}{\sim}{A}\in\powerset(A)}{%
       \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
         x \subseteq A}{3}}
-    \proofstep{}{\EqClass{x}{R}{A}=\EqClass{x}{R}{A}}{\rII}
+    \proofstep{}{\EqClass{x}{\sim}{A}=\EqClass{x}{\sim}{A}}{\rII}
     \proofstep{2}{\exists z\in A\,
-      \EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{%
+      \EqClass{x}{\sim}{A}=\EqClass{z}{\sim}{A}}{%
       \rEI{\rAI{2,5}}}
     \proofstep{1,2}{%
-      \EqClass{x}{R}{A}\in\powerset(A)\land
+      \EqClass{x}{\sim}{A}\in\powerset(A)\land
       \exists z\in A\,
-        \EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{\rAI{4,6}}
+        \EqClass{x}{\sim}{A}=\EqClass{z}{\sim}{A}}{\rAI{4,6}}
   \closeproofpartindR
 
   \proofpartindR[Einsetzen in die Quotientenmenge]{%
-    \EqRel{R,A}\dsep x\in A
-    \vdash \EqClass{x}{R}{A}\in\QuotientSet{A}{R}%
+    \EqRel{A,\sim}\dsep x\in A
+    \vdash \EqClass{x}{\sim}{A}\in\QuotientSet{A}{\sim}%
   }{%
-    \EqRel{R,A}\dsep x\in A
-    \vdash \EqClass{x}{R}{A}\in\QuotientSet{A}{R}%
+    \EqRel{A,\sim}\dsep x\in A
+    \vdash \EqClass{x}{\sim}{A}\in\QuotientSet{A}{\sim}%
   }[EqClassInQuotientConclusion]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{1,2}{%
-      \EqClass{x}{R}{A}\in\powerset(A)\land
+      \EqClass{x}{\sim}{A}\in\powerset(A)\land
       \exists z\in A\,
-        \EqClass{x}{R}{A}=\EqClass{z}{R}{A}}{%
+        \EqClass{x}{\sim}{A}=\EqClass{z}{\sim}{A}}{%
       \FormulaRefAuto{EqClassQuotientMembershipWitness}{1,2}}
-    \proofstep{1,2}{\EqClass{x}{R}{A}\in\QuotientSet{A}{R}}{%
+    \proofstep{1,2}{\EqClass{x}{\sim}{A}\in\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotientSetChar}{1,3}}
   \closeproofpartindR
 \end{tabproofsplit}
 
 \FormulaThmDelta[Elemente der Quotientenmenge sind Teilmengen]{%
-  \EqRel{R,A}\dsep C\in \QuotientSet{A}{R}
+  \EqRel{A,\sim}\dsep C\in \QuotientSet{A}{\sim}
   \vdash
   C\subseteq A
 }{%
-  \DeltaRow{Mengen}{A\dsep R\dsep C}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep C}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
-  \proofstep{2}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
+  \proofstep{2}{C\in \QuotientSet{A}{\sim}}{\rA}
   \proofstep{1,2}{%
     C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{QuotientSetChar}{1,2}}
   \proofstep{1,2}{C\in\powerset(A)}{\rAEa{3}}
   \proofstep{1,2}{C\subseteq A}{%
@@ -1186,21 +984,21 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 \end{tabproof}
 
 \FormulaThmDeltaK[Elemente der Quotientenmenge haben einen Repräsentanten]{%
-  \EqRel{R,A}\dsep C\in \QuotientSet{A}{R}
+  \EqRel{A,\sim}\dsep C\in \QuotientSet{A}{\sim}
   \vdash
-  \exists x\in A\,C=\EqClass{x}{R}{A}
+  \exists x\in A\,C=\EqClass{x}{\sim}{A}
 }{QuotientRepresentative}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
-  \DeltaRow{Relationen}{R}
+  \DeltaRow{Mengen}{A\dsep C\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
-  \proofstep{2}{C\in \QuotientSet{A}{R}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
+  \proofstep{2}{C\in \QuotientSet{A}{\sim}}{\rA}
   \proofstep{1,2}{%
     C\in\powerset(A)\land
-    \exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \exists x\in A\,C=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{QuotientSetChar}{1,2}}
-  \proofstep{1,2}{\exists x\in A\,C=\EqClass{x}{R}{A}}{\rAEb{3}}
+  \proofstep{1,2}{\exists x\in A\,C=\EqClass{x}{\sim}{A}}{\rAEb{3}}
 \end{tabproof}
 
 
@@ -1209,48 +1007,48 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 \section{Quotientenprojektion}
 
 \FormulaDefDeltaK[Funktionsvorschrift der Quotientenprojektion]{%
-  \EqRel{R,A}\dsep x\in A\vdash
-  \tQuotProj{A}{R}(x)\coloneqq \EqClass{x}{R}{A}
+  \EqRel{A,\sim}\dsep x\in A\vdash
+  \tQuotProj{A}{\sim}(x)\coloneqq \EqClass{x}{\sim}{A}
 }{QuotProjRuleDef}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
-  \DeltaRow{Neue Symbole}{\tQuotProj{A}{R}}
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{\sim}{A}}
+  \DeltaRow{Neue Symbole}{\tQuotProj{A}{\sim}}
 }
 
 \FormulaThmDeltaK[Typisierung der Quotientenprojektionsvorschrift]{%
-  \EqRel{R,A}\dsep x\in A\vdash
-  \tQuotProj{A}{R}(x)\in\QuotientSet{A}{R}
+  \EqRel{A,\sim}\dsep x\in A\vdash
+  \tQuotProj{A}{\sim}(x)\in\QuotientSet{A}{\sim}
 }{QuotProjRuleInQuotient}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
-  \proofstep{1,2}{\tQuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+  \proofstep{1,2}{\tQuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{QuotProjRuleDef}{1,2}}
-  \proofstep{1,2}{\EqClass{x}{R}{A}\in\QuotientSet{A}{R}}{%
+  \proofstep{1,2}{\EqClass{x}{\sim}{A}\in\QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{EqClassInQuotient}{1,2}}
-  \proofstep{1,2}{\tQuotProj{A}{R}(x)\in\QuotientSet{A}{R}}{\rIE{3,4}}
+  \proofstep{1,2}{\tQuotProj{A}{\sim}(x)\in\QuotientSet{A}{\sim}}{\rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Existenz der Quotientenprojektion]{%
-  \EqRel{R,A}\vdash
-  \exists! q\colon A\to\QuotientSet{A}{R}\,
-  \forall x\in A\,q(x)=\tQuotProj{A}{R}(x)
+  \EqRel{A,\sim}\vdash
+  \exists! q\colon A\to\QuotientSet{A}{\sim}\,
+  \forall x\in A\,q(x)=\tQuotProj{A}{\sim}(x)
 }{QuotProjExists}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
+  \DeltaRow{Mengen}{A\dsep x}
   \DeltaRow{Funktionen}{q}
-  \DeltaRow{Funktionensymbol}{\tQuotProj{A}{R}}
+  \DeltaRow{Funktionensymbol}{\tQuotProj{A}{\sim}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{1}{%
     \begin{aligned}[t]
-      &\exists! q\colon A\to\QuotientSet{A}{R}\,{}\\
-      &\forall x\in A\,q(x)=\tQuotProj{A}{R}(x)
+      &\exists! q\colon A\to\QuotientSet{A}{\sim}\,{}\\
+      &\forall x\in A\,q(x)=\tQuotProj{A}{\sim}(x)
     \end{aligned}}{%
     \FormulaRefAuto{%
       x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
@@ -1261,328 +1059,328 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 \end{tabproof}
 
 \FormulaDefDeltaK[Quotientenprojektion]{%
-  \EqRel{R,A}\vdash
-  \QuotProj{A}{R}\coloneqq
-  \iota q\Bigl(q\colon A\to\QuotientSet{A}{R}\land
-  \forall x\in A\,q(x)=\tQuotProj{A}{R}(x)\Bigr)
+  \EqRel{A,\sim}\vdash
+  \QuotProj{A}{\sim}\coloneqq
+  \iota q\Bigl(q\colon A\to\QuotientSet{A}{\sim}\land
+  \forall x\in A\,q(x)=\tQuotProj{A}{\sim}(x)\Bigr)
 }{QuotProjDef}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
-  \DeltaRow{Funktionen}{q\dsep \QuotProj{A}{R}}
-  \DeltaRow{Funktionensymbol}{\tQuotProj{A}{R}}
-  \DeltaRow{Neue Symbole}{\QuotProj{A}{R}}
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Funktionen}{q\dsep \QuotProj{A}{\sim}}
+  \DeltaRow{Funktionensymbol}{\tQuotProj{A}{\sim}}
+  \DeltaRow{Neue Symbole}{\QuotProj{A}{\sim}}
 }
 
 \FormulaThmDeltaK[Typisierung der Quotientenprojektion]{%
-  \EqRel{R,A}\vdash
-  \QuotProj{A}{R}\colon A\to\QuotientSet{A}{R}
+  \EqRel{A,\sim}\vdash
+  \QuotProj{A}{\sim}\colon A\to\QuotientSet{A}{\sim}
 }{QuotProjFunction}{%
-  \DeltaRow{Mengen}{A\dsep R}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
-  \proofstep{1}{\QuotProj{A}{R}\colon A\to\QuotientSet{A}{R}}{%
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
+  \proofstep{1}{\QuotProj{A}{\sim}\colon A\to\QuotientSet{A}{\sim}}{%
     \rAEa{\FormulaRefAuto{QuotProjDef}{1}}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Wert der Quotientenprojektion]{%
-  \EqRel{R,A}\dsep x\in A\vdash
-  \QuotProj{A}{R}(x)=\EqClass{x}{R}{A}
+  \EqRel{A,\sim}\dsep x\in A\vdash
+  \QuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}
 }{QuotProjValue}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
-  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{R}{A}}
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
+  \DeltaRow{Äquivalenzklassen}{\EqClass{x}{\sim}{A}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{x\in A}{\rA}
   \proofstep{1}{\forall x\in A\,
-    \QuotProj{A}{R}(x)=\tQuotProj{A}{R}(x)}{%
+    \QuotProj{A}{\sim}(x)=\tQuotProj{A}{\sim}(x)}{%
     \rAEb{\FormulaRefAuto{QuotProjDef}{1}}}
-  \proofstep{1,2}{\QuotProj{A}{R}(x)=\tQuotProj{A}{R}(x)}{%
+  \proofstep{1,2}{\QuotProj{A}{\sim}(x)=\tQuotProj{A}{\sim}(x)}{%
     \rRE{2,\rUE{3}}}
-  \proofstep{1,2}{\tQuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+  \proofstep{1,2}{\tQuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{QuotProjRuleDef}{1,2}}
-  \proofstep{1,2}{\QuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+  \proofstep{1,2}{\QuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Surjektivität der Quotientenprojektion]{%
-  \EqRel{R,A}\vdash
-  \QuotProj{A}{R}\colon A\sur\QuotientSet{A}{R}
+  \EqRel{A,\sim}\vdash
+  \QuotProj{A}{\sim}\colon A\sur\QuotientSet{A}{\sim}
 }{QuotProjSurjective}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep C\dsep x}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
+  \DeltaRow{Mengen}{A\dsep C\dsep x}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Jede Quotientenklasse besitzt ein Urbild]{%
-    \EqRel{R,A}\dsep C\in\QuotientSet{A}{R}
+    \EqRel{A,\sim}\dsep C\in\QuotientSet{A}{\sim}
     \vdash
-    \exists x\in A\,\QuotProj{A}{R}(x)=C
+    \exists x\in A\,\QuotProj{A}{\sim}(x)=C
   }{%
-    \EqRel{R,A}\dsep C\in\QuotientSet{A}{R}
+    \EqRel{A,\sim}\dsep C\in\QuotientSet{A}{\sim}
     \vdash
-    \exists x\in A\,\QuotProj{A}{R}(x)=C
+    \exists x\in A\,\QuotProj{A}{\sim}(x)=C
   }[QuotProjSurjectivePreimage]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
-    \proofstepwidestar[2]{C\in\QuotientSet{A}{R}}{\rA}
-    \proofstepwidestar[1,2]{\exists x\in A\,C=\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
+    \proofstepwidestar[2]{C\in\QuotientSet{A}{\sim}}{\rA}
+    \proofstepwidestar[1,2]{\exists x\in A\,C=\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{QuotientRepresentative}{1,2}}
-    \proofstepwidestar[4]{x\in A\land C=\EqClass{x}{R}{A}}{\rA}
+    \proofstepwidestar[4]{x\in A\land C=\EqClass{x}{\sim}{A}}{\rA}
     \proofstepwidestar[4]{x\in A}{\rAEa{4}}
-    \proofstepwidestar[4]{C=\EqClass{x}{R}{A}}{\rAEb{4}}
-    \proofstepwidestar[1,4]{\QuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[4]{C=\EqClass{x}{\sim}{A}}{\rAEb{4}}
+    \proofstepwidestar[1,4]{\QuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,5}}
-    \proofstepwidestar[1,4]{C=\QuotProj{A}{R}(x)}{%
+    \proofstepwidestar[1,4]{C=\QuotProj{A}{\sim}(x)}{%
       \FormulaRefAuto{a = b,\, c = b \vdash a = c}{6,7}}
-    \proofstepwidestar[1,4]{\QuotProj{A}{R}(x)=C}{%
+    \proofstepwidestar[1,4]{\QuotProj{A}{\sim}(x)=C}{%
       \FormulaRefAuto{a=b\vdash b=a}{8}}
-    \proofstepwidestar[1,4]{\exists x\in A\,\QuotProj{A}{R}(x)=C}{%
+    \proofstepwidestar[1,4]{\exists x\in A\,\QuotProj{A}{\sim}(x)=C}{%
       \rEI{\rAI{5,9}}}
-    \proofstepwidestar[1,2]{\exists x\in A\,\QuotProj{A}{R}(x)=C}{%
+    \proofstepwidestar[1,2]{\exists x\in A\,\QuotProj{A}{\sim}(x)=C}{%
       \rEE{3,4,10}}
   \closeproofpartwideindR
 
   \pagebreak[3]
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
-    \proofstepwidestar[1]{\QuotProj{A}{R}\colon A\to\QuotientSet{A}{R}}{%
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
+    \proofstepwidestar[1]{\QuotProj{A}{\sim}\colon A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
-    \proofstepwidestar[3]{C\in\QuotientSet{A}{R}}{\rA}
-    \proofstepwidestar[1,3]{\exists x\in A\,\QuotProj{A}{R}(x)=C}{%
+    \proofstepwidestar[3]{C\in\QuotientSet{A}{\sim}}{\rA}
+    \proofstepwidestar[1,3]{\exists x\in A\,\QuotProj{A}{\sim}(x)=C}{%
       \FormulaRefAuto{QuotProjSurjectivePreimage}{1,3}}
-    \proofstepwidestar[1]{\forall C\in\QuotientSet{A}{R}\,
-      \exists x\in A\,\QuotProj{A}{R}(x)=C}{%
+    \proofstepwidestar[1]{\forall C\in\QuotientSet{A}{\sim}\,
+      \exists x\in A\,\QuotProj{A}{\sim}(x)=C}{%
       \rUI{\rRI{3,4}}}
-    \proofstepwidestar[1]{\QuotProj{A}{R}\colon A\sur\QuotientSet{A}{R}}{%
+    \proofstepwidestar[1]{\QuotProj{A}{\sim}\colon A\sur\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{Surjektive Funktion}{2,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Gleichheit von Projektionswerten]{%
-  \EqRel{R,A}\dsep x\in A\dsep y\in A
+  \EqRel{A,\sim}\dsep x\in A\dsep y\in A
   \vdash
-  \bigl(\QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\bigr)
-  \leftrightarrow (x,y)\in R
+  \bigl(\QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\bigr)
+  \leftrightarrow x\sim y
 }{QuotProjEqualIffRel}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep x\dsep y}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Von gleichen Projektionswerten zur Äquivalenz]{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A
     \vdash
-    \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\rightarrow (x,y)\in R
+    \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\rightarrow x\sim y
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A
     \vdash
-    \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\rightarrow (x,y)\in R
+    \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\rightarrow x\sim y
   }[QuotProjEqualIffRelForward]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
-    \proofstepwidestar[4]{\QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)}{\rA}
-    \proofstepwidestar[1,2]{\QuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[4]{\QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)}{\rA}
+    \proofstepwidestar[1,2]{\QuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,2}}
-    \proofstepwidestar[1,3]{\QuotProj{A}{R}(y)=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,3]{\QuotProj{A}{\sim}(y)=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,3}}
-    \proofstepwidestar[1,2]{\EqClass{x}{R}{A}=\QuotProj{A}{R}(x)}{%
+    \proofstepwidestar[1,2]{\EqClass{x}{\sim}{A}=\QuotProj{A}{\sim}(x)}{%
       \FormulaRefAuto{a=b\vdash b=a}{5}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}=\QuotProj{A}{R}(y)}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}=\QuotProj{A}{\sim}(y)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,4}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,6}}
-    \proofstepwidestar[1,2,3,4]{(x,y)\in R}{%
+    \proofstepwidestar[1,2,3,4]{x\sim y}{%
       \FormulaRefAuto{EqClassRelFromEqual}{1,2,3,9}}
     \proofstepwidestar[1,2,3]{%
-      \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\rightarrow (x,y)\in R}{%
+      \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\rightarrow x\sim y}{%
       \rRI{4,10}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Von der Äquivalenz zu gleichen Projektionswerten]{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A
     \vdash
-    (x,y)\in R\rightarrow
-    \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)
+    x\sim y\rightarrow
+    \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)
   }{%
-    \EqRel{R,A}\dsep x\in A\dsep y\in A
+    \EqRel{A,\sim}\dsep x\in A\dsep y\in A
     \vdash
-    (x,y)\in R\rightarrow
-    \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)
+    x\sim y\rightarrow
+    \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)
   }[QuotProjEqualIffRelBackward]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
-    \proofstepwidestar[4]{(x,y)\in R}{\rA}
-    \proofstepwidestar[1,2]{\QuotProj{A}{R}(x)=\EqClass{x}{R}{A}}{%
+    \proofstepwidestar[4]{x\sim y}{\rA}
+    \proofstepwidestar[1,2]{\QuotProj{A}{\sim}(x)=\EqClass{x}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,2}}
-    \proofstepwidestar[1,3]{\QuotProj{A}{R}(y)=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,3]{\QuotProj{A}{\sim}(y)=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,3}}
-    \proofstepwidestar[1,2,3,4]{\EqClass{x}{R}{A}=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\EqClass{x}{\sim}{A}=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{EqClassEqualFromRel}{1,2,3,4}}
-    \proofstepwidestar[1,2,3,4]{\QuotProj{A}{R}(x)=\EqClass{y}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{\QuotProj{A}{\sim}(x)=\EqClass{y}{\sim}{A}}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,7}}
-    \proofstepwidestar[1,3]{\EqClass{y}{R}{A}=\QuotProj{A}{R}(y)}{%
+    \proofstepwidestar[1,3]{\EqClass{y}{\sim}{A}=\QuotProj{A}{\sim}(y)}{%
       \FormulaRefAuto{a=b\vdash b=a}{6}}
-    \proofstepwidestar[1,2,3,4]{\QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)}{%
+    \proofstepwidestar[1,2,3,4]{\QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,9}}
     \proofstepwidestar[1,2,3]{%
-      (x,y)\in R\rightarrow
-      \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)}{%
+      x\sim y\rightarrow
+      \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)}{%
       \rRI{4,10}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{x\in A}{\rA}
     \proofstepwidestar[3]{y\in A}{\rA}
     \proofstepwidestar[1,2,3]{%
-      \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\rightarrow (x,y)\in R}{%
+      \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\rightarrow x\sim y}{%
       \FormulaRefAuto{QuotProjEqualIffRelForward}{1,2,3}}
     \proofstepwidestar[1,2,3]{%
-      (x,y)\in R\rightarrow
-      \QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)}{%
+      x\sim y\rightarrow
+      \QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)}{%
       \FormulaRefAuto{QuotProjEqualIffRelBackward}{1,2,3}}
     \proofstepwidestar[1,2,3]{%
-      \bigl(\QuotProj{A}{R}(x)=\QuotProj{A}{R}(y)\bigr)
-      \leftrightarrow (x,y)\in R}{\rLRI{4,5}}
+      \bigl(\QuotProj{A}{\sim}(x)=\QuotProj{A}{\sim}(y)\bigr)
+      \leftrightarrow x\sim y}{\rLRI{4,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \section{Quotientenbildabbildung einer Teilfamilie}
 
 \FormulaDefDeltaK[Quotientenbildabbildung einer Teilfamilie]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\vdash
-  \QuotFamMap{A}{R}{M}\coloneqq
-  \PowMap{\QuotProj{A}{R}}\restriction_M
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\vdash
+  \QuotFamMap{A}{\sim}{M}\coloneqq
+  \PowMap{\QuotProj{A}{\sim}}\restriction_M
 }{QuotFamMapDef}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}\dsep \PowMap{\QuotProj{A}{R}}\dsep
-  \QuotFamMap{A}{R}{M}}
-  \DeltaRow{Neue Symbole}{\QuotFamMap{A}{R}{M}}
+  \DeltaRow{Mengen}{A\dsep M}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}\dsep \PowMap{\QuotProj{A}{\sim}}\dsep
+  \QuotFamMap{A}{\sim}{M}}
+  \DeltaRow{Neue Symbole}{\QuotFamMap{A}{\sim}{M}}
 }
 
 \FormulaThmDeltaK[Typisierung der Quotientenbildabbildung]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\vdash
-  \QuotFamMap{A}{R}{M}\colon
-  M\to\powerset(\QuotientSet{A}{R})
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\vdash
+  \QuotFamMap{A}{\sim}{M}\colon
+  M\to\powerset(\QuotientSet{A}{\sim})
 }{QuotFamMapFunction}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}\dsep \QuotFamMap{A}{R}{M}}
+  \DeltaRow{Mengen}{A\dsep M}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}\dsep \QuotFamMap{A}{\sim}{M}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{M\subseteq\powerset(A)}{\rA}
-  \proofstep{1}{\QuotProj{A}{R}\colon A\to\QuotientSet{A}{R}}{%
+  \proofstep{1}{\QuotProj{A}{\sim}\colon A\to\QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{QuotProjFunction}{1}}
-  \proofstep{1}{\PowMap{\QuotProj{A}{R}}\colon
-    \powerset(A)\to\powerset(\QuotientSet{A}{R})}{%
+  \proofstep{1}{\PowMap{\QuotProj{A}{\sim}}\colon
+    \powerset(A)\to\powerset(\QuotientSet{A}{\sim})}{%
     \FormulaRefAuto{F\colon A\to B \vdash
     \PowMap{F}\colon \powerset(A)\to \powerset(B)}{3}}
-  \proofstep{1,2}{\PowMap{\QuotProj{A}{R}}\restriction_M
-    \colon M\to\powerset(\QuotientSet{A}{R})}{%
+  \proofstep{1,2}{\PowMap{\QuotProj{A}{\sim}}\restriction_M
+    \colon M\to\powerset(\QuotientSet{A}{\sim})}{%
     \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{2,4}}
-  \proofstep{1,2}{\QuotFamMap{A}{R}{M}=
-    \PowMap{\QuotProj{A}{R}}\restriction_M}{%
+  \proofstep{1,2}{\QuotFamMap{A}{\sim}{M}=
+    \PowMap{\QuotProj{A}{\sim}}\restriction_M}{%
     \FormulaRefAuto{QuotFamMapDef}{1,2}}
-  \proofstep{1,2}{\QuotFamMap{A}{R}{M}\colon
-    M\to\powerset(\QuotientSet{A}{R})}{\rIE{6,5}}
+  \proofstep{1,2}{\QuotFamMap{A}{\sim}{M}\colon
+    M\to\powerset(\QuotientSet{A}{\sim})}{\rIE{6,5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Wert der Quotientenbildabbildung]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\vdash
-  \QuotFamMap{A}{R}{M}(X)=\QuotProj{A}{R}[X]
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\vdash
+  \QuotFamMap{A}{\sim}{M}(X)=\QuotProj{A}{\sim}[X]
 }{QuotFamMapValue}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}\dsep \QuotFamMap{A}{R}{M}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}\dsep \QuotFamMap{A}{\sim}{M}}
 }
 \begin{tabproofsplit}
   \proofpartindR[Auswertung der Einschränkung]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
       \vdash{}\\
-      &\QuotFamMap{A}{R}{M}(X)
-      =\PowMap{\QuotProj{A}{R}}(X)
+      &\QuotFamMap{A}{\sim}{M}(X)
+      =\PowMap{\QuotProj{A}{\sim}}(X)
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
     \vdash
-    \QuotFamMap{A}{R}{M}(X)
-    =\PowMap{\QuotProj{A}{R}}(X)%
+    \QuotFamMap{A}{\sim}{M}(X)
+    =\PowMap{\QuotProj{A}{\sim}}(X)%
   }[QuotFamMapValueRestrictedEvaluation]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{M\subseteq\powerset(A)}{\rA}
     \proofstep{3}{X\in M}{\rA}
-    \proofstep{1}{\QuotProj{A}{R}\colon
-      A\to\QuotientSet{A}{R}}{%
+    \proofstep{1}{\QuotProj{A}{\sim}\colon
+      A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
-    \proofstep{1}{\PowMap{\QuotProj{A}{R}}\colon
-      \powerset(A)\to\powerset(\QuotientSet{A}{R})}{%
+    \proofstep{1}{\PowMap{\QuotProj{A}{\sim}}\colon
+      \powerset(A)\to\powerset(\QuotientSet{A}{\sim})}{%
       \FormulaRefAuto{F\colon A\to B \vdash
         \PowMap{F}\colon \powerset(A)\to\powerset(B)}{4}}
-    \proofstep{1,2}{\QuotFamMap{A}{R}{M}=
-      \PowMap{\QuotProj{A}{R}}\restriction_M}{%
+    \proofstep{1,2}{\QuotFamMap{A}{\sim}{M}=
+      \PowMap{\QuotProj{A}{\sim}}\restriction_M}{%
       \FormulaRefAuto{QuotFamMapDef}{1,2}}
-    \proofstep{1,2,3}{\QuotFamMap{A}{R}{M}(X)=
-      \bigl(\PowMap{\QuotProj{A}{R}}\restriction_M\bigr)(X)}{%
+    \proofstep{1,2,3}{\QuotFamMap{A}{\sim}{M}(X)=
+      \bigl(\PowMap{\QuotProj{A}{\sim}}\restriction_M\bigr)(X)}{%
       \FormulaRefAuto{x\in A\dsep F=G\vdash F(x)=G(x)}{3,6}}
     \proofstep{1,2,3}{%
-      \bigl(\PowMap{\QuotProj{A}{R}}\restriction_M\bigr)(X)
-      =\PowMap{\QuotProj{A}{R}}(X)}{%
+      \bigl(\PowMap{\QuotProj{A}{\sim}}\restriction_M\bigr)(X)
+      =\PowMap{\QuotProj{A}{\sim}}(X)}{%
       \FormulaRefAuto{C\subseteq A \dsep x\in C
         \vdash F\restriction_C(x)=F(x)}{2,3,5}}
-    \proofstep{1,2,3}{\QuotFamMap{A}{R}{M}(X)
-      =\PowMap{\QuotProj{A}{R}}(X)}{%
+    \proofstep{1,2,3}{\QuotFamMap{A}{\sim}{M}(X)
+      =\PowMap{\QuotProj{A}{\sim}}(X)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,8}}
   \closeproofpartindR
 
   \proofpartindR[Potenzmengenabbildung als Bild]{%
     \begin{aligned}[t]
-      &\EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
       \vdash{}\\
-      &\PowMap{\QuotProj{A}{R}}(X)=\QuotProj{A}{R}[X]
+      &\PowMap{\QuotProj{A}{\sim}}(X)=\QuotProj{A}{\sim}[X]
     \end{aligned}%
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
     \vdash
-    \PowMap{\QuotProj{A}{R}}(X)=\QuotProj{A}{R}[X]%
+    \PowMap{\QuotProj{A}{\sim}}(X)=\QuotProj{A}{\sim}[X]%
   }[QuotFamMapValuePowerImage]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{M\subseteq\powerset(A)}{\rA}
     \proofstep{3}{X\in M}{\rA}
-    \proofstep{1}{\QuotProj{A}{R}\colon
-      A\to\QuotientSet{A}{R}}{%
+    \proofstep{1}{\QuotProj{A}{\sim}\colon
+      A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
     \proofstep{2,3}{X\in\powerset(A)}{%
       \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{2,3}}
-    \proofstep{1,2,3}{\PowMap{\QuotProj{A}{R}}(X)=
-      \QuotProj{A}{R}[X]}{%
+    \proofstep{1,2,3}{\PowMap{\QuotProj{A}{\sim}}(X)=
+      \QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{F\colon A\to B\dsep X\in\powerset(A)\vdash
         \PowMap{F}(X)=F[X]}{4,5}}
   \closeproofpartindR
 
   \proofpartindR[Zusammenführung]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
     \vdash
-    \QuotFamMap{A}{R}{M}(X)=\QuotProj{A}{R}[X]%
+    \QuotFamMap{A}{\sim}{M}(X)=\QuotProj{A}{\sim}[X]%
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
     \vdash
-    \QuotFamMap{A}{R}{M}(X)=\QuotProj{A}{R}[X]%
+    \QuotFamMap{A}{\sim}{M}(X)=\QuotProj{A}{\sim}[X]%
   }[QuotFamMapValueConclusion]
-    \proofstep{1}{\EqRel{R,A}}{\rA}
+    \proofstep{1}{\EqRel{A,\sim}}{\rA}
     \proofstep{2}{M\subseteq\powerset(A)}{\rA}
     \proofstep{3}{X\in M}{\rA}
-    \proofstep{1,2,3}{\QuotFamMap{A}{R}{M}(X)
-      =\PowMap{\QuotProj{A}{R}}(X)}{%
+    \proofstep{1,2,3}{\QuotFamMap{A}{\sim}{M}(X)
+      =\PowMap{\QuotProj{A}{\sim}}(X)}{%
       \FormulaRefAuto{QuotFamMapValueRestrictedEvaluation}{1,2,3}}
-    \proofstep{1,2,3}{\PowMap{\QuotProj{A}{R}}(X)
-      =\QuotProj{A}{R}[X]}{%
+    \proofstep{1,2,3}{\PowMap{\QuotProj{A}{\sim}}(X)
+      =\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{QuotFamMapValuePowerImage}{1,2,3}}
-    \proofstep{1,2,3}{\QuotFamMap{A}{R}{M}(X)
-      =\QuotProj{A}{R}[X]}{%
+    \proofstep{1,2,3}{\QuotFamMap{A}{\sim}{M}(X)
+      =\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
   \closeproofpartindR
 \end{tabproofsplit}
@@ -1590,336 +1388,350 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
 \subsection{Charakterisierung der Quotientenbildabbildung}
 
 \FormulaThmDeltaK[Quotientenprojektionsbilder liegen in der Quotientenmenge]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-  \dsep C\in\QuotProj{A}{R}[X]
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+  \dsep C\in\QuotProj{A}{\sim}[X]
   \vdash
-  C\in\QuotientSet{A}{R}
+  C\in\QuotientSet{A}{\sim}
 }{QuotProjImageInQuotient}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep C\dsep a}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{M\subseteq\powerset(A)}{\rA}
   \proofstep{3}{X\in M}{\rA}
-  \proofstep{4}{C\in\QuotProj{A}{R}[X]}{\rA}
+  \proofstep{4}{C\in\QuotProj{A}{\sim}[X]}{\rA}
   \proofstep{2,3}{X\in\powerset(A)}{%
     \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{2,3}}
   \proofstep{2,3}{X\subseteq A}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{5}}
-  \proofstep{1}{\QuotProj{A}{R}\colon
-    A\to\QuotientSet{A}{R}}{%
+  \proofstep{1}{\QuotProj{A}{\sim}\colon
+    A\to\QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{QuotProjFunction}{1}}
-  \proofstep{1,2,3}{\QuotProj{A}{R}[X]\subseteq
-    \QuotientSet{A}{R}}{%
+  \proofstep{1,2,3}{\QuotProj{A}{\sim}[X]\subseteq
+    \QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{C\subseteq A \dsep F\colon A\to B \vdash F[C]\subseteq B}{6,7}}
-  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{R}}{%
+  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{8,4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Quotientenprojektionsbilder liefern Klassenzeugen]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-  \dsep C\in\QuotProj{A}{R}[X]
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+  \dsep C\in\QuotProj{A}{\sim}[X]
   \vdash
-  \exists a\in X\,C=\EqClass{a}{R}{A}
+  \exists a\in X\,C=\EqClass{a}{\sim}{A}
 }{QuotProjImageClassWitness}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep C\dsep a}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Urbildzeuge des Projektionsbildes]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep C\in\QuotProj{A}{R}[X]
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep C\in\QuotProj{A}{\sim}[X]
     \vdash
-    \exists a\in X\,C=\QuotProj{A}{R}(a)
+    \exists a\in X\,C=\QuotProj{A}{\sim}(a)
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep C\in\QuotProj{A}{R}[X]
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep C\in\QuotProj{A}{\sim}[X]
     \vdash
-    \exists a\in X\,C=\QuotProj{A}{R}(a)
+    \exists a\in X\,C=\QuotProj{A}{\sim}(a)
   }[QuotProjImageValueWitness]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{C\in\QuotProj{A}{R}[X]}{\rA}
+    \proofstepwidestar[4]{C\in\QuotProj{A}{\sim}[X]}{\rA}
     \proofstepwidestar[2,3]{X\in\powerset(A)}{%
       \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{2,3}}
     \proofstepwidestar[2,3]{X\subseteq A}{%
       \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{5}}
-    \proofstepwidestar[1]{\QuotProj{A}{R}\colon
-      A\to\QuotientSet{A}{R}}{%
+    \proofstepwidestar[1]{\QuotProj{A}{\sim}\colon
+      A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
     \proofstepwidestar[1,2,3,4]{\exists a\in X\,
-      C=\QuotProj{A}{R}(a)}{%
+      C=\QuotProj{A}{\sim}(a)}{%
       \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep
       y\in F[C]\vdash \exists x\in C\,y=F(x)}{6,7,4}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Vom Urbildzeugen zum Klassenzeugen]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep C\in\QuotProj{A}{R}[X]
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep C\in\QuotProj{A}{\sim}[X]
     \vdash
-    \exists a\in X\,C=\EqClass{a}{R}{A}
+    \exists a\in X\,C=\EqClass{a}{\sim}{A}
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep C\in\QuotProj{A}{R}[X]
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep C\in\QuotProj{A}{\sim}[X]
     \vdash
-    \exists a\in X\,C=\EqClass{a}{R}{A}
+    \exists a\in X\,C=\EqClass{a}{\sim}{A}
   }[QuotProjImageClassWitnessConclusion]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{C\in\QuotProj{A}{R}[X]}{\rA}
+    \proofstepwidestar[4]{C\in\QuotProj{A}{\sim}[X]}{\rA}
     \proofstepwidestar[1,2,3,4]{\exists a\in X\,
-      C=\QuotProj{A}{R}(a)}{%
+      C=\QuotProj{A}{\sim}(a)}{%
       \FormulaRefAuto{QuotProjImageValueWitness}{1,2,3,4}}
-    \proofstepwidestar[6]{a\in X\land C=\QuotProj{A}{R}(a)}{\rA}
+    \proofstepwidestar[6]{a\in X\land C=\QuotProj{A}{\sim}(a)}{\rA}
     \proofstepwidestar[6]{a\in X}{\rAEa{6}}
     \proofstepwidestar[2,3,6]{X\subseteq A}{%
       \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{%
         \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{2,3}}}
     \proofstepwidestar[2,3,6]{a\in A}{%
       \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{8,7}}
-    \proofstepwidestar[1,6]{\QuotProj{A}{R}(a)=\EqClass{a}{R}{A}}{%
+    \proofstepwidestar[1,6]{\QuotProj{A}{\sim}(a)=\EqClass{a}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,9}}
-    \proofstepwidestar[1,6]{C=\EqClass{a}{R}{A}}{%
+    \proofstepwidestar[1,6]{C=\EqClass{a}{\sim}{A}}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{\rAEb{6},10}}
-    \proofstepwidestar[1,6]{a\in X\land C=\EqClass{a}{R}{A}}{\rAI{7,11}}
-    \proofstepwidestar[1,6]{\exists a\in X\,C=\EqClass{a}{R}{A}}{\rEI{12}}
-    \proofstepwidestar[1,2,3,4]{\exists a\in X\,C=\EqClass{a}{R}{A}}{%
+    \proofstepwidestar[1,6]{a\in X\land C=\EqClass{a}{\sim}{A}}{\rAI{7,11}}
+    \proofstepwidestar[1,6]{\exists a\in X\,C=\EqClass{a}{\sim}{A}}{\rEI{12}}
+    \proofstepwidestar[1,2,3,4]{\exists a\in X\,C=\EqClass{a}{\sim}{A}}{%
       \rEE{5,6,13}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Quotientenprojektionsbilder liefern Klassen]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-  \dsep C\in\QuotProj{A}{R}[X]
-  \vdash
-  C\in\QuotientSet{A}{R}\land
-  \exists a\in X\,C=\EqClass{a}{R}{A}
+  \begin{aligned}[t]
+    &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+      \dsep C\in\QuotProj{A}{\sim}[X]\vdash{}\\
+    &C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}
+  \end{aligned}
 }{QuotProjImageToEqClass}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep C\dsep a}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproof}
-  \proofstep{1}{\EqRel{R,A}}{\rA}
+  \proofstep{1}{\EqRel{A,\sim}}{\rA}
   \proofstep{2}{M\subseteq\powerset(A)}{\rA}
   \proofstep{3}{X\in M}{\rA}
-  \proofstep{4}{C\in\QuotProj{A}{R}[X]}{\rA}
-  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{R}}{%
+  \proofstep{4}{C\in\QuotProj{A}{\sim}[X]}{\rA}
+  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{\sim}}{%
     \FormulaRefAuto{QuotProjImageInQuotient}{1,2,3,4}}
-  \proofstep{1,2,3,4}{\exists a\in X\,C=\EqClass{a}{R}{A}}{%
+  \proofstep{1,2,3,4}{\exists a\in X\,C=\EqClass{a}{\sim}{A}}{%
     \FormulaRefAuto{QuotProjImageClassWitness}{1,2,3,4}}
-  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{R}\land
-    \exists a\in X\,C=\EqClass{a}{R}{A}}{\rAI{5,6}}
+  \proofstep{1,2,3,4}{C\in\QuotientSet{A}{\sim}\land
+    \exists a\in X\,C=\EqClass{a}{\sim}{A}}{\rAI{5,6}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Klassen liefern Quotientenprojektionsbilder]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-  \dsep \exists a\in X\,C=\EqClass{a}{R}{A}
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+  \dsep \exists a\in X\,C=\EqClass{a}{\sim}{A}
   \vdash
-  C\in\QuotProj{A}{R}[X]
+  C\in\QuotProj{A}{\sim}[X]
 }{EqClassToQuotProjImage}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep C\dsep a}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Ein Klassenzeuge liefert einen Projektionswert]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep a\in X\land C=\EqClass{a}{R}{A}
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep a\in X\land C=\EqClass{a}{\sim}{A}
     \vdash
-    C\in\QuotProj{A}{R}[X]
+    C\in\QuotProj{A}{\sim}[X]
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep a\in X\land C=\EqClass{a}{R}{A}
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep a\in X\land C=\EqClass{a}{\sim}{A}
     \vdash
-    C\in\QuotProj{A}{R}[X]
+    C\in\QuotProj{A}{\sim}[X]
   }[EqClassWitnessToQuotProjImage]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{a\in X\land C=\EqClass{a}{R}{A}}{\rA}
+    \proofstepwidestar[4]{a\in X\land C=\EqClass{a}{\sim}{A}}{\rA}
     \proofstepwidestar[2,3]{X\in\powerset(A)}{%
       \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{2,3}}
     \proofstepwidestar[2,3]{X\subseteq A}{%
       \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{5}}
-    \proofstepwidestar[1]{\QuotProj{A}{R}\colon
-      A\to\QuotientSet{A}{R}}{%
+    \proofstepwidestar[1]{\QuotProj{A}{\sim}\colon
+      A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
     \proofstepwidestar[4]{a\in X}{\rAEa{4}}
     \proofstepwidestar[2,3,4]{a\in A}{%
       \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{6,8}}
-    \proofstepwidestar[1,4]{\QuotProj{A}{R}(a)=\EqClass{a}{R}{A}}{%
+    \proofstepwidestar[1,4]{\QuotProj{A}{\sim}(a)=\EqClass{a}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjValue}{1,9}}
-    \proofstepwidestar[1,4]{\EqClass{a}{R}{A}=\QuotProj{A}{R}(a)}{%
+    \proofstepwidestar[1,4]{\EqClass{a}{\sim}{A}=\QuotProj{A}{\sim}(a)}{%
       \FormulaRefAuto{a=b\vdash b=a}{10}}
-    \proofstepwidestar[1,4]{C=\QuotProj{A}{R}(a)}{%
+    \proofstepwidestar[1,4]{C=\QuotProj{A}{\sim}(a)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{\rAEb{4},11}}
-    \proofstepwidestar[1,4]{a\in X\land C=\QuotProj{A}{R}(a)}{%
+    \proofstepwidestar[1,4]{a\in X\land C=\QuotProj{A}{\sim}(a)}{%
       \rAI{8,12}}
     \proofstepwidestar[1,4]{\exists a\in X\,
-      C=\QuotProj{A}{R}(a)}{\rEI{13}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{R}[X]}{%
+      C=\QuotProj{A}{\sim}(a)}{\rEI{13}}
+    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep
       \exists x\in C\,y=F(x)\vdash y\in F[C]}{6,7,14}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Elimination des Klassenzeugen]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep \exists a\in X\,C=\EqClass{a}{R}{A}
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep \exists a\in X\,C=\EqClass{a}{\sim}{A}
     \vdash
-    C\in\QuotProj{A}{R}[X]
+    C\in\QuotProj{A}{\sim}[X]
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \dsep \exists a\in X\,C=\EqClass{a}{R}{A}
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+    \dsep \exists a\in X\,C=\EqClass{a}{\sim}{A}
     \vdash
-    C\in\QuotProj{A}{R}[X]
+    C\in\QuotProj{A}{\sim}[X]
   }[EqClassToQuotProjImageConclusion]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{\exists a\in X\,C=\EqClass{a}{R}{A}}{\rA}
-    \proofstepwidestar[5]{a\in X\land C=\EqClass{a}{R}{A}}{\rA}
-    \proofstepwidestar[1,2,3,5]{C\in\QuotProj{A}{R}[X]}{%
+    \proofstepwidestar[4]{\exists a\in X\,C=\EqClass{a}{\sim}{A}}{\rA}
+    \proofstepwidestar[5]{a\in X\land C=\EqClass{a}{\sim}{A}}{\rA}
+    \proofstepwidestar[1,2,3,5]{C\in\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{EqClassWitnessToQuotProjImage}{1,2,3,5}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{R}[X]}{%
+    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{\sim}[X]}{%
       \rEE{4,5,6}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Charakterisierung der Quotientenbildabbildung]{%
-  \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\vdash
+  \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\vdash
   \begin{aligned}[t]
-    C\in\QuotFamMap{A}{R}{M}(X)
+    C\in\QuotFamMap{A}{\sim}{M}(X)
     \leftrightarrow{}&
-    C\in\QuotientSet{A}{R}\land{}\\
-    &\exists a\in X\,C=\EqClass{a}{R}{A}
+    C\in\QuotientSet{A}{\sim}\land{}\\
+    &\exists a\in X\,C=\EqClass{a}{\sim}{A}
   \end{aligned}
 }{QuotFamMapChar}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep C\dsep a}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}\dsep \QuotFamMap{A}{R}{M}}
-  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{R}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep C\dsep a}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}\dsep \QuotFamMap{A}{\sim}{M}}
+  \DeltaRow{Quotientenmenge}{\QuotientSet{A}{\sim}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[\(\rightarrow\)]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \vdash
-    C\in\QuotFamMap{A}{R}{M}(X)\rightarrow
-    \bigl(C\in\QuotientSet{A}{R}\land
-    \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
+    \begin{aligned}[t]
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+        \vdash{}\\
+      &C\in\QuotFamMap{A}{\sim}{M}(X)\rightarrow{}\\[-2pt]
+      &\qquad\bigl(C\in\QuotientSet{A}{\sim}\land
+        \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)
+    \end{aligned}
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \vdash
-    C\in\QuotFamMap{A}{R}{M}(X)\rightarrow
-    \bigl(C\in\QuotientSet{A}{R}\land
-    \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
+    \begin{aligned}[t]
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+        \vdash{}\\
+      &C\in\QuotFamMap{A}{\sim}{M}(X)\rightarrow{}\\[-2pt]
+      &\qquad\bigl(C\in\QuotientSet{A}{\sim}\land
+        \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)
+    \end{aligned}
   }[QuotFamMapCharForward]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{C\in\QuotFamMap{A}{R}{M}(X)}{\rA}
-    \proofstepwidestar[1,2,3]{\QuotFamMap{A}{R}{M}(X)=
-      \QuotProj{A}{R}[X]}{%
+    \proofstepwidestar[4]{C\in\QuotFamMap{A}{\sim}{M}(X)}{\rA}
+    \proofstepwidestar[1,2,3]{\QuotFamMap{A}{\sim}{M}(X)=
+      \QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{QuotFamMapValue}{1,2,3}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{R}[X]}{\rIE{5,4}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}}{%
+    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{\sim}[X]}{\rIE{5,4}}
+    \proofstepwidestar[1,2,3,4]{C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}}{%
       \FormulaRefAuto{QuotProjImageToEqClass}{1,2,3,6}}
-    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{R}{M}(X)
+    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{\sim}{M}(X)
       \rightarrow
-      \bigl(C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)}{\rRI{4,7}}
+      \bigl(C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)}{\rRI{4,7}}
   \closeproofpartwideindR
 
   \proofpartwideindR[\(\leftarrow\)]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \vdash
-    \bigl(C\in\QuotientSet{A}{R}\land
-    \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
-    \rightarrow C\in\QuotFamMap{A}{R}{M}(X)
+    \begin{aligned}[t]
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+        \vdash{}\\
+      &\bigl(C\in\QuotientSet{A}{\sim}\land
+        \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)\rightarrow{}\\[-2pt]
+      &\qquad C\in\QuotFamMap{A}{\sim}{M}(X)
+    \end{aligned}
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M
-    \vdash
-    \bigl(C\in\QuotientSet{A}{R}\land
-    \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
-    \rightarrow C\in\QuotFamMap{A}{R}{M}(X)
+    \begin{aligned}[t]
+      &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M
+        \vdash{}\\
+      &\bigl(C\in\QuotientSet{A}{\sim}\land
+        \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)\rightarrow{}\\[-2pt]
+      &\qquad C\in\QuotFamMap{A}{\sim}{M}(X)
+    \end{aligned}
   }[QuotFamMapCharBackward]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[4]{C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}}{\rA}
-    \proofstepwidestar[4]{\exists a\in X\,C=\EqClass{a}{R}{A}}{\rAEb{4}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{R}[X]}{%
+    \proofstepwidestar[4]{%
+      \begin{aligned}[t]
+        &C\in\QuotientSet{A}{\sim}\land{}\\[-2pt]
+        &\exists a\in X\,C=\EqClass{a}{\sim}{A}
+      \end{aligned}}{\rA}
+    \proofstepwidestar[4]{\exists a\in X\,C=\EqClass{a}{\sim}{A}}{\rAEb{4}}
+    \proofstepwidestar[1,2,3,4]{C\in\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{EqClassToQuotProjImage}{1,2,3,5}}
-    \proofstepwidestar[1,2,3]{\QuotProj{A}{R}[X]=
-      \QuotFamMap{A}{R}{M}(X)}{%
+    \proofstepwidestar[1,2,3]{\QuotProj{A}{\sim}[X]=
+      \QuotFamMap{A}{\sim}{M}(X)}{%
       \FormulaRefAuto{a=b\vdash b=a}{%
       \FormulaRefAuto{QuotFamMapValue}{1,2,3}}}
-    \proofstepwidestar[1,2,3,4]{C\in\QuotFamMap{A}{R}{M}(X)}{%
+    \proofstepwidestar[1,2,3,4]{C\in\QuotFamMap{A}{\sim}{M}(X)}{%
       \rIE{7,6}}
     \proofstepwidestar[1,2,3]{%
-      \bigl(C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
-      \rightarrow C\in\QuotFamMap{A}{R}{M}(X)}{\rRI{4,8}}
+      \begin{aligned}[t]
+        &\bigl(C\in\QuotientSet{A}{\sim}\land
+          \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)\rightarrow{}\\[-2pt]
+        &\qquad C\in\QuotFamMap{A}{\sim}{M}(X)
+      \end{aligned}}{\rRI{4,8}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
-    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{R}{M}(X)
+    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{\sim}{M}(X)
       \rightarrow
-      \bigl(C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)}{%
+      \bigl(C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)}{%
       \FormulaRefAuto{QuotFamMapCharForward}{1,2,3}}
     \proofstepwidestar[1,2,3]{%
-      \bigl(C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)
-      \rightarrow C\in\QuotFamMap{A}{R}{M}(X)}{%
+      \bigl(C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)
+      \rightarrow C\in\QuotFamMap{A}{\sim}{M}(X)}{%
       \FormulaRefAuto{QuotFamMapCharBackward}{1,2,3}}
-    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{R}{M}(X)
+    \proofstepwidestar[1,2,3]{C\in\QuotFamMap{A}{\sim}{M}(X)
       \leftrightarrow
-      \bigl(C\in\QuotientSet{A}{R}\land
-      \exists a\in X\,C=\EqClass{a}{R}{A}\bigr)}{\rLRI{4,5}}
+      \bigl(C\in\QuotientSet{A}{\sim}\land
+      \exists a\in X\,C=\EqClass{a}{\sim}{A}\bigr)}{\rLRI{4,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Quotientenbildabbildungen erhalten Vereinigungen]{%
   \begin{aligned}[t]
-    &\EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep
+    &\EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep
       X\in M\dsep Y\in M\dsep X\cup Y\in M\\
     &\vdash
-      \QuotFamMap{A}{R}{M}(X\cup Y)=
-      \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)
+      \QuotFamMap{A}{\sim}{M}(X\cup Y)=
+      \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)
   \end{aligned}
 }{QuotFamMapPreservesUnion}{%
-  \DeltaRow{Mengen}{A\dsep R\dsep M\dsep X\dsep Y}
-  \DeltaRow{Relationen}{R}
-  \DeltaRow{Funktionen}{\QuotProj{A}{R}\dsep\QuotFamMap{A}{R}{M}}
+  \DeltaRow{Mengen}{A\dsep M\dsep X\dsep Y}
+  \DeltaRow{Relationsoperatoren}{\sim}
+  \DeltaRow{Funktionen}{\QuotProj{A}{\sim}\dsep\QuotFamMap{A}{\sim}{M}}
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Die Quotientenprojektion erhält Vereinigungen von Teilmengen]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
     \vdash
-    \QuotProj{A}{R}[X\cup Y]=
-    \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]
+    \QuotProj{A}{\sim}[X\cup Y]=
+    \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
     \vdash
-    \QuotProj{A}{R}[X\cup Y]=
-    \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]
+    \QuotProj{A}{\sim}[X\cup Y]=
+    \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]
   }[QuotProjImagePreservesUnion]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
     \proofstepwidestar[4]{Y\in M}{\rA}
-    \proofstepwidestar[1]{\QuotProj{A}{R}\colon
-      A\to\QuotientSet{A}{R}}{%
+    \proofstepwidestar[1]{\QuotProj{A}{\sim}\colon
+      A\to\QuotientSet{A}{\sim}}{%
       \FormulaRefAuto{QuotProjFunction}{1}}
     \proofstepwidestar[2,3]{X\in\powerset(A)}{%
       \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{2,3}}
@@ -1930,70 +1742,70 @@ einem festen Träger wird, beschränken wir sie auf eine Mengenfamilie \(M\).
     \proofstepwidestar[2,4]{Y\subseteq A}{%
       \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}{8}}
     \proofstepwidestar[1,2,3,4]{%
-      \QuotProj{A}{R}[X\cup Y]=
-      \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]}{%
+      \QuotProj{A}{\sim}[X\cup Y]=
+      \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]}{%
       \FormulaRefAuto{F\colon M\to N \dsep A\subseteq M \dsep
       B\subseteq M \vdash F[A\cup B]=F[A]\cup F[B]}{5,7,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Auswertung auf den beiden Familiengliedern]{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
     \vdash
-    \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]=
-    \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)
+    \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]=
+    \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)
   }{%
-    \EqRel{R,A}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
+    \EqRel{A,\sim}\dsep M\subseteq\powerset(A)\dsep X\in M\dsep Y\in M
     \vdash
-    \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]=
-    \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)
+    \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]=
+    \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)
   }[QuotFamMapUnionValue]
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
     \proofstepwidestar[4]{Y\in M}{\rA}
     \proofstepwidestar[1,2,3]{%
-      \QuotFamMap{A}{R}{M}(X)=\QuotProj{A}{R}[X]}{%
+      \QuotFamMap{A}{\sim}{M}(X)=\QuotProj{A}{\sim}[X]}{%
       \FormulaRefAuto{QuotFamMapValue}{1,2,3}}
     \proofstepwidestar[1,2,4]{%
-      \QuotFamMap{A}{R}{M}(Y)=\QuotProj{A}{R}[Y]}{%
+      \QuotFamMap{A}{\sim}{M}(Y)=\QuotProj{A}{\sim}[Y]}{%
       \FormulaRefAuto{QuotFamMapValue}{1,2,4}}
     \proofstepwidestar[1,2,3]{%
-      \QuotProj{A}{R}[X]=\QuotFamMap{A}{R}{M}(X)}{%
+      \QuotProj{A}{\sim}[X]=\QuotFamMap{A}{\sim}{M}(X)}{%
       \FormulaRefAuto{a=b\vdash b=a}{5}}
     \proofstepwidestar[1,2,4]{%
-      \QuotProj{A}{R}[Y]=\QuotFamMap{A}{R}{M}(Y)}{%
+      \QuotProj{A}{\sim}[Y]=\QuotFamMap{A}{\sim}{M}(Y)}{%
       \FormulaRefAuto{a=b\vdash b=a}{6}}
     \proofstepwidestar[1,2,3]{%
-      \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]=
-      \QuotFamMap{A}{R}{M}(X)\cup\QuotProj{A}{R}[Y]}{%
+      \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]=
+      \QuotFamMap{A}{\sim}{M}(X)\cup\QuotProj{A}{\sim}[Y]}{%
       \FormulaRefAuto{A=B\vdash A\cup C = B\cup C}{7}}
     \proofstepwidestar[1,2,3,4]{%
-      \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]=
-      \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)}{%
+      \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]=
+      \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
         9,\FormulaRefAuto{A=B\vdash C\cup A = C\cup B}{8}}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{\EqRel{R,A}}{\rA}
+    \proofstepwidestar[1]{\EqRel{A,\sim}}{\rA}
     \proofstepwidestar[2]{M\subseteq\powerset(A)}{\rA}
     \proofstepwidestar[3]{X\in M}{\rA}
     \proofstepwidestar[4]{Y\in M}{\rA}
     \proofstepwidestar[5]{X\cup Y\in M}{\rA}
     \proofstepwidestar[1,2,5]{%
-      \QuotFamMap{A}{R}{M}(X\cup Y)=\QuotProj{A}{R}[X\cup Y]}{%
+      \QuotFamMap{A}{\sim}{M}(X\cup Y)=\QuotProj{A}{\sim}[X\cup Y]}{%
       \FormulaRefAuto{QuotFamMapValue}{1,2,5}}
     \proofstepwidestar[1,2,3,4]{%
-      \QuotProj{A}{R}[X\cup Y]=
-      \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]}{%
+      \QuotProj{A}{\sim}[X\cup Y]=
+      \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]}{%
       \FormulaRefAuto{QuotProjImagePreservesUnion}{1,2,3,4}}
     \proofstepwidestar[1,2,3,4]{%
-      \QuotProj{A}{R}[X]\cup\QuotProj{A}{R}[Y]=
-      \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)}{%
+      \QuotProj{A}{\sim}[X]\cup\QuotProj{A}{\sim}[Y]=
+      \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)}{%
       \FormulaRefAuto{QuotFamMapUnionValue}{1,2,3,4}}
     \proofstepwidestar[1,2,3,4,5]{%
-      \QuotFamMap{A}{R}{M}(X\cup Y)=
-      \QuotFamMap{A}{R}{M}(X)\cup\QuotFamMap{A}{R}{M}(Y)}{%
+      \QuotFamMap{A}{\sim}{M}(X\cup Y)=
+      \QuotFamMap{A}{\sim}{M}(X)\cup\QuotFamMap{A}{\sim}{M}(Y)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
         6,\FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,8}}}
   \closeproofpartwide
@@ -2037,11 +1849,11 @@ der allgemeinen Quotientenprojektion.
   \bigcup M\sur\OccQuotCarrier{M}
 }{OccQuotProjSurjective}{%
   \DeltaRow{Mengen}{M}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotProj{M}}
 }
 \begin{tabproof}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{}{\OccQuotProj{M}\colon
     \bigcup M\sur\OccQuotCarrier{M}}{%
@@ -2053,12 +1865,12 @@ der allgemeinen Quotientenprojektion.
   \OccQuotProj{M}(a)=\OccClass{M}{a}
 }{OccQuotProjValue}{%
   \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotProj{M}}
 }
 \begin{tabproof}
   \proofstep{1}{a\in\bigcup M}{\rA}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{1}{\OccQuotProj{M}(a)=\OccClass{M}{a}}{%
     \FormulaRefAuto{QuotProjValue}{2,1}}
@@ -2067,20 +1879,20 @@ der allgemeinen Quotientenprojektion.
 \FormulaThmDeltaK[Gleichheit von Ununterscheidbarkeitsprojektionswerten]{%
   a\in\bigcup M\dsep b\in\bigcup M\vdash
   \bigl(\OccQuotProj{M}(a)=\OccQuotProj{M}(b)\bigr)
-  \leftrightarrow(a,b)\in\SameOccRel{M}
+  \leftrightarrow a\mathrel{\SameOccRel{M}}b
 }{OccQuotProjEqualIffSameOcc}{%
   \DeltaRow{Mengen}{M\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotProj{M}}
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{a\in\bigcup M}{\rA}
   \proofstepwidestar[2]{b\in\bigcup M}{\rA}
-  \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstepwidestar[]{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstepwidestar[1,2]{%
     \bigl(\OccQuotProj{M}(a)=\OccQuotProj{M}(b)\bigr)
-    \leftrightarrow(a,b)\in\SameOccRel{M}}{%
+    \leftrightarrow a\mathrel{\SameOccRel{M}}b}{%
     \FormulaRefAuto{QuotProjEqualIffRel}{3,1,2}}
 \end{tabproofwide}
 
@@ -2099,11 +1911,11 @@ Mitgliedschaftstransport.
   \OccQuotMap{M}\colon M\to\powerset(\OccQuotCarrier{M})
 }{OccQuotMapPowerFunction}{%
   \DeltaRow{Mengen}{M}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotMap{M}}
 }
 \begin{tabproof}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{}{M\subseteq\powerset(\bigcup M)}{%
     \FormulaRefAuto{FamilySubsetPowerUnion}}
@@ -2122,12 +1934,12 @@ Mitgliedschaftstransport.
   \end{aligned}
 }{OccQuotMapChar}{%
   \DeltaRow{Mengen}{M\dsep X\dsep C\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotMap{M}}
 }
 \begin{tabproof}
   \proofstep{1}{X\in M}{\rA}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{}{M\subseteq\powerset(\bigcup M)}{%
     \FormulaRefAuto{FamilySubsetPowerUnion}}
@@ -2218,7 +2030,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   \OccClass{M}{a}\in\OccQuotMap{M}(X)
 }{OccQuotMembershipTransport}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotMap{M}}
 }
 \begin{tabproofsplitwide}
@@ -2233,7 +2045,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   }[OccQuotMembershipTransportForward]
     \proofstepwidestar[1]{X\in M}{\rA}
     \proofstepwidestar[2]{a\in\bigcup M}{\rA}
-    \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \proofstepwidestar[]{\EqRel{\bigcup M,\SameOccRel{M}}}{%
       \FormulaRefAuto{SameOccRelEqRel}}
     \proofstepwidestar[4]{a\in X}{\rA}
     \proofstepwidestar[2]{\OccClass{M}{a}\in\OccQuotCarrier{M}}{%
@@ -2264,7 +2076,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   }[OccQuotMembershipTransportBackward]
     \proofstepwidestar[1]{X\in M}{\rA}
     \proofstepwidestar[2]{a\in\bigcup M}{\rA}
-    \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \proofstepwidestar[]{\EqRel{\bigcup M,\SameOccRel{M}}}{%
       \FormulaRefAuto{SameOccRelEqRel}}
     \proofstepwidestar[4]{%
       \OccClass{M}{a}\in\OccQuotMap{M}(X)}{\rA}
@@ -2279,11 +2091,12 @@ Vereinigungsverträglichkeit und Bijektivität.
     \proofstepwidestar[1,7]{b\in\bigcup M}{%
       \FormulaRefAuto{B\in A\dsep x\in B\vdash x\in\bigcup A}{1,8}}
     \proofstepwidestar[7]{\OccClass{M}{a}=\OccClass{M}{b}}{\rAEb{7}}
-    \proofstepwidestar[1,2,7]{(a,b)\in\SameOccRel{M}}{%
+    \proofstepwidestar[1,2,7]{a\mathrel{\SameOccRel{M}}b}{%
       \FormulaRefAuto{EqClassRelFromEqual}{3,2,9,10}}
     \proofstepwidestar[1,2,7]{%
       \forall Z\in M\,(a\in Z\leftrightarrow b\in Z)}{%
-      \rAEb{\rAEb{\FormulaRefAuto{SameOccRelChar}{11}}}}
+      \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+        \FormulaRefAuto{SameOccRelChar}[thm]{2,9},11}}
     \proofstepwidestar[1,2,7]{a\in X\leftrightarrow b\in X}{%
       \rRE{1,\rUE{12}}}
     \proofstepwidestar[1,2,7]{a\in X}{%
@@ -2399,7 +2212,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   \proofstep{1}{X\in M}{\rA}
   \proofstep{2}{Y\in M}{\rA}
   \proofstep{3}{X\cup Y\in M}{\rA}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{}{M\subseteq\powerset(\bigcup M)}{%
     \FormulaRefAuto{FamilySubsetPowerUnion}}
@@ -2507,7 +2320,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   \bigcup\OccQuotFam{M}=\OccQuotCarrier{M}
 }{OccQuotFamUnionCarrier}{%
   \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep C\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotMap{M}}
 }
 \begin{tabproofsplitwide}
@@ -2549,7 +2362,7 @@ Vereinigungsverträglichkeit und Bijektivität.
     \OccQuotCarrier{M}\subseteq\bigcup\OccQuotFam{M}
   }[OccQuotFamUnionCarrierSubsetBackward]
     \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rA}
-    \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \proofstepwidestar[]{\EqRel{\bigcup M,\SameOccRel{M}}}{%
       \FormulaRefAuto{SameOccRelEqRel}}
     \proofstepwidestar[1]{\exists a\in\bigcup M\,
       C=\OccClass{M}{a}}{%
@@ -2606,14 +2419,14 @@ Vereinigungsverträglichkeit und Bijektivität.
   \exists a\in\bigcup M\,C=\OccClass{M}{a}
 }{OccQuotUnionRepresentative}{%
   \DeltaRow{Mengen}{M\dsep C\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproof}
   \proofstep{1}{C\in\bigcup\OccQuotFam{M}}{\rA}
   \proofstep{}{\bigcup\OccQuotFam{M}=\OccQuotCarrier{M}}{%
     \FormulaRefAuto{OccQuotFamUnionCarrier}}
   \proofstep{1}{C\in\OccQuotCarrier{M}}{\rIE{2,1}}
-  \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+  \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{SameOccRelEqRel}}
   \proofstep{1}{\exists a\in\bigcup M\,C=\OccClass{M}{a}}{%
     \FormulaRefAuto{QuotientRepresentative}{4,3}}
@@ -2643,7 +2456,7 @@ Vereinigungsverträglichkeit und Bijektivität.
   \bigcup\OccQuotFam{M}\neq\varnothing
 }{OccQuotFamCarrierNonempty}{%
   \DeltaRow{Mengen}{M\dsep a}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproofsplit}
   \proofpartindR[Eine Klasse als Element der Vereinigung]{%
@@ -2654,7 +2467,7 @@ Vereinigungsverträglichkeit und Bijektivität.
     \vdash \OccClass{M}{a}\in\bigcup\OccQuotFam{M}%
   }[OccQuotFamCarrierElement]
     \proofstep{1}{a\in\bigcup M}{\rA}
-    \proofstep{}{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
       \FormulaRefAuto{SameOccRelEqRel}}
     \proofstep{1}{\OccClass{M}{a}\in\OccQuotCarrier{M}}{%
       \FormulaRefAuto{EqClassInQuotient}{2,1}}
@@ -2697,7 +2510,7 @@ Ununterscheidbarkeitsquotienten ist diese Kennzeichnung injektiv.
   \OccQuotCarrier{M}\inj\powerset(M)
 }{OccQuotTraceMapInjective}{%
   \DeltaRow{Mengen}{M\dsep C\dsep D\dsep X\dsep a\dsep b}
-  \DeltaRow{Relationen}{\SameOccRel{M}}
+  \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
   \DeltaRow{Funktionen}{\OccQuotMap{M}\dsep
     \TraceMap{\OccQuotMap{M}}}
 }
@@ -2766,20 +2579,22 @@ Ununterscheidbarkeitsquotienten ist diese Kennzeichnung injektiv.
 
   \proofpartwideindR[Ununterscheidbarkeit der Repräsentanten]{%
     \begin{aligned}[t]
-      &C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\dsep{}\\[-2pt]
+      &C,D\in\OccQuotCarrier{M}\dsep{}\\[-2pt]
       &\TraceMap{\OccQuotMap{M}}(C)=
       \TraceMap{\OccQuotMap{M}}(D)\dsep{}\\[-2pt]
       &a\in\bigcup M\dsep b\in\bigcup M\dsep{}\\[-2pt]
       &C=\OccClass{M}{a}\dsep D=\OccClass{M}{b}\\
-      &\vdash (a,b)\in\SameOccRel{M}
+      &\vdash a\mathrel{\SameOccRel{M}}b
     \end{aligned}
   }{%
-    C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\dsep
-    \TraceMap{\OccQuotMap{M}}(C)=
-    \TraceMap{\OccQuotMap{M}}(D)\dsep
-    a\in\bigcup M\dsep C=\OccClass{M}{a}\dsep
-    b\in\bigcup M\dsep D=\OccClass{M}{b}
-    \vdash (a,b)\in\SameOccRel{M}
+    \begin{aligned}[t]
+      &C,D\in\OccQuotCarrier{M}\dsep
+        \TraceMap{\OccQuotMap{M}}(C)=
+        \TraceMap{\OccQuotMap{M}}(D)\dsep{}\\[-2pt]
+      &a,b\in\bigcup M\dsep C=\OccClass{M}{a}\dsep
+        D=\OccClass{M}{b}
+        \vdash a\mathrel{\SameOccRel{M}}b
+    \end{aligned}
   }[OccQuotTraceRepresentativesRelated]
     \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rA}
     \proofstepwidestar[2]{D\in\OccQuotCarrier{M}}{\rA}
@@ -2799,32 +2614,37 @@ Ununterscheidbarkeitsquotienten ist diese Kennzeichnung injektiv.
       \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
       \rUI{\rRI{8,9}}}
     \proofstepwidestar[1,2,3,4,5,6,7]{%
-      a\in\bigcup M\land b\in\bigcup M\land
-      \forall X\in M\,(a\in X\leftrightarrow b\in X)}{%
+      \begin{aligned}[t]
+        &a\in\bigcup M\land b\in\bigcup M\land{}\\[-2pt]
+        &\forall X\in M\,(a\in X\leftrightarrow b\in X)
+      \end{aligned}}{%
       \rAI{4,\rAI{6,10}}}
-    \proofstepwidestar[1,2,3,4,5,6,7]{(a,b)\in\SameOccRel{M}}{%
-      \FormulaRefAuto{SameOccRelChar}{11}}
+    \proofstepwidestar[1,2,3,4,5,6,7]{a\mathrel{\SameOccRel{M}}b}{%
+      \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+        \FormulaRefAuto{SameOccRelChar}[thm]{4,6},10}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Klassengleichheit]{%
     \begin{aligned}[t]
-      &C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\dsep{}\\[-2pt]
+      &C,D\in\OccQuotCarrier{M}\dsep{}\\[-2pt]
       &\TraceMap{\OccQuotMap{M}}(C)=
       \TraceMap{\OccQuotMap{M}}(D)\\
       &\vdash C=D
     \end{aligned}
   }{%
-    C\in\OccQuotCarrier{M}\dsep D\in\OccQuotCarrier{M}\dsep
-    \TraceMap{\OccQuotMap{M}}(C)=
-    \TraceMap{\OccQuotMap{M}}(D)
-    \vdash C=D
+    \begin{aligned}[t]
+      &C,D\in\OccQuotCarrier{M}\dsep{}\\[-2pt]
+      &\TraceMap{\OccQuotMap{M}}(C)=
+        \TraceMap{\OccQuotMap{M}}(D)\vdash{}\\[-2pt]
+      &C=D
+    \end{aligned}
   }[OccQuotTraceMapEquality]
     \proofstepwidestar[1]{C\in\OccQuotCarrier{M}}{\rA}
     \proofstepwidestar[2]{D\in\OccQuotCarrier{M}}{\rA}
     \proofstepwidestar[3]{%
       \TraceMap{\OccQuotMap{M}}(C)=
       \TraceMap{\OccQuotMap{M}}(D)}{\rA}
-    \proofstepwidestar[]{\EqRel{\SameOccRel{M},\bigcup M}}{%
+    \proofstepwidestar[]{\EqRel{\bigcup M,\SameOccRel{M}}}{%
       \FormulaRefAuto{SameOccRelEqRel}}
     \proofstepwidestar[1]{\exists a\in\bigcup M\,
       C=\OccClass{M}{a}}{%
@@ -2836,19 +2656,23 @@ Ununterscheidbarkeitsquotienten ist diese Kennzeichnung injektiv.
       C=\OccClass{M}{a}}{\rA}
     \proofstepwidestar[8]{b\in\bigcup M\land
       D=\OccClass{M}{b}}{\rA}
-    \proofstepwidestar[1,2,3,7,8]{(a,b)\in\SameOccRel{M}}{%
+    \proofstepwidestar[7]{a\in\bigcup M}{\rAEa{7}}
+    \proofstepwidestar[7]{C=\OccClass{M}{a}}{\rAEb{7}}
+    \proofstepwidestar[8]{b\in\bigcup M}{\rAEa{8}}
+    \proofstepwidestar[8]{D=\OccClass{M}{b}}{\rAEb{8}}
+    \proofstepwidestar[1,2,3,7,8]{a\mathrel{\SameOccRel{M}}b}{%
       \FormulaRefAuto{OccQuotTraceRepresentativesRelated}{%
-        1,2,3,\rAEa{7},\rAEb{7},\rAEa{8},\rAEb{8}}}
+        1,2,3,9,10,11,12}}
     \proofstepwidestar[1,2,3,7,8]{%
       \OccClass{M}{a}=\OccClass{M}{b}}{%
       \FormulaRefAuto{EqClassEqualFromRel}{%
-        4,\rAEa{7},\rAEa{8},9}}
+        4,9,11,13}}
     \proofstepwidestar[1,2,3,7,8]{C=\OccClass{M}{b}}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{\rAEb{7},10}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,14}}
     \proofstepwidestar[1,2,3,7,8]{C=D}{%
-      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{11,\rAEb{8}}}
-    \proofstepwidestar[1,2,3,7]{C=D}{\rEE{6,8,12}}
-    \proofstepwidestar[1,2,3]{C=D}{\rEE{5,7,13}}
+      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{15,12}}
+    \proofstepwidestar[1,2,3,7]{C=D}{\rEE{6,8,16}}
+    \proofstepwidestar[1,2,3]{C=D}{\rEE{5,7,17}}
   \closeproofpartwideindR
 
   \pagebreak[3]
