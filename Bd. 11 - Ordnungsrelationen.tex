@@ -26,6 +26,8 @@
 \tableofcontents
 \setcounter{file}{11}
 \renewcommand{\FormulaBandID}{11}
+\providecommand{\ProofRefStack}[1]{%
+  \ensuremath{\begin{gathered}#1\end{gathered}}}
 
 \chapter{Einleitung}
 
@@ -169,16 +171,20 @@ Zugehörigkeit eines geordneten Paares zu einer Relationsmenge.
 
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{\PartOrd{A,\leq}}{\rA}
-    \proofstepwidestar[1]{x\in A\vdash x\geq x}{%
-      \FormulaRefAuto{OrderDualReflexive}[thm]{1}}
-    \proofstepwidestar[1]{%
-      x,y,z\in A\dsep x\geq y\dsep y\geq z\vdash x\geq z}{%
-      \FormulaRefAuto{OrderDualTransitive}[thm]{1}}
-    \proofstepwidestar[1]{%
-      x,y\in A\dsep x\geq y\dsep y\geq x\vdash x=y}{%
-      \FormulaRefAuto{OrderDualAntisymmetric}[thm]{1}}
+    \proofstepwidestar[2]{x\in A}{\rA}
+    \proofstepwidestar[1,2]{x\geq x}{%
+      \FormulaRefAuto{OrderDualReflexive}[thm]{1,2}}
+    \proofstepwidestar[4]{y\in A}{\rA}
+    \proofstepwidestar[5]{z\in A}{\rA}
+    \proofstepwidestar[6]{x\geq y}{\rA}
+    \proofstepwidestar[7]{y\geq z}{\rA}
+    \proofstepwidestar[1,2,4,5,6,7]{x\geq z}{%
+      \FormulaRefAuto{OrderDualTransitive}[thm]{1,2,4,5,6,7}}
+    \proofstepwidestar[9]{y\geq x}{\rA}
+    \proofstepwidestar[1,2,4,6,9]{x=y}{%
+      \FormulaRefAuto{OrderDualAntisymmetric}[thm]{1,2,4,6,9}}
     \proofstepwidestar[1]{\PartOrd{A,\geq}}{%
-      \FormulaRefAuto{Partielle Ordnung}[def]{2,3,4}}
+      \FormulaRefAuto{Partielle Ordnung}[def]{3,8,10}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1387,21 +1393,127 @@ festgehalten.
   T\subseteq A\vdash
   \LB_{A,\geq}(T)=\UB_{A,\leq}(T)
 }{DualLowerBoundsAreUpperBounds}{%
-  \DeltaRow{Mengen}{A\dsep T}
+  \DeltaRow{Mengen}{A\dsep T\dsep a\dsep x}
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
   \DeltaPrem{Duale Ordnung}{\PartOrd{A,\geq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{a\in\LB_{A,\geq}(T)}{\rA}
+  \proofstepwidestar[1,2]{%
+    a\in A\land\forall x\in T\,(a\geq x)}{%
+    \FormulaRefAuto{LowerBoundSetElim}[thm]{1,2}}
+  \proofstepwidestar[1,2]{a\in A}{\rAEa{3}}
+  \proofstepwidestar[1,2]{\forall x\in T\,(a\geq x)}{\rAEb{3}}
+  \proofstepwidestar[6]{x\in T}{\rA}
+  \proofstepwidestar[1,6]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,6}}
+  \proofstepwidestar[1,2,6]{a\geq x}{\rRE{6,\rUE{5}}}
+  \proofstepwidestar[1,2,6]{a\geq x\leftrightarrow x\leq a}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{4,7}}
+  \proofstepwidestar[1,2,6]{x\leq a}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{9,8}}
+  \proofstepwidestar[1,2]{\forall x\in T\,(x\leq a)}{%
+    \rUI{\rRI{6,10}}}
+  \proofstepwidestar[1,2]{a\in\UB_{A,\leq}(T)}{%
+    \FormulaRefAuto{UpperBoundSetIntro}[thm]{1,4,11}}
+  \proofstepwidestar[1]{%
+    a\in\LB_{A,\geq}(T)\to a\in\UB_{A,\leq}(T)}{\rRI{2,12}}
+  \proofstepwidestar[14]{a\in\UB_{A,\leq}(T)}{\rA}
+  \proofstepwidestar[1,14]{%
+    a\in A\land\forall x\in T\,(x\leq a)}{%
+    \FormulaRefAuto{UpperBoundSetElim}[thm]{1,14}}
+  \proofstepwidestar[1,14]{a\in A}{\rAEa{15}}
+  \proofstepwidestar[1,14]{\forall x\in T\,(x\leq a)}{\rAEb{15}}
+  \proofstepwidestar[18]{x\in T}{\rA}
+  \proofstepwidestar[1,18]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,18}}
+  \proofstepwidestar[1,14,18]{x\leq a}{\rRE{18,\rUE{17}}}
+  \proofstepwidestar[1,14,18]{a\geq x\leftrightarrow x\leq a}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{16,19}}
+  \proofstepwidestar[1,14,18]{a\geq x}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{21,20}}
+  \proofstepwidestar[1,14]{\forall x\in T\,(a\geq x)}{%
+    \rUI{\rRI{18,22}}}
+  \proofstepwidestar[1,14]{a\in\LB_{A,\geq}(T)}{%
+    \FormulaRefAuto{LowerBoundSetIntro}[thm]{1,16,23}}
+  \proofstepwidestar[1]{%
+    a\in\UB_{A,\leq}(T)\to a\in\LB_{A,\geq}(T)}{\rRI{14,24}}
+  \proofstepwidestar[1]{%
+    a\in\LB_{A,\geq}(T)\leftrightarrow a\in\UB_{A,\leq}(T)}{%
+    \rLRI{13,25}}
+  \proofstepwidestar[1]{%
+    \forall a\,
+      \bigl(a\in\LB_{A,\geq}(T)\leftrightarrow
+            a\in\UB_{A,\leq}(T)\bigr)}{\rUI{26}}
+  \proofstepwidestar[1]{\LB_{A,\geq}(T)=\UB_{A,\leq}(T)}{%
+    \FormulaRefAuto{\forall x\,
+      (x\in A\leftrightarrow x\in B)\eqvdash A=B}{27}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Obere Schranken der dualen Ordnung]{%
   T\subseteq A\vdash
   \UB_{A,\geq}(T)=\LB_{A,\leq}(T)
 }{DualUpperBoundsAreLowerBounds}{%
-  \DeltaRow{Mengen}{A\dsep T}
+  \DeltaRow{Mengen}{A\dsep T\dsep a\dsep x}
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
   \DeltaPrem{Duale Ordnung}{\PartOrd{A,\geq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{a\in\UB_{A,\geq}(T)}{\rA}
+  \proofstepwidestar[1,2]{%
+    a\in A\land\forall x\in T\,(x\geq a)}{%
+    \FormulaRefAuto{UpperBoundSetElim}[thm]{1,2}}
+  \proofstepwidestar[1,2]{a\in A}{\rAEa{3}}
+  \proofstepwidestar[1,2]{\forall x\in T\,(x\geq a)}{\rAEb{3}}
+  \proofstepwidestar[6]{x\in T}{\rA}
+  \proofstepwidestar[1,6]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,6}}
+  \proofstepwidestar[1,2,6]{x\geq a}{\rRE{6,\rUE{5}}}
+  \proofstepwidestar[1,2,6]{x\geq a\leftrightarrow a\leq x}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{7,4}}
+  \proofstepwidestar[1,2,6]{a\leq x}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{9,8}}
+  \proofstepwidestar[1,2]{\forall x\in T\,(a\leq x)}{%
+    \rUI{\rRI{6,10}}}
+  \proofstepwidestar[1,2]{a\in\LB_{A,\leq}(T)}{%
+    \FormulaRefAuto{LowerBoundSetIntro}[thm]{1,4,11}}
+  \proofstepwidestar[1]{%
+    a\in\UB_{A,\geq}(T)\to a\in\LB_{A,\leq}(T)}{\rRI{2,12}}
+  \proofstepwidestar[14]{a\in\LB_{A,\leq}(T)}{\rA}
+  \proofstepwidestar[1,14]{%
+    a\in A\land\forall x\in T\,(a\leq x)}{%
+    \FormulaRefAuto{LowerBoundSetElim}[thm]{1,14}}
+  \proofstepwidestar[1,14]{a\in A}{\rAEa{15}}
+  \proofstepwidestar[1,14]{\forall x\in T\,(a\leq x)}{\rAEb{15}}
+  \proofstepwidestar[18]{x\in T}{\rA}
+  \proofstepwidestar[1,18]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,18}}
+  \proofstepwidestar[1,14,18]{a\leq x}{\rRE{18,\rUE{17}}}
+  \proofstepwidestar[1,14,18]{x\geq a\leftrightarrow a\leq x}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{19,16}}
+  \proofstepwidestar[1,14,18]{x\geq a}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{21,20}}
+  \proofstepwidestar[1,14]{\forall x\in T\,(x\geq a)}{%
+    \rUI{\rRI{18,22}}}
+  \proofstepwidestar[1,14]{a\in\UB_{A,\geq}(T)}{%
+    \FormulaRefAuto{UpperBoundSetIntro}[thm]{1,16,23}}
+  \proofstepwidestar[1]{%
+    a\in\LB_{A,\leq}(T)\to a\in\UB_{A,\geq}(T)}{\rRI{14,24}}
+  \proofstepwidestar[1]{%
+    a\in\UB_{A,\geq}(T)\leftrightarrow a\in\LB_{A,\leq}(T)}{%
+    \rLRI{13,25}}
+  \proofstepwidestar[1]{%
+    \forall a\,
+      \bigl(a\in\UB_{A,\geq}(T)\leftrightarrow
+            a\in\LB_{A,\leq}(T)\bigr)}{\rUI{26}}
+  \proofstepwidestar[1]{\UB_{A,\geq}(T)=\LB_{A,\leq}(T)}{%
+    \FormulaRefAuto{\forall x\,
+      (x\in A\leftrightarrow x\in B)\eqvdash A=B}{27}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Minimum und duales Maximum]{%
   T\subseteq A\dsep
@@ -1413,6 +1525,55 @@ festgehalten.
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in T\,\forall x\in T\,(m\leq x)}{\rA}
+  \proofstepwidestar[]{\PartOrd{A,\geq}}{%
+    \FormulaRefAuto{OrderDualPartialOrder}[thm]}
+  \proofstepwidestar[2]{\min_{A,\leq}(T)\in T}{%
+    \FormulaRefAuto{Minimum}[def]{2}}
+  \proofstepwidestar[2]{%
+    \forall x\in T\,(\min_{A,\leq}(T)\leq x)}{%
+    \FormulaRefAuto{Minimum}[def]{2}}
+  \proofstepwidestar[1,2]{\min_{A,\leq}(T)\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,4}}
+  \proofstepwidestar[7]{x\in T}{\rA}
+  \proofstepwidestar[1,7]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,7}}
+  \proofstepwidestar[2,7]{\min_{A,\leq}(T)\leq x}{%
+    \rRE{7,\rUE{5}}}
+  \proofstepwidestar[1,2,7]{%
+    x\geq\min_{A,\leq}(T)\leftrightarrow
+    \min_{A,\leq}(T)\leq x}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{8,6}}
+  \proofstepwidestar[1,2,7]{x\geq\min_{A,\leq}(T)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{10,9}}
+  \proofstepwidestar[1,2]{%
+    \forall x\in T\,(x\geq\min_{A,\leq}(T))}{%
+    \rUI{\rRI{7,11}}}
+  \proofstepwidestar[1,2]{%
+    \exists m\in T\,\forall x\in T\,(x\geq m)}{%
+    \rEI{\rAI{4,12}}}
+  \proofstepwidestar[1,2]{%
+    \exists! m\in T\,\forall x\in T\,(x\geq m)}{%
+    \FormulaRefAuto{MaximumUnique}[thm]{3,13}}
+  \proofstepwidestar[1,2]{\max_{A,\geq}(T)\in T}{%
+    \FormulaRefAuto{Maximum}[def]{3,13}}
+  \proofstepwidestar[1,2]{%
+    \forall x\in T\,(x\geq\max_{A,\geq}(T))}{%
+    \FormulaRefAuto{Maximum}[def]{3,13}}
+  \proofstepwidestar[1,2]{%
+    \min_{A,\leq}(T)\in T\land
+      \forall x\in T\,(x\geq\min_{A,\leq}(T))}{\rAI{4,12}}
+  \proofstepwidestar[1,2]{%
+    \max_{A,\geq}(T)\in T\land
+      \forall x\in T\,(x\geq\max_{A,\geq}(T))}{\rAI{15,16}}
+  \proofstepwidestar[1,2]{%
+    \min_{A,\leq}(T)=\max_{A,\geq}(T)}{%
+    \FormulaRefAuto{\exists! x\,P(x),\;P(a),\;P(b)\vdash a=b}{%
+      14,17,18}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Maximum und duales Minimum]{%
   T\subseteq A\dsep
@@ -1424,6 +1585,55 @@ festgehalten.
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists m\in T\,\forall x\in T\,(x\leq m)}{\rA}
+  \proofstepwidestar[]{\PartOrd{A,\geq}}{%
+    \FormulaRefAuto{OrderDualPartialOrder}[thm]}
+  \proofstepwidestar[2]{\max_{A,\leq}(T)\in T}{%
+    \FormulaRefAuto{Maximum}[def]{2}}
+  \proofstepwidestar[2]{%
+    \forall x\in T\,(x\leq\max_{A,\leq}(T))}{%
+    \FormulaRefAuto{Maximum}[def]{2}}
+  \proofstepwidestar[1,2]{\max_{A,\leq}(T)\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,4}}
+  \proofstepwidestar[7]{x\in T}{\rA}
+  \proofstepwidestar[1,7]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}{1,7}}
+  \proofstepwidestar[2,7]{x\leq\max_{A,\leq}(T)}{%
+    \rRE{7,\rUE{5}}}
+  \proofstepwidestar[1,2,7]{%
+    \max_{A,\leq}(T)\geq x\leftrightarrow
+    x\leq\max_{A,\leq}(T)}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{6,8}}
+  \proofstepwidestar[1,2,7]{\max_{A,\leq}(T)\geq x}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{10,9}}
+  \proofstepwidestar[1,2]{%
+    \forall x\in T\,(\max_{A,\leq}(T)\geq x)}{%
+    \rUI{\rRI{7,11}}}
+  \proofstepwidestar[1,2]{%
+    \exists m\in T\,\forall x\in T\,(m\geq x)}{%
+    \rEI{\rAI{4,12}}}
+  \proofstepwidestar[1,2]{%
+    \exists! m\in T\,\forall x\in T\,(m\geq x)}{%
+    \FormulaRefAuto{MinimumUnique}[thm]{3,13}}
+  \proofstepwidestar[1,2]{\min_{A,\geq}(T)\in T}{%
+    \FormulaRefAuto{Minimum}[def]{3,13}}
+  \proofstepwidestar[1,2]{%
+    \forall x\in T\,(\min_{A,\geq}(T)\geq x)}{%
+    \FormulaRefAuto{Minimum}[def]{3,13}}
+  \proofstepwidestar[1,2]{%
+    \max_{A,\leq}(T)\in T\land
+      \forall x\in T\,(\max_{A,\leq}(T)\geq x)}{\rAI{4,12}}
+  \proofstepwidestar[1,2]{%
+    \min_{A,\geq}(T)\in T\land
+      \forall x\in T\,(\min_{A,\geq}(T)\geq x)}{\rAI{15,16}}
+  \proofstepwidestar[1,2]{%
+    \max_{A,\leq}(T)=\min_{A,\geq}(T)}{%
+    \FormulaRefAuto{\exists! x\,P(x),\;P(a),\;P(b)\vdash a=b}{%
+      14,17,18}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Supremum und duales Infimum]{%
   \begin{aligned}[t]
@@ -1434,10 +1644,47 @@ festgehalten.
     &\sup_{A,\leq}(T)=\inf_{A,\geq}(T)
   \end{aligned}
 }{DualSupremumEqualsInfimum}{%
-  \DeltaRow{Mengen}{A\dsep T\dsep s\dsep u}
+  \DeltaRow{Mengen}{A\dsep T\dsep s\dsep u\dsep d}
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists s\in\UB_{A,\leq}(T)\,
+      \forall u\in\UB_{A,\leq}(T)\,(s\leq u)}{\rA}
+  \proofstepwidestar[]{\PartOrd{A,\geq}}{%
+    \FormulaRefAuto{OrderDualPartialOrder}[thm]}
+  \proofstepwidestar[1]{%
+    \LB_{A,\geq}(T)=\UB_{A,\leq}(T)}{%
+    \FormulaRefAuto{DualLowerBoundsAreUpperBounds}[thm]{3,1}}
+  \proofstepwidestar[1,2]{%
+    \sup_{A,\leq}(T)\in\UB_{A,\leq}(T)}{%
+    \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    \sup_{A,\leq}(T)\in\LB_{A,\geq}(T)}{\rIE{4,5}}
+  \proofstepwidestar[7]{d\in\LB_{A,\geq}(T)}{\rA}
+  \proofstepwidestar[1,7]{d\in\UB_{A,\leq}(T)}{\rIE{4,7}}
+  \proofstepwidestar[1,2,7]{\sup_{A,\leq}(T)\leq d}{%
+    \FormulaRefAuto{SupremumLeastUpperBound}[thm]{1,2,8}}
+  \proofstepwidestar[1,2]{\sup_{A,\leq}(T)\in A}{%
+    \FormulaRefAuto{SupremumInCarrier}[thm]{1,2}}
+  \proofstepwidestar[1,7]{d\in A}{%
+    \rAEa{\FormulaRefAuto{LowerBoundSetElim}[thm]{1,7}}}
+  \proofstepwidestar[1,2,7]{%
+    d\geq\sup_{A,\leq}(T)\leftrightarrow
+      \sup_{A,\leq}(T)\leq d}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{11,10}}
+  \proofstepwidestar[1,2,7]{d\geq\sup_{A,\leq}(T)}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{12,9}}
+  \proofstepwidestar[1,2]{%
+    \forall d\in\LB_{A,\geq}(T)\,
+      (d\geq\sup_{A,\leq}(T))}{\rUI{\rRI{7,13}}}
+  \proofstepwidestar[1,2]{%
+    \sup_{A,\leq}(T)=\inf_{A,\geq}(T)}{%
+    \FormulaRefAuto{InfimumCandidateEqualsInfimum}[thm]{%
+      3,1,6,14}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Infimum und duales Supremum]{%
   \begin{aligned}[t]
@@ -1452,58 +1699,43 @@ festgehalten.
   \DeltaRow{Relationsoperatoren}{\leq\dsep\geq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
-
-\paragraph{Beweis.}
-Für jedes \(a\in A\) gilt nach
-\FormulaRefAuto{OrderDualRelation}[def]
-\[
-  \begin{aligned}
-    a\in\LB_{A,\geq}(T)
-    &\iff \forall x\in T\,(a\geq x)\\
-    &\iff \forall x\in T\,(x\leq a)\\
-    &\iff a\in\UB_{A,\leq}(T),\\[2pt]
-    a\in\UB_{A,\geq}(T)
-    &\iff \forall x\in T\,(x\geq a)\\
-    &\iff \forall x\in T\,(a\leq x)\\
-    &\iff a\in\LB_{A,\leq}(T).
-  \end{aligned}
-\]
-Die Extensionalität liefert daher die beiden behaupteten Gleichheiten der
-Schrankenmengen.
-
-Ein Element \(m\in T\) ist genau dann ein Minimum von \(T\) bezüglich
-\(\leq\), wenn \(m\leq x\) für alle \(x\in T\) gilt. Wegen
-\(m\leq x\iff x\geq m\) ist dies genau die Bedingung dafür, dass \(m\)
-bezüglich \(\geq\) ein Maximum von \(T\) ist. Ebenso ist
-\(x\leq m\iff m\geq x\), sodass die Kandidaten für ein Maximum bezüglich
-\(\leq\) genau die Kandidaten für ein Minimum bezüglich \(\geq\) sind.
-Die Definitionen von Minimum und Maximum ergeben unter den angegebenen
-Existenzvoraussetzungen die beiden Gleichheiten.
-
-Mit den bereits bewiesenen Gleichheiten der Schrankenmengen gilt ferner
-\[
-  \begin{aligned}
-    &s\in\UB_{A,\leq}(T)\land
-      \forall u\in\UB_{A,\leq}(T)\,(s\leq u)\\
-    &\quad\iff
-      s\in\LB_{A,\geq}(T)\land
-      \forall u\in\LB_{A,\geq}(T)\,(u\geq s),
-  \end{aligned}
-\]
-also ist ein Supremumskandidat bezüglich \(\leq\) genau ein
-Infimumskandidat bezüglich \(\geq\). Dual gilt
-\[
-  \begin{aligned}
-    &i\in\LB_{A,\leq}(T)\land
-      \forall d\in\LB_{A,\leq}(T)\,(d\leq i)\\
-    &\quad\iff
-      i\in\UB_{A,\geq}(T)\land
-      \forall d\in\UB_{A,\geq}(T)\,(i\geq d).
-  \end{aligned}
-\]
-Die Definitionen von Infimum und Supremum liefern damit unter den jeweiligen
-Existenzvoraussetzungen auch die letzten beiden Gleichheiten.
-\hfill\(\square\)
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\subseteq A}{\rA}
+  \proofstepwidestar[2]{%
+    \exists i\in\LB_{A,\leq}(T)\,
+      \forall d\in\LB_{A,\leq}(T)\,(d\leq i)}{\rA}
+  \proofstepwidestar[]{\PartOrd{A,\geq}}{%
+    \FormulaRefAuto{OrderDualPartialOrder}[thm]}
+  \proofstepwidestar[1]{%
+    \UB_{A,\geq}(T)=\LB_{A,\leq}(T)}{%
+    \FormulaRefAuto{DualUpperBoundsAreLowerBounds}[thm]{3,1}}
+  \proofstepwidestar[1,2]{%
+    \inf_{A,\leq}(T)\in\LB_{A,\leq}(T)}{%
+    \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    \inf_{A,\leq}(T)\in\UB_{A,\geq}(T)}{\rIE{4,5}}
+  \proofstepwidestar[7]{d\in\UB_{A,\geq}(T)}{\rA}
+  \proofstepwidestar[1,7]{d\in\LB_{A,\leq}(T)}{\rIE{4,7}}
+  \proofstepwidestar[1,2,7]{d\leq\inf_{A,\leq}(T)}{%
+    \FormulaRefAuto{InfimumGreatestLowerBound}[thm]{1,2,8}}
+  \proofstepwidestar[1,2]{\inf_{A,\leq}(T)\in A}{%
+    \FormulaRefAuto{InfimumInCarrier}[thm]{1,2}}
+  \proofstepwidestar[1,7]{d\in A}{%
+    \rAEa{\FormulaRefAuto{UpperBoundSetElim}[thm]{1,7}}}
+  \proofstepwidestar[1,2,7]{%
+    \inf_{A,\leq}(T)\geq d\leftrightarrow
+      d\leq\inf_{A,\leq}(T)}{%
+    \FormulaRefAuto{OrderDualRelation}[def]{10,11}}
+  \proofstepwidestar[1,2,7]{\inf_{A,\leq}(T)\geq d}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{12,9}}
+  \proofstepwidestar[1,2]{%
+    \forall d\in\UB_{A,\geq}(T)\,
+      (\inf_{A,\leq}(T)\geq d)}{\rUI{\rRI{7,13}}}
+  \proofstepwidestar[1,2]{%
+    \inf_{A,\leq}(T)=\sup_{A,\geq}(T)}{%
+    \FormulaRefAuto{SupremumCandidateEqualsSupremum}[thm]{%
+      3,1,6,14}}
+\end{tabproofwide}
 
 \subsection{Beispiele zu Infimum und Supremum}
 
@@ -1727,18 +1959,66 @@ vorausgesetzt.
 \FormulaThmDeltaK[Idempotenz des Paarmengensupremums]{%
   x\in A\vdash\sup_{A,\leq}(\{x,x\})=x
 }{PairSupremumIdempotent}{%
-  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Mengen}{A\dsep x\dsep u}
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[1]{x\leq x}{%
+    \FormulaRefAuto{EqRelReflexivity}[ax]{1}}
+  \proofstepwidestar[1]{\{x,x\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{1,1}}
+  \proofstepwidestar[1]{x\in A\land x\leq x\land x\leq x}{%
+    \rAI{1,\rAI{2,2}}}
+  \proofstepwidestar[1]{x\in\UB_{A,\leq}(\{x,x\})}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{PairUpperBoundSetCharacterization}[thm]{1,1},4}}
+  \proofstepwidestar[6]{u\in\UB_{A,\leq}(\{x,x\})}{\rA}
+  \proofstepwidestar[1,6]{u\in A\land x\leq u\land x\leq u}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{PairUpperBoundSetCharacterization}[thm]{1,1},6}}
+  \proofstepwidestar[1,6]{x\leq u}{\rAEa{\rAEb{7}}}
+  \proofstepwidestar[1]{%
+    \forall u\in\UB_{A,\leq}(\{x,x\})\,(x\leq u)}{%
+    \rUI{\rRI{6,8}}}
+  \proofstepwidestar[1]{x=\sup_{A,\leq}(\{x,x\})}{%
+    \FormulaRefAuto{SupremumCandidateEqualsSupremum}[thm]{3,5,9}}
+  \proofstepwidestar[1]{\sup_{A,\leq}(\{x,x\})=x}{%
+    \FormulaRefAuto{a=b\vdash b=a}{10}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Idempotenz des Paarmengeninfimums]{%
   x\in A\vdash\inf_{A,\leq}(\{x,x\})=x
 }{PairInfimumIdempotent}{%
-  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Mengen}{A\dsep x\dsep d}
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[1]{x\leq x}{%
+    \FormulaRefAuto{EqRelReflexivity}[ax]{1}}
+  \proofstepwidestar[1]{\{x,x\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{1,1}}
+  \proofstepwidestar[1]{x\in A\land x\leq x\land x\leq x}{%
+    \rAI{1,\rAI{2,2}}}
+  \proofstepwidestar[1]{x\in\LB_{A,\leq}(\{x,x\})}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{PairLowerBoundSetCharacterization}[thm]{1,1},4}}
+  \proofstepwidestar[6]{d\in\LB_{A,\leq}(\{x,x\})}{\rA}
+  \proofstepwidestar[1,6]{d\in A\land d\leq x\land d\leq x}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{PairLowerBoundSetCharacterization}[thm]{1,1},6}}
+  \proofstepwidestar[1,6]{d\leq x}{\rAEa{\rAEb{7}}}
+  \proofstepwidestar[1]{%
+    \forall d\in\LB_{A,\leq}(\{x,x\})\,(d\leq x)}{%
+    \rUI{\rRI{6,8}}}
+  \proofstepwidestar[1]{x=\inf_{A,\leq}(\{x,x\})}{%
+    \FormulaRefAuto{InfimumCandidateEqualsInfimum}[thm]{3,5,9}}
+  \proofstepwidestar[1]{\inf_{A,\leq}(\{x,x\})=x}{%
+    \FormulaRefAuto{a=b\vdash b=a}{10}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Kommutativität des Paarmengensupremums]{%
   \begin{aligned}[t]
@@ -1753,6 +2033,34 @@ vorausgesetzt.
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[2]{y\in A}{\rA}
+  \proofstepwidestar[3]{%
+    \exists s\in\UB_{A,\leq}(\{x,y\})\,
+      \forall u\in\UB_{A,\leq}(\{x,y\})\,(s\leq u)}{\rA}
+  \proofstepwidestar[]{\{x,y\}=\{y,x\}}{%
+    \FormulaRefAuto{\{a,b\} = \{b,a\}}[thm]}
+  \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{1,2}}
+  \proofstepwidestar[1,2,3]{%
+    \sup_{A,\leq}(\{x,y\})\in\UB_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{SupremumBelongsUpperBounds}[thm]{5,3}}
+  \proofstepwidestar[1,2,3]{%
+    \sup_{A,\leq}(\{x,y\})\in\UB_{A,\leq}(\{y,x\})}{\rIE{4,6}}
+  \proofstepwidestar[8]{u\in\UB_{A,\leq}(\{y,x\})}{\rA}
+  \proofstepwidestar[8]{u\in\UB_{A,\leq}(\{x,y\})}{\rIE{4,8}}
+  \proofstepwidestar[1,2,3,8]{\sup_{A,\leq}(\{x,y\})\leq u}{%
+    \FormulaRefAuto{SupremumLeastUpperBound}[thm]{5,3,9}}
+  \proofstepwidestar[1,2,3]{%
+    \forall u\in\UB_{A,\leq}(\{y,x\})\,
+      (\sup_{A,\leq}(\{x,y\})\leq u)}{\rUI{\rRI{8,10}}}
+  \proofstepwidestar[1,2]{\{y,x\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{2,1}}
+  \proofstepwidestar[1,2,3]{%
+    \sup_{A,\leq}(\{x,y\})=\sup_{A,\leq}(\{y,x\})}{%
+    \FormulaRefAuto{SupremumCandidateEqualsSupremum}[thm]{12,7,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Kommutativität des Paarmengeninfimums]{%
   \begin{aligned}[t]
@@ -1767,6 +2075,34 @@ vorausgesetzt.
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in A}{\rA}
+  \proofstepwidestar[2]{y\in A}{\rA}
+  \proofstepwidestar[3]{%
+    \exists i\in\LB_{A,\leq}(\{x,y\})\,
+      \forall d\in\LB_{A,\leq}(\{x,y\})\,(d\leq i)}{\rA}
+  \proofstepwidestar[]{\{x,y\}=\{y,x\}}{%
+    \FormulaRefAuto{\{a,b\} = \{b,a\}}[thm]}
+  \proofstepwidestar[1,2]{\{x,y\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{1,2}}
+  \proofstepwidestar[1,2,3]{%
+    \inf_{A,\leq}(\{x,y\})\in\LB_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{InfimumBelongsLowerBounds}[thm]{5,3}}
+  \proofstepwidestar[1,2,3]{%
+    \inf_{A,\leq}(\{x,y\})\in\LB_{A,\leq}(\{y,x\})}{\rIE{4,6}}
+  \proofstepwidestar[8]{d\in\LB_{A,\leq}(\{y,x\})}{\rA}
+  \proofstepwidestar[8]{d\in\LB_{A,\leq}(\{x,y\})}{\rIE{4,8}}
+  \proofstepwidestar[1,2,3,8]{d\leq\inf_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{InfimumGreatestLowerBound}[thm]{5,3,9}}
+  \proofstepwidestar[1,2,3]{%
+    \forall d\in\LB_{A,\leq}(\{y,x\})\,
+      (d\leq\inf_{A,\leq}(\{x,y\}))}{\rUI{\rRI{8,10}}}
+  \proofstepwidestar[1,2]{\{y,x\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{2,1}}
+  \proofstepwidestar[1,2,3]{%
+    \inf_{A,\leq}(\{x,y\})=\inf_{A,\leq}(\{y,x\})}{%
+    \FormulaRefAuto{InfimumCandidateEqualsInfimum}[thm]{12,7,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Assoziativität des Paarmengensupremums]{%
   \begin{aligned}[t]
@@ -1787,6 +2123,165 @@ vorausgesetzt.
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\operatorname{SupEx}_{A,\leq}(x,y)}{\rA}
+  \proofstepwidestar[2]{\operatorname{SupEx}_{A,\leq}(y,z)}{\rA}
+  \proofstepwidestar[3]{%
+    \operatorname{SupEx}_{A,\leq}
+      \bigl(\sup_{A,\leq}(\{x,y\}),z\bigr)}{\rA}
+  \proofstepwidestar[4]{%
+    \operatorname{SupEx}_{A,\leq}
+      \bigl(x,\sup_{A,\leq}(\{y,z\})\bigr)}{\rA}
+  \proofstepwidestar[1]{%
+    \begin{aligned}[t]
+      &(x\in A\land y\in A)\land{}\\[-2pt]
+      &\exists s\in\UB_{A,\leq}(\{x,y\})\,{}\\[-2pt]
+      &\quad\forall u\in\UB_{A,\leq}(\{x,y\})\,(s\leq u)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairSupremumExistence}[def]{1}}
+  \proofstepwidestar[1]{x\in A}{\rAEa{\rAEa{5}}}
+  \proofstepwidestar[1]{y\in A}{\rAEb{\rAEa{5}}}
+  \proofstepwidestar[1]{%
+    \exists s\in\UB_{A,\leq}(\{x,y\})\,
+      \forall u\in\UB_{A,\leq}(\{x,y\})\,(s\leq u)}{\rAEb{5}}
+  \proofstepwidestar[2]{%
+    \begin{aligned}[t]
+      &(y\in A\land z\in A)\land{}\\[-2pt]
+      &\exists s\in\UB_{A,\leq}(\{y,z\})\,{}\\[-2pt]
+      &\quad\forall u\in\UB_{A,\leq}(\{y,z\})\,(s\leq u)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairSupremumExistence}[def]{2}}
+  \proofstepwidestar[2]{z\in A}{\rAEb{\rAEa{9}}}
+  \proofstepwidestar[2]{%
+    \exists s\in\UB_{A,\leq}(\{y,z\})\,
+      \forall u\in\UB_{A,\leq}(\{y,z\})\,(s\leq u)}{\rAEb{9}}
+  \proofstepwidestar[3]{%
+    \begin{aligned}[t]
+      &\bigl(\sup_{A,\leq}(\{x,y\})\in A\land z\in A\bigr)\land{}\\[-2pt]
+      &\exists s\in
+        \UB_{A,\leq}(\{\sup_{A,\leq}(\{x,y\}),z\})\,{}\\[-2pt]
+      &\quad\forall u\in
+        \UB_{A,\leq}(\{\sup_{A,\leq}(\{x,y\}),z\})\,(s\leq u)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairSupremumExistence}[def]{3}}
+  \proofstepwidestar[3]{\sup_{A,\leq}(\{x,y\})\in A}{%
+    \rAEa{\rAEa{12}}}
+  \proofstepwidestar[3]{%
+    \begin{aligned}[t]
+      &\exists s\in
+        \UB_{A,\leq}(\{\sup_{A,\leq}(\{x,y\}),z\})\,{}\\[-2pt]
+      &\quad\forall u\in
+        \UB_{A,\leq}(\{\sup_{A,\leq}(\{x,y\}),z\})\,(s\leq u)
+    \end{aligned}}{%
+    \rAEb{12}}
+  \proofstepwidestar[4]{%
+    \begin{aligned}[t]
+      &\bigl(x\in A\land\sup_{A,\leq}(\{y,z\})\in A\bigr)\land{}\\[-2pt]
+      &\exists s\in
+        \UB_{A,\leq}(\{x,\sup_{A,\leq}(\{y,z\})\})\,{}\\[-2pt]
+      &\quad\forall u\in
+        \UB_{A,\leq}(\{x,\sup_{A,\leq}(\{y,z\})\})\,(s\leq u)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairSupremumExistence}[def]{4}}
+  \proofstepwidestar[4]{\sup_{A,\leq}(\{y,z\})\in A}{%
+    \rAEb{\rAEa{15}}}
+  \proofstepwidestar[4]{%
+    \begin{aligned}[t]
+      &\exists s\in
+        \UB_{A,\leq}(\{x,\sup_{A,\leq}(\{y,z\})\})\,{}\\[-2pt]
+      &\quad\forall u\in
+        \UB_{A,\leq}(\{x,\sup_{A,\leq}(\{y,z\})\})\,(s\leq u)
+    \end{aligned}}{%
+    \rAEb{15}}
+  \proofstepwidestar[3]{%
+    \{\sup_{A,\leq}(\{x,y\}),z\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{13,10}}
+  \proofstepwidestar[3]{%
+    \sup_{A,\leq}
+      \bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)\in A}{%
+    \FormulaRefAuto{SupremumInCarrier}[thm]{18,14}}
+  \proofstepwidestar[4]{%
+    \{x,\sup_{A,\leq}(\{y,z\})\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{6,16}}
+  \proofstepwidestar[4]{%
+    \sup_{A,\leq}
+      \bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)\in A}{%
+    \FormulaRefAuto{SupremumInCarrier}[thm]{20,17}}
+  \proofstepwidestar[4]{%
+    x\leq\sup_{A,\leq}
+      \bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{PairSupremumFirstOperand}[thm]{6,16,17}}
+  \proofstepwidestar[4]{%
+    \sup_{A,\leq}(\{y,z\})\leq
+    \sup_{A,\leq}\bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{PairSupremumSecondOperand}[thm]{6,16,17}}
+  \proofstepwidestar[2]{y\leq\sup_{A,\leq}(\{y,z\})}{%
+    \FormulaRefAuto{PairSupremumFirstOperand}[thm]{7,10,11}}
+  \proofstepwidestar[2]{z\leq\sup_{A,\leq}(\{y,z\})}{%
+    \FormulaRefAuto{PairSupremumSecondOperand}[thm]{7,10,11}}
+  \proofstepwidestar[2,4]{%
+    y\leq\sup_{A,\leq}
+      \bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{24,23}}
+  \proofstepwidestar[2,4]{%
+    z\leq\sup_{A,\leq}
+      \bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{25,23}}
+  \proofstepwidestar[1,2,4]{%
+    \sup_{A,\leq}(\{x,y\})\leq
+    \sup_{A,\leq}\bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairSupremumUniversal}[thm]\\
+      (6,7,21,8,22,26)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq
+    \sup_{A,\leq}\bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairSupremumUniversal}[thm]\\
+      (13,10,21,14,28,27)}}
+
+  \proofstepwidestar[3]{%
+    \sup_{A,\leq}(\{x,y\})\leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \FormulaRefAuto{PairSupremumFirstOperand}[thm]{13,10,14}}
+  \proofstepwidestar[3]{%
+    z\leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \FormulaRefAuto{PairSupremumSecondOperand}[thm]{13,10,14}}
+  \proofstepwidestar[1]{x\leq\sup_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{PairSupremumFirstOperand}[thm]{6,7,8}}
+  \proofstepwidestar[1]{y\leq\sup_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{PairSupremumSecondOperand}[thm]{6,7,8}}
+  \proofstepwidestar[1,3]{%
+    x\leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{32,30}}
+  \proofstepwidestar[1,3]{%
+    y\leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{33,30}}
+  \proofstepwidestar[1,2,3]{%
+    \sup_{A,\leq}(\{y,z\})\leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairSupremumUniversal}[thm]\\
+      (7,10,19,11,35,31)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \sup_{A,\leq}\bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)
+    \leq
+    \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairSupremumUniversal}[thm]\\
+      (6,16,19,17,34,36)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \sup_{A,\leq}
+      \bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr)
+    =
+    \sup_{A,\leq}
+      \bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{x\leq y\dsep y\leq x\vdash x=y}[ax]{29,37}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Assoziativität des Paarmengeninfimums]{%
   \begin{aligned}[t]
@@ -1807,73 +2302,165 @@ vorausgesetzt.
   \DeltaRow{Relationsoperatoren}{\leq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{A,\leq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\operatorname{InfEx}_{A,\leq}(x,y)}{\rA}
+  \proofstepwidestar[2]{\operatorname{InfEx}_{A,\leq}(y,z)}{\rA}
+  \proofstepwidestar[3]{%
+    \operatorname{InfEx}_{A,\leq}
+      \bigl(\inf_{A,\leq}(\{x,y\}),z\bigr)}{\rA}
+  \proofstepwidestar[4]{%
+    \operatorname{InfEx}_{A,\leq}
+      \bigl(x,\inf_{A,\leq}(\{y,z\})\bigr)}{\rA}
+  \proofstepwidestar[1]{%
+    \begin{aligned}[t]
+      &(x\in A\land y\in A)\land{}\\[-2pt]
+      &\exists i\in\LB_{A,\leq}(\{x,y\})\,{}\\[-2pt]
+      &\quad\forall d\in\LB_{A,\leq}(\{x,y\})\,(d\leq i)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairInfimumExistence}[def]{1}}
+  \proofstepwidestar[1]{x\in A}{\rAEa{\rAEa{5}}}
+  \proofstepwidestar[1]{y\in A}{\rAEb{\rAEa{5}}}
+  \proofstepwidestar[1]{%
+    \exists i\in\LB_{A,\leq}(\{x,y\})\,
+      \forall d\in\LB_{A,\leq}(\{x,y\})\,(d\leq i)}{\rAEb{5}}
+  \proofstepwidestar[2]{%
+    \begin{aligned}[t]
+      &(y\in A\land z\in A)\land{}\\[-2pt]
+      &\exists i\in\LB_{A,\leq}(\{y,z\})\,{}\\[-2pt]
+      &\quad\forall d\in\LB_{A,\leq}(\{y,z\})\,(d\leq i)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairInfimumExistence}[def]{2}}
+  \proofstepwidestar[2]{z\in A}{\rAEb{\rAEa{9}}}
+  \proofstepwidestar[2]{%
+    \exists i\in\LB_{A,\leq}(\{y,z\})\,
+      \forall d\in\LB_{A,\leq}(\{y,z\})\,(d\leq i)}{\rAEb{9}}
+  \proofstepwidestar[3]{%
+    \begin{aligned}[t]
+      &\bigl(\inf_{A,\leq}(\{x,y\})\in A\land z\in A\bigr)\land{}\\[-2pt]
+      &\exists i\in
+        \LB_{A,\leq}(\{\inf_{A,\leq}(\{x,y\}),z\})\,{}\\[-2pt]
+      &\quad\forall d\in
+        \LB_{A,\leq}(\{\inf_{A,\leq}(\{x,y\}),z\})\,(d\leq i)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairInfimumExistence}[def]{3}}
+  \proofstepwidestar[3]{\inf_{A,\leq}(\{x,y\})\in A}{%
+    \rAEa{\rAEa{12}}}
+  \proofstepwidestar[3]{%
+    \begin{aligned}[t]
+      &\exists i\in
+        \LB_{A,\leq}(\{\inf_{A,\leq}(\{x,y\}),z\})\,{}\\[-2pt]
+      &\quad\forall d\in
+        \LB_{A,\leq}(\{\inf_{A,\leq}(\{x,y\}),z\})\,(d\leq i)
+    \end{aligned}}{%
+    \rAEb{12}}
+  \proofstepwidestar[4]{%
+    \begin{aligned}[t]
+      &\bigl(x\in A\land\inf_{A,\leq}(\{y,z\})\in A\bigr)\land{}\\[-2pt]
+      &\exists i\in
+        \LB_{A,\leq}(\{x,\inf_{A,\leq}(\{y,z\})\})\,{}\\[-2pt]
+      &\quad\forall d\in
+        \LB_{A,\leq}(\{x,\inf_{A,\leq}(\{y,z\})\})\,(d\leq i)
+    \end{aligned}}{%
+    \FormulaRefAuto{PairInfimumExistence}[def]{4}}
+  \proofstepwidestar[4]{\inf_{A,\leq}(\{y,z\})\in A}{%
+    \rAEb{\rAEa{15}}}
+  \proofstepwidestar[4]{%
+    \begin{aligned}[t]
+      &\exists i\in
+        \LB_{A,\leq}(\{x,\inf_{A,\leq}(\{y,z\})\})\,{}\\[-2pt]
+      &\quad\forall d\in
+        \LB_{A,\leq}(\{x,\inf_{A,\leq}(\{y,z\})\})\,(d\leq i)
+    \end{aligned}}{%
+    \rAEb{15}}
+  \proofstepwidestar[3]{%
+    \{\inf_{A,\leq}(\{x,y\}),z\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{13,10}}
+  \proofstepwidestar[3]{%
+    \inf_{A,\leq}
+      \bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)\in A}{%
+    \FormulaRefAuto{InfimumInCarrier}[thm]{18,14}}
+  \proofstepwidestar[4]{%
+    \{x,\inf_{A,\leq}(\{y,z\})\}\subseteq A}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{6,16}}
+  \proofstepwidestar[4]{%
+    \inf_{A,\leq}
+      \bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)\in A}{%
+    \FormulaRefAuto{InfimumInCarrier}[thm]{20,17}}
+  \proofstepwidestar[3]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq\inf_{A,\leq}(\{x,y\})}{%
+    \FormulaRefAuto{PairInfimumFirstOperand}[thm]{13,10,14}}
+  \proofstepwidestar[3]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq z}{%
+    \FormulaRefAuto{PairInfimumSecondOperand}[thm]{13,10,14}}
+  \proofstepwidestar[1]{\inf_{A,\leq}(\{x,y\})\leq x}{%
+    \FormulaRefAuto{PairInfimumFirstOperand}[thm]{6,7,8}}
+  \proofstepwidestar[1]{\inf_{A,\leq}(\{x,y\})\leq y}{%
+    \FormulaRefAuto{PairInfimumSecondOperand}[thm]{6,7,8}}
+  \proofstepwidestar[1,3]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq x}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{22,24}}
+  \proofstepwidestar[1,3]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq y}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{22,25}}
+  \proofstepwidestar[1,2,3]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq\inf_{A,\leq}(\{y,z\})}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairInfimumUniversal}[thm]\\
+      (7,10,19,11,27,23)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    \leq
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairInfimumUniversal}[thm]\\
+      (6,16,19,17,26,28)}}
 
-\paragraph{Beweis.}
-Es ist \(\{x,x\}=\{x\}\). Wegen der Reflexivität ist \(x\) eine obere
-Schranke dieser Menge, und jede obere Schranke \(u\) erfüllt \(x\leq u\).
-Somit ist \(x\) der kleinste Kandidat in
-\(\UB_{A,\leq}(\{x\})\). Dual ist \(x\) eine untere Schranke, und jede
-untere Schranke \(d\) erfüllt \(d\leq x\); daher ist \(x\) der größte
-Kandidat in \(\LB_{A,\leq}(\{x\})\). Nach den Definitionen von Supremum
-und Infimum folgen beide Idempotenzgleichungen.
-
-Aus \(\{x,y\}=\{y,x\}\) folgen unmittelbar
-\[
-  \UB_{A,\leq}(\{x,y\})=\UB_{A,\leq}(\{y,x\})
-  \quad\text{und}\quad
-  \LB_{A,\leq}(\{x,y\})=\LB_{A,\leq}(\{y,x\}).
-\]
-Die jeweils betrachteten Mengen besitzen folglich denselben eindeutig
-bestimmten kleinsten beziehungsweise größten Kandidaten. Die Definitionen
-von Supremum und Infimum ergeben die beiden Kommutativitätsgleichungen.
-
-Für den assoziativen Supremumsfall setze
-\[
-  \begin{aligned}
-    p&\coloneqq
-      \sup_{A,\leq}\bigl(\{\sup_{A,\leq}(\{x,y\}),z\}\bigr),\\
-    q&\coloneqq
-      \sup_{A,\leq}\bigl(\{x,\sup_{A,\leq}(\{y,z\})\}\bigr).
-  \end{aligned}
-\]
-Die Existenzvoraussetzungen sichern die Existenz aller hierbei verwendeten
-Suprema. Die beiden Operandenregeln, die Transitivität und die
-Universalcharakterisierung des Paarmengensupremums liefern für jedes
-\(u\in A\)
-\[
-  \begin{aligned}
-    p\leq u
-    &\iff x\leq u\land y\leq u\land z\leq u\\
-    &\iff q\leq u.
-  \end{aligned}
-\]
-Damit sind \(p\) und \(q\) beide die kleinste obere Schranke von
-\(\{x,y,z\}\). Insbesondere gelten \(p\leq q\) und \(q\leq p\), also
-folgt \(p=q\) aus der Antisymmetrie.
-
-Für den dualen Infimumsfall setze
-\[
-  \begin{aligned}
-    r&\coloneqq
-      \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr),\\
-    t&\coloneqq
-      \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr).
-  \end{aligned}
-\]
-Die entsprechenden Existenzvoraussetzungen und die dualen Operandenregeln
-sowie die Universalcharakterisierung des Paarmengeninfimums ergeben für
-jedes \(d\in A\)
-\[
-  \begin{aligned}
-    d\leq r
-    &\iff d\leq x\land d\leq y\land d\leq z\\
-    &\iff d\leq t.
-  \end{aligned}
-\]
-Also sind \(r\) und \(t\) beide die größte untere Schranke von
-\(\{x,y,z\}\). Es folgen \(r\leq t\) und \(t\leq r\), mithin \(r=t\)
-durch Antisymmetrie.
-\hfill\(\square\)
+  \proofstepwidestar[4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq x}{%
+    \FormulaRefAuto{PairInfimumFirstOperand}[thm]{6,16,17}}
+  \proofstepwidestar[4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq\inf_{A,\leq}(\{y,z\})}{%
+    \FormulaRefAuto{PairInfimumSecondOperand}[thm]{6,16,17}}
+  \proofstepwidestar[2]{\inf_{A,\leq}(\{y,z\})\leq y}{%
+    \FormulaRefAuto{PairInfimumFirstOperand}[thm]{7,10,11}}
+  \proofstepwidestar[2]{\inf_{A,\leq}(\{y,z\})\leq z}{%
+    \FormulaRefAuto{PairInfimumSecondOperand}[thm]{7,10,11}}
+  \proofstepwidestar[2,4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq y}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{31,32}}
+  \proofstepwidestar[2,4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq z}{%
+    \FormulaRefAuto{EqRelTransitivity}[ax]{31,33}}
+  \proofstepwidestar[1,2,4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq\inf_{A,\leq}(\{x,y\})}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairInfimumUniversal}[thm]\\
+      (6,7,21,8,30,34)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \inf_{A,\leq}\bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)
+    \leq
+    \inf_{A,\leq}\bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)}{%
+    \ProofRefStack{%
+      \FormulaRefAuto{PairInfimumUniversal}[thm]\\
+      (13,10,21,14,36,35)}}
+  \proofstepwidestar[1,2,3,4]{%
+    \inf_{A,\leq}
+      \bigl(\{\inf_{A,\leq}(\{x,y\}),z\}\bigr)
+    =
+    \inf_{A,\leq}
+      \bigl(\{x,\inf_{A,\leq}(\{y,z\})\}\bigr)}{%
+    \FormulaRefAuto{x\leq y\dsep y\leq x\vdash x=y}[ax]{29,37}}
+\end{tabproofwide}
 
 \subsubsection{Inklusionsordnung auf Mengenfamilien}
 
@@ -1885,16 +2472,18 @@ durch Antisymmetrie.
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{M\subseteq\powerset(U)}{\rA}
-  \proofstepwidestar[]{X\in M\vdash X\subseteq X}{%
+  \proofstepwidestar[2]{X\in M}{\rA}
+  \proofstepwidestar[2]{X\subseteq X}{%
     \FormulaRefAuto{A \subseteq A}}
-  \proofstepwidestar[]{%
-    X\subseteq Y\dsep Y\subseteq Z\vdash X\subseteq Z}{%
-    \FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}}
-  \proofstepwidestar[]{%
-    X\subseteq Y\dsep Y\subseteq X\vdash X=Y}{%
-    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}}
+  \proofstepwidestar[4]{X\subseteq Y}{\rA}
+  \proofstepwidestar[5]{Y\subseteq Z}{\rA}
+  \proofstepwidestar[4,5]{X\subseteq Z}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{4,5}}
+  \proofstepwidestar[7]{Y\subseteq X}{\rA}
+  \proofstepwidestar[4,7]{X=Y}{%
+    \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{4,7}}
   \proofstepwidestar[1]{\PartOrd{M,\subseteq}}{%
-    \FormulaRefAuto{Partielle Ordnung}[def]{2,3,4}}
+    \FormulaRefAuto{Partielle Ordnung}[def]{3,6,8}}
 \end{tabproofwide}
 
 Die Reflexivität, Transitivität und Antisymmetrie dieser Ordnung sind genau
@@ -1907,10 +2496,49 @@ die entsprechenden Grundgesetze der Teilmengenrelation.
     &\inf_{M,\subseteq}(\{X,Y\})=X\cap Y
   \end{aligned}
 }{InclusionFamilyPairInfimum}{%
-  \DeltaRow{Mengen}{U\dsep M\dsep X\dsep Y}
+  \DeltaRow{Mengen}{U\dsep M\dsep X\dsep Y\dsep Z}
   \DeltaRow{Relationsoperatoren}{\subseteq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{M,\subseteq}}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{M\subseteq\powerset(U)}{\rA}
+  \proofstepwidestar[2]{X\in M}{\rA}
+  \proofstepwidestar[3]{Y\in M}{\rA}
+  \proofstepwidestar[4]{X\cap Y\in M}{\rA}
+  \proofstepwidestar[2,3]{\{X,Y\}\subseteq M}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{2,3}}
+  \proofstepwidestar[]{X\cap Y\subseteq X}{%
+    \FormulaRefAuto{A\cap B\subseteq A}}
+  \proofstepwidestar[]{X\cap Y\subseteq Y}{%
+    \FormulaRefAuto{A\cap B\subseteq B}}
+  \proofstepwidestar[4]{%
+    X\cap Y\in M\land X\cap Y\subseteq X\land X\cap Y\subseteq Y}{%
+    \rAI{4,\rAI{6,7}}}
+  \proofstepwidestar[2,3,4]{%
+    X\cap Y\in\LB_{M,\subseteq}(\{X,Y\})}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{PairLowerBoundSetCharacterization}[thm]{2,3},8}}
+  \proofstepwidestar[10]{%
+    Z\in\LB_{M,\subseteq}(\{X,Y\})}{\rA}
+  \proofstepwidestar[2,3,10]{%
+    Z\in M\land Z\subseteq X\land Z\subseteq Y}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{PairLowerBoundSetCharacterization}[thm]{2,3},10}}
+  \proofstepwidestar[2,3,10]{Z\subseteq X}{\rAEa{\rAEb{11}}}
+  \proofstepwidestar[2,3,10]{Z\subseteq Y}{\rAEb{\rAEb{11}}}
+  \proofstepwidestar[2,3,10]{Z\subseteq X\cap Y}{%
+    \FormulaRefAuto{A\subseteq B \dsep A\subseteq C
+      \vdash A\subseteq B\cap C}{12,13}}
+  \proofstepwidestar[2,3]{%
+    \forall Z\in\LB_{M,\subseteq}(\{X,Y\})\,(Z\subseteq X\cap Y)}{%
+    \rUI{\rRI{10,14}}}
+  \proofstepwidestar[2,3,4]{%
+    X\cap Y=\inf_{M,\subseteq}(\{X,Y\})}{%
+    \FormulaRefAuto{InfimumCandidateEqualsInfimum}[thm]{5,9,15}}
+  \proofstepwidestar[2,3,4]{%
+    \inf_{M,\subseteq}(\{X,Y\})=X\cap Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{16}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Paarmengensupremum in einer Mengenfamilie]{%
   \begin{aligned}[t]
@@ -1919,17 +2547,49 @@ die entsprechenden Grundgesetze der Teilmengenrelation.
     &\sup_{M,\subseteq}(\{X,Y\})=X\cup Y
   \end{aligned}
 }{InclusionFamilyPairSupremum}{%
-  \DeltaRow{Mengen}{U\dsep M\dsep X\dsep Y}
+  \DeltaRow{Mengen}{U\dsep M\dsep X\dsep Y\dsep Z}
   \DeltaRow{Relationsoperatoren}{\subseteq}
   \DeltaPrem{Partielle Ordnung}{\PartOrd{M,\subseteq}}
 }
-
-Tatsächlich ist \(X\cap Y\) in der Inklusionsordnung eine untere Schranke
-von \(X\) und \(Y\), und jede weitere untere Schranke ist in
-\(X\cap Y\) enthalten. Dual dazu enthält \(X\cup Y\) beide Mengen, und jede
-gemeinsame obere Schranke enthält \(X\cup Y\). Die Zusatzannahmen
-\(X\cap Y\in M\) beziehungsweise \(X\cup Y\in M\) sind wesentlich: Ein
-Infimum oder Supremum muss im gewählten Träger liegen.
+\begin{tabproofwide}
+  \proofstepwidestar[1]{M\subseteq\powerset(U)}{\rA}
+  \proofstepwidestar[2]{X\in M}{\rA}
+  \proofstepwidestar[3]{Y\in M}{\rA}
+  \proofstepwidestar[4]{X\cup Y\in M}{\rA}
+  \proofstepwidestar[2,3]{\{X,Y\}\subseteq M}{%
+    \FormulaRefAuto{a\in A,\,b\in A\vdash\{a,b\}\subseteq A}{2,3}}
+  \proofstepwidestar[]{X\subseteq X\cup Y}{%
+    \FormulaRefAuto{A \subseteq A \cup B}}
+  \proofstepwidestar[]{Y\subseteq X\cup Y}{%
+    \FormulaRefAuto{A \subseteq B \cup A}}
+  \proofstepwidestar[4]{%
+    X\cup Y\in M\land X\subseteq X\cup Y\land Y\subseteq X\cup Y}{%
+    \rAI{4,\rAI{6,7}}}
+  \proofstepwidestar[2,3,4]{%
+    X\cup Y\in\UB_{M,\subseteq}(\{X,Y\})}{%
+    \FormulaRefAuto{P\leftrightarrow Q, Q\vdash P}{%
+      \FormulaRefAuto{PairUpperBoundSetCharacterization}[thm]{2,3},8}}
+  \proofstepwidestar[10]{%
+    Z\in\UB_{M,\subseteq}(\{X,Y\})}{\rA}
+  \proofstepwidestar[2,3,10]{%
+    Z\in M\land X\subseteq Z\land Y\subseteq Z}{%
+    \FormulaRefAuto{P\leftrightarrow Q, P\vdash Q}{%
+      \FormulaRefAuto{PairUpperBoundSetCharacterization}[thm]{2,3},10}}
+  \proofstepwidestar[2,3,10]{X\subseteq Z}{\rAEa{\rAEb{11}}}
+  \proofstepwidestar[2,3,10]{Y\subseteq Z}{\rAEb{\rAEb{11}}}
+  \proofstepwidestar[2,3,10]{X\cup Y\subseteq Z}{%
+    \FormulaRefAuto{A \subseteq C,\, B \subseteq C
+      \vdash A \cup B \subseteq C}{12,13}}
+  \proofstepwidestar[2,3]{%
+    \forall Z\in\UB_{M,\subseteq}(\{X,Y\})\,(X\cup Y\subseteq Z)}{%
+    \rUI{\rRI{10,14}}}
+  \proofstepwidestar[2,3,4]{%
+    X\cup Y=\sup_{M,\subseteq}(\{X,Y\})}{%
+    \FormulaRefAuto{SupremumCandidateEqualsSupremum}[thm]{5,9,15}}
+  \proofstepwidestar[2,3,4]{%
+    \sup_{M,\subseteq}(\{X,Y\})=X\cup Y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{16}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Paarmengeninfimum im Potenzmengenträger]{%
   X,Y\subseteq U\vdash
@@ -1938,6 +2598,25 @@ Infimum oder Supremum muss im gewählten Träger liegen.
   \DeltaRow{Mengen}{U\dsep X\dsep Y}
   \DeltaRow{Relationsoperatoren}{\subseteq}
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\subseteq U}{\rA}
+  \proofstepwidestar[2]{Y\subseteq U}{\rA}
+  \proofstepwidestar[]{\powerset(U)\subseteq\powerset(U)}{%
+    \FormulaRefAuto{A \subseteq A}}
+  \proofstepwidestar[1]{X\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{1}}
+  \proofstepwidestar[2]{Y\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{2}}
+  \proofstepwidestar[1]{X\cap Y\subseteq U}{%
+    \FormulaRefAuto{A\subseteq M\vdash A\cap B\subseteq M}{1}}
+  \proofstepwidestar[1]{X\cap Y\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{6}}
+  \proofstepwidestar[]{\PartOrd{\powerset(U),\subseteq}}{%
+    \FormulaRefAuto{InclusionOrderOnFamily}[thm]{3}}
+  \proofstepwidestar[1,2]{%
+    \inf_{\powerset(U),\subseteq}(\{X,Y\})=X\cap Y}{%
+    \FormulaRefAuto{InclusionFamilyPairInfimum}[thm]{8,3,4,5,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Paarmengensupremum im Potenzmengenträger]{%
   X,Y\subseteq U\vdash
@@ -1946,10 +2625,26 @@ Infimum oder Supremum muss im gewählten Träger liegen.
   \DeltaRow{Mengen}{U\dsep X\dsep Y}
   \DeltaRow{Relationsoperatoren}{\subseteq}
 }
-
-Der Potenzmengenträger ist unter Schnitt und Vereinigung abgeschlossen.
-Daher entfallen dort die zusätzlichen Trägerannahmen der beiden
-vorangegangenen Sätze.
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\subseteq U}{\rA}
+  \proofstepwidestar[2]{Y\subseteq U}{\rA}
+  \proofstepwidestar[]{\powerset(U)\subseteq\powerset(U)}{%
+    \FormulaRefAuto{A \subseteq A}}
+  \proofstepwidestar[1]{X\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{1}}
+  \proofstepwidestar[2]{Y\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{2}}
+  \proofstepwidestar[1,2]{X\cup Y\subseteq U}{%
+    \FormulaRefAuto{A \subseteq C,\, B \subseteq C
+      \vdash A \cup B \subseteq C}{1,2}}
+  \proofstepwidestar[1,2]{X\cup Y\in\powerset(U)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;x \subseteq A}{6}}
+  \proofstepwidestar[]{\PartOrd{\powerset(U),\subseteq}}{%
+    \FormulaRefAuto{InclusionOrderOnFamily}[thm]{3}}
+  \proofstepwidestar[1,2]{%
+    \sup_{\powerset(U),\subseteq}(\{X,Y\})=X\cup Y}{%
+    \FormulaRefAuto{InclusionFamilyPairSupremum}[thm]{8,3,4,5,7}}
+\end{tabproofwide}
 
 
 \subsection{Restriktion einer partiellen Ordnung}
@@ -2053,16 +2748,20 @@ Relationsoperator ausgewertet wird.
 \begin{tabproofwide}
   \proofstepwidestar[1]{T\subseteq A}{\rA}
   \proofstepwidestar[2]{\PartOrd{A,\leq}}{\rA}
-  \proofstepwidestar[1,2]{x\in T\vdash x\leq_T x}{%
-    \FormulaRefAuto{OrderRestrictionReflexive}[thm]{1}}
-  \proofstepwidestar[1,2]{%
-    x,y,z\in T\dsep x\leq_T y\dsep y\leq_T z\vdash x\leq_T z}{%
-    \FormulaRefAuto{OrderRestrictionTransitive}[thm]}
-  \proofstepwidestar[1,2]{%
-    x,y\in T\dsep x\leq_T y\dsep y\leq_T x\vdash x=y}{%
-    \FormulaRefAuto{OrderRestrictionAntisymmetric}[thm]}
+  \proofstepwidestar[3]{x\in T}{\rA}
+  \proofstepwidestar[1,2,3]{x\leq_T x}{%
+    \FormulaRefAuto{OrderRestrictionReflexive}[thm]{1,3}}
+  \proofstepwidestar[5]{y\in T}{\rA}
+  \proofstepwidestar[6]{z\in T}{\rA}
+  \proofstepwidestar[7]{x\leq_T y}{\rA}
+  \proofstepwidestar[8]{y\leq_T z}{\rA}
+  \proofstepwidestar[1,2,3,5,6,7,8]{x\leq_T z}{%
+    \FormulaRefAuto{OrderRestrictionTransitive}[thm]{3,5,6,7,8}}
+  \proofstepwidestar[10]{y\leq_T x}{\rA}
+  \proofstepwidestar[1,2,3,5,7,10]{x=y}{%
+    \FormulaRefAuto{OrderRestrictionAntisymmetric}[thm]{3,5,7,10}}
   \proofstepwidestar[1,2]{\PartOrd{T,\leq_T}}{%
-    \FormulaRefAuto{Partielle Ordnung}[def]{3,4,5}}
+    \FormulaRefAuto{Partielle Ordnung}[def]{4,9,11}}
 \end{tabproofwide}
 
 
@@ -2227,21 +2926,32 @@ Relationsoperator ausgewertet wird.
   \DeltaDecl{Funktionen}{C}
   \DeltaDecl{Relation}{\ChoiceRel{A}}
 }
-\paragraph{Beweis.}
-Sei \(C\) ein Zeuge der Voraussetzung. Dann gilt
-\[
-  C\colon\PowNE{A}\to A
-  \quad\text{und}\quad
-  \forall X\in\PowNE{A}\,
-    \bigl((X,C(X))\in\ChoiceRel{A}\bigr).
-\]
-Für ein beliebiges \(X\in\PowNE{A}\) liefert
-\FormulaRefAuto{ChoiceRelElim}[thm] daher \(C(X)\in X\). Folglich gilt
-\(\forall X\in\PowNE{A}\,(C(X)\in X)\). Zusammen mit der Typisierung von
-\(C\) folgt nach \FormulaRefAuto{ChoicePow}[def] die Aussage
-\(\ChoicePow{C}{A}\), und die Existenzquantifizierung über \(C\) ergibt die
-Behauptung.
-\hfill\(\square\)
+\begin{tabproofwide}
+  \proofstepwidestar[1]{%
+    \exists C\colon\PowNE{A}\to A\,
+      \forall X\in\PowNE{A}\,
+        \bigl((X,C(X))\in\ChoiceRel{A}\bigr)}{\rA}
+  \proofstepwidestar[2]{%
+    C\colon\PowNE{A}\to A\land
+      \forall X\in\PowNE{A}\,
+        \bigl((X,C(X))\in\ChoiceRel{A}\bigr)}{\rA}
+  \proofstepwidestar[2]{C\colon\PowNE{A}\to A}{\rAEa{2}}
+  \proofstepwidestar[2]{%
+    \forall X\in\PowNE{A}\,
+      \bigl((X,C(X))\in\ChoiceRel{A}\bigr)}{\rAEb{2}}
+  \proofstepwidestar[5]{X\in\PowNE{A}}{\rA}
+  \proofstepwidestar[2,5]{(X,C(X))\in\ChoiceRel{A}}{%
+    \rRE{5,\rUE{4}}}
+  \proofstepwidestar[2,5]{C(X)\in X}{%
+    \FormulaRefAuto{ChoiceRelElim}[thm]{6}}
+  \proofstepwidestar[2]{%
+    \forall X\in\PowNE{A}\,\bigl(C(X)\in X\bigr)}{%
+    \rUI{\rRI{5,7}}}
+  \proofstepwidestar[2]{\ChoicePow{C}{A}}{%
+    \FormulaRefAuto{ChoicePow}[def]{\rAI{3,8}}}
+  \proofstepwidestar[2]{\exists C\,\ChoicePow{C}{A}}{\rEI{9}}
+  \proofstepwidestar[1]{\exists C\,\ChoicePow{C}{A}}{\rEE{1,2,10}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Surjektionsform liefert Auswahlfunktion auf nichtleeren Teilmengen]{%
   \ACsur\vdash \exists C\,\ChoicePow{C}{A}%
@@ -2273,7 +2983,11 @@ Behauptung.
   \proofstep{1}{\exists C\,\ChoicePow{C}{A}}{\FormulaRefAuto{ChoiceRelToChoicePow}{6}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Zermelos Konstruktionssatz]{%
+Die für Zermelos Konstruktion benötigte transfinite Rekursion wurde bislang
+nicht entwickelt. Das folgende Konstruktionsprinzip kapselt deshalb genau
+diesen noch nicht formalisierten Schritt.
+
+\FormulaAxiomDeltaK[Zermelos Konstruktionsprinzip]{%
   \ChoicePow{C}{A}\vdash
   \exists\,\preccurlyeq\;\WellOrd{A,\preccurlyeq}%
 }{ZermeloConstruction}{
@@ -2333,12 +3047,134 @@ Behauptung.
   \forall X\in \Fib_G[A]\,
     \exists! b\,(b\in X\land b\in L_{G,\preccurlyeq})%
 }{WellOrdFiberChoiceSet}{
-  \DeltaDecl{Mengen}{A \dsep B\dsep X \dsep b}
+  \DeltaDecl{Mengen}{A \dsep B\dsep X \dsep b\dsep c\dsep m\dsep n\dsep y}
   \DeltaDecl{Funktion}{G}
   \DeltaRow{Relationsoperatoren}{\preccurlyeq}
   \DeltaRow{Faserminimenge}{L_{G,\preccurlyeq}}
     [\FormulaRefAuto{FiberMinSet}]
 }
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\WellOrd{B,\preccurlyeq}}{\rA}
+  \proofstepwidestar[2]{G\colon B\sur A}{\rA}
+  \proofstepwidestar[2]{G\colon B\to A}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{2}}
+  \proofstepwidestar[2]{\Fib_G\colon A\to\powerset(B)}{%
+    \FormulaRefAuto{\Fib_G\colon A\to \powerset(B)}{3}}
+  \proofstepwidestar[5]{X\in\Fib_G[A]}{\rA}
+  \proofstepwidestar[2]{\Fib_G[A]\subseteq\powerset(B)}{%
+    \FormulaRefAuto{F\colon A\to B \vdash F[A]\subseteq B}{4}}
+  \proofstepwidestar[2,5]{X\in\powerset(B)}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{6,5}}
+  \proofstepwidestar[2,5]{X\subseteq B}{%
+    \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}{7}}
+  \proofstepwidestar[2,5]{X\neq\varnothing}{%
+    \FormulaRefAuto{X\in \Fib_F[B] \vdash X\neq\varnothing}{2,5}}
+  \proofstepwidestar[1,2,5]{%
+    \exists m\in X\,\forall x\in X\,(m\preccurlyeq x)}{%
+    \FormulaRefAuto{T\subseteq A \dsep T\neq\varnothing
+      \vdash \exists m\in T\,\forall x\in T\,(m\leq x)}[ax]{8,9}}
+
+  \proofstepwidestar[11]{%
+    m\in X\land\forall x\in X\,(m\preccurlyeq x)}{\rA}
+  \proofstepwidestar[11]{m\in X}{\rAEa{11}}
+  \proofstepwidestar[11]{%
+    \forall x\in X\,(m\preccurlyeq x)}{\rAEb{11}}
+  \proofstepwidestar[2,5]{%
+    \exists y\in A\,X=\Fib_G(y)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]
+      \vdash \exists x\in A\,y=F(x)}{4,5}}
+  \proofstepwidestar[15]{y\in A\land X=\Fib_G(y)}{\rA}
+  \proofstepwidestar[15]{y\in A}{\rAEa{15}}
+  \proofstepwidestar[15]{X=\Fib_G(y)}{\rAEb{15}}
+  \proofstepwidestar[2,5,11]{m\in B}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{8,12}}
+  \proofstepwidestar[11,15]{m\in\Fib_G(y)}{\rIE{17,12}}
+  \proofstepwidestar[2,11,15]{G(m)=y}{%
+    \FormulaRefAuto{y\in B\dsep x\in \Fib_F(y) \vdash F(x)=y}{%
+      3,16,19}}
+
+  \proofstepwidestar[21]{c\in B}{\rA}
+  \proofstepwidestar[22]{G(c)=G(m)}{\rA}
+  \proofstepwidestar[2,11,15,22]{G(c)=y}{%
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{22,20}}
+  \proofstepwidestar[2,11,15,21,22]{c\in\Fib_G(y)}{%
+    \FormulaRefAuto{y\in B\dsep x\in A\dsep F(x)=y
+      \vdash x\in \Fib_F(y)}{3,16,21,23}}
+  \proofstepwidestar[2,5,11,15,21,22]{c\in X}{\rIE{17,24}}
+  \proofstepwidestar[2,5,11,15,21,22]{m\preccurlyeq c}{%
+    \rRE{25,\rUE{13}}}
+  \proofstepwidestar[2,5,11,15,21]{%
+    G(c)=G(m)\rightarrow m\preccurlyeq c}{\rRI{22,26}}
+  \proofstepwidestar[2,5,11,15]{%
+    \forall c\in B\,
+      \bigl(G(c)=G(m)\rightarrow m\preccurlyeq c\bigr)}{%
+    \rUI{\rRI{21,27}}}
+  \proofstepwidestar[2,5,11,15]{%
+    m\in B\land
+      \forall c\in B\,
+        \bigl(G(c)=G(m)\rightarrow m\preccurlyeq c\bigr)}{%
+    \rAI{18,28}}
+  \proofstepwidestar[2,5,11,15]{%
+    m\in\{\,b\in B\mid
+      \forall c\in B\,
+        (G(c)=G(b)\rightarrow b\preccurlyeq c)\,\}}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\}
+      \eqvdash x \in A \land P(x)}{29}}
+  \proofstepwidestar[2,5,11,15]{m\in L_{G,\preccurlyeq}}{%
+    \rIE{\FormulaRefAuto{FiberMinSet}[def],30}}
+  \proofstepwidestar[2,5,11,15]{%
+    m\in X\land m\in L_{G,\preccurlyeq}}{\rAI{12,31}}
+  \proofstepwidestar[2,5,11,15]{%
+    \exists b\,(b\in X\land b\in L_{G,\preccurlyeq})}{\rEI{32}}
+
+  \proofstepwidestar[34]{%
+    n\in X\land n\in L_{G,\preccurlyeq}}{\rA}
+  \proofstepwidestar[34]{n\in X}{\rAEa{34}}
+  \proofstepwidestar[34]{n\in L_{G,\preccurlyeq}}{\rAEb{34}}
+  \proofstepwidestar[2,5,34]{n\in B}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{8,35}}
+  \proofstepwidestar[15,34]{n\in\Fib_G(y)}{\rIE{17,35}}
+  \proofstepwidestar[2,15,34]{G(n)=y}{%
+    \FormulaRefAuto{y\in B\dsep x\in \Fib_F(y) \vdash F(x)=y}{%
+      3,16,38}}
+  \proofstepwidestar[34]{%
+    n\in\{\,b\in B\mid
+      \forall c\in B\,
+        (G(c)=G(b)\rightarrow b\preccurlyeq c)\,\}}{%
+    \rIE{\FormulaRefAuto{FiberMinSet}[def],36}}
+  \proofstepwidestar[34]{%
+    n\in B\land
+      \forall c\in B\,
+        \bigl(G(c)=G(n)\rightarrow n\preccurlyeq c\bigr)}{%
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\}
+      \eqvdash x \in A \land P(x)}{40}}
+  \proofstepwidestar[34]{%
+    \forall c\in B\,
+      \bigl(G(c)=G(n)\rightarrow n\preccurlyeq c\bigr)}{\rAEb{41}}
+  \proofstepwidestar[2,11,15,34]{G(m)=G(n)}{%
+    \FormulaRefAuto{a=b,\,c=b\vdash a=c}{20,39}}
+  \proofstepwidestar[2,5,11,15,34]{%
+    G(m)=G(n)\rightarrow n\preccurlyeq m}{%
+    \rRE{18,\rUE{42}}}
+  \proofstepwidestar[2,5,11,15,34]{n\preccurlyeq m}{\rRE{43,44}}
+  \proofstepwidestar[5,11,34]{m\preccurlyeq n}{%
+    \rRE{35,\rUE{13}}}
+  \proofstepwidestar[1,2,5,11,15,34]{m=n}{%
+    \FormulaRefAuto{x\leq y\dsep y\leq x\vdash x=y}[ax]{46,45}}
+  \proofstepwidestar[1,2,5,11,15]{%
+    \exists! b\,(b\in X\land b\in L_{G,\preccurlyeq})}{%
+    \UEI{33,32,34,47}}
+  \proofstepwidestar[1,2,5,11]{%
+    \exists! b\,(b\in X\land b\in L_{G,\preccurlyeq})}{%
+    \rEE{14,15,48}}
+  \proofstepwidestar[1,2,5]{%
+    \exists! b\,(b\in X\land b\in L_{G,\preccurlyeq})}{%
+    \rEE{10,11,49}}
+  \proofstepwidestar[1,2]{%
+    \forall X\in\Fib_G[A]\,
+      \exists! b\,(b\in X\land b\in L_{G,\preccurlyeq})}{%
+    \rUI{\rRI{5,50}}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Faserminima einer Wohlordnung liefern eine Rechtsinverse]{%
   \WellOrd{B,\preccurlyeq}\dsep G\colon B\sur A
@@ -2404,17 +3240,17 @@ Behauptung.
   \DeltaDecl{Mengen}{A \dsep B}
   \DeltaDecl{Funktionen}{F \dsep G}
 }
-\begin{tabproof}
-  \proofstep{1}{\ACsur}{\rA}
-  \proofstep{1}{\WOP}{\FormulaRefAuto{ACsurToWOP}{1}}
-  \proofstep{}{\ACsur\rightarrow \WOP}{\rRI{1,2}}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{\ACsur}{\rA}
+    \proofstep{1}{\WOP}{\FormulaRefAuto{ACsurToWOP}{1}}
+  \closeproofpart
 
-  \proofstep{4}{\WOP}{\rA}
-  \proofstep{4}{\ACsur}{\FormulaRefAuto{WOPToACsur}{4}}
-  \proofstep{}{\WOP\rightarrow \ACsur}{\rRI{4,5}}
-
-  \proofstep{}{\ACsur\eqvdash \WOP}{\rLRI{3,6}}
-\end{tabproof}
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{\WOP}{\rA}
+    \proofstep{1}{\ACsur}{\FormulaRefAuto{WOPToACsur}{1}}
+  \closeproofpart
+\end{tabproofsplit}
 
 \chapter{Ordnungsbezogene Teilmengen}
 
