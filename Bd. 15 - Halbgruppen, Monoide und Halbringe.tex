@@ -59,28 +59,13 @@ Elemente, also etwa \(\MonoidAlg{A}{\star}{e}\) und
 
 \section{Binäre Operationen}
 
-Eine binäre Operation auf einem Träger \(A\) ordnet je zwei Elementen von
-\(A\) wieder ein Element von \(A\) zu. Da die allgemeine Funktionstheorie
-bereits entwickelt ist, genügt es im algebraischen Kontext, diese
-Abgeschlossenheit als zugängliche Strukturinformation festzuhalten.
-
-\FormulaDefDeltaK[Binäre Operation auf einem Träger]{%
-  \mathsf{BinOp}\!\left(A,\star\right)%
-}{BinaryOperationDef}{%
-  \DeltaRow{Mengen}{A\dsep x\dsep y}
-  \DeltaRow{\textbf{Axiom}}{}
-  \DeltaRow{Abgeschlossenheit}{%
-    x,y\in A\vdash x\star y\in A}
-  \DeltaRow{\textbf{Neues Symbol}}{}
-  \DeltaPrem{Binäre Operation}{\mathsf{BinOp}\!\left(A,\star\right)}
-}
-
-\FormulaAxiomDeltaK[Zugriff auf eine binäre Operation]{%
-  \mathsf{BinOp}\!\left(A,\star\right)\dsep x,y\in A
-  \vdash x\star y\in A%
-}{BinaryOperationClosureAxiom}{%
-  \DeltaRow{Mengen}{A\dsep x\dsep y}
-}
+Der Begriff des binären Operators wurde bereits in Band~3 eingeführt
+(\FormulaRefAuto{BinaryOperationDef}). In der Algebra heißt ein solcher
+Operator auch binäre Operation. Seine Abgeschlossenheit ist durch
+\FormulaRefAuto{BinaryOperationClosureAxiom} unmittelbar zugänglich.
+Im Folgenden wird \(\mathsf{BinOp}\!\left(A,\star\right)\) in genau diesem
+Sinn verwendet und um die jeweils erforderlichen algebraischen Gesetze
+ergänzt.
 
 \section{Halbgruppen}
 
@@ -355,17 +340,18 @@ registriert.
   \proofstepwidestar[3]{a\in A}{\rA}
   \proofstepwidestar[4]{b\in A}{\rA}
   \proofstepwidestar[5]{c\in A}{\rA}
-  \proofstepwidestar[6]{b\star a=c\star a}{\rA}
 
   \proofstepwide[1,3,4]{a\star b}{=}{b\star a}{%
     \FormulaRefAuto{CommutativeSemigroupCommutativityAxiom}[ax]{1,3,4}}
-  \proofstepwide[6]{}{=}{c\star a}{\rA}
+  \proofstepwide[7]{b\star a}{=}{c\star a}{\rA}
   \proofstepwide[1,3,5]{}{=}{a\star c}{%
     \FormulaRefAuto{CommutativeSemigroupCommutativityAxiom}[ax]{1,5,3}}
-  \proofstepwide[1,3,4,5,6]{a\star b}{=}{a\star c}{%
-    \rChain{7,8,9}}
+  \proofstepwide[1,3,4,7]{a\star b}{=}{c\star a}{%
+    \rChain{6,7}}
+  \proofstepwide[1,3,4,5,7]{a\star b}{=}{a\star c}{%
+    \rChain{9,8}}
 
-  \proofstepwidestar[1,2,3,4,5,6]{b=c}{%
+  \proofstepwidestar[1,2,3,4,5,7]{b=c}{%
     \FormulaRefAuto{LeftCancellationAxiom}[ax]{2,3,4,5,10}}
 \end{tabproofwide}
 
@@ -422,7 +408,7 @@ auch in der Morphismenbezeichnung.
     \SemigroupIso{f}{A,\star}{B,\diamond}}
 }
 
-\subsection{Beispiele zu Halbgruppenhomomorphismen}
+\subsection{Beispiele}
 
 \FormulaThmDeltaK[Komposition von Halbgruppenhomomorphismen]{%
   \begin{aligned}[t]
@@ -483,14 +469,18 @@ auch in der Morphismenbezeichnung.
     (g\circ f)(x)\bullet(g\circ f)(y)}{%
     \rIE{14,\rIE{15,\rII}}}
   \proofstepwide[1,2,8,9]{(g\circ f)(x\star y)}{=}{%
+    g(f(x)\diamond f(y))}{%
+    \rChain{16,17}}
+  \proofstepwide[1,2,8,9]{(g\circ f)(x\star y)}{=}{%
+    g(f(x))\bullet g(f(y))}{%
+    \rChain{20,18}}
+  \proofstepwide[1,2,8,9]{(g\circ f)(x\star y)}{=}{%
     (g\circ f)(x)\bullet(g\circ f)(y)}{%
-    \rChain{16,17,18,19}}
+    \rChain{21,19}}
   \proofstepwidestar[1,2]{%
     \SemigroupHom{g\circ f}{A,\star}{C,\bullet}}{%
-    \FormulaRefAuto{SemigroupHomDef}[def]{6,7,5,20}}
+    \FormulaRefAuto{SemigroupHomDef}[def]{6,7,5,22}}
 \end{tabproofwide}
-
-\subsection{Beispiele zu Halbgruppenisomorphismen}
 
 \FormulaThmDeltaK[Die Identität ist ein Halbgruppenisomorphismus]{%
   \SemigroupAlg{A}{\star}
@@ -555,7 +545,7 @@ auch in der Morphismenbezeichnung.
     \FormulaRefAuto{SemigroupIsoDef}[def]{5,8}}
 \end{tabproof}
 
-\subsection{Spezialisierte Halbgruppen}
+\subsection{Spezielle Definitionen}
 
 Für kommutative, idempotente, kommutativ-idempotente und kürzbare
 Halbgruppen wird keine zweite Erhaltungsgleichung eingeführt. Ein
@@ -597,6 +587,113 @@ nur mit entsprechend spezialisierten Quell- und Zielstrukturen:
   \DeltaPrem{Kürzbarer Fall}{\mathsf{K\ddot{u}rzHGrHom}}
 }
 
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus kommutativer Halbgruppen]{%
+  \CommutativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\CommutativeSemigroupAlg{A}{\star}%
+}{CommutativeSemigroupHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus kommutativer Halbgruppen]{%
+  \CommutativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\CommutativeSemigroupAlg{B}{\diamond}%
+}{CommutativeSemigroupHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Halbgruppenhomomorphismus eines kommutativen Homomorphismus]{%
+  \CommutativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\SemigroupHom{f}{A,\star}{B,\diamond}%
+}{CommutativeSemigroupHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus idempotenter Halbgruppen]{%
+  \IdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{IdemHGr}(A,\star)%
+}{IdempotentSemigroupHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus idempotenter Halbgruppen]{%
+  \IdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{IdemHGr}(B,\diamond)%
+}{IdempotentSemigroupHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Halbgruppenhomomorphismus eines idempotenten Homomorphismus]{%
+  \IdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\SemigroupHom{f}{A,\star}{B,\diamond}%
+}{IdempotentSemigroupHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Quellstruktur eines kommutativ-idempotenten Homomorphismus]{%
+  \CommutativeIdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{KIHGr}(A,\star)%
+}{CommutativeIdempotentSemigroupHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines kommutativ-idempotenten Homomorphismus]{%
+  \CommutativeIdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{KIHGr}(B,\diamond)%
+}{CommutativeIdempotentSemigroupHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Halbgruppenhomomorphismus eines kommutativ-idempotenten Homomorphismus]{%
+  \CommutativeIdempotentSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\SemigroupHom{f}{A,\star}{B,\diamond}%
+}{CommutativeIdempotentSemigroupHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus kürzbarer Halbgruppen]{%
+  \CancellativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{K\ddot{u}rz}(A,\star)%
+}{CancellativeSemigroupHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus kürzbarer Halbgruppen]{%
+  \CancellativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\mathsf{K\ddot{u}rz}(B,\diamond)%
+}{CancellativeSemigroupHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Halbgruppenhomomorphismus eines kürzbaren Homomorphismus]{%
+  \CancellativeSemigroupHom{f}{A,\star}{B,\diamond}
+  \vdash\SemigroupHom{f}{A,\star}{B,\diamond}%
+}{CancellativeSemigroupHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
 \FormulaDefDeltaK[Spezialisierte Halbgruppenisomorphismen]{%
   \begin{aligned}[t]
     &\CommutativeSemigroupIso{f}{A,\star}{B,\diamond}\\[-2pt]
@@ -624,6 +721,77 @@ nur mit entsprechend spezialisierten Quell- und Zielstrukturen:
   \DeltaPrem{Idempotenter Fall}{\mathsf{IdemHGrIso}}
   \DeltaPrem{Kommutativ-idempotenter Fall}{\mathsf{KIHGrIso}}
   \DeltaPrem{Kürzbarer Fall}{\mathsf{K\ddot{u}rzHGrIso}}
+}
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus kommutativer Halbgruppen]{%
+  \CommutativeSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash\CommutativeSemigroupHom{f}{A,\star}{B,\diamond}%
+}{CommutativeSemigroupIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus kommutativer Halbgruppen]{%
+  \CommutativeSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash f\colon A\bij B%
+}{CommutativeSemigroupIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus idempotenter Halbgruppen]{%
+  \IdempotentSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash\IdempotentSemigroupHom{f}{A,\star}{B,\diamond}%
+}{IdempotentSemigroupIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus idempotenter Halbgruppen]{%
+  \IdempotentSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash f\colon A\bij B%
+}{IdempotentSemigroupIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Homomorphismus eines kommutativ-idempotenten Isomorphismus]{%
+  \CommutativeIdempotentSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash\CommutativeIdempotentSemigroupHom{f}{A,\star}{B,\diamond}%
+}{CommutativeIdempotentSemigroupIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines kommutativ-idempotenten Isomorphismus]{%
+  \CommutativeIdempotentSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash f\colon A\bij B%
+}{CommutativeIdempotentSemigroupIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus kürzbarer Halbgruppen]{%
+  \CancellativeSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash\CancellativeSemigroupHom{f}{A,\star}{B,\diamond}%
+}{CancellativeSemigroupIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus kürzbarer Halbgruppen]{%
+  \CancellativeSemigroupIso{f}{A,\star}{B,\diamond}
+  \vdash f\colon A\bij B%
+}{CancellativeSemigroupIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
 }
 
 \begin{remark}
@@ -837,6 +1005,8 @@ Operationserhaltung allein ableitbar.
     \MonoidIso{f}{A,\star,e}{B,\diamond,u}}
 }
 
+\subsection{Beispiele}
+
 \FormulaThmDeltaK[Komposition von Monoidhomomorphismen]{%
   \begin{aligned}[t]
     &\MonoidHom{f}{A,\star,e}{B,\diamond,u}\dsep
@@ -875,6 +1045,8 @@ Operationserhaltung allein ableitbar.
     \FormulaRefAuto{MonoidHomDef}[def]{10,11,5,9}}
 \end{tabproofwide}
 
+\subsection{Spezielle Definitionen}
+
 \FormulaDefDeltaK[Homomorphismen kommutativer Monoide]{%
   \begin{aligned}[t]
     &\CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}\\[-2pt]
@@ -892,6 +1064,32 @@ Operationserhaltung allein ableitbar.
   \DeltaPrem{Symbol}{\mathsf{KMonHom}}
 }
 
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidAlg{A}{\star}{e}%
+}{CommutativeMonoidHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidAlg{B}{\diamond}{u}%
+}{CommutativeMonoidHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Monoidhomomorphismus eines kommutativen Homomorphismus]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\MonoidHom{f}{A,\star,e}{B,\diamond,u}%
+}{CommutativeMonoidHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
 \FormulaDefDeltaK[Isomorphismen kommutativer Monoide]{%
   \begin{aligned}[t]
     &\CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}\\[-2pt]
@@ -904,6 +1102,23 @@ Operationserhaltung allein ableitbar.
   \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
   \DeltaRow{\textbf{Neues Symbol}}{}
   \DeltaPrem{Isomorphismus kommutativer Monoide}{\mathsf{KMonIso}}
+}
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}%
+}{CommutativeMonoidIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}
+  \vdash f\colon A\bij B%
+}{CommutativeMonoidIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
 }
 
 Die Erhaltungsgleichungen sind also auch im kommutativen Fall dieselben.
@@ -1140,6 +1355,8 @@ des multiplikativen Monoids.
   \DeltaPrem{Symbol}{\mathsf{HringIso}}
 }
 
+\subsection{Beispiele}
+
 \FormulaThmDeltaK[Komposition von Halbringhomomorphismen]{%
   \begin{aligned}[t]
     &\SemiringHom{f}{R,\oplus,\odot,0_R,1_R}
@@ -1192,6 +1409,8 @@ des multiplikativen Monoids.
     \FormulaRefAuto{SemiringHomDef}[def]{9,10,5,8}}
 \end{tabproofwide}
 
+\subsection{Spezielle Definitionen}
+
 \FormulaDefDeltaK[Homomorphismen kommutativer Halbringe]{%
   \begin{aligned}[t]
     &\CommutativeSemiringHom{f}{R,\oplus,\odot,0_R,1_R}
@@ -1204,10 +1423,41 @@ des multiplikativen Monoids.
         {S,\boxplus,\boxtimes,0_S,1_S}
   \end{aligned}
 }{CommutativeSemiringHomDef}{%
-  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
   \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
   \DeltaRow{\textbf{Neues Symbol}}{}
   \DeltaPrem{Homomorphismus kommutativer Halbringe}{\mathsf{KHringHom}}
+}
+
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus kommutativer Halbringe]{%
+  \CommutativeSemiringHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash\CommutativeSemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}%
+}{CommutativeSemiringHomSourceAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus kommutativer Halbringe]{%
+  \CommutativeSemiringHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash\CommutativeSemiringAlg{S}{\boxplus}{\boxtimes}{0_S}{1_S}%
+}{CommutativeSemiringHomTargetAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Halbringhomomorphismus eines kommutativen Homomorphismus]{%
+  \CommutativeSemiringHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash
+  \SemiringHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}%
+}{CommutativeSemiringHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
 }
 
 \FormulaDefDeltaK[Isomorphismen kommutativer Halbringe]{%
@@ -1220,10 +1470,31 @@ des multiplikativen Monoids.
     &\qquad\land f\colon R\bij S
   \end{aligned}
 }{CommutativeSemiringIsoDef}{%
-  \DeltaRow{Mengen}{R\dsep S}
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
   \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
   \DeltaRow{\textbf{Neues Symbol}}{}
   \DeltaPrem{Isomorphismus kommutativer Halbringe}{\mathsf{KHringIso}}
+}
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus kommutativer Halbringe]{%
+  \CommutativeSemiringIso{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash
+  \CommutativeSemiringHom{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}%
+}{CommutativeSemiringIsoHomAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus kommutativer Halbringe]{%
+  \CommutativeSemiringIso{f}{R,\oplus,\odot,0_R,1_R}
+    {S,\boxplus,\boxtimes,0_S,1_S}
+  \vdash f\colon R\bij S%
+}{CommutativeSemiringIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{R\dsep S\dsep0_R\dsep1_R\dsep0_S\dsep1_S}
+  \DeltaRow{Funktionen}{f\dsep\oplus\dsep\odot\dsep\boxplus\dsep\boxtimes}
 }
 
 Auch hier ist die Kommutativität kein zusätzliches Erhaltungsgesetz. Ein
@@ -1285,10 +1556,9 @@ die zugrunde liegende Abbildung bijektiv ist.
 
 \section{Kürzbarkeit der Addition}
 
-\FormulaThmDeltaK[Die Addition bildet ein kürzbares kommutatives Monoid]{%
-  \CommutativeMonoidAlg{\mathbb{N}}{+}{0}
-  \land\mathsf{K\ddot{u}rz}\!\left(\mathbb{N},+\right)%
-}{NaturalAdditiveCancellativeMonoid}{%
+\FormulaThmDeltaK[Die Addition ist kürzbar]{%
+  \mathsf{K\ddot{u}rz}\!\left(\mathbb{N},+\right)%
+}{NaturalAdditionCancellative}{%
   \DeltaRow{Mengen}{\mathbb{N}\dsep a\dsep b\dsep c}
 }
 \begin{tabproofsplitwide}
@@ -1315,23 +1585,25 @@ die zugrunde liegende Abbildung bijektiv ist.
     \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
     \proofstepwidestar[3]{c\in\mathbb{N}}{\rA}
     \proofstepwidestar[4]{b+a=c+a}{\rA}
-    \proofstepwidestar[1,2]{a+b=b+a}{%
-      \FormulaRefAuto{PeanoAddCommutative}[thm]{1,2}}
-    \proofstepwidestar[1,3]{a+c=c+a}{%
-      \FormulaRefAuto{PeanoAddCommutative}[thm]{1,3}}
-    \proofstepwidestar[1,2,3,4]{a+b=a+c}{%
-      \rIE{5,\rIE{4,\FormulaRefAuto{a=b\vdash b=a}{6}}}}
+    \proofstepwidestar[]{%
+      \CommutativeMonoidAlg{\mathbb{N}}{+}{0}}{%
+      \FormulaRefAuto{NaturalAdditiveCommutativeMonoid}[thm]}
+    \proofstepwidestar[]{%
+      \CommutativeSemigroupAlg{\mathbb{N}}{+}}{%
+      \FormulaRefAuto{CommutativeMonoidIsCommutativeSemigroup}[thm]{5}}
+    \proofstepwidestar[]{%
+      \mathsf{LK\ddot{u}rz}\!\left(\mathbb{N},+\right)}{%
+      \FormulaRefAuto{NaturalAdditionLeftCancellative}[thm]}
     \proofstepwidestar[1,2,3,4]{b=c}{%
-      \FormulaRefAuto{PeanoAddLeftCancellation}[thm]{1,2,3,7}}
+      \FormulaRefAuto{%
+        CommutativeLeftCancellationImpliesRightCancellation%
+      }[thm]{6,7,1,2,3,4}}
     \proofstepwidestar[]{%
       \mathsf{RK\ddot{u}rz}\!\left(\mathbb{N},+\right)}{%
       \FormulaRefAuto{RightCancellativeDef}[def]{8}}
   \closeproofpartwideindR
 
   \proofpartwide{Zusammenfassung}
-    \proofstepwidestar[]{%
-      \CommutativeMonoidAlg{\mathbb{N}}{+}{0}}{%
-      \FormulaRefAuto{NaturalAdditiveCommutativeMonoid}[thm]}
     \proofstepwidestar[]{%
       \mathsf{LK\ddot{u}rz}\!\left(\mathbb{N},+\right)}{%
       \FormulaRefAuto{NaturalAdditionLeftCancellative}[thm]}
@@ -1340,11 +1612,7 @@ die zugrunde liegende Abbildung bijektiv ist.
       \FormulaRefAuto{NaturalAdditionRightCancellative}[thm]}
     \proofstepwidestar[]{%
       \mathsf{K\ddot{u}rz}\!\left(\mathbb{N},+\right)}{%
-      \FormulaRefAuto{CancellativeOperationDef}[def]{2,3}}
-    \proofstepwidestar[]{%
-      \CommutativeMonoidAlg{\mathbb{N}}{+}{0}
-      \land\mathsf{K\ddot{u}rz}\!\left(\mathbb{N},+\right)}{%
-      \rAI{1,4}}
+      \FormulaRefAuto{CancellativeOperationDef}[def]{1,2}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1530,15 +1798,14 @@ Zielhalbrings als Endoabbildung auf \(R\) festgehalten.
     \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
     \FormulaRefAuto{%
       x\in A\vdash t(x)\coloneq y\dsep x\in A\vdash t(x)\in B
-      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{7,10}}
+      \exists! F\colon A\to B\,\forall x\in A\,F(x)=t(x)}{9,10}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Rekursionsdaten des kanonischen Halbringhomomorphismus]{%
+\FormulaThmDeltaK[Das additive Nullelement liegt im Träger]{%
   \SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}
   \vdash
-  0_R\in R\land
-  \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R%
-}{NaturalSemiringRecursionData}{%
+  0_R\in R%
+}{SemiringZeroCarrier}{%
   \DeltaRow{Mengen}{R\dsep0_R\dsep1_R}
   \DeltaRow{Funktionen}{\oplus\dsep\odot}
 }
@@ -1550,13 +1817,6 @@ Zielhalbrings als Endoabbildung auf \(R\) festgehalten.
     \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{2}}
   \proofstep{1}{0_R\in R}{%
     \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{3}}
-  \proofstep{1}{%
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \FormulaRefAuto{SemiringSuccessorFunction}[thm]{1}}
-  \proofstep{1}{%
-    0_R\in R\land
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \rAI{4,5}}
 \end{tabproof}
 
 Der Dedekindsche Rekursionssatz liefert zu diesen Daten genau eine
@@ -1575,8 +1835,10 @@ Zielstruktur mit
 }{NaturalSemiringMapDef}{%
   \DeltaRow{Mengen}{R\dsep0_R\dsep1_R\dsep n}
   \DeltaRow{Funktionen}{\oplus\dsep\odot}
-  \DeltaRow{Rekursionsdaten}{}[%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]]
+  \DeltaRow{Startwert}{}[%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]]
+  \DeltaRow{Schrittfunktion}{}[%
+    \FormulaRefAuto{SemiringSuccessorFunction}[thm]]
   \DeltaRow{Rekursionssatz}{}[%
     \FormulaRefAuto{DedekindRecursionTheorem}[thm]]
   \DeltaRow{\textbf{Neues Symbol}}{}
@@ -1594,19 +1856,17 @@ Zielstruktur mit
 }
 \begin{tabproof}
   \proofstep{1}{\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
+  \proofstep{1}{0_R\in R}{%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]{1}}
   \proofstep{1}{%
-    0_R\in R\land
     \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]{1}}
-  \proofstep{1}{0_R\in R}{\rAEa{2}}
-  \proofstep{1}{%
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{\rAEb{2}}
+    \FormulaRefAuto{SemiringSuccessorFunction}[thm]{1}}
   \proofstep{1}{%
     \RecFun{0_R}{\SemiringSuccessor{R,\oplus,\odot,0_R,1_R}}
     \colon\mathbb N\to R}{%
     \FormulaRefAuto{%
       m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}\colon \mathbb{N}\to M}{3,4}}
+      \RecFun{m_0}{f}\colon \mathbb{N}\to M}{2,3}}
   \proofstep{1}{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
     =
@@ -1614,7 +1874,7 @@ Zielstruktur mit
     \FormulaRefAuto{NaturalSemiringMapDef}[def]{1}}
   \proofstep{1}{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
-    \colon\mathbb N\to R}{\rIE{6,5}}
+    \colon\mathbb N\to R}{\rIE{5,4}}
 \end{tabproof}
 \par\smallskip
 
@@ -1628,19 +1888,17 @@ Zielstruktur mit
 }
 \begin{tabproof}
   \proofstep{1}{\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
+  \proofstep{1}{0_R\in R}{%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]{1}}
   \proofstep{1}{%
-    0_R\in R\land
     \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]{1}}
-  \proofstep{1}{0_R\in R}{\rAEa{2}}
-  \proofstep{1}{%
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{\rAEb{2}}
+    \FormulaRefAuto{SemiringSuccessorFunction}[thm]{1}}
   \proofstep{1}{%
     \RecFun{0_R}{\SemiringSuccessor{R,\oplus,\odot,0_R,1_R}}(0)
     =0_R}{%
     \FormulaRefAuto{%
       m_0\in M\dsep f\colon M\to M \vdash
-      \RecFun{m_0}{f}(0)=m_0}{3,4}}
+      \RecFun{m_0}{f}(0)=m_0}{2,3}}
   \proofstep{1}{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
     =
@@ -1648,7 +1906,7 @@ Zielstruktur mit
     \FormulaRefAuto{NaturalSemiringMapDef}[def]{1}}
   \proofstep{1}{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)=0_R}{%
-    \rIE{6,5}}
+    \rIE{5,4}}
 \end{tabproof}
 \par\smallskip
 
@@ -1678,32 +1936,31 @@ Zur Entlastung der Beweiszeilen setzen wir in diesem Beweis
     \SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
   \proofstepwidestar[2]{n\in\mathbb N}{\rA}
   \proofstepwidestar[1]{%
-    0_R\in R\land
-    s_R\colon R\to R}{%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]{1}}
-  \proofstepwidestar[1]{0_R\in R}{\rAEa{3}}
-  \proofstepwidestar[1]{s_R\colon R\to R}{\rAEb{3}}
+    0_R\in R}{%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]{1}}
+  \proofstepwidestar[1]{s_R\colon R\to R}{%
+    \FormulaRefAuto{SemiringSuccessorFunction}[thm]{1}}
   \proofstepwidestar[1,2]{%
     \RecFun{0_R}{s_R}(\Succ(n))
     =
     s_R\!\left(\RecFun{0_R}{s_R}(n)\right)}{%
     \FormulaRefAuto{%
       m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{4,5,2}}
+      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{3,4,2}}
   \proofstepwidestar[1]{\eta_R=\RecFun{0_R}{s_R}}{%
     \FormulaRefAuto{NaturalSemiringMapDef}[def]{1}}
   \proofstepwidestar[1,2]{%
-    \eta_R(\Succ(n))=s_R\!\left(\eta_R(n)\right)}{\rIE{7,6}}
+    \eta_R(\Succ(n))=s_R\!\left(\eta_R(n)\right)}{\rIE{6,5}}
   \proofstepwidestar[1]{\eta_R\colon\mathbb N\to R}{%
     \FormulaRefAuto{NaturalSemiringMapFunction}[thm]{1}}
   \proofstepwidestar[1,2]{\eta_R(n)\in R}{%
-    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{9,2}}
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{8,2}}
   \proofstepwidestar[1,2]{%
     s_R\!\left(\eta_R(n)\right)=\eta_R(n)\oplus1_R}{%
-    \FormulaRefAuto{SemiringSuccessorDef}[def]{1,10}}
+    \FormulaRefAuto{SemiringSuccessorDef}[def]{1,9}}
   \proofstepwidestar[1,2]{%
     \eta_R(\Succ(n))=\eta_R(n)\oplus1_R}{%
-    \rChain{8,11}}
+    \rChain{7,10}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Einserhaltung der kanonischen Abbildung]{%
@@ -1719,30 +1976,40 @@ Zur Entlastung der Beweiszeilen setzen wir in diesem Beweis
     \SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
   \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
   \proofstepwidestar[]{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
-  \proofstepwide[3]{%
-    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)}{=}{%
+  \proofstepwidestar[]{%
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)
+    =
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(0))}{\rIE{3}}
-  \proofstepwide[1]{%
-    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(0))}{=}{%
+  \proofstepwidestar[1]{%
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(0))
+    =
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)\oplus1_R}{%
     \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]{1,2}}
-  \proofstepwide[1]{%
-    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)\oplus1_R}{=}{%
-    0_R\oplus1_R}{%
+  \proofstepwidestar[1]{%
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)
+    =
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)\oplus1_R}{%
+    \rChain{4,5}}
+  \proofstepwidestar[1]{%
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)=0_R}{%
     \FormulaRefAuto{NaturalSemiringMapZero}[thm]{1}}
+  \proofstepwidestar[1]{%
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)
+    =
+    0_R\oplus1_R}{\rIE{7,6}}
   \proofstepwidestar[1]{\CommutativeMonoidAlg{R}{\oplus}{0_R}}{%
     \FormulaRefAuto{SemiringAdditiveCommutativeMonoidAxiom}[ax]{1}}
   \proofstepwidestar[1]{\MonoidAlg{R}{\oplus}{0_R}}{%
-    \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{7}}
+    \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{9}}
   \proofstepwidestar[1]{\MonoidAlg{R}{\odot}{1_R}}{%
     \FormulaRefAuto{SemiringMultiplicativeMonoidAxiom}[ax]{1}}
   \proofstepwidestar[1]{1_R\in R}{%
-    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{9}}
-  \proofstepwide[1]{0_R\oplus1_R}{=}{1_R}{%
-    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{8,10}}
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{11}}
+  \proofstepwidestar[1]{0_R\oplus1_R=1_R}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{10,12}}
   \proofstepwidestar[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)=1_R}{%
-    \rChain{4,5,6,11}}
+    \rChain{8,13}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Die kanonische Abbildung erhält die Addition]{%
@@ -1809,8 +2076,11 @@ Im Induktionsschritt kürzen wir zusätzlich
       \FormulaRefAuto{a=b\vdash b=a}{%
         \FormulaRefAuto{NaturalSemiringMapZero}[thm]{1}}}
     \proofstepwidestar[1,2]{%
+      \eta_R(m+0)=\eta_R(m)\oplus0_R}{%
+      \rChain{7,8}}
+    \proofstepwidestar[1,2]{%
       \eta_R(m+0)=\eta_R(m)\oplus\eta_R(0)}{%
-      \rChain{7,8,9}}
+      \rChain{10,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -1883,9 +2153,18 @@ Im Induktionsschritt kürzen wir zusätzlich
       \parbox[t]{.23\textwidth}{\raggedright
         \FormulaRefAuto{a=b\vdash b=a}\\
         \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]}}
+    \proofstepwidestar[1,2,3]{%
+      \eta_R(m+\Succ(n))=\eta_R(m+n)\oplus1_R}{%
+      \rChain{10,11}}
+    \proofstepwidestar[1,2,3,4]{%
+      \eta_R(m+\Succ(n))=(x\oplus y)\oplus1_R}{%
+      \rChain{15,12}}
+    \proofstepwidestar[1,2,3,4]{%
+      \eta_R(m+\Succ(n))=x\oplus(y\oplus1_R)}{%
+      \rChain{16,13}}
     \proofstepwidestar[1,2,3,4]{%
       \eta_R(m+\Succ(n))=x\oplus\eta_R(\Succ(n))}{%
-      \rChain{10,11,12,13,14}}
+      \rChain{17,14}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -1965,8 +2244,14 @@ Im Induktionsschritt kürzen wir zusätzlich
       \FormulaRefAuto{a=b\vdash b=a}{%
         \FormulaRefAuto{NaturalSemiringMapZero}[thm]{1}}}
     \proofstepwidestar[1,2]{%
+      \eta_R(m\cdot0)=0_R}{%
+      \rChain{5,6}}
+    \proofstepwidestar[1,2]{%
+      \eta_R(m\cdot0)=\eta_R(m)\odot0_R}{%
+      \rChain{9,7}}
+    \proofstepwidestar[1,2]{%
       \eta_R(m\cdot0)=\eta_R(m)\odot\eta_R(0)}{%
-      \rChain{5,6,7,8}}
+      \rChain{10,8}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -2040,11 +2325,31 @@ Im Induktionsschritt kürzen wir zusätzlich
       \parbox[t]{.23\textwidth}{\raggedright
         \FormulaRefAuto{a=b\vdash b=a}\\
         \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]}}
+    \proofstepwidestar[1,2,3]{%
+      \eta_R(m\cdot\Succ(n))
+      =
+      \eta_R(m\cdot n)\oplus x}{%
+      \rChain{6,7}}
+    \proofstepwidestar[1,2,3,4]{%
+      \eta_R(m\cdot\Succ(n))
+      =
+      (x\odot y)\oplus x}{%
+      \rChain{12,8}}
+    \proofstepwidestar[1,2,3,4]{%
+      \eta_R(m\cdot\Succ(n))
+      =
+      (x\odot y)\oplus(x\odot1_R)}{%
+      \rChain{13,9}}
+    \proofstepwidestar[1,2,3,4]{%
+      \eta_R(m\cdot\Succ(n))
+      =
+      x\odot(y\oplus1_R)}{%
+      \rChain{14,10}}
     \proofstepwidestar[1,2,3,4]{%
       \eta_R(m\cdot\Succ(n))
       =
       x\odot\eta_R(\Succ(n))}{%
-      \rChain{6,7,8,9,10,11}}
+      \rChain{15,11}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -2238,13 +2543,20 @@ Für die folgenden Beweistafeln setzen wir erneut
       \FormulaRefAuto{a=b\vdash b=a}{%
         \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]{1,6}}}
     \proofstepwidestar[1,2,6,7]{%
+      f(\Succ(n))=f(n)\oplus f(1)}{%
+      \rChain{8,9}}
+    \proofstepwidestar[1,2,6,7]{%
+      f(\Succ(n))=
+      \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n)\oplus1_R}{%
+      \rChain{12,10}}
+    \proofstepwidestar[1,2,6,7]{%
       f(\Succ(n))=
       \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(n))}{%
-      \rChain{8,9,10,11}}
+      \rChain{13,11}}
     \proofstepwidestar[1,2,3]{n\in\mathbb N}{\rA}
     \proofstepwidestar[1,2,3]{%
       f(n)=\NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n)}{%
-      \FormulaRefAuto{PeanoInductionRule}[ax]{5,12,13}}
+      \FormulaRefAuto{PeanoInductionRule}[ax]{5,14,15}}
   \closeproofpartwideindR
 
   \proofpartwide{Existenz und Eindeutigkeit}
@@ -2366,14 +2678,11 @@ sind.
 \begin{tabproofwide}
   \proofstepwidestar[1]{%
     \SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
-  \proofstepwidestar[1]{%
-    0_R\in R\land
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]{1}}
-  \proofstepwidestar[1]{0_R\in R}{\rAEa{2}}
+  \proofstepwidestar[1]{0_R\in R}{%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]{1}}
   \proofstepwidestar[1]{%
     \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \rAEb{2}}
+    \FormulaRefAuto{SemiringSuccessorFunction}[thm]{1}}
   \proofstepwidestar[1]{%
     \begin{aligned}[t]
       &\RecFun{0_R}
@@ -2393,7 +2702,7 @@ sind.
       \Bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{RecFunSurjectiveIffInductionPrinciple}[thm]{3,4}}
+    \FormulaRefAuto{RecFunSurjectiveIffInductionPrinciple}[thm]{2,3}}
   \proofstepwidestar[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
     =
@@ -2417,7 +2726,7 @@ sind.
         \rightarrow A=R
       \Bigr)
     \end{aligned}
-  }{\rIE{6,5}}
+  }{\rIE{5,4}}
 \end{tabproofwide}
 
 \begin{remark}
@@ -2669,11 +2978,8 @@ surjektiv ist. Ohne Surjektivität erfasst es nur deren Bild.
     \Bigl(
       \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}(x)\neq0_R
     \Bigr)}{\rA}
-  \proofstepwidestar[1]{%
-    0_R\in R\land
-    \SemiringSuccessor{R,\oplus,\odot,0_R,1_R}\colon R\to R}{%
-    \FormulaRefAuto{NaturalSemiringRecursionData}[thm]{1}}
-  \proofstepwidestar[1]{0_R\in R}{\rAEa{4}}
+  \proofstepwidestar[1]{0_R\in R}{%
+    \FormulaRefAuto{SemiringZeroCarrier}[thm]{1}}
   \proofstepwidestar[1,2,3]{%
     \RecFun{0_R}
       {\SemiringSuccessor{R,\oplus,\odot,0_R,1_R}}
@@ -2681,7 +2987,7 @@ surjektiv ist. Ohne Surjektivität erfasst es nur deren Bild.
       \FormulaRefAuto{%
         m_0\in M\dsep f\colon M\inj M\dsep
         \forall x\in M\,\bigl(f(x)\neq m_0\bigr)
-        \vdash \RecFun{m_0}{f}\colon\mathbb{N}\inj M}[thm]{5,2,3}}
+        \vdash \RecFun{m_0}{f}\colon\mathbb{N}\inj M}[thm]{4,2,3}}
   \proofstepwidestar[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
     =
@@ -2690,7 +2996,7 @@ surjektiv ist. Ohne Surjektivität erfasst es nur deren Bild.
     \FormulaRefAuto{NaturalSemiringMapDef}[def]{1}}
   \proofstepwidestar[1,2,3]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}
-      \colon\mathbb N\inj R}{\rIE{7,6}}
+      \colon\mathbb N\inj R}{\rIE{6,5}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Die kanonische Abbildung in einen endlichen Halbring ist nicht injektiv]{%
