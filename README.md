@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B18
+### Standalone-Bände B03 bis B20
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -60,6 +60,8 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B16 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15 |
 | B17 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16 |
 | B18 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17 |
+| B19 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18 |
+| B20 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -79,10 +81,12 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B12 | Natürliche Zahlen |
 | B13 | Ganze Zahlen |
 | B14 | Endliche Mengen |
-| B15 | Halbgruppen, Monoide und Halbringe |
-| B16 | Gruppen und Ringe |
-| B17 | Halbverbände und Verbände |
-| B18 | Frankls Vermutung |
+| B15 | Halbgruppen |
+| B16 | Monoide |
+| B17 | Halbringe |
+| B18 | Gruppen und Ringe |
+| B19 | Halbverbände und Verbände |
+| B20 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
 Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
@@ -95,8 +99,9 @@ Surjektionstheorie nicht vom Auswahlaxiom abhängt.
 Fachspezifische Funktionen bleiben in dem Band, der die für ihre Definition
 benötigten Gegenstände einführt; insbesondere bleiben natürliche
 arithmetische Funktionen in B12 und ganzzahlige Funktionen in B13. Die
-Bände B15 und B16 abstrahieren deren Gesetze zu Monoid-, Halbring-, Gruppen-
-und Ringstrukturen. Ihre allgemeinen Abbildungseigenschaften werden mit den
+Bände B15--B18 abstrahieren deren Gesetze zu Halbgruppen-, Monoid-,
+Halbring-, Gruppen- und Ringstrukturen. Ihre allgemeinen
+Abbildungseigenschaften werden mit den
 Sätzen aus B06--B08 nachgewiesen. Die Nummerierung bezeichnet damit eine
 Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
 
@@ -106,7 +111,7 @@ ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
 unveränderte tex→aux-Standardregel.
 Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
 unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
-Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B18`
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B20`
 und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 ### PDF-Titel und File Juggler
@@ -140,6 +145,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B16
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B17
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B18
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B19
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B20
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -180,10 +187,10 @@ Zuordnung der titelbasierten Quelldateien zu `registry/_Bxx` im dokumentierten
 Benötigt wird latexmk 4.84 oder neuer.
 
 Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei
-`Bd. 18 - Frankls Vermutung.tex`:
+`Bd. 20 - Frankls Vermutung.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 18 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 20 - Frankls Vermutung.tex"
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
