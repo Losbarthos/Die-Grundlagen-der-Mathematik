@@ -1655,6 +1655,12 @@ Relationen überein.  Für Monoide ist die ausdrückliche Alternative \(b=a\)
     \FormulaRefAuto{SemigroupIsoDef}[def]{13,8}}
 \end{tabproofwide}
 
+\section{Das Isomorphieproblem für Potenzhalbgruppen}
+
+Zwei Halbgruppen heißen \emph{global isomorph}, wenn ihre
+Potenzhalbgruppen isomorph sind.  Die folgende Richtung gilt ohne jede
+Endlichkeitsvoraussetzung.
+
 \FormulaThmDeltaK[Die isomorphe Richtung des Potenzhalbgruppenproblems]{%
   \begin{aligned}[t]
     &\exists f\,\SemigroupIso{f}{A,\star}{B,\diamond}\vdash{}\\[-2pt]
@@ -1685,5 +1691,949 @@ Relationen überein.  Für Monoide ist die ausdrückliche Alternative \(b=a\)
       {\PowNE{A},\star_{\mathcal P}}
       {\PowNE{B},\diamond_{\mathcal P}}}{\rEE{1,2,4}}
 \end{tabproofwide}
+
+\newcommand{\MogStar}{\mathbin{\ast}}
+\newcommand{\MogDiamond}{\mathbin{\diamond}}
+
+\subsection{Ein unendliches Gegenbeispiel zur Umkehrung}
+
+Die folgende Konstruktion geht auf
+\href{https://doi.org/10.1007/BF02389140}%
+  {Mogiljanskaja, \emph{Non-isomorphic Semigroups with Isomorphic
+  Semigroups of Subsets}, 1973, S.~330--332}
+zurück.  Alle verwendeten Symbole seien paarweise verschieden.
+
+\FormulaDefDeltaK[Das Mogiljanskaja-Paar]{%
+  \begin{aligned}[t]
+    L&\coloneqq\{a_i\mid i\in\mathbb N\},
+    &D&\coloneqq\{b_{ij}\mid i,j\in\mathbb N\},\\
+    a_i=a_j&\Longleftrightarrow i=j,
+    &b_{ij}=b_{mn}&\Longleftrightarrow(i=m\land j=n),\\
+    S&\coloneqq L\mathbin{\dot\cup}D\mathbin{\dot\cup}\{0\},
+    &T&\coloneqq S\mathbin{\dot\cup}\{k\},\\
+    x\MogStar y&\coloneqq
+      \begin{cases}
+        b_{ij},&x=a_i\land y=a_j,\\
+        0,&\text{sonst},
+      \end{cases}
+    &x\MogDiamond y&\coloneqq
+      \begin{cases}
+        x\MogStar y,&x,y\in S,\\
+        0,&k\in\{x,y\},
+      \end{cases}\\
+    \alpha&\colon\mathbb N\to S,\quad \alpha(i)\coloneqq a_i,
+    &\beta&\colon\mathbb N\to T,\quad \beta(i)\coloneqq a_i .
+  \end{aligned}
+}{MogiljanskajaPairDef}{%
+  \DeltaRow{Mengen}{L\dsep D\dsep S\dsep T\dsep
+    0\dsep k\dsep a_i\dsep a_j\dsep b_{ij}\dsep b_{mn}\dsep
+    x\dsep y\dsep i\dsep j\dsep m\dsep n}
+  \DeltaRow{Funktionen}{\MogStar\dsep\MogDiamond\dsep\alpha\dsep\beta}
+}
+
+\FormulaThmDeltaK[Der erste Träger bildet eine Halbgruppe]{%
+  \SemigroupAlg{S}{\MogStar}%
+}{MogiljanskajaFirstSemigroup}{%
+  \DeltaRow{Mengen}{S\dsep D\dsep 0\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\MogStar}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in S}{\rA}
+  \proofstepwidestar[2]{y\in S}{\rA}
+  \proofstepwidestar[3]{z\in S}{\rA}
+  \proofstepwidestar[1,2]{x\MogStar y\in S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2}}
+  \proofstepwidestar[2,3]{y\MogStar z\in S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2,3}}
+  \proofstepwide[1,2,3]{(x\MogStar y)\MogStar z}{=}{0}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2,3}}
+  \proofstepwide[1,2,3]{0}{=}{x\MogStar(y\MogStar z)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2,3}}}
+  \proofstepwide[1,2,3]{(x\MogStar y)\MogStar z}{=}{x\MogStar(y\MogStar z)}{%
+    \rChain{6,7}}
+  \proofstepwidestar[]{\SemigroupAlg{S}{\MogStar}}{%
+    \FormulaRefAuto{SemigroupDef}[def]{4,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Der zweite Träger bildet eine Halbgruppe]{%
+  \SemigroupAlg{T}{\MogDiamond}%
+}{MogiljanskajaSecondSemigroup}{%
+  \DeltaRow{Mengen}{T\dsep D\dsep 0\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\MogDiamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x\in T}{\rA}
+  \proofstepwidestar[2]{y\in T}{\rA}
+  \proofstepwidestar[3]{z\in T}{\rA}
+  \proofstepwidestar[1,2]{x\MogDiamond y\in T}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2}}
+  \proofstepwidestar[2,3]{y\MogDiamond z\in T}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2,3}}
+  \proofstepwide[1,2,3]{(x\MogDiamond y)\MogDiamond z}{=}{0}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2,3}}
+  \proofstepwide[1,2,3]{0}{=}{x\MogDiamond(y\MogDiamond z)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2,3}}}
+  \proofstepwide[1,2,3]{(x\MogDiamond y)\MogDiamond z}{=}{%
+    x\MogDiamond(y\MogDiamond z)}{\rChain{6,7}}
+  \proofstepwidestar[]{\SemigroupAlg{T}{\MogDiamond}}{%
+    \FormulaRefAuto{SemigroupDef}[def]{4,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die erste Indexabbildung ist injektiv]{%
+  \alpha\colon\mathbb N\inj S%
+}{MogiljanskajaFirstIndexMapInjective}{%
+  \DeltaRow{Mengen}{S\dsep i\dsep j}
+  \DeltaRow{Funktionen}{\alpha}
+}
+\begin{tabproof}
+  \proofstep{}{\alpha\colon\mathbb N\to S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]}
+  \proofstep{}{%
+    \forall i,j\in\mathbb N\,
+      \bigl(\alpha(i)=\alpha(j)\rightarrow i=j\bigr)}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]}
+  \proofstep{}{\alpha\colon\mathbb N\inj S}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die zweite Indexabbildung ist injektiv]{%
+  \beta\colon\mathbb N\inj T%
+}{MogiljanskajaSecondIndexMapInjective}{%
+  \DeltaRow{Mengen}{T\dsep i\dsep j}
+  \DeltaRow{Funktionen}{\beta}
+}
+\begin{tabproof}
+  \proofstep{}{\beta\colon\mathbb N\to T}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]}
+  \proofstep{}{%
+    \forall i,j\in\mathbb N\,
+      \bigl(\beta(i)=\beta(j)\rightarrow i=j\bigr)}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]}
+  \proofstep{}{\beta\colon\mathbb N\inj T}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Indexabbildungen sind injektiv]{%
+  \alpha\colon\mathbb N\inj S
+  \land\beta\colon\mathbb N\inj T%
+}{MogiljanskajaIndexMapsInjective}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{\alpha\dsep\beta}
+}
+\begin{tabproof}
+  \proofstep{}{\alpha\colon\mathbb N\inj S}{%
+    \FormulaRefAuto{MogiljanskajaFirstIndexMapInjective}[thm]}
+  \proofstep{}{\beta\colon\mathbb N\inj T}{%
+    \FormulaRefAuto{MogiljanskajaSecondIndexMapInjective}[thm]}
+  \proofstep{}{%
+    \alpha\colon\mathbb N\inj S
+    \land\beta\colon\mathbb N\inj T}{\rAI{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die beiden Träger sind nicht endlich]{%
+  \neg\Finite{S}\land\neg\Finite{T}%
+}{MogiljanskajaCarriersInfinite}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{F\dsep\alpha\dsep\beta}
+}
+\begin{tabproof}
+  \proofstep{}{\alpha\colon\mathbb N\inj S}{%
+    \FormulaRefAuto{MogiljanskajaFirstIndexMapInjective}[thm]}
+  \proofstep{}{\beta\colon\mathbb N\inj T}{%
+    \FormulaRefAuto{MogiljanskajaSecondIndexMapInjective}[thm]}
+  \proofstep{3}{\Finite{S}}{\rA}
+  \proofstep{3}{\neg\exists F\colon\mathbb N\inj S}{%
+    \FormulaRefAuto{FiniteNoNatInjection}[thm]{3}}
+  \proofstep{}{\exists F\colon\mathbb N\inj S}{\rEI{1}}
+  \proofstep{3}{\bot}{\rBI{4,5}}
+  \proofstep{}{\neg\Finite{S}}{\rCI{3,6}}
+  \proofstep{8}{\Finite{T}}{\rA}
+  \proofstep{8}{\neg\exists F\colon\mathbb N\inj T}{%
+    \FormulaRefAuto{FiniteNoNatInjection}[thm]{8}}
+  \proofstep{}{\exists F\colon\mathbb N\inj T}{\rEI{2}}
+  \proofstep{8}{\bot}{\rBI{9,10}}
+  \proofstep{}{\neg\Finite{T}}{\rCI{8,11}}
+  \proofstep{}{\neg\Finite{S}\land\neg\Finite{T}}{\rAI{7,12}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente außerhalb von \(L\) sind Produkte]{%
+  s\in S\dsep s\notin L
+  \vdash\exists x,y\in S\,(s=x\MogStar y)%
+}{MogiljanskajaNonLIsProduct}{%
+  \DeltaRow{Mengen}{L\dsep S\dsep D\dsep 0\dsep
+    s\dsep x\dsep y\dsep i\dsep j}
+  \DeltaRow{Funktionen}{\MogStar}
+}
+\begin{tabproof}
+  \proofstep{1}{s\in S}{\rA}
+  \proofstep{2}{s\notin L}{\rA}
+  \proofstep{1,2}{s\in D\lor s=0}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2}}
+  \proofstep{4}{s\in D}{\rA}
+  \proofstep{4}{%
+    \exists i,j\in\mathbb N\,(s=b_{ij})}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{4}}
+  \proofstep{6}{i,j\in\mathbb N\land s=b_{ij}}{\rA}
+  \proofstep{6}{a_i,a_j\in S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{6}}
+  \proofstep{6}{s=a_i\MogStar a_j}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{6}}
+  \proofstep{6}{\exists x,y\in S\,(s=x\MogStar y)}{\rEI{8}}
+  \proofstep{4}{\exists x,y\in S\,(s=x\MogStar y)}{\rEE{5,6,9}}
+  \proofstep{11}{s=0}{\rA}
+  \proofstep{11}{0\in S\land s=0\MogStar0}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{11}}
+  \proofstep{11}{\exists x,y\in S\,(s=x\MogStar y)}{\rEI{12}}
+  \proofstep{1,2}{\exists x,y\in S\,(s=x\MogStar y)}{%
+    \rOE{3,4,10,11,13}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Kein Produkt im zweiten Träger ist \(k\)]{%
+  x,y\in T\vdash x\MogDiamond y\neq k%
+}{MogiljanskajaKNotProduct}{%
+  \DeltaRow{Mengen}{T\dsep D\dsep 0\dsep k\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in T}{\rA}
+  \proofstep{2}{y\in T}{\rA}
+  \proofstep{1,2}{x\MogDiamond y\in D\cup\{0\}}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2}}
+  \proofstep{}{k\notin D\cup\{0\}}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]}
+  \proofstep{5}{x\MogDiamond y=k}{\rA}
+  \proofstep{1,2,5}{k\in D\cup\{0\}}{\rIE{5,3}}
+  \proofstep{1,2,5}{\bot}{\rBI{4,6}}
+  \proofstep{1,2}{x\MogDiamond y\neq k}{\rCI{5,7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Bilder zweier Faktoren ergeben nicht \(k\)]{%
+  \begin{aligned}[t]
+    &\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}\dsep
+      x,y\in S\vdash{}\\[-2pt]
+    &f(x)\MogDiamond f(y)\neq k
+  \end{aligned}
+}{MogiljanskajaHomValuesNotK}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep k\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{x\in S}{\rA}
+  \proofstep{3}{y\in S}{\rA}
+  \proofstep{1}{f\colon S\to T}{%
+    \FormulaRefAuto{SemigroupHomFunctionAxiom}[ax]{1}}
+  \proofstep{1,2}{f(x)\in T}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,2}}
+  \proofstep{1,3}{f(y)\in T}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,3}}
+  \proofstep{1,2,3}{f(x)\MogDiamond f(y)\neq k}{%
+    \FormulaRefAuto{MogiljanskajaKNotProduct}[thm]{5,6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein Urbild von \(k\) ist kein Produkt]{%
+  \begin{aligned}[t]
+    &\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}\dsep
+      s\in S\dsep f(s)=k\vdash{}\\[-2pt]
+    &\neg\exists x,y\in S\,(s=x\MogStar y)
+  \end{aligned}
+}{MogiljanskajaPreimageKNotProduct}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep k\dsep s\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{s\in S}{\rA}
+  \proofstep{3}{f(s)=k}{\rA}
+  \proofstep{4}{\exists x,y\in S\,(s=x\MogStar y)}{\rA}
+  \proofstep{5}{x,y\in S\land s=x\MogStar y}{\rA}
+  \proofstep{5}{x\in S}{\rAEa{5}}
+  \proofstep{5}{y\in S}{\rAEa{\rAEb{5}}}
+  \proofstep{5}{s=x\MogStar y}{\rAEb{\rAEb{5}}}
+  \proofstep{1,5}{f(x\MogStar y)=f(x)\MogDiamond f(y)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{1,6,7}}
+  \proofstep{3,5}{f(x\MogStar y)=k}{\rIE{8,3}}
+  \proofstep{1,3,5}{f(x)\MogDiamond f(y)=k}{%
+    \FormulaRefAuto{a = b,\, a = c \vdash b = c}[thm]{9,10}}
+  \proofstep{1,5}{f(x)\MogDiamond f(y)\neq k}{%
+    \FormulaRefAuto{MogiljanskajaHomValuesNotK}[thm]{1,6,7}}
+  \proofstep{1,3,5}{\bot}{\rBI{12,11}}
+  \proofstep{1,2,3,4}{\bot}{\rEE{4,5,13}}
+  \proofstep{1,2,3}{\neg\exists x,y\in S\,(s=x\MogStar y)}{\rCI{4,14}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein Urbild von \(k\) liegt in \(L\)]{%
+  \begin{aligned}[t]
+    &\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\dsep
+      s\in S\dsep f(s)=k\vdash s\in L
+  \end{aligned}
+}{MogiljanskajaPreimageKInL}{%
+  \DeltaRow{Mengen}{L\dsep S\dsep T\dsep k\dsep s}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{s\in S}{\rA}
+  \proofstep{3}{f(s)=k}{\rA}
+  \proofstep{1}{\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}}
+  \proofstep{1,2,3}{\neg\exists x,y\in S\,(s=x\MogStar y)}{%
+    \FormulaRefAuto{MogiljanskajaPreimageKNotProduct}[thm]{4,2,3}}
+  \proofstep{6}{s\notin L}{\rA}
+  \proofstep{2,6}{\exists x,y\in S\,(s=x\MogStar y)}{%
+    \FormulaRefAuto{MogiljanskajaNonLIsProduct}[thm]{2,6}}
+  \proofstep{1,2,3,6}{\bot}{\rBI{5,7}}
+  \proofstep{1,2,3}{s\in L}{\rCI{6,8}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Produkte eines Urbilds von \(k\) haben Bild \(0\)]{%
+  \begin{aligned}[t]
+    &\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}\dsep
+      i,n\in\mathbb N\dsep f(a_i)=k\vdash{}\\[-2pt]
+    &f(b_{in})=0
+  \end{aligned}
+}{MogiljanskajaPreimageProductsMapToZero}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep 0\dsep k\dsep
+    a_i\dsep a_n\dsep b_{in}\dsep i\dsep n}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\SemigroupHom{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstepwidestar[2]{i\in\mathbb N}{\rA}
+  \proofstepwidestar[3]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[4]{f(a_i)=k}{\rA}
+  \proofstepwidestar[2,3]{a_i,a_n\in S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2,3}}
+  \proofstepwide[1,2,3,4]{f(b_{in})}{=}{f(a_i\MogStar a_n)}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2,3}}
+  \proofstepwide[1,2,3,4]{}{=}{f(a_i)\MogDiamond f(a_n)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{1,5}}
+  \proofstepwide[1,2,3,4]{}{=}{k\MogDiamond f(a_n)}{\rLRS{4}}
+  \proofstepwide[1,2,3,4]{}{=}{0}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{1,2,3}}
+  \proofstepwide[1,2,3,4]{f(b_{in})}{=}{0}{\rChain{6,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Verschiedene Produktindizes widersprechen der
+Injektivität]{%
+  \begin{aligned}[t]
+    &\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\dsep
+      i\in\mathbb N\dsep
+      f(b_{i0})=0\dsep f(b_{i1})=0\vdash\bot
+  \end{aligned}
+}{MogiljanskajaDistinctProductImagesContradiction}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep0\dsep1\dsep
+    b_{i0}\dsep b_{i1}\dsep i}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{i\in\mathbb N}{\rA}
+  \proofstep{3}{f(b_{i0})=0}{\rA}
+  \proofstep{4}{f(b_{i1})=0}{\rA}
+  \proofstep{1}{f\colon S\bij T}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{1}}
+  \proofstep{1}{f\colon S\inj T}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}[thm]{5}}
+  \proofstep{2}{b_{i0},b_{i1}\in S}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2}}
+  \proofstep{3,4}{f(b_{i0})=f(b_{i1})}{%
+    \FormulaRefAuto{a = b,\, c = b \vdash a = c}[thm]{3,4}}
+  \proofstep{1,2,3,4}{b_{i0}=b_{i1}}{%
+    \FormulaRefAuto{Injektivität}[ax]{6,7,8}}
+  \proofstep{2}{b_{i0}\neq b_{i1}}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{2}}
+  \proofstep{1,2,3,4}{\bot}{\rBI{10,9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein angenommener Grundhalbgruppenisomorphismus
+führt zum Widerspruch]{%
+  \SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\vdash\bot%
+}{MogiljanskajaIsoContradiction}{%
+  \DeltaRow{Mengen}{L\dsep S\dsep T\dsep 0\dsep1\dsep
+    k\dsep s\dsep a_i\dsep b_{i0}\dsep b_{i1}\dsep i}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstepwidestar[1]{f\colon S\sur T}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\sur B}[thm]{%
+      \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{1}}}
+  \proofstepwidestar[1]{\exists s\in S\,(f(s)=k)}{%
+    \FormulaRefAuto{y\in B\vdash \exists x\in A\;F(x)=y}[ax]{%
+      2,\FormulaRefAuto{MogiljanskajaPairDef}[def]}}
+  \proofstepwidestar[4]{s\in S\land f(s)=k}{\rA}
+  \proofstepwidestar[4]{s\in S}{\rAEa{4}}
+  \proofstepwidestar[4]{f(s)=k}{\rAEb{4}}
+  \proofstepwidestar[1,4]{s\in L}{%
+    \FormulaRefAuto{MogiljanskajaPreimageKInL}[thm]{1,5,6}}
+  \proofstepwidestar[1,4]{%
+    \exists i\in\mathbb N\,(s=a_i)}{%
+    \FormulaRefAuto{MogiljanskajaPairDef}[def]{7}}
+  \proofstepwidestar[9]{i\in\mathbb N\land s=a_i}{\rA}
+  \proofstepwidestar[9]{i\in\mathbb N}{\rAEa{9}}
+  \proofstepwidestar[4,9]{f(a_i)=k}{\rIE{11,\rIE{10,6}}}
+  \proofstepwidestar[1,4,9]{f(b_{i0})=0}{%
+    \FormulaRefAuto{MogiljanskajaPreimageProductsMapToZero}[thm]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1},10,
+      \FormulaRefAuto{PeanoZero}[ax],11}}
+  \proofstepwidestar[1,4,9]{f(b_{i1})=0}{%
+    \FormulaRefAuto{MogiljanskajaPreimageProductsMapToZero}[thm]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1},10,
+      \FormulaRefAuto{PeanoOneInN}[thm],11}}
+  \proofstepwidestar[1,4,9]{\bot}{%
+    \FormulaRefAuto{MogiljanskajaDistinctProductImagesContradiction}[thm]{%
+      1,10,12,13}}
+  \proofstepwidestar[1,4]{\bot}{\rEE{8,9,14}}
+  \proofstepwidestar[1]{\bot}{\rEE{3,4,15}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Kein Grundhalbgruppenisomorphismus existiert]{%
+  \neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}%
+}{MogiljanskajaNotIsomorphic}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep\MogStar\dsep\MogDiamond}
+}
+\begin{tabproof}
+  \proofstep{1}{%
+    \exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rA}
+  \proofstep{2}{\bot}{%
+    \FormulaRefAuto{MogiljanskajaIsoContradiction}[thm]{2}}
+  \proofstep{1}{\bot}{\rEE{1,2,3}}
+  \proofstep{}{%
+    \neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{\rCI{1,4}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Hilfsmengen des Potenzhalbgruppenisomorphismus]{%
+  \begin{aligned}[t]
+    D'&\coloneqq
+      \{b_{ij}\in D\mid i\neq0\}\cup\{b_{00}\},\\
+    c_0&\coloneqq b_{00},\qquad
+    c_1\coloneqq b_{13},\qquad
+    c_2\coloneqq b_{10},\\
+    \mathcal C&\coloneqq
+      \{H\subseteq D'\mid c_0,c_1\in H\},\\
+    \mathcal C_0&\coloneqq
+      \{H\in\mathcal C\mid c_2\notin H\},\qquad
+    \mathcal C_1\coloneqq
+      \{H\in\mathcal C\mid c_2\in H\},\\
+    \mathcal E&\coloneqq
+      \bigl\{\{k\}\cup H\bigm|H\subseteq D\bigr\}.
+  \end{aligned}
+}{MogiljanskajaAuxiliarySetsDef}{%
+  \DeltaRow{Mengen}{D\dsep D'\dsep k\dsep
+    b_{ij}\dsep c_0\dsep c_1\dsep c_2\dsep
+    \mathcal C\dsep\mathcal C_0\dsep\mathcal C_1\dsep
+    \mathcal E\dsep H\dsep i\dsep j}
+}
+
+\FormulaDefDeltaK[Die beiden Hilfsabbildungen]{%
+  \begin{aligned}[t]
+    \sigma&\colon
+      D'\setminus\{c_0,c_1,c_2\}\to
+      D'\setminus\{c_0,c_1\},\\[-2pt]
+    \sigma(b_{ij})&\coloneqq
+      \begin{cases}
+        b_{10},&i=1\land j=1,\\
+        b_{11},&i=1\land j=2,\\
+        b_{12},&i=1\land j=4,\\
+        b_{1,j-1},&i=1\land j\geq5,\\
+        b_{ij},&i\geq2,
+      \end{cases}\\
+    \theta&\colon
+      D'\setminus\{c_0,c_1,c_2\}\to D,\\[-2pt]
+    \theta(b_{ij})&\coloneqq
+      \begin{cases}
+        b_{00},&i=1\land j=1,\\
+        b_{01},&i=1\land j=2,\\
+        b_{0,j-2},&i=1\land j\geq4,\\
+        b_{i-1,j},&i\geq2.
+      \end{cases}
+  \end{aligned}
+}{MogiljanskajaAuxiliaryMapsDef}{%
+  \DeltaRow{Mengen}{D\dsep D'\dsep c_0\dsep c_1\dsep c_2
+    \dsep b_{ij}\dsep i\dsep j}
+  \DeltaRow{Funktionen}{\sigma\dsep\theta}
+}
+
+\FormulaThmDeltaK[Die Hilfsabbildungen sind bijektiv]{%
+  \begin{aligned}[t]
+    &\sigma\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij
+      D'\setminus\{c_0,c_1\}\ \land{}\\[-2pt]
+    &\theta\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij D
+  \end{aligned}
+}{MogiljanskajaAuxiliaryMapsBijective}{%
+  \DeltaRow{Mengen}{D\dsep D'\dsep c_0\dsep c_1\dsep c_2}
+  \DeltaRow{Funktionen}{\sigma\dsep\theta}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \sigma\colon
+      D'\setminus\{c_0,c_1,c_2\}\inj
+      D'\setminus\{c_0,c_1\}}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliaryMapsDef}[def]}
+  \proofstepwidestar[]{%
+    \sigma\colon
+      D'\setminus\{c_0,c_1,c_2\}\sur
+      D'\setminus\{c_0,c_1\}}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliaryMapsDef}[def]}
+  \proofstepwidestar[]{%
+    \sigma\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij
+      D'\setminus\{c_0,c_1\}}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+      \vdash F\colon A\bij B}[thm]{1,2}}
+  \proofstepwidestar[]{%
+    \theta\colon
+      D'\setminus\{c_0,c_1,c_2\}\inj D}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliaryMapsDef}[def]}
+  \proofstepwidestar[]{%
+    \theta\colon
+      D'\setminus\{c_0,c_1,c_2\}\sur D}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliaryMapsDef}[def]}
+  \proofstepwidestar[]{%
+    \theta\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij D}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+      \vdash F\colon A\bij B}[thm]{4,5}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\sigma\colon
+        D'\setminus\{c_0,c_1,c_2\}\bij
+        D'\setminus\{c_0,c_1\}\ \land{}\\[-2pt]
+      &\theta\colon
+        D'\setminus\{c_0,c_1,c_2\}\bij D
+    \end{aligned}}{\rAI{3,6}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Die Hilfsbijektion auf Teilmengenfamilien]{%
+  \begin{aligned}[t]
+    \psi&\colon\mathcal C\to\mathcal C\cup\mathcal E,\\
+    \psi(H)&\coloneqq
+      \begin{cases}
+        \{c_0,c_1\}\cup
+          \sigma[H\setminus\{c_0,c_1\}],
+          &H\in\mathcal C_0,\\[2pt]
+        \{k\}\cup
+          \theta[H\setminus\{c_0,c_1,c_2\}],
+          &H\in\mathcal C_1.
+      \end{cases}
+  \end{aligned}
+}{MogiljanskajaPsiDef}{%
+  \DeltaRow{Mengen}{k\dsep c_0\dsep c_1\dsep c_2\dsep
+    \mathcal C\dsep\mathcal C_0\dsep\mathcal C_1\dsep
+    \mathcal E\dsep H}
+  \DeltaRow{Funktionen}{\psi\dsep\sigma\dsep\theta}
+}
+
+\FormulaThmDeltaK[Die Hilfsabbildung \(\psi\) ist bijektiv]{%
+  \psi\colon\mathcal C\bij\mathcal C\cup\mathcal E%
+}{MogiljanskajaPsiBijective}{%
+  \DeltaRow{Mengen}{\mathcal C\dsep\mathcal C_0\dsep
+    \mathcal C_1\dsep\mathcal E}
+  \DeltaRow{Funktionen}{\psi\dsep\sigma\dsep\theta}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \mathcal C=\mathcal C_0\cup\mathcal C_1
+    \land\mathcal C_0\cap\mathcal C_1=\varnothing}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliarySetsDef}[def]}
+  \proofstepwidestar[]{%
+    \mathcal C\cap\mathcal E=\varnothing}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliarySetsDef}[def]}
+  \proofstepwidestar[]{%
+    \sigma\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij
+      D'\setminus\{c_0,c_1\}}{%
+    \rAEa{\FormulaRefAuto{MogiljanskajaAuxiliaryMapsBijective}[thm]}}
+  \proofstepwidestar[]{%
+    \theta\colon
+      D'\setminus\{c_0,c_1,c_2\}\bij D}{%
+    \rAEb{\FormulaRefAuto{MogiljanskajaAuxiliaryMapsBijective}[thm]}}
+  \proofstepwidestar[]{%
+    \psi\colon\mathcal C\inj\mathcal C\cup\mathcal E}{%
+    \FormulaRefAuto{MogiljanskajaPsiDef}[def]{1,2,3,4}}
+  \proofstepwidestar[]{%
+    \psi\colon\mathcal C\sur\mathcal C\cup\mathcal E}{%
+    \FormulaRefAuto{MogiljanskajaPsiDef}[def]{1,2,3,4}}
+  \proofstepwidestar[]{%
+    \psi\colon\mathcal C\bij\mathcal C\cup\mathcal E}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+      \vdash F\colon A\bij B}[thm]{5,6}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Die Abbildungen \(\Phi\) und \(\Omega\)]{%
+  \begin{aligned}[t]
+    L_U&\coloneqq U\cap L,\qquad
+    D_U\coloneqq U\cap D,\qquad
+    Z_U\coloneqq U\cap\{0\},\\
+    \Phi(X)&\coloneqq
+      \begin{cases}
+        X,&D_X\notin\mathcal C,\\
+        L_X\cup\psi(D_X)\cup Z_X,&D_X\in\mathcal C,
+      \end{cases}\\
+    \Omega(Y)&\coloneqq
+      \begin{cases}
+        Y,&k\notin Y\land D_Y\notin\mathcal C,\\
+        L_Y\cup\psi^{-1}(D_Y)\cup Z_Y,
+          &k\notin Y\land D_Y\in\mathcal C,\\
+        L_Y\cup\psi^{-1}(\{k\}\cup D_Y)\cup Z_Y,
+          &k\in Y.
+      \end{cases}
+  \end{aligned}
+}{MogiljanskajaPhiOmegaDef}{%
+  \DeltaRow{Mengen}{L\dsep D\dsep0\dsep k\dsep
+    U\dsep X\dsep Y\dsep L_U\dsep D_U\dsep Z_U\dsep
+    \mathcal C}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega\dsep\psi\dsep\psi^{-1}}
+}
+
+\FormulaThmDeltaK[Typisierung von \(\Phi\) und \(\Omega\)]{%
+  \begin{aligned}[t]
+    &\Phi\colon\PowNE{S}\to\PowNE{T}\ \land{}\\[-2pt]
+    &\Omega\colon\PowNE{T}\to\PowNE{S}
+  \end{aligned}
+}{MogiljanskajaPhiOmegaFunctions}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega\dsep\psi}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \psi\colon\mathcal C\bij\mathcal C\cup\mathcal E}{%
+    \FormulaRefAuto{MogiljanskajaPsiBijective}[thm]}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\to\PowNE{T}}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{1}}
+  \proofstepwidestar[]{%
+    \Omega\colon\PowNE{T}\to\PowNE{S}}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{1}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\Phi\colon\PowNE{S}\to\PowNE{T}\ \land{}\\[-2pt]
+      &\Omega\colon\PowNE{T}\to\PowNE{S}
+    \end{aligned}}{\rAI{2,3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[\(\Omega\) ist Linksinverse von \(\Phi\)]{%
+  \Omega\circ\Phi=\Id_{\PowNE{S}}%
+}{MogiljanskajaPhiOmegaLeftInverse}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep X}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\to\PowNE{T}}{%
+    \rAEa{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[]{%
+    \Omega\colon\PowNE{T}\to\PowNE{S}}{%
+    \rAEb{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[3]{X\in\PowNE{S}}{\rA}
+  \proofstepwide[3]{(\Omega\circ\Phi)(X)}{=}{\Omega(\Phi(X))}{%
+    \FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}[thm]{3}}
+  \proofstepwide[3]{}{=}{X}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{3}}
+  \proofstepwide[3]{}{=}{\Id_{\PowNE{S}}(X)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{x\in A\vdash \Id_A(x)=x}[thm]{3}}}
+  \proofstepwide[3]{(\Omega\circ\Phi)(X)}{=}{%
+    \Id_{\PowNE{S}}(X)}{\rChain{4,6}}
+  \proofstepwidestar[]{%
+    \forall X\in\PowNE{S}\,
+      \bigl((\Omega\circ\Phi)(X)=\Id_{\PowNE{S}}(X)\bigr)}{%
+    \rUI{\rRI{3,7}}}
+  \proofstepwidestar[]{%
+    \Omega\circ\Phi=\Id_{\PowNE{S}}}{%
+    \FormulaRefAuto{\forall x\in A\,(F(x)=G(x)) \eqvdash F=G}[thm]{8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[\(\Omega\) ist Rechtsinverse von \(\Phi\)]{%
+  \Phi\circ\Omega=\Id_{\PowNE{T}}%
+}{MogiljanskajaPhiOmegaRightInverse}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep Y}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\to\PowNE{T}}{%
+    \rAEa{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[]{%
+    \Omega\colon\PowNE{T}\to\PowNE{S}}{%
+    \rAEb{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[3]{Y\in\PowNE{T}}{\rA}
+  \proofstepwide[3]{(\Phi\circ\Omega)(Y)}{=}{\Phi(\Omega(Y))}{%
+    \FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}[thm]{3}}
+  \proofstepwide[3]{}{=}{Y}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{3}}
+  \proofstepwide[3]{}{=}{\Id_{\PowNE{T}}(Y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{x\in A\vdash \Id_A(x)=x}[thm]{3}}}
+  \proofstepwide[3]{(\Phi\circ\Omega)(Y)}{=}{%
+    \Id_{\PowNE{T}}(Y)}{\rChain{4,6}}
+  \proofstepwidestar[]{%
+    \forall Y\in\PowNE{T}\,
+      \bigl((\Phi\circ\Omega)(Y)=\Id_{\PowNE{T}}(Y)\bigr)}{%
+    \rUI{\rRI{3,7}}}
+  \proofstepwidestar[]{%
+    \Phi\circ\Omega=\Id_{\PowNE{T}}}{%
+    \FormulaRefAuto{\forall x\in A\,(F(x)=G(x)) \eqvdash F=G}[thm]{8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[\(\Phi\) und \(\Omega\) sind invers]{%
+  \begin{aligned}[t]
+    &\Omega\circ\Phi=\Id_{\PowNE{S}}\ \land{}\\[-2pt]
+    &\Phi\circ\Omega=\Id_{\PowNE{T}}
+  \end{aligned}
+}{MogiljanskajaPhiOmegaInverse}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \Omega\circ\Phi=\Id_{\PowNE{S}}}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaLeftInverse}[thm]}
+  \proofstepwidestar[]{%
+    \Phi\circ\Omega=\Id_{\PowNE{T}}}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaRightInverse}[thm]}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\Omega\circ\Phi=\Id_{\PowNE{S}}\ \land{}\\[-2pt]
+      &\Phi\circ\Omega=\Id_{\PowNE{T}}
+    \end{aligned}}{\rAI{1,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Abbildung \(\Phi\) ist bijektiv]{%
+  \Phi\colon\PowNE{S}\bij\PowNE{T}%
+}{MogiljanskajaPhiBijective}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{\Phi\dsep\Omega}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\to\PowNE{T}}{%
+    \rAEa{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[]{%
+    \Omega\colon\PowNE{T}\to\PowNE{S}}{%
+    \rAEb{\FormulaRefAuto{MogiljanskajaPhiOmegaFunctions}[thm]}}
+  \proofstepwidestar[]{%
+    \Omega\circ\Phi=\Id_{\PowNE{S}}}{%
+    \rAEa{\FormulaRefAuto{MogiljanskajaPhiOmegaInverse}[thm]}}
+  \proofstepwidestar[]{%
+    \Phi\circ\Omega=\Id_{\PowNE{T}}}{%
+    \rAEb{\FormulaRefAuto{MogiljanskajaPhiOmegaInverse}[thm]}}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\bij\PowNE{T}}{%
+    \FormulaRefAuto{F\circ G = \Id_A\dsep G\circ F =\Id_B
+      \vdash G\colon A\bij B}[thm]{3,4}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Rechteck der von Null verschiedenen Produkte]{%
+  R(X,Y)\coloneqq
+    \{b_{ij}\mid a_i\in X\cap L\land a_j\in Y\cap L\}%
+}{MogiljanskajaRectangleDef}{%
+  \DeltaRow{Mengen}{L\dsep X\dsep Y\dsep
+    a_i\dsep a_j\dsep b_{ij}\dsep i\dsep j\dsep R(X,Y)}
+}
+
+\FormulaThmDeltaK[Ein Produktrechteck liegt nicht in \(\mathcal C\)]{%
+  X,Y\in\PowNE{S}\vdash R(X,Y)\notin\mathcal C%
+}{MogiljanskajaRectangleAvoidsC}{%
+  \DeltaRow{Mengen}{S\dsep L\dsep D'\dsep
+    X\dsep Y\dsep\mathcal C\dsep
+    c_0\dsep c_1\dsep b_{03}\dsep R(X,Y)}
+}
+\begin{tabproof}
+  \proofstep{1}{X\in\PowNE{S}}{\rA}
+  \proofstep{2}{Y\in\PowNE{S}}{\rA}
+  \proofstep{3}{R(X,Y)\in\mathcal C}{\rA}
+  \proofstep{3}{c_0,c_1\in R(X,Y)}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliarySetsDef}[def]{3}}
+  \proofstep{3}{R(X,Y)\subseteq D'}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliarySetsDef}[def]{3}}
+  \proofstep{1,2,3}{a_0\in X\cap L\land a_3\in Y\cap L}{%
+    \FormulaRefAuto{MogiljanskajaRectangleDef}[def]{4}}
+  \proofstep{1,2,3}{b_{03}\in R(X,Y)}{%
+    \FormulaRefAuto{MogiljanskajaRectangleDef}[def]{6}}
+  \proofstep{1,2,3}{b_{03}\in D'}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,7}}
+  \proofstep{}{b_{03}\notin D'}{%
+    \FormulaRefAuto{MogiljanskajaAuxiliarySetsDef}[def]}
+  \proofstep{1,2,3}{\bot}{\rBI{9,8}}
+  \proofstep{1,2}{R(X,Y)\notin\mathcal C}{\rCI{3,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[\(\Phi\) erhält das Mengenprodukt]{%
+  \begin{aligned}[t]
+    &X,Y\in\PowNE{S}\vdash{}\\[-2pt]
+    &\Phi(X\MogStar_{\mathcal P}Y)
+      =\Phi(X)\MogDiamond_{\mathcal P}\Phi(Y)
+  \end{aligned}
+}{MogiljanskajaPhiPreservesPowerProduct}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep L\dsep D\dsep
+    X\dsep Y\dsep\mathcal C\dsep R(X,Y)}
+  \DeltaRow{Funktionen}{\Phi\dsep
+    \MogStar\dsep\MogDiamond\dsep
+    \MogStar_{\mathcal P}\dsep\MogDiamond_{\mathcal P}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\in\PowNE{S}}{\rA}
+  \proofstepwidestar[2]{Y\in\PowNE{S}}{\rA}
+  \proofstepwidestar[1,2]{%
+    X\MogStar_{\mathcal P}Y\in\PowNE{S}}{%
+    \FormulaRefAuto{PowerSemigroupProductClosure}[thm]{%
+      \FormulaRefAuto{MogiljanskajaFirstSemigroup}[thm],1,2}}
+  \proofstepwidestar[1,2]{R(X,Y)\notin\mathcal C}{%
+    \FormulaRefAuto{MogiljanskajaRectangleAvoidsC}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    (X\MogStar_{\mathcal P}Y)\cap D=R(X,Y)}{%
+    \FormulaRefAuto{PowerSemigroupProductDef}[def]{%
+      \FormulaRefAuto{MogiljanskajaPairDef}[def],1,2}}
+  \proofstepwidestar[1,2]{%
+    (X\MogStar_{\mathcal P}Y)\cap D\notin\mathcal C}{\rIE{5,4}}
+  \proofstepwide[1,2]{\Phi(X\MogStar_{\mathcal P}Y)}{=}{%
+    X\MogStar_{\mathcal P}Y}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{3,6}}
+  \proofstepwidestar[1]{%
+    \Phi(X)\cap L=X\cap L
+    \land\bigl(\Phi(X)\subseteq L\leftrightarrow X\subseteq L\bigr)}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{1}}
+  \proofstepwidestar[2]{%
+    \Phi(Y)\cap L=Y\cap L
+    \land\bigl(\Phi(Y)\subseteq L\leftrightarrow Y\subseteq L\bigr)}{%
+    \FormulaRefAuto{MogiljanskajaPhiOmegaDef}[def]{2}}
+  \proofstepwide[1,2]{X\MogStar_{\mathcal P}Y}{=}{%
+    \Phi(X)\MogDiamond_{\mathcal P}\Phi(Y)}{%
+    \FormulaRefAuto{PowerSemigroupProductDef}[def]{%
+      \FormulaRefAuto{MogiljanskajaPairDef}[def],8,9}}
+  \proofstepwide[1,2]{\Phi(X\MogStar_{\mathcal P}Y)}{=}{%
+    \Phi(X)\MogDiamond_{\mathcal P}\Phi(Y)}{\rChain{7,10}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die konstruierten Potenzhalbgruppen sind isomorph]{%
+  \SemigroupIso{\Phi}
+    {\PowNE{S},\MogStar_{\mathcal P}}
+    {\PowNE{T},\MogDiamond_{\mathcal P}}%
+}{MogiljanskajaPowerSemigroupIsomorphism}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep X\dsep Y}
+  \DeltaRow{Funktionen}{\Phi\dsep
+    \MogStar\dsep\MogDiamond\dsep
+    \MogStar_{\mathcal P}\dsep\MogDiamond_{\mathcal P}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\SemigroupAlg{S}{\MogStar}}{%
+    \FormulaRefAuto{MogiljanskajaFirstSemigroup}[thm]}
+  \proofstepwidestar[]{\SemigroupAlg{T}{\MogDiamond}}{%
+    \FormulaRefAuto{MogiljanskajaSecondSemigroup}[thm]}
+  \proofstepwidestar[]{%
+    \SemigroupAlg{\PowNE{S}}{\MogStar_{\mathcal P}}}{%
+    \FormulaRefAuto{NonemptyPowerSemigroup}[thm]{1}}
+  \proofstepwidestar[]{%
+    \SemigroupAlg{\PowNE{T}}{\MogDiamond_{\mathcal P}}}{%
+    \FormulaRefAuto{NonemptyPowerSemigroup}[thm]{2}}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\bij\PowNE{T}}{%
+    \FormulaRefAuto{MogiljanskajaPhiBijective}[thm]}
+  \proofstepwidestar[]{%
+    \Phi\colon\PowNE{S}\to\PowNE{T}}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{5}}
+  \proofstepwidestar[7]{X\in\PowNE{S}}{\rA}
+  \proofstepwidestar[8]{Y\in\PowNE{S}}{\rA}
+  \proofstepwidestar[7,8]{%
+    \Phi(X\MogStar_{\mathcal P}Y)
+      =\Phi(X)\MogDiamond_{\mathcal P}\Phi(Y)}{%
+    \FormulaRefAuto{MogiljanskajaPhiPreservesPowerProduct}[thm]{7,8}}
+  \proofstepwidestar[]{%
+    \SemigroupHom{\Phi}
+      {\PowNE{S},\MogStar_{\mathcal P}}
+      {\PowNE{T},\MogDiamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupHomDef}[def]{3,4,6,9}}
+  \proofstepwidestar[]{%
+    \SemigroupIso{\Phi}
+      {\PowNE{S},\MogStar_{\mathcal P}}
+      {\PowNE{T},\MogDiamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{10,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Das Mogiljanskaja-Paar ist ein unendliches
+Gegenbeispiel]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{S}{\MogStar}\land
+      \SemigroupAlg{T}{\MogDiamond}\land
+      \neg\Finite{S}\land
+      \neg\Finite{T}\land{}\\[-2pt]
+    &\neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\land
+      \exists F\,\SemigroupIso{F}
+        {\PowNE{S},\MogStar_{\mathcal P}}
+        {\PowNE{T},\MogDiamond_{\mathcal P}}
+  \end{aligned}
+}{MogiljanskajaPairCounterexample}{%
+  \DeltaRow{Mengen}{S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep F\dsep\Phi\dsep
+    \MogStar\dsep\MogDiamond\dsep
+    \MogStar_{\mathcal P}\dsep\MogDiamond_{\mathcal P}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\SemigroupAlg{S}{\MogStar}}{%
+    \FormulaRefAuto{MogiljanskajaFirstSemigroup}[thm]}
+  \proofstepwidestar[]{\SemigroupAlg{T}{\MogDiamond}}{%
+    \FormulaRefAuto{MogiljanskajaSecondSemigroup}[thm]}
+  \proofstepwidestar[]{\neg\Finite{S}\land\neg\Finite{T}}{%
+    \FormulaRefAuto{MogiljanskajaCarriersInfinite}[thm]}
+  \proofstepwidestar[]{%
+    \neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}}{%
+    \FormulaRefAuto{MogiljanskajaNotIsomorphic}[thm]}
+  \proofstepwidestar[]{%
+    \SemigroupIso{\Phi}
+      {\PowNE{S},\MogStar_{\mathcal P}}
+      {\PowNE{T},\MogDiamond_{\mathcal P}}}{%
+    \FormulaRefAuto{MogiljanskajaPowerSemigroupIsomorphism}[thm]}
+  \proofstepwidestar[]{%
+    \exists F\,\SemigroupIso{F}
+      {\PowNE{S},\MogStar_{\mathcal P}}
+      {\PowNE{T},\MogDiamond_{\mathcal P}}}{\rEI{5}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\\[-2pt]
+      &{}\land\exists F\,\SemigroupIso{F}
+        {\PowNE{S},\MogStar_{\mathcal P}}
+        {\PowNE{T},\MogDiamond_{\mathcal P}}
+    \end{aligned}}{\rAI{4,6}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\neg\Finite{S}\land\neg\Finite{T}\\[-2pt]
+      &{}\land\neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\\[-2pt]
+      &{}\land\exists F\,\SemigroupIso{F}
+        {\PowNE{S},\MogStar_{\mathcal P}}
+        {\PowNE{T},\MogDiamond_{\mathcal P}}
+    \end{aligned}}{\rAI{3,7}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\SemigroupAlg{T}{\MogDiamond}\land
+        \neg\Finite{S}\land\neg\Finite{T}\\[-2pt]
+      &{}\land\neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\\[-2pt]
+      &{}\land\exists F\,\SemigroupIso{F}
+        {\PowNE{S},\MogStar_{\mathcal P}}
+        {\PowNE{T},\MogDiamond_{\mathcal P}}
+    \end{aligned}}{\rAI{2,8}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\SemigroupAlg{S}{\MogStar}\land
+        \SemigroupAlg{T}{\MogDiamond}\land
+        \neg\Finite{S}\land
+        \neg\Finite{T}\\[-2pt]
+      &{}\land\neg\exists f\,\SemigroupIso{f}{S,\MogStar}{T,\MogDiamond}\\[-2pt]
+      &{}\land\exists F\,\SemigroupIso{F}
+          {\PowNE{S},\MogStar_{\mathcal P}}
+          {\PowNE{T},\MogDiamond_{\mathcal P}}
+    \end{aligned}}{\rAI{1,9}}
+\end{tabproofwide}
+
+Damit ist das Mogiljanskaja-Paar ein Gegenbeispiel zur Umkehrung von
+\FormulaRefAuto{SemigroupIsoImpliesPowerSemigroupIso}[thm].
+Die Umkehrung ist also ohne Endlichkeitsvoraussetzung falsch.
 
 \end{document}
