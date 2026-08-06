@@ -3353,6 +3353,26 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
   \proofstep{1,2}{x\notin A\cup B}{\rCI{3,9}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Nichtzugehörigkeit zu beiden Summanden einer Vereinigung]{%
+  x\notin A\cup B\vdash x\notin A\land x\notin B%
+}{OutsideUnionComponents}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+}
+\begin{tabproof}
+  \proofstep{1}{x\notin A\cup B}{\rA}
+  \proofstep{2}{x\in A}{\rA}
+  \proofstep{2}{x\in A\cup B}{%
+    \FormulaRefAuto{x\in A\vdash x\in A\cup B}[thm]{2}}
+  \proofstep{1,2}{\bot}{\rBI{3,1}}
+  \proofstep{1}{x\notin A}{\rCI{2,4}}
+  \proofstep{6}{x\in B}{\rA}
+  \proofstep{6}{x\in A\cup B}{%
+    \FormulaRefAuto{x\in B\vdash x\in A\cup B}[thm]{6}}
+  \proofstep{1,6}{\bot}{\rBI{7,1}}
+  \proofstep{1}{x\notin B}{\rCI{6,8}}
+  \proofstep{1}{x\notin A\land x\notin B}{\rAI{5,9}}
+\end{tabproof}
+
 
 \section{Grundlegende Eigenschaften}
 
@@ -5106,14 +5126,20 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
       \proofstep{1,2}{(a,b)\in A\times B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{3}}
 \end{tabproof}
 
-\subsubsection{Getaggte Kopien und disjunkte Produktschichten}
+\subsubsection{Getaggte Familien}
 
-Die Tags und die Indexmengen in den folgenden Sätzen sind völlig
-beliebige Mengen. Der Tag steht in der ersten Komponente und sorgt dafür,
-dass Schichten mit verschiedenen Tags paarweise disjunkt sind. Das gilt
-nicht nur für zwei Schichten: Die paarweise formulierte Folgerung unten
-erfasst jede durch eine Menge indizierte Familie solcher Schichten, ohne
-dass dafür bereits der spätere Funktionsbegriff benötigt wird.
+Sollen mehrere indizierte Familien gleichzeitig verwendet werden, müssen
+ihre Elemente auch dann auseinandergehalten werden, wenn dieselben Indizes
+auftreten. Dazu versehen wir jede Familie mit einem eigenen Tag: Für
+\(i\in I\) schreiben wir
+\[
+  a_i=(p,i).
+\]
+Die zugehörige Menge aller Werte ist die Produktschicht
+\(\{p\}\times I\). Verschiedene Tags trennen sowohl die einzelnen Werte
+als auch die ganzen Schichten. Auf diese Weise lassen sich insbesondere
+einfach und mehrfach indizierte Familien gemeinsam in einer Grundmenge
+unterbringen.
 
 \FormulaThmDeltaK[Eindeutige Darstellung in einer getaggten Produktschicht]{%
   x\in\{p\}\times I
@@ -5239,169 +5265,16 @@ dass dafür bereits der spätere Funktionsbegriff benötigt wird.
     \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}{\rUI{23}}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Paarweise Disjunktheit einer beliebig getaggten
-Schichtenfamilie]{%
-  s,t\in T\dsep s\neq t\vdash
-  (\{s\}\times I_s)\cap(\{t\}\times I_t)=\varnothing%
-}{TaggedLayerFamilyPairwiseDisjoint}{%
-  \DeltaRow{Mengen}{T\dsep s\dsep t\dsep I_s\dsep I_t}%
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{s,t\in T}{\rA}
-  \proofstepwidestar[2]{s\neq t}{\rA}
-  \proofstepwidestar[2]{%
-    (\{s\}\times I_s)\cap(\{t\}\times I_t)=\varnothing}{%
-    \FormulaRefAuto{TaggedProductLayersDisjoint}[thm]{2}}
-\end{tabproofwide}
+Für mehr als zwei Familien wird der vorangehende Satz jeweils auf zwei
+verschiedene Tags angewandt. So erhält man paarweise disjunkte Schichten,
+ohne eine eigene Familiensymbolik einzuführen.
 
-Dies ist an dieser Stelle ein metasprachliches Schema: Für jede Wahl
-einer Indexmenge \(T\) und von Mengen \(I_t\) darf die Aussage
-instanziiert werden. Eine Familie \(t\mapsto I_t\) wird hier noch nicht
-als Funktionsobjekt quantifiziert, weil der Funktionsbegriff erst später
-eingeführt wird. Die Voraussetzungen \(s,t\in T\) halten lediglich die
-beabsichtigte Indizierung fest; für die Disjunktheit selbst wird nur
-\(s\neq t\) benötigt. Mit \(L_t=\{t\}\times I_t\) besagt das Schema also
-\[
-  s\neq t\quad\Longrightarrow\quad L_s\cap L_t=\varnothing.
-\]
-Insbesondere darf die Familie endlich oder unendlich viele Schichten
-enthalten.
+Werden außerdem endlich viele Sonderwerte benötigt, versieht man auch sie
+mit neuen Tags. Damit bleiben sie von allen bisherigen Schichten und
+voneinander verschieden; ein zusätzliches Paketprädikat ist dafür nicht
+erforderlich.
 
-\FormulaThmDeltaK[Zwei getaggte disjunkte Schichten mit frischen Außenpunkten]{%
-  p\neq q\vdash
-  \exists L\,\exists D\,\Bigl(
-    \begin{aligned}[t]
-      &L=\{p\}\times I
-      \land D=\{q\}\times J\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in L\leftrightarrow
-        \exists! i\,\bigl(i\in I\land x=(p,i)\bigr)\Bigr)\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in D\leftrightarrow
-        \exists! j\,\bigl(j\in J\land x=(q,j)\bigr)\Bigr)\\[-1mm]
-      &\land\ L\cap D=\varnothing\\[-1mm]
-      &\land\ \exists u\,\exists v\,
-        \bigl(u\notin L\cup D\land v\notin L\cup D\land u\neq v\bigr)
-    \end{aligned}
-  \Bigr)%
-}{TaggedDisjointLayersWithFreshPoints}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep i\dsep j\dsep u\dsep v}%
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{p\neq q}{\rA}
-  \proofstepwidestar[]{\{p\}\times I=\{p\}\times I}{\rII}
-  \proofstepwidestar[]{\{q\}\times J=\{q\}\times J}{\rII}
-
-  \proofstepwidestar[]{%
-    x\in\{p\}\times I\leftrightarrow
-      \exists! i\,\bigl(i\in I\land x=(p,i)\bigr)}{%
-    \FormulaRefAuto{TaggedProductLayerUniqueRepresentation}[thm]}
-  \proofstepwidestar[]{%
-    \forall x\,\Bigl(x\in\{p\}\times I\leftrightarrow
-      \exists! i\,\bigl(i\in I\land x=(p,i)\bigr)\Bigr)}{\rUI{4}}
-
-  \proofstepwidestar[]{%
-    x\in\{q\}\times J\leftrightarrow
-      \exists! j\,\bigl(j\in J\land x=(q,j)\bigr)}{%
-    \FormulaRefAuto{TaggedProductLayerUniqueRepresentation}[thm]}
-  \proofstepwidestar[]{%
-    \forall x\,\Bigl(x\in\{q\}\times J\leftrightarrow
-      \exists! j\,\bigl(j\in J\land x=(q,j)\bigr)\Bigr)}{\rUI{6}}
-
-  \proofstepwidestar[1]{%
-    (\{p\}\times I)\cap(\{q\}\times J)=\varnothing}{%
-    \FormulaRefAuto{TaggedProductLayersDisjoint}[thm]{1}}
-  \proofstepwidestar[]{%
-    \exists u\,\exists v\,
-    \Bigl(
-      u\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land u\neq v
-    \Bigr)}{%
-    \FormulaRefAuto{TwoFreshElementsOutsideSet}[thm]}
-
-  \proofstepwidestar[1]{%
-    \begin{aligned}[t]
-      &\{p\}\times I=\{p\}\times I
-      \land \{q\}\times J=\{q\}\times J\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in\{p\}\times I\leftrightarrow
-        \exists! i\,\bigl(i\in I\land x=(p,i)\bigr)\Bigr)\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in\{q\}\times J\leftrightarrow
-        \exists! j\,\bigl(j\in J\land x=(q,j)\bigr)\Bigr)\\[-1mm]
-      &\land\ (\{p\}\times I)\cap(\{q\}\times J)=\varnothing\\[-1mm]
-      &\land\ \exists u\,\exists v\,\Bigl(
-        u\notin(\{p\}\times I)\cup(\{q\}\times J)
-        \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-        \land u\neq v\Bigr)
-    \end{aligned}}{%
-    \rAI{\rAI{\rAI{\rAI{\rAI{2,3},5},7},8},9}}
-  \proofstepwidestar[1]{%
-    \exists L\,\exists D\,\Bigl(
-      \begin{aligned}[t]
-        &L=\{p\}\times I
-        \land D=\{q\}\times J\\[-1mm]
-        &\land\ \forall x\,\Bigl(x\in L\leftrightarrow
-          \exists! i\,\bigl(i\in I\land x=(p,i)\bigr)\Bigr)\\[-1mm]
-        &\land\ \forall x\,\Bigl(x\in D\leftrightarrow
-          \exists! j\,\bigl(j\in J\land x=(q,j)\bigr)\Bigr)\\[-1mm]
-        &\land\ L\cap D=\varnothing\\[-1mm]
-        &\land\ \exists u\,\exists v\,
-          \bigl(u\notin L\cup D\land v\notin L\cup D\land u\neq v\bigr)
-      \end{aligned}
-    \Bigr)}{\rEI{10}}
-\end{tabproofwide}
-
-Schreibt man \(a_i=(p,i)\) und \(b_j=(q,j)\), so sind damit für völlig
-beliebige Indexmengen \(I\) und \(J\) zwei eindeutig indizierte Systeme
-gegeben: Die \(a_i\) sind untereinander verschieden, die \(b_j\) sind
-untereinander verschieden, und wegen der verschiedenen Tags ist jedes
-\(a_i\) von jedem \(b_j\) verschieden.  Auch eine Mehrfachindizierung ist
-nur eine Spezialisierung dieses Satzes.  Für \(J=J_1\times J_2\) schreibt
-man etwa \(b_{rs}=(q,(r,s))\); entsprechend ist jede endliche Zahl von
-Indexkoordinaten durch iterierte kartesische Produkte möglich.
-
-\FormulaThmDeltaK[Kanonische disjunkte Schichten mit frischen Außenpunkten]{%
-  \exists L\,\exists D\,\Bigl(
-    \begin{aligned}[t]
-      &L=\{\varnothing\}\times I
-      \land D=\{\{\varnothing\}\}\times J\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in L\leftrightarrow
-        \exists! i\,\bigl(i\in I\land x=(\varnothing,i)\bigr)\Bigr)\\[-1mm]
-      &\land\ \forall x\,\Bigl(x\in D\leftrightarrow
-        \exists! j\,\bigl(j\in J\land x=(\{\varnothing\},j)\bigr)\Bigr)\\[-1mm]
-      &\land\ L\cap D=\varnothing\\[-1mm]
-      &\land\ \exists u\,\exists v\,
-        \bigl(u\notin L\cup D\land v\notin L\cup D\land u\neq v\bigr)
-    \end{aligned}
-  \Bigr)%
-}{CanonicalTaggedDisjointLayersWithFreshPoints}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep x
-    \dsep i\dsep j\dsep u\dsep v}%
-}
-\begin{tabproofwide}
-  \proofstepwidestar[]{\varnothing\in\{\varnothing\}}{%
-    \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rII}}
-  \proofstepwidestar[]{\{\varnothing\}\neq\varnothing}{%
-    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{1}}
-  \proofstepwidestar[]{\varnothing\neq\{\varnothing\}}{%
-    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{2}}
-  \proofstepwidestar[]{%
-    \exists L\,\exists D\,\Bigl(
-      \begin{aligned}[t]
-        &L=\{\varnothing\}\times I
-        \land D=\{\{\varnothing\}\}\times J\\[-1mm]
-        &\land\ \forall x\,\Bigl(x\in L\leftrightarrow
-          \exists! i\,\bigl(i\in I\land x=(\varnothing,i)\bigr)\Bigr)\\[-1mm]
-        &\land\ \forall x\,\Bigl(x\in D\leftrightarrow
-          \exists! j\,\bigl(j\in J\land x=(\{\varnothing\},j)\bigr)\Bigr)\\[-1mm]
-        &\land\ L\cap D=\varnothing\\[-1mm]
-        &\land\ \exists u\,\exists v\,
-          \bigl(u\notin L\cup D\land v\notin L\cup D\land u\neq v\bigr)
-      \end{aligned}
-    \Bigr)}{%
-    \FormulaRefAuto{TaggedDisjointLayersWithFreshPoints}[thm]{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Gewöhnliche Darstellung einer getaggten Schicht]{%
+\FormulaThmDeltaK[Darstellung einer getaggten Schicht]{%
   x\in\{p\}\times I
   \eqvdash \exists i\in I\,(x=(p,i))%
 }{TaggedProductLayerRepresentation}{%
@@ -5430,7 +5303,7 @@ Indexkoordinaten durch iterierte kartesische Produkte möglich.
   \closeproofpart
 \end{tabproofsplit}
 
-\FormulaThmDeltaK[Gewöhnliche Darstellung einer zweifach indizierten Schicht]{%
+\FormulaThmDeltaK[Darstellung einer zweifach indizierten Schicht]{%
   x\in\{p\}\times(J\times K)
   \eqvdash
   \exists j\in J\,\exists k\in K\,(x=(p,(j,k)))%
@@ -5508,438 +5381,6 @@ Indexkoordinaten durch iterierte kartesische Produkte möglich.
       \rEE{1,2,12}}
   \closeproofpartwide
 \end{tabproofsplitwide}
-
-\FormulaThmDeltaK[Universelle Rechtsinjektivität eines Paar-Tags]{%
-  \forall x\,\forall y\,
-    \bigl((p,x)=(p,y)\longrightarrow x=y\bigr)%
-}{TaggedPairRightInjectiveUniversal}{%
-  \DeltaRow{Mengen}{p\dsep x\dsep y}
-}
-\begin{tabproof}
-  \proofstep{1}{(p,x)=(p,y)}{\rA}
-  \proofstep{1}{x=y}{%
-    \FormulaRefAuto{TaggedPairRightInjective}[thm]{1}}
-  \proofstep{}{\forall x\,\forall y\,
-    ((p,x)=(p,y)\longrightarrow x=y)}{%
-    \rUI{\rUI{\rRI{1,2}}}}
-\end{tabproof}
-
-\FormulaDefDeltaK[Grunddaten zweier beliebig getaggter Schichten]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)
-  \ \Longleftrightarrow\
-  \begin{aligned}[t]
-    &\Bigl(
-      L=\{p\}\times I
-      \land D=\{q\}\times J\\[-2pt]
-    &\hspace{18mm}\land\
-      \forall x\,\bigl(x\in L\leftrightarrow
-        \exists i\in I\,(x=(p,i))\bigr)
-    \Bigr)\\[-2pt]
-    {}\land{}&
-    \Bigl(
-      \forall x\,\bigl(x\in D\leftrightarrow
-        \exists j\in J\,(x=(q,j))\bigr)\\[-2pt]
-    &\hspace{18mm}\land\
-      \forall i\,\forall m\,
-        \bigl((p,i)=(p,m)\longrightarrow i=m\bigr)\\[-2pt]
-    &\hspace{18mm}\land\
-      \forall j\,\forall n\,
-        \bigl((q,j)=(q,n)\longrightarrow j=n\bigr)
-    \Bigr)\\[-2pt]
-    {}\land{}&
-    \Bigl(
-      \bigl(L\cap D=\varnothing
-        \land u\notin L\cup D
-        \land v\notin L\cup D\bigr)
-      \land u\neq v
-    \Bigr)
-  \end{aligned}%
-}{TaggedGroundDataDef}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep i\dsep m\dsep j\dsep n\dsep u\dsep v}
-}
-
-\FormulaThmDeltaK[Allgemeines Grunddatenpaket getaggter Schichten]{%
-  p\neq q\vdash
-  \exists L\,\exists D\,\exists u\,\exists v\,
-    \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)%
-}{TaggedGroundDataWithFreshPoints}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep i\dsep m\dsep j\dsep n\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{p\neq q}{\rA}
-  \proofstepwidestar[]{\{p\}\times I=\{p\}\times I}{\rII}
-  \proofstepwidestar[]{\{q\}\times J=\{q\}\times J}{\rII}
-  \proofstepwidestar[]{%
-    x\in\{p\}\times I\leftrightarrow
-      \exists i\in I\,(x=(p,i))}{%
-    \FormulaRefAuto{TaggedProductLayerRepresentation}[thm]}
-  \proofstepwidestar[]{%
-    \forall x\,\bigl(x\in\{p\}\times I\leftrightarrow
-      \exists i\in I\,(x=(p,i))\bigr)}{\rUI{4}}
-  \proofstepwidestar[]{%
-    x\in\{q\}\times J\leftrightarrow
-      \exists j\in J\,(x=(q,j))}{%
-    \FormulaRefAuto{TaggedProductLayerRepresentation}[thm]}
-  \proofstepwidestar[]{%
-    \forall x\,\bigl(x\in\{q\}\times J\leftrightarrow
-      \exists j\in J\,(x=(q,j))\bigr)}{\rUI{6}}
-  \proofstepwidestar[]{%
-    \forall i\,\forall m\,
-      \bigl((p,i)=(p,m)\longrightarrow i=m\bigr)}{%
-    \FormulaRefAuto{TaggedPairRightInjectiveUniversal}[thm]}
-  \proofstepwidestar[]{%
-    \forall j\,\forall n\,
-      \bigl((q,j)=(q,n)\longrightarrow j=n\bigr)}{%
-    \FormulaRefAuto{TaggedPairRightInjectiveUniversal}[thm]}
-  \proofstepwidestar[1]{%
-    (\{p\}\times I)\cap(\{q\}\times J)=\varnothing}{%
-    \FormulaRefAuto{TaggedProductLayersDisjoint}[thm]{1}}
-  \proofstepwidestar[]{%
-    \exists u\,\exists v\,\Bigl(
-      u\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land u\neq v\Bigr)}{%
-    \FormulaRefAuto{TwoFreshElementsOutsideSet}[thm]}
-
-  \proofstepwidestar[12]{%
-    \exists v\,\Bigl(
-      u\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land u\neq v\Bigr)}{\rA}
-  \proofstepwidestar[13]{%
-    u\notin(\{p\}\times I)\cup(\{q\}\times J)
-    \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-    \land u\neq v}{\rA}
-  \proofstepwidestar[13]{%
-    u\notin(\{p\}\times I)\cup(\{q\}\times J)}{%
-    \FormulaRefAuto{P\land Q\land R\vdash P}[thm]{13}}
-  \proofstepwidestar[13]{%
-    v\notin(\{p\}\times I)\cup(\{q\}\times J)}{%
-    \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{13}}
-  \proofstepwidestar[13]{u\neq v}{%
-    \FormulaRefAuto{P\land Q\land R\vdash R}[thm]{13}}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      &\{p\}\times I=\{p\}\times I
-      \land\{q\}\times J=\{q\}\times J\\[-2pt]
-      &\land\ \forall x\,\bigl(x\in\{p\}\times I\leftrightarrow
-        \exists i\in I\,(x=(p,i))\bigr)
-    \end{aligned}}{\rAI{\rAI{2,3},5}}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      &\forall x\,\bigl(x\in\{q\}\times J\leftrightarrow
-        \exists j\in J\,(x=(q,j))\bigr)\\[-2pt]
-      &\land\ \forall i\,\forall m\,
-        ((p,i)=(p,m)\longrightarrow i=m)\\[-2pt]
-      &\land\ \forall j\,\forall n\,
-        ((q,j)=(q,n)\longrightarrow j=n)
-    \end{aligned}}{\rAI{\rAI{7,8},9}}
-  \proofstepwidestar[1,13]{%
-    \bigl(
-      (\{p\}\times I)\cap(\{q\}\times J)=\varnothing
-      \land u\notin(\{p\}\times I)\cup(\{q\}\times J)
-      \land v\notin(\{p\}\times I)\cup(\{q\}\times J)
-    \bigr)\land u\neq v}{%
-    \rAI{\rAI{\rAI{10,14},15},16}}
-  \proofstepwidestar[1,13]{%
-    \mathsf{TGD}_{p,q}^{I,J}
-      (\{p\}\times I,\{q\}\times J;u,v)}{%
-    \FormulaRefAuto{TaggedGroundDataDef}[def]{%
-      \rAI{\rAI{17,18},19}}}
-  \proofstepwidestar[1,13]{%
-    \exists L\,\exists D\,\exists u\,\exists v\,
-      \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rEI{20}}
-  \proofstepwidestar[1,12]{%
-    \exists L\,\exists D\,\exists u\,\exists v\,
-      \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{%
-    \rEE{12,13,21}}
-  \proofstepwidestar[1]{%
-    \exists L\,\exists D\,\exists u\,\exists v\,
-      \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{%
-    \rEE{11,12,22}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Kanonisches Grunddatenpaket getaggter Schichten]{%
-  \exists L\,\exists D\,\exists u\,\exists v\,
-    \mathsf{TGD}_{\varnothing,\{\varnothing\}}^{I,J}(L,D;u,v)%
-}{CanonicalTaggedGroundDataWithFreshPoints}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep x
-    \dsep i\dsep m\dsep j\dsep n\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[]{\varnothing\in\{\varnothing\}}{%
-    \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rII}}
-  \proofstepwidestar[]{\{\varnothing\}\neq\varnothing}{%
-    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{1}}
-  \proofstepwidestar[]{\varnothing\neq\{\varnothing\}}{%
-    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{2}}
-  \proofstepwidestar[]{%
-    \exists L\,\exists D\,\exists u\,\exists v\,
-      \mathsf{TGD}_{\varnothing,\{\varnothing\}}^{I,J}(L,D;u,v)}{%
-    \FormulaRefAuto{TaggedGroundDataWithFreshPoints}[thm]{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Injektivität der ersten Indizierung im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)
-  \dsep(p,i)=(p,m)\vdash i=m%
-}{TaggedGroundFirstIndexUnique}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep i\dsep m\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[2]{(p,i)=(p,m)}{\rA}
-  \proofstepwidestar[1]{%
-    \forall i\,\forall m\,((p,i)=(p,m)\longrightarrow i=m)}{%
-    \rAEb{\rAEa{\rAEb{\rAEa{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}}
-  \proofstepwidestar[1]{(p,i)=(p,m)\longrightarrow i=m}{%
-    \rUE{\rUE{3}}}
-  \proofstepwidestar[1,2]{i=m}{\rRE{2,4}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Injektivität der zweiten Indizierung im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)
-  \dsep(q,j)=(q,n)\vdash j=n%
-}{TaggedGroundSecondIndexUnique}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep j\dsep n\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[2]{(q,j)=(q,n)}{\rA}
-  \proofstepwidestar[1]{%
-    \forall j\,\forall n\,((q,j)=(q,n)\longrightarrow j=n)}{%
-    \rAEb{\rAEb{\rAEa{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}
-  \proofstepwidestar[1]{(q,j)=(q,n)\longrightarrow j=n}{%
-    \rUE{\rUE{3}}}
-  \proofstepwidestar[1,2]{j=n}{\rRE{2,4}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Elementkriterium der ersten Grundschicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)
-  \vdash x\in L\leftrightarrow\exists i\in I\,(x=(p,i))%
-}{TaggedGroundFirstLayerMembership}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep i\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{%
-    \forall x\,\bigl(x\in L\leftrightarrow
-      \exists i\in I\,(x=(p,i))\bigr)}{%
-    \rAEb{\rAEa{\rAEa{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}
-  \proofstepwidestar[1]{%
-    x\in L\leftrightarrow\exists i\in I\,(x=(p,i))}{\rUE{2}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Elementkriterium der zweiten Grundschicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)
-  \vdash x\in D\leftrightarrow\exists j\in J\,(x=(q,j))%
-}{TaggedGroundSecondLayerMembership}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep j\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{%
-    \forall x\,\bigl(x\in D\leftrightarrow
-      \exists j\in J\,(x=(q,j))\bigr)}{%
-    \rAEa{\rAEa{\rAEb{\rAEa{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}}
-  \proofstepwidestar[1]{%
-    x\in D\leftrightarrow\exists j\in J\,(x=(q,j))}{\rUE{2}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Disjunktheit im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash L\cap D=\varnothing%
-}{TaggedGroundLayersDisjoint}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{L\cap D=\varnothing}{%
-    \rAEa{\rAEa{\rAEa{\rAEb{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Erster Außenpunkt im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash u\notin L\cup D%
-}{TaggedGroundFirstOutsideLayers}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{u\notin L\cup D}{%
-    \rAEb{\rAEa{\rAEa{\rAEb{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Zweiter Außenpunkt im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash v\notin L\cup D%
-}{TaggedGroundSecondOutsideLayers}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{v\notin L\cup D}{%
-    \rAEb{\rAEa{\rAEb{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Verschiedenheit der Außenpunkte im Grunddatenpaket]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash u\neq v%
-}{TaggedGroundFreshPointsDistinct}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{u\neq v}{%
-    \rAEb{\rAEb{\FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Nichtzugehörigkeit zu beiden Summanden einer Vereinigung]{%
-  x\notin A\cup B\vdash x\notin A\land x\notin B%
-}{OutsideUnionComponents}{%
-  \DeltaRow{Mengen}{A\dsep B\dsep x}
-}
-\begin{tabproof}
-  \proofstep{1}{x\notin A\cup B}{\rA}
-  \proofstep{2}{x\in A}{\rA}
-  \proofstep{2}{x\in A\cup B}{%
-    \FormulaRefAuto{x\in A\vdash x\in A\cup B}[thm]{2}}
-  \proofstep{1,2}{\bot}{\rBI{3,1}}
-  \proofstep{1}{x\notin A}{\rCI{2,4}}
-  \proofstep{6}{x\in B}{\rA}
-  \proofstep{6}{x\in A\cup B}{%
-    \FormulaRefAuto{x\in B\vdash x\in A\cup B}[thm]{6}}
-  \proofstep{1,6}{\bot}{\rBI{7,1}}
-  \proofstep{1}{x\notin B}{\rCI{6,8}}
-  \proofstep{1}{x\notin A\land x\notin B}{\rAI{5,9}}
-\end{tabproof}
-
-\FormulaThmDeltaK[Erster Außenpunkt außerhalb der ersten Schicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash u\notin L%
-}{TaggedGroundFirstNotInFirstLayer}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{u\notin L\cup D}{%
-    \FormulaRefAuto{TaggedGroundFirstOutsideLayers}[thm]{1}}
-  \proofstepwidestar[1]{u\notin L\land u\notin D}{%
-    \FormulaRefAuto{OutsideUnionComponents}[thm]{2}}
-  \proofstepwidestar[1]{u\notin L}{\rAEa{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Erster Außenpunkt außerhalb der zweiten Schicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash u\notin D%
-}{TaggedGroundFirstNotInSecondLayer}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{u\notin L\cup D}{%
-    \FormulaRefAuto{TaggedGroundFirstOutsideLayers}[thm]{1}}
-  \proofstepwidestar[1]{u\notin L\land u\notin D}{%
-    \FormulaRefAuto{OutsideUnionComponents}[thm]{2}}
-  \proofstepwidestar[1]{u\notin D}{\rAEb{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Zweiter Außenpunkt außerhalb der ersten Schicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash v\notin L%
-}{TaggedGroundSecondNotInFirstLayer}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{v\notin L\cup D}{%
-    \FormulaRefAuto{TaggedGroundSecondOutsideLayers}[thm]{1}}
-  \proofstepwidestar[1]{v\notin L\land v\notin D}{%
-    \FormulaRefAuto{OutsideUnionComponents}[thm]{2}}
-  \proofstepwidestar[1]{v\notin L}{\rAEa{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Zweiter Außenpunkt außerhalb der zweiten Schicht]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash v\notin D%
-}{TaggedGroundSecondNotInSecondLayer}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{v\notin L\cup D}{%
-    \FormulaRefAuto{TaggedGroundSecondOutsideLayers}[thm]{1}}
-  \proofstepwidestar[1]{v\notin L\land v\notin D}{%
-    \FormulaRefAuto{OutsideUnionComponents}[thm]{2}}
-  \proofstepwidestar[1]{v\notin D}{\rAEb{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Zweiter Außenpunkt nicht im Singleton des ersten]{%
-  \mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)\vdash v\notin\{u\}%
-}{TaggedGroundSecondNotInFirstSingleton}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep L\dsep D\dsep p\dsep q\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{TGD}_{p,q}^{I,J}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{u\neq v}{%
-    \FormulaRefAuto{TaggedGroundFreshPointsDistinct}[thm]{1}}
-  \proofstepwidestar[1]{v\neq u}{%
-    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{2}}
-  \proofstepwidestar[1]{v\notin\{u\}}{%
-    \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}[thm]{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Zweifache Injektivität der zweiten Indizierung]{%
-  \mathsf{TGD}_{p,q}^{I,J\times K}(L,D;u,v)
-  \dsep(q,(j,k))=(q,(m,n))
-  \vdash j=m\land k=n%
-}{TaggedGroundSecondProductIndexUnique}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep K\dsep L\dsep D\dsep p\dsep q
-    \dsep j\dsep k\dsep m\dsep n\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{%
-    \mathsf{TGD}_{p,q}^{I,J\times K}(L,D;u,v)}{\rA}
-  \proofstepwidestar[2]{(q,(j,k))=(q,(m,n))}{\rA}
-  \proofstepwidestar[1,2]{(j,k)=(m,n)}{%
-    \FormulaRefAuto{TaggedGroundSecondIndexUnique}[thm]{1,2}}
-  \proofstepwidestar[1,2]{j=m\land k=n}{%
-    \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{3}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Elementkriterium der zweifach indizierten zweiten Schicht]{%
-  \mathsf{TGD}_{p,q}^{I,J\times K}(L,D;u,v)
-  \vdash
-  x\in D\leftrightarrow
-    \exists j\in J\,\exists k\in K\,(x=(q,(j,k)))%
-}{TaggedGroundSecondProductLayerMembership}{%
-  \DeltaRow{Mengen}{I\dsep J\dsep K\dsep L\dsep D\dsep p\dsep q
-    \dsep x\dsep r\dsep j\dsep k\dsep u\dsep v}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{%
-    \mathsf{TGD}_{p,q}^{I,J\times K}(L,D;u,v)}{\rA}
-  \proofstepwidestar[1]{%
-    D=\{q\}\times(J\times K)}{%
-    \rAEb{\rAEa{\rAEa{\rAEa{%
-      \FormulaRefAuto{TaggedGroundDataDef}[def]{1}}}}}}
-  \proofstepwidestar[1]{%
-    x\in D\leftrightarrow x\in\{q\}\times(J\times K)}{\rLRS{2}}
-  \proofstepwidestar[]{%
-    x\in\{q\}\times(J\times K)
-    \leftrightarrow
-    \exists j\in J\,\exists k\in K\,(x=(q,(j,k)))}{%
-    \FormulaRefAuto{TaggedNestedProductLayerRepresentation}[thm]}
-  \proofstepwidestar[1]{%
-    x\in D\leftrightarrow
-      \exists j\in J\,\exists k\in K\,(x=(q,(j,k)))}{%
-    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R
-      \vdash P\leftrightarrow R}[thm]{3,4}}
-\end{tabproofwide}
 
 % ============================================================
 %  Dreifache Produkte als verschachtelte Paare
