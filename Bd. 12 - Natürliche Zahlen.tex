@@ -1081,6 +1081,36 @@ von-Neumann-spezifischen Aussagen aus Band~03, insbesondere
 Ordnungsdefinitionen über \(m\in n\) oder \(m\subseteq n\), werden hier nicht
 als Folgerungen aus den Peano-Axiomen benutzt.
 
+\FormulaThmDeltaK[Null ist von jedem Nachfolger verschieden]{%
+  n\in\mathbb{N}\vdash 0\neq\Succ(n)%
+}{PeanoZeroNeSuccessor}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb{N}}{\rA}
+  \proofstep{1}{\Succ(n)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{1}}
+  \proofstep{1}{0\neq\Succ(n)}{%
+    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nachfolger bewahren Verschiedenheit]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\neq n
+  \vdash \Succ(m)\neq\Succ(n)%
+}{PeanoSuccPreservesNe}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{3}{m\neq n}{\rA}
+  \proofstep{4}{\Succ(m)=\Succ(n)}{\rA}
+  \proofstep{1,2,4}{m=n}{%
+    \FormulaRefAuto{PeanoSuccInjective}[ax]{1,2,4}}
+  \proofstep{1,2,3,4}{\bot}{\rBI{5,3}}
+  \proofstep{1,2,3}{\Succ(m)\neq\Succ(n)}{\rCI{4,6}}
+\end{tabproof}
+
 \iffalse
 Von-Neumann-spezifischer Block aus Band 03. Diese Aussagen beruhen auf der
 konkreten Konstruktion natürlicher Zahlen als Mengen und gehören nicht zur
@@ -8441,6 +8471,214 @@ punktweise Funktionsvorschrift; die eigentliche Folgenverschiebung ist
   \proofstep{1}{\neg(\SuccShift{H}\colon M\sur M)}{\rCI{6,11}}
 \end{tabproof}
 
+\subsubsection{Bijektivität auf die ausgelassene Zielmenge}
+
+Die Folgenverschiebung ist auf \(M\) nicht surjektiv, weil sie den Anfangspunkt
+auslässt.  Nach einer Verkleinerung der Zielmenge ist sie dagegen bijektiv.
+Damit wird das bei endlichen Indexverschiebungen verwendete
+Hilbert-Hotel-Argument allgemein festgehalten; ein Cantorsches
+Diagonalargument ist hier nicht beteiligt.
+
+\FormulaThmDeltaK[Die Folgenverschiebung trifft den Anfangspunkt nicht]{%
+  H\colon\mathbb{N}\inj M\dsep x\in M
+  \vdash\SuccShift{H}(x)\neq H(0)%
+}{SuccShiftAvoidsInitialValue}{%
+  \DeltaRow{Mengen}{M\dsep x}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}}
+}
+\begin{tabproof}
+  \proofstep{1}{H\colon\mathbb{N}\inj M}{\rA}
+  \proofstep{2}{x\in M}{\rA}
+  \proofstep{3}{\SuccShift{H}(x)=H(0)}{\rA}
+  \proofstep{1,2,3}{\bot}{%
+    \FormulaRefAuto{H\colon\mathbb{N}\inj M\dsep x\in M\dsep
+      \SuccShift{H}(x)=H(0)\vdash\bot}{1,2,3}}
+  \proofstep{1,2}{\SuccShift{H}(x)\neq H(0)}{\rCI{3,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Werte der Folgenverschiebung liegen in der ausgelassenen
+Zielmenge]{%
+  H\colon\mathbb{N}\inj M\dsep x\in M
+  \vdash\SuccShift{H}(x)\in M\setminus\{H(0)\}%
+}{SuccShiftPuncturedRange}{%
+  \DeltaRow{Mengen}{M\dsep x}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}}
+}
+\begin{tabproof}
+  \proofstep{1}{H\colon\mathbb{N}\inj M}{\rA}
+  \proofstep{2}{x\in M}{\rA}
+  \proofstep{1}{\SuccShift{H}\colon M\to M}{%
+    \FormulaRefAuto{H\colon\mathbb{N}\inj M
+      \vdash\SuccShift{H}\colon M\to M}{1}}
+  \proofstep{1,2}{\SuccShift{H}(x)\in M}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{3,2}}
+  \proofstep{1,2}{\SuccShift{H}(x)\neq H(0)}{%
+    \FormulaRefAuto{SuccShiftAvoidsInitialValue}[thm]{1,2}}
+  \proofstep{1,2}{\SuccShift{H}(x)\notin\{H(0)\}}{%
+    \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{5}}
+  \proofstep{1,2}{\SuccShift{H}(x)\in M\setminus\{H(0)\}}{%
+    \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}{%
+      \rAI{4,6}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Jedes nicht ausgelassene Element besitzt ein Urbild]{%
+  \begin{aligned}[t]
+    &H\colon\mathbb{N}\inj M\dsep y\in M\setminus\{H(0)\}\vdash{}\\[-2pt]
+    &\exists x\in M\,\SuccShift{H}(x)=y
+  \end{aligned}%
+}{SuccShiftPuncturedPreimage}{%
+  \DeltaRow{Mengen}{M\dsep n\dsep x\dsep y}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Bildfall]{%
+    \begin{aligned}[t]
+      &H\colon\mathbb{N}\inj M\dsep y\in M\setminus\{H(0)\}
+        \dsep y\in H[\mathbb{N}]\vdash{}\\[-2pt]
+      &\exists x\in M\,\SuccShift{H}(x)=y
+    \end{aligned}%
+  }{%
+    H\colon\mathbb{N}\inj M\dsep y\in M\setminus\{H(0)\}
+      \dsep y\in H[\mathbb{N}]
+    \vdash\exists x\in M\,\SuccShift{H}(x)=y%
+  }[SuccShiftPuncturedPreimageImageCase]
+    \proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
+    \proofstepwidestar[2]{y\in M\setminus\{H(0)\}}{\rA}
+    \proofstepwidestar[3]{y\in H[\mathbb{N}]}{\rA}
+    \proofstepwidestar[1]{H\colon\mathbb{N}\to M}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1}}
+    \proofstepwidestar[1,3]{%
+      \exists n\in\mathbb{N}\,y=H(n)}{%
+      \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]
+        \vdash\exists x\in A\,y=F(x)}{4,3}}
+    \proofstepwidestar[6]{n\in\mathbb{N}\land y=H(n)}{\rA}
+    \proofstepwidestar[6]{n\in\mathbb{N}}{\rAEa{6}}
+    \proofstepwidestar[6]{y=H(n)}{\rAEb{6}}
+    \proofstepwidestar[2]{y\notin\{H(0)\}}{%
+      \rAEb{\FormulaRefAuto{x\in A\setminus B
+        \eqvdash x\in A\land x\notin B}{2}}}
+    \proofstepwidestar[2]{y\neq H(0)}{%
+      \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{9}}
+    \proofstepwidestar[11]{n=0}{\rA}
+    \proofstepwidestar[6,11]{y=H(0)}{\rIE{11,8}}
+    \proofstepwidestar[2,6,11]{\bot}{\rBI{10,12}}
+    \proofstepwidestar[2,6]{n\neq0}{\rCI{11,13}}
+    \proofstepwidestar[6]{\Pred(n)\in\mathbb{N}}{%
+      \FormulaRefAuto{PeanoPredNatural}[thm]{7}}
+    \proofstepwidestar[1,6]{H(\Pred(n))\in M}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{4,15}}
+    \proofstepwidestar[1,6]{%
+      \SuccShift{H}(H(\Pred(n)))=H(\Succ(\Pred(n)))}{%
+      \FormulaRefAuto{H\colon\mathbb{N}\inj M\dsep n\in\mathbb{N}
+        \vdash\SuccShift{H}(H(n))=H(\Succ(n))}{1,15}}
+    \proofstepwidestar[2,6]{n=\Succ(\Pred(n))}{%
+      \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{7,14}}
+    \proofstepwidestar[1,2,6]{%
+      \SuccShift{H}(H(\Pred(n)))=H(n)}{\rIE{18,17}}
+    \proofstepwidestar[1,2,6]{%
+      \SuccShift{H}(H(\Pred(n)))=y}{%
+      \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{%
+        19,\FormulaRefAuto{a=b\vdash b=a}{8}}}
+    \proofstepwidestar[1,2,6]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{%
+      \rEI{\rAI{16,20}}}
+    \proofstepwidestar[1,2,3]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{%
+      \rEE{5,6,21}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Außenfall]{%
+    \begin{aligned}[t]
+      &H\colon\mathbb{N}\inj M\dsep y\in M\setminus\{H(0)\}
+        \dsep y\notin H[\mathbb{N}]\vdash{}\\[-2pt]
+      &\exists x\in M\,\SuccShift{H}(x)=y
+    \end{aligned}%
+  }{%
+    H\colon\mathbb{N}\inj M\dsep y\in M\setminus\{H(0)\}
+      \dsep y\notin H[\mathbb{N}]
+    \vdash\exists x\in M\,\SuccShift{H}(x)=y%
+  }[SuccShiftPuncturedPreimageOutsideCase]
+    \proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
+    \proofstepwidestar[2]{y\in M\setminus\{H(0)\}}{\rA}
+    \proofstepwidestar[3]{y\notin H[\mathbb{N}]}{\rA}
+    \proofstepwidestar[2]{y\in M}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\in A}{2}}
+    \proofstepwidestar[1,2,3]{\SuccShift{H}(y)=y}{%
+      \FormulaRefAuto{H\colon\mathbb{N}\inj M\dsep x\in M\dsep
+        x\notin H[\mathbb{N}]\vdash\SuccShift{H}(x)=x}{1,4,3}}
+    \proofstepwidestar[1,2,3]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{%
+      \rEI{\rAI{4,5}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
+    \proofstepwidestar[2]{y\in M\setminus\{H(0)\}}{\rA}
+    \proofstepwidestar[]{%
+      y\in H[\mathbb{N}]\lor y\notin H[\mathbb{N}]}{%
+      \FormulaRefAuto{P\lor\neg P}}
+    \proofstepwidestar[4]{y\in H[\mathbb{N}]}{\rA}
+    \proofstepwidestar[1,2,4]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{%
+      \FormulaRefAuto{SuccShiftPuncturedPreimageImageCase}{1,2,4}}
+    \proofstepwidestar[6]{y\notin H[\mathbb{N}]}{\rA}
+    \proofstepwidestar[1,2,6]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{%
+      \FormulaRefAuto{SuccShiftPuncturedPreimageOutsideCase}{1,2,6}}
+    \proofstepwidestar[1,2]{%
+      \exists x\in M\,\SuccShift{H}(x)=y}{\rOE{3,4,5,6,7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Folgenverschiebung als Bijektion auf die ausgelassene
+Zielmenge]{%
+  H\colon\mathbb{N}\inj M
+  \vdash\SuccShift{H}\colon M\bij M\setminus\{H(0)\}%
+}{SuccShiftPuncturedBijection}{%
+  \DeltaRow{Mengen}{M\dsep x\dsep y}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
+  \proofstepwidestar[1]{\SuccShift{H}\colon M\inj M}{%
+    \FormulaRefAuto{H\colon\mathbb{N}\inj M
+      \vdash\SuccShift{H}\colon M\inj M}{1}}
+  \proofstepwidestar[3]{x\in M}{\rA}
+  \proofstepwidestar[1,3]{%
+    \SuccShift{H}(x)\in M\setminus\{H(0)\}}{%
+    \FormulaRefAuto{SuccShiftPuncturedRange}[thm]{1,3}}
+  \proofstepwidestar[1]{%
+    x\in M\rightarrow
+    \SuccShift{H}(x)\in M\setminus\{H(0)\}}{\rRI{3,4}}
+  \proofstepwidestar[1]{%
+    \forall x\in M\,
+      \SuccShift{H}(x)\in M\setminus\{H(0)\}}{\rUI{5}}
+  \proofstepwidestar[1]{%
+    \SuccShift{H}\colon M\inj M\setminus\{H(0)\}}{%
+    \quad\FormulaRefAuto{F\colon A\inj B\dsep\forall x\in A\,F(x)\in C
+      \vdash F\colon A\inj C}{2,6}}
+  \proofstepwidestar[1]{%
+    \SuccShift{H}\colon M\to M\setminus\{H(0)\}}{%
+    \quad\FormulaRefAuto{Injektive Funktion}[def]{7}}
+  \proofstepwidestar[9]{y\in M\setminus\{H(0)\}}{\rA}
+  \proofstepwidestar[1,9]{%
+    \exists x\in M\,\SuccShift{H}(x)=y}{%
+    \FormulaRefAuto{SuccShiftPuncturedPreimage}[thm]{1,9}}
+  \proofstepwidestar[1]{%
+    y\in M\setminus\{H(0)\}\rightarrow
+      \exists x\in M\,\SuccShift{H}(x)=y}{\rRI{9,10}}
+  \proofstepwidestar[1]{%
+    \forall y\in M\setminus\{H(0)\}\,
+      \exists x\in M\,\SuccShift{H}(x)=y}{\rUI{11}}
+  \proofstepwidestar[1]{%
+    \SuccShift{H}\colon M\sur M\setminus\{H(0)\}}{%
+    \quad\FormulaRefAuto{Surjektive Funktion}[def]{8,12}}
+  \proofstepwidestar[1]{%
+    \SuccShift{H}\colon M\bij M\setminus\{H(0)\}}{%
+    \quad\FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+      \vdash F\colon A\bij B}{7,13}}
+\end{tabproofwide}
+
 \section{Addition}
 
 Für festes \(a\in\mathbb{N}\) liefert der Dedekindsche Rekursionssatz genau
@@ -10827,6 +11065,45 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1}{\NatSeg{n}\subseteq\NatSeg{\Succ(n)}}{\rIE{2,3}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Nachfolger-Anfangsabschnitt: Elementkriterium]{%
+  r\in\mathbb{N}\vdash
+  x\in\NatSeg{\Succ(r)}\leftrightarrow
+  \bigl(x\in\NatSeg{r}\lor x=r\bigr)%
+}{PeanoNatSegSuccMembershipIff}{%
+  \DeltaRow{Mengen}{r\dsep x}%
+}
+\begin{tabproof}
+  \proofstep{1}{r\in\mathbb{N}}{\rA}
+  \proofstep{2}{x\in\NatSeg{\Succ(r)}}{\rA}
+  \proofstep{1,2}{x\in\NatSeg{r}\lor x=r}{%
+    \FormulaRefAuto{PeanoNatSegSuccElim}[thm]{1,2}}
+  \proofstep{1}{%
+    x\in\NatSeg{\Succ(r)}\rightarrow
+    \bigl(x\in\NatSeg{r}\lor x=r\bigr)}{\rRI{2,3}}
+  \proofstep{5}{x\in\NatSeg{r}\lor x=r}{\rA}
+  \proofstep{6}{x\in\NatSeg{r}}{\rA}
+  \proofstep{1}{\NatSeg{r}\subseteq\NatSeg{\Succ(r)}}{%
+    \FormulaRefAuto{PeanoNatSegSubsetSucc}[thm]{1}}
+  \proofstep{1,6}{x\in\NatSeg{\Succ(r)}}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,6}}
+  \proofstep{9}{x=r}{\rA}
+  \proofstep{1}{\NatSeg{\Succ(r)}=\NatSeg{r}\cup\{r\}}{%
+    \FormulaRefAuto{PeanoNatSegSucc}[thm]{1}}
+  \proofstep{}{r\in\{r\}}{\FormulaRefAuto{a\in\{a\}}[thm]}
+  \proofstep{}{r\in\NatSeg{r}\cup\{r\}}{%
+    \FormulaRefAuto{u\in B\vdash u\in A\cup B}[thm]{11}}
+  \proofstep{1}{r\in\NatSeg{\Succ(r)}}{\rIE{10,12}}
+  \proofstep{1,9}{x\in\NatSeg{\Succ(r)}}{\rIE{9,13}}
+  \proofstep{1,5}{x\in\NatSeg{\Succ(r)}}{%
+    \rOE{5,6,8,9,14}}
+  \proofstep{1}{%
+    \bigl(x\in\NatSeg{r}\lor x=r\bigr)\rightarrow
+    x\in\NatSeg{\Succ(r)}}{\rRI{5,15}}
+  \proofstep{1}{%
+    x\in\NatSeg{\Succ(r)}\leftrightarrow
+    \bigl(x\in\NatSeg{r}\lor x=r\bigr)}{\rLRI{4,16}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Strikte Ordnung als Mitgliedschaft im Peano-Anfangsabschnitt]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
   m<n \leftrightarrow m\in \NatSeg{n}%
@@ -10842,6 +11119,239 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1,2}{m<n \leftrightarrow m\in\NatSeg{n}}{%
     \FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{3}}
 \end{tabproof}
+
+\FormulaThmDeltaK[Verfeinerung eines additiven Restfalls]{%
+  \begin{aligned}[t]
+    n,r\in\mathbb{N}\dsep
+    \exists p\in\mathbb{N}\,(n=p+r)\vdash{}&n=r\lor{}\\[-2pt]
+    &\exists m\in\mathbb{N}\,(n=m+\Succ(r))
+  \end{aligned}%
+}{PeanoTailRefinement}{%
+  \DeltaRow{Mengen}{m\dsep n\dsep p\dsep r}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Nullfall des Restzeugen]{%
+    n,r,p\in\mathbb{N}\dsep n=p+r\dsep p=0\vdash n=r
+  }{%
+    n,r,p\in\mathbb{N}\dsep n=p+r\dsep p=0\vdash n=r
+  }[PeanoTailRefinementZeroCase]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{p\in\mathbb{N}}{\rA}
+    \proofstepwidestar[4]{n=p+r}{\rA}
+    \proofstepwidestar[5]{p=0}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{n=0+r}{\rIE{5,4}}
+    \proofstepwidestar[2]{0+r=r}{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm]{2}}
+    \proofstepwidestar[1,2,3,4,5]{n=r}{\rChain{6,7}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Nachfolgerfall des Restzeugen]{%
+    \begin{aligned}[t]
+      &n,r,p\in\mathbb{N}\dsep n=p+r\dsep p\neq0\vdash{}\\[-2pt]
+      &\exists m\in\mathbb{N}\,(n=m+\Succ(r))
+    \end{aligned}%
+  }{%
+    n,r,p\in\mathbb{N}\dsep n=p+r\dsep p\neq0
+    \vdash\exists m\in\mathbb{N}\,(n=m+\Succ(r))
+  }[PeanoTailRefinementSuccCase]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{p\in\mathbb{N}}{\rA}
+    \proofstepwidestar[4]{n=p+r}{\rA}
+    \proofstepwidestar[5]{p\neq0}{\rA}
+    \proofstepwidestar[3,5]{\exists m\in\mathbb{N}\,(p=\Succ(m))}{%
+      \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{3,5}}
+    \proofstepwidestar[7]{m\in\mathbb{N}\land p=\Succ(m)}{\rA}
+    \proofstepwidestar[2,7]{\Succ(m)+r=\Succ(m+r)}{%
+      \FormulaRefAuto{PeanoAddSuccLeft}[thm]{\rAEa{7},2}}
+    \proofstepwidestar[2,7]{m+\Succ(r)=\Succ(m+r)}{%
+      \FormulaRefAuto{PeanoAddSuccRight}[thm]{\rAEa{7},2}}
+    \proofstepwidestar[2,7]{\Succ(m)+r=m+\Succ(r)}{%
+      \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{8,9}}
+    \proofstepwidestar[1,2,3,4,7]{n=\Succ(m)+r}{%
+      \rIE{\rAEb{7},4}}
+    \proofstepwidestar[1,2,3,4,7]{n=m+\Succ(r)}{\rChain{11,10}}
+    \proofstepwidestar[1,2,3,4,7]{%
+      m\in\mathbb{N}\land n=m+\Succ(r)}{\rAI{\rAEa{7},12}}
+    \proofstepwidestar[1,2,3,4,7]{%
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rEI{13}}
+    \proofstepwidestar[1,2,3,4,5]{%
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rEE{6,7,14}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{\exists p\in\mathbb{N}\,(n=p+r)}{\rA}
+    \proofstepwidestar[4]{p\in\mathbb{N}\land n=p+r}{\rA}
+    \proofstepwidestar[4]{p=0\lor p\neq0}{%
+      \FormulaRefAuto{P\lor\neg P}[thm]}
+    \proofstepwidestar[6]{p=0}{\rA}
+    \proofstepwidestar[1,2,4,6]{n=r}{%
+      \FormulaRefAuto{PeanoTailRefinementZeroCase}[thm]{%
+        1,2,\rAEa{4},\rAEb{4},6}}
+    \proofstepwidestar[1,2,4,6]{%
+      n=r\lor\exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rOIa{7}}
+    \proofstepwidestar[9]{p\neq0}{\rA}
+    \proofstepwidestar[1,2,4,9]{%
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \FormulaRefAuto{PeanoTailRefinementSuccCase}[thm]{%
+        1,2,\rAEa{4},\rAEb{4},9}}
+    \proofstepwidestar[1,2,4,9]{%
+      n=r\lor\exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rOIb{10}}
+    \proofstepwidestar[1,2,4]{%
+      n=r\lor\exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \rOE{5,6,8,9,11}}
+    \proofstepwidestar[1,2,3]{%
+      n=r\lor\exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \rEE{3,4,12}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Zerlegung in Anfangsabschnitt und additiven Rest]{%
+  \begin{aligned}[t]
+    n,r\in\mathbb{N}\vdash{}&n\in\NatSeg{r}\lor{}\\[-2pt]
+    &\exists m\in\mathbb{N}\,(n=m+r)
+  \end{aligned}%
+}{PeanoNatSegTailSplit}{%
+  \DeltaRow{Mengen}{m\dsep n\dsep p\dsep r}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    n\in\mathbb{N}\vdash
+    n\in\NatSeg{0}\lor\exists m\in\mathbb{N}\,(n=m+0)
+  }{%
+    n\in\mathbb{N}\vdash
+    n\in\NatSeg{0}\lor\exists m\in\mathbb{N}\,(n=m+0)
+  }[PeanoNatSegTailSplitBase]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[1]{n+0=n}{%
+      \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+    \proofstepwidestar[1]{n=n+0}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{2}}
+    \proofstepwidestar[1]{n\in\mathbb{N}\land n=n+0}{\rAI{1,3}}
+    \proofstepwidestar[1]{\exists m\in\mathbb{N}\,(n=m+0)}{\rEI{4}}
+    \proofstepwidestar[1]{%
+      n\in\NatSeg{0}\lor\exists m\in\mathbb{N}\,(n=m+0)}{\rOIb{5}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &n,r\in\mathbb{N}\dsep
+        \bigl(n\in\NatSeg{r}\lor
+        \exists p\in\mathbb{N}\,(n=p+r)\bigr)\vdash{}\\[-2pt]
+      &n\in\NatSeg{\Succ(r)}\lor
+        \exists m\in\mathbb{N}\,(n=m+\Succ(r))
+    \end{aligned}%
+  }{%
+    \begin{aligned}[t]
+      &n,r\in\mathbb{N}\dsep
+        \bigl(n\in\NatSeg{r}\lor
+        \exists p\in\mathbb{N}\,(n=p+r)\bigr)\vdash{}\\[-2pt]
+      &n\in\NatSeg{\Succ(r)}\lor
+        \exists m\in\mathbb{N}\,(n=m+\Succ(r))
+    \end{aligned}%
+  }[PeanoNatSegTailSplitStep]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+    \proofstepwidestar[3]{%
+      n\in\NatSeg{r}\lor\exists p\in\mathbb{N}\,(n=p+r)}{\rA}
+    \proofstepwidestar[2]{\NatSeg{r}\subseteq\NatSeg{\Succ(r)}}{%
+      \FormulaRefAuto{PeanoNatSegSubsetSucc}[thm]{2}}
+    \proofstepwidestar[5]{n\in\NatSeg{r}}{\rA}
+    \proofstepwidestar[2,5]{n\in\NatSeg{\Succ(r)}}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,5}}
+    \proofstepwidestar[2,5]{%
+      n\in\NatSeg{\Succ(r)}\lor
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rOIa{6}}
+    \proofstepwidestar[8]{\exists p\in\mathbb{N}\,(n=p+r)}{\rA}
+    \proofstepwidestar[1,2,8]{%
+      n=r\lor\exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \FormulaRefAuto{PeanoTailRefinement}[thm]{1,2,8}}
+    \proofstepwidestar[10]{n=r}{\rA}
+    \proofstepwidestar[2]{%
+      \NatSeg{\Succ(r)}=\NatSeg{r}\cup\{r\}}{%
+      \FormulaRefAuto{PeanoNatSegSucc}[thm]{2}}
+    \proofstepwidestar[]{r\in\{r\}}{%
+      \FormulaRefAuto{a\in\{a\}}[thm]}
+    \proofstepwidestar[]{r\in\NatSeg{r}\cup\{r\}}{%
+      \FormulaRefAuto{u\in B\vdash u\in A\cup B}[thm]{12}}
+    \proofstepwidestar[2]{r\in\NatSeg{\Succ(r)}}{\rIE{11,13}}
+    \proofstepwidestar[2,10]{n\in\NatSeg{\Succ(r)}}{\rIE{10,14}}
+    \proofstepwidestar[2,10]{%
+      n\in\NatSeg{\Succ(r)}\lor
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rOIa{15}}
+    \proofstepwidestar[17]{%
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rA}
+    \proofstepwidestar[17]{%
+      n\in\NatSeg{\Succ(r)}\lor
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{\rOIb{17}}
+    \proofstepwidestar[1,2,8]{%
+      n\in\NatSeg{\Succ(r)}\lor
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \rOE{9,10,16,17,18}}
+    \proofstepwidestar[1,2,3]{%
+      n\in\NatSeg{\Succ(r)}\lor
+      \exists m\in\mathbb{N}\,(n=m+\Succ(r))}{%
+      \rOE{3,5,7,8,19}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+    \proofstepwidestar[1,2]{%
+      n\in\NatSeg{r}\lor\exists m\in\mathbb{N}\,(n=m+r)}{%
+      \makecell[l]{%
+        \FormulaRefAuto{PeanoInductionRule}[ax]\\[-2pt]
+        \quad(IA,IS,2,1)}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Ein additiver Rest liegt außerhalb des Anfangsabschnitts]{%
+  m,r\in\mathbb{N}\vdash m+r\notin\NatSeg{r}%
+}{PeanoTailAvoidsInitialSegment}{%
+  \DeltaRow{Mengen}{k\dsep m\dsep r}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
+  \proofstepwidestar[1,2]{m+r\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{1,2}}
+  \proofstepwidestar[1,2]{r+m=m+r}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{2,1}}
+  \proofstepwidestar[1,2]{m\in\mathbb{N}\land r+m=m+r}{\rAI{1,4}}
+  \proofstepwidestar[1,2]{\exists k\in\mathbb{N}\,(r+k=m+r)}{\rEI{5}}
+  \proofstepwidestar[1,2]{r\leq m+r}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m\leq n\leftrightarrow
+      \exists k\in\mathbb{N}\,(m+k=n)}[thm]{2,3,6}}
+  \proofstepwidestar[8]{m+r\in\NatSeg{r}}{\rA}
+  \proofstepwidestar[1,2,8]{m+r<r}{%
+    \FormulaRefAuto{PeanoNatSegStrictMembership}[thm]{3,2,8}}
+  \proofstepwidestar[1,2,8]{\bot}{%
+    \FormulaRefAuto{PeanoOrderNoCycle}[thm]{3,2,9,7}}
+  \proofstepwidestar[1,2]{m+r\notin\NatSeg{r}}{\rCI{8,10}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein Anfangswert ist kein additiver Rest]{%
+  m,r\in\mathbb{N}\dsep q\in\NatSeg{r}\vdash m+r\neq q%
+}{PeanoTailAvoidsInitialValue}{%
+  \DeltaRow{Mengen}{m\dsep q\dsep r}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{r\in\mathbb{N}}{\rA}
+  \proofstep{3}{q\in\NatSeg{r}}{\rA}
+  \proofstep{1,2}{m+r\notin\NatSeg{r}}{%
+    \FormulaRefAuto{PeanoTailAvoidsInitialSegment}[thm]{1,2}}
+  \proofstep{5}{m+r=q}{\rA}
+  \proofstep{3,5}{m+r\in\NatSeg{r}}{%
+    \FormulaRefAuto{a=b\dsep b\in A\vdash a\in A}[thm]{5,3}}
+  \proofstep{1,2,3,5}{\bot}{\rBI{4,6}}
+  \proofstep{1,2,3}{m+r\neq q}{\rCI{5,7}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Kein Endpunkt im eigenen Anfangsabschnitt]{%
   n\in\mathbb{N}\vdash n\notin \NatSeg{n}%
 }{PeanoNatSegEndpointNotIn}{%
@@ -13592,6 +14102,583 @@ bezeichnet den Nachfolger des vorherigen.
   \DeltaRow{Mengen}{1\dsep 2\dsep 3\dsep 4\dsep 5\dsep 6\dsep 7\dsep 8\dsep 9\dsep 10}%
   \DeltaRow{Funktionensymbol}{\Succ}%
 }
+
+\FormulaThmDeltaK[Zwei ist eine natürliche Zahl]{%
+  2\in\mathbb{N}%
+}{PeanoTwoInN}{%
+  \DeltaRow{Mengen}{2}%
+}
+\begin{tabproof}
+  \proofstep{}{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{\Succ(1)\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+  \proofstep{}{2=\Succ(1)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(1)=2}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{2\in\mathbb{N}}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Drei ist eine natürliche Zahl]{%
+  3\in\mathbb{N}%
+}{PeanoThreeInN}{%
+  \DeltaRow{Mengen}{3}%
+}
+\begin{tabproof}
+  \proofstep{}{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstep{}{\Succ(2)\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+  \proofstep{}{3=\Succ(2)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(2)=3}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{3\in\mathbb{N}}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vier ist eine natürliche Zahl]{%
+  4\in\mathbb{N}%
+}{PeanoFourInN}{%
+  \DeltaRow{Mengen}{4}%
+}
+\begin{tabproof}
+  \proofstep{}{3\in\mathbb{N}}{\FormulaRefAuto{PeanoThreeInN}[thm]}
+  \proofstep{}{\Succ(3)\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+  \proofstep{}{4=\Succ(3)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(3)=4}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{4\in\mathbb{N}}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Fünf ist eine natürliche Zahl]{%
+  5\in\mathbb{N}%
+}{PeanoFiveInN}{%
+  \DeltaRow{Mengen}{5}%
+}
+\begin{tabproof}
+  \proofstep{}{4\in\mathbb{N}}{\FormulaRefAuto{PeanoFourInN}[thm]}
+  \proofstep{}{\Succ(4)\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+  \proofstep{}{5=\Succ(4)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(4)=5}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{5\in\mathbb{N}}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Null und eins sind verschieden]{%
+  0\neq1%
+}{PeanoZeroNeOne}{%
+  \DeltaRow{Mengen}{0\dsep1}%
+}
+\begin{tabproof}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{0\neq\Succ(0)}{%
+    \FormulaRefAuto{PeanoZeroNeSuccessor}[thm]{1}}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstep{}{\Succ(0)=1}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{0\neq1}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Null und zwei sind verschieden]{%
+  0\neq2%
+}{PeanoZeroNeTwo}{%
+  \DeltaRow{Mengen}{0\dsep2}%
+}
+\begin{tabproof}
+  \proofstep{}{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{0\neq\Succ(1)}{%
+    \FormulaRefAuto{PeanoZeroNeSuccessor}[thm]{1}}
+  \proofstep{}{2=\Succ(1)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(1)=2}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{0\neq2}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Null und drei sind verschieden]{%
+  0\neq3%
+}{PeanoZeroNeThree}{%
+  \DeltaRow{Mengen}{0\dsep3}%
+}
+\begin{tabproof}
+  \proofstep{}{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstep{}{0\neq\Succ(2)}{%
+    \FormulaRefAuto{PeanoZeroNeSuccessor}[thm]{1}}
+  \proofstep{}{3=\Succ(2)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(2)=3}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
+  \proofstep{}{0\neq3}{%
+    \rIE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Eins und zwei sind verschieden]{%
+  1\neq2%
+}{PeanoOneNeTwo}{%
+  \DeltaRow{Mengen}{0\dsep1\dsep2}%
+}
+\begin{tabproof}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{0\neq1}{\FormulaRefAuto{PeanoZeroNeOne}[thm]}
+  \proofstep{}{\Succ(0)\neq\Succ(1)}{%
+    \FormulaRefAuto{PeanoSuccPreservesNe}[thm]{1,2,3}}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstep{}{\Succ(0)=1}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{5}}
+  \proofstep{}{2=\Succ(1)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(1)=2}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+  \proofstep{}{1\neq\Succ(1)}{\rIE{6,4}}
+  \proofstep{}{1\neq2}{\rIE{8,9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Eins und drei sind verschieden]{%
+  1\neq3%
+}{PeanoOneNeThree}{%
+  \DeltaRow{Mengen}{0\dsep1\dsep2\dsep3}%
+}
+\begin{tabproof}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstep{}{0\neq2}{\FormulaRefAuto{PeanoZeroNeTwo}[thm]}
+  \proofstep{}{\Succ(0)\neq\Succ(2)}{%
+    \FormulaRefAuto{PeanoSuccPreservesNe}[thm]{1,2,3}}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstep{}{\Succ(0)=1}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{5}}
+  \proofstep{}{3=\Succ(2)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(2)=3}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+  \proofstep{}{1\neq\Succ(2)}{\rIE{6,4}}
+  \proofstep{}{1\neq3}{\rIE{8,9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zwei und drei sind verschieden]{%
+  2\neq3%
+}{PeanoTwoNeThree}{%
+  \DeltaRow{Mengen}{1\dsep2\dsep3}%
+}
+\begin{tabproof}
+  \proofstep{}{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstep{}{1\neq2}{\FormulaRefAuto{PeanoOneNeTwo}[thm]}
+  \proofstep{}{\Succ(1)\neq\Succ(2)}{%
+    \FormulaRefAuto{PeanoSuccPreservesNe}[thm]{1,2,3}}
+  \proofstep{}{2=\Succ(1)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(1)=2}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{5}}
+  \proofstep{}{3=\Succ(2)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{\Succ(2)=3}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+  \proofstep{}{2\neq\Succ(2)}{\rIE{6,4}}
+  \proofstep{}{2\neq3}{\rIE{8,9}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente des Eins-Anfangsabschnitts]{%
+  n\in\NatSeg{1}\leftrightarrow n=0%
+}{PeanoNatSegOneMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{\NatSeg{\Succ(0)}=\NatSeg{0}\cup\{0\}}{%
+    \FormulaRefAuto{PeanoNatSegSucc}[thm]{1}}
+  \proofstep{}{\NatSeg{0}=\varnothing}{%
+    \FormulaRefAuto{PeanoNatSegZero}[thm]}
+  \proofstep{}{\NatSeg{0}\cup\{0\}=\varnothing\cup\{0\}}{%
+    \FormulaRefAuto{A=B\vdash A\cup C=B\cup C}[thm]{3}}
+  \proofstep{}{\NatSeg{\Succ(0)}=\varnothing\cup\{0\}}{\rChain{2,4}}
+  \proofstep{}{\varnothing\cup\{0\}=\{0\}}{%
+    \FormulaRefAuto{\varnothing\cup A=A}[thm]}
+  \proofstep{}{\NatSeg{\Succ(0)}=\{0\}}{\rChain{5,6}}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstep{}{\NatSeg{1}=\{0\}}{\rIE{8,7}}
+  \proofstep{}{n\in\{0\}\leftrightarrow n=0}{%
+    \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]}
+  \proofstep{}{n\in\NatSeg{1}\leftrightarrow n=0}{\rIE{9,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente des Zwei-Anfangsabschnitts]{%
+  n\in\NatSeg{2}\leftrightarrow n=0\lor n=1%
+}{PeanoNatSegTwoMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{}{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{%
+    n\in\NatSeg{\Succ(1)}\leftrightarrow
+    \bigl(n\in\NatSeg{1}\lor n=1\bigr)}{%
+    \FormulaRefAuto{PeanoNatSegSuccMembershipIff}[thm]{1}}
+  \proofstep{}{n\in\NatSeg{1}\leftrightarrow n=0}{%
+    \FormulaRefAuto{PeanoNatSegOneMembership}[thm]}
+  \proofstep{}{%
+    n\in\NatSeg{\Succ(1)}\leftrightarrow n=0\lor n=1}{\rLRS{3,2}}
+  \proofstep{}{2=\Succ(1)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstep{}{n\in\NatSeg{2}\leftrightarrow n=0\lor n=1}{\rIE{5,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente des Drei-Anfangsabschnitts]{%
+  n\in\NatSeg{3}\leftrightarrow n=0\lor n=1\lor n=2%
+}{PeanoNatSegThreeMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(2)}\leftrightarrow
+    \bigl(n\in\NatSeg{2}\lor n=2\bigr)}{%
+    \FormulaRefAuto{PeanoNatSegSuccMembershipIff}[thm]{1}}
+  \proofstepwidestar[]{n\in\NatSeg{2}\leftrightarrow n=0\lor n=1}{%
+    \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(2)}\leftrightarrow
+    n=0\lor n=1\lor n=2}{\rLRS{3,2}}
+  \proofstepwidestar[]{3=\Succ(2)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{3}\leftrightarrow n=0\lor n=1\lor n=2}{\rIE{5,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Elemente des Vier-Anfangsabschnitts]{%
+  n\in\NatSeg{4}\leftrightarrow n=0\lor n=1\lor n=2\lor n=3%
+}{PeanoNatSegFourMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{3\in\mathbb{N}}{\FormulaRefAuto{PeanoThreeInN}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(3)}\leftrightarrow
+    \bigl(n\in\NatSeg{3}\lor n=3\bigr)}{%
+    \FormulaRefAuto{PeanoNatSegSuccMembershipIff}[thm]{1}}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{3}\leftrightarrow n=0\lor n=1\lor n=2}{%
+    \FormulaRefAuto{PeanoNatSegThreeMembership}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(3)}\leftrightarrow
+    n=0\lor n=1\lor n=2\lor n=3}{\rLRS{3,2}}
+  \proofstepwidestar[]{4=\Succ(3)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{4}\leftrightarrow
+    n=0\lor n=1\lor n=2\lor n=3}{\rIE{5,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Elemente des Fünf-Anfangsabschnitts]{%
+  \begin{aligned}[t]
+    n\in\NatSeg{5}\leftrightarrow{}&n=0\lor n=1\lor{}\\[-2pt]
+    &n=2\lor n=3\lor n=4
+  \end{aligned}%
+}{PeanoNatSegFiveMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{4\in\mathbb{N}}{\FormulaRefAuto{PeanoFourInN}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(4)}\leftrightarrow
+    \bigl(n\in\NatSeg{4}\lor n=4\bigr)}{%
+    \FormulaRefAuto{PeanoNatSegSuccMembershipIff}[thm]{1}}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{4}\leftrightarrow
+    n=0\lor n=1\lor n=2\lor n=3}{%
+    \FormulaRefAuto{PeanoNatSegFourMembership}[thm]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{\Succ(4)}\leftrightarrow
+    n=0\lor n=1\lor n=2\lor n=3\lor n=4}{\rLRS{3,2}}
+  \proofstepwidestar[]{5=\Succ(4)}{%
+    \FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{5}\leftrightarrow
+    n=0\lor n=1\lor n=2\lor n=3\lor n=4}{\rIE{5,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Indexzerlegung ab eins]{%
+  n\in\mathbb{N}\vdash
+  n=0\lor\exists m\in\mathbb{N}\,(n=m+1)%
+}{PeanoIndexSplitAtOne}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{1\in\mathbb{N}}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestar[1]{%
+    n\in\NatSeg{1}\lor\exists m\in\mathbb{N}\,(n=m+1)}{%
+    \FormulaRefAuto{PeanoNatSegTailSplit}[thm]{1,2}}
+  \proofstepwidestar[]{n\in\NatSeg{1}\leftrightarrow n=0}{%
+    \FormulaRefAuto{PeanoNatSegOneMembership}[thm]}
+  \proofstepwidestar[5]{n\in\NatSeg{1}}{\rA}
+  \proofstepwidestar[5]{n=0}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{4,5}}
+  \proofstepwidestar[5]{%
+    n=0\lor\exists m\in\mathbb{N}\,(n=m+1)}{\rOIa{6}}
+  \proofstepwidestar[8]{\exists m\in\mathbb{N}\,(n=m+1)}{\rA}
+  \proofstepwidestar[8]{%
+    n=0\lor\exists m\in\mathbb{N}\,(n=m+1)}{\rOIb{8}}
+  \proofstepwidestar[1]{%
+    n=0\lor\exists m\in\mathbb{N}\,(n=m+1)}{%
+    \rOE{3,5,7,8,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Indexzerlegung ab zwei]{%
+  n\in\mathbb{N}\vdash
+  n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)%
+}{PeanoIndexSplitAtTwo}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{2\in\mathbb{N}}{\FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstepwidestar[1]{%
+    n\in\NatSeg{2}\lor\exists m\in\mathbb{N}\,(n=m+2)}{%
+    \FormulaRefAuto{PeanoNatSegTailSplit}[thm]{1,2}}
+  \proofstepwidestar[]{n\in\NatSeg{2}\leftrightarrow n=0\lor n=1}{%
+    \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]}
+  \proofstepwidestar[5]{n\in\NatSeg{2}}{\rA}
+  \proofstepwidestar[5]{n=0\lor n=1}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{4,5}}
+  \proofstepwidestar[7]{n=0}{\rA}
+  \proofstepwidestar[7]{%
+    n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)}{\rOIa{7}}
+  \proofstepwidestar[9]{n=1}{\rA}
+  \proofstepwidestar[9]{%
+    n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)}{%
+    \rOIb{\rOIa{9}}}
+  \proofstepwidestar[5]{%
+    n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)}{%
+    \rOE{6,7,8,9,10}}
+  \proofstepwidestar[12]{\exists m\in\mathbb{N}\,(n=m+2)}{\rA}
+  \proofstepwidestar[12]{%
+    n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)}{%
+    \rOIb{\rOIb{12}}}
+  \proofstepwidestar[1]{%
+    n=0\lor n=1\lor\exists m\in\mathbb{N}\,(n=m+2)}{%
+    \rOE{3,5,11,12,13}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Indexzerlegung ab drei]{%
+  \begin{aligned}[t]
+    n\in\mathbb{N}\vdash{}&n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+    &\exists m\in\mathbb{N}\,(n=m+3)
+  \end{aligned}%
+}{PeanoIndexSplitAtThree}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{3\in\mathbb{N}}{\FormulaRefAuto{PeanoThreeInN}[thm]}
+  \proofstepwidestar[1]{%
+    n\in\NatSeg{3}\lor\exists m\in\mathbb{N}\,(n=m+3)}{%
+    \FormulaRefAuto{PeanoNatSegTailSplit}[thm]{1,2}}
+  \proofstepwidestar[]{%
+    n\in\NatSeg{3}\leftrightarrow n=0\lor n=1\lor n=2}{%
+    \FormulaRefAuto{PeanoNatSegThreeMembership}[thm]}
+  \proofstepwidestar[5]{n\in\NatSeg{3}}{\rA}
+  \proofstepwidestar[5]{n=0\lor n=1\lor n=2}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{4,5}}
+  \proofstepwidestar[7]{n=0}{\rA}
+  \proofstepwidestar[7]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{\rOIa{7}}
+  \proofstepwidestar[9]{n=1}{\rA}
+  \proofstepwidestar[9]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{\rOIb{\rOIa{9}}}
+  \proofstepwidestar[11]{n=2}{\rA}
+  \proofstepwidestar[11]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{%
+    \rOIb{\rOIb{\rOIa{11}}}}
+  \proofstepwidestar[5]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{%
+    \FormulaRefAuto{P_1\lor P_2\lor P_3\dsep
+      [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\vdash R}[thm]{%
+      6,7,8,9,10,11,12}}
+  \proofstepwidestar[14]{\exists m\in\mathbb{N}\,(n=m+3)}{\rA}
+  \proofstepwidestar[14]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{%
+    \rOIb{\rOIb{\rOIb{14}}}}
+  \proofstepwidestar[1]{%
+    n=0\lor n=1\lor n=2\lor
+    \exists m\in\mathbb{N}\,(n=m+3)}{%
+    \rOE{3,5,13,14,15}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Indexzerlegung ab vier]{%
+  \begin{aligned}[t]
+    n\in\mathbb{N}\vdash{}&n=0\lor n=1\lor n=2\lor n=3\lor{}\\[-2pt]
+    &\exists m\in\mathbb{N}\,(n=m+4)
+  \end{aligned}%
+}{PeanoIndexSplitAtFour}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{4\in\mathbb{N}}{\FormulaRefAuto{PeanoFourInN}[thm]}
+  \proofstepwidestar[1]{%
+    n\in\NatSeg{4}\lor\exists m\in\mathbb{N}\,(n=m+4)}{%
+    \FormulaRefAuto{PeanoNatSegTailSplit}[thm]{1,2}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      n\in\NatSeg{4}\leftrightarrow{}&n=0\lor n=1\lor{}\\[-2pt]
+      &n=2\lor n=3
+    \end{aligned}}{%
+    \FormulaRefAuto{PeanoNatSegFourMembership}[thm]}
+  \proofstepwidestar[5]{n\in\NatSeg{4}}{\rA}
+  \proofstepwidestar[5]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor{}\\[-2pt]
+      &n=2\lor n=3
+    \end{aligned}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{4,5}}
+  \proofstepwidestar[7]{n=0}{\rA}
+  \proofstepwidestar[7]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{\rOIa{7}}
+  \proofstepwidestar[9]{n=1}{\rA}
+  \proofstepwidestar[9]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{\rOIb{\rOIa{9}}}
+  \proofstepwidestar[11]{n=2}{\rA}
+  \proofstepwidestar[11]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIa{11}}}}
+  \proofstepwidestar[13]{n=3}{\rA}
+  \proofstepwidestar[13]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIb{\rOIa{13}}}}}
+  \proofstepwidestar[5]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{%
+    \makecell[l]{%
+      \FormulaRefAuto{P_1\lor P_2\lor P_3\lor P_4\dsep
+        [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\dsep
+        [P_4]\vdots R\vdash R}[thm]\\[-2pt]
+      \quad(6,7,8,9,10,11,12,13,14)}}
+  \proofstepwidestar[16]{\exists m\in\mathbb{N}\,(n=m+4)}{\rA}
+  \proofstepwidestar[16]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIb{\rOIb{16}}}}}
+  \proofstepwidestar[1]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
+    \end{aligned}}{%
+    \rOE{3,5,15,16,17}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Indexzerlegung ab fünf]{%
+  \begin{aligned}[t]
+    n\in\mathbb{N}\vdash{}&n=0\lor n=1\lor n=2\lor n=3\lor n=4\lor{}\\[-2pt]
+    &\exists m\in\mathbb{N}\,(n=m+5)
+  \end{aligned}%
+}{PeanoIndexSplitAtFive}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[]{5\in\mathbb{N}}{\FormulaRefAuto{PeanoFiveInN}[thm]}
+  \proofstepwidestar[1]{%
+    n\in\NatSeg{5}\lor\exists m\in\mathbb{N}\,(n=m+5)}{%
+    \FormulaRefAuto{PeanoNatSegTailSplit}[thm]{1,2}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      n\in\NatSeg{5}\leftrightarrow{}&n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4
+    \end{aligned}}{%
+    \FormulaRefAuto{PeanoNatSegFiveMembership}[thm]}
+  \proofstepwidestar[5]{n\in\NatSeg{5}}{\rA}
+  \proofstepwidestar[5]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4
+    \end{aligned}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{4,5}}
+  \proofstepwidestar[7]{n=0}{\rA}
+  \proofstepwidestar[7]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{\rOIa{7}}
+  \proofstepwidestar[9]{n=1}{\rA}
+  \proofstepwidestar[9]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{\rOIb{\rOIa{9}}}
+  \proofstepwidestar[11]{n=2}{\rA}
+  \proofstepwidestar[11]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIa{11}}}}
+  \proofstepwidestar[13]{n=3}{\rA}
+  \proofstepwidestar[13]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIb{\rOIa{13}}}}}
+  \proofstepwidestar[15]{n=4}{\rA}
+  \proofstepwidestar[15]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIb{\rOIb{\rOIa{15}}}}}}
+  \proofstepwidestar[5]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \makecell[l]{%
+      \FormulaRefAuto{DisjunctionEliminationFive}[thm]\\[-2pt]
+      \quad(6,7,8,9,10,11,12,13,14,15,16)}}
+  \proofstepwidestar[18]{\exists m\in\mathbb{N}\,(n=m+5)}{\rA}
+  \proofstepwidestar[18]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \rOIb{\rOIb{\rOIb{\rOIb{\rOIb{18}}}}}}
+  \proofstepwidestar[1]{%
+    \begin{aligned}[t]
+      &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
+      &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
+    \end{aligned}}{%
+    \rOE{3,5,17,18,19}}
+\end{tabproofwide}
 
 Eine Basis eines Stellenwertsystems ist eine natürliche Zahl, die mindestens
 \(2\) ist. Diese Bedingung wird als eigenes Prädikat notiert.
