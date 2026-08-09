@@ -133,11 +133,11 @@ und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 ### PDF-Titel und File Juggler
 
-Die gemeinsame Präambel lädt `hyperref` mit der Option `pdfusetitle`.
-Dadurch werden `\title` und `\author` jedes Standalone-Bandes automatisch in
-die PDF-Metadaten `Title` und `Author` übernommen. File Juggler kann beim
-Umbenennen deshalb direkt **PDF properties → Title** verwenden; die
-Dateiendung bleibt dabei erhalten. Bei Namenskonflikten sollte
+Jede aktive Banddatei setzt im Subfile-Vorspann `pdftitle` und `pdfauthor`
+explizit mit `\hypersetup`. Dadurch überschreibt ein Standalone-Build den in
+der gemeinsamen Präambel gesetzten Titel des Gesamtbandes zuverlässig. File
+Juggler kann beim Umbenennen deshalb direkt **PDF properties → Title**
+verwenden; die Dateiendung bleibt dabei erhalten. Bei Namenskonflikten sollte
 **Rename new file** gewählt werden, damit keine vorhandene PDF überschrieben
 wird.
 
