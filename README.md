@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B31
+### Standalone-Bände B03 bis B35
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -73,6 +73,10 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B29 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28 |
 | B30 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29 |
 | B31 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30 |
+| B32 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31 |
+| B33 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32 |
+| B34 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33 |
+| B35 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33, B34 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -87,28 +91,32 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B07 | Surjektive Funktionen |
 | B08 | Bijektive Funktionen |
 | B09 | Auswahlprinzip |
-| B10 | Äquivalenzrelationen und Quotienten |
-| B11 | Ordnungsrelationen |
-| B12 | Natürliche Zahlen |
-| B13 | Ganze Zahlen |
-| B14 | Rationale Zahlen |
-| B15 | Reelle Zahlen |
-| B16 | Endliche Mengen |
-| B17 | Folgen |
-| B18 | Halbgruppen |
-| B19 | Kommutative Halbgruppen |
-| B20 | Idempotente Halbgruppen |
-| B21 | Kommutative idempotente Halbgruppen |
-| B22 | Halbgruppen mit Nullelement |
-| B23 | Linkskürzbare Halbgruppen |
-| B24 | Rechtskürzbare Halbgruppen |
-| B25 | Kürzbare Halbgruppen |
-| B26 | Endliche Halbgruppen |
-| B27 | Monoide |
-| B28 | Halbringe |
-| B29 | Gruppen und Ringe |
-| B30 | Halbverbände und Verbände |
-| B31 | Frankls Vermutung |
+| B10 | Natürliche Zahlen |
+| B11 | Äquivalenzrelationen und Quotienten |
+| B12 | Halbordnungen |
+| B13 | Schranken, Infima und Suprema |
+| B14 | Paarinfima und Paarsuprema |
+| B15 | Totale Ordnungen |
+| B16 | Wohlordnungen und Auswahlaxiom |
+| B17 | Ganze Zahlen |
+| B18 | Rationale Zahlen |
+| B19 | Reelle Zahlen |
+| B20 | Endliche Mengen |
+| B21 | Folgen |
+| B22 | Halbgruppen |
+| B23 | Kommutative Halbgruppen |
+| B24 | Idempotente Halbgruppen |
+| B25 | Kommutative idempotente Halbgruppen |
+| B26 | Halbgruppen mit Nullelement |
+| B27 | Linkskürzbare Halbgruppen |
+| B28 | Rechtskürzbare Halbgruppen |
+| B29 | Kürzbare Halbgruppen |
+| B30 | Endliche Halbgruppen |
+| B31 | Monoide |
+| B32 | Halbringe |
+| B33 | Gruppen und Ringe |
+| B34 | Halbverbände und Verbände |
+| B35 | Frankls Vermutung |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
 Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
@@ -120,13 +128,17 @@ Auswahlprinzip steht getrennt in B09, damit die elementare
 Surjektionstheorie nicht vom Auswahlaxiom abhängt.
 Fachspezifische Funktionen bleiben in dem Band, der die für ihre Definition
 benötigten Gegenstände einführt; insbesondere bleiben natürliche
-arithmetische Funktionen in B12 und ganzzahlige Funktionen in B13. B14
-konstruiert die rationalen Zahlen aus Bruchpaaren ganzer Zahlen. B15 gewinnt
-die reellen Zahlen folgenfrei aus Dedekind-Schnitten, sodass B17 anschließend
-Folgen, endliche Folgen, Familien und reelle Grenzwerte ohne
-Abhängigkeitszirkel einführen kann. B16 behandelt zuvor die endlichen Mengen.
-Die Bände B18--B26 untersuchen Halbgruppen und ihre zusätzlichen
-Axiomstrukturen getrennt. Die Bände B27--B29 behandeln Monoid-, Halbring-,
+arithmetische Funktionen in B10 und ganzzahlige Funktionen in B17. B11
+entwickelt danach die für die Ganzzahlkonstruktion benötigte Äquivalenz- und
+Quotiententheorie. Die Bände B12--B16 gliedern die Ordnungstheorie in
+Halbordnungen, Schranken, Infima und Suprema, Paarinfima und Paarsuprema, totale
+Ordnungen sowie Wohlordnungen. B17 konstruiert die ganzen Zahlen, B18 die
+rationalen Zahlen und B19 die reellen Zahlen folgenfrei aus
+Dedekind-Schnitten, sodass B21 anschließend Folgen, endliche Folgen, Familien
+und reelle Grenzwerte ohne Abhängigkeitszirkel einführen kann. B20 behandelt
+zuvor die endlichen Mengen.
+Die Bände B22--B30 untersuchen Halbgruppen und ihre zusätzlichen
+Axiomstrukturen getrennt. Die Bände B31--B33 behandeln Monoid-, Halbring-,
 Gruppen- und Ringstrukturen. Ihre allgemeinen
 Abbildungseigenschaften werden mit den
 Sätzen aus B06--B08 nachgewiesen. Die Nummerierung bezeichnet damit eine
@@ -138,7 +150,7 @@ ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
 unveränderte tex→aux-Standardregel.
 Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
 unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
-Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B31`
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B35`
 und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 ### PDF-Titel und File Juggler
@@ -185,6 +197,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B29
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B30
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B31
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B32
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B33
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B34
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B35
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -225,10 +241,10 @@ Zuordnung der titelbasierten Quelldateien zu `registry/_Bxx` im dokumentierten
 Benötigt wird latexmk 4.84 oder neuer.
 
 Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei
-`Bd. 31 - Frankls Vermutung.tex`:
+`Bd. 35 - Frankls Vermutung.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 31 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 35 - Frankls Vermutung.tex"
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen

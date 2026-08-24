@@ -1,0 +1,1568 @@
+%============================================================
+%  Bd. 17 - Folgen
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B17}
+}{
+}
+
+\title{Bd. 17 - Folgen}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{17}
+
+\hypersetup{
+  pdftitle={Bd. 17 - Folgen},
+  pdfauthor={Martin Kunze}
+}
+
+\providecommand{\PosNatSeg}[1]{\mathbb{N}_{1,\ldots,#1}}
+% Die folgenden Symbole werden in Band 15 lokal eingeführt. Die Fallbacks
+% halten diesen Band auch im Standalone-Build lesbar und kollidieren wegen
+% \providecommand nicht mit den dort bereits vorhandenen Definitionen.
+\ifSubfilesClassLoaded{%
+  \providecommand{\RealLe}{\mathrel{\leq_{\mathbb R}}}
+  \providecommand{\RealLt}{\mathrel{<_{\mathbb R}}}
+  \providecommand{\RealZero}{0_{\mathbb R}}
+  \providecommand{\RealOne}{1_{\mathbb R}}
+  \providecommand{\RealAdd}{\mathbin{\oplus}}
+  \providecommand{\RealMul}{\mathbin{\odot}}
+  \providecommand{\RealNeg}[1]{\mathop{\ominus}\!#1}
+  \providecommand{\RealInv}[1]{\operatorname{inv}_{\mathbb R}\!\left(#1\right)}
+  \providecommand{\RealAbs}[1]{\left\lvert #1\right\rvert_{\mathbb R}}
+  \providecommand{\RealDist}[2]{d_{\mathbb R}\!\left(#1,#2\right)}
+}{%
+}
+
+\begin{document}
+
+\title{Bd. 17 - Folgen}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{17}
+\renewcommand{\FormulaBandID}{17}
+
+\chapter{Einleitung}
+
+Eine Folge ist keine neue Art mathematischer Gegenstand, sondern eine
+Funktion, deren Definitionsmenge als Indexmenge gelesen wird. Diese Sichtweise
+trennt drei Dinge sauber voneinander: die Indexmenge, die Zielmenge und die
+tatsächlich angenommene Bildmenge. Insbesondere darf aus einer Schreibweise
+\(a\colon I\to M\) nicht ohne einen Surjektivitätsbeweis geschlossen werden,
+dass jedes Element von \(M\) als Folgenglied vorkommt.
+
+Der Band beginnt deshalb mit beliebig indizierten Familien. Unendliche Folgen
+\(\mathbb N\to M\), endliche Folgen und die traditionelle Schreibweise
+\((a_i)_{i\in I}\) erscheinen anschließend als Spezialfälle. Für reelle
+Folgen werden Konvergenz, Grenzwerte, Beschränktheit, die elementaren
+Grenzwertregeln und das Cauchy-Kriterium entwickelt. Das letzte Kapitel stellt
+die rein folgen- und mengentheoretischen Familien bereit, die in der
+Mogiljanskaja-Konstruktion der späteren Halbgruppentheorie verwendet werden.
+
+\chapter{Indizierte Familien}
+
+\section{Familien als Funktionen}
+
+\FormulaDefDeltaK[Indizierte Familie]{%
+  a\colon I\to M\vdash
+  (a_i)_{i\in I}\coloneqq a\dsep
+  i\in I\vdash a_i\coloneqq a(i)%
+}{IndexedFamilyDef}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep i}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Schreibweisen}{(a_i)_{i\in I}\dsep a_i}
+}
+
+Die Menge \(I\) heißt \textbf{Indexmenge}, \(M\) heißt \textbf{Zielmenge}
+der Familie, und \(a_i\) heißt das zum Index \(i\) gehörende
+\textbf{Familienglied}. Die Klammer \((a_i)_{i\in I}\) bezeichnet die ganze
+Funktion und nicht die ungeordnete Menge ihrer Werte. Verschiedene Indizes
+dürfen daher dasselbe Familienglied tragen.
+
+Für die folgenden Definitionen gilt die direkte Familienkonvention. Sei
+\(y\) ein bereits gebildeter Term mit ausgezeichnetem Index \(i\). Sobald
+\(i\in I\vdash y\in M\) bewiesen ist, darf ein frisches Familiensymbol \(a\)
+unmittelbar durch
+\[
+  a\colon I\to M\dsep i\in I\vdash a_i\coloneqq y
+\]
+eingeführt werden. Der Satz
+\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm] aus Band~05 liefert die
+eindeutig bestimmte Funktion \(a\colon I\to M\) mit \(a(i)=y\), und nach
+\FormulaRefAuto{IndexedFamilyDef}[def] ist dies genau die Gleichung \(a_i=y\).
+In einem solchen Definitionsblock ist daher nur noch die Typisierung des
+rechten Terms nachzuweisen; ein eigener Existenzsatz wird nicht wiederholt.
+
+\FormulaThmDeltaK[Automatische Typisierung eines Familiengliedes]{%
+  a\colon I\to M\dsep i\in I\vdash a_i\in M%
+}{IndexedFamilyCoordinateTyping}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep i}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Aus der Typisierung der Funktion folgt \(a(i)\in M\). Nach der
+Koordinatendefinition ist \(a_i=a(i)\).
+\end{proof}
+
+\FormulaThmDeltaK[Erweiterung der Zielmenge einer Familie]{%
+  a\colon I\to M\dsep M\subseteq N\vdash a\colon I\to N%
+}{IndexedFamilyCodomainExtension}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep N}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Dies ist die Zielmengenerweiterung aus Band~05, auf die als Familie gelesene
+Funktion \(a\) angewandt. Die Werte und damit alle Glieder \(a_i\) ändern
+sich dabei nicht.
+\end{proof}
+
+\section{Bildmenge und Wertemenge}
+
+\FormulaDefDeltaK[Wertemenge einer Familie]{%
+  a\colon I\to M\vdash
+  \operatorname{Bild}(a)\coloneqq a[I]%
+}{IndexedFamilyImageDef}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep a[I]}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Schreibweise}{\operatorname{Bild}(a)}
+}
+
+\FormulaThmDeltaK[Elementkriterium der Wertemenge]{%
+  a\colon I\to M\vdash
+  x\in\operatorname{Bild}(a)
+  \leftrightarrow
+  \exists i\in I\,(x=a_i)%
+}{IndexedFamilyImageMembership}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep x\dsep i}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Nach der Definition der Bildmenge einer Teilmenge in Band~05 gilt
+\(x\in a[I]\) genau dann, wenn ein \(i\in I\) mit \(x=a(i)\) existiert.
+Nun wird \(a(i)\) durch \(a_i\) ersetzt.
+\end{proof}
+
+\FormulaThmDeltaK[Wertemenge liegt in der Zielmenge]{%
+  a\colon I\to M\vdash \operatorname{Bild}(a)\subseteq M%
+}{IndexedFamilyImageSubsetCodomain}{%
+  \DeltaRow{Mengen}{I\dsep M}
+  \DeltaRow{Funktionen}{a}
+}
+
+\FormulaThmDeltaK[Surjektive Familien und ihre Wertemenge]{%
+  a\colon I\to M\vdash
+  \bigl(a\colon I\sur M\bigr)
+  \leftrightarrow
+  \operatorname{Bild}(a)=M%
+}{IndexedFamilySurjectiveIffImage}{%
+  \DeltaRow{Mengen}{I\dsep M}
+  \DeltaRow{Funktionen}{a}
+}
+
+Die Zielmenge gehört zur Typisierung, die Wertemenge wird dagegen durch die
+Glieder bestimmt. So kann dieselbe Familie zunächst als \(a\colon I\to M\)
+und nach einer Zielmengenerweiterung als \(a\colon I\to N\) gelesen werden,
+ohne dass sich \(\operatorname{Bild}(a)\) ändert.
+
+\section{Gleichheit, Einschränkung und Umindizierung}
+
+\FormulaThmDeltaK[Extensionalität indizierter Familien]{%
+  a,b\colon I\to M\vdash
+  a=b\leftrightarrow\forall i\in I\,(a_i=b_i)%
+}{IndexedFamilyExtensionality}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep i}
+  \DeltaRow{Funktionen}{a\dsep b}
+}
+\begin{proof}
+Dies ist die Funktionsextensionalität aus Band~05 in Koordinatenschreibweise.
+Insbesondere genügt die Gleichheit der Wertemengen nicht für die Gleichheit
+zweier Familien.
+\end{proof}
+
+\FormulaDefDeltaK[Einschränkung einer Familie]{%
+  a\colon I\to M\dsep J\subseteq I\vdash
+  (a_i)_{i\in J}\coloneqq a\restriction_J%
+}{IndexedFamilyRestrictionDef}{%
+  \DeltaRow{Mengen}{I\dsep J\dsep M\dsep i}
+  \DeltaRow{Funktionen}{a\dsep a\restriction_J}
+}
+
+\FormulaThmDeltaK[Eigenschaften der eingeschränkten Familie]{%
+  \begin{aligned}[t]
+  &a\colon I\to M\dsep J\subseteq I\vdash
+    a\restriction_J\colon J\to M\dsep{}\\[-2pt]
+  &\quad\forall i\in J\,\bigl((a\restriction_J)_i=a_i\bigr)\dsep{}\\[-2pt]
+  &\quad\operatorname{Bild}(a\restriction_J)\subseteq
+    \operatorname{Bild}(a)
+  \end{aligned}%
+}{IndexedFamilyRestrictionFacts}{%
+  \DeltaRow{Mengen}{I\dsep J\dsep M\dsep i}
+  \DeltaRow{Funktionen}{a\dsep a\restriction_J}
+}
+
+\FormulaDefDeltaK[Umindizierte Familie]{%
+  a\colon I\to M\dsep \varphi\colon J\to I\vdash
+  (a_{\varphi(j)})_{j\in J}\coloneqq a\circ\varphi%
+}{IndexedFamilyReindexingDef}{%
+  \DeltaRow{Mengen}{I\dsep J\dsep M\dsep j}
+  \DeltaRow{Funktionen}{a\dsep\varphi\dsep a\circ\varphi}
+}
+
+\FormulaThmDeltaK[Bildmenge nach Umindizierung]{%
+  a\colon I\to M\dsep \varphi\colon J\to I\vdash
+  \operatorname{Bild}(a\circ\varphi)=a[\varphi[J]]
+  \subseteq\operatorname{Bild}(a)%
+}{IndexedFamilyReindexingImage}{%
+  \DeltaRow{Mengen}{I\dsep J\dsep M}
+  \DeltaRow{Funktionen}{a\dsep\varphi}
+}
+
+Ist \(\varphi\) injektiv, so heißt die umindizierte Familie eine
+\textbf{Teilfamilie}. Eine bloße Einschränkung ist der Spezialfall, in dem
+\(\varphi\) die Inklusion \(J\hookrightarrow I\) ist. Ist \(\varphi\)
+surjektiv, dann hat die umindizierte Familie dieselbe Wertemenge wie die
+Ausgangsfamilie.
+
+\section{Injektive und surjektive Familien}
+
+\FormulaDefDeltaK[Injektive Familie]{%
+  a\colon I\to M\vdash
+  \bigl((a_i)_{i\in I}\text{ ist injektiv}\bigr)
+  \coloneqq \bigl(a\colon I\inj M\bigr)%
+}{InjectiveIndexedFamilyDef}{%
+  \DeltaRow{Mengen}{I\dsep M}
+  \DeltaRow{Funktionen}{a}
+}
+
+\FormulaThmDeltaK[Indexkriterium für Injektivität]{%
+  a\colon I\to M\vdash
+  \bigl(a\colon I\inj M\bigr)
+  \leftrightarrow
+  \forall i,j\in I\,(a_i=a_j\rightarrow i=j)%
+}{InjectiveIndexedFamilyCriterion}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep i\dsep j}
+  \DeltaRow{Funktionen}{a}
+}
+
+\FormulaDefDeltaK[Surjektive Familie]{%
+  a\colon I\to M\vdash
+  \bigl((a_i)_{i\in I}\text{ durchläuft }M\bigr)
+  \coloneqq \bigl(a\colon I\sur M\bigr)%
+}{SurjectiveIndexedFamilyDef}{%
+  \DeltaRow{Mengen}{I\dsep M}
+  \DeltaRow{Funktionen}{a}
+}
+
+Eine bijektive Familie ist zugleich injektiv und surjektiv. Sie zählt jedes
+Element ihrer Zielmenge genau einmal auf. Eine nichtinjektive Folge darf
+dagegen Werte wiederholen, und eine nichtsurjektive Folge lässt Zielwerte aus.
+
+\chapter{Endliche und unendliche Folgen}
+
+\section{Unendliche Folgen}
+
+\FormulaDefDeltaK[Unendliche Folge in einer Menge]{%
+  a\colon\mathbb N\to M\vdash
+  (a_n)_{n\in\mathbb N}\coloneqq a%
+}{InfiniteSequenceDef}{%
+  \DeltaRow{Mengen}{M\dsep n}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Schreibweise}{(a_n)_{n\in\mathbb N}}
+}
+
+Unsere natürlichen Zahlen beginnen bei \(0\). Daher ist \(a_0\) das erste,
+\(a_1\) das zweite und allgemein \(a_n\) das durch den Index \(n\)
+bezeichnete Glied. Die drei Schreibweisen
+\[
+  a\colon\mathbb N\to M,
+  \qquad (a_n)_{n\in\mathbb N},
+  \qquad (a_0,a_1,a_2,\ldots)
+\]
+bezeichnen dieselbe Funktion, betonen aber unterschiedliche Aspekte.
+
+\FormulaDefDeltaK[Verschobene Folge und Restfolge]{%
+  a\colon\mathbb N\to M\dsep r\in\mathbb N\vdash
+  \begin{aligned}[t]
+    &a^{\langle r\rangle}\colon\mathbb N\to M,\\[-2pt]
+    &\forall n\in\mathbb N\,
+      \bigl(a^{\langle r\rangle}_n\coloneqq a_{n+r}\bigr)
+  \end{aligned}%
+}{SequenceTailDef}{%
+  \DeltaRow{Mengen}{M\dsep n\dsep r}
+  \DeltaRow{Funktionen}{a\dsep a^{\langle r\rangle}}
+}
+
+Die Restfolge lässt genau die ersten \(r\) Glieder aus. Ihre Wertemenge ist
+im Allgemeinen nur eine Teilmenge der ursprünglichen Wertemenge.
+
+\FormulaDefDeltaK[Teilfolge einer unendlichen Folge]{%
+  a\colon\mathbb N\to M\dsep
+  \varphi\colon\mathbb N\to\mathbb N\dsep
+  \forall n\in\mathbb N\,
+    \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)
+  \vdash
+  (a_{\varphi(n)})_{n\in\mathbb N}\coloneqq a\circ\varphi%
+}{SubsequenceDef}{%
+  \DeltaRow{Mengen}{M\dsep n}
+  \DeltaRow{Funktionen}{a\dsep\varphi\dsep a\circ\varphi}
+}
+
+Die strikte Zunahme der Indexfolge verhindert Wiederholungen und eine
+Umkehrung der ursprünglichen Reihenfolge. Jede Restfolge ist eine Teilfolge;
+die zugehörige Indexfunktion lautet \(\varphi(n)=n+r\).
+
+\section{Endliche Folgen mit nullbasierten Indizes}
+
+Für \(n\in\mathbb N\) ist
+\(\NatSeg{n}=\{i\in\mathbb N\mid i<n\}\) der Anfangsabschnitt mit genau
+\(n\) Elementen. Insbesondere ist \(\NatSeg{0}=\varnothing\), während
+\(\NatSeg{1}=\{0\}\) gilt.
+
+\FormulaDefDeltaK[Nullbasierte endliche Folge]{%
+  n\in\mathbb N\dsep a\colon\NatSeg{n}\to M\vdash
+  (a_i)_{i<n}\coloneqq(a_i)_{i\in\NatSeg{n}}%
+}{ZeroBasedFiniteSequenceDef}{%
+  \DeltaRow{Mengen}{M\dsep n\dsep i\dsep\NatSeg{n}}
+  \DeltaRow{Funktionen}{a}
+}
+
+Eine nullbasierte Folge der Länge \(n\) wird für \(n>0\) auch als
+\[
+  (a_0,a_1,\ldots,a_{n-1})
+\]
+geschrieben. Der größte Index ist also \(n-1\), die Anzahl der Glieder aber
+\(n\). Bei \(n=0\) gibt es keinen Ausdruck \(a_{n-1}\); die Folge ist dann
+die eindeutig bestimmte leere Funktion \(\varnothing\to M\).
+
+\section{Endliche Folgen mit positiven Indizes}
+
+\FormulaDefDeltaK[Positive Indexmenge]{%
+  n\in\mathbb N\vdash
+  \PosNatSeg{n}\coloneqq
+  \{i\in\mathbb N\mid 1\leq i\land i\leq n\}%
+}{PositiveNaturalSegmentDef}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep\PosNatSeg{n}}
+  \DeltaRow{Neue Schreibweise}{\PosNatSeg{n}}
+}
+
+\FormulaThmDeltaK[Ränder der positiven Indexmenge]{%
+  n\in\mathbb N\vdash
+  \PosNatSeg{0}=\varnothing\land
+  \forall i\in\mathbb N\,
+    \bigl(i\in\PosNatSeg{n}\leftrightarrow
+      1\leq i\land i\leq n\bigr)%
+}{PositiveNaturalSegmentBoundary}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep\PosNatSeg{n}}
+}
+\begin{proof}
+Beide Aussagen folgen unmittelbar aus
+\FormulaRefAuto{PositiveNaturalSegmentDef}[def]. Für \(n=0\) kann keine
+natürliche Zahl zugleich \(1\leq i\) und \(i\leq0\) erfüllen.
+\end{proof}
+
+\FormulaDefDeltaK[Positiv indizierte endliche Folge]{%
+  n\in\mathbb N\dsep a\colon\PosNatSeg{n}\to M\vdash
+  (a_i)_{i=1}^{n}\coloneqq(a_i)_{i\in\PosNatSeg{n}}%
+}{PositiveFiniteSequenceDef}{%
+  \DeltaRow{Mengen}{M\dsep n\dsep i\dsep\PosNatSeg{n}}
+  \DeltaRow{Funktionen}{a}
+}
+
+Für \(n>0\) lautet die ausgeschriebene Form
+\[
+  (a_1,a_2,\ldots,a_n).
+\]
+Auch diese Folge hat genau \(n\) Glieder. Die Schreibweise
+\((a_0,\ldots,a_n)\) hätte dagegen \(n+1\) Glieder und darf nicht als Folge
+der Länge \(n\) bezeichnet werden.
+
+\FormulaDefDeltaK[Indexverschiebung zwischen den beiden Konventionen]{%
+  n\in\mathbb N\vdash
+  \begin{aligned}[t]
+    &\lambda_n\colon\NatSeg{n}\to\PosNatSeg{n},\\[-2pt]
+    &\forall i\in\NatSeg{n}\,
+      \bigl(\lambda_n(i)\coloneqq\Succ(i)\bigr)
+  \end{aligned}%
+}{FiniteSequenceIndexShiftDef}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep\NatSeg{n}\dsep\PosNatSeg{n}}
+  \DeltaRow{Funktionen}{\lambda_n}
+}
+\begin{proof}
+Aus \(i\in\NatSeg{n}\) folgen \(i<n\) und damit
+\(1\leq\Succ(i)\leq n\), also
+\(\Succ(i)\in\PosNatSeg{n}\). Das einmalige Typisierungsprinzip liefert die
+angezeigte Funktion.
+\end{proof}
+
+\FormulaThmDeltaK[Äquivalenz der beiden endlichen Indexkonventionen]{%
+  n\in\mathbb N\vdash
+  \lambda_n\colon\NatSeg{n}\bij\PosNatSeg{n}\dsep
+  j\in\PosNatSeg{n}\vdash\lambda_n^{-1}(j)=\Pred(j)%
+}{FiniteSequenceIndexShiftBijective}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep j\dsep\NatSeg{n}\dsep\PosNatSeg{n}}
+  \DeltaRow{Funktionen}{\lambda_n\dsep\lambda_n^{-1}}
+}
+\begin{proof}
+Für \(i<n\) gilt \(1\leq\Succ(i)\leq n\). Umgekehrt besitzt jedes
+\(j\) mit \(1\leq j\leq n\) den eindeutig bestimmten Vorgänger
+\(\Pred(j)<n\). Nachfolger und Vorgänger sind auf diesen Bereichen invers.
+\end{proof}
+
+\FormulaThmDeltaK[Umrechnung endlicher Folgen]{%
+  \begin{aligned}[t]
+  &n\in\mathbb N\dsep a\colon\NatSeg{n}\to M\vdash
+    a\circ\lambda_n^{-1}\colon\PosNatSeg{n}\to M\dsep{}\\[-2pt]
+  &\quad\forall j\in\PosNatSeg{n}\,
+    \bigl((a\circ\lambda_n^{-1})_j=a_{\Pred(j)}\bigr)
+  \end{aligned}%
+}{FiniteSequenceConventionConversion}{%
+  \DeltaRow{Mengen}{M\dsep n\dsep j}
+  \DeltaRow{Funktionen}{a\dsep\lambda_n}
+}
+
+Die Umrechnung ändert nur die Namen der Indizes, weder die Reihenfolge noch
+die Wertemenge. Damit können nullbasierte und positiv indizierte endliche
+Folgen verwendet werden, ohne eine versteckte Verschiebung der Länge
+einzuführen.
+
+\chapter{Grundlegende Beispiele und Rekursion}
+
+\section{Konstante und kanonische Familien}
+
+\FormulaDefDeltaK[Konstante Familie]{%
+  c\in M\vdash
+  \begin{aligned}[t]
+    &\operatorname{const}_{I,c}\colon I\to M,\\[-2pt]
+    &\forall i\in I\,
+      \bigl((\operatorname{const}_{I,c})_i\coloneqq c\bigr)
+  \end{aligned}%
+}{ConstantIndexedFamilyDef}{%
+  \DeltaRow{Mengen}{I\dsep M\dsep c\dsep i}
+  \DeltaRow{Funktionen}{\operatorname{const}_{I,c}}
+}
+
+Ist \(I\neq\varnothing\), so hat die konstante Familie die Wertemenge
+\(\{c\}\); bei leerer Indexmenge ist ihre Wertemenge leer. Für
+\(I=\mathbb N\) entsteht die konstante Folge \((c,c,c,\ldots)\).
+
+\FormulaDefDeltaK[Kanonische Aufzählungsfolge der natürlichen Zahlen]{%
+  \begin{aligned}[t]
+    &\iota_{\mathbb N}\colon\mathbb N\to\mathbb N,\\[-2pt]
+    &\forall n\in\mathbb N\,
+      \bigl((\iota_{\mathbb N})_n\coloneqq n\bigr)
+  \end{aligned}%
+}{NaturalEnumerationSequenceDef}{%
+  \DeltaRow{Mengen}{n}
+  \DeltaRow{Funktionen}{\iota_{\mathbb N}}
+}
+
+Diese Folge ist bijektiv und hat Bildmenge \(\mathbb N\). Die Folge
+\((0,2,4,\ldots)\) der geraden natürlichen Zahlen wird entsprechend durch
+die untereinander stehende Typ- und Grundgleichung eingeführt:
+\[
+  \begin{aligned}[t]
+    &e\colon\mathbb N\to\mathbb N,\\[-2pt]
+    &\forall n\in\mathbb N\,\bigl(e_n\coloneqq 2n\bigr).
+  \end{aligned}
+\]
+Ihre Zielmenge ist \(\mathbb N\), ihre Wertemenge aber nur die Menge der
+geraden Zahlen.
+
+\section{Rekursiv definierte Folgen}
+
+\FormulaThmDeltaK[Rekursive Definition einer Folge durch einen Schritt]{%
+  x_0\in M\dsep F\colon M\to M
+  \vdash
+  \exists!a\colon\mathbb N\to M\,
+  \bigl(a_0=x_0\land
+    \forall n\in\mathbb N\,(a_{\Succ(n)}=F(a_n))\bigr)%
+}{RecursiveSequenceExistenceUnique}{%
+  \DeltaRow{Mengen}{M\dsep x_0\dsep n}
+  \DeltaRow{Funktionen}{F\dsep a}
+}
+\begin{proof}
+Dies ist der Rekursionssatz für die natürlichen Zahlen aus Band~10,
+formuliert in Folgennotation. Die Voraussetzung \(F\colon M\to M\) enthält
+bereits den einmaligen Nachweis, dass jeder Rekursionsschritt wieder in
+\(M\) liegt.
+\end{proof}
+
+\begin{example}[Iteration]
+Zu \(x_0\in M\) und \(F\colon M\to M\) gehört die eindeutig bestimmte
+Iterationsfolge
+\[
+  x_0,\quad F(x_0),\quad F(F(x_0)),\quad\ldots.
+\]
+Man schreibt auch \(a_n=F^n(x_0)\), wobei \(F^0=\Id_M\) ist.
+\end{example}
+
+\begin{example}[Arithmetische Folge]
+Für \(u,d\in\mathbb R\) wird nach Band~15 die benötigte Schrittabbildung
+durch
+\[
+  \begin{aligned}[t]
+    &F_d\colon\mathbb R\to\mathbb R,\\[-2pt]
+    &\forall x\in\mathbb R\,
+      \bigl(F_d(x)\coloneqq x\RealAdd d\bigr)
+  \end{aligned}
+\]
+eingeführt. Daher wird durch
+\[
+  a_0=u,
+  \qquad a_{\Succ(n)}=F_d(a_n)
+\]
+eine eindeutig bestimmte reelle Folge definiert. In der konventionellen
+Notation des nächsten Kapitels lautet der Schritt \(a_{n+1}=a_n+d\).
+\end{example}
+
+\begin{example}[Geometrische Folge]
+Für \(u,q\in\mathbb R\) wird entsprechend
+\[
+  \begin{aligned}[t]
+    &G_q\colon\mathbb R\to\mathbb R,\\[-2pt]
+    &\forall x\in\mathbb R\,
+      \bigl(G_q(x)\coloneqq q\RealMul x\bigr)
+  \end{aligned}
+\]
+eingeführt. Die Gleichungen
+\[
+  a_0=u,
+  \qquad a_{\Succ(n)}=G_q(a_n)
+\]
+definieren daher eine eindeutig bestimmte reelle Folge, ohne dass eine
+reelle Potenznotation vorweggenommen werden muss.
+\end{example}
+
+\chapter{Reelle Folgen und Grenzwerte}
+
+\section{Reelle Notation und punktweise Operationen}
+
+Band~15 konstruiert die reellen Operationen zunächst unter eigenen Symbolen.
+In diesem und in späteren analytischen Bänden werden dafür die üblichen
+Körpersymbole als reine Abkürzungen verwendet. Rationale Zahlen und
+insbesondere rationale Zahlzeichen werden dabei, wie am Ende von Band~15
+vereinbart, über \(\iota_{\mathbb R}\) mit ihren reellen Bildern
+identifiziert.
+Die folgenden Abkürzungen gelten innerhalb dieses Analysis-Kapitels, sobald
+die beteiligten Terme als reell typisiert sind. Sie ändern nicht die
+natürlichen Tags \(0,1,\ldots\) in späteren rein mengentheoretischen Kapiteln.
+
+\FormulaDefDeltaK[Konventionelle Schreibweise für reelle Operationen]{%
+  \begin{aligned}[t]
+  &0\coloneqq\RealZero\dsep 1\coloneqq\RealOne,\\[-2pt]
+  &x,y\in\mathbb R\vdash
+    \begin{gathered}[t]
+      x+y\coloneqq x\RealAdd y,\qquad
+      -x\coloneqq\RealNeg{x},\qquad
+      x-y\coloneqq x\RealAdd\RealNeg{y},\\[-2pt]
+      xy\coloneqq x\RealMul y,\qquad
+      (x\leq y)\coloneqq(x\RealLe y),\qquad
+      (x<y)\coloneqq(x\RealLt y),\\[-2pt]
+      (x\geq y)\coloneqq(y\RealLe x),\qquad
+      (x>y)\coloneqq(y\RealLt x),\qquad
+      |x|\coloneqq\RealAbs{x},
+    \end{gathered}\\[-2pt]
+  &x,y\in\mathbb R\dsep y\neq0\vdash
+      y^{-1}\coloneqq\RealInv{y}\dsep
+      \frac{x}{y}\coloneqq x\RealMul\RealInv{y}.
+  \end{aligned}%
+}{RealSequenceConventionalNotation}{%
+  \DeltaRow{Mengen}{x\dsep y\dsep\mathbb R}
+  \DeltaRow{Relationsoperatoren}{\RealLe\dsep\RealLt}
+  \DeltaRow{Funktionsoperatoren}{\RealAdd\dsep\RealMul
+    \dsep\RealNeg{\,\cdot\,}\dsep\RealInv{\,\cdot\,}
+    \dsep\RealAbs{\,\cdot\,}}
+}
+
+Alle folgenden Rechnungen mit gewöhnlichen Symbolen sind daher Aussagen über
+die in Band~15 registrierten Operationen; es wird keine zweite reelle
+Arithmetik eingeführt.
+
+\FormulaDefDeltaK[Punktweise Operationen reeller Folgen]{%
+  \begin{aligned}[t]
+  &a,b\colon\mathbb N\to\mathbb R\vdash\\[-2pt]
+  &\quad a+b,\ a-b,\ a\mathbin{\cdot}b\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad \forall n\in\mathbb N\,
+    \begin{gathered}[t]
+      (a+b)_n\coloneqq a_n+b_n,\qquad
+      (a-b)_n\coloneqq a_n-b_n,\\[-2pt]
+      (a\mathbin{\cdot}b)_n\coloneqq a_nb_n
+    \end{gathered};\\[2pt]
+  &a\colon\mathbb N\to\mathbb R\vdash\\[-2pt]
+  &\quad -a,\ |a|\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad \forall n\in\mathbb N\,
+      \bigl((-a)_n\coloneqq-a_n,\qquad(|a|)_n\coloneqq|a_n|\bigr);\\[2pt]
+  &a\colon\mathbb N\to\mathbb R\dsep c\in\mathbb R\vdash\\[-2pt]
+  &\quad ca\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad
+    \forall n\in\mathbb N\,((ca)_n\coloneqq c\,a_n),\\[-2pt]
+  &a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\vdash\\[-2pt]
+  &\quad a-L\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad
+    \forall n\in\mathbb N\,((a-L)_n\coloneqq a_n-L).
+  \end{aligned}%
+}{PointwiseRealSequenceOperationsDef}{%
+  \DeltaRow{Mengen}{c\dsep L\dsep n}
+  \DeltaRow{Folgen}{a\dsep b\dsep a+b\dsep a-b}%
+  \DeltaRow{Folgen}{-a\dsep ca\dsep a\mathbin{\cdot}b}%
+  \DeltaRow{Folgen}{|a|\dsep a-L}
+}
+\begin{proof}
+Die Abgeschlossenheitssätze
+\FormulaRefAuto{RealCutAdditiveClosure}[thm] und
+\FormulaRefAuto{RealCutMultiplicativeClosure}[thm] sowie
+\FormulaRefAuto{RealAbsoluteValue}[def] zeigen für jeden Index einmal, dass
+alle rechts stehenden Werte in \(\mathbb R\) liegen.
+\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm] liefert daraus
+die angezeigten Funktionen; ihre Typisierung ist anschließend in den
+Funktionsaussagen gespeichert.
+\end{proof}
+
+\FormulaDefDeltaK[Punktweiser Kehrwert und Quotient reeller Folgen]{%
+  \begin{aligned}[t]
+  &b\colon\mathbb N\to\mathbb R\dsep
+    \forall n\in\mathbb N\,(b_n\neq0)\vdash\\[-2pt]
+  &\quad b^{-1}\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad
+    \forall n\in\mathbb N\,
+      ((b^{-1})_n\coloneqq\tfrac1{b_n});\\[2pt]
+  &a,b\colon\mathbb N\to\mathbb R\dsep
+    \forall n\in\mathbb N\,(b_n\neq0)\vdash\\[-2pt]
+  &\quad\frac ab\colon\mathbb N\to\mathbb R,\\[-2pt]
+  &\quad
+    \forall n\in\mathbb N\,
+      \left(\left(\frac ab\right)_n\coloneqq\frac{a_n}{b_n}\right).
+  \end{aligned}%
+}{PointwiseRealSequenceReciprocalQuotientDef}{%
+  \DeltaRow{Mengen}{n}
+  \DeltaRow{Funktionen}{a\dsep b\dsep b^{-1}\dsep a/b}
+}
+\begin{proof}
+Die Nichtnullbedingung macht \(\RealInv{b_n}\) für jeden Index anwendbar.
+\FormulaRefAuto{RealCutMultiplicativeClosure}[thm] und
+\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm] liefern beide
+Funktionen.
+\end{proof}
+
+\section{Konvergenz}
+
+Von nun an seien Folgen ohne anderslautenden Zusatz reelle Folgen, also
+Funktionen \(a\colon\mathbb N\to\mathbb R\). Der Ausdruck
+\(\varepsilon>0\) bedeutet stets
+\(\varepsilon\in\mathbb R\land\RealZero\RealLt\varepsilon\).
+
+\FormulaDefDeltaK[Konvergenz einer reellen Folge]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\vdash
+    \bigl(a_n\longrightarrow L\bigr)\coloneqq{}\\[-2pt]
+  &\quad\forall\varepsilon\in\mathbb R\,
+    \Bigl(\varepsilon>0\rightarrow
+      \exists N\in\mathbb N\,
+      \forall n\in\mathbb N\,
+        (N\leq n\rightarrow|a_n-L|<\varepsilon)\Bigr)
+  \end{aligned}%
+}{RealSequenceConvergenceDef}{%
+  \DeltaRow{Mengen}{L\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Schreibweise}{a_n\to L}
+}
+
+Gilt \(a_n\to L\), so heißt \(L\) ein \textbf{Grenzwert} der Folge. Man
+schreibt auch
+\[
+  \lim_{n\to\infty}a_n=L.
+\]
+Die Zahl \(N\) darf von \(\varepsilon\) abhängen, aber nicht vom später
+gewählten \(n\). Die Forderung betrifft nur Indizes \(n\geq N\); endlich
+viele Anfangsglieder haben deshalb keinen Einfluss auf Konvergenz und
+Grenzwert.
+
+\FormulaDefDeltaK[Konvergente und divergente Folge]{%
+  a\colon\mathbb N\to\mathbb R\vdash
+  \operatorname{Konv}(a)\coloneqq
+    \exists L\in\mathbb R\,(a_n\to L)\dsep
+  \operatorname{Div}(a)\coloneqq\neg\operatorname{Konv}(a)%
+}{RealSequenceConvergentDivergentDef}{%
+  \DeltaRow{Mengen}{L}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Prädikate}{\operatorname{Konv}\dsep\operatorname{Div}}
+}
+
+\FormulaThmDeltaK[Eindeutigkeit des Grenzwerts]{%
+  a\colon\mathbb N\to\mathbb R\dsep
+  L,K\in\mathbb R\dsep
+  a_n\to L\dsep a_n\to K\vdash L=K%
+}{RealSequenceLimitUnique}{%
+  \DeltaRow{Mengen}{L\dsep K\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Angenommen, \(L\neq K\), und setze
+\(\varepsilon=|L-K|/3>0\). Für hinreichend großes \(n\) gelten zugleich
+\(|a_n-L|<\varepsilon\) und \(|a_n-K|<\varepsilon\). Mit der
+Dreiecksungleichung folgt
+\[
+  |L-K|\leq |L-a_n|+|a_n-K|
+  <2\varepsilon=\frac23|L-K|,
+\]
+ein Widerspruch. Also ist \(L=K\).
+\end{proof}
+
+Wegen der Eindeutigkeit ist \(\lim_{n\to\infty}a_n\) ein eindeutig
+bestimmter Ausdruck, sobald die Folge konvergiert.
+
+\FormulaThmDeltaK[Konvergenz konstanter Folgen]{%
+  c\in\mathbb R\vdash
+  (\operatorname{const}_{\mathbb N,c})_n\to c%
+}{ConstantRealSequenceConverges}{%
+  \DeltaRow{Mengen}{c\dsep n}
+  \DeltaRow{Funktionen}{\operatorname{const}_{\mathbb N,c}}
+}
+
+\FormulaThmDeltaK[Endliche Änderungen verändern den Grenzwert nicht]{%
+  \begin{aligned}[t]
+  &a,b\colon\mathbb N\to\mathbb R\dsep
+    \exists N_0\in\mathbb N\,
+      \forall n\in\mathbb N\,(N_0\leq n\rightarrow a_n=b_n)\\[-2pt]
+  &\quad\vdash
+    \forall L\in\mathbb R\,(a_n\to L\leftrightarrow b_n\to L)
+  \end{aligned}%
+}{FiniteModificationPreservesLimit}{%
+  \DeltaRow{Mengen}{L\dsep N_0\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b}
+}
+\begin{proof}
+Zu einer gegebenen Schranke \(N\) für eine der Folgen verwendet man für die
+andere Folge den größeren der beiden Indizes \(N\) und \(N_0\).
+\end{proof}
+
+\FormulaThmDeltaK[Restfolgen haben denselben Grenzwert]{%
+  a\colon\mathbb N\to\mathbb R\dsep r\in\mathbb N\dsep L\in\mathbb R
+  \vdash
+  a_n\to L\leftrightarrow a^{\langle r\rangle}_n\to L%
+}{SequenceTailSameLimit}{%
+  \DeltaRow{Mengen}{L\dsep r\dsep n}
+  \DeltaRow{Funktionen}{a\dsep a^{\langle r\rangle}}
+}
+
+\FormulaThmDeltaK[Teilfolgen einer konvergenten Folge]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\dsep a_n\to L\dsep
+    \varphi\colon\mathbb N\to\mathbb N\dsep{}\\[-2pt]
+  &\quad\forall n\in\mathbb N\,
+    \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)
+    \vdash a_{\varphi(n)}\to L
+  \end{aligned}%
+}{SubsequenceOfConvergentSequence}{%
+  \DeltaRow{Mengen}{L\dsep n}
+  \DeltaRow{Funktionen}{a\dsep\varphi}
+}
+\begin{proof}
+Eine streng wachsende natürliche Indexfolge erfüllt \(n\leq\varphi(n)\).
+Ist \(n\geq N\), so ist daher auch \(\varphi(n)\geq N\), und die
+\(\varepsilon\)-Abschätzung der Ausgangsfolge kann bei diesem Index
+angewandt werden.
+\end{proof}
+
+\section{Nullfolgen und Abschätzungen}
+
+\FormulaDefDeltaK[Nullfolge]{%
+  a\colon\mathbb N\to\mathbb R\vdash
+  \bigl(a\text{ ist eine Nullfolge}\bigr)
+  \coloneqq(a_n\to0)%
+}{NullSequenceDef}{%
+  \DeltaRow{Funktionen}{a}
+}
+
+\FormulaThmDeltaK[Konvergenz als Nullfolgeneigenschaft]{%
+  a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\vdash
+  a_n\to L\leftrightarrow(a-L)_n\to0%
+}{ConvergenceIffDifferenceNullSequence}{%
+  \DeltaRow{Mengen}{L\dsep n}
+  \DeltaRow{Funktionen}{a\dsep a-L}
+}
+
+\FormulaThmDeltaK[Majorantenkriterium für Nullfolgen]{%
+  a,b\colon\mathbb N\to\mathbb R\dsep
+  b_n\to0\dsep
+  \exists N_0\in\mathbb N\,
+    \forall n\in\mathbb N\,
+      (N_0\leq n\rightarrow|a_n|\leq b_n)
+  \vdash a_n\to0%
+}{NullSequenceMajorantCriterion}{%
+  \DeltaRow{Mengen}{N_0\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b}
+}
+
+\FormulaThmDeltaK[Einschließungsprinzip]{%
+  \begin{aligned}[t]
+  &a,b,c\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\dsep
+    a_n\to L\dsep c_n\to L\dsep{}\\[-2pt]
+  &\quad\exists N_0\in\mathbb N\,
+    \forall n\in\mathbb N\,
+      \bigl(N_0\leq n\rightarrow
+        (a_n\leq b_n\land b_n\leq c_n)\bigr)
+    \vdash b_n\to L
+  \end{aligned}%
+}{RealSequenceSqueezeTheorem}{%
+  \DeltaRow{Mengen}{L\dsep N_0\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b\dsep c}
+}
+\begin{proof}
+Für ein gegebenes \(\varepsilon>0\) liegen schließlich sowohl \(a_n\) als
+auch \(c_n\) im Intervall
+\((L-\varepsilon,L+\varepsilon)\). Ab dem Maximum dieser beiden Schranken
+und \(N_0\) liegt wegen \(a_n\leq b_n\leq c_n\) auch \(b_n\) in diesem
+Intervall.
+\end{proof}
+
+\section{Beschränktheit und Ordnung}
+
+\FormulaDefDeltaK[Beschränkte reelle Folge]{%
+  a\colon\mathbb N\to\mathbb R\vdash
+  \operatorname{Beschr}(a)\coloneqq
+  \exists C\in\mathbb R\,
+    \bigl(C\geq0\land
+      \forall n\in\mathbb N\,(|a_n|\leq C)\bigr)%
+}{BoundedRealSequenceDef}{%
+  \DeltaRow{Mengen}{C\dsep n}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neues Prädikat}{\operatorname{Beschr}}
+}
+
+\FormulaThmDeltaK[Konvergente Folgen sind beschränkt]{%
+  a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\dsep a_n\to L
+  \vdash\operatorname{Beschr}(a)%
+}{ConvergentRealSequenceBounded}{%
+  \DeltaRow{Mengen}{L\dsep C\dsep N\dsep n}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Für \(\varepsilon=1\) gibt es ein \(N\), so dass
+\(|a_n-L|<1\) für alle \(n\geq N\). Dann ist
+\(|a_n|<|L|+1\) für alle diese Indizes. Die endlich vielen Werte mit
+\(n<N\) besitzen ein Maximum ihrer Absolutbeträge. Das Maximum dieses
+Wertes und \(|L|+1\) ist eine Schranke für die ganze Folge. Für \(N=0\)
+entfällt der endliche Anfangsteil.
+\end{proof}
+
+\FormulaThmDeltaK[Ordnung bleibt im Grenzübergang erhalten]{%
+  \begin{aligned}[t]
+  &a,b\colon\mathbb N\to\mathbb R\dsep A,B\in\mathbb R\dsep
+    a_n\to A\dsep b_n\to B\dsep{}\\[-2pt]
+  &\quad\exists N_0\in\mathbb N\,
+    \forall n\in\mathbb N\,(N_0\leq n\rightarrow a_n\leq b_n)
+    \vdash A\leq B
+  \end{aligned}%
+}{RealSequenceLimitPreservesOrder}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep N_0\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b}
+}
+\begin{proof}
+Wäre \(A>B\), so könnte man
+\(\varepsilon=(A-B)/3>0\) wählen. Schließlich wären dann
+\(a_n>A-\varepsilon>B+\varepsilon>b_n\), im Widerspruch zur angenommenen
+Ungleichung.
+\end{proof}
+
+Aus einer schließlich strikten Ungleichung \(a_n<b_n\) folgt im Allgemeinen
+nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
+\(0<1/(n+1)\), obwohl beide Seiten gegen \(0\) konvergieren.
+
+\FormulaDefDeltaK[Monotone reelle Folgen]{%
+  a\colon\mathbb N\to\mathbb R\vdash
+  \begin{aligned}[t]
+  \operatorname{Mon}_{\uparrow}(a)&\coloneqq
+    \forall n\in\mathbb N\,(a_n\leq a_{\Succ(n)}),\\[-2pt]
+  \operatorname{Mon}_{\downarrow}(a)&\coloneqq
+    \forall n\in\mathbb N\,(a_{\Succ(n)}\leq a_n)
+  \end{aligned}%
+}{MonotoneRealSequenceDef}{%
+  \DeltaRow{Mengen}{n}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neue Prädikate}{\operatorname{Mon}_{\uparrow}\dsep
+    \operatorname{Mon}_{\downarrow}}
+}
+
+\FormulaThmDeltaK[Monotone Konvergenz]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\dsep
+    \operatorname{Mon}_{\uparrow}(a)\dsep
+    \exists C\in\mathbb R\,\forall n\in\mathbb N\,(a_n\leq C)
+    \vdash
+    a_n\to\sup_{\mathbb R,\RealLe}\bigl(a[\mathbb N]\bigr),\\[-2pt]
+  &a\colon\mathbb N\to\mathbb R\dsep
+    \operatorname{Mon}_{\downarrow}(a)\dsep
+    \exists C\in\mathbb R\,\forall n\in\mathbb N\,(C\leq a_n)
+    \vdash
+    a_n\to\inf_{\mathbb R,\RealLe}\bigl(a[\mathbb N]\bigr).
+  \end{aligned}%
+}{MonotoneRealSequenceConvergence}{%
+  \DeltaRow{Mengen}{C\dsep n\dsep a[\mathbb N]}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Relationsoperatoren}{\RealLe}
+}
+\begin{proof}
+Sei zunächst \(a\) monoton wachsend und nach oben beschränkt. Wegen der
+Vollständigkeit von \(\mathbb R\) existiert
+\(s=\sup_{\mathbb R,\RealLe}(a[\mathbb N])\). Zu \(\varepsilon>0\) ist
+\(s-\varepsilon\) keine obere Schranke der Wertemenge. Also gibt es ein
+\(N\) mit \(s-\varepsilon<a_N\leq s\). Für \(n\geq N\) liefert die
+Monotonie
+\(s-\varepsilon<a_N\leq a_n\leq s<s+\varepsilon\). Somit
+\(a_n\to s\). Im fallenden Fall existiert das Infimum
+\(r=\inf_{\mathbb R,\RealLe}(a[\mathbb N])\) nach
+\FormulaRefAuto{RealInfimumCharacterization}[thm]. Nun ist
+\(r+\varepsilon\) keine untere Schranke. Daher gibt es ein \(N\) mit
+\(r\leq a_N<r+\varepsilon\), und für \(n\geq N\) gilt
+\(r\leq a_n\leq a_N<r+\varepsilon\). Also \(a_n\to r\).
+\end{proof}
+
+\section{Grenzwertregeln}
+
+\FormulaThmDeltaK[Lineare Grenzwertregeln]{%
+  a,b\colon\mathbb N\to\mathbb R\dsep
+  A,B,c\in\mathbb R\dsep
+  a_n\to A\dsep b_n\to B
+  \vdash
+  \begin{aligned}[t]
+  (a+b)_n&\to A+B,\\[-2pt]
+  (a-b)_n&\to A-B,\\[-2pt]
+  (ca)_n&\to cA
+  \end{aligned}%
+}{RealSequenceLinearLimitRules}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep c\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b\dsep a+b\dsep a-b\dsep ca}
+}
+\begin{proof}
+Für die Summe wählt man zu \(\varepsilon>0\) für beide Folgen die
+Genauigkeit \(\varepsilon/2\) und verwendet
+\[
+ |(a_n+b_n)-(A+B)|
+ \leq|a_n-A|+|b_n-B|.
+\]
+Die Differenz folgt durch Addition von \(-b_n\). Für \(c=0\) ist die
+Skalarmultiplikation konstant null; für \(c\neq0\) verwendet man für
+\(a_n\) die Genauigkeit \(\varepsilon/|c|\).
+\end{proof}
+
+\FormulaThmDeltaK[Produktregel für Grenzwerte]{%
+  a,b\colon\mathbb N\to\mathbb R\dsep
+  A,B\in\mathbb R\dsep
+  a_n\to A\dsep b_n\to B
+  \vdash (a\mathbin{\cdot}b)_n\to AB%
+}{RealSequenceProductLimitRule}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b\dsep a\mathbin{\cdot}b}
+}
+\begin{proof}
+Die konvergente Folge \(a\) ist beschränkt; sei \(|a_n|\leq C\). Dann
+\[
+ |a_nb_n-AB|
+ \leq |a_n|\,|b_n-B|+|B|\,|a_n-A|
+ \leq C|b_n-B|+|B|\,|a_n-A|.
+\]
+Die beiden Summanden werden durch geeignete positive Genauigkeiten kleiner
+als \(\varepsilon/2\). Falls \(C=0\) oder \(B=0\), entfällt der betreffende
+Summand beziehungsweise wird eine beliebige positive Hilfsschranke benutzt.
+\end{proof}
+
+\FormulaThmDeltaK[Kehrwertregel für Grenzwerte]{%
+  b\colon\mathbb N\to\mathbb R\dsep
+  B\in\mathbb R\dsep b_n\to B\dsep B\neq0\dsep
+  \forall n\in\mathbb N\,(b_n\neq0)
+  \vdash (b^{-1})_n\to\frac1B%
+}{RealSequenceReciprocalLimitRule}{%
+  \DeltaRow{Mengen}{B\dsep n}
+  \DeltaRow{Funktionen}{b\dsep b^{-1}}
+}
+\begin{proof}
+Aus \(b_n\to B\) und \(B\neq0\) folgt schließlich
+\(|b_n|>|B|/2\). Für diese Indizes gilt
+\[
+ \left|\frac1{b_n}-\frac1B\right|
+ =\frac{|b_n-B|}{|b_n|\,|B|}
+ <\frac{2}{|B|^2}|b_n-B|.
+\]
+Die Behauptung folgt aus der Konvergenz von \(b_n\) gegen \(B\).
+\end{proof}
+
+\FormulaThmDeltaK[Quotientenregel für Grenzwerte]{%
+  \begin{aligned}[t]
+  &a,b\colon\mathbb N\to\mathbb R\dsep A,B\in\mathbb R\dsep
+    a_n\to A\dsep b_n\to B\dsep B\neq0\dsep{}\\[-2pt]
+  &\quad\forall n\in\mathbb N\,(b_n\neq0)
+    \vdash \left(\frac ab\right)_n\to\frac AB
+  \end{aligned}%
+}{RealSequenceQuotientLimitRule}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep n}
+  \DeltaRow{Funktionen}{a\dsep b\dsep a/b}
+}
+\begin{proof}
+Nach den punktweisen Definitionen stimmen \(a/b\) und
+\(a\mathbin{\cdot}b^{-1}\) an jedem Index überein und sind daher dieselbe
+Funktion. Man wendet
+\FormulaRefAuto{RealSequenceReciprocalLimitRule}[thm] auf \(b\) und
+anschließend \FormulaRefAuto{RealSequenceProductLimitRule}[thm] an.
+\end{proof}
+
+\FormulaThmDeltaK[Stetigkeit des Betrags für Folgen]{%
+  a\colon\mathbb N\to\mathbb R\dsep A\in\mathbb R\dsep a_n\to A
+  \vdash (|a|)_n\to|A|%
+}{AbsoluteValuePreservesSequenceLimits}{%
+  \DeltaRow{Mengen}{A\dsep n}
+  \DeltaRow{Funktionen}{a\dsep |a|}
+}
+\begin{proof}
+Die umgekehrte Dreiecksungleichung liefert
+\(\bigl||a_n|-|A|\bigr|\leq|a_n-A|\).
+\end{proof}
+
+\section{Cauchy-Folgen}
+
+\FormulaDefDeltaK[Cauchy-Folge in den reellen Zahlen]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\vdash
+    \operatorname{Cauchy}(a)\coloneqq{}\\[-2pt]
+  &\quad\forall\varepsilon\in\mathbb R\,
+    \Bigl(\varepsilon>0\rightarrow
+      \exists N\in\mathbb N\,
+      \forall m,n\in\mathbb N\,\bigl((N\leq m\land N\leq n)\\[-2pt]
+  &\hspace{54mm}\rightarrow|a_m-a_n|<\varepsilon\bigr)\Bigr)
+  \end{aligned}%
+}{RealCauchySequenceDef}{%
+  \DeltaRow{Mengen}{\varepsilon\dsep N\dsep m\dsep n}
+  \DeltaRow{Funktionen}{a}
+  \DeltaRow{Neues Prädikat}{\operatorname{Cauchy}}
+}
+
+Die Cauchy-Bedingung erwähnt keinen vermuteten Grenzwert. Sie verlangt, dass
+späte Folgenglieder untereinander beliebig nahe liegen. Ob daraus ein
+Grenzwert folgt, hängt von der Vollständigkeit der Zielmenge ab.
+
+\FormulaThmDeltaK[Konvergenz impliziert die Cauchy-Eigenschaft]{%
+  a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R\dsep a_n\to L
+  \vdash\operatorname{Cauchy}(a)%
+}{ConvergentSequenceIsCauchy}{%
+  \DeltaRow{Mengen}{L\dsep\varepsilon\dsep N\dsep m\dsep n}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Zu \(\varepsilon>0\) wähle \(N\) so, dass
+\(|a_k-L|<\varepsilon/2\) für alle \(k\geq N\). Für \(m,n\geq N\) gilt
+dann
+\[
+ |a_m-a_n|\leq|a_m-L|+|a_n-L|<\varepsilon.
+\]
+\end{proof}
+
+\FormulaThmDeltaK[Cauchy-Folgen sind beschränkt]{%
+  a\colon\mathbb N\to\mathbb R\dsep\operatorname{Cauchy}(a)
+  \vdash\operatorname{Beschr}(a)%
+}{RealCauchySequenceBounded}{%
+  \DeltaRow{Mengen}{N\dsep n}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Wende die Cauchy-Bedingung mit \(\varepsilon=1\) an und fixiere einen Index
+\(N\), ab dem sie gilt. Dann ist \(|a_n-a_N|<1\) für \(n\geq N\), also
+\(|a_n|<|a_N|+1\). Die endlich vielen Anfangsglieder werden wie im Beweis
+von \FormulaRefAuto{ConvergentRealSequenceBounded}[thm] gemeinsam
+beschränkt.
+\end{proof}
+
+\FormulaThmDeltaK[Cauchy-Kriterium in den reellen Zahlen]{%
+  a\colon\mathbb N\to\mathbb R\vdash
+  \operatorname{Konv}(a)\leftrightarrow\operatorname{Cauchy}(a)%
+}{RealSequenceCauchyCriterion}{%
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Die Hinrichtung ist
+\FormulaRefAuto{ConvergentSequenceIsCauchy}[thm]. Sei umgekehrt \(a\) eine
+Cauchy-Folge. Nach
+\FormulaRefAuto{RealCauchySequenceBounded}[thm] ist sie beschränkt. Für
+\(N\in\mathbb N\) setze
+\[
+  T_N\coloneqq
+  \{a_n\mid n\in\mathbb N\land N\leq n\}.
+\]
+Jede Menge \(T_N\) ist nichtleer und nach unten beschränkt. Nach
+\FormulaRefAuto{RealInfimumCharacterization}[thm] besitzt sie daher ein
+eindeutiges Infimum
+\(\alpha_N=\inf_{\mathbb R,\RealLe}(T_N)\in\mathbb R\). Das einmalige
+Typisierungsprinzip liefert somit eine Folge
+\(\alpha\colon\mathbb N\to\mathbb R\). Wegen
+\(T_{\Succ(N)}\subseteq T_N\) ist \(\alpha_N\leq\alpha_{\Succ(N)}\).
+Außerdem ist die Menge
+\[
+  \mathcal A\coloneqq\{\alpha_N\mid N\in\mathbb N\}
+\]
+nichtleer und durch jede obere Schranke von \(a[\mathbb N]\) nach oben
+beschränkt. Ihre reelle Supremumszahl
+\[
+  L\coloneqq\sup_{\mathbb R,\RealLe}(\mathcal A)
+\]
+existiert folglich nach
+\FormulaRefAuto{RealLeastUpperBoundProperty}[thm].
+
+Sei nun \(\varepsilon>0\) und
+\(\delta=\varepsilon/2\). Wähle \(N\) so, dass
+\(|a_m-a_n|<\delta\) für alle \(m,n\geq N\). Für festes \(n\geq N\)
+ist \(a_n-\delta\) eine untere Schranke von \(T_N\); daher
+\[
+  a_n-\delta\leq\alpha_N\leq L.
+\]
+Für jedes \(k\in\mathbb N\) kann man einen Index \(m\geq k,N\) wählen.
+Dann gilt
+\(\alpha_k\leq a_m<a_n+\delta\). Somit ist \(a_n+\delta\) eine obere
+Schranke von \(\mathcal A\), also
+\[
+  L\leq a_n+\delta.
+\]
+Zusammen folgt \(|a_n-L|\leq\delta<\varepsilon\) für alle \(n\geq N\).
+Damit konvergiert \(a\) gegen \(L\).
+\end{proof}
+
+Die Rückrichtung des Cauchy-Kriteriums ist genau die Stelle, an der die
+Vollständigkeit von \(\mathbb R\) benötigt wird. In \(\mathbb Q\) gibt es
+Cauchy-Folgen, deren reeller Grenzwert irrational ist und die deshalb in
+\(\mathbb Q\) keinen Grenzwert besitzen.
+
+\chapter{Die Mogiljanskaja-Familien}
+
+\section{Die beiden Grundfamilien}
+
+Für die spätere Konstruktion zweier unendlicher Halbgruppen werden zwei
+disjunkte getaggte Schichten benötigt. In diesem Band geht es ausschließlich
+um ihre familien- und mengentheoretischen Eigenschaften; Operationen auf den
+späteren Trägermengen werden erst im Halbgruppenband definiert.
+Die Zeichen \(0\) und \(1\) in den folgenden geordneten Paaren sind dabei
+ausdrücklich die natürlichen Peano-Zahlen und dienen lediglich als Tags.
+
+\FormulaDefDeltaK[Die einfach indizierte Grundschicht]{%
+  L\coloneqq\{0\}\times\mathbb N%
+}{MogiljanskajaLayerLDef}{%
+  \DeltaRow{Mengen}{L}
+}
+
+\FormulaDefDeltaK[Die zweifach indizierte Grundschicht]{%
+  D\coloneqq\{1\}\times(\mathbb N\times\mathbb N)%
+}{MogiljanskajaLayerDDef}{%
+  \DeltaRow{Mengen}{D}
+}
+
+\FormulaDefDeltaK[Die einfach indizierte Grundfamilie]{%
+  \begin{aligned}[t]
+    &a\colon\mathbb N\to L,\\[-2pt]
+    &\forall i\in\mathbb N\,\bigl(a_i\coloneqq(0,i)\bigr)
+  \end{aligned}%
+}{MogiljanskajaAElementsDef}{%
+  \DeltaRow{Mengen}{L\dsep a_i\dsep i}
+  \DeltaRow{Funktionen}{a}
+}
+
+Die Typisierung ist unmittelbar, denn aus \(i\in\mathbb N\) folgt
+\((0,i)\in\{0\}\times\mathbb N=L\). Nach dem einmaligen
+Typisierungsprinzip ist damit die ganze Folge definiert.
+
+\FormulaDefDeltaK[Die zweifach indizierte Grundfamilie]{%
+  \begin{aligned}[t]
+    &b\colon\mathbb N\times\mathbb N\to D,\\[-2pt]
+    &\forall i,j\in\mathbb N\,\bigl(b_{ij}\coloneqq(1,(i,j))\bigr)
+  \end{aligned}%
+}{MogiljanskajaBElementsDef}{%
+  \DeltaRow{Mengen}{D\dsep b_{ij}\dsep i\dsep j}
+  \DeltaRow{Funktionen}{b}
+}
+
+Hier steht \(b_{ij}\) für \(b((i,j))\). Die Familie ist also eine einzige
+Funktion auf \(\mathbb N\times\mathbb N\), keine zweistufige Sammlung
+voneinander unabhängiger Funktionen.
+
+\FormulaThmDeltaK[Eindeutigkeit der (a)-Indizes]{%
+  i,j\in\mathbb N\dsep a_i=a_j\vdash i=j%
+}{MogiljanskajaAIndexUnique}{%
+  \DeltaRow{Mengen}{a_i\dsep a_j\dsep i\dsep j}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Aus \((0,i)=(0,j)\) folgt durch Injektivität des geordneten Paars
+\(i=j\).
+\end{proof}
+
+\FormulaThmDeltaK[Eindeutigkeit der (b)-Indizes]{%
+  i,j,m,n\in\mathbb N\dsep b_{ij}=b_{mn}
+  \vdash i=m\land j=n%
+}{MogiljanskajaBIndexUnique}{%
+  \DeltaRow{Mengen}{b_{ij}\dsep b_{mn}\dsep i\dsep j\dsep m\dsep n}
+  \DeltaRow{Funktionen}{b}
+}
+\begin{proof}
+Aus \((1,(i,j))=(1,(m,n))\) folgt zunächst \((i,j)=(m,n)\) und daraus
+\(i=m\) sowie \(j=n\).
+\end{proof}
+
+\FormulaThmDeltaK[Elementkriterium der (a)-Schicht]{%
+  s\in L\leftrightarrow\exists i\in\mathbb N\,(s=a_i)%
+}{MogiljanskajaLayerLMembership}{%
+  \DeltaRow{Mengen}{L\dsep s\dsep a_i\dsep i}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Jedes Element von \(L=\{0\}\times\mathbb N\) besitzt eindeutig die Form
+\((0,i)=a_i\), und jedes \(a_i\) liegt nach seiner Definition in \(L\).
+\end{proof}
+
+\FormulaThmDeltaK[Elementkriterium der (b)-Schicht]{%
+  s\in D\leftrightarrow
+    \exists i,j\in\mathbb N\,(s=b_{ij})%
+}{MogiljanskajaLayerDMembership}{%
+  \DeltaRow{Mengen}{D\dsep s\dsep b_{ij}\dsep i\dsep j}
+  \DeltaRow{Funktionen}{b}
+}
+\begin{proof}
+Jedes Element von
+\(D=\{1\}\times(\mathbb N\times\mathbb N)\) besitzt eindeutig die Form
+\((1,(i,j))=b_{ij}\), und jedes \(b_{ij}\) liegt in \(D\).
+\end{proof}
+
+\FormulaThmDeltaK[Bildmenge der (a)-Familie]{%
+  a[\mathbb N]=L%
+}{MogiljanskajaLayerLImage}{%
+  \DeltaRow{Mengen}{L\dsep a[\mathbb N]}
+  \DeltaRow{Funktionen}{a}
+}
+\begin{proof}
+Die beiden Mengen besitzen nach
+\FormulaRefAuto{MogiljanskajaLayerLMembership}[thm] dieselben Elemente.
+\end{proof}
+
+\FormulaThmDeltaK[Bildmenge der (b)-Familie]{%
+  b[\mathbb N\times\mathbb N]=D%
+}{MogiljanskajaLayerDImage}{%
+  \DeltaRow{Mengen}{D\dsep b[\mathbb N\times\mathbb N]}
+  \DeltaRow{Funktionen}{b}
+}
+\begin{proof}
+Die beiden Mengen besitzen nach
+\FormulaRefAuto{MogiljanskajaLayerDMembership}[thm] dieselben Elemente.
+\end{proof}
+
+\FormulaThmDeltaK[Die beiden Grundschichten sind disjunkt]{%
+  L\cap D=\varnothing%
+}{MogiljanskajaLayersDisjoint}{%
+  \DeltaRow{Mengen}{L\dsep D}
+}
+\begin{proof}
+Ein Element von \(L\) hat den ersten Tag \(0\), ein Element von \(D\) den
+ersten Tag \(1\). Wegen \(0\neq1\) kann kein Element in beiden Schichten
+liegen.
+\end{proof}
+
+\section{Marker und Reserveschichten}
+
+\FormulaDefDeltaK[Marker und unendliche Reserveschicht]{%
+  \begin{aligned}[t]
+    c_0&\coloneqq b_{00},&
+    c_1&\coloneqq b_{11},&
+    c_2&\coloneqq b_{10},\\[-2pt]
+    U&\coloneqq\bigl\{u\in D\bigm|
+      \exists n,j\in\mathbb N\,
+        u=b_{\Succ(\Succ(n)),j}\bigr\},\\[-2pt]
+    V&\coloneqq U\cup\{c_2\},&
+    P&\coloneqq\{c_0,c_1\},&
+    D'&\coloneqq P\cup V
+  \end{aligned}%
+}{MogiljanskajaDPrimeDef}{%
+  \DeltaRow{Mengen}{D\dsep D'\dsep U\dsep V\dsep P\dsep
+    c_0\dsep c_1\dsep c_2\dsep b_{ij}\dsep n\dsep j\dsep u}
+  \DeltaRow{Funktionen}{b}
+}
+
+Somit besteht \(U\) genau aus den Elementen der Zeilen mit erstem Index
+mindestens \(2\). Die Menge \(V\) adjungiert den Marker \(c_2=b_{10}\),
+und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
+
+\FormulaThmDeltaK[Elementkriterium der Reserveschicht]{%
+  u\in U\eqvdash
+  \exists n,j\in\mathbb N\,
+    (u=b_{\Succ(\Succ(n)),j})%
+}{MogiljanskajaReserveMembership}{%
+  \DeltaRow{Mengen}{D\dsep U\dsep u\dsep b_{ij}\dsep n\dsep j}
+  \DeltaRow{Funktionen}{b}
+}
+
+\FormulaThmDeltaK[Die Marker und das ausgesparte Rechteckelement]{%
+  \begin{aligned}[t]
+    &c_0,c_1,c_2\in D\dsep
+      c_0,c_1,c_2\notin U\dsep
+      c_0,c_1,c_2\text{ paarweise verschieden},\\[-2pt]
+    &D'\subseteq D\dsep b_{01}\notin D'
+  \end{aligned}%
+}{MogiljanskajaReserveMarkerFacts}{%
+  \DeltaRow{Mengen}{D\dsep D'\dsep U\dsep V\dsep P\dsep
+    c_0\dsep c_1\dsep c_2\dsep b_{01}\dsep n\dsep j}
+  \DeltaRow{Funktionen}{b}
+}
+\begin{proof}
+Die drei Marker besitzen die verschiedenen Indexpaare
+\[
+  (0,0),\qquad(1,1),\qquad(1,0).
+\]
+Ihre Verschiedenheit folgt aus
+\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]. Keiner hat einen ersten
+Index von mindestens \(2\), also liegen sie außerhalb von \(U\). Folglich
+liegen \(U,V,P,D'\) in \(D\). Das Element \(b_{01}\) gehört weder zu
+\(P\) noch zu \(V\): Es ist keiner der Marker und sein erster Index ist
+\(0\), so dass es nicht in \(U\) liegt.
+\end{proof}
+
+\FormulaThmDeltaK[Der dritte Marker liegt außerhalb des festen Kerns]{%
+  c_2\notin P\dsep P\cap U=\varnothing%
+}{MogiljanskajaReserveCoreFacts}{%
+  \DeltaRow{Mengen}{P\dsep U\dsep c_0\dsep c_1\dsep c_2}
+}
+
+\section{Parametrisierungen und ihre Bildmengen}
+
+\FormulaDefDeltaK[Die beiden Parametrisierungen der Produktschichten]{%
+  \begin{aligned}[t]
+    &\delta\colon\mathbb N\times\mathbb N\to D,\\[-2pt]
+    &\forall n,j\in\mathbb N\,
+      \bigl(\delta(n,j)\coloneqq b_{nj}\bigr);\\[2pt]
+    &\upsilon\colon\mathbb N\times\mathbb N\to U,\\[-2pt]
+    &\forall n,j\in\mathbb N\,
+      \bigl(\upsilon(n,j)\coloneqq b_{\Succ(\Succ(n)),j}\bigr)
+  \end{aligned}%
+}{MogiljanskajaRowParametrizationsDef}{%
+  \DeltaRow{Mengen}{D\dsep U\dsep b_{ij}\dsep n\dsep j}
+  \DeltaRow{Funktionen}{b\dsep\delta\dsep\upsilon}
+}
+
+\FormulaThmDeltaK[Die Zeilenparametrisierungen sind bijektiv]{%
+  \delta\colon\mathbb N\times\mathbb N\bij D\dsep
+  \upsilon\colon\mathbb N\times\mathbb N\bij U%
+}{MogiljanskajaRowParametrizationsBijective}{%
+  \DeltaRow{Mengen}{D\dsep U\dsep n\dsep j\dsep m\dsep q\dsep u}
+  \DeltaRow{Funktionen}{\delta\dsep\upsilon}
+}
+\begin{proof}
+Die Bijektivität von \(\delta\) ist die eindeutige Darstellung jedes
+Elements von \(D\) als \(b_{nj}\). Für \(\upsilon\) liefert
+\FormulaRefAuto{MogiljanskajaReserveMembership}[thm] die Surjektivität.
+Aus
+\(b_{\Succ(\Succ(n)),j}=b_{\Succ(\Succ(m)),q}\) folgen mit der
+Indexeindeutigkeit zunächst
+\(\Succ(\Succ(n))=\Succ(\Succ(m))\) und \(j=q\), dann durch zweimalige
+Nachfolgerinjektivität \(n=m\).
+\end{proof}
+
+Insbesondere gelten die präzisen Bildmengengleichheiten
+\[
+  \delta[\mathbb N\times\mathbb N]=D,
+  \qquad
+  \upsilon[\mathbb N\times\mathbb N]=U.
+\]
+
+\FormulaDefDeltaK[Die Zeilenrückverschiebung]{%
+  \theta\coloneqq\delta\circ\upsilon^{-1}%
+}{MogiljanskajaThetaDef}{%
+  \DeltaRow{Mengen}{D\dsep U}
+  \DeltaRow{Funktionen}{\delta\dsep\upsilon\dsep\theta}
+}
+
+\FormulaThmDeltaK[Die Zeilenrückverschiebung ist bijektiv]{%
+  \theta\colon U\bij D%
+}{MogiljanskajaThetaBijective}{%
+  \DeltaRow{Mengen}{D\dsep U}
+  \DeltaRow{Funktionen}{\delta\dsep\upsilon\dsep\theta}
+}
+\begin{proof}
+Inverse und Komposition bijektiver Funktionen sind bijektiv.
+\end{proof}
+
+\section{Die punktierte Verschiebung}
+
+\FormulaThmDeltaK[Die Werte der Verschiebungsfolge liegen in der Reserve]{%
+  n\in\mathbb N\vdash b_{\Succ(n),0}\in V%
+}{MogiljanskajaShiftValueInV}{%
+  \DeltaRow{Mengen}{U\dsep V\dsep c_2\dsep b_{ij}\dsep n}
+  \DeltaRow{Funktionen}{b}
+}
+\begin{proof}
+Für \(n=0\) ist \(b_{\Succ(0),0}=b_{10}=c_2\in V\). Für \(n>0\)
+existiert ein \(m\in\mathbb N\) mit \(n=\Succ(m)\); dann ist
+\(b_{\Succ(n),0}=b_{\Succ(\Succ(m)),0}\in U\subseteq V\).
+\end{proof}
+
+\FormulaDefDeltaK[Die Folge für die punktierte Verschiebung]{%
+  \begin{aligned}[t]
+    &H\colon\mathbb N\to V,\\[-2pt]
+    &\forall n\in\mathbb N\,
+      \bigl(H_n\coloneqq b_{\Succ(n),0}\bigr)
+  \end{aligned}%
+}{MogiljanskajaShiftSequenceDef}{%
+  \DeltaRow{Mengen}{V\dsep b_{ij}\dsep n}
+  \DeltaRow{Funktionen}{b\dsep H}
+}
+
+\FormulaThmDeltaK[Die punktierte Verschiebung entfernt genau den dritten
+Marker]{%
+  H\colon\mathbb N\inj V\dsep H_0=c_2\dsep
+  V\setminus\{c_2\}=U%
+}{MogiljanskajaShiftSequenceFacts}{%
+  \DeltaRow{Mengen}{U\dsep V\dsep c_2\dsep n\dsep m}
+  \DeltaRow{Funktionen}{H}
+}
+\begin{proof}
+Aus \(H_n=H_m\) folgt
+\(b_{\Succ(n),0}=b_{\Succ(m),0}\), also \(\Succ(n)=\Succ(m)\) und
+damit \(n=m\). Ferner ist \(H_0=b_{10}=c_2\). Da \(c_2\notin U\) und
+\(V=U\cup\{c_2\}\), gilt \(V\setminus\{c_2\}=U\).
+\end{proof}
+
+\FormulaThmDeltaK[Tatsächliche Bildmenge der Verschiebungsfolge]{%
+  H[\mathbb N]
+  =\{b_{\Succ(n),0}\mid n\in\mathbb N\}
+  \dsep H[\mathbb N]\subsetneq V%
+}{MogiljanskajaShiftSequenceImage}{%
+  \DeltaRow{Mengen}{V\dsep b_{ij}\dsep n}
+  \DeltaRow{Funktionen}{H}
+}
+\begin{proof}
+Die erste Gleichheit ist das Bildmengenkriterium für die definierende
+Vorschrift von \(H\). Die Inklusion in \(V\) folgt aus der Typisierung.
+Sie ist echt: Das Element \(b_{\Succ(\Succ(0)),1}=b_{21}\) liegt in
+\(U\subseteq V\). Jedes Glied \(H_n=b_{\Succ(n),0}\) besitzt dagegen den
+zweiten Index \(0\); wegen der Eindeutigkeit der \(b\)-Indizes kann
+\(b_{21}\) kein Glied von \(H\) sein.
+\end{proof}
+
+Damit ist ausdrücklich zwischen Ziel- und Bildmenge unterschieden:
+\(H\colon\mathbb N\to V\), aber \(H[\mathbb N]\neq V\). Die Folge wird
+nicht zur Aufzählung von \(V\), sondern zur Konstruktion einer Verschiebung
+auf \(V\) verwendet.
+
+\FormulaDefDeltaK[Die Bijektion in die um einen Marker erweiterte Reserve]{%
+  \sigma\coloneqq(\SuccShift{H})^{-1}%
+}{MogiljanskajaSigmaDef}{%
+  \DeltaRow{Mengen}{U\dsep V}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}\dsep\sigma}
+}
+
+\FormulaThmDeltaK[Die Markeradjunktion ist bijektiv]{%
+  \sigma\colon U\bij V%
+}{MogiljanskajaSigmaBijective}{%
+  \DeltaRow{Mengen}{U\dsep V\dsep c_2}
+  \DeltaRow{Funktionen}{H\dsep\SuccShift{H}\dsep\sigma}
+}
+\begin{proof}
+Nach \FormulaRefAuto{MogiljanskajaShiftSequenceFacts}[thm] ist
+\(H\colon\mathbb N\inj V\), \(H_0=c_2\) und
+\(V\setminus\{c_2\}=U\). Der allgemeine Satz über die Folgenverschiebung
+entlang einer Einbettung liefert
+\(\SuccShift{H}\colon V\bij V\setminus\{H_0\}=U\). Daher ist die inverse
+Funktion \(\sigma\colon U\bij V\).
+\end{proof}
+
+\section{Familien mit den vorgegebenen Bildmengen}
+
+Die Familien \(a\), \(b\), \(\delta\) und \(\upsilon\) parametrisieren
+bereits \(L,D,D\) beziehungsweise \(U\). Aus \(\sigma\) entsteht ohne eine
+weitere Fallunterscheidung eine bijektive Familie mit Bild \(V\).
+
+\FormulaDefDeltaK[Eine bijektive Familie mit Bildmenge (V)]{%
+  \nu\coloneqq\sigma\circ\upsilon%
+}{MogiljanskajaVParametrizationDef}{%
+  \DeltaRow{Mengen}{U\dsep V}
+  \DeltaRow{Funktionen}{\upsilon\dsep\sigma\dsep\nu}
+}
+
+\FormulaThmDeltaK[Die Familie (nu) parametrisiert (V)]{%
+  \nu\colon\mathbb N\times\mathbb N\bij V\dsep
+  \nu[\mathbb N\times\mathbb N]=V%
+}{MogiljanskajaVParametrizationBijective}{%
+  \DeltaRow{Mengen}{V}
+  \DeltaRow{Funktionen}{\nu}
+}
+\begin{proof}
+Die Funktionen \(\upsilon\colon\mathbb N^2\bij U\) und
+\(\sigma\colon U\bij V\) sind bijektiv, also auch ihre Komposition.
+\end{proof}
+
+Für \(D'=P\cup V\) müssen die beiden Marker aus \(P\) und die Familie
+\(\nu\) disjunkt zusammengefügt werden. Die Tags \(0\) und \(1\) sorgen
+dafür, dass sich die beiden Indexteile nicht überschneiden.
+
+\FormulaDefDeltaK[Indexmenge für die Familie mit Bild (D')]{%
+  I_{D'}\coloneqq
+  (\{0\}\times\NatSeg{2})
+  \cup
+  (\{1\}\times(\mathbb N\times\mathbb N))%
+}{MogiljanskajaDPrimeIndexSetDef}{%
+  \DeltaRow{Mengen}{I_{D'}}
+}
+
+\FormulaDefDeltaK[Eine Familie mit Bildmenge (D')]{%
+  \begin{aligned}[t]
+    &\omega\colon I_{D'}\to D',\\[-2pt]
+    &\forall i\in\NatSeg{2}\,
+      \left(
+        \omega((0,i))\coloneqq
+        \begin{cases}
+          c_0,& i=0,\\
+          c_1,& i=1,
+        \end{cases}
+      \right),\\[-2pt]
+    &\forall n,j\in\mathbb N\,
+      \bigl(\omega((1,(n,j)))\coloneqq\nu(n,j)\bigr)
+  \end{aligned}%
+}{MogiljanskajaDPrimeParametrizationDef}{%
+  \DeltaRow{Mengen}{I_{D'}\dsep D'\dsep c_0\dsep c_1\dsep n\dsep j}
+  \DeltaRow{Funktionen}{\nu\dsep\omega}
+}
+
+\FormulaThmDeltaK[Die Familie (omega) parametrisiert (D')]{%
+  \omega\colon I_{D'}\bij D'\dsep \omega[I_{D'}]=D'%
+}{MogiljanskajaDPrimeParametrizationBijective}{%
+  \DeltaRow{Mengen}{I_{D'}\dsep D'\dsep P\dsep V}
+  \DeltaRow{Funktionen}{\omega}
+}
+\begin{proof}
+Auf dem ersten Indexteil nimmt \(\omega\) genau die beiden verschiedenen
+Werte \(c_0,c_1\) aus \(P\) an. Auf dem zweiten Indexteil ist \(\omega\)
+die bijektive Familie \(\nu\) mit Bild \(V\). Nach
+\FormulaRefAuto{MogiljanskajaReserveMarkerFacts}[thm] und
+\FormulaRefAuto{MogiljanskajaReserveCoreFacts}[thm] gilt
+\(P\cap V=\varnothing\). Daher sind die beiden Wertebereiche disjunkt, und
+die zusammengefügte Familie ist bijektiv auf \(P\cup V=D'\).
+\end{proof}
+
+\FormulaThmDeltaK[Mogiljanskaja-Bildmengen]{%
+  \begin{aligned}[t]
+    a[\mathbb N]&=L,&
+    b[\mathbb N\times\mathbb N]&=D,\\[-2pt]
+    \upsilon[\mathbb N\times\mathbb N]&=U,&
+    \nu[\mathbb N\times\mathbb N]&=V,\\[-2pt]
+    \omega[I_{D'}]&=D'
+  \end{aligned}%
+}{MogiljanskajaFamilyImages}{%
+  \DeltaRow{Mengen}{L\dsep D\dsep U\dsep V\dsep D'\dsep I_{D'}}
+  \DeltaRow{Funktionen}{a\dsep b\dsep\upsilon\dsep\nu\dsep\omega}
+}
+
+Diese Zusammenfassung ist die Schnittstelle zum späteren Halbgruppenband.
+Dort müssen die Familien und ihre Typisierung nicht erneut aufgebaut werden;
+es genügt, ihre Bildmengengleichheiten und die wenigen benötigten
+Markerfakten zu zitieren.
+
+\end{document}
