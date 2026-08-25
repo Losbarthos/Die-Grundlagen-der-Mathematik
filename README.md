@@ -136,7 +136,14 @@ Ordnungen sowie Wohlordnungen. B17 konstruiert die ganzen Zahlen, B18 die
 rationalen Zahlen und B19 die reellen Zahlen folgenfrei aus
 Dedekind-Schnitten, sodass B21 anschließend Folgen, endliche Folgen, Familien
 und reelle Grenzwerte ohne Abhängigkeitszirkel einführen kann. B20 behandelt
-zuvor die endlichen Mengen.
+zuvor die endlichen Mengen. Nach dem jeweiligen Modellnachweis stellen B17
+und B18 die arithmetischen Gesetze als einzeln registrierte Axiomschnittstellen
+bereit; die anschließenden Sätze verwenden diese Schnittstellen statt erneut
+mit Paarrepräsentanten zu rechnen. Ganzzahlige und rationale Zahlzeichen
+werden typisiert, aber ohne sichtbaren Trägerindex geschrieben
+(beispielsweise `\IntNumeral{2}` und `\RatNumeral{2}`); für mehrdeutige
+Kontexte bleiben die expliziten Einbettungen `\IntOfNat`, `\RatOfInt` und
+`\RatOfNat` verfügbar.
 Die Bände B22--B30 untersuchen Halbgruppen und ihre zusätzlichen
 Axiomstrukturen getrennt. Die Bände B31--B33 behandeln Monoid-, Halbring-,
 Gruppen- und Ringstrukturen. Ihre allgemeinen

@@ -19,8 +19,8 @@
   pdfauthor={Martin Kunze}
 }
 
-% Die Notationen bleiben bis zu ihrer Aufnahme in die gemeinsame
-% Makrodatei lokal in diesem Band.
+% Lokale Fallbacks spiegeln die zentrale Zahlennotation und halten den Band
+% auch bei einer isolierten Weiterverarbeitung lesbar.
 \providecommand{\PositiveIntegers}{\ensuremath{\mathbb Z_{>0}}}
 \providecommand{\RatPairCarrier}{\ensuremath{D_{\mathbb Q}}}
 \providecommand{\RatPairRel}{\ensuremath{\mathrel{\sim_{\mathbb Q}}}}
@@ -31,7 +31,7 @@
   \ensuremath{\operatorname{rec}_{\mathbb Q}\!\left(#1,#2\right)}%
 }
 \providecommand{\RationalOrderedField}[1]{%
-  \ensuremath{\mathsf{ArchOF}\!\left(#1\right)}%
+  \ensuremath{\mathsf{QOF}\!\left(#1\right)}%
 }
 
 \begin{document}
@@ -70,7 +70,7 @@ setzt keinen bereits eingeführten abstrakten Körperbegriff voraus.
 
 \FormulaDefDeltaK[Positive ganze Zahlen]{%
   \PositiveIntegers\coloneqq
-  \{b\in\mathbb Z\mid 0_{\mathbb Z}<b\}%
+  \{b\in\mathbb Z\mid \IntZero<b\}%
 }{PositiveIntegersDef}{%
   \DeltaRow{Mengen}{\PositiveIntegers}%
   \DeltaRow{Relationsoperatoren}{<}%
@@ -78,41 +78,140 @@ setzt keinen bereits eingeführten abstrakten Körperbegriff voraus.
 }
 
 \FormulaThmDeltaK[Die Ganzzahleins ist positiv]{%
-  1_{\mathbb Z}\in\PositiveIntegers%
+  \IntOne\in\PositiveIntegers%
 }{IntegerOnePositive}{%
   \DeltaRow{Mengen}{\PositiveIntegers}%
 }
 
-\emph{Beweisskizze.}
-Nach \FormulaRefAuto{IntegerOneDef}[def] ist
-\(1_{\mathbb Z}=\IntEmbed(1)\). Die strikte Positivität folgt aus der
-Nachfolgerorientierung der Ganzzahlordnung und der Verträglichkeit der
-natürlichen Einbettung mit dem Nachfolger.
+\begin{tabproof}
+  \proofstep{}{\IntZero<\IntOne}{%
+    \FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}
+  \proofstep{}{\IntOne\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+  \proofstep{}{\IntOne\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1,2}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Positive ganze Zahlen sind von null verschieden]{%
-  b\in\PositiveIntegers\vdash b\neq0_{\mathbb Z}%
+  b\in\PositiveIntegers\vdash b\neq\IntZero%
 }{PositiveIntegerNonzero}{%
   \DeltaRow{Mengen}{b}%
 }
 
-\emph{Beweisskizze.}
-Aus \(0_{\mathbb Z}<b\) und \(b=0_{\mathbb Z}\) entstünde unmittelbar
-\(0_{\mathbb Z}<0_{\mathbb Z}\), im Widerspruch zur Irreflexivität der
-strikten Ordnung.
+\begin{tabproof}
+  \proofstep{1}{b\in\PositiveIntegers}{\rA}
+  \proofstep{1}{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstep{1}{\IntZero\leq b\land\IntZero\neq b}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{2}}
+  \proofstep{1}{b\neq\IntZero}{%
+    \FormulaRefAuto{a\neq b\vdash b\neq a}{\rAEb{3}}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Die Ganzzahleins ist kleinste positive ganze Zahl]{%
-  b\in\PositiveIntegers\vdash1_{\mathbb Z}\leq b%
+  b\in\PositiveIntegers\vdash\IntOne\leq b%
 }{PositiveIntegerOneLowerBound}{%
   \DeltaRow{Mengen}{b}%
   \DeltaRow{Relationsoperatoren}{\leq}%
 }
 
-\emph{Beweisskizze.}
-Die Normalform \FormulaRefAuto{IntegerSignedNormalForm}[thm] stellt ein
-positives \(b\) als \(\IntEmbed(n)\) dar. Wegen \(b\neq0_{\mathbb Z}\) ist
-\(n\neq0\), also ein Nachfolger. Die natürliche Ordnung und ihre in Band~17
-konstruierte Ganzzahleinbettung liefern daher
-\(1_{\mathbb Z}\leq\IntEmbed(n)=b\).
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Positiver Normalformfall]{%
+    \begin{aligned}[t]
+      &b\in\PositiveIntegers\dsep n\in\mathbb N\dsep
+        b=\IntEmbed(n)\vdash{}\\
+      &\IntOne\leq b
+    \end{aligned}
+  }{%
+    b\in\PositiveIntegers\dsep n\in\mathbb N\dsep
+    b=\IntEmbed(n)\vdash\IntOne\leq b
+  }[PositiveIntegerOneLowerBoundPositiveCase]
+    \proofstepwidestarbreakkeep[1]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[2]{n\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[3]{b=\IntEmbed(n)}{\rA}
+    \proofstepwidestarbreakkeep[1]{b\neq\IntZero}{%
+      \FormulaRefAuto{PositiveIntegerNonzero}[thm]{1}}
+    \proofstepwidestarbreakkeep[2,3,4]{n\neq0}{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingInjective}[thm]{%
+        \FormulaRefAuto{PeanoZero}[ax],2,%
+        \rRI{n=0,\rIE{3,\FormulaRefAuto{IntegerZeroDef}[def]}}}}
+    \proofstepwidestarbreakkeep[2,5]{\exists k\in\mathbb N\,(n=\Succ(k))}{%
+      \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{2,5}}
+    \proofstepwidestarbreakkeep[7]{k\in\mathbb N\land n=\Succ(k)}{\rA}
+    \proofstepwidestarbreakkeep[7]{1+k=\Succ(k)}{%
+      \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{%
+          \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{7}},%
+        \FormulaRefAuto{PeanoAddOneSucc}[thm]{\rAEa{7}}}}
+    \proofstepwidestarbreakkeep[7]{1\leq n}{%
+      \FormulaRefAuto{NaturalOrderAdditiveCharacterization}[thm]{%
+        \FormulaRefAuto{PeanoOneInN}[thm],\rAEb{\rAEa{7}},%
+        \rEI{\rAI{\rAEa{7},\rIE{8,\rAEb{7}}}}}}
+    \proofstepwidestarbreakkeep[2,7]{\IntEmbed(1)\leq\IntEmbed(n)}{%
+      \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
+        \FormulaRefAuto{PeanoOneInN}[thm],2,9}}
+    \proofstepwidestarbreakkeep[1,2,3]{\IntOne\leq b}{%
+      \rEE{6,7,\rIE{10,3,\FormulaRefAuto{IntegerOneDef}[def]}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Negativer Normalformfall ist ausgeschlossen]{%
+    \begin{aligned}[t]
+      &b\in\PositiveIntegers\dsep n\in\mathbb N\dsep
+        b=-\IntEmbed(n)\vdash{}\\
+      &\IntOne\leq b
+    \end{aligned}
+  }{%
+    b\in\PositiveIntegers\dsep n\in\mathbb N\dsep
+    b=-\IntEmbed(n)\vdash\IntOne\leq b
+  }[PositiveIntegerOneLowerBoundNegativeCase]
+    \proofstepwidestarbreakkeep[1]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[2]{n\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[3]{b=-\IntEmbed(n)}{\rA}
+    \proofstepwidestarbreakkeep[1]{\IntZero\leq b}{%
+      \rAEa{\FormulaRefAuto{IntegerStrictOrderDef}[def]{%
+        \rAEb{\FormulaRefAuto{PositiveIntegersDef}[def]{1}}}}}
+    \proofstepwidestarbreakkeep[2]{-\IntEmbed(n)=\IntClass{0}{n}}{%
+      \FormulaRefAuto{IntegerNegationDef}[def]{%
+        2,\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}}
+    \proofstepwidestarbreakkeep[2,3,4]{n\leq0}{%
+      \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
+        \FormulaRefAuto{PeanoZero}[ax],2,4,5,%
+        \FormulaRefAuto{IntegerZeroClass}[thm]}}
+    \proofstepwidestarbreakkeep[2]{0\leq n}{\FormulaRefAuto{PeanoZeroLeq}[thm]{2}}
+    \proofstepwidestarbreakkeep[2,6,7]{n=0}{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep
+        m\leq n\dsep n\leq m\vdash m=n}{%
+        2,\FormulaRefAuto{PeanoZero}[ax],6,7}}
+    \proofstepwidestarbreakkeep[2,3,5,8]{b=\IntZero}{%
+      \rIE{3,5,8,\FormulaRefAuto{IntegerZeroDef}[def],%
+        \FormulaRefAuto{IntegerNegativeZero}[thm]}}
+    \proofstepwidestarbreakkeep[1,9]{\bot}{%
+      \FormulaRefAuto{PositiveIntegerNonzero}[thm]{1,9}}
+    \proofstepwidestarbreakkeep[1,2,3]{\IntOne\leq b}{%
+      \FormulaRefAuto{\bot\vdash P}{10}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[1]{b\in\mathbb Z}{%
+      \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{1}}}
+    \proofstepwidestarbreakkeep[1]{\exists n\in\mathbb N\,
+      (b=\IntEmbed(n)\lor b=-\IntEmbed(n))}{%
+      \FormulaRefAuto{IntegerSignedNormalForm}[thm]{2}}
+    \proofstepwidestarbreakkeep[4]{n\in\mathbb N\land
+      (b=\IntEmbed(n)\lor b=-\IntEmbed(n))}{\rA}
+    \proofstepwidestarbreakkeep[1,4]{b=\IntEmbed(n)\to\IntOne\leq b}{%
+      \rRI{\rAEa{\rAEb{4}},%
+        \FormulaRefAuto{PositiveIntegerOneLowerBoundPositiveCase}{%
+          1,\rAEa{4},\rAEa{\rAEb{4}}}}}
+    \proofstepwidestarbreakkeep[1,4]{b=-\IntEmbed(n)\to\IntOne\leq b}{%
+      \rRI{\rAEb{\rAEb{4}},%
+        \FormulaRefAuto{PositiveIntegerOneLowerBoundNegativeCase}{%
+          1,\rAEa{4},\rAEb{\rAEb{4}}}}}
+    \proofstepwidestarbreakkeep[1,4]{\IntOne\leq b}{%
+      \rOE{\rAEb{4},5,6}}
+    \proofstepwidestarbreakkeep[1]{\IntOne\leq b}{\rEE{3,4,7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit positiver ganzer Zahlen unter Multiplikation]{%
   b\in\PositiveIntegers\dsep d\in\PositiveIntegers
@@ -120,13 +219,20 @@ konstruierte Ganzzahleinbettung liefern daher
 }{PositiveIntegerMulClosure}{%
   \DeltaRow{Mengen}{b\dsep d}%
 }
-
-\FormulaThmDeltaK[Kürzung eines positiven ganzzahligen Faktors]{%
-  a,c\in\mathbb Z\dsep d\in\PositiveIntegers\dsep
-  a\cdot d=c\cdot d\vdash a=c%
-}{IntegerPositiveFactorCancellation}{%
-  \DeltaRow{Mengen}{a\dsep c\dsep d}%
-}
+\begin{tabproof}
+  \proofstep{1}{b\in\PositiveIntegers}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{1}{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2}{b\cdot d\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{\rAEa{3},\rAEa{4}}}
+  \proofstep{1,2}{\IntZero<b\cdot d}{%
+    \FormulaRefAuto{IntegerPositiveProductAxiom}[ax]{3,4}}
+  \proofstep{1,2}{b\cdot d\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{5,6}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Positive ganzzahlige Faktoren bewahren und reflektieren die Ordnung]{%
   a,c\in\mathbb Z\dsep d\in\PositiveIntegers
@@ -135,17 +241,32 @@ konstruierte Ganzzahleinbettung liefern daher
 }{IntegerPositiveFactorOrder}{%
   \DeltaRow{Mengen}{a\dsep c\dsep d}%
 }
+\begin{tabproof}
+  \proofstep{1}{a,c\in\mathbb Z}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2}{a\leq c\leftrightarrow
+    a\cdot d\leq c\cdot d}{%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{1,3}}
+\end{tabproof}
 
-\emph{Gemeinsame Beweisskizze.}
-Nach der Ganzzahlnormalform
-\FormulaRefAuto{IntegerSignedNormalForm}[thm] wird jeder Faktor als
-eingebettete natürliche Zahl oder als deren Negatives dargestellt. Auf dem
-positiven Strahl folgen Produktspositivität und strikte Monotonie durch
-Induktion aus der rekursiven Multiplikation auf \(\mathbb N\), der
-Distributivität und der strikten Monotonie der Addition. Die multiplikative
-Verträglichkeit und Injektivität der Einbettung übertragen diese Aussagen auf
-\(\mathbb Z\). Die Kürzungsregel ist der Gleichheitsfall der reflektierten
-Ordnung.
+\FormulaThmDeltaK[Kürzung eines positiven ganzzahligen Faktors]{%
+  a,c\in\mathbb Z\dsep d\in\PositiveIntegers\dsep
+  a\cdot d=c\cdot d\vdash a=c%
+}{IntegerPositiveFactorCancellation}{%
+  \DeltaRow{Mengen}{a\dsep c\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{a,c\in\mathbb Z}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{3}{a\cdot d=c\cdot d}{\rA}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2,3}{a=c}{%
+    \FormulaRefAuto{IntegerPositiveFactorCancellationFromAxioms}[thm]{%
+      1,4,3}}
+\end{tabproof}
 
 \section{Bruchpaare}
 
@@ -230,12 +351,34 @@ Ordnung.
   \DeltaRow{Relationsoperatoren}{\RatPairRel}%
 }
 
-\emph{Beweisskizze.}
-Aus \(ad=cb\) und \(cf=ed\) folgt nach Multiplikation mit \(f\)
-beziehungsweise \(b\), Kommutativität und Assoziativität
-\(d(af)=d(eb)\). Da \(d>0\) ist, liefert
-\FormulaRefAuto{IntegerPositiveFactorCancellation}[thm] die Gleichheit
-\(af=eb\), also \((a,b)\RatPairRel(e,f)\).
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c,e\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d,f\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{(a,b)\RatPairRel(c,d)}{\rA}
+  \proofstepwidestarbreakkeep[4]{(c,d)\RatPairRel(e,f)}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{RationalPairRelChar}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[1,2,4]{c\cdot f=e\cdot d}{%
+    \FormulaRefAuto{RationalPairRelChar}[thm]{1,2,4}}
+  \proofstepwide[1,2,3]{(a\cdot f)\cdot d}{=}{%
+    (a\cdot d)\cdot f}{%
+    \FormulaRefAuto{IntMulAssociative}[thm],
+    \FormulaRefAuto{IntMulCommutative}[thm]}
+  \proofstepwide[1,2,3]{(a\cdot d)\cdot f}{=}{%
+    (c\cdot b)\cdot f}{\rIE{5}}
+  \proofstepwide[1,2,3,4]{(c\cdot b)\cdot f}{=}{%
+    (e\cdot b)\cdot d}{%
+    \FormulaRefAuto{IntMulAssociative}[thm],
+    \FormulaRefAuto{IntMulCommutative}[thm],6}
+  \proofstepwidestarbreakkeep[1,2,3,4]{(a\cdot f)\cdot d=(e\cdot b)\cdot d}{%
+    \rChain{7,8,9}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{a\cdot f=e\cdot b}{%
+    \FormulaRefAuto{IntegerPositiveFactorCancellation}[thm]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{1},%
+      \FormulaRefAuto{IntMulClosure}[thm]{1},\rAEa{\rAEb{2}},10}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{(a,b)\RatPairRel(e,f)}{%
+    \FormulaRefAuto{RationalPairRelChar}[thm]{1,2,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Die Bruchpaarrelation ist eine Äquivalenzrelation]{%
   \EqRel{\RatPairCarrier,\RatPairRel}%
@@ -244,10 +387,39 @@ beziehungsweise \(b\), Kommutativität und Assoziativität
   \DeltaRow{Relationsoperatoren}{\RatPairRel}%
 }
 
-\emph{Beweisskizze.}
-Jedes Element von \(\RatPairCarrier\) besitzt eindeutig die Gestalt
-\((a,b)\) mit \(a\in\mathbb Z\) und \(b\in\PositiveIntegers\). Damit sind
-Reflexivität, Symmetrie und Transitivität genau die drei vorangehenden Sätze.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{x\in\RatPairCarrier}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+    x=(a,b)}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash
+      \exists a\in A\,\exists b\in B\,x=(a,b)}{%
+      \FormulaRefAuto{RationalPairCarrier}[def]{1}}}
+  \proofstepwidestarbreakkeep[1]{x\RatPairRel x}{%
+    \rEE{2,a\in\mathbb Z\land b\in\PositiveIntegers\land x=(a,b),%
+      \rIE{x=(a,b),\FormulaRefAuto{RationalPairRelReflexive}[thm]{%
+        a\in\mathbb Z,b\in\PositiveIntegers}}}}
+  \proofstepwidestarbreakkeep[]{\forall x\in\RatPairCarrier\,(x\RatPairRel x)}{%
+    \rUI{\rRI{1,3}}}
+  \proofstepwidestarbreakkeep[5]{x,y\in\RatPairCarrier\land x\RatPairRel y}{\rA}
+  \proofstepwidestarbreakkeep[5]{y\RatPairRel x}{%
+    \FormulaRefAuto{RationalPairRelSymmetric}[thm]{%
+      \FormulaRefAuto{x\in A\times B\eqvdash
+        \exists a\in A\,\exists b\in B\,x=(a,b)}{\rAEa{5}},%
+      \FormulaRefAuto{x\in A\times B\eqvdash
+        \exists a\in A\,\exists b\in B\,x=(a,b)}{\rAEa{\rAEb{5}}},%
+      \rAEb{\rAEb{5}}}}
+  \proofstepwidestarbreakkeep[]{\forall x,y\in\RatPairCarrier\,
+    (x\RatPairRel y\to y\RatPairRel x)}{\rUI{\rRI{5,6}}}
+  \proofstepwidestarbreakkeep[8]{x,y,z\in\RatPairCarrier\land
+    x\RatPairRel y\land y\RatPairRel z}{\rA}
+  \proofstepwidestarbreakkeep[8]{x\RatPairRel z}{%
+    \FormulaRefAuto{RationalPairRelTransitive}[thm]{8}}
+  \proofstepwidestarbreakkeep[]{\forall x,y,z\in\RatPairCarrier\,
+    (x\RatPairRel y\land y\RatPairRel z\to x\RatPairRel z)}{%
+    \rUI{\rRI{8,9}}}
+  \proofstepwidestarbreakkeep[]{\EqRel{\RatPairCarrier,\RatPairRel}}{%
+    \FormulaRefAuto{EqRelDef}[def]{4,7,10}}
+\end{tabproofwide}
 
 \section{Quotient und Bruchklassen}
 
@@ -277,12 +449,20 @@ Reflexivität, Symmetrie und Transitivität genau die drei vorangehenden Sätze.
   \DeltaRow{Mengen}{a\dsep b}%
 }
 
-\emph{Beweisskizze.}
-Das Paar \((a,b)\) liegt in \(\RatPairCarrier\). Mit
-\FormulaRefAuto{RationalPairEquivalence}[thm] liegt seine Äquivalenzklasse in
-der Quotientenmenge; anschließend werden
-\FormulaRefAuto{RationalClassDef}[def] und
-\FormulaRefAuto{RationalsAsQuotient}[def] eingesetzt.
+\begin{tabproof}
+  \proofstep{1}{a\in\mathbb Z}{\rA}
+  \proofstep{2}{b\in\PositiveIntegers}{\rA}
+  \proofstep{1,2}{(a,b)\in\RatPairCarrier}{%
+    \FormulaRefAuto{RationalPairCarrier}[def]{1,2}}
+  \proofstep{}{\EqRel{\RatPairCarrier,\RatPairRel}}{%
+    \FormulaRefAuto{RationalPairEquivalence}[thm]}
+  \proofstep{1,2}{\EqClass{(a,b)}{\RatPairRel}{\RatPairCarrier}
+    \in\QuotientSet{\RatPairCarrier}{\RatPairRel}}{%
+    \FormulaRefAuto{EqClassInQuotient}[thm]{3,4}}
+  \proofstep{1,2}{\RatClass{a}{b}\in\mathbb Q}{%
+    \rIE{5,\FormulaRefAuto{RationalClassDef}[def]{1,2},%
+      \FormulaRefAuto{RationalsAsQuotient}[def]}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Gleichheit von Bruchklassen]{%
   a,c\in\mathbb Z\dsep b,d\in\PositiveIntegers\vdash
@@ -293,11 +473,23 @@ der Quotientenmenge; anschließend werden
   \DeltaRow{Relationsoperatoren}{\RatPairRel}%
 }
 
-\emph{Beweisskizze.}
-Für Äquivalenzrelationen sind zwei Klassen genau dann gleich, wenn ihre
-Repräsentanten äquivalent sind. Dies folgt aus
-\FormulaRefAuto{EqClassEqualIffRel}[thm]. Die Behauptung ergibt sich danach
-aus \FormulaRefAuto{RationalPairRelChar}[thm].
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[]{\EqRel{\RatPairCarrier,\RatPairRel}}{%
+    \FormulaRefAuto{RationalPairEquivalence}[thm]}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}=\RatClass{c}{d}
+    \leftrightarrow(a,b)\RatPairRel(c,d)}{%
+    \rIE{\FormulaRefAuto{RationalClassDef}[def]{1,2},%
+      \FormulaRefAuto{EqClassEqualIffRel}[thm]{1,2,3}}}
+  \proofstepwidestarbreakkeep[1,2]{(a,b)\RatPairRel(c,d)
+    \leftrightarrow a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{RationalPairRelChar}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}=\RatClass{c}{d}
+    \leftrightarrow a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R
+      \vdash P\leftrightarrow R}{4,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Jede rationale Zahl besitzt ein Bruchpaar]{%
   q\in\mathbb Q\vdash
@@ -307,11 +499,35 @@ aus \FormulaRefAuto{RationalPairRelChar}[thm].
   \DeltaRow{Mengen}{q\dsep a\dsep b\dsep\RatPairCarrier}%
 }
 
-\emph{Beweisskizze.}
-Nach der Repräsentanteneigenschaft einer Quotientenmenge besitzt \(q\) eine
-Darstellung als Klasse eines Elements von \(\RatPairCarrier\). Das
-kartesische Produkt zerlegt dieses Element in einen ganzzahligen Zähler und
-einen positiven ganzzahligen Nenner.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{q\in\QuotientSet{\RatPairCarrier}{\RatPairRel}}{%
+    \rIE{1,\FormulaRefAuto{RationalsAsQuotient}[def]}}
+  \proofstepwidestarbreakkeep[]{\EqRel{\RatPairCarrier,\RatPairRel}}{%
+    \FormulaRefAuto{RationalPairEquivalence}[thm]}
+  \proofstepwidestarbreakkeep[1]{\exists x\in\RatPairCarrier\,
+    q=\EqClass{x}{\RatPairRel}{\RatPairCarrier}}{%
+    \FormulaRefAuto{QuotientRepresentative}[thm]{2,3}}
+  \proofstepwidestarbreakkeep[5]{x\in\RatPairCarrier\land
+    q=\EqClass{x}{\RatPairRel}{\RatPairCarrier}}{\rA}
+  \proofstepwidestarbreakkeep[5]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,x=(a,b)}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash
+      \exists a\in A\,\exists b\in B\,x=(a,b)}{%
+      \rIE{\rAEa{5},\FormulaRefAuto{RationalPairCarrier}[def]}}}
+  \proofstepwidestarbreakkeep[7]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land x=(a,b)}{\rA}
+  \proofstepwidestarbreakkeep[5,7]{q=\RatClass{a}{b}}{%
+    \rIE{\rAEb{5},\rAEb{\rAEb{7}},%
+      \FormulaRefAuto{RationalClassDef}[def]{\rAEa{7},\rAEa{\rAEb{7}}}}}
+  \proofstepwidestarbreakkeep[5,7]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \rEI{\rAI{\rAEa{7},\rEI{\rAI{\rAEa{\rAEb{7}},8}}}}}
+  \proofstepwidestarbreakkeep[5]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{\rEE{6,7,9}}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{\rEE{4,5,10}}
+\end{tabproofwide}
 
 \section{Einbettung der ganzen Zahlen}
 
@@ -319,7 +535,7 @@ einen positiven ganzzahligen Nenner.
   \begin{aligned}[t]
     &\RatEmbed\colon\mathbb Z\to\mathbb Q,\\[-2pt]
     &\forall z\in\mathbb Z\,
-      \bigl(\RatEmbed(z)\coloneqq\RatClass{z}{1_{\mathbb Z}}\bigr)
+      \bigl(\RatEmbed(z)\coloneqq\RatClass{z}{\IntOne}\bigr)
   \end{aligned}%
 }{IntegerRationalEmbedding}{%
   \DeltaRow{Mengen}{z}%
@@ -328,13 +544,13 @@ einen positiven ganzzahligen Nenner.
 }
 \begin{tabproof}
   \proofstep{1}{z\in\mathbb Z}{\rA}
-  \proofstep{}{1_{\mathbb Z}\in\PositiveIntegers}{%
+  \proofstep{}{\IntOne\in\PositiveIntegers}{%
     \FormulaRefAuto{IntegerOnePositive}[thm]}
-  \proofstep{1}{\RatClass{z}{1_{\mathbb Z}}\in\mathbb Q}{%
+  \proofstep{1}{\RatClass{z}{\IntOne}\in\mathbb Q}{%
     \FormulaRefAuto{RationalClassInQ}[thm]{1,2}}
   \proofstep{}{%
     \forall z\in\mathbb Z\,
-      \bigl(\RatClass{z}{1_{\mathbb Z}}\in\mathbb Q\bigr)}{%
+      \bigl(\RatClass{z}{\IntOne}\in\mathbb Q\bigr)}{%
     \rUI{\rRI{1,3}}}
 \end{tabproof}
 
@@ -355,43 +571,122 @@ einen positiven ganzzahligen Nenner.
   \DeltaRow{Funktion}{\RatEmbed}%
 }
 
-\emph{Beweisskizze.}
-Aus \(\RatEmbed(z)=\RatEmbed(w)\) folgt nach dem Klassenkriterium
-\(z1_{\mathbb Z}=w1_{\mathbb Z}\), also \(z=w\). Zusammen mit der
-Typisierung ist dies die Injektivitätsbedingung.
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Gleichheitsreflexion]{%
+    z,w\in\mathbb Z\dsep\RatEmbed(z)=\RatEmbed(w)\vdash z=w%
+  }{%
+    z,w\in\mathbb Z\dsep\RatEmbed(z)=\RatEmbed(w)\vdash z=w
+  }[IntegerRationalEmbeddingReflectsEquality]
+    \proofstepwidestarbreakkeep[1]{z,w\in\mathbb Z}{\rA}
+    \proofstepwidestarbreakkeep[2]{\RatEmbed(z)=\RatEmbed(w)}{\rA}
+    \proofstepwidestarbreakkeep[1]{\RatEmbed(z)=\RatClass{z}{\IntOne}}{%
+      \FormulaRefAuto{IntegerRationalEmbedding}[def]{\rAEa{1}}}
+    \proofstepwidestarbreakkeep[1]{\RatEmbed(w)=\RatClass{w}{\IntOne}}{%
+      \FormulaRefAuto{IntegerRationalEmbedding}[def]{\rAEb{1}}}
+    \proofstepwidestarbreakkeep[1,2]{z\cdot\IntOne=w\cdot\IntOne}{%
+      \FormulaRefAuto{RationalClassEquality}[thm]{%
+        1,\FormulaRefAuto{IntegerOnePositive}[thm],\rIE{2,3,4}}}
+    \proofstepwidestarbreakkeep[1,2]{z=w}{%
+      \rIE{5,\FormulaRefAuto{IntMulOne}[thm]{1}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[]{\RatEmbed\colon\mathbb Z\to\mathbb Q}{%
+      \FormulaRefAuto{IntegerRationalEmbeddingFunction}[thm]}
+    \proofstepwidestarbreakkeep[2]{z,w\in\mathbb Z\land
+      \RatEmbed(z)=\RatEmbed(w)}{\rA}
+    \proofstepwidestarbreakkeep[2]{z=w}{%
+      \FormulaRefAuto{IntegerRationalEmbeddingReflectsEquality}{2}}
+    \proofstepwidestarbreakkeep[]{\RatEmbed\colon\mathbb Z\inj\mathbb Q}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1,\rUI{\rRI{2,3}}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Im rationalen Kontext verwenden wir dieselben sichtbaren Zahlzeichen wie in
+\(\mathbb N\) und \(\mathbb Z\).  Semantisch bezeichnet
+\(\RatNumeral{n}\) für \(n\in\mathbb N\) das Bild
+\(\RatOfNat{n}\).  Dies ist eine typisierte Schreibkonvention und keine
+Mengeninklusion.  Wo der umgebende Träger den Typ nicht eindeutig bestimmt,
+bleiben \(\RatOfInt{z}\) beziehungsweise \(\RatOfNat{n}\) ausdrücklich
+sichtbar.  Insbesondere stehen \(\RatZero,\RatOne,\RatNumeral{2},
+\RatNumeral{3},\RatNumeral{4},\ldots\) ohne Trägerindex.
+
+\FormulaDefDeltaK[Unindizierte rationale Zahlzeichen]{%
+  n\in\mathbb N\vdash
+  \RatNumeral{n}\coloneqq\RatOfNat{n}%
+}{RationalNumeralConvention}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbole}{\IntEmbed\dsep\RatEmbed}%
+  \DeltaRow{Neue Schreibweise}{\RatNumeral{n}}%
+}
 
 \FormulaDefDeltaK[Null der rationalen Zahlen]{%
-  0_{\mathbb Q}\coloneqq\RatEmbed(0_{\mathbb Z})%
+  \RatZero\coloneqq\RatOfInt{\IntZero}%
 }{RationalZeroDef}{%
-  \DeltaRow{Neue Symbole}{0_{\mathbb Q}}%
+  \DeltaRow{Neue Symbole}{\RatZero}%
   \DeltaRow{Funktionensymbol}{\RatEmbed}%
 }
 
 \FormulaDefDeltaK[Eins der rationalen Zahlen]{%
-  1_{\mathbb Q}\coloneqq\RatEmbed(1_{\mathbb Z})%
+  \RatOne\coloneqq\RatOfInt{\IntOne}%
 }{RationalOneDef}{%
-  \DeltaRow{Neue Symbole}{1_{\mathbb Q}}%
+  \DeltaRow{Neue Symbole}{\RatOne}%
   \DeltaRow{Funktionensymbol}{\RatEmbed}%
 }
 
 \FormulaThmDeltaK[Null- und Einsklasse]{%
-  0_{\mathbb Q}=\RatClass{0_{\mathbb Z}}{1_{\mathbb Z}}
+  \RatZero=\RatClass{\IntZero}{\IntOne}
   \dsep
-  1_{\mathbb Q}=\RatClass{1_{\mathbb Z}}{1_{\mathbb Z}}%
+  \RatOne=\RatClass{\IntOne}{\IntOne}%
 }{RationalZeroOneClasses}{%
   \DeltaRow{Mengen}{\mathbb Q}%
 }
+\begin{tabproof}
+  \proofstep{}{\RatZero=\RatEmbed(\IntZero)}{%
+    \FormulaRefAuto{RationalZeroDef}[def]}
+  \proofstep{}{\RatEmbed(\IntZero)
+    =\RatClass{\IntZero}{\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{%
+      \FormulaRefAuto{IntZeroCarrier}[thm]}}
+  \proofstep{}{\RatZero=\RatClass{\IntZero}{\IntOne}}{%
+    \rChain{1,2}}
+  \proofstep{}{\RatOne=\RatEmbed(\IntOne)}{%
+    \FormulaRefAuto{RationalOneDef}[def]}
+  \proofstep{}{\RatEmbed(\IntOne)
+    =\RatClass{\IntOne}{\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{%
+      \FormulaRefAuto{IntOneCarrier}[thm]}}
+  \proofstep{}{\RatOne=\RatClass{\IntOne}{\IntOne}}{%
+    \rChain{4,5}}
+  \proofstep{}{\RatZero=\RatClass{\IntZero}{\IntOne}
+    \land\RatOne=\RatClass{\IntOne}{\IntOne}}{%
+    \rAI{3,6}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Null und Eins sind rationale Zahlen]{%
-  0_{\mathbb Q}\in\mathbb Q\dsep1_{\mathbb Q}\in\mathbb Q%
+  \RatZero\in\mathbb Q\dsep\RatOne\in\mathbb Q%
 }{RationalZeroOneCarrier}{%
   \DeltaRow{Mengen}{\mathbb Q}%
 }
 
-\emph{Beweisskizze.}
-Beide Aussagen folgen unmittelbar aus den beiden Definitionen, der
-Funktionsgleichung von \(\RatEmbed\) und
-\FormulaRefAuto{IntegerRationalEmbeddingFunction}[thm].
+\begin{tabproof}
+  \proofstep{}{\RatEmbed\colon\mathbb Z\to\mathbb Q}{%
+    \FormulaRefAuto{IntegerRationalEmbeddingFunction}[thm]}
+  \proofstep{}{\IntZero\in\mathbb Z}{%
+    \FormulaRefAuto{IntZeroCarrier}[thm]}
+  \proofstep{}{\IntOne\in\mathbb Z}{%
+    \FormulaRefAuto{IntOneCarrier}[thm]}
+  \proofstep{}{\RatEmbed(\IntZero)\in\mathbb Q}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{1,2}}
+  \proofstep{}{\RatEmbed(\IntOne)\in\mathbb Q}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{1,3}}
+  \proofstep{}{\RatZero\in\mathbb Q}{%
+    \rIE{4,\FormulaRefAuto{RationalZeroDef}[def]}}
+  \proofstep{}{\RatOne\in\mathbb Q}{%
+    \rIE{5,\FormulaRefAuto{RationalOneDef}[def]}}
+  \proofstep{}{\RatZero\in\mathbb Q\land\RatOne\in\mathbb Q}{%
+    \rAI{6,7}}
+\end{tabproof}
 
 \chapter{Arithmetik der rationalen Zahlen}
 
@@ -405,9 +700,24 @@ Funktionsgleichung von \(\RatEmbed\) und
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
 }
 
-\emph{Beweisskizze.}
-Aus \(ad=cb\) folgt durch Negation beider Seiten
-\((-a)d=(-c)b\). Das Klassenkriterium liefert die Behauptung.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,3}}
+  \proofstepwide[1,2,3]{(-a)\cdot d}{=}{-(a\cdot d)}{%
+    \FormulaRefAuto{IntMulLeftDistributive}[thm],
+    \FormulaRefAuto{IntAddInverse}[thm]}
+  \proofstepwide[1,2,3]{-(a\cdot d)}{=}{-(c\cdot b)}{\rIE{4}}
+  \proofstepwide[1,2,3]{-(c\cdot b)}{=}{(-c)\cdot b}{%
+    \FormulaRefAuto{IntMulLeftDistributive}[thm],
+    \FormulaRefAuto{IntAddInverse}[thm]}
+  \proofstepwidestarbreakkeep[1,2,3]{(-a)\cdot d=(-c)\cdot b}{\rChain{5,6,7}}
+  \proofstepwidestarbreakkeep[1,2,3]{\RatClass{-a}{b}=\RatClass{-c}{d}}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{%
+      \FormulaRefAuto{IntNegClosure}[thm]{1},2,8}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Quotientenabstieg der rationalen Negation]{%
   q\in\mathbb Q\vdash
@@ -417,6 +727,98 @@ Aus \(ad=cb\) folgt durch Negation beider Seiten
 }{RationalNegationQuotientDescent}{%
   \DeltaRow{Mengen}{q\dsep u\dsep a\dsep b}%
 }
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Existenz]{%
+    \begin{aligned}[t]
+      q\in\mathbb Q\vdash\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})
+    \end{aligned}
+  }{%
+    q\in\mathbb Q\vdash\exists u\in\mathbb Q\,
+    \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+    (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})
+  }[RationalNegationDescentExistence]
+    \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+    \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+      \land q=\RatClass{a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[3]{\RatClass{-a}{b}\in\mathbb Q}{%
+      \FormulaRefAuto{RationalClassInQ}[thm]{%
+        \FormulaRefAuto{IntNegClosure}[thm]{\rAEa{3}},\rAEa{\rAEb{3}}}}
+    \proofstepwidestarbreakkeep[3]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land
+       \RatClass{-a}{b}=\RatClass{-a}{b})}{%
+      \rEI{\rAI{\rAEa{3},\rEI{\rAI{\rAEa{\rAEb{3}},%
+        \rAI{\rAEb{\rAEb{3}},\rII}}}}}}
+    \proofstepwidestarbreakkeep[3]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{%
+      \rEI{\rAI{4,5}}}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{\rEE{2,3,6}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Eindeutigkeit]{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+        (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})\dsep{}\\
+      &\exists c\in\mathbb Z\,\exists d\in\PositiveIntegers\,
+        (q=\RatClass{c}{d}\land v=\RatClass{-c}{d})\vdash u=v
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+        (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})\dsep{}\\
+      &\exists c\in\mathbb Z\,\exists d\in\PositiveIntegers\,
+        (q=\RatClass{c}{d}\land v=\RatClass{-c}{d})\vdash u=v
+    \end{aligned}
+  }[RationalNegationDescentUniqueness]
+    \proofstepwidestarbreakkeep[1]{u,v\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[3]{\exists c\in\mathbb Z\,
+      \exists d\in\PositiveIntegers\,
+      (q=\RatClass{c}{d}\land v=\RatClass{-c}{d})}{\rA}
+    \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers\land
+      q=\RatClass{a}{b}\land u=\RatClass{-a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[5]{c\in\mathbb Z\land d\in\PositiveIntegers\land
+      q=\RatClass{c}{d}\land v=\RatClass{-c}{d}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a}{b}=\RatClass{c}{d}}{%
+      \rIE{\rAEa{\rAEb{4}},\rAEa{\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{-a}{b}=\RatClass{-c}{d}}{%
+      \FormulaRefAuto{RationalNegationCompatible}[thm]{4,5,6}}
+    \proofstepwidestarbreakkeep[4,5]{u=v}{%
+      \rIE{\rAEb{\rAEb{4}},\rAEb{\rAEb{5}},7}}
+    \proofstepwidestarbreakkeep[1,2,3]{u=v}{\rEE{2,4,\rEE{3,5,8}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{%
+      \FormulaRefAuto{RationalNegationDescentExistence}{1}}
+    \proofstepwidestarbreakkeep[3]{u\in\mathbb Q\land
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[4]{v\in\mathbb Q\land
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land v=\RatClass{-a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[3,4]{u=v}{%
+      \FormulaRefAuto{RationalNegationDescentUniqueness}{3,4}}
+    \proofstepwidestarbreakkeep[1]{\exists!u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land u=\RatClass{-a}{b})}{\UEI{2,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Negation rationaler Zahlen]{%
   q\in\mathbb Q\vdash
@@ -436,6 +838,24 @@ Aus \(ad=cb\) folgt durch Negation beider Seiten
 }{RationalNegationClassValue}{%
   \DeltaRow{Mengen}{a\dsep b}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{-a}{b}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntNegClosure}[thm]{1},2}}
+  \proofstepwidestarbreakkeep[1,2]{\begin{aligned}[t]
+    &\exists!u\in\mathbb Q\,
+      \exists c\in\mathbb Z\,\exists d\in\PositiveIntegers\,{}\\
+    &\bigl(\RatClass{a}{b}=\RatClass{c}{d}
+      \land u=\RatClass{-c}{d}\bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{RationalNegationQuotientDescent}[thm]{3}}
+  \proofstepwidestarbreakkeep[1,2]{-\RatClass{a}{b}=\RatClass{-a}{b}}{%
+    \FormulaRefAuto{RationalNegationDef}[def]{1,2,4,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit und doppelte Negation]{%
   q\in\mathbb Q\vdash
@@ -444,10 +864,29 @@ Aus \(ad=cb\) folgt durch Negation beider Seiten
   \DeltaRow{Mengen}{q}%
 }
 
-\emph{Beweisskizze.}
-Existenz folgt aus dem Repräsentantensatz, Eindeutigkeit aus der
-Repräsentantenunabhängigkeit. Auf einer Bruchklasse werden beide Aussagen zu
-\(-(-a)=a\) in \(\mathbb Z\).
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers\land
+    q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{-q=\RatClass{-a}{b}}{%
+    \rIE{\rAEb{\rAEb{3}},%
+      \FormulaRefAuto{RationalNegationClassValue}[thm]{%
+        \rAEa{3},\rAEa{\rAEb{3}}}}}
+  \proofstepwidestarbreakkeep[3]{-q\in\mathbb Q}{%
+    \rIE{4,\FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntNegClosure}[thm]{\rAEa{3}},\rAEa{\rAEb{3}}}}}
+  \proofstepwidestarbreakkeep[3]{-(-q)=\RatClass{-(-a)}{b}}{%
+    \rIE{4,\FormulaRefAuto{RationalNegationClassValue}[thm]{%
+      \FormulaRefAuto{IntNegClosure}[thm]{\rAEa{3}},\rAEa{\rAEb{3}}}}}
+  \proofstepwidestarbreakkeep[3]{-(-q)=q}{%
+    \rIE{6,\FormulaRefAuto{IntegerDoubleNegation}[thm]{\rAEa{3}},%
+      \rAEb{\rAEb{3}}}}
+  \proofstepwidestarbreakkeep[3]{-q\in\mathbb Q\land-(-q)=q}{\rAI{5,7}}
+  \proofstepwidestarbreakkeep[1]{-q\in\mathbb Q\land-(-q)=q}{\rEE{2,3,8}}
+\end{tabproofwide}
 
 \section{Addition}
 
@@ -465,12 +904,39 @@ Repräsentantenunabhängigkeit. Auf einer Bruchklasse werden beide Aussagen zu
     c\dsep c'\dsep d\dsep d'}%
 }
 
-\emph{Beweisskizze.}
-Die Voraussetzungen sind \(ab'=a'b\) und \(cd'=c'd\). Nach
-Ausmultiplizieren der beiden Kreuzprodukte werden genau diese beiden
-Gleichheiten eingesetzt; Assoziativität, Kommutativität und Distributivität
-in \(\mathbb Z\) ordnen die Faktoren. Die Nennerprodukte sind nach
-\FormulaRefAuto{PositiveIntegerMulClosure}[thm] positiv.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,a',c,c'\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,b',d,d'\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}=\RatClass{a'}{b'}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\RatClass{c}{d}=\RatClass{c'}{d'}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{a\cdot b'=a'\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[1,2,4]{c\cdot d'=c'\cdot d}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,4}}
+  \proofstepwidestarbreakkeep[2]{b\cdot d\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2}}
+  \proofstepwidestarbreakkeep[2]{b'\cdot d'\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2}}
+  \proofstepwidestarbreakkeep[1]{a\cdot d+c\cdot b\in\mathbb Z}{%
+    \FormulaRefAuto{IntAddClosure}[thm]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{1},%
+      \FormulaRefAuto{IntMulClosure}[thm]{1}}}
+  \proofstepwidestarbreakkeep[1]{a'\cdot d'+c'\cdot b'\in\mathbb Z}{%
+    \FormulaRefAuto{IntAddClosure}[thm]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{1},%
+      \FormulaRefAuto{IntMulClosure}[thm]{1}}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    (a\cdot d+c\cdot b)\cdot(b'\cdot d')
+    =(a'\cdot d'+c'\cdot b')\cdot(b\cdot d)}{%
+    \rIE{5,6,\FormulaRefAuto{IntMulAssociative}[thm],%
+      \FormulaRefAuto{IntMulCommutative}[thm],%
+      \FormulaRefAuto{IntMulLeftDistributive}[thm],%
+      \FormulaRefAuto{IntMulRightDistributive}[thm]}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    \RatClass{a\cdot d+c\cdot b}{b\cdot d}
+    =\RatClass{a'\cdot d'+c'\cdot b'}{b'\cdot d'}}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{9,10,7,8,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Quotientenabstieg der rationalen Addition]{%
   q,r\in\mathbb Q\vdash
@@ -481,8 +947,145 @@ in \(\mathbb Z\) ordnen die Faktoren. Die Nennerprodukte sind nach
           &u=\RatClass{a\cdot d+c\cdot b}{b\cdot d}\bigr)
   \end{aligned}%
 }{RationalAdditionQuotientDescent}{%
-  \DeltaRow{Mengen}{q\dsep r\dsep u\dsep a\dsep b\dsep c\dsep d}%
+  \DeltaRow{Mengen}{q\dsep r\dsep u\dsep v\dsep
+    a\dsep a'\dsep b\dsep b'\dsep c\dsep c'\dsep d\dsep d'}%
 }
+
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Existenz]{%
+    \begin{aligned}[t]
+      q,r\in\mathbb Q\vdash\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \bigl(&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\
+            &u=\RatClass{a\cdot d+c\cdot b}{b\cdot d}\bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      q,r\in\mathbb Q\vdash\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \bigl(&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\
+            &u=\RatClass{a\cdot d+c\cdot b}{b\cdot d}\bigr)
+    \end{aligned}
+  }[RationalAdditionDescentExistence]
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+    \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+      \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+    \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+      \land q=\RatClass{a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[5]{c\in\mathbb Z\land d\in\PositiveIntegers
+      \land r=\RatClass{c}{d}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{a\cdot d+c\cdot b\in\mathbb Z}{%
+      \FormulaRefAuto{IntAddClosure}[thm]{%
+        \FormulaRefAuto{IntMulClosure}[thm]{4,5},%
+        \FormulaRefAuto{IntMulClosure}[thm]{4,5}}}
+    \proofstepwidestarbreakkeep[4,5]{b\cdot d\in\PositiveIntegers}{%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{4,5}}
+    \proofstepwidestarbreakkeep[4,5]{%
+      \RatClass{a\cdot d+c\cdot b}{b\cdot d}\in\mathbb Q}{%
+      \FormulaRefAuto{RationalClassInQ}[thm]{6,7}}
+    \proofstepwidestarbreakkeep[4,5]{\exists a,c\in\mathbb Z\,
+      \exists b,d\in\PositiveIntegers\,
+      \begin{aligned}[t]
+        (&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\[-2pt]
+         &\RatClass{a\cdot d+c\cdot b}{b\cdot d}
+          =\RatClass{a\cdot d+c\cdot b}{b\cdot d})
+      \end{aligned}}{\rEI{\rAI{4,5,\rII}}}
+    \proofstepwidestarbreakkeep[4,5]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \begin{aligned}[t]
+        (&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\[-2pt]
+         &u=\RatClass{a\cdot d+c\cdot b}{b\cdot d})
+      \end{aligned}}{\rEI{\rAI{8,9}}}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \begin{aligned}[t]
+        (&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\[-2pt]
+         &u=\RatClass{a\cdot d+c\cdot b}{b\cdot d})
+      \end{aligned}}{\rEE{2,4,\rEE{3,5,10}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Eindeutigkeit]{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a d+c b}{b d})\dsep{}\\
+      &\exists a',c'\in\mathbb Z\,
+       \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'd'+c'b'}{b'd'})\vdash u=v
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a d+c b}{b d})\dsep{}\\
+      &\exists a',c'\in\mathbb Z\,
+       \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'd'+c'b'}{b'd'})\vdash u=v
+    \end{aligned}
+  }[RationalAdditionDescentUniqueness]
+    \proofstepwidestarbreakkeep[1]{u,v\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\exists a,c\in\mathbb Z\,
+      \exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a d+c b}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[3]{\exists a',c'\in\mathbb Z\,
+      \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'd'+c'b'}{b'd'})}{\rA}
+    \proofstepwidestarbreakkeep[4]{a,c\in\mathbb Z\land b,d\in\PositiveIntegers
+      \land q=\RatClass{a}{b}\land r=\RatClass{c}{d}
+      \land u=\RatClass{a d+c b}{b d}}{\rA}
+    \proofstepwidestarbreakkeep[5]{a',c'\in\mathbb Z\land
+      b',d'\in\PositiveIntegers\land q=\RatClass{a'}{b'}
+      \land r=\RatClass{c'}{d'}
+      \land v=\RatClass{a'd'+c'b'}{b'd'}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a}{b}=\RatClass{a'}{b'}}{%
+      \rIE{\rAEa{\rAEb{4}},\rAEa{\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{c}{d}=\RatClass{c'}{d'}}{%
+      \rIE{\rAEa{\rAEb{\rAEb{4}}},\rAEa{\rAEb{\rAEb{5}}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a d+c b}{b d}
+      =\RatClass{a'd'+c'b'}{b'd'}}{%
+      \FormulaRefAuto{RationalAdditionCompatible}[thm]{4,5,6,7}}
+    \proofstepwidestarbreakkeep[4,5]{u=v}{%
+      \rIE{\rAEb{\rAEb{\rAEb{4}}},%
+        \rAEb{\rAEb{\rAEb{5}}},8}}
+    \proofstepwidestarbreakkeep[1,2,3]{u=v}{\rEE{2,4,\rEE{3,5,9}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \begin{aligned}[t]
+        (&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\[-2pt]
+         &u=\RatClass{a d+c b}{b d})
+      \end{aligned}}{\FormulaRefAuto{RationalAdditionDescentExistence}{1}}
+    \proofstepwidestarbreakkeep[3]{u\in\mathbb Q\land
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a d+c b}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[4]{v\in\mathbb Q\land
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       v=\RatClass{a d+c b}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[3,4]{u=v}{%
+      \FormulaRefAuto{RationalAdditionDescentUniqueness}{3,4}}
+    \proofstepwidestarbreakkeep[1]{\exists!u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      \begin{aligned}[t]
+        (&q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land{}\\[-2pt]
+         &u=\RatClass{a d+c b}{b d})
+      \end{aligned}}{\UEI{2,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Addition rationaler Zahlen]{%
   q,r\in\mathbb Q\vdash
@@ -506,12 +1109,60 @@ in \(\mathbb Z\) ordnen die Faktoren. Die Nennerprodukte sind nach
 }{RationalAdditionClassValue}{%
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b},\RatClass{c}{d}\in\mathbb Q}{%
+    \rAI{\FormulaRefAuto{RationalClassInQ}[thm]{1,2},%
+      \FormulaRefAuto{RationalClassInQ}[thm]{1,2}}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a d+c b}{b d}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntAddClosure}[thm]{%
+        \FormulaRefAuto{IntMulClosure}[thm]{1,2},%
+        \FormulaRefAuto{IntMulClosure}[thm]{1,2}},%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2}}}
+  \proofstepwidestarbreakkeep[1,2]{\exists!u\in\mathbb Q\,
+    \exists x,z\in\mathbb Z\,\exists y,t\in\PositiveIntegers\,
+    \begin{aligned}[t]
+      (&\RatClass{a}{b}=\RatClass{x}{y}\land
+       \RatClass{c}{d}=\RatClass{z}{t}\land{}\\[-2pt]
+       &u=\RatClass{x t+z y}{y t})
+    \end{aligned}}{%
+    \FormulaRefAuto{RationalAdditionQuotientDescent}[thm]{3}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}+\RatClass{c}{d}
+    =\RatClass{a d+c b}{b d}}{%
+    \FormulaRefAuto{RationalAdditionDef}[def]{1,2,3,4,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit der rationalen Addition]{%
   q,r\in\mathbb Q\vdash q+r\in\mathbb Q%
 }{RationalAddClosure}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+  \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[5]{c\in\mathbb Z\land d\in\PositiveIntegers
+    \land r=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[4,5]{q+r=\RatClass{a d+c b}{b d}}{%
+    \rIE{\rAEb{\rAEb{4}},\rAEb{\rAEb{5}},%
+      \FormulaRefAuto{RationalAdditionClassValue}[thm]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{\RatClass{a d+c b}{b d}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntAddClosure}[thm]{%
+        \FormulaRefAuto{IntMulClosure}[thm]{4,5},%
+        \FormulaRefAuto{IntMulClosure}[thm]{4,5}},%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{q+r\in\mathbb Q}{\rIE{6,7}}
+  \proofstepwidestarbreakkeep[1]{q+r\in\mathbb Q}{\rEE{2,4,\rEE{3,5,8}}}
+\end{tabproofwide}
 
 \section{Multiplikation}
 
@@ -529,10 +1180,30 @@ in \(\mathbb Z\) ordnen die Faktoren. Die Nennerprodukte sind nach
     c\dsep c'\dsep d\dsep d'}%
 }
 
-\emph{Beweisskizze.}
-Aus \(ab'=a'b\) und \(cd'=c'd\) folgt durch Multiplikation und Umordnung
-\((ac)(b'd')=(a'c')(bd)\). Die Nennerprodukte sind positiv, sodass das
-Klassenkriterium anwendbar ist.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,a',c,c'\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,b',d,d'\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}=\RatClass{a'}{b'}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\RatClass{c}{d}=\RatClass{c'}{d'}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{a\cdot b'=a'\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[1,2,4]{c\cdot d'=c'\cdot d}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,4}}
+  \proofstepwidestarbreakkeep[1]{a\cdot c,a'\cdot c'\in\mathbb Z}{%
+    \rAI{\FormulaRefAuto{IntMulClosure}[thm]{1},%
+      \FormulaRefAuto{IntMulClosure}[thm]{1}}}
+  \proofstepwidestarbreakkeep[2]{b\cdot d,b'\cdot d'\in\PositiveIntegers}{%
+    \rAI{\FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2},%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2}}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    (a\cdot c)\cdot(b'\cdot d')
+    =(a'\cdot c')\cdot(b\cdot d)}{%
+    \rIE{5,6,\FormulaRefAuto{IntMulAssociative}[thm],%
+      \FormulaRefAuto{IntMulCommutative}[thm]}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\RatClass{a\cdot c}{b\cdot d}
+    =\RatClass{a'\cdot c'}{b'\cdot d'}}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{7,8,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Quotientenabstieg der rationalen Multiplikation]{%
   q,r\in\mathbb Q\vdash
@@ -543,8 +1214,132 @@ Klassenkriterium anwendbar ist.
           &u=\RatClass{a\cdot c}{b\cdot d}\bigr)
   \end{aligned}%
 }{RationalMultiplicationQuotientDescent}{%
-  \DeltaRow{Mengen}{q\dsep r\dsep u\dsep a\dsep b\dsep c\dsep d}%
+  \DeltaRow{Mengen}{q\dsep r\dsep u\dsep v\dsep
+    a\dsep a'\dsep b\dsep b'\dsep c\dsep c'\dsep d\dsep d'}%
 }
+
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Existenz]{%
+    \begin{aligned}[t]
+      &q,r\in\mathbb Q\vdash\exists u\in\mathbb Q\,{}\\
+      &\exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,{}\\
+      &\bigl(q=\RatClass{a}{b}\land r=\RatClass{c}{d}
+        \land u=\RatClass{a c}{b d}\bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &q,r\in\mathbb Q\vdash\exists u\in\mathbb Q\,{}\\
+      &\exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,{}\\
+      &\bigl(q=\RatClass{a}{b}\land r=\RatClass{c}{d}
+        \land u=\RatClass{a c}{b d}\bigr)
+    \end{aligned}
+  }[RationalMultiplicationDescentExistence]
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+    \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+      \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+    \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+      \land q=\RatClass{a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[5]{c\in\mathbb Z\land d\in\PositiveIntegers
+      \land r=\RatClass{c}{d}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{a c\in\mathbb Z}{%
+      \FormulaRefAuto{IntMulClosure}[thm]{4,5}}
+    \proofstepwidestarbreakkeep[4,5]{b d\in\PositiveIntegers}{%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{4,5}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a c}{b d}\in\mathbb Q}{%
+      \FormulaRefAuto{RationalClassInQ}[thm]{6,7}}
+    \proofstepwidestarbreakkeep[4,5]{\exists a,c\in\mathbb Z\,
+      \exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       \RatClass{a c}{b d}=\RatClass{a c}{b d})}{%
+      \rEI{\rAI{4,5,\rII}}}
+    \proofstepwidestarbreakkeep[4,5]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{\rEI{\rAI{8,9}}}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{\rEE{2,4,\rEE{3,5,10}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Eindeutigkeit]{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})\dsep{}\\
+      &\exists a',c'\in\mathbb Z\,
+       \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'c'}{b'd'})\vdash u=v
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})\dsep{}\\
+      &\exists a',c'\in\mathbb Z\,
+       \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'c'}{b'd'})\vdash u=v
+    \end{aligned}
+  }[RationalMultiplicationDescentUniqueness]
+    \proofstepwidestarbreakkeep[1]{u,v\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\exists a,c\in\mathbb Z\,
+      \exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[3]{\exists a',c'\in\mathbb Z\,
+      \exists b',d'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land r=\RatClass{c'}{d'}\land
+       v=\RatClass{a'c'}{b'd'})}{\rA}
+    \proofstepwidestarbreakkeep[4]{a,c\in\mathbb Z\land b,d\in\PositiveIntegers
+      \land q=\RatClass{a}{b}\land r=\RatClass{c}{d}
+      \land u=\RatClass{a c}{b d}}{\rA}
+    \proofstepwidestarbreakkeep[5]{a',c'\in\mathbb Z\land
+      b',d'\in\PositiveIntegers\land q=\RatClass{a'}{b'}
+      \land r=\RatClass{c'}{d'}\land v=\RatClass{a'c'}{b'd'}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a}{b}=\RatClass{a'}{b'}}{%
+      \rIE{\rAEa{\rAEb{4}},\rAEa{\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{c}{d}=\RatClass{c'}{d'}}{%
+      \rIE{\rAEa{\rAEb{\rAEb{4}}},\rAEa{\rAEb{\rAEb{5}}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatClass{a c}{b d}
+      =\RatClass{a'c'}{b'd'}}{%
+      \FormulaRefAuto{RationalMultiplicationCompatible}[thm]{4,5,6,7}}
+    \proofstepwidestarbreakkeep[4,5]{u=v}{%
+      \rIE{\rAEb{\rAEb{\rAEb{4}}},%
+        \rAEb{\rAEb{\rAEb{5}}},8}}
+    \proofstepwidestarbreakkeep[1,2,3]{u=v}{\rEE{2,4,\rEE{3,5,9}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{%
+      \FormulaRefAuto{RationalMultiplicationDescentExistence}{1}}
+    \proofstepwidestarbreakkeep[3]{u\in\mathbb Q\land
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[4]{v\in\mathbb Q\land
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       v=\RatClass{a c}{b d})}{\rA}
+    \proofstepwidestarbreakkeep[3,4]{u=v}{%
+      \FormulaRefAuto{RationalMultiplicationDescentUniqueness}{3,4}}
+    \proofstepwidestarbreakkeep[1]{\exists!u\in\mathbb Q\,
+      \exists a,c\in\mathbb Z\,\exists b,d\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land r=\RatClass{c}{d}\land
+       u=\RatClass{a c}{b d})}{\UEI{2,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Multiplikation rationaler Zahlen]{%
   q,r\in\mathbb Q\vdash
@@ -568,62 +1363,299 @@ Klassenkriterium anwendbar ist.
 }{RationalMultiplicationClassValue}{%
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b},\RatClass{c}{d}\in\mathbb Q}{%
+    \rAI{\FormulaRefAuto{RationalClassInQ}[thm]{1,2},%
+      \FormulaRefAuto{RationalClassInQ}[thm]{1,2}}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a c}{b d}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{1},%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{2}}}
+  \proofstepwidestarbreakkeep[1,2]{\begin{aligned}[t]
+    &\exists!u\in\mathbb Q\,
+      \exists x,z\in\mathbb Z\,\exists y,t\in\PositiveIntegers\,{}\\
+    &\bigl(\RatClass{a}{b}=\RatClass{x}{y}
+      \land\RatClass{c}{d}=\RatClass{z}{t}\land{}\\
+    &\hspace{8em}u=\RatClass{x z}{y t}\bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{RationalMultiplicationQuotientDescent}[thm]{3}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}\cdot\RatClass{c}{d}
+    =\RatClass{a c}{b d}}{%
+    \FormulaRefAuto{RationalMultiplicationDef}[def]{1,2,3,4,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit der rationalen Multiplikation]{%
   q,r\in\mathbb Q\vdash q\cdot r\in\mathbb Q%
 }{RationalMulClosure}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+  \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[5]{c\in\mathbb Z\land d\in\PositiveIntegers
+    \land r=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[4,5]{q\cdot r=\RatClass{a c}{b d}}{%
+    \rIE{\rAEb{\rAEb{4}},\rAEb{\rAEb{5}},%
+      \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{\RatClass{a c}{b d}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{4,5},%
+      \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{q\cdot r\in\mathbb Q}{\rIE{6,7}}
+  \proofstepwidestarbreakkeep[1]{q\cdot r\in\mathbb Q}{%
+    \rEE{2,4,\rEE{3,5,8}}}
+\end{tabproofwide}
 
 \section{Grundlegende Rechengesetze}
+
+\FormulaThmDeltaK[Multiplikation ganzer Zahlen mit null aus den Axiomen]{%
+  z\in\mathbb Z\vdash
+  z\cdot\IntZero=\IntZero\dsep
+  \IntZero\cdot z=\IntZero%
+}{IntegerMulZeroFromAxioms}{%
+  \DeltaRow{Mengen}{z}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{z\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{z\cdot\IntZero\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{%
+      1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[]{\IntZero+\IntZero=\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}}
+  \proofstepwidestarbreakkeep[1]{z\cdot\IntZero
+    =z\cdot\IntZero+z\cdot\IntZero}{%
+    \rIE{3,\FormulaRefAuto{IntegerMulLeftDistributiveAxiom}[ax]{%
+      1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}}
+  \proofstepwidestarbreakkeep[1]{-(z\cdot\IntZero)
+    +(z\cdot\IntZero)=\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
+  \proofstepwidestarbreakkeep[1]{-(z\cdot\IntZero)
+    +(z\cdot\IntZero+z\cdot\IntZero)
+    =z\cdot\IntZero}{%
+    \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{%
+      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2},2},%
+    \FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2},%
+    \FormulaRefAuto{IntegerAddZeroAxiom}[ax]{2}}
+  \proofstepwidestarbreakkeep[1]{z\cdot\IntZero=\IntZero}{%
+    \rIE{4,5,6}}
+  \proofstepwidestarbreakkeep[1]{\IntZero\cdot z=z\cdot\IntZero}{%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],1}}
+  \proofstepwidestarbreakkeep[1]{\IntZero\cdot z=\IntZero}{\rChain{8,7}}
+  \proofstepwidestarbreakkeep[1]{z\cdot\IntZero=\IntZero\land
+    \IntZero\cdot z=\IntZero}{\rAI{7,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Assoziativität der rationalen Addition]{%
   p,q,r\in\mathbb Q\vdash(p+q)+r=p+(q+r)%
 }{RationalAddAssociative}{%
   \DeltaRow{Mengen}{p\dsep q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{p,q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,p=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,q=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\exists e\in\mathbb Z\,
+    \exists f\in\PositiveIntegers\,r=\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[5]{a,c,e\in\mathbb Z\land
+    b,d,f\in\PositiveIntegers\land p=\RatClass{a}{b}\land
+    q=\RatClass{c}{d}\land r=\RatClass{e}{f}}{\rA}
+  \proofstepwidestarbreakkeep[5]{%
+    (\RatClass{a}{b}+\RatClass{c}{d})+\RatClass{e}{f}
+    =\RatClass{a}{b}+(\RatClass{c}{d}+\RatClass{e}{f})}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{5},%
+    \FormulaRefAuto{IntAddAssociative}[thm],%
+    \FormulaRefAuto{IntAddCommutative}[thm],%
+    \FormulaRefAuto{IntMulAssociative}[thm],%
+    \FormulaRefAuto{IntMulCommutative}[thm],%
+    \FormulaRefAuto{IntMulLeftDistributive}[thm],%
+    \FormulaRefAuto{IntMulRightDistributive}[thm]}
+  \proofstepwidestarbreakkeep[5]{(p+q)+r=p+(q+r)}{\rIE{5,6}}
+  \proofstepwidestarbreakkeep[1]{(p+q)+r=p+(q+r)}{\rEE{2,3,4,5,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Kommutativität der rationalen Addition]{%
   q,r\in\mathbb Q\vdash q+r=r+q%
 }{RationalAddCommutative}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+  \proofstepwidestarbreakkeep[4]{a,c\in\mathbb Z\land b,d\in\PositiveIntegers
+    \land q=\RatClass{a}{b}\land r=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\RatClass{a}{b}+\RatClass{c}{d}
+    =\RatClass{c}{d}+\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{4},%
+    \FormulaRefAuto{IntAddCommutative}[thm],%
+    \FormulaRefAuto{IntMulCommutative}[thm]}
+  \proofstepwidestarbreakkeep[4]{q+r=r+q}{\rIE{4,5}}
+  \proofstepwidestarbreakkeep[1]{q+r=r+q}{\rEE{2,3,4,6}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Nullgesetz der rationalen Addition]{%
-  q\in\mathbb Q\vdash q+0_{\mathbb Q}=q%
+  q\in\mathbb Q\vdash q+\RatZero=q%
 }{RationalAddZero}{%
   \DeltaRow{Mengen}{q}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}+\RatZero
+    =\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{3},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntAddZero}[thm],%
+    \FormulaRefAuto{IntMulOne}[thm],%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]}
+  \proofstepwidestarbreakkeep[3]{q+\RatZero=q}{\rIE{3,4}}
+  \proofstepwidestarbreakkeep[1]{q+\RatZero=q}{\rEE{2,3,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Additives Inverses rationaler Zahlen]{%
-  q\in\mathbb Q\vdash q+(-q)=0_{\mathbb Q}%
+  q\in\mathbb Q\vdash q+(-q)=\RatZero%
 }{RationalAddInverse}{%
   \DeltaRow{Mengen}{q}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{-q=\RatClass{-a}{b}}{%
+    \rIE{\rAEb{\rAEb{3}},%
+      \FormulaRefAuto{RationalNegationClassValue}[thm]{3}}}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}+\RatClass{-a}{b}
+    =\RatZero}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{3},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntAddInverse}[thm],%
+    \FormulaRefAuto{IntMulOne}[thm],%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]}
+  \proofstepwidestarbreakkeep[3]{q+(-q)=\RatZero}{\rIE{3,4,5}}
+  \proofstepwidestarbreakkeep[1]{q+(-q)=\RatZero}{\rEE{2,3,6}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Assoziativität der rationalen Multiplikation]{%
   p,q,r\in\mathbb Q\vdash(p\cdot q)\cdot r=p\cdot(q\cdot r)%
 }{RationalMulAssociative}{%
   \DeltaRow{Mengen}{p\dsep q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{p,q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,p=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,q=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\exists e\in\mathbb Z\,
+    \exists f\in\PositiveIntegers\,r=\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[5]{a,c,e\in\mathbb Z\land
+    b,d,f\in\PositiveIntegers\land p=\RatClass{a}{b}\land
+    q=\RatClass{c}{d}\land r=\RatClass{e}{f}}{\rA}
+  \proofstepwidestarbreakkeep[5]{%
+    (\RatClass{a}{b}\cdot\RatClass{c}{d})\cdot\RatClass{e}{f}
+    =\RatClass{a}{b}\cdot(\RatClass{c}{d}\cdot\RatClass{e}{f})}{%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{5},%
+    \FormulaRefAuto{IntMulAssociative}[thm]}
+  \proofstepwidestarbreakkeep[5]{(p\cdot q)\cdot r=p\cdot(q\cdot r)}{\rIE{5,6}}
+  \proofstepwidestarbreakkeep[1]{(p\cdot q)\cdot r=p\cdot(q\cdot r)}{%
+    \rEE{2,3,4,5,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Kommutativität der rationalen Multiplikation]{%
   q,r\in\mathbb Q\vdash q\cdot r=r\cdot q%
 }{RationalMulCommutative}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+  \proofstepwidestarbreakkeep[4]{a,c\in\mathbb Z\land b,d\in\PositiveIntegers
+    \land q=\RatClass{a}{b}\land r=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\RatClass{a}{b}\cdot\RatClass{c}{d}
+    =\RatClass{c}{d}\cdot\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{4},%
+    \FormulaRefAuto{IntMulCommutative}[thm]}
+  \proofstepwidestarbreakkeep[4]{q\cdot r=r\cdot q}{\rIE{4,5}}
+  \proofstepwidestarbreakkeep[1]{q\cdot r=r\cdot q}{\rEE{2,3,4,6}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Einheitsgesetz der rationalen Multiplikation]{%
-  q\in\mathbb Q\vdash q\cdot1_{\mathbb Q}=q%
+  q\in\mathbb Q\vdash q\cdot\RatOne=q%
 }{RationalMulOne}{%
   \DeltaRow{Mengen}{q}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}\cdot\RatOne
+    =\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{3},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntMulOne}[thm]}
+  \proofstepwidestarbreakkeep[3]{q\cdot\RatOne=q}{\rIE{3,4}}
+  \proofstepwidestarbreakkeep[1]{q\cdot\RatOne=q}{\rEE{2,3,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Nullgesetz der rationalen Multiplikation]{%
-  q\in\mathbb Q\vdash q\cdot0_{\mathbb Q}=0_{\mathbb Q}%
+  q\in\mathbb Q\vdash q\cdot\RatZero=\RatZero%
 }{RationalMulZero}{%
   \DeltaRow{Mengen}{q}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}\cdot\RatZero
+    =\RatZero}{%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{3},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm],%
+    \FormulaRefAuto{IntMulOne}[thm]}
+  \proofstepwidestarbreakkeep[3]{q\cdot\RatZero=\RatZero}{\rIE{3,4}}
+  \proofstepwidestarbreakkeep[1]{q\cdot\RatZero=\RatZero}{\rEE{2,3,5}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Distributivität rationaler Zahlen]{%
   p,q,r\in\mathbb Q\vdash
@@ -631,18 +1663,34 @@ Klassenkriterium anwendbar ist.
 }{RationalDistributive}{%
   \DeltaRow{Mengen}{p\dsep q\dsep r}%
 }
-
-\emph{Gemeinsame Beweisskizze.}
-Man wählt Bruchdarstellungen aller beteiligten rationalen Zahlen und setzt die
-Klassenformeln für Addition, Multiplikation und Negation ein. Nach
-Ausmultiplizieren reduzieren sich die Aussagen auf die entsprechenden
-Ganzzahlgesetze
-\FormulaRefAuto{IntAddAssociative}[thm],
-\FormulaRefAuto{IntAddCommutative}[thm],
-\FormulaRefAuto{IntMulAssociative}[thm],
-\FormulaRefAuto{IntMulCommutative}[thm] und
-\FormulaRefAuto{IntMulLeftDistributive}[thm]. Die Null- und Einsgesetze folgen
-aus den eingebetteten Klassen mit Nenner \(1_{\mathbb Z}\).
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{p,q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,p=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,q=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\exists e\in\mathbb Z\,
+    \exists f\in\PositiveIntegers\,r=\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[5]{a,c,e\in\mathbb Z\land
+    b,d,f\in\PositiveIntegers\land p=\RatClass{a}{b}\land
+    q=\RatClass{c}{d}\land r=\RatClass{e}{f}}{\rA}
+  \proofstepwidestarbreakkeep[5]{%
+    \RatClass{a}{b}\cdot(\RatClass{c}{d}+\RatClass{e}{f})
+    =\RatClass{a}{b}\cdot\RatClass{c}{d}
+      +\RatClass{a}{b}\cdot\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{5},%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{5},%
+    \FormulaRefAuto{IntMulLeftDistributive}[thm],%
+    \FormulaRefAuto{IntMulRightDistributive}[thm],%
+    \FormulaRefAuto{IntMulAssociative}[thm],%
+    \FormulaRefAuto{IntMulCommutative}[thm]}
+  \proofstepwidestarbreakkeep[5]{p\cdot(q+r)=p\cdot q+p\cdot r}{\rIE{5,6}}
+  \proofstepwidestarbreakkeep[1]{p\cdot(q+r)=p\cdot q+p\cdot r}{%
+    \rEE{2,3,4,5,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Additivität der ganzzahligen Einbettung]{%
   z,w\in\mathbb Z\vdash
@@ -651,6 +1699,27 @@ aus den eingebetteten Klassen mit Nenner \(1_{\mathbb Z}\).
   \DeltaRow{Mengen}{z\dsep w}%
   \DeltaRow{Funktion}{\RatEmbed}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{z,w\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z+w)
+    =\RatClass{z+w}{\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{%
+      \FormulaRefAuto{IntegerAddClosureAxiom}[ax]{1}}}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z)+\RatEmbed(w)
+    =\RatClass{z\cdot\IntOne+w\cdot\IntOne}
+      {\IntOne\cdot\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{1},%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{%
+      1,\FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[1]{%
+    \RatClass{z\cdot\IntOne+w\cdot\IntOne}
+      {\IntOne\cdot\IntOne}
+    =\RatClass{z+w}{\IntOne}}{%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerAddCommutativeAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z+w)=\RatEmbed(z)+\RatEmbed(w)}{%
+    \rIE{2,3,4}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Multiplikativität der ganzzahligen Einbettung]{%
   z,w\in\mathbb Z\vdash
@@ -659,35 +1728,106 @@ aus den eingebetteten Klassen mit Nenner \(1_{\mathbb Z}\).
   \DeltaRow{Mengen}{z\dsep w}%
   \DeltaRow{Funktion}{\RatEmbed}%
 }
-
-\emph{Beweisskizze.}
-Beide Seiten werden als Bruchklassen mit Nenner \(1_{\mathbb Z}\)
-geschrieben. Die Klassenformeln und die Einheitsgesetze in \(\mathbb Z\)
-liefern jeweils dieselbe Klasse.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{z,w\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z\cdot w)
+    =\RatClass{z\cdot w}{\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{%
+      \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{1}}}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z)\cdot\RatEmbed(w)
+    =\RatClass{z\cdot w}{\IntOne\cdot\IntOne}}{%
+    \FormulaRefAuto{IntegerRationalEmbedding}[def]{1},%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{%
+      1,\FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[1]{\RatClass{z\cdot w}
+      {\IntOne\cdot\IntOne}
+    =\RatClass{z\cdot w}{\IntOne}}{%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{%
+      \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z\cdot w)
+    =\RatEmbed(z)\cdot\RatEmbed(w)}{\rIE{2,3,4}}
+\end{tabproofwide}
 
 \section{Kehrwert und Division}
 
 \FormulaThmDeltaK[Nullkriterium einer Bruchklasse]{%
   a\in\mathbb Z\dsep b\in\PositiveIntegers\vdash
-  \bigl(\RatClass{a}{b}=0_{\mathbb Q}
-  \leftrightarrow a=0_{\mathbb Z}\bigr)%
+  \bigl(\RatClass{a}{b}=\RatZero
+  \leftrightarrow a=\IntZero\bigr)%
 }{RationalClassZeroIffNumeratorZero}{%
   \DeltaRow{Mengen}{a\dsep b}%
 }
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Hinrichtung]{%
+    a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
+    \RatClass{a}{b}=\RatZero\vdash a=\IntZero
+  }{%
+    a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
+    \RatClass{a}{b}=\RatZero\vdash a=\IntZero
+  }[RationalClassZeroNumeratorForward]
+    \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+    \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}=\RatZero}{\rA}
+    \proofstepwidestarbreakkeep[1,2,3]{a\cdot\IntOne
+      =\IntZero\cdot b}{%
+      \FormulaRefAuto{RationalClassEquality}[thm]{%
+        1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],2,%
+        \FormulaRefAuto{IntegerOnePositiveAxiom}[ax],%
+        \rIE{3,\rAEa{\FormulaRefAuto{RationalZeroOneClasses}[thm]}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{a=\IntZero}{%
+      \rIE{4,\FormulaRefAuto{IntegerMulOneAxiom}[ax]{1},%
+        \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{%
+          \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],%
+          \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{2}}}}}
+  \closeproofpartwideindR
 
-\emph{Beweisskizze.}
-Mit der Nullklasse lautet das Klassenkriterium
-\(a1_{\mathbb Z}=0_{\mathbb Z}b\). Die Einheits- und Nullgesetze in
-\(\mathbb Z\) reduzieren dies auf \(a=0_{\mathbb Z}\).
+  \proofpartwideindR[Rückrichtung]{%
+    a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
+    a=\IntZero\vdash\RatClass{a}{b}=\RatZero
+  }{%
+    a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
+    a=\IntZero\vdash\RatClass{a}{b}=\RatZero
+  }[RationalClassZeroNumeratorBackward]
+    \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+    \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[3]{a=\IntZero}{\rA}
+    \proofstepwidestarbreakkeep[1,2,3]{a\cdot\IntOne
+      =\IntZero\cdot b}{%
+      \rIE{3,\FormulaRefAuto{IntegerMulOneAxiom}[ax]{1},%
+        \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{%
+          \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],%
+          \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{2}}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{\RatClass{a}{b}
+      =\RatClass{\IntZero}{\IntOne}}{%
+      \FormulaRefAuto{RationalClassEquality}[thm]{%
+        1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],2,%
+        \FormulaRefAuto{IntegerOnePositiveAxiom}[ax],4}}
+    \proofstepwidestarbreakkeep[1,2,3]{\RatClass{a}{b}=\RatZero}{%
+      \rIE{5,\rAEa{\FormulaRefAuto{RationalZeroOneClasses}[thm]}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+    \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+    \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}=\RatZero
+      \to a=\IntZero}{%
+      \rRI{3,\FormulaRefAuto{RationalClassZeroNumeratorForward}{1,2,3}}}
+    \proofstepwidestarbreakkeep[1,2]{a=\IntZero
+      \to\RatClass{a}{b}=\RatZero}{%
+      \rRI{4,\FormulaRefAuto{RationalClassZeroNumeratorBackward}{1,2,4}}}
+    \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}=\RatZero
+      \leftrightarrow a=\IntZero}{\rAI{3,4}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Reziproker Repräsentantenwert]{%
   \begin{aligned}[t]
     &a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
-      a\neq0_{\mathbb Z}\vdash{}\\
+      a\neq\IntZero\vdash{}\\
     &\RatRecipRep{a}{b}\coloneqq
       \begin{cases}
-        \RatClass{b}{a},&0_{\mathbb Z}<a,\\
-        \RatClass{-b}{-a},&a<0_{\mathbb Z}.
+        \RatClass{b}{a},&\IntZero<a,\\
+        \RatClass{-b}{-a},&a<\IntZero.
       \end{cases}
   \end{aligned}%
 }{RationalReciprocalRepresentativeDef}{%
@@ -696,54 +1836,227 @@ Mit der Nullklasse lautet das Klassenkriterium
 }
 
 Wegen der Totalität der Ganzzahlordnung gilt für
-\(a\neq0_{\mathbb Z}\) genau einer der beiden Fälle. Im ersten Fall ist
+\(a\neq\IntZero\) genau einer der beiden Fälle. Im ersten Fall ist
 \(a\) selbst ein positiver Nenner, im zweiten Fall ist \(-a\) positiv.
 
 \FormulaThmDeltaK[Typisierung des reziproken Repräsentantenwertes]{%
   a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
-  a\neq0_{\mathbb Z}
+  a\neq\IntZero
   \vdash\RatRecipRep{a}{b}\in\mathbb Q%
 }{RationalReciprocalRepresentativeInQ}{%
   \DeltaRow{Mengen}{a\dsep b}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{a\neq\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[1,3]{\IntZero<a\lor a<\IntZero}{%
+    \FormulaRefAuto{IntegerOrderComparableAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],1},%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,3}}
+  \proofstepwidestarbreakkeep[5]{\IntZero<a}{\rA}
+  \proofstepwidestarbreakkeep[1,2,5]{\RatRecipRep{a}{b}=\RatClass{b}{a}}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{1,2,5}}
+  \proofstepwidestarbreakkeep[1,2,5]{\RatRecipRep{a}{b}\in\mathbb Q}{%
+    \rIE{6,\FormulaRefAuto{RationalClassInQ}[thm]{%
+      \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{2}},%
+      \FormulaRefAuto{PositiveIntegersDef}[def]{1,5}}}}
+  \proofstepwidestarbreakkeep[8]{a<\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[1,8]{\IntZero<-a}{%
+    \FormulaRefAuto{IntegerOrderTranslationEquivalenceAxiom}[ax]{%
+      1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],%
+      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{1},8},%
+    \FormulaRefAuto{IntegerAddInverseAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2,8]{\RatRecipRep{a}{b}=\RatClass{-b}{-a}}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{1,2,8}}
+  \proofstepwidestarbreakkeep[1,2,8]{\RatRecipRep{a}{b}\in\mathbb Q}{%
+    \rIE{10,\FormulaRefAuto{RationalClassInQ}[thm]{%
+      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{%
+        \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{2}}},%
+      \FormulaRefAuto{PositiveIntegersDef}[def]{1,9}}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\RatRecipRep{a}{b}\in\mathbb Q}{%
+    \rOE{4,5,7,8,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Repräsentantenunabhängigkeit des Kehrwertes]{%
   \begin{aligned}[t]
     &a,c\in\mathbb Z\dsep b,d\in\PositiveIntegers\dsep
-      a\neq0_{\mathbb Z}\dsep c\neq0_{\mathbb Z}\dsep{}\\
+      a\neq\IntZero\dsep c\neq\IntZero\dsep{}\\
     &\RatClass{a}{b}=\RatClass{c}{d}
       \vdash\RatRecipRep{a}{b}=\RatRecipRep{c}{d}
   \end{aligned}%
 }{RationalReciprocalCompatible}{%
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
 }
-
-\emph{Beweisskizze.}
-Aus \(ad=cb\) und positiven Nennern folgt, dass \(a\) und \(c\) dasselbe
-Vorzeichen besitzen. Sind beide positiv, ist für die reziproken Klassen die
-benötigte Kreuzgleichheit \(bc=da\); sie ist nur die symmetrisch umgeordnete
-Ausgangsgleichheit. Sind beide negativ, ergibt dieselbe Rechnung nach
-Negation aller Zähler und Nenner die Gleichheit der Klassen.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{a\neq\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[4]{c\neq\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[5]{\RatClass{a}{b}=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,5]{a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,5}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5]{%
+    (\IntZero<a\land\IntZero<c)
+    \lor(a<\IntZero\land c<\IntZero)}{%
+    \FormulaRefAuto{IntegerOrderTotalAxiom}[ax],%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{1,2},%
+    \FormulaRefAuto{IntegerPositiveFactorCancellationFromAxioms}[thm]{1,2,6}}
+  \proofstepwidestarbreakkeep[8]{\IntZero<a\land\IntZero<c}{\rA}
+  \proofstepwidestarbreakkeep[1,2,5,8]{\RatRecipRep{a}{b}
+    =\RatRecipRep{c}{d}}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{1,2,8},%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,%
+      \rIE{6,\FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{1}}}}
+  \proofstepwidestarbreakkeep[10]{a<\IntZero\land c<\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[1,2,5,10]{\RatRecipRep{a}{b}
+    =\RatRecipRep{c}{d}}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{1,2,10},%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,6},%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerMulAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerAddInverseAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5]{\RatRecipRep{a}{b}
+    =\RatRecipRep{c}{d}}{\rOE{7,8,9,10,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Quotientenabstieg des Kehrwertes]{%
   \begin{aligned}[t]
-    &q\in\mathbb Q\dsep q\neq0_{\mathbb Q}\vdash{}\\
+    &q\in\mathbb Q\dsep q\neq\RatZero\vdash{}\\
     &\exists!u\in\mathbb Q\,
       \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,\bigl({}\\
     &\qquad q=\RatClass{a}{b}\land
-      a\neq0_{\mathbb Z}\land u=\RatRecipRep{a}{b}\bigr)
+      a\neq\IntZero\land u=\RatRecipRep{a}{b}\bigr)
   \end{aligned}%
 }{RationalReciprocalQuotientDescent}{%
-  \DeltaRow{Mengen}{q\dsep u\dsep a\dsep b}%
+  \DeltaRow{Mengen}{q\dsep u\dsep v\dsep a\dsep a'\dsep b\dsep b'}%
 }
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Existenz]{%
+    \begin{aligned}[t]
+      &q\in\mathbb Q\dsep q\neq\RatZero\vdash
+        \exists u\in\mathbb Q\,{}\\
+      &\exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,{}\\
+      &\bigl(q=\RatClass{a}{b}\land a\neq\IntZero
+        \land u=\RatRecipRep{a}{b}\bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &q\in\mathbb Q\dsep q\neq\RatZero\vdash
+        \exists u\in\mathbb Q\,{}\\
+      &\exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,{}\\
+      &\bigl(q=\RatClass{a}{b}\land a\neq\IntZero
+        \land u=\RatRecipRep{a}{b}\bigr)
+    \end{aligned}
+  }[RationalReciprocalDescentExistence]
+    \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{q\neq\RatZero}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+    \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+      \land q=\RatClass{a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[2,4]{a\neq\IntZero}{%
+      \rRI{a=\IntZero,\rBI{2,%
+        \rIE{\rAEb{\rAEb{4}},%
+          \FormulaRefAuto{RationalClassZeroIffNumeratorZero}[thm]{4,a=\IntZero}}}}}
+    \proofstepwidestarbreakkeep[4,5]{\RatRecipRep{a}{b}\in\mathbb Q}{%
+      \FormulaRefAuto{RationalReciprocalRepresentativeInQ}[thm]{4,5}}
+    \proofstepwidestarbreakkeep[4,5]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       \RatRecipRep{a}{b}=\RatRecipRep{a}{b})}{%
+      \rEI{\rAI{4,5,\rII}}}
+    \proofstepwidestarbreakkeep[4,5]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{\rEI{\rAI{6,7}}}
+    \proofstepwidestarbreakkeep[1,2]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{\rEE{3,4,8}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Eindeutigkeit]{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+       \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+       (q=\RatClass{a}{b}\land a\neq\IntZero\land
+        u=\RatRecipRep{a}{b})\dsep{}\\
+      &\exists a'\in\mathbb Z\,\exists b'\in\PositiveIntegers\,
+       (q=\RatClass{a'}{b'}\land a'\neq\IntZero\land
+        v=\RatRecipRep{a'}{b'})\vdash u=v
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &u,v\in\mathbb Q\dsep
+       \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+       (q=\RatClass{a}{b}\land a\neq\IntZero\land
+        u=\RatRecipRep{a}{b})\dsep{}\\
+      &\exists a'\in\mathbb Z\,\exists b'\in\PositiveIntegers\,
+       (q=\RatClass{a'}{b'}\land a'\neq\IntZero\land
+        v=\RatRecipRep{a'}{b'})\vdash u=v
+    \end{aligned}
+  }[RationalReciprocalDescentUniqueness]
+    \proofstepwidestarbreakkeep[1]{u,v\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\exists a\in\mathbb Z\,
+      \exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[3]{\exists a'\in\mathbb Z\,
+      \exists b'\in\PositiveIntegers\,
+      (q=\RatClass{a'}{b'}\land a'\neq\IntZero\land
+       v=\RatRecipRep{a'}{b'})}{\rA}
+    \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+      \land q=\RatClass{a}{b}\land a\neq\IntZero
+      \land u=\RatRecipRep{a}{b}}{\rA}
+    \proofstepwidestarbreakkeep[5]{a'\in\mathbb Z\land b'\in\PositiveIntegers
+      \land q=\RatClass{a'}{b'}\land a'\neq\IntZero
+      \land v=\RatRecipRep{a'}{b'}}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{\RatRecipRep{a}{b}
+      =\RatRecipRep{a'}{b'}}{%
+      \FormulaRefAuto{RationalReciprocalCompatible}[thm]{%
+        4,5,\rIE{\rAEa{\rAEb{4}},\rAEa{\rAEb{5}}}}}
+    \proofstepwidestarbreakkeep[4,5]{u=v}{%
+      \rIE{\rAEb{\rAEb{\rAEb{\rAEb{4}}}},%
+        \rAEb{\rAEb{\rAEb{\rAEb{5}}}},6}}
+    \proofstepwidestarbreakkeep[1,2,3]{u=v}{\rEE{2,4,\rEE{3,5,7}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{q\neq\RatZero}{\rA}
+    \proofstepwidestarbreakkeep[1,2]{\exists u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{%
+      \FormulaRefAuto{RationalReciprocalDescentExistence}{1,2}}
+    \proofstepwidestarbreakkeep[4]{u\in\mathbb Q\land
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[5]{v\in\mathbb Q\land
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       v=\RatRecipRep{a}{b})}{\rA}
+    \proofstepwidestarbreakkeep[4,5]{u=v}{%
+      \FormulaRefAuto{RationalReciprocalDescentUniqueness}{4,5}}
+    \proofstepwidestarbreakkeep[1,2]{\exists!u\in\mathbb Q\,
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+      (q=\RatClass{a}{b}\land a\neq\IntZero\land
+       u=\RatRecipRep{a}{b})}{\UEI{3,4,5,6}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Kehrwert einer von null verschiedenen rationalen Zahl]{%
   \begin{aligned}[t]
-    &q\in\mathbb Q\dsep q\neq0_{\mathbb Q}\vdash{}\\
+    &q\in\mathbb Q\dsep q\neq\RatZero\vdash{}\\
     &q^{-1}\coloneqq\iota u\Bigl(
       u\in\mathbb Q\land
       \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,\bigl({}\\
-    &\qquad q=\RatClass{a}{b}\land a\neq0_{\mathbb Z}\land
+    &\qquad q=\RatClass{a}{b}\land a\neq\IntZero\land
       u=\RatRecipRep{a}{b}\bigr)
       \Bigr)
   \end{aligned}%
@@ -754,40 +2067,88 @@ Negation aller Zähler und Nenner die Gleichheit der Klassen.
 
 \FormulaThmDeltaK[Kehrwert auf Bruchklassen]{%
   a\in\mathbb Z\dsep b\in\PositiveIntegers\dsep
-  a\neq0_{\mathbb Z}
+  a\neq\IntZero
   \vdash
   \bigl(\RatClass{a}{b}\bigr)^{-1}=\RatRecipRep{a}{b}%
 }{RationalReciprocalClassValue}{%
   \DeltaRow{Mengen}{a\dsep b}%
   \DeltaRow{Funktionsoperatoren}{(\,\cdot\,)^{-1}}%
 }
-
-Die Klassenformel folgt unmittelbar aus dem eindeutigen Quotientenabstieg
-\FormulaRefAuto{RationalReciprocalQuotientDescent}[thm] und der Definition
-\FormulaRefAuto{RationalReciprocalDef}[def].
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{a\neq\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalClassInQ}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2,3]{\RatRecipRep{a}{b}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeInQ}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists!u\in\mathbb Q\,
+    \exists c\in\mathbb Z\,\exists d\in\PositiveIntegers\,
+    (\RatClass{a}{b}=\RatClass{c}{d}\land c\neq\IntZero
+     \land u=\RatRecipRep{c}{d})}{%
+    \FormulaRefAuto{RationalReciprocalQuotientDescent}[thm]{4,%
+      \rRI{\RatClass{a}{b}=\RatZero,%
+        \rBI{3,\FormulaRefAuto{RationalClassZeroIffNumeratorZero}[thm]{%
+          1,2,\RatClass{a}{b}=\RatZero}}}}}
+  \proofstepwidestarbreakkeep[1,2,3]{(\RatClass{a}{b})^{-1}
+    =\RatRecipRep{a}{b}}{%
+    \FormulaRefAuto{RationalReciprocalDef}[def]{1,2,3,4,5,6}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit des rationalen Kehrwertes]{%
-  q\in\mathbb Q\dsep q\neq0_{\mathbb Q}
+  q\in\mathbb Q\dsep q\neq\RatZero
   \vdash q^{-1}\in\mathbb Q%
 }{RationalReciprocalClosure}{%
   \DeltaRow{Mengen}{q}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{q\neq\RatZero}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\exists!u\in\mathbb Q\,
+    \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+    (q=\RatClass{a}{b}\land a\neq\IntZero\land
+     u=\RatRecipRep{a}{b})}{%
+    \FormulaRefAuto{RationalReciprocalQuotientDescent}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{q^{-1}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalReciprocalDef}[def]{1,2,3}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Multiplikatives Inverses rationaler Zahlen]{%
-  q\in\mathbb Q\dsep q\neq0_{\mathbb Q}
-  \vdash q\cdot q^{-1}=1_{\mathbb Q}%
+  q\in\mathbb Q\dsep q\neq\RatZero
+  \vdash q\cdot q^{-1}=\RatOne%
 }{RationalMulInverse}{%
   \DeltaRow{Mengen}{q}%
 }
-
-\emph{Beweisskizze.}
-Für \(q=\RatClass{a}{b}\) mit \(a>0\) ist das Produkt
-\(\RatClass{ab}{ba}\), für \(a<0\) nach zweimaliger Negation dieselbe
-Klasse. In beiden Fällen ist sie nach dem Klassenkriterium gleich
-\(\RatClass{1_{\mathbb Z}}{1_{\mathbb Z}}\).
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{q\neq\RatZero}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[2,4]{a\neq\IntZero}{%
+    \rRI{a=\IntZero,\rBI{2,%
+      \rIE{\rAEb{\rAEb{4}},%
+        \FormulaRefAuto{RationalClassZeroIffNumeratorZero}[thm]{4,a=\IntZero}}}}}
+  \proofstepwidestarbreakkeep[4,5]{(\RatClass{a}{b})^{-1}
+    =\RatRecipRep{a}{b}}{%
+    \FormulaRefAuto{RationalReciprocalClassValue}[thm]{4,5}}
+  \proofstepwidestarbreakkeep[4,5]{\RatClass{a}{b}\cdot\RatRecipRep{a}{b}
+    =\RatOne}{%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{4,5},%
+    \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{4},%
+    \FormulaRefAuto{RationalClassEquality}[thm]{4},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerMulAssociativeAxiom}[ax]{4},%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{4},%
+    \FormulaRefAuto{IntegerAddInverseAxiom}[ax]{4}}
+  \proofstepwidestarbreakkeep[4,5]{q\cdot q^{-1}=\RatOne}{\rIE{4,6,7}}
+  \proofstepwidestarbreakkeep[1,2]{q\cdot q^{-1}=\RatOne}{\rEE{3,4,8}}
+\end{tabproofwide}
 
 \FormulaDefDeltaK[Division rationaler Zahlen]{%
-  q,r\in\mathbb Q\dsep r\neq0_{\mathbb Q}\vdash
+  q,r\in\mathbb Q\dsep r\neq\RatZero\vdash
   \frac qr\coloneqq q\cdot r^{-1}%
 }{RationalDivisionDef}{%
   \DeltaRow{Mengen}{q\dsep r}%
@@ -795,11 +2156,21 @@ Klasse. In beiden Fällen ist sie nach dem Klassenkriterium gleich
 }
 
 \FormulaThmDeltaK[Abgeschlossenheit der rationalen Division]{%
-  q,r\in\mathbb Q\dsep r\neq0_{\mathbb Q}
+  q,r\in\mathbb Q\dsep r\neq\RatZero
   \vdash\frac qr\in\mathbb Q%
 }{RationalDivisionClosure}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproof}
+  \proofstep{1}{q,r\in\mathbb Q}{\rA}
+  \proofstep{2}{r\neq\RatZero}{\rA}
+  \proofstep{1,2}{r^{-1}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalReciprocalClosure}[thm]{\rAEb{1},2}}
+  \proofstep{1,2}{q\cdot r^{-1}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalMulClosure}[thm]{\rAEa{1},3}}
+  \proofstep{1,2}{\frac qr\in\mathbb Q}{%
+    \rIE{4,\FormulaRefAuto{RationalDivisionDef}[def]{1,2}}}
+\end{tabproof}
 
 \chapter{Ordnung der rationalen Zahlen}
 
@@ -819,13 +2190,22 @@ Klasse. In beiden Fällen ist sie nach dem Klassenkriterium gleich
     c\dsep c'\dsep d\dsep d'}%
 }
 
-\emph{Beweisskizze.}
-Man multipliziert die erste Ungleichung mit dem positiven Produkt
-\(b'd'\). Die beiden Klassengleichheiten ersetzen anschließend
-\(ab'\) durch \(a'b\) und \(cd'\) durch \(c'd\). Nach Umordnung bleibt die
-zweite Ungleichung mit dem gemeinsamen positiven Faktor \(bd\), der mit
-\FormulaRefAuto{IntegerPositiveFactorOrder}[thm] reflektiert werden darf.
-Die Rückrichtung ist symmetrisch.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,a',c,c'\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,b',d,d'\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatClass{a}{b}=\RatClass{a'}{b'}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\RatClass{c}{d}=\RatClass{c'}{d'}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{a\cdot b'=a'\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[1,2,4]{c\cdot d'=c'\cdot d}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2,4}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    a\cdot d\leq c\cdot b
+    \leftrightarrow a'\cdot d'\leq c'\cdot b'}{%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{1,2},%
+    \FormulaRefAuto{IntegerMulAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{1},\rIE{5,6}}
+\end{tabproofwide}
 
 \FormulaDefDeltaK[Rationale Ordnung als Quotientenrelation]{%
   \begin{aligned}[t]
@@ -850,11 +2230,25 @@ Die Rückrichtung ist symmetrisch.
 }{RationalOrderQuotientDescent}{%
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d\dsep\RatOrderGraph}%
 }
-
-Die Existenz der Relation folgt durch Aussonderung in
-\(\mathbb Q\times\mathbb Q\). Ihre Klassencharakterisierung ist wegen
-\FormulaRefAuto{RationalOrderCompatible}[thm] unabhängig von der Wahl der
-Repräsentanten.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[]{\RatOrderGraph\subseteq\mathbb Q\times\mathbb Q}{%
+    \FormulaRefAuto{RationalOrderRelationDef}[def]}
+  \proofstepwidestarbreakkeep[2]{a,c\in\mathbb Z\land
+    b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[2]{(\RatClass{a}{b},\RatClass{c}{d})
+    \in\RatOrderGraph\leftrightarrow a\cdot d\leq c\cdot b}{%
+    \FormulaRefAuto{RationalOrderRelationDef}[def]{2},%
+    \FormulaRefAuto{RationalOrderCompatible}[thm]}
+  \proofstepwidestarbreakkeep[]{\forall a,c\in\mathbb Z\,
+    \forall b,d\in\PositiveIntegers\,
+    \bigl((\RatClass{a}{b},\RatClass{c}{d})\in\RatOrderGraph
+      \leftrightarrow a\cdot d\leq c\cdot b\bigr)}{%
+    \rUI{\rRI{2,3}}}
+  \proofstepwidestarbreakkeep[]{\RatOrderGraph\subseteq\mathbb Q\times\mathbb Q
+    \land\forall a,c\in\mathbb Z\,\forall b,d\in\PositiveIntegers\,
+    \bigl((\RatClass{a}{b},\RatClass{c}{d})\in\RatOrderGraph
+      \leftrightarrow a\cdot d\leq c\cdot b\bigr)}{\rAI{1,4}}
+\end{tabproofwide}
 
 \FormulaDefDeltaK[Ordnungsoperator der rationalen Zahlen]{%
   q,r\in\mathbb Q\vdash
@@ -881,6 +2275,17 @@ Repräsentanten.
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
   \DeltaRow{Relationsoperatoren}{\leq\dsep\leq_{\mathbb Q}}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{(\RatClass{a}{b},\RatClass{c}{d})
+    \in\RatOrderGraph\leftrightarrow a\cdot d\leq c\cdot b}{%
+    \rAEb{\FormulaRefAuto{RationalOrderQuotientDescent}[thm]}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}\leq\RatClass{c}{d}
+    \leftrightarrow a\cdot d\leq c\cdot b}{%
+    \rIE{3,\FormulaRefAuto{RationalOrderDef}[def]{1,2},%
+      \FormulaRefAuto{RationalOrderNotation}[def]{1,2}}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Totale Ordnung der rationalen Zahlen]{%
   \TotOrd{\mathbb Q,\leq_{\mathbb Q}}%
@@ -888,13 +2293,68 @@ Repräsentanten.
   \DeltaRow{Mengen}{q\dsep r\dsep s}%
   \DeltaRow{Relationsoperatoren}{\leq_{\mathbb Q}}%
 }
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Ordnungsregeln aus Kreuzprodukten]{%
+    \begin{aligned}[t]
+      &q,r,s\in\mathbb Q\vdash
+      q\leq q\ \land\
+      ((q\leq r\land r\leq q)\to q=r)\ \land{}\\
+      &((q\leq r\land r\leq s)\to q\leq s)\ \land\
+      (q\leq r\lor r\leq q)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &q,r,s\in\mathbb Q\vdash
+      q\leq q\ \land\
+      ((q\leq r\land r\leq q)\to q=r)\ \land{}\\
+      &((q\leq r\land r\leq s)\to q\leq s)\ \land\
+      (q\leq r\lor r\leq q)
+    \end{aligned}
+  }[RationalOrderLawsOnRepresentatives]
+    \proofstepwidestarbreakkeep[1]{q,r,s\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[1]{q\leq q}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}},%
+      \FormulaRefAuto{RationalOrderClassChar}[thm],%
+      \FormulaRefAuto{IntegerOrderReflexiveAxiom}[ax]}
+    \proofstepwidestarbreakkeep[1]{(q\leq r\land r\leq q)\to q=r}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{1},%
+      \FormulaRefAuto{RationalOrderClassChar}[thm],%
+      \FormulaRefAuto{RationalClassEquality}[thm],%
+      \FormulaRefAuto{IntegerOrderAntisymmetricAxiom}[ax]}
+    \proofstepwidestarbreakkeep[1]{(q\leq r\land r\leq s)\to q\leq s}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{1},%
+      \FormulaRefAuto{RationalOrderClassChar}[thm],%
+      \FormulaRefAuto{IntegerOrderTransitiveAxiom}[ax],%
+      \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax],%
+      \FormulaRefAuto{IntegerPositiveFactorCancellationFromAxioms}[thm]}
+    \proofstepwidestarbreakkeep[1]{q\leq r\lor r\leq q}{%
+      \FormulaRefAuto{RationalPairRepresentative}[thm]{1},%
+      \FormulaRefAuto{RationalOrderClassChar}[thm],%
+      \FormulaRefAuto{IntegerOrderComparableAxiom}[ax]}
+    \proofstepwidestarbreakkeep[1]{q\leq q\land
+      ((q\leq r\land r\leq q)\to q=r)\land
+      ((q\leq r\land r\leq s)\to q\leq s)\land
+      (q\leq r\lor r\leq q)}{\rAI{2,3,4,5}}
+  \closeproofpartwideindR
 
-\emph{Beweisskizze.}
-Reflexivität und Totalität folgen unmittelbar aus der totalen
-Ganzzahlordnung auf den Kreuzprodukten. Antisymmetrie ist das
-Klassenkriterium. Für die Transitivität werden die beiden Ungleichungen mit
-den jeweils fehlenden positiven Nennern multipliziert; danach wird der
-gemeinsame positive Faktor gekürzt.
+  \proofpartwide{Schluss}
+    \proofstepwidestarbreakkeep[]{\forall q\in\mathbb Q\,(q\leq q)}{%
+      \FormulaRefAuto{RationalOrderLawsOnRepresentatives}}
+    \proofstepwidestarbreakkeep[]{\forall q,r,s\in\mathbb Q\,
+      ((q\leq r\land r\leq s)\to q\leq s)}{%
+      \FormulaRefAuto{RationalOrderLawsOnRepresentatives}}
+    \proofstepwidestarbreakkeep[]{\forall q,r\in\mathbb Q\,
+      ((q\leq r\land r\leq q)\to q=r)}{%
+      \FormulaRefAuto{RationalOrderLawsOnRepresentatives}}
+    \proofstepwidestarbreakkeep[]{\PartOrd{\mathbb Q,\leq_{\mathbb Q}}}{%
+      \FormulaRefAuto{Partielle Ordnung}[def]{1,2,3}}
+    \proofstepwidestarbreakkeep[]{\forall q,r\in\mathbb Q\,
+      (q\leq r\lor r\leq q)}{%
+      \FormulaRefAuto{RationalOrderLawsOnRepresentatives}}
+    \proofstepwidestarbreakkeep[]{\TotOrd{\mathbb Q,\leq_{\mathbb Q}}}{%
+      \FormulaRefAuto{Totale Ordnung}[def]{4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Strikte Ordnung der rationalen Zahlen]{%
   q,r\in\mathbb Q\vdash
@@ -911,6 +2371,21 @@ gemeinsame positive Faktor gekürzt.
 }{RationalStrictOrderClassChar}{%
   \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a,c\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b,d\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}\leq\RatClass{c}{d}
+    \leftrightarrow a\cdot d\leq c\cdot b}{%
+    \FormulaRefAuto{RationalOrderClassChar}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}=\RatClass{c}{d}
+    \leftrightarrow a\cdot d=c\cdot b}{%
+    \FormulaRefAuto{RationalClassEquality}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\RatClass{a}{b}<\RatClass{c}{d}
+    \leftrightarrow a\cdot d<c\cdot b}{%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]{1,2,3,4},%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{%
+      \FormulaRefAuto{IntMulClosure}[thm]{1,2}}}
+\end{tabproofwide}
 
 \section{Verträglichkeit von Ordnung und Arithmetik}
 
@@ -920,43 +2395,162 @@ gemeinsame positive Faktor gekürzt.
 }{RationalOrderTranslation}{%
   \DeltaRow{Mengen}{p\dsep q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{p,q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,p=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,q=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\exists e\in\mathbb Z\,
+    \exists f\in\PositiveIntegers\,r=\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[5]{a,c,e\in\mathbb Z\land
+    b,d,f\in\PositiveIntegers\land p=\RatClass{a}{b}\land
+    q=\RatClass{c}{d}\land r=\RatClass{e}{f}}{\rA}
+  \proofstepwidestarbreakkeep[5]{\RatClass{c}{d}\leq\RatClass{e}{f}
+    \leftrightarrow
+    \RatClass{a}{b}+\RatClass{c}{d}
+      \leq\RatClass{a}{b}+\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalAdditionClassValue}[thm]{5},%
+    \FormulaRefAuto{RationalOrderClassChar}[thm]{5},%
+    \FormulaRefAuto{IntegerOrderTranslationEquivalenceAxiom}[ax]{5},%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{5},%
+    \FormulaRefAuto{IntegerMulLeftDistributiveAxiom}[ax]{5},%
+    \FormulaRefAuto{IntegerMulRightDistributiveAxiom}[ax]{5}}
+  \proofstepwidestarbreakkeep[5]{q\leq r\leftrightarrow p+q\leq p+r}{\rIE{5,6}}
+  \proofstepwidestarbreakkeep[1]{q\leq r\leftrightarrow p+q\leq p+r}{%
+    \rEE{2,3,4,5,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Produkt nichtnegativer rationaler Zahlen ist nichtnegativ]{%
-  q,r\in\mathbb Q\dsep0_{\mathbb Q}\leq q\dsep0_{\mathbb Q}\leq r
-  \vdash0_{\mathbb Q}\leq q\cdot r%
+  q,r\in\mathbb Q\dsep\RatZero\leq q\dsep\RatZero\leq r
+  \vdash\RatZero\leq q\cdot r%
 }{RationalNonnegativeProduct}{%
   \DeltaRow{Mengen}{q\dsep r}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{\RatZero\leq q}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatZero\leq r}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,r=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{1}}}
+  \proofstepwidestarbreakkeep[6]{a,c\in\mathbb Z\land b,d\in\PositiveIntegers
+    \land q=\RatClass{a}{b}\land r=\RatClass{c}{d}}{\rA}
+  \proofstepwidestarbreakkeep[2,3,6]{\IntZero\leq a
+    \land\IntZero\leq c}{%
+    \FormulaRefAuto{RationalOrderClassChar}[thm]{6},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{6},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{6}}
+  \proofstepwidestarbreakkeep[6,7]{\IntZero\leq a\cdot c}{%
+    \FormulaRefAuto{IntegerPositiveProductAxiom}[ax]{6},%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{6},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{6},%
+    \FormulaRefAuto{IntegerOrderReflexiveAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[6,8]{\RatZero
+    \leq\RatClass{a c}{b d}}{%
+    \FormulaRefAuto{RationalOrderClassChar}[thm]{6},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{PositiveIntegerMulClosure}[thm]{6},%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{6},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{6}}
+  \proofstepwidestarbreakkeep[6]{q\cdot r=\RatClass{a c}{b d}}{%
+    \rIE{\rAEa{\rAEb{\rAEb{6}}},\rAEb{\rAEb{\rAEb{6}}},%
+      \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{6}}}
+  \proofstepwidestarbreakkeep[2,3,6]{\RatZero\leq q\cdot r}{\rIE{9,10}}
+  \proofstepwidestarbreakkeep[1,2,3]{\RatZero\leq q\cdot r}{%
+    \rEE{4,5,6,11}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Positive rationale Faktoren bewahren die strikte Ordnung]{%
-  p,q,r\in\mathbb Q\dsep q<r\dsep0_{\mathbb Q}<p
+  p,q,r\in\mathbb Q\dsep q<r\dsep\RatZero<p
   \vdash p\cdot q<p\cdot r%
 }{RationalPositiveMulStrictOrder}{%
   \DeltaRow{Mengen}{p\dsep q\dsep r}%
 }
-
-\emph{Gemeinsame Beweisskizze.}
-Nach Wahl positiver Nenner werden die drei Behauptungen mit der
-Klassencharakterisierung in Ganzzahlungleichungen übersetzt. Für die Addition
-heben sich die gleichen Kreuzterme auf. Für die Multiplikation werden
-Produkte positiver Nenner und die Ganzzahlregeln für positive Faktoren
-verwendet.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{p,q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{q<r}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatZero<p}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,p=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{1}}}
+  \proofstepwidestarbreakkeep[1]{\exists c\in\mathbb Z\,
+    \exists d\in\PositiveIntegers\,q=\RatClass{c}{d}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEa{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\exists e\in\mathbb Z\,
+    \exists f\in\PositiveIntegers\,r=\RatClass{e}{f}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[7]{a,c,e\in\mathbb Z\land
+    b,d,f\in\PositiveIntegers\land p=\RatClass{a}{b}\land
+    q=\RatClass{c}{d}\land r=\RatClass{e}{f}}{\rA}
+  \proofstepwidestarbreakkeep[2,3,7]{\IntZero<a
+    \land c\cdot f<e\cdot d}{%
+    \FormulaRefAuto{RationalStrictOrderClassChar}[thm]{7},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{7},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{7}}
+  \proofstepwidestarbreakkeep[2,3,7]{(a\cdot c)\cdot(b\cdot f)
+    <(a\cdot e)\cdot(b\cdot d)}{%
+    \FormulaRefAuto{IntegerPositiveFactorStrictOrderFromAxioms}[thm]{7,8},%
+    \FormulaRefAuto{IntegerPositiveProductAxiom}[ax]{7},%
+    \FormulaRefAuto{IntegerMulAssociativeAxiom}[ax]{7},%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{7}}
+  \proofstepwidestarbreakkeep[2,3,7]{%
+    \RatClass{a c}{b d}<\RatClass{a e}{b f}}{%
+    \FormulaRefAuto{RationalStrictOrderClassChar}[thm]{7,9}}
+  \proofstepwidestarbreakkeep[7]{p\cdot q=\RatClass{a c}{b d}
+    \land p\cdot r=\RatClass{a e}{b f}}{%
+    \rAI{\FormulaRefAuto{RationalMultiplicationClassValue}[thm]{7},%
+      \FormulaRefAuto{RationalMultiplicationClassValue}[thm]{7}}}
+  \proofstepwidestarbreakkeep[2,3,7]{p\cdot q<p\cdot r}{\rIE{10,11}}
+  \proofstepwidestarbreakkeep[1,2,3]{p\cdot q<p\cdot r}{%
+    \rEE{4,5,6,7,12}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Positive rationale Zahlen haben positive Kehrwerte]{%
-  q\in\mathbb Q\dsep0_{\mathbb Q}<q
-  \vdash0_{\mathbb Q}<q^{-1}%
+  q\in\mathbb Q\dsep\RatZero<q
+  \vdash\RatZero<q^{-1}%
 }{RationalPositiveReciprocal}{%
   \DeltaRow{Mengen}{q\dsep a\dsep b}%
   \DeltaRow{Relationsoperatoren}{<}%
   \DeltaRow{Funktionsoperatoren}{(\,\cdot\,)^{-1}}%
 }
-
-\emph{Beweisskizze.}
-Sei \(q=\RatClass{a}{b}\). Aus \(0_{\mathbb Q}<q\) folgt mit der strikten
-Klassencharakterisierung \(0_{\mathbb Z}<a\). Daher ist nach
-\FormulaRefAuto{RationalReciprocalClassValue}[thm]
-\(q^{-1}=\RatClass{b}{a}\). Weil auch \(b>0_{\mathbb Z}\) gilt, liefert
-dieselbe Klassencharakterisierung \(0_{\mathbb Q}<q^{-1}\).
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{\RatZero<q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[4]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[2,4]{\IntZero<a}{%
+    \FormulaRefAuto{RationalStrictOrderClassChar}[thm]{4,2},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{4},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{4}}
+  \proofstepwidestarbreakkeep[4,5]{a\neq\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerStrictOrderDef}[def]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{q^{-1}=\RatClass{b}{a}}{%
+    \rIE{\rAEb{\rAEb{4}},%
+      \FormulaRefAuto{RationalReciprocalClassValue}[thm]{4,6},%
+      \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{4,5}}}
+  \proofstepwidestarbreakkeep[4,5]{\RatZero<\RatClass{b}{a}}{%
+    \FormulaRefAuto{RationalStrictOrderClassChar}[thm]{4,5},%
+    \FormulaRefAuto{RationalZeroOneClasses}[thm],%
+    \FormulaRefAuto{IntegerPositiveProductAxiom}[ax]{4,5},%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{4},%
+    \FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{4}}
+  \proofstepwidestarbreakkeep[2,4]{\RatZero<q^{-1}}{\rIE{7,8}}
+  \proofstepwidestarbreakkeep[1,2]{\RatZero<q^{-1}}{\rEE{3,4,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Ordnungstreue der ganzzahligen Einbettung]{%
   z,w\in\mathbb Z\vdash
@@ -965,130 +2559,261 @@ dieselbe Klassencharakterisierung \(0_{\mathbb Q}<q^{-1}\).
   \DeltaRow{Mengen}{z\dsep w}%
   \DeltaRow{Funktion}{\RatEmbed}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{z,w\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{\RatEmbed(z)=\RatClass{z}{\IntOne}
+    \land\RatEmbed(w)=\RatClass{w}{\IntOne}}{%
+    \rAI{\FormulaRefAuto{IntegerRationalEmbedding}[def]{\rAEa{1}},%
+      \FormulaRefAuto{IntegerRationalEmbedding}[def]{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{\RatClass{z}{\IntOne}
+    \leq\RatClass{w}{\IntOne}
+    \leftrightarrow z\cdot\IntOne\leq w\cdot\IntOne}{%
+    \FormulaRefAuto{RationalOrderClassChar}[thm]{%
+      1,\FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[1]{z\cdot\IntOne\leq w\cdot\IntOne
+    \leftrightarrow z\leq w}{%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{z\leq w
+    \leftrightarrow\RatEmbed(z)\leq\RatEmbed(w)}{\rIE{2,3,4}}
+\end{tabproofwide}
 
-\emph{Beweisskizze.}
-Beide eingebetteten Zahlen haben Nenner \(1_{\mathbb Z}\). Das
-Kreuzproduktkriterium reduziert die rationale Ungleichung deshalb mittels
-der Einheitsgesetze auf \(z\leq w\).
+\chapter{Axiomatische Weiterarbeit}
 
-\section{Dichte und archimedische Eigenschaft}
+Der Quotientenkern ist damit vollständig verifiziert.  Ab jetzt werden keine
+Eigenschaften von Bruchpaaren mehr vorausgesetzt.  Die folgenden beiden
+Modellsätze halten noch die für \(\mathbb Q\) charakteristische Erzeugung aus
+ganzen Zählern und positiven ganzen Nennern sowie die Orientierung der Eins
+fest; anschließend wird ausschließlich über die registrierten Axiome
+weitergearbeitet.
 
-\FormulaThmDeltaK[Dichte der rationalen Ordnung]{%
-  q,r\in\mathbb Q\dsep q<r
-  \vdash\exists s\in\mathbb Q\,(q<s\land s<r)%
-}{RationalOrderDense}{%
-  \DeltaRow{Mengen}{q\dsep r\dsep s}%
+\FormulaThmDeltaK[Null und Eins sind im rationalen Modell verschieden]{%
+  \RatZero\neq\RatOne%
+}{RationalZeroNeOneModel}{%
+  \DeltaRow{Mengen}{\mathbb Q}%
 }
+\begin{tabproof}
+  \proofstep{}{\IntZero\neq\IntOne}{%
+    \FormulaRefAuto{IntegerZeroNeOneAxiom}[ax]}
+  \proofstep{}{\RatEmbed(\IntZero)\neq\RatEmbed(\IntOne)}{%
+    \FormulaRefAuto{IntegerRationalEmbeddingInjective}[thm]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],%
+      \FormulaRefAuto{IntegerOneCarrierAxiom}[ax],1}}
+  \proofstep{}{\RatZero\neq\RatOne}{%
+    \rIE{2,\FormulaRefAuto{RationalZeroDef}[def],%
+      \FormulaRefAuto{RationalOneDef}[def]}}
+\end{tabproof}
 
-\emph{Beweisskizze.}
-Die Zahl \(2_{\mathbb Q}\coloneqq1_{\mathbb Q}+1_{\mathbb Q}\) ist positiv
-und daher von null verschieden. Für
-\(s\coloneqq(q+r)/2_{\mathbb Q}\) folgt aus \(q<r\) durch Addition und
-Multiplikation mit dem nach
-\FormulaRefAuto{RationalPositiveReciprocal}[thm] positiven Kehrwert von
-\(2_{\mathbb Q}\), dass \(q<s<r\).
+\FormulaThmDeltaK[Die rationale Eins ist im Modell positiv]{%
+  \RatZero<\RatOne%
+}{RationalOnePositiveModel}{%
+  \DeltaRow{Mengen}{\mathbb Q}%
+}
+\begin{tabproof}
+  \proofstep{}{\IntZero<\IntOne}{%
+    \FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}
+  \proofstep{}{\RatEmbed(\IntZero)<\RatEmbed(\IntOne)}{%
+    \FormulaRefAuto{IntegerRationalEmbeddingOrder}[thm]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],%
+      \FormulaRefAuto{IntegerOneCarrierAxiom}[ax],1},%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]}
+  \proofstep{}{\RatZero<\RatOne}{%
+    \rIE{2,\FormulaRefAuto{RationalZeroDef}[def],%
+      \FormulaRefAuto{RationalOneDef}[def]}}
+\end{tabproof}
 
-\FormulaThmDeltaK[Archimedische Eigenschaft der rationalen Zahlen]{%
+\FormulaThmDeltaK[Brucherzeugung des rationalen Modells]{%
   q\in\mathbb Q\vdash
-  \exists n\in\mathbb N\,
-  q<\RatEmbed(\IntEmbed(n))%
-}{RationalArchimedean}{%
-  \DeltaRow{Mengen}{q\dsep n}%
-  \DeltaRow{Funktionensymbole}{\IntEmbed\dsep\RatEmbed}%
+  \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+  q=\RatEmbed(a)\cdot\bigl(\RatEmbed(b)\bigr)^{-1}%
+}{RationalFractionGenerationModel}{%
+  \DeltaRow{Mengen}{q\dsep a\dsep b}%
+  \DeltaRow{Funktion}{\RatEmbed}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,q=\RatClass{a}{b}}{%
+    \FormulaRefAuto{RationalPairRepresentative}[thm]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatClass{a}{b}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\RatEmbed(a)=\RatClass{a}{\IntOne}
+    \land\RatEmbed(b)=\RatClass{b}{\IntOne}}{%
+    \rAI{\FormulaRefAuto{IntegerRationalEmbedding}[def]{3},%
+      \FormulaRefAuto{IntegerRationalEmbedding}[def]{%
+        \rAEa{\FormulaRefAuto{PositiveIntegersDef}[def]{\rAEa{\rAEb{3}}}}}}}
+  \proofstepwidestarbreakkeep[3]{b\neq\IntZero}{%
+    \FormulaRefAuto{PositiveIntegerNonzero}[thm]{\rAEa{\rAEb{3}}}}
+  \proofstepwidestarbreakkeep[3]{\bigl(\RatEmbed(b)\bigr)^{-1}
+    =\RatClass{\IntOne}{b}}{%
+    \FormulaRefAuto{RationalReciprocalClassValue}[thm]{3,5},%
+    \FormulaRefAuto{RationalReciprocalRepresentativeDef}[def]{3}}
+  \proofstepwidestarbreakkeep[3]{\RatEmbed(a)\cdot
+    \bigl(\RatEmbed(b)\bigr)^{-1}=\RatClass{a}{b}}{%
+    \rIE{4,6,\FormulaRefAuto{RationalMultiplicationClassValue}[thm]{3},%
+      \FormulaRefAuto{IntegerMulOneAxiom}[ax]{3}}}
+  \proofstepwidestarbreakkeep[3]{q=\RatEmbed(a)\cdot
+    \bigl(\RatEmbed(b)\bigr)^{-1}}{\rIE{\rAEb{\rAEb{3}},7}}
+  \proofstepwidestarbreakkeep[3]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,
+    q=\RatEmbed(a)\cdot\bigl(\RatEmbed(b)\bigr)^{-1}}{%
+    \rEI{\rAI{\rAEa{3},\rEI{\rAI{\rAEa{\rAEb{3}},8}}}}}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,
+    q=\RatEmbed(a)\cdot\bigl(\RatEmbed(b)\bigr)^{-1}}{\rEE{2,3,9}}
+\end{tabproofwide}
 
-\emph{Beweisskizze.}
-Schreibe \(q=\RatClass{a}{b}\) mit \(b>0\). Nach der Ganzzahlnormalform
-ist \(a\) eine eingebettete natürliche Zahl oder deren Negatives. Man wählt
-eine positive natürliche Zahl \(n\), deren Einbettung strikt größer als
-\(a\) ist. Nach \FormulaRefAuto{PositiveIntegerOneLowerBound}[thm] gilt
-\(1_{\mathbb Z}\leq b\); Multiplikation mit dem positiven
-\(\IntEmbed(n)\) liefert daher
-\(\IntEmbed(n)\leq\IntEmbed(n)b\). Somit ist
-\(a<\IntEmbed(n)b\), und das strikte Kreuzproduktkriterium ergibt
-\(q<\RatEmbed(\IntEmbed(n))\).
+\FormulaThmDeltaK[Ganzzahlschranke für positive Nenner im Modell]{%
+  a\in\mathbb Z\dsep b\in\PositiveIntegers\vdash
+  \exists n\in\mathbb N\,
+  a<\IntEmbed(n)\cdot b%
+}{RationalIntegerFractionBoundModel}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep n}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists m\in\mathbb N\,
+    (a=\IntEmbed(m)\lor a=-\IntEmbed(m))}{%
+    \FormulaRefAuto{IntegerSignedNormalForm}[thm]{1}}
+  \proofstepwidestarbreakkeep[4]{m\in\mathbb N\land
+    (a=\IntEmbed(m)\lor a=-\IntEmbed(m))}{\rA}
+  \proofstepwidestarbreakkeep[4]{\Succ(m)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{4}}}
+  \proofstepwidestarbreakkeep[2]{\IntOne\leq b}{%
+    \FormulaRefAuto{PositiveIntegerOneLowerBound}[thm]{2}}
+  \proofstepwidestarbreakkeep[2,4]{a<\IntEmbed(\Succ(m))}{%
+    \FormulaRefAuto{IntegerSuccessorPositiveAxiom}[ax]{\rAEa{4}},%
+    \FormulaRefAuto{IntegerOrderTranslationEquivalenceAxiom}[ax],%
+    \FormulaRefAuto{IntegerOrderTotalAxiom}[ax],%
+    \FormulaRefAuto{IntegerAddInverseAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[2,4]{\IntEmbed(\Succ(m))
+    \leq\IntEmbed(\Succ(m))\cdot b}{%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{%
+      \FormulaRefAuto{IntegerOnePositiveAxiom}[ax],2,6},%
+    \FormulaRefAuto{IntegerMulOneAxiom}[ax]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{5}}}
+  \proofstepwidestarbreakkeep[1,2,4]{a<\IntEmbed(\Succ(m))\cdot b}{%
+    \FormulaRefAuto{IntegerOrderTransitiveAxiom}[ax]{1,7,8},%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,7}}
+  \proofstepwidestarbreakkeep[1,2,4]{\exists n\in\mathbb N\,
+    a<\IntEmbed(n)\cdot b}{\rEI{\rAI{5,9}}}
+  \proofstepwidestarbreakkeep[1,2]{\exists n\in\mathbb N\,
+    a<\IntEmbed(n)\cdot b}{\rEE{3,4,10}}
+\end{tabproofwide}
 
-\chapter{Axiomatische Zusammenfassung}
+Die folgende Tafel ist die Schnittstelle für alle weiteren Sätze dieses und
+der folgenden Bände.  Anders als die Axiome eines beliebigen geordneten
+Körpers enthält sie ausdrücklich die Brucherzeugung; erst diese Zeile hält
+fest, dass der Träger gerade der von \(\mathbb Z\) erzeugte Primkörper ist.
+Dichte und Archimedizität werden danach als Folgesätze bewiesen.
 
-Die folgende Tafel bündelt die für spätere Bände maßgeblichen Resultate.
-Der Ausdruck \(\RationalOrderedField{\mathbb Q}\) ist an dieser Stelle nur
-ein Name für die aufgeführten Aussagen. Insbesondere werden Dichte und
-archimedische Eigenschaft als bewiesene Zusätze registriert und nicht als
-Bestandteile der späteren abstrakten Körperdefinition ausgegeben.
-
-\FormulaDefDeltaK[Rationale Zahlen als archimedisch geordneter Körper]{%
+\FormulaDefDeltaK[Rationale Zahlen als erzeugter geordneter Körper]{%
   \RationalOrderedField{\mathbb Q}%
 }{RationalOrderedFieldAxioms}{%
   \DeltaRow{\makecell[l]{\textbf{Träger und}\\\textbf{Konstanten}}}{}%
-  \DeltaRow{Träger}{\mathbb Q}%
-  \DeltaRow{Null und Eins}{0_{\mathbb Q},1_{\mathbb Q}\in\mathbb Q}
-    [\FormulaRefAuto{RationalZeroOneCarrier}[thm]]%
-  \DeltaRow{\makecell[l]{Verschiedene\\Konstanten}}{0_{\mathbb Q}\neq1_{\mathbb Q}}
-    [\FormulaRefAuto{IntegerRationalEmbeddingInjective}[thm]]%
+  \DeltaRow{Null}{\RatZero\in\mathbb Q}
+    [\FormulaRefAuto{RationalZeroCarrierAxiom}[ax]]%
+  \DeltaRow{Eins}{\RatOne\in\mathbb Q}
+    [\FormulaRefAuto{RationalOneCarrierAxiom}[ax]]%
+  \DeltaRow{Verschieden}{\RatZero\neq\RatOne}
+    [\FormulaRefAuto{RationalZeroNeOneAxiom}[ax]]%
+  \DeltaRow{Orientierung}{\RatZero<\RatOne}
+    [\FormulaRefAuto{RationalOnePositiveAxiom}[ax]]%
   \DeltaRow{\textbf{Addition}}{}%
-  \DeltaRow{Abgeschlossenheit}{q,r\in\mathbb Q\vdash q+r\in\mathbb Q}
-    [\FormulaRefAuto{RationalAddClosure}[thm]]%
-  \DeltaRow{Assoziativität}{p,q,r\in\mathbb Q\vdash(p+q)+r=p+(q+r)}
-    [\FormulaRefAuto{RationalAddAssociative}[thm]]%
-  \DeltaRow{Kommutativität}{q,r\in\mathbb Q\vdash q+r=r+q}
-    [\FormulaRefAuto{RationalAddCommutative}[thm]]%
+  \DeltaRow{Abgeschlossen}{q,r\in\mathbb Q\vdash q+r\in\mathbb Q}
+    [\FormulaRefAuto{RationalAddClosureAxiom}[ax]]%
+  \DeltaRow{Assoziativ}{p,q,r\in\mathbb Q\vdash(p+q)+r=p+(q+r)}
+    [\FormulaRefAuto{RationalAddAssociativeAxiom}[ax]]%
+  \DeltaRow{Kommutativ}{q,r\in\mathbb Q\vdash q+r=r+q}
+    [\FormulaRefAuto{RationalAddCommutativeAxiom}[ax]]%
   \DeltaRow{Negation}{q\in\mathbb Q\vdash-q\in\mathbb Q}
-    [\FormulaRefAuto{RationalNegationLaws}[thm]]%
-  \DeltaRow{Null}{q\in\mathbb Q\vdash q+0_{\mathbb Q}=q}
-    [\FormulaRefAuto{RationalAddZero}[thm]]%
-  \DeltaRow{Inverse}{q\in\mathbb Q\vdash q+(-q)=0_{\mathbb Q}}
-    [\FormulaRefAuto{RationalAddInverse}[thm]]%
+    [\FormulaRefAuto{RationalNegationClosureAxiom}[ax]]%
+  \DeltaRow{Nullgesetz}{q\in\mathbb Q\vdash q+\RatZero=q}
+    [\FormulaRefAuto{RationalAddZeroAxiom}[ax]]%
+  \DeltaRow{Inverse}{q\in\mathbb Q\vdash q+(-q)=\RatZero}
+    [\FormulaRefAuto{RationalAddInverseAxiom}[ax]]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
   \DeltaRow{\textbf{Multiplikation}}{}%
-  \DeltaRow{Abgeschlossenheit}{q,r\in\mathbb Q\vdash q\cdot r\in\mathbb Q}
-    [\FormulaRefAuto{RationalMulClosure}[thm]]%
-  \DeltaRow{Assoziativität}{\begin{aligned}[t]
-    &p,q,r\in\mathbb Q\vdash{}\\
-    &(p\cdot q)\cdot r=p\cdot(q\cdot r)
-    \end{aligned}}
-    [\FormulaRefAuto{RationalMulAssociative}[thm]]%
-  \DeltaRow{Kommutativität}{q,r\in\mathbb Q\vdash q\cdot r=r\cdot q}
-    [\FormulaRefAuto{RationalMulCommutative}[thm]]%
-  \DeltaRow{Eins}{q\in\mathbb Q\vdash q\cdot1_{\mathbb Q}=q}
-    [\FormulaRefAuto{RationalMulOne}[thm]]%
-  \DeltaRow{Inverse}{\begin{aligned}[t]
-    &q\in\mathbb Q\dsep q\neq0_{\mathbb Q}\vdash{}\\
-    &q\cdot q^{-1}=1_{\mathbb Q}
-    \end{aligned}}
-    [\FormulaRefAuto{RationalMulInverse}[thm]]%
-  \DeltaRow{Kehrwert}{\begin{aligned}[t]
-    &q\in\mathbb Q\dsep q\neq0_{\mathbb Q}\vdash{}\\
-    &q^{-1}\in\mathbb Q
-    \end{aligned}}
-    [\FormulaRefAuto{RationalReciprocalClosure}[thm]]%
-  \DeltaRow{Distributivität}{\begin{aligned}[t]
-    &p,q,r\in\mathbb Q\vdash{}\\
-    &p\cdot(q+r)=p\cdot q+p\cdot r
-    \end{aligned}}
-    [\FormulaRefAuto{RationalDistributive}[thm]]%
+  \DeltaRow{Abgeschlossen}{q,r\in\mathbb Q\vdash q\cdot r\in\mathbb Q}
+    [\FormulaRefAuto{RationalMulClosureAxiom}[ax]]%
+  \DeltaRow{Assoziativ}{p,q,r\in\mathbb Q\vdash
+    (p\cdot q)\cdot r=p\cdot(q\cdot r)}
+    [\FormulaRefAuto{RationalMulAssociativeAxiom}[ax]]%
+  \DeltaRow{Kommutativ}{q,r\in\mathbb Q\vdash q\cdot r=r\cdot q}
+    [\FormulaRefAuto{RationalMulCommutativeAxiom}[ax]]%
+  \DeltaRow{Einsgesetz}{q\in\mathbb Q\vdash q\cdot\RatOne=q}
+    [\FormulaRefAuto{RationalMulOneAxiom}[ax]]%
+  \DeltaRow{Kehrwert}{q\in\mathbb Q\dsep q\neq\RatZero
+    \vdash q^{-1}\in\mathbb Q}
+    [\FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]]%
+  \DeltaRow{Inverse}{q\in\mathbb Q\dsep q\neq\RatZero
+    \vdash q\cdot q^{-1}=\RatOne}
+    [\FormulaRefAuto{RationalMulInverseAxiom}[ax]]%
+  \DeltaRow{Distributiv}{p,q,r\in\mathbb Q\vdash
+    p\cdot(q+r)=p\cdot q+p\cdot r}
+    [\FormulaRefAuto{RationalDistributiveAxiom}[ax]]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
   \DeltaRow{\textbf{Ordnung}}{}%
-  \DeltaRow{Totale Ordnung}{\TotOrd{\mathbb Q,\leq_{\mathbb Q}}}
-    [\FormulaRefAuto{RationalOrderTotal}[thm]]%
-  \DeltaRow{Translation}{\begin{aligned}[t]
-    &p,q,r\in\mathbb Q\vdash{}\\
-    &(q\leq r\leftrightarrow p+q\leq p+r)
+  \DeltaRow{Total}{\TotOrd{\mathbb Q,\leq_{\mathbb Q}}}
+    [\FormulaRefAuto{RationalOrderTotalAxiom}[ax]]%
+  \DeltaRow{Translation}{p,q,r\in\mathbb Q\vdash
+    (q\leq r\leftrightarrow p+q\leq p+r)}
+    [\FormulaRefAuto{RationalOrderTranslationAxiom}[ax]]%
+  \DeltaRow{\makecell[l]{Nichtnegative\\Produkte}}{\begin{aligned}[t]
+    &q,r\in\mathbb Q\dsep\RatZero\leq q\dsep{}\\
+    &\RatZero\leq r\vdash\RatZero\leq q\cdot r
     \end{aligned}}
-    [\FormulaRefAuto{RationalOrderTranslation}[thm]]%
-  \DeltaRow{Positive Produkte}{\begin{aligned}[t]
-    &q,r\in\mathbb Q\dsep0_{\mathbb Q}\leq q\dsep{}\\
-    &0_{\mathbb Q}\leq r\vdash0_{\mathbb Q}\leq q\cdot r
+    [\FormulaRefAuto{RationalNonnegativeProductAxiom}[ax]]%
+  \DeltaRow{\makecell[l]{Positive\\Faktoren}}{\begin{aligned}[t]
+    &p,q,r\in\mathbb Q\dsep q<r\dsep\RatZero<p\vdash{}\\
+    &p\cdot q<p\cdot r
     \end{aligned}}
-    [\FormulaRefAuto{RationalNonnegativeProduct}[thm]]%
-  \DeltaRow{\textbf{Zusätze}}{}%
-  \DeltaRow{Dichte}{\begin{aligned}[t]
-    &q,r\in\mathbb Q\dsep q<r\vdash{}\\
-    &\exists s\in\mathbb Q\,(q<s\land s<r)
+    [\FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]]%
+  \DeltaRow{\makecell[l]{Positive\\Kehrwerte}}{q\in\mathbb Q\dsep\RatZero<q
+    \vdash\RatZero<q^{-1}}
+    [\FormulaRefAuto{RationalPositiveReciprocalAxiom}[ax]]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\makecell[l]{\textbf{Ganzzahl-}\\\textbf{einbettung}}}{}%
+  \DeltaRow{Funktion}{\RatEmbed\colon\mathbb Z\to\mathbb Q}
+    [\FormulaRefAuto{RationalIntegerEmbeddingFunctionAxiom}[ax]]%
+  \DeltaRow{Injektiv}{\RatEmbed\colon\mathbb Z\inj\mathbb Q}
+    [\FormulaRefAuto{RationalIntegerEmbeddingInjectiveAxiom}[ax]]%
+  \DeltaRow{Additiv}{\begin{aligned}[t]
+    &z,w\in\mathbb Z\vdash{}\\
+    &\RatEmbed(z+w)=\RatEmbed(z)+\RatEmbed(w)
     \end{aligned}}
-    [\FormulaRefAuto{RationalOrderDense}[thm]]%
-  \DeltaRow{Archimedisch}{\begin{aligned}[t]
-    &q\in\mathbb Q\vdash{}\\
-    &\exists n\in\mathbb N\,q<\RatEmbed(\IntEmbed(n))
+    [\FormulaRefAuto{RationalIntegerEmbeddingAdditiveAxiom}[ax]]%
+  \DeltaRow{Multiplikativ}{\begin{aligned}[t]
+    &z,w\in\mathbb Z\vdash{}\\
+    &\RatEmbed(z\cdot w)=\RatEmbed(z)\cdot\RatEmbed(w)
     \end{aligned}}
-    [\FormulaRefAuto{RationalArchimedean}[thm]]%
+    [\FormulaRefAuto{RationalIntegerEmbeddingMultiplicativeAxiom}[ax]]%
+  \DeltaRow{Ordnungstreu}{\begin{aligned}[t]
+    &z,w\in\mathbb Z\vdash{}\\
+    &z\leq w\leftrightarrow\RatEmbed(z)\leq\RatEmbed(w)
+    \end{aligned}}
+    [\FormulaRefAuto{RationalIntegerEmbeddingOrderAxiom}[ax]]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{Brucherzeugung}{\begin{aligned}[t]
+    &q\in\mathbb Q\vdash
+      \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,{}\\
+    &q=\RatEmbed(a)\cdot(\RatEmbed(b))^{-1}
+    \end{aligned}}
+    [\FormulaRefAuto{RationalFractionGenerationAxiom}[ax]]%
+  \DeltaRow{Positive Nenner}{b\in\PositiveIntegers\vdash
+    b\in\mathbb Z\land\IntZero<b}
+    [\FormulaRefAuto{RationalPositiveDenominatorAxiom}[ax]]%
+  \DeltaRow{Nenner-Schranke}{\begin{aligned}[t]
+    &a\in\mathbb Z\dsep b\in\PositiveIntegers\vdash{}\\
+    &\exists n\in\mathbb N\,{}\\
+    &a<\IntEmbed(n)\cdot b
+    \end{aligned}}
+    [\FormulaRefAuto{RationalIntegerFractionBoundAxiom}[ax]]%
 }
 
 \FormulaThmDeltaK[Das Quotientenmodell erfüllt die rationalen Körperaxiome]{%
@@ -1101,11 +2826,423 @@ Bestandteile der späteren abstrakten Körperdefinition ausgegeben.
   \DeltaRow{Funktionensymbol}{\RatEmbed}%
   \DeltaRow{Relationsoperatoren}{\leq_{\mathbb Q}}%
 }
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[]{\mathbb Q
+    =\QuotientSet{\RatPairCarrier}{\RatPairRel}}{%
+    \FormulaRefAuto{RationalsAsQuotient}[def]}
+  \proofstepwidestarbreakkeep[]{\RationalOrderedField{\mathbb Q}}{%
+      \begin{aligned}[t]
+      &\FormulaRefAuto{RationalOrderedFieldAxioms}[def],\\[-2pt]
+      &\FormulaRefAuto{RationalZeroOneCarrier}[thm],
+       \FormulaRefAuto{RationalZeroNeOneModel}[thm],
+       \FormulaRefAuto{RationalOnePositiveModel}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalNegationLaws}[thm],
+       \FormulaRefAuto{RationalAddClosure}[thm],
+       \FormulaRefAuto{RationalAddAssociative}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalAddCommutative}[thm],
+       \FormulaRefAuto{RationalAddZero}[thm],
+       \FormulaRefAuto{RationalAddInverse}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalMulClosure}[thm],
+       \FormulaRefAuto{RationalMulAssociative}[thm],
+       \FormulaRefAuto{RationalMulCommutative}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalMulOne}[thm],
+       \FormulaRefAuto{RationalReciprocalClosure}[thm],
+       \FormulaRefAuto{RationalMulInverse}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalDistributive}[thm],
+       \FormulaRefAuto{RationalOrderTotal}[thm],
+       \FormulaRefAuto{RationalOrderTranslation}[thm],\\[-2pt]
+      &\FormulaRefAuto{RationalNonnegativeProduct}[thm],
+       \FormulaRefAuto{RationalPositiveMulStrictOrder}[thm],
+       \FormulaRefAuto{RationalPositiveReciprocal}[thm],\\[-2pt]
+      &\FormulaRefAuto{IntegerRationalEmbeddingFunction}[thm],
+       \FormulaRefAuto{IntegerRationalEmbeddingInjective}[thm],
+       \FormulaRefAuto{IntegerRationalEmbeddingAdditive}[thm],\\[-2pt]
+      &\FormulaRefAuto{IntegerRationalEmbeddingMultiplicative}[thm],
+       \FormulaRefAuto{IntegerRationalEmbeddingOrder}[thm],
+       \FormulaRefAuto{RationalFractionGenerationModel}[thm],\\[-2pt]
+      &\FormulaRefAuto{PositiveIntegersDef}[def],
+       \FormulaRefAuto{RationalIntegerFractionBoundModel}[thm]
+      \end{aligned}}
+  \proofstepwidestarbreakkeep[]{\mathbb Q
+    =\QuotientSet{\RatPairCarrier}{\RatPairRel}
+    \land\RationalOrderedField{\mathbb Q}}{\rAI{1,2}}
+\end{tabproofwide}
 
-\emph{Beweisskizze.}
-Jede Zeile der Zusammenfassung ist entweder eine Definition oder einer der in
-diesem Band bewiesenen und dort angegebenen Sätze. Damit erfüllt das aus
-positiven Bruchpaaren gebildete Quotientenmodell genau das durch
-\FormulaRefAuto{RationalOrderedFieldAxioms}[def] benannte Aussagenpaket.
+\FormulaAxiomAutoR[Rationale Null im Träger]{%
+  \RatZero\in\mathbb Q}{RationalZeroCarrierAxiom}
+\par\noindent\emph{Modellursprung:}
+\FormulaRefAuto{RationalZeroOneCarrier}[thm].\par
+
+\FormulaAxiomAutoR[Rationale Eins im Träger]{%
+  \RatOne\in\mathbb Q}{RationalOneCarrierAxiom}
+\par\noindent\emph{Modellursprung:}
+\FormulaRefAuto{RationalZeroOneCarrier}[thm].\par
+
+\FormulaAxiomAutoR[Rationale Null und Eins sind verschieden]{%
+  \RatZero\neq\RatOne}{RationalZeroNeOneAxiom}
+\par\noindent\emph{Modellursprung:}
+\FormulaRefAuto{RationalZeroNeOneModel}[thm].\par
+
+\FormulaAxiomAutoR[Die rationale Eins ist positiv]{%
+  \RatZero<\RatOne}{RationalOnePositiveAxiom}
+\par\noindent\emph{Modellursprung:}
+\FormulaRefAuto{RationalOnePositiveModel}[thm].\par
+
+\FormulaAxiomAutoR[Abgeschlossenheit der rationalen Addition]{%
+  q,r\in\mathbb Q\vdash q+r\in\mathbb Q}{RationalAddClosureAxiom}
+\FormulaAxiomAutoR[Assoziativität der rationalen Addition]{%
+  p,q,r\in\mathbb Q\vdash(p+q)+r=p+(q+r)}{RationalAddAssociativeAxiom}
+\FormulaAxiomAutoR[Kommutativität der rationalen Addition]{%
+  q,r\in\mathbb Q\vdash q+r=r+q}{RationalAddCommutativeAxiom}
+\FormulaAxiomAutoR[Abgeschlossenheit der rationalen Negation]{%
+  q\in\mathbb Q\vdash-q\in\mathbb Q}{RationalNegationClosureAxiom}
+\FormulaAxiomAutoR[Nullgesetz der rationalen Addition]{%
+  q\in\mathbb Q\vdash q+\RatZero=q}{RationalAddZeroAxiom}
+\FormulaAxiomAutoR[Additive Inversen in \(\mathbb Q\)]{%
+  q\in\mathbb Q\vdash q+(-q)=\RatZero}{RationalAddInverseAxiom}
+
+\FormulaAxiomAutoR[Abgeschlossenheit der rationalen Multiplikation]{%
+  q,r\in\mathbb Q\vdash q\cdot r\in\mathbb Q}{RationalMulClosureAxiom}
+\FormulaAxiomAutoR[Assoziativität der rationalen Multiplikation]{%
+  p,q,r\in\mathbb Q\vdash(p\cdot q)\cdot r=p\cdot(q\cdot r)%
+}{RationalMulAssociativeAxiom}
+\FormulaAxiomAutoR[Kommutativität der rationalen Multiplikation]{%
+  q,r\in\mathbb Q\vdash q\cdot r=r\cdot q}{RationalMulCommutativeAxiom}
+\FormulaAxiomAutoR[Einheitsgesetz der rationalen Multiplikation]{%
+  q\in\mathbb Q\vdash q\cdot\RatOne=q}{RationalMulOneAxiom}
+\FormulaAxiomAutoR[Abgeschlossenheit des rationalen Kehrwertes]{%
+  q\in\mathbb Q\dsep q\neq\RatZero\vdash q^{-1}\in\mathbb Q%
+}{RationalReciprocalClosureAxiom}
+\FormulaAxiomAutoR[Multiplikative Inversen in \(\mathbb Q\)]{%
+  q\in\mathbb Q\dsep q\neq\RatZero
+  \vdash q\cdot q^{-1}=\RatOne}{RationalMulInverseAxiom}
+\FormulaAxiomAutoR[Distributivität der rationalen Multiplikation]{%
+  p,q,r\in\mathbb Q\vdash p\cdot(q+r)=p\cdot q+p\cdot r%
+}{RationalDistributiveAxiom}
+
+\FormulaAxiomAutoR[Totale Ordnung der rationalen Zahlen]{%
+  \TotOrd{\mathbb Q,\leq_{\mathbb Q}}}{RationalOrderTotalAxiom}
+\FormulaAxiomAutoR[Translationsäquivalenz der rationalen Ordnung]{%
+  p,q,r\in\mathbb Q\vdash(q\leq r\leftrightarrow p+q\leq p+r)%
+}{RationalOrderTranslationAxiom}
+\FormulaAxiomAutoR[Nichtnegative rationale Produkte]{%
+  q,r\in\mathbb Q\dsep\RatZero\leq q\dsep\RatZero\leq r
+  \vdash\RatZero\leq q\cdot r}{RationalNonnegativeProductAxiom}
+\FormulaAxiomAutoR[Positive rationale Faktoren bewahren strikte Ordnung]{%
+  p,q,r\in\mathbb Q\dsep q<r\dsep\RatZero<p
+  \vdash p\cdot q<p\cdot r}{RationalPositiveMulStrictOrderAxiom}
+\FormulaAxiomAutoR[Positive rationale Zahlen haben positive Kehrwerte]{%
+  q\in\mathbb Q\dsep\RatZero<q\vdash\RatZero<q^{-1}%
+}{RationalPositiveReciprocalAxiom}
+
+\FormulaAxiomAutoR[Typisierung der Ganzzahleinbettung]{%
+  \RatEmbed\colon\mathbb Z\to\mathbb Q%
+}{RationalIntegerEmbeddingFunctionAxiom}
+\FormulaAxiomAutoR[Injektivität der Ganzzahleinbettung]{%
+  \RatEmbed\colon\mathbb Z\inj\mathbb Q%
+}{RationalIntegerEmbeddingInjectiveAxiom}
+\FormulaAxiomAutoR[Additivität der Ganzzahleinbettung]{%
+  z,w\in\mathbb Z\vdash\RatEmbed(z+w)=\RatEmbed(z)+\RatEmbed(w)%
+}{RationalIntegerEmbeddingAdditiveAxiom}
+\FormulaAxiomAutoR[Multiplikativität der Ganzzahleinbettung]{%
+  z,w\in\mathbb Z\vdash
+  \RatEmbed(z\cdot w)=\RatEmbed(z)\cdot\RatEmbed(w)%
+}{RationalIntegerEmbeddingMultiplicativeAxiom}
+\FormulaAxiomAutoR[Ordnungstreue der Ganzzahleinbettung]{%
+  z,w\in\mathbb Z\vdash
+  (z\leq w\leftrightarrow\RatEmbed(z)\leq\RatEmbed(w))%
+}{RationalIntegerEmbeddingOrderAxiom}
+\FormulaAxiomAutoR[Brucherzeugung der rationalen Zahlen]{%
+  q\in\mathbb Q\vdash
+  \exists a\in\mathbb Z\,\exists b\in\PositiveIntegers\,
+  q=\RatEmbed(a)\cdot(\RatEmbed(b))^{-1}%
+}{RationalFractionGenerationAxiom}
+\FormulaAxiomAutoR[Charakterisierung positiver Nenner]{%
+  b\in\PositiveIntegers\vdash
+  b\in\mathbb Z\land\IntZero<b%
+}{RationalPositiveDenominatorAxiom}
+\FormulaAxiomAutoR[Ganzzahlschranke für positive Nenner]{%
+  a\in\mathbb Z\dsep b\in\PositiveIntegers\vdash
+  \exists n\in\mathbb N\,a<\IntEmbed(n)\cdot b%
+}{RationalIntegerFractionBoundAxiom}
+
+\begin{sloppypar}
+\noindent\emph{Modellursprünge der arithmetischen, geordneten und
+Einbettungsaxiome:}
+\FormulaRefAuto{RationalAddClosure}[thm],
+\FormulaRefAuto{RationalAddAssociative}[thm],
+\FormulaRefAuto{RationalAddCommutative}[thm],
+\FormulaRefAuto{RationalNegationLaws}[thm],
+\FormulaRefAuto{RationalAddZero}[thm],
+\FormulaRefAuto{RationalAddInverse}[thm],
+\FormulaRefAuto{RationalMulClosure}[thm],
+\FormulaRefAuto{RationalMulAssociative}[thm],
+\FormulaRefAuto{RationalMulCommutative}[thm],
+\FormulaRefAuto{RationalMulOne}[thm],
+\FormulaRefAuto{RationalReciprocalClosure}[thm],
+\FormulaRefAuto{RationalMulInverse}[thm],
+\FormulaRefAuto{RationalDistributive}[thm],
+\FormulaRefAuto{RationalOrderTotal}[thm],
+\FormulaRefAuto{RationalOrderTranslation}[thm],
+\FormulaRefAuto{RationalNonnegativeProduct}[thm],
+\FormulaRefAuto{RationalPositiveMulStrictOrder}[thm],
+\FormulaRefAuto{RationalPositiveReciprocal}[thm],
+\FormulaRefAuto{IntegerRationalEmbeddingFunction}[thm],
+\FormulaRefAuto{IntegerRationalEmbeddingInjective}[thm],
+\FormulaRefAuto{IntegerRationalEmbeddingAdditive}[thm],
+\FormulaRefAuto{IntegerRationalEmbeddingMultiplicative}[thm],
+\FormulaRefAuto{IntegerRationalEmbeddingOrder}[thm] und
+\FormulaRefAuto{RationalFractionGenerationModel}[thm] und
+\FormulaRefAuto{RationalIntegerFractionBoundModel}[thm]; die
+Nennercharakterisierung ist die Definition
+\FormulaRefAuto{PositiveIntegersDef}[def].\par
+\end{sloppypar}
+
+\chapter{Folgesätze aus den rationalen Axiomen}
+
+\section{Dichte und archimedische Eigenschaft}
+
+\FormulaThmDeltaK[Ordnungsumkehr positiver Kehrwerte]{%
+  q,r\in\mathbb Q\dsep\RatZero<q\dsep\RatZero<r
+  \vdash\bigl(q^{-1}<r^{-1}\leftrightarrow r<q\bigr)%
+}{RationalPositiveReciprocalOrderReversal}{%
+  \DeltaRow{Mengen}{q\dsep r}%
+  \DeltaRow{Relationsoperatoren}{<}%
+  \DeltaRow{Funktionsoperatoren}{(\,\cdot\,)^{-1}}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Hinrichtung]{%
+    q,r\in\mathbb Q\dsep\RatZero<q\dsep\RatZero<r\dsep
+    q^{-1}<r^{-1}\vdash r<q
+  }{%
+    q,r\in\mathbb Q\dsep\RatZero<q\dsep\RatZero<r\dsep
+    q^{-1}<r^{-1}\vdash r<q
+  }[RationalPositiveReciprocalOrderForward]
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\RatZero<q}{\rA}
+    \proofstepwidestarbreakkeep[3]{\RatZero<r}{\rA}
+    \proofstepwidestarbreakkeep[4]{q^{-1}<r^{-1}}{\rA}
+    \proofstepwidestarbreakkeep[2,3]{q\neq\RatZero\land r\neq\RatZero}{%
+      \rAI{%
+        \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{%
+          \FormulaRefAuto{RationalStrictOrderDef}[def]{2}},%
+        \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{%
+          \FormulaRefAuto{RationalStrictOrderDef}[def]{3}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{q^{-1},r^{-1}\in\mathbb Q}{%
+      \rAI{%
+        \FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]{%
+          \rAEa{1},\rAEa{5}},%
+        \FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]{%
+          \rAEb{1},\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      q\cdot q^{-1}<q\cdot r^{-1}}{%
+      \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{%
+        1,2,4,6}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      \RatOne<q\cdot r^{-1}}{%
+      \rIE{\FormulaRefAuto{RationalMulInverseAxiom}[ax]{%
+        \rAEa{1},\rAEa{5}},7}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      r\cdot\RatOne<r\cdot(q\cdot r^{-1})}{%
+      \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{%
+        1,3,8,\FormulaRefAuto{RationalOneCarrierAxiom}[ax],%
+        \FormulaRefAuto{RationalMulClosureAxiom}[ax]{1,6}}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{r<q}{%
+      \rIE{9,%
+        \FormulaRefAuto{RationalMulOneAxiom}[ax]{\rAEb{1}},%
+        \FormulaRefAuto{RationalMulAssociativeAxiom}[ax]{1,6},%
+        \FormulaRefAuto{RationalMulCommutativeAxiom}[ax]{1,6},%
+        \FormulaRefAuto{RationalMulInverseAxiom}[ax]{%
+          \rAEb{1},\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{q^{-1}<r^{-1}\to r<q}{%
+      \rRI{4,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[R\"uckrichtung]{%
+    q,r\in\mathbb Q\dsep\RatZero<q\dsep\RatZero<r\dsep
+    r<q\vdash q^{-1}<r^{-1}
+  }{%
+    q,r\in\mathbb Q\dsep\RatZero<q\dsep\RatZero<r\dsep
+    r<q\vdash q^{-1}<r^{-1}
+  }[RationalPositiveReciprocalOrderBackward]
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\RatZero<q}{\rA}
+    \proofstepwidestarbreakkeep[3]{\RatZero<r}{\rA}
+    \proofstepwidestarbreakkeep[4]{r<q}{\rA}
+    \proofstepwidestarbreakkeep[2,3]{q\neq\RatZero\land r\neq\RatZero}{%
+      \rAI{%
+        \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{%
+          \FormulaRefAuto{RationalStrictOrderDef}[def]{2}},%
+        \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{%
+          \FormulaRefAuto{RationalStrictOrderDef}[def]{3}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{q^{-1},r^{-1}\in\mathbb Q}{%
+      \rAI{%
+        \FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]{%
+          \rAEa{1},\rAEa{5}},%
+        \FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]{%
+          \rAEb{1},\rAEb{5}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
+      \RatZero<q^{-1}\land\RatZero<r^{-1}}{%
+      \rAI{%
+        \FormulaRefAuto{RationalPositiveReciprocalAxiom}[ax]{\rAEa{1},2},%
+        \FormulaRefAuto{RationalPositiveReciprocalAxiom}[ax]{\rAEb{1},3}}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      r^{-1}\cdot r<r^{-1}\cdot q}{%
+      \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{%
+        1,4,\rAEb{7},6}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      \RatOne<r^{-1}\cdot q}{%
+      \rIE{%
+        \FormulaRefAuto{RationalMulCommutativeAxiom}[ax]{1,6},%
+        \FormulaRefAuto{RationalMulInverseAxiom}[ax]{%
+          \rAEb{1},\rAEb{5}},8}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      q^{-1}\cdot\RatOne<q^{-1}\cdot(r^{-1}\cdot q)}{%
+      \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{%
+        1,\rAEa{7},9,6}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{q^{-1}<r^{-1}}{%
+      \rIE{10,%
+        \FormulaRefAuto{RationalMulOneAxiom}[ax]{\rAEa{6}},%
+        \FormulaRefAuto{RationalMulAssociativeAxiom}[ax]{1,6},%
+        \FormulaRefAuto{RationalMulCommutativeAxiom}[ax]{1,6},%
+        \FormulaRefAuto{RationalMulInverseAxiom}[ax]{%
+          \rAEa{1},\rAEa{5}}}}
+    \proofstepwidestarbreakkeep[1,2,3]{r<q\to q^{-1}<r^{-1}}{%
+      \rRI{4,11}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Zusammenfassung}
+    \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+    \proofstepwidestarbreakkeep[2]{\RatZero<q}{\rA}
+    \proofstepwidestarbreakkeep[3]{\RatZero<r}{\rA}
+    \proofstepwidestarbreakkeep[1,2,3]{q^{-1}<r^{-1}\to r<q}{%
+      \FormulaRefAuto{RationalPositiveReciprocalOrderForward}[thm]{1,2,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{r<q\to q^{-1}<r^{-1}}{%
+      \FormulaRefAuto{RationalPositiveReciprocalOrderBackward}[thm]{1,2,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
+      q^{-1}<r^{-1}\leftrightarrow r<q}{\rLRI{4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Dichte der rationalen Ordnung]{%
+  q,r\in\mathbb Q\dsep q<r
+  \vdash\exists s\in\mathbb Q\,(q<s\land s<r)%
+}{RationalOrderDense}{%
+  \DeltaRow{Mengen}{q\dsep r\dsep s}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q,r\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[2]{q<r}{\rA}
+  \proofstepwidestarbreakkeep[]{\RatZero<\RatOne}{%
+    \FormulaRefAuto{RationalOnePositiveAxiom}[ax]}
+  \proofstepwidestarbreakkeep[]{\RatZero<\RatOne+\RatOne}{%
+    \FormulaRefAuto{RationalOrderTranslationAxiom}[ax]{%
+      \FormulaRefAuto{RationalZeroCarrierAxiom}[ax],%
+      \FormulaRefAuto{RationalOneCarrierAxiom}[ax],3},%
+    \FormulaRefAuto{RationalAddZeroAxiom}[ax]{%
+      \FormulaRefAuto{RationalOneCarrierAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[]{\RatOne+\RatOne\neq\RatZero}{%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]{4}}
+  \proofstepwidestarbreakkeep[]{(\RatOne+\RatOne)^{-1}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalReciprocalClosureAxiom}[ax]{%
+      \FormulaRefAuto{RationalAddClosureAxiom}[ax]{%
+        \FormulaRefAuto{RationalOneCarrierAxiom}[ax]},5}}
+  \proofstepwidestarbreakkeep[]{\RatZero
+    <(\RatOne+\RatOne)^{-1}}{%
+    \FormulaRefAuto{RationalPositiveReciprocalAxiom}[ax]{%
+      \FormulaRefAuto{RationalAddClosureAxiom}[ax]{%
+        \FormulaRefAuto{RationalOneCarrierAxiom}[ax]},4}}
+  \proofstepwidestarbreakkeep[1]{(q+r)\cdot
+    (\RatOne+\RatOne)^{-1}\in\mathbb Q}{%
+    \FormulaRefAuto{RationalMulClosureAxiom}[ax]{%
+      \FormulaRefAuto{RationalAddClosureAxiom}[ax]{1},6}}
+  \proofstepwidestarbreakkeep[1,2]{q<(q+r)\cdot
+    (\RatOne+\RatOne)^{-1}}{%
+    \FormulaRefAuto{RationalOrderTranslationAxiom}[ax]{1,2},%
+    \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{1,2,7},%
+    \FormulaRefAuto{RationalMulInverseAxiom}[ax]{5},%
+    \FormulaRefAuto{RationalDistributiveAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulCommutativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulOneAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalAddAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalAddCommutativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]}
+  \proofstepwidestarbreakkeep[1,2]{(q+r)\cdot
+    (\RatOne+\RatOne)^{-1}<r}{%
+    \FormulaRefAuto{RationalOrderTranslationAxiom}[ax]{1,2},%
+    \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{1,2,7},%
+    \FormulaRefAuto{RationalMulInverseAxiom}[ax]{5},%
+    \FormulaRefAuto{RationalDistributiveAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulCommutativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalMulOneAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalAddAssociativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalAddCommutativeAxiom}[ax]{1},%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]}
+  \proofstepwidestarbreakkeep[1,2]{\exists s\in\mathbb Q\,(q<s\land s<r)}{%
+    \rEI{\rAI{8,\rAI{9,10}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Archimedische Eigenschaft der rationalen Zahlen]{%
+  q\in\mathbb Q\vdash
+  \exists n\in\mathbb N\,
+  q<\RatEmbed(\IntEmbed(n))%
+}{RationalArchimedean}{%
+  \DeltaRow{Mengen}{q\dsep n}%
+  \DeltaRow{Funktionensymbole}{\IntEmbed\dsep\RatEmbed}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{q\in\mathbb Q}{\rA}
+  \proofstepwidestarbreakkeep[1]{\exists a\in\mathbb Z\,
+    \exists b\in\PositiveIntegers\,
+    q=\RatEmbed(a)\cdot(\RatEmbed(b))^{-1}}{%
+    \FormulaRefAuto{RationalFractionGenerationAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[3]{a\in\mathbb Z\land b\in\PositiveIntegers
+    \land q=\RatEmbed(a)\cdot(\RatEmbed(b))^{-1}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\exists n\in\mathbb N\,
+    a<\IntEmbed(n)\cdot b}{%
+    \FormulaRefAuto{RationalIntegerFractionBoundAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[5]{n\in\mathbb N\land
+    a<\IntEmbed(n)\cdot b}{\rA}
+  \proofstepwidestarbreakkeep[3]{\IntZero<b}{%
+    \rAEb{\FormulaRefAuto{RationalPositiveDenominatorAxiom}[ax]{%
+      \rAEa{\rAEb{3}}}}}
+  \proofstepwidestarbreakkeep[3]{\RatZero<\RatEmbed(b)}{%
+    \FormulaRefAuto{RationalIntegerEmbeddingOrderAxiom}[ax]{3,6},%
+    \FormulaRefAuto{RationalIntegerEmbeddingInjectiveAxiom}[ax],%
+    \FormulaRefAuto{RationalZeroDef}[def],%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]}
+  \proofstepwidestarbreakkeep[3]{\RatZero<(\RatEmbed(b))^{-1}}{%
+    \FormulaRefAuto{RationalPositiveReciprocalAxiom}[ax]{%
+      \FormulaRefAuto{RationalIntegerEmbeddingFunctionAxiom}[ax]{3},7}}
+  \proofstepwidestarbreakkeep[3,5]{\RatEmbed(a)
+    <\RatEmbed(\IntEmbed(n)\cdot b)}{%
+    \FormulaRefAuto{RationalIntegerEmbeddingOrderAxiom}[ax]{3,%
+      \rAEb{5}},%
+    \FormulaRefAuto{RationalIntegerEmbeddingInjectiveAxiom}[ax],%
+    \FormulaRefAuto{RationalStrictOrderDef}[def]}
+  \proofstepwidestarbreakkeep[3,5]{\RatEmbed(\IntEmbed(n)\cdot b)
+    =\RatEmbed(\IntEmbed(n))\cdot\RatEmbed(b)}{%
+    \FormulaRefAuto{RationalIntegerEmbeddingMultiplicativeAxiom}[ax]{3,5}}
+  \proofstepwidestarbreakkeep[3,5]{\RatEmbed(a)\cdot(\RatEmbed(b))^{-1}
+    <\RatEmbed(\IntEmbed(n)\cdot b)\cdot(\RatEmbed(b))^{-1}}{%
+    \FormulaRefAuto{RationalPositiveMulStrictOrderAxiom}[ax]{%
+      \FormulaRefAuto{RationalIntegerEmbeddingFunctionAxiom}[ax]{3},%
+      \FormulaRefAuto{RationalIntegerEmbeddingFunctionAxiom}[ax]{3,5},8,9}}
+  \proofstepwidestarbreakkeep[3,5]{%
+    \RatEmbed(\IntEmbed(n)\cdot b)\cdot(\RatEmbed(b))^{-1}
+    =\RatEmbed(\IntEmbed(n))}{%
+    \rIE{10,\FormulaRefAuto{RationalMulAssociativeAxiom}[ax],%
+      \FormulaRefAuto{RationalMulCommutativeAxiom}[ax],%
+      \FormulaRefAuto{RationalMulInverseAxiom}[ax]{7},%
+      \FormulaRefAuto{RationalMulOneAxiom}[ax]}}
+  \proofstepwidestarbreakkeep[3,5]{q<\RatEmbed(\IntEmbed(n))}{%
+    \rIE{\rAEb{\rAEb{3}},11,12}}
+  \proofstepwidestarbreakkeep[3,5]{\exists n\in\mathbb N\,
+    q<\RatEmbed(\IntEmbed(n))}{\rEI{\rAI{\rAEa{5},13}}}
+  \proofstepwidestarbreakkeep[1]{\exists n\in\mathbb N\,
+    q<\RatEmbed(\IntEmbed(n))}{\rEE{2,3,\rEE{4,5,14}}}
+\end{tabproofwide}
 
 \end{document}
