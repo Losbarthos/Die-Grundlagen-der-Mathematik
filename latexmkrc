@@ -215,6 +215,11 @@ for my $band (@{$dgm_graph_order}) {
     $dgm_band_by_source_leaf{$leaf} = $band;
 }
 
+# Die reMarkable-Ausgabe verwendet denselben Bandgraphen wie B30, besitzt aber
+# einen eigenen Satz-Wrapper und eigene Ausgabe-/Registry-Artefakte.
+$dgm_band_by_source_leaf{'Bd. 30 - Endliche Halbgruppen - reMarkable.tex'} =
+    'B30';
+
 sub dgm_transitive_predecessors {
     my ($target) = @_;
     my %seen;

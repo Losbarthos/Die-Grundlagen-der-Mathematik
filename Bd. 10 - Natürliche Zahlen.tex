@@ -932,12 +932,18 @@ wir nun das übliche Zahlzeichen ein.
 Die Struktur \((\mathbb{N},0,\Succ)\) wird durch die folgenden Axiome
 festgelegt. Zuerst stehen sie gesammelt wie die ZF-Axiome in Band~03; danach
 werden sie einzeln registriert, damit spätere Beweise dieses Bandes direkt
-auf diese Axiome verweisen können.
+auf diese Axiome verweisen können. Die fett gesetzten Zwischenüberschriften
+gliedern dabei lediglich die gemeinsame Peano-Schnittstelle; sie sind keine
+zusätzlichen Axiome. Auch die drei Darstellungsformen der Typisierung und
+Induktion sind nicht voneinander unabhängig: Aus
+\(\Succ\colon\mathbb N\to\mathbb N\) folgen die universelle und die
+sequenzielle Abschlussform, und die Induktionsregel ist die im Kalkül
+verwendete Regelgestalt desselben Induktionsprinzips.
 
-\FormulaDefDeltaK[Peano-Axiome mit Nachfolgerfunktion]{%
+\FormulaDefDeltaK[Peano-Schnittstelle mit Nachfolgerfunktion]{%
   (\mathbb{N},0,\Succ)%
 }{Peano-Axiome}{%
-  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{\textbf{Signatur und Träger}}{}
   \DeltaRow{Null}
            {0\in\mathbb{N}}
            [\FormulaRefAuto{PeanoZero}]
@@ -950,6 +956,7 @@ auf diese Axiome verweisen können.
               &\quad \Succ(x)\in \mathbb{N}
             \end{aligned}}
            [\FormulaRefAuto{PeanoSuccClosureUniversal}]
+  \DeltaRow{\textbf{Nachfolgerstruktur}}{}
   \DeltaRow{\makecell[l]{Nachfolger-\\abschluss}}
            {n\in\mathbb{N}\vdash \Succ(n)\in\mathbb{N}}
            [\FormulaRefAuto{PeanoSuccClosure}]
@@ -968,6 +975,7 @@ auf diese Axiome verweisen können.
               &\Succ(x)=\Succ(y)\vdash x=y
             \end{aligned}}
            [\FormulaRefAuto{PeanoSuccInjective}]
+  \DeltaRow{\textbf{Induktionsprinzip}}{}
   \DeltaRow{Induktion}
            {\begin{aligned}[t]
               &P(0)\dsep \forall x\in\mathbb{N}\\
@@ -1541,9 +1549,9 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 
 \subsection{Transitivitätskette}
 
-\FormulaThmDelta[Transitivität der natürlichen Zahlen]{%
+\FormulaThmDeltaK[Transitivität der natürlichen Zahlen]{%
   n\in\mathbb{N}\vdash \bigcup n\subseteq n%
-}{%
+}{PeanoTransitiveSet}{%
   \DeltaDecl{Mengen}{n}%
 }
 \begin{tabproofsplitwide}
@@ -2443,10 +2451,10 @@ kann.
   \DeltaRow{Neue Symbole}{<}%
 }
 
-\FormulaThmDelta[Mitgliedschaftscharakterisierung der strikten natürlichen Ordnung]{%
+\FormulaThmDeltaK[Mitgliedschaftscharakterisierung der strikten natürlichen Ordnung]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
   m < n \leftrightarrow m\in n%
-}{%
+}{PeanoLtMembershipIff}{%
   \DeltaRow{Mengen}{m\dsep n}%
   \DeltaRow{Relationsoperatoren}{<_{\mathbb{N}}\dsep<}%
 }
@@ -9008,6 +9016,58 @@ In der eingeführten Schreibweise ist diese Abbildung
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,4}}
 \end{tabproof}
 
+Da \(\Pred\) genau auf den von \(0\) verschiedenen natürlichen Zahlen
+definiert ist, führen wir nur die dort benötigte Minus-eins-Schreibweise
+ein. Eine allgemeine Subtraktion auf \(\mathbb N\) ist damit nicht gemeint.
+
+\FormulaDefDeltaK[Minus-eins-Schreibweise für positive natürliche Zahlen]{%
+  n\in\mathbb N\dsep n\neq0\vdash
+  n-1\coloneqq\Pred(n)%
+}{PeanoMinusOneNotation}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbol}{\Pred}%
+  \DeltaRow{Neue Schreibweise}{n-1}%
+}
+
+\FormulaThmDeltaK[Abziehen von \(1\) erhält die Natürlichkeit]{%
+  n\in\mathbb N\dsep n\neq0\vdash n-1\in\mathbb N%
+}{PeanoMinusOneNatural}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbol}{\Pred}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb N}{\rA}
+  \proofstep{2}{n\neq0}{\rA}
+  \proofstep{1,2}{\Pred(n)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoPredNatural}[thm]{1,2}}
+  \proofstep{1,2}{n-1=\Pred(n)}{%
+    \FormulaRefAuto{PeanoMinusOneNotation}[def]{1,2}}
+  \proofstep{1,2}{n-1\in\mathbb N}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Abziehen und anschließendes Addieren von \(1\)]{%
+  n\in\mathbb N\dsep n\neq0\vdash (n-1)+1=n%
+}{PeanoMinusOneAddOne}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbole}{\Pred\dsep\Succ}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb N}{\rA}
+  \proofstep{2}{n\neq0}{\rA}
+  \proofstep{1,2}{n-1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMinusOneNatural}[thm]{1,2}}
+  \proofstep{1,2}{n-1=\Pred(n)}{%
+    \FormulaRefAuto{PeanoMinusOneNotation}[def]{1,2}}
+  \proofstep{1,2}{(n-1)+1=\Succ(n-1)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{3}}
+  \proofstep{1,2}{\Succ(n-1)=\Succ(\Pred(n))}{\rIE{4}}
+  \proofstep{1,2}{n=\Succ(\Pred(n))}{%
+    \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{1,2}}
+  \proofstep{1,2}{\Succ(\Pred(n))=n}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+  \proofstep{1,2}{(n-1)+1=n}{\rChain{5,6,8}}
+\end{tabproof}
+
 \section{Natürliche Ordnung}
 
 Die zuvor aus der von-Neumann-Konstruktion gewonnene Ordnung auf
@@ -12546,6 +12606,145 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\subsection{Abgeleitete Rechenregeln für Gleichungen}
+
+Die folgenden Regeln bündeln häufig wiederkehrende Substitutions- und
+Distributivitätsschritte.  Sie erlauben es insbesondere, eine Gleichung von
+Summen in einem Schritt mit einem gemeinsamen Faktor zu multiplizieren.
+
+\FormulaThmDeltaK[Verträglichkeit der Addition mit Gleichungen]{%
+  a,b,c,d\in\mathbb N\dsep a=b\dsep c=d\vdash a+c=b+d%
+}{PeanoAddCongruence}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{a,b,c,d\in\mathbb N}{\rA}
+  \proofstep{2}{a=b}{\rA}
+  \proofstep{3}{c=d}{\rA}
+  \proofstep{1,2}{a+c=b+c}{\rIE{2}}
+  \proofstep{1,3}{b+c=b+d}{\rIE{3}}
+  \proofstep{1,2,3}{a+c=b+d}{\rChain{4,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Verträglichkeit der Multiplikation mit Gleichungen]{%
+  a,b,c,d\in\mathbb N\dsep a=b\dsep c=d\vdash
+  a\cdot c=b\cdot d%
+}{PeanoMulCongruence}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{a,b,c,d\in\mathbb N}{\rA}
+  \proofstep{2}{a=b}{\rA}
+  \proofstep{3}{c=d}{\rA}
+  \proofstep{1,2}{a\cdot c=b\cdot c}{\rIE{2}}
+  \proofstep{1,3}{b\cdot c=b\cdot d}{\rIE{3}}
+  \proofstep{1,2,3}{a\cdot c=b\cdot d}{\rChain{4,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechtsmultiplikation einer Summengleichung]{%
+  \begin{aligned}[t]
+    &a,b,c,d,e\in\mathbb N\dsep a+b=c+d\vdash{}\\[-2pt]
+    &a\cdot e+b\cdot e=c\cdot e+d\cdot e
+  \end{aligned}%
+}{PeanoScaledSumEqualityRight}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d\dsep e}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b,c,d,e\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{a+b=c+d}{\rA}
+  \proofstepwidestar[1]{(a+b)\cdot e=a\cdot e+b\cdot e}{%
+    \FormulaRefAuto{PeanoMulRightDistributive}{1}}
+  \proofstepwidestar[1]{a\cdot e+b\cdot e=(a+b)\cdot e}{%
+    \FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstepwidestar[1,2]{(a+b)\cdot e=(c+d)\cdot e}{\rIE{2}}
+  \proofstepwidestar[1]{(c+d)\cdot e=c\cdot e+d\cdot e}{%
+    \FormulaRefAuto{PeanoMulRightDistributive}{1}}
+  \proofstepwidestar[1,2]{%
+    a\cdot e+b\cdot e=c\cdot e+d\cdot e}{\rChain{4,5,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Linksmultiplikation einer Summengleichung]{%
+  \begin{aligned}[t]
+    &a,b,c,d,e\in\mathbb N\dsep a+b=c+d\vdash{}\\[-2pt]
+    &e\cdot a+e\cdot b=e\cdot c+e\cdot d
+  \end{aligned}%
+}{PeanoScaledSumEqualityLeft}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d\dsep e}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b,c,d,e\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{a+b=c+d}{\rA}
+  \proofstepwidestar[1]{e\cdot(a+b)=e\cdot a+e\cdot b}{%
+    \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
+  \proofstepwidestar[1]{e\cdot a+e\cdot b=e\cdot(a+b)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{3}}
+  \proofstepwidestar[1,2]{e\cdot(a+b)=e\cdot(c+d)}{\rIE{2}}
+  \proofstepwidestar[1]{e\cdot(c+d)=e\cdot c+e\cdot d}{%
+    \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
+  \proofstepwidestar[1,2]{%
+    e\cdot a+e\cdot b=e\cdot c+e\cdot d}{\rChain{4,5,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Komponentenweises Addieren zweier Summengleichungen]{%
+  \begin{aligned}[t]
+    &a,b,c,d,e,f,g,h\in\mathbb N\dsep
+      a+b=c+d\dsep e+f=g+h\vdash{}\\[-2pt]
+    &(a+e)+(b+f)=(c+g)+(d+h)
+  \end{aligned}%
+}{PeanoSumEqualitiesAddition}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d\dsep
+    e\dsep f\dsep g\dsep h}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b,c,d,e,f,g,h\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{a+b=c+d}{\rA}
+  \proofstepwidestar[3]{e+f=g+h}{\rA}
+  \proofstepwidestar[1]{(a+e)+(b+f)=(a+b)+(e+f)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      \FormulaRefAuto{PeanoAddInterchange}{1}}}
+  \proofstepwidestar[1,2,3]{(a+b)+(e+f)=(c+d)+(g+h)}{%
+    \rIE{2,3}}
+  \proofstepwidestar[1]{(c+d)+(g+h)=(c+g)+(d+h)}{%
+    \FormulaRefAuto{PeanoAddInterchange}{1}}
+  \proofstepwidestar[1,2,3]{%
+    (a+e)+(b+f)=(c+g)+(d+h)}{\rChain{4,5,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Bilineares Vertauschungsgesetz]{%
+  \begin{aligned}[t]
+    &a,b,c,d,e,f\in\mathbb N\vdash{}\\[-2pt]
+    &a\cdot(c+e)+b\cdot(d+f)
+      =(a\cdot c+b\cdot d)+(a\cdot e+b\cdot f)
+  \end{aligned}%
+}{PeanoBilinearAddInterchange}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d\dsep e\dsep f}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
+  \proofstepwidestar[1]{a\cdot c\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}{1}}
+  \proofstepwidestar[1]{a\cdot e\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}{1}}
+  \proofstepwidestar[1]{b\cdot d\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}{1}}
+  \proofstepwidestar[1]{b\cdot f\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}{1}}
+  \proofstepwidestar[1]{a\cdot(c+e)=a\cdot c+a\cdot e}{%
+    \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
+  \proofstepwidestar[1]{b\cdot(d+f)=b\cdot d+b\cdot f}{%
+    \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
+  \proofstepwidestar[1]{%
+    a\cdot(c+e)+b\cdot(d+f)
+    =(a\cdot c+a\cdot e)+(b\cdot d+b\cdot f)}{\rIE{6,7}}
+  \proofstepwidestar[1]{%
+    (a\cdot c+a\cdot e)+(b\cdot d+b\cdot f)
+    =(a\cdot c+b\cdot d)+(a\cdot e+b\cdot f)}{%
+    \FormulaRefAuto{PeanoAddInterchange}{2,3,4,5}}
+  \proofstepwidestar[1]{%
+    a\cdot(c+e)+b\cdot(d+f)
+    =(a\cdot c+b\cdot d)+(a\cdot e+b\cdot f)}{\rChain{8,9}}
+\end{tabproofwide}
+
 Damit sind Addition und Multiplikation als totale Operationen auf
 \(\mathbb{N}\) eingeführt. Ihre vertrauten Rechenregeln, etwa Assoziativität,
 Kommutativität und Distributivität, sind damit aus den rekursiven Definitionen
@@ -13715,9 +13914,9 @@ Damit sind die Rekursionsgleichungen für Potenzen nur die Produktgleichungen
 für konstante Folgen. Wir formulieren sie als eigene Sätze, weil sie die
 Rekursionsform der Potenznotation festhalten.
 
-\FormulaThmDelta[Nullregel der Potenz natürlicher Zahlen]{%
+\FormulaThmDeltaK[Nullregel der Potenz natürlicher Zahlen]{%
   b\in\mathbb{N}\vdash b^{0}=\Succ(0)%
-}{%
+}{PeanoPowerZero}{%
   \DeltaRow{Mengen}{b\dsep i}%
   \DeltaRow{Funktionensymbol}{\ConstFun{\mathbb{N}}{\mathbb{N}}{b}}%
 }
@@ -13742,14 +13941,9 @@ Rekursionsform der Potenznotation festhalten.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
 \end{tabproofwide}
 
-\FormulaThmDeltaR[Nachfolgerregel der Potenz natürlicher Zahlen]{%
-  \begin{aligned}[t]
-    &b\in\mathbb{N}\dsep n\in\mathbb{N}\vdash{}\\
-    &b^{\Succ(n)}=b^n\cdot b
-  \end{aligned}
-}{%
+\FormulaThmDeltaK[Nachfolgerregel der Potenz natürlicher Zahlen]{%
   b\in\mathbb{N}\dsep n\in\mathbb{N}\vdash b^{\Succ(n)}=b^n\cdot b%
-}{%
+}{PeanoPowerSucc}{%
   \DeltaRow{Mengen}{b\dsep n\dsep i\dsep m}%
   \DeltaRow{Funktionensymbol}{\ConstFun{\mathbb{N}}{\mathbb{N}}{b}}%
 }
@@ -13801,6 +13995,598 @@ Rekursionsform der Potenznotation festhalten.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,12}}
   \proofstepwidestar[1,2]{b^{\Succ(n)}=b^n\cdot b}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,13}}
+\end{tabproofwide}
+
+\section{Fakultäten natürlicher Zahlen}
+
+Die Fakultät ist das Produkt der ersten positiven natürlichen Zahlen. Da
+das Produktzeichen bereits auf Anfangsabschnitten definiert ist, kann sie
+ohne eine weitere Rekursionskonstruktion eingeführt werden.
+
+\FormulaDefDeltaK[Fakultätsfunktion]{%
+  \begin{aligned}[t]
+    &\operatorname{fac}\colon\mathbb{N}\to\mathbb{N},\\[-2pt]
+    &\forall n\in\mathbb{N}\,
+      \left(\operatorname{fac}(n)=n!\coloneqq
+      \prod_{i<n}\Succ(i)\right)
+  \end{aligned}%
+}{FactorialFunction}{%
+  \DeltaRow{Mengen}{n\dsep i}%
+  \DeltaRow{Funktionensymbole}{\Succ\dsep \operatorname{fac}}%
+  \DeltaRow{Neue Schreibweise}{n!}%
+}
+
+\FormulaThmDeltaK[Rekursionsgleichungen der Fakultät]{%
+  \begin{aligned}[t]
+    &0!=\Succ(0),\\[-2pt]
+    &n\in\mathbb{N}\vdash \Succ(n)!=n!\cdot\Succ(n)
+  \end{aligned}%
+}{FactorialRecursion}{%
+  \DeltaRow{Mengen}{n\dsep i}%
+  \DeltaRow{Funktionensymbole}{\Succ\dsep \operatorname{fac}}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Nullfall]{0!=\Succ(0)}{0!=\Succ(0)}
+    \proofstepwidestar[]{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}}{%
+      \FormulaRefAuto{PeanoSuccFunction}[ax]}
+    \proofstepwidestar[]{0!=\prod_{i<0}\Succ(i)}{%
+      \FormulaRefAuto{FactorialFunction}[def]{1}}
+    \proofstepwidestar[]{\prod_{i<0}\Succ(i)=\Succ(0)}{%
+      \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+        \prod_{i<0}u(i)=\Succ(0)}{2}}
+    \proofstepwidestar[]{0!=\Succ(0)}{\rChain{3,4}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Nachfolgerfall]{%
+    n\in\mathbb{N}\vdash \Succ(n)!=n!\cdot\Succ(n)%
+  }{%
+    n\in\mathbb{N}\vdash \Succ(n)!=n!\cdot\Succ(n)%
+  }
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}}{%
+      \FormulaRefAuto{PeanoSuccFunction}[ax]}
+    \proofstepwidestar[1]{\Succ(n)\in\mathbb{N}}{%
+      \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+    \proofstepwidestar[1]{\Succ(n)!=\prod_{i<\Succ(n)}\Succ(i)}{%
+      \FormulaRefAuto{FactorialFunction}[def]{3}}
+    \proofstepwidestar[1]{%
+      \prod_{i<\Succ(n)}\Succ(i)
+      =\left(\prod_{i<n}\Succ(i)\right)\cdot\Succ(n)}{%
+      \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}
+        \vdash \prod_{i<\Succ(n)}u(i)=
+        \left(\prod_{i<n}u(i)\right)\cdot u(n)}{2,1}}
+    \proofstepwidestar[1]{n!=\prod_{i<n}\Succ(i)}{%
+      \FormulaRefAuto{FactorialFunction}[def]{1}}
+    \proofstepwidestar[1]{%
+      \left(\prod_{i<n}\Succ(i)\right)\cdot\Succ(n)
+      =n!\cdot\Succ(n)}{\rIE{6}}
+    \proofstepwidestar[1]{\Succ(n)!=n!\cdot\Succ(n)}{%
+      \rChain{4,5,7}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Abgeschlossenheit der Fakultätsfunktion]{%
+  \operatorname{fac}\colon\mathbb{N}\to\mathbb{N}%
+}{FactorialClosure}{%
+  \DeltaRow{Mengen}{n\dsep i}%
+  \DeltaRow{Funktionensymbole}{\Succ\dsep \operatorname{fac}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\operatorname{fac}\colon\mathbb{N}\to\mathbb{N}}{%
+    \FormulaRefAuto{FactorialFunction}[def]}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Nullteilerfreiheit der natürlichen Multiplikation]{%
+  a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep a\neq0\dsep b\neq0
+  \vdash a\cdot b\neq0%
+}{PeanoMulNonzero}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep k\dsep r}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
+  \proofstepwidestar[3]{a\neq0}{\rA}
+  \proofstepwidestar[4]{b\neq0}{\rA}
+  \proofstepwidestar[2,4]{\exists k\in\mathbb{N}\,(b=\Succ(k))}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{2,4}}
+  \proofstepwidestar[3]{\exists r\in\mathbb{N}\,(a=\Succ(r))}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{1,3}}
+  \proofstepwidestar[7]{k\in\mathbb{N}\land b=\Succ(k)}{\rA}
+  \proofstepwidestar[8]{r\in\mathbb{N}\land a=\Succ(r)}{\rA}
+  \proofstepwidestar[7]{k\in\mathbb{N}}{\rAEa{7}}
+  \proofstepwidestar[7]{b=\Succ(k)}{\rAEb{7}}
+  \proofstepwidestar[8]{r\in\mathbb{N}}{\rAEa{8}}
+  \proofstepwidestar[8]{a=\Succ(r)}{\rAEb{8}}
+  \proofstepwidestar[1,7]{a\cdot\Succ(k)=a\cdot k+a}{%
+    \FormulaRefAuto{PeanoMulSuccRight}[thm]{1,9}}
+  \proofstepwidestar[1,7,8]{a\cdot k+a=\Succ(a\cdot k+r)}{%
+    \rIE{12,\FormulaRefAuto{PeanoAddSuccRight}[thm]{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{1,9},11}}}
+  \proofstepwidestar[1,7,8]{a\cdot\Succ(k)=\Succ(a\cdot k+r)}{%
+    \rChain{13,14}}
+  \proofstepwidestar[1,7,8]{\Succ(a\cdot k+r)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{%
+      \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}
+        \vdash a+b\in\mathbb{N}}{%
+        \FormulaRefAuto{PeanoMulClosure}[thm]{1,9},11}}}
+  \proofstepwidestar[1,7,8]{a\cdot\Succ(k)\neq0}{\rIE{15,16}}
+  \proofstepwidestar[1,7,8]{a\cdot b\neq0}{\rIE{10,17}}
+  \proofstepwidestar[1,3,7]{a\cdot b\neq0}{\rEE{6,8,18}}
+  \proofstepwidestar[1,2,3,4]{a\cdot b\neq0}{\rEE{5,7,19}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Nichtnullwert der Fakultät]{%
+  n\in\mathbb{N}\vdash n!\neq0%
+}{FactorialNonzero}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbol}{\operatorname{fac}}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{0!\neq0}{0!\neq0}
+    \proofstepwidestar[]{0!=\Succ(0)}{%
+      \FormulaRefAuto{FactorialRecursion}[thm]}
+    \proofstepwidestar[]{\Succ(0)\neq0}{%
+      \FormulaRefAuto{PeanoSuccNonzero}[ax]{\FormulaRefAuto{PeanoZero}[ax]}}
+    \proofstepwidestar[]{0!\neq0}{\rIE{1,2}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    n\in\mathbb{N}\dsep n!\neq0\vdash \Succ(n)!\neq0%
+  }{%
+    n\in\mathbb{N}\dsep n!\neq0\vdash \Succ(n)!\neq0%
+  }
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{n!\neq0}{\rA}
+    \proofstepwidestar[1]{n!\in\mathbb{N}}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+        \FormulaRefAuto{FactorialClosure}[thm],1}}
+    \proofstepwidestar[1]{\Succ(n)\in\mathbb{N}}{%
+      \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}
+    \proofstepwidestar[1]{\Succ(n)\neq0}{%
+      \FormulaRefAuto{PeanoSuccNonzero}[ax]{1}}
+    \proofstepwidestar[1,2]{n!\cdot\Succ(n)\neq0}{%
+      \FormulaRefAuto{PeanoMulNonzero}[thm]{3,4,2,5}}
+    \proofstepwidestar[1]{\Succ(n)!=n!\cdot\Succ(n)}{%
+      \FormulaRefAuto{FactorialRecursion}[thm]{1}}
+    \proofstepwidestar[1,2]{\Succ(n)!\neq0}{\rIE{7,6}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[1]{n!\neq0}{%
+      \FormulaRefAuto{PeanoInductionRule}[ax]{IA,IS,1}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Strikter Fakultätsschritt]{%
+  n\in\mathbb{N}\setminus\{0\}\vdash n!<\Succ(n)!%
+}{FactorialSuccessorStrict}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbol}{\operatorname{fac}}%
+  \DeltaRow{Relationsoperator}{<_{\mathbb N}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}\setminus\{0\}}{\rA}
+  \proofstepwidestar[1]{n\in\mathbb{N}\land n\neq0}{%
+    \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}
+  \proofstepwidestar[1]{n\in\mathbb{N}}{\rAEa{2}}
+  \proofstepwidestar[1]{n\neq0}{\rAEb{2}}
+  \proofstepwidestar[1]{n!\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+      \FormulaRefAuto{FactorialClosure}[thm],3}}
+  \proofstepwidestar[1]{n!\neq0}{%
+    \FormulaRefAuto{FactorialNonzero}[thm]{3}}
+  \proofstepwidestar[1]{n!\cdot n\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoMulClosure}[thm]{5,3}}
+  \proofstepwidestar[1]{n!\cdot n\neq0}{%
+    \FormulaRefAuto{PeanoMulNonzero}[thm]{5,3,6,4}}
+  \proofstepwidestar[1]{\Succ(n)!=n!\cdot\Succ(n)}{%
+    \FormulaRefAuto{FactorialRecursion}[thm]{3}}
+  \proofstepwidestar[1]{n!\cdot\Succ(n)=n!\cdot n+n!}{%
+    \FormulaRefAuto{PeanoMulSuccRight}[thm]{5,3}}
+  \proofstepwidestar[1]{n!\cdot n+n!=n!+n!\cdot n}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{7,5}}
+  \proofstepwidestar[1]{n!+n!\cdot n=\Succ(n)!}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\rChain{9,10,11}}}
+  \proofstepwidestar[1]{\Succ(n)!\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+      \FormulaRefAuto{FactorialClosure}[thm],
+      \FormulaRefAuto{PeanoSuccClosure}[ax]{3}}}
+  \proofstepwidestar[1]{n!<\Succ(n)!}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep
+      k\in\mathbb{N}\dsep m+k=n\dsep k\neq0\vdash m<n}{%
+      5,13,7,12,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Obere Zahl einer strikten Ungleichung ist nicht null]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m<n\vdash n\neq0%
+}{PeanoStrictUpperNonzero}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+  \DeltaRow{Relationsoperator}{<_{\mathbb N}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[3]{m<n}{\rA}
+  \proofstepwidestar[4]{n=0}{\rA}
+  \proofstepwidestar[3,4]{m<0}{\rIE{4,3}}
+  \proofstepwidestar[1]{\neg(m<0)}{%
+    \FormulaRefAuto{PeanoNoLtZero}[thm]{1}}
+  \proofstepwidestar[1,3,4]{\bot}{\rBI{5,6}}
+  \proofstepwidestar[1,3]{n\neq0}{\rCI{4,7}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Transitivität der strikten natürlichen Ordnung]{%
+  a\in\mathbb{N}\dsep b\in\mathbb{N}\dsep c\in\mathbb{N}\dsep
+  a<b\dsep b<c\vdash a<c%
+}{PeanoLtTransitive}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c}%
+  \DeltaRow{Relationsoperator}{<_{\mathbb N}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in\mathbb{N}}{\rA}
+  \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
+  \proofstepwidestar[3]{c\in\mathbb{N}}{\rA}
+  \proofstepwidestar[4]{a<b}{\rA}
+  \proofstepwidestar[5]{b<c}{\rA}
+  \proofstepwidestar[1,2,4]{a\leq b}{%
+    \FormulaRefAuto{PeanoStrictImpliesLeq}[thm]{1,2,4}}
+  \proofstepwidestar[2,3,5]{b\leq c}{%
+    \FormulaRefAuto{PeanoStrictImpliesLeq}[thm]{2,3,5}}
+  \proofstepwidestar[1,2,3,4,5]{a\leq c}{%
+    \FormulaRefAuto{PeanoLeqTransitive}[thm]{1,2,3,6,7}}
+  \proofstepwidestar[1,3,4,5]{a<c\lor a=c}{%
+    \FormulaRefAuto{PeanoLeqSplit}[thm]{1,3,8}}
+  \proofstepwidestar[10]{a<c}{\rA}
+  \proofstepwidestar[11]{a=c}{\rA}
+  \proofstepwidestar[5,11]{b<a}{\rIE{11,5}}
+  \proofstepwidestar[2,1,5,11]{b\leq a}{%
+    \FormulaRefAuto{PeanoStrictImpliesLeq}[thm]{2,1,12}}
+  \proofstepwidestar[1,2,4,5,11]{\bot}{%
+    \FormulaRefAuto{PeanoOrderNoCycle}[thm]{1,2,4,13}}
+  \proofstepwidestar[1,2,4,5,11]{a<c}{\rCE{14}}
+  \proofstepwidestar[1,2,3,4,5]{a<c}{%
+    \rOE{9,10,10,11,15}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gemischte Transitivität der natürlichen Ordnung]{%
+  k,m,n\in\mathbb N\dsep k<m\dsep m\leq n\vdash k<n%
+}{PeanoLtLeqTransitive}{%
+  \DeltaRow{Mengen}{k\dsep m\dsep n}
+  \DeltaRow{Relationsoperatoren}{<_{\mathbb N}\dsep\leq_{\mathbb N}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{k,m,n\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{k<m}{\rA}
+  \proofstepwidestar[3]{m\leq n}{\rA}
+  \proofstepwidestar[1,2]{k<_{\mathbb N}m}{%
+    \FormulaRefAuto{NaturalStrictOrderNotation}[def]{\rAEa{1},\rAEa{\rAEb{1}},2}}
+  \proofstepwidestar[1,2]{k\in m}{%
+    \FormulaRefAuto{NaturalStrictOrderOperator}[def]{\rAEa{1},\rAEa{\rAEb{1}},4}}
+  \proofstepwidestar[1,3]{m\leq_{\mathbb N}n}{%
+    \FormulaRefAuto{NaturalOrderNotation}[def]{\rAEa{\rAEb{1}},\rAEb{\rAEb{1}},3}}
+  \proofstepwidestar[1,3]{m\subseteq n}{%
+    \FormulaRefAuto{NaturalOrderOperator}[def]{\rAEa{\rAEb{1}},\rAEb{\rAEb{1}},6}}
+  \proofstepwidestar[1,2,3]{k\in n}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,5}}
+  \proofstepwidestar[1,2,3]{k<_{\mathbb N}n}{%
+    \FormulaRefAuto{NaturalStrictOrderOperator}[def]{\rAEa{1},\rAEb{\rAEb{1}},8}}
+  \proofstepwidestar[1,2,3]{k<n}{%
+    \FormulaRefAuto{NaturalStrictOrderNotation}[def]{\rAEa{1},\rAEb{\rAEb{1}},9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Vorgänger erhalten strikte Ungleichungen positiver Zahlen]{%
+  r,s\in\mathbb N\dsep r\neq0\dsep r<s
+  \vdash\Pred(r)<\Pred(s)%
+}{PeanoPredStrictMonotonePositive}{%
+  \DeltaRow{Mengen}{r\dsep s\dsep u}
+  \DeltaRow{Relationsoperatoren}{<_{\mathbb N}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{r,s\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{r\neq0}{\rA}
+  \proofstepwidestar[3]{r<s}{\rA}
+  \proofstepwidestar[1,3]{s\neq0}{%
+    \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{\rAEa{1},\rAEb{1},3}}
+  \proofstepwidestarbreak[1,2,3]{\Pred(r),\Pred(s)\in\mathbb N}{%
+    \rAIRepeat{2}{\FormulaRefAuto{PeanoPredNatural}[thm]}{%
+      \rAEa{1},2\mid\rAEb{1},4}}
+  \proofstepwidestar[1,2]{r=\Succ(\Pred(r))}{%
+    \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{\rAEa{1},2}}
+  \proofstepwidestar[1,3]{s=\Succ(\Pred(s))}{%
+    \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{\rAEb{1},4}}
+  \proofstepwidestarbreak[1,3]{%
+    \exists u\in\mathbb N\,(r+\Succ(u)=s)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m<n\leftrightarrow
+      \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}[thm]{\rAEa{1},\rAEb{1},3}}
+  \proofstepwidestar[9]{u\in\mathbb N\land r+\Succ(u)=s}{\rA}
+  \proofstepwidestarbreak[1,2,3,9]{%
+    \Succ(\Pred(r)+\Succ(u))=\Succ(\Pred(s))}{%
+    \rIE{6,7,\rAEb{9},
+      \FormulaRefAuto{PeanoAddSuccLeft}[thm]{%
+        \rAEa{5},\FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{9}}}}}
+  \proofstepwidestarbreak[1,2,3,9]{\Pred(r)+\Succ(u)=\Pred(s)}{%
+    \FormulaRefAuto{PeanoSuccInjective}[ax]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{%
+        \rAEa{5},\FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{9}}},
+      \rAEb{5},10}}
+  \proofstepwidestarbreak[1,2,3,9]{\Pred(r)<\Pred(s)}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m<n\leftrightarrow
+      \exists k\in\mathbb{N}\,(m+\Succ(k)=n)}[thm]{%
+      \rAEa{5},\rAEb{5},\rEI{\rAI{\rAEa{9},11}}}}
+  \proofstepwidestar[1,2,3]{\Pred(r)<\Pred(s)}{\rEE{8,9,12}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Vorgänger einer positiven Zahl vor einem
+Nachfolgerendpunkt]{%
+  s,j\in\mathbb N\dsep s\neq0\dsep s<\Succ(j)
+  \vdash\Pred(s)<j%
+}{PeanoPredBelowSuccessor}{%
+  \DeltaRow{Mengen}{s\dsep j}
+  \DeltaRow{Relationsoperatoren}{<_{\mathbb N}\dsep\leq_{\mathbb N}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{s,j\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{s\neq0}{\rA}
+  \proofstepwidestar[3]{s<\Succ(j)}{\rA}
+  \proofstepwidestar[1,2]{\Pred(s)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoPredNatural}[thm]{\rAEa{1},2}}
+  \proofstepwidestarbreak[1,2]{s=\Succ(\Pred(s))}{%
+    \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{\rAEa{1},2}}
+  \proofstepwidestarbreak[1]{\Pred(s)<\Succ(\Pred(s))}{%
+    \FormulaRefAuto{n\in\mathbb{N}\vdash n<\Succ(n)}[thm]{4}}
+  \proofstepwidestar[1,2]{\Pred(s)<s}{\rIE{5,6}}
+  \proofstepwidestar[1,3]{s\leq j}{%
+    \FormulaRefAuto{PeanoLeqSuccStrict}[thm]{\rAEa{1},\rAEb{1},3}}
+  \proofstepwidestar[1,2,3]{\Pred(s)<j}{%
+    \FormulaRefAuto{PeanoLtLeqTransitive}[thm]{%
+      \rAI{4,\rAI{\rAEa{1},\rAEb{1}}},7,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Strenge Monotonie der positiven Fakultäten]{%
+  m\in\mathbb{N}\setminus\{0\}\dsep
+  n\in\mathbb{N}\setminus\{0\}\dsep m<n
+  \vdash m!<n!%
+}{PositiveFactorialStrict}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+  \DeltaRow{Funktionensymbol}{\operatorname{fac}}%
+  \DeltaRow{Relationsoperator}{<_{\mathbb N}}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    \forall m\in\mathbb{N}\setminus\{0\}\,(m<0\rightarrow m!<0!)%
+  }{%
+    \forall m\in\mathbb{N}\setminus\{0\}\,(m<0\rightarrow m!<0!)%
+  }[PositiveFactorialStrictBase]
+    \proofstepwidestar[1]{m\in\mathbb{N}\setminus\{0\}}{\rA}
+    \proofstepwidestar[2]{m<0}{\rA}
+    \proofstepwidestar[1]{m\in\mathbb{N}}{%
+      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}}
+    \proofstepwidestar[1]{\neg(m<0)}{%
+      \FormulaRefAuto{PeanoNoLtZero}[thm]{3}}
+    \proofstepwidestar[1,2]{m!<0!}{%
+      \FormulaRefAuto{P\dsep\neg P\vdash Q}{2,4}}
+    \proofstepwidestar[1]{m<0\rightarrow m!<0!}{\rRI{2,5}}
+    \proofstepwidestar[]{%
+      \forall m\in\mathbb{N}\setminus\{0\}\,(m<0\rightarrow m!<0!)}{%
+      \rUI{\rRI{1,6}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &n\in\mathbb{N}\dsep
+       \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)
+       \vdash{}\\[-2pt]
+      &\forall m\in\mathbb{N}\setminus\{0\}\,
+        (m<\Succ(n)\rightarrow m!<\Succ(n)!)
+    \end{aligned}%
+  }{%
+    n\in\mathbb{N}\dsep
+    \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)
+    \vdash
+    \forall m\in\mathbb{N}\setminus\{0\}\,
+      (m<\Succ(n)\rightarrow m!<\Succ(n)!)%
+  }[PositiveFactorialStrictStep]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{%
+      \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)}{\rA}
+    \proofstepwidestar[3]{m\in\mathbb{N}\setminus\{0\}}{\rA}
+    \proofstepwidestar[4]{m<\Succ(n)}{\rA}
+    \proofstepwidestar[3]{m\in\mathbb{N}}{%
+      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}}
+    \proofstepwidestar[3]{m!\in\mathbb{N}}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+        \FormulaRefAuto{FactorialClosure}[thm],5}}
+    \proofstepwidestar[1]{n!\in\mathbb{N}}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+        \FormulaRefAuto{FactorialClosure}[thm],1}}
+    \proofstepwidestar[1]{\Succ(n)!\in\mathbb{N}}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+        \FormulaRefAuto{FactorialClosure}[thm],%
+        \FormulaRefAuto{PeanoSuccClosure}[ax]{1}}}
+    \proofstepwidestar[1,3,4]{m<n\lor m=n}{%
+      \FormulaRefAuto{PeanoStrictSuccSplit}[thm]{1,5,4}}
+    \proofstepwidestar[10]{m<n}{\rA}
+    \proofstepwidestar[2,3,10]{m!<n!}{\rRE{10,\rRE{3,\rUE{2}}}}
+    \proofstepwidestar[1,3,10]{n\neq0}{%
+      \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{5,1,10}}
+    \proofstepwidestar[1,3,10]{n\in\mathbb{N}\setminus\{0\}}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{\rAI{1,12}}}
+    \proofstepwidestar[1,3,10]{n!<\Succ(n)!}{%
+      \FormulaRefAuto{FactorialSuccessorStrict}[thm]{13}}
+    \proofstepwidestar[1,2,3,10]{m!<\Succ(n)!}{%
+      \FormulaRefAuto{PeanoLtTransitive}[thm]{6,7,8,11,14}}
+    \proofstepwidestar[16]{m=n}{\rA}
+    \proofstepwidestar[3]{m!<\Succ(m)!}{%
+      \FormulaRefAuto{FactorialSuccessorStrict}[thm]{3}}
+    \proofstepwidestar[3,16]{m!<\Succ(n)!}{\rIE{16,17}}
+    \proofstepwidestar[1,2,3,4]{m!<\Succ(n)!}{%
+      \rOE{9,10,15,16,18}}
+    \proofstepwidestar[1,2,3]{%
+      m<\Succ(n)\rightarrow m!<\Succ(n)!}{\rRI{4,19}}
+    \proofstepwidestar[1,2]{%
+      \forall m\in\mathbb{N}\setminus\{0\}\,
+        (m<\Succ(n)\rightarrow m!<\Succ(n)!)}{\rUI{\rRI{3,20}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{m\in\mathbb{N}\setminus\{0\}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb{N}\setminus\{0\}}{\rA}
+    \proofstepwidestar[3]{m<n}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb{N}}{%
+      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}}
+    \proofstepwidestar[4]{%
+      \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)}{%
+      \FormulaRefAuto{PeanoInductionRule}[ax]{IA,IS,4}}
+    \proofstepwidestar[1,4]{m<n\rightarrow m!<n!}{%
+      \rRE{1,\rUE{5}}}
+    \proofstepwidestar[1,2,3]{m!<n!}{\rRE{6,3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Die uneingeschränkte Fakultätsfunktion ist nicht injektiv, denn
+\(0!=1!=1\), und als Abbildung \(\mathbb N\to\mathbb N\) ist sie auch nicht
+surjektiv. Die mathematisch korrekte Bijektivitätsaussage verwendet deshalb
+die positiven Argumente und als Ziel genau die auftretenden Fakultätswerte.
+
+\FormulaDefDeltaK[Positive Fakultätsfunktion]{%
+  \operatorname{fac}_{+}\coloneqq
+  \operatorname{fac}\upharpoonright(\mathbb{N}\setminus\{0\})
+  \colon
+  \mathbb{N}\setminus\{0\}
+  \to
+  \operatorname{fac}[\mathbb{N}\setminus\{0\}]%
+}{PositiveFactorialFunction}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbole}{\operatorname{fac}\dsep\operatorname{fac}_{+}}%
+}
+
+\FormulaThmDeltaK[Werte der positiven Fakultätsfunktion]{%
+  n\in\mathbb{N}\setminus\{0\}\vdash \operatorname{fac}_{+}(n)=n!%
+}{PositiveFactorialValue}{%
+  \DeltaRow{Mengen}{n}%
+  \DeltaRow{Funktionensymbole}{\operatorname{fac}\dsep\operatorname{fac}_{+}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb{N}\setminus\{0\}}{\rA}
+  \proofstepwidestar[]{\mathbb{N}\setminus\{0\}\subseteq\mathbb{N}}{%
+    \FormulaRefAuto{A\setminus B\subseteq A}[thm]}
+  \proofstepwidestar[1]{%
+    (\operatorname{fac}\upharpoonright(\mathbb{N}\setminus\{0\}))(n)
+    =\operatorname{fac}(n)}{%
+    \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
+      F\restriction_C(x)=F(x)}[thm]{2,1}}
+  \proofstepwidestar[1]{%
+    \operatorname{fac}_{+}(n)
+    =(\operatorname{fac}\upharpoonright(\mathbb{N}\setminus\{0\}))(n)}{%
+    \FormulaRefAuto{PositiveFactorialFunction}[def]}
+  \proofstepwidestar[1]{\operatorname{fac}(n)=n!}{%
+    \FormulaRefAuto{FactorialFunction}[def]{%
+      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}}}
+  \proofstepwidestar[1]{\operatorname{fac}_{+}(n)=n!}{%
+    \rChain{4,3,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Bijektivität der positiven Fakultätsfunktion]{%
+  \operatorname{fac}_{+}
+  \colon
+  \mathbb{N}\setminus\{0\}
+  \bij
+  \operatorname{fac}[\mathbb{N}\setminus\{0\}]%
+}{PositiveFactorialBijective}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+  \DeltaRow{Funktionensymbole}{\operatorname{fac}\dsep\operatorname{fac}_{+}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \operatorname{fac}_{+}\colon
+    \mathbb{N}\setminus\{0\}\to
+    \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
+    \FormulaRefAuto{PositiveFactorialFunction}[def]}
+  \proofstepwidestar[2]{m\in\mathbb{N}\setminus\{0\}}{\rA}
+  \proofstepwidestar[3]{n\in\mathbb{N}\setminus\{0\}}{\rA}
+  \proofstepwidestar[4]{\operatorname{fac}_{+}(m)=\operatorname{fac}_{+}(n)}{\rA}
+  \proofstepwidestar[2]{\operatorname{fac}_{+}(m)=m!}{%
+    \FormulaRefAuto{PositiveFactorialValue}[thm]{2}}
+  \proofstepwidestar[3]{\operatorname{fac}_{+}(n)=n!}{%
+    \FormulaRefAuto{PositiveFactorialValue}[thm]{3}}
+  \proofstepwidestar[2,3,4]{m!=n!}{%
+    \rChain{\FormulaRefAuto{a=b\vdash b=a}{5},4,6}}
+  \proofstepwidestar[2]{m\in\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}}
+  \proofstepwidestar[3]{n\in\mathbb{N}}{%
+    \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}}
+  \proofstepwidestar[2]{m!\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+      \FormulaRefAuto{FactorialClosure}[thm],8}}
+  \proofstepwidestar[3]{n!\in\mathbb{N}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
+      \FormulaRefAuto{FactorialClosure}[thm],9}}
+  \proofstepwidestar[2,3]{m<n\lor n<m\lor m=n}{%
+    \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{8,9}}
+  \proofstepwidestar[13]{m<n}{\rA}
+  \proofstepwidestar[2,3,13]{m!<n!}{%
+    \FormulaRefAuto{PositiveFactorialStrict}[thm]{2,3,13}}
+  \proofstepwidestar[2,3,4,13]{\bot}{%
+    \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{10,11,14,7}}
+  \proofstepwidestar[2,3,4,13]{m=n}{\rCE{15}}
+  \proofstepwidestar[17]{n<m}{\rA}
+  \proofstepwidestar[2,3,17]{n!<m!}{%
+    \FormulaRefAuto{PositiveFactorialStrict}[thm]{3,2,17}}
+  \proofstepwidestar[2,3,4,17]{\bot}{%
+    \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{%
+      11,10,18,\FormulaRefAuto{a=b\vdash b=a}{7}}}
+  \proofstepwidestar[2,3,4,17]{m=n}{\rCE{19}}
+  \proofstepwidestar[21]{m=n}{\rA}
+  \proofstepwidestar[2,3,4]{m=n}{%
+    \FormulaRefAuto{P_1\lor P_2\lor P_3\dsep
+      [P_1]\vdots R\dsep[P_2]\vdots R\dsep[P_3]\vdots R\vdash R}{%
+      12,13,16,17,20,21,21}}
+  \proofstepwidestar[]{%
+    \operatorname{fac}_{+}\colon
+    \mathbb{N}\setminus\{0\}\inj
+    \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{%
+      1,\rUI{\rRI{2,\rUI{\rRI{3,\rRI{4,22}}}}}}}
+  \proofstepwidestar[24]{%
+    y\in\operatorname{fac}[\mathbb{N}\setminus\{0\}]}{\rA}
+  \proofstepwidestar[24]{%
+    \exists x\in\mathbb{N}\setminus\{0\}\,
+      y=\operatorname{fac}(x)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}{\FormulaRefAuto{FactorialClosure}[thm],24}}
+  \proofstepwidestar[26]{%
+    x\in\mathbb{N}\setminus\{0\}\land y=\operatorname{fac}(x)}{\rA}
+  \proofstepwidestar[26]{x\in\mathbb{N}\setminus\{0\}}{\rAEa{26}}
+  \proofstepwidestar[26]{y=\operatorname{fac}(x)}{\rAEb{26}}
+  \proofstepwidestar[26]{\operatorname{fac}_{+}(x)=x!}{%
+    \FormulaRefAuto{PositiveFactorialValue}[thm]{27}}
+  \proofstepwidestar[26]{\operatorname{fac}(x)=x!}{%
+    \FormulaRefAuto{FactorialFunction}[def]{%
+      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{27}}}}
+  \proofstepwidestar[26]{y=\operatorname{fac}_{+}(x)}{%
+    \rChain{28,30,\FormulaRefAuto{a=b\vdash b=a}{29}}}
+  \proofstepwidestar[26]{%
+    \exists x\in\mathbb{N}\setminus\{0\}\,
+      y=\operatorname{fac}_{+}(x)}{\rEI{\rAI{27,31}}}
+  \proofstepwidestar[24]{%
+    \exists x\in\mathbb{N}\setminus\{0\}\,
+      y=\operatorname{fac}_{+}(x)}{\rEE{25,26,32}}
+  \proofstepwidestar[]{%
+    \operatorname{fac}_{+}\colon
+    \mathbb{N}\setminus\{0\}\sur
+    \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{%
+      1,\rUI{\rRI{24,33}}}}
+  \proofstepwidestar[]{%
+    \operatorname{fac}_{+}\colon
+    \mathbb{N}\setminus\{0\}\bij
+    \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+      \vdash F\colon A\bij B}[thm]{23,34}}
 \end{tabproofwide}
 
 \chapter{\(b\)-adische Stellenwertsysteme für natürliche Zahlen}
@@ -13937,6 +14723,109 @@ bezeichnet den Nachfolger des vorherigen.
   \proofstep{}{0\neq2}{%
     \rIE{4,2}}
 \end{tabproof}
+
+Die Zweierpotenzfunktion kann erst an dieser Stelle typisiert werden, weil
+das Zahlzeichen \(2\) nun als natürliche Zahl registriert ist.
+
+\FormulaDefDeltaK[Zweierpotenzfunktion]{%
+  \operatorname{pow}_2\colon\mathbb N\to\mathbb N,
+  \qquad
+  \forall n\in\mathbb N\,
+    \bigl(\operatorname{pow}_2(n)=2^n\bigr)%
+}{PeanoPowerTwoFunction}{%
+  \DeltaRow{Mengen}{n}
+  \DeltaRow{Funktionensymbol}{\operatorname{pow}_2}
+}
+
+\FormulaThmDeltaK[Strenge Monotonie und Injektivität der Zweierpotenzfunktion]{%
+  \begin{aligned}[t]
+    &m,n\in\mathbb N\dsep m<n
+      \vdash \operatorname{pow}_2(m)<\operatorname{pow}_2(n),\\[-2pt]
+    &\operatorname{pow}_2\colon\mathbb N\inj\mathbb N
+  \end{aligned}%
+}{PeanoPowerTwoStrictMonotoneInjective}{%
+  \DeltaRow{Mengen}{j\dsep k\dsep m\dsep n\dsep r}
+  \DeltaRow{Funktionensymbol}{\operatorname{pow}_2}
+  \DeltaRow{Relationsoperator}{<_{\mathbb N}}
+}
+\begin{proof}
+Wir zeigen zunächst durch natürliche Induktion
+\[
+  \forall n\in\mathbb N\,
+  \bigl(\operatorname{pow}_2(n)\neq0\bigr).
+\]
+Im Nullfall gilt nach \FormulaRefAuto{PeanoTwoInN}[thm],
+\FormulaRefAuto{PeanoPowerTwoFunction}[def] und
+\FormulaRefAuto{PeanoPowerZero}[thm]
+\(\operatorname{pow}_2(0)=2^0=\Succ(0)\). Ferner ist
+\(\Succ(0)\neq0\) nach \FormulaRefAuto{PeanoZero}[ax] und
+\FormulaRefAuto{PeanoSuccNonzero}[ax].
+Sei nun \(n\in\mathbb N\) und
+\(\operatorname{pow}_2(n)\neq0\). Aus
+\FormulaRefAuto{PeanoPowerClosure}[thm],
+\FormulaRefAuto{PeanoTwoInN}[thm] und
+\FormulaRefAuto{PeanoZeroNeTwo}[thm] folgen
+\(\operatorname{pow}_2(n)\in\mathbb N\), \(2\in\mathbb N\) und wegen
+\FormulaRefAuto{a\neq b\vdash b\neq a}[thm] auch \(2\neq0\). Daher liefert
+\FormulaRefAuto{PeanoMulNonzero}[thm]
+zusammen mit \FormulaRefAuto{PeanoPowerSucc}[thm]
+\[
+  \operatorname{pow}_2(\Succ(n))
+  =2^{\Succ(n)}=2^n\cdot2\neq0.
+\]
+
+Für jedes \(n\in\mathbb N\) ist der Nachfolgerschritt strikt. Tatsächlich
+ergeben die Definition des Zahlzeichens \(2\),
+\FormulaRefAuto{PeanoMulSuccRight}[thm] und
+\FormulaRefAuto{PeanoMulRightOne}[thm]
+\[
+  \operatorname{pow}_2(\Succ(n))
+  =2^n\cdot2
+  =2^n\cdot\Succ(1)
+  =2^n\cdot1+2^n
+  =\operatorname{pow}_2(n)+\operatorname{pow}_2(n).
+\]
+Der zweite Summand ist natürlich und nach dem ersten Absatz nicht null.
+Nach \FormulaRefAuto{PeanoNonzeroIsSucc}[thm] gibt es daher ein
+\(j\in\mathbb N\) mit
+\(\operatorname{pow}_2(n)=\Succ(j)\). Die additive Charakterisierung der
+strikten natürlichen Ordnung
+\FormulaRefAuto{NaturalStrictOrderAdditiveCharacterization}[thm] liefert nun
+\[
+  \operatorname{pow}_2(n)
+  <\operatorname{pow}_2(n)+\operatorname{pow}_2(n)
+  =\operatorname{pow}_2(\Succ(n)).
+\]
+
+Nun wird über \(r\) die Aussage
+\[
+  \forall m\in\mathbb N\,
+  \bigl(m<r\rightarrow
+    \operatorname{pow}_2(m)<\operatorname{pow}_2(r)\bigr)
+\]
+bewiesen. Für \(r=0\) ist sie nach
+\FormulaRefAuto{PeanoNoLtZero}[thm] leer erfüllt. Im
+Nachfolgerschritt zerlegt
+\FormulaRefAuto{PeanoStrictSuccSplit}[thm] die Voraussetzung
+\(m<\Succ(r)\) in \(m<r\) oder \(m=r\). Im ersten Fall folgen aus der
+Induktionsannahme, dem soeben bewiesenen strikten Nachfolgerschritt und
+\FormulaRefAuto{PeanoLtTransitive}[thm]
+\[
+  \operatorname{pow}_2(m)<\operatorname{pow}_2(r)
+  <\operatorname{pow}_2(\Succ(r));
+\]
+im zweiten Fall ist genau der strikte Nachfolgerschritt anzuwenden. Der
+Induktionsschluss ist die erste Behauptung des Satzes.
+
+Schließlich impliziert diese Behauptung für \(k<n\) die Ungleichheit
+\(\operatorname{pow}_2(k)\neq\operatorname{pow}_2(n)\); andernfalls
+widerspräche die Gleichheit
+\FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]. Zusammen mit der
+Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
+\(\operatorname{pow}_2\) damit die Voraussetzung von
+\FormulaRefAuto{B04PeanoStrictSeparationInjection}[thm]. Also gilt
+\(\operatorname{pow}_2\colon\mathbb N\inj\mathbb N\).
+\end{proof}
 
 \FormulaThmDeltaK[Null und drei sind verschieden]{%
   0\neq3%

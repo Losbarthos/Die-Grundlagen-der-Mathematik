@@ -964,6 +964,114 @@ Schlussregeln des natürlichen Schließens) bleibt unverändert, wir
 führen lediglich neue Schreibweisen ein, die durch bereits
 vorhandene Ausdrücke erklärt werden.
 
+\subsection{Früh verwendete metasprachliche Quantornotation}
+
+Die folgenden Abkürzungen werden bereits in den Definitionen dieses
+Abschnitts benötigt. Wir ziehen sie deshalb an diese Stelle vor; ihre
+metasprachliche Rolle wird im Abschnitt \enquote{Metanotation und
+Metaregeln} systematisch eingeordnet.
+
+\begin{definition}[Beschränkte Quantoren und kommagetrennte Variablen]
+\label{def:bounded-quantifier-list-meta}
+Sei \(P(x)\) eine Formel, \(A\) ein Träger und \(y\) eine für die
+jeweilige Formel frische Variable. Zunächst vereinbaren wir die
+Grundabkürzungen
+\[
+  \begin{aligned}
+    \forall x\in A\,P(x)
+      &\quad\coloneqq\quad
+        \forall x\,\bigl(x\in A\rightarrow P(x)\bigr),\\
+    \exists x\in A\,P(x)
+      &\quad\coloneqq\quad
+        \exists x\,\bigl(x\in A\land P(x)\bigr),\\
+    \exists!x\,P(x)
+      &\quad\coloneqq\quad
+        \exists x\,\Bigl(P(x)\land
+          \forall y\,\bigl(P(y)\rightarrow y=x\bigr)\Bigr),\\
+    \exists!x\in A\,P(x)
+      &\quad\coloneqq\quad
+        \exists x\,\Bigl(x\in A\land P(x)\land
+          \forall y\,\bigl((y\in A\land P(y))\rightarrow y=x\bigr)\Bigr).
+  \end{aligned}
+\]
+Die letzte Zeile fordert also sowohl die Existenz eines Elements von
+\(A\) mit der Eigenschaft \(P\) als auch dessen Eindeutigkeit
+\emph{innerhalb von \(A\)}. Sie ist äquivalent zu
+\(\exists!x\,(x\in A\land P(x))\), sofern \(\exists!\) gemäß der
+vorhergehenden Zeile expandiert wird.
+
+Seien nun \(x_1,\ldots,x_n\) paarweise verschiedene Variablen und
+\(n\geq 1\). Für \(Q\in\{\forall,\exists\}\) setzen wir
+\[
+  Q\,x_1,\ldots,x_n\,P
+  \quad\coloneqq\quad
+  Q\,x_1\,Q\,x_2\cdots Q\,x_n\,P
+\]
+und, wenn alle Variablen denselben Träger haben,
+\[
+  Q\,x_1,\ldots,x_n\in A\,P
+  \quad\coloneqq\quad
+  Q\,x_1\in A\,Q\,x_2\in A\cdots Q\,x_n\in A\,P.
+\]
+Insbesondere bedeutet
+\[
+  \exists x_1,\ldots,x_n\in A\,P
+  \quad\text{genau}\quad
+  \exists x_1\in A\,\exists x_2\in A\cdots
+  \exists x_n\in A\,P.
+\]
+Entsprechend kürzen wir mehrere gleichartige Trägerannahmen durch
+\[
+  x_1,\ldots,x_n\in A
+  \quad\coloneqq\quad
+  x_1\in A\land\bigl(x_2,\ldots,x_n\in A\bigr)
+  \qquad(n\geq 2)
+\]
+ab; für \(n=1\) steht die Schreibweise lediglich für \(x_1\in A\).
+Da die rechte Seite jeweils eine um ein Glied kürzere Liste enthält,
+ist dies eine wohlfundierte rekursive Definition und legt die
+Konjunktion ausdrücklich rechtsassoziiert fest. Die Reihenfolge der
+Quantoren bleibt dabei erhalten; die Kommaschreibweise behauptet
+insbesondere keine Vertauschungsregel.
+Die Kommalistenregel gilt bewusst nur für \(\forall\) und \(\exists\):
+Eine Schreibweise \(\exists!x_1,\ldots,x_n\,P\) wird nicht als
+Verschachtelung gelesen. Eindeutige Mehrfachobjekte formulieren wir
+stattdessen als ein eindeutig bestimmtes Tupel.
+\end{definition}
+
+\begin{definition}[Mehrzeiliges System von Bedingungen]
+\label{def:conjunctive-system-meta}
+Eine unter einer linken geschweiften Klammer mehrzeilig notierte Liste von
+Formeln lesen wir konjunktiv:
+\[
+  \left\{
+  \begin{aligned}
+    P_1,\\
+    P_2,\\[-2pt]
+    &\ \vdots\\[-2pt]
+    P_m
+  \end{aligned}
+  \right.
+  \quad\coloneqq\quad
+  \operatorname{Konj}(P_1,\ldots,P_m),
+\]
+wobei die metasprachliche Abkürzung \(\operatorname{Konj}\) rekursiv
+durch
+\[
+  \operatorname{Konj}(P_1)\coloneqq P_1,
+  \qquad
+  \operatorname{Konj}(P_1,\ldots,P_m)
+  \coloneqq
+  P_1\land\operatorname{Konj}(P_2,\ldots,P_m)
+  \quad(m\geq 2)
+\]
+festgelegt ist. Das System ist somit ausdrücklich rechtsassoziiert.
+Die Zeilenumbrüche und die abschließenden Kommas gehören nur zur
+Darstellung. In Beweisen werden die üblichen Regeln
+\(\land I\) und \(\land E\) auf die zugrunde liegende Konjunktion
+angewandt.
+\end{definition}
+
 \subsection{Explizite Definitionen}
 
 \begin{definition}[Explizite Definition]
@@ -1324,6 +1432,137 @@ durch das schematische \(\vdash\) mitabgedeckt.
   \end{tabularx}
 \end{center}
 
+\subsection{Kurznotation für iterierte Gleichheitselimination}
+
+\begin{definition}[Iterierte Gleichheitselimination in Beweistabellen]
+\label{def:iterated-equality-elimination-meta}
+Seien \(k\geq 1\), und seien in einer Beweistabelle Gleichheiten
+\(E_1,\ldots,E_k\) durch die Verweise
+\(i_1,\ldots,i_k\) sowie eine Ausgangsformel \(F_0\) durch den
+Verweis \(j\) gegeben. Gibt es Formeln \(F_1,\ldots,F_k\), sodass
+für jedes \(r\in\{1,\ldots,k\}\) die Formel \(F_r\) aus \(E_r\) und
+\(F_{r-1}\) durch eine gewöhnliche Anwendung von \(=E\) folgt, so
+dürfen wir die ausgelassenen Zwischenzeilen durch
+\[
+  \rIE{i_1,\ldots,i_k,j}
+\]
+abkürzen. Das letzte Argument bezeichnet also stets die
+Ausgangsformel; die davorstehenden Argumente bezeichnen in ihrer
+Anwendungsreihenfolge die verwendeten Gleichheiten. Für \(k=1\)
+erhalten wir die elementare Schreibweise \(\rIE{i_1,j}\).
+
+Beispielsweise steht
+\[
+  \rIE{i_1,i_2,j}
+\]
+bei den ersten drei Zeilen der folgenden Tabelle kurz für die beiden
+anschließend ausgeschriebenen Schritte:
+\[
+  \begin{array}{llll}
+    I_{i_1} & (i_1) & s=t     & \cdots \\
+    I_{i_2} & (i_2) & u=v     & \cdots \\
+    I_j     & (j)   & P(s,u)  & \cdots \\
+    I_{i_1}\cup I_j
+            & (m_1) & P(t,u)  & \rIE{i_1,j} \\
+    I_{i_1}\cup I_{i_2}\cup I_j
+            & (m_2) & P(t,v)  & \rIE{i_2,m_1}.
+  \end{array}
+\]
+
+Sind \(I_{i_1},\ldots,I_{i_k}\) und \(I_j\) die
+Abhängigkeitsmengen der zitierten Zeilen, so trägt die Schlusszeile
+genau die Abhängigkeitsmenge
+\[
+  I_j\cup I_{i_1}\cup\dots\cup I_{i_k}.
+\]
+Insbesondere darf die Kurznotation keine zusätzliche, nicht durch
+einen ihrer Verweise belegte Abhängigkeit erhalten. Wird eine
+Gleichheit entgegen ihrer notierten Richtung benötigt, ist in der
+vollständigen Herleitung zuvor ihre aus \(=I\) und \(=E\) ableitbare
+symmetrische Form einzusetzen.
+\end{definition}
+
+\begin{remark}
+Die Schreibweise mit mehr als zwei Argumenten ist keine neue
+elementare Schlussregel und auch keine gleichzeitige Ersetzung. Sie
+ist ausschließlich eine Abkürzung für eine endliche Folge einzeln
+prüfbarer Anwendungen der bereits definierten Regel \(=E\). Sie ist
+nur zulässig, wenn alle ausgelassenen Zwischenformeln tatsächlich
+gebildet werden können.
+\end{remark}
+
+\subsection{Kurznotation für iterierte Konjunktionseinführung}
+
+\begin{definition}[Iterierte Konjunktionseinführung und Wiederholung]
+\label{rule:AIStar}
+Seien \(n\geq1\) und \(P_1,\ldots,P_n\) Formeln. Sind die Formeln
+\(P_i\) in einer Beweistabelle durch die Ableitungen
+\(\rho_i\) begründet, so schreiben wir
+\[
+  \rAIStar{\rho_1,\ldots,\rho_n}
+\]
+als Kurznotation für die rechtsassoziierte Bildung von
+\(\operatorname{Konj}(P_1,\ldots,P_n)\) durch endlich viele Anwendungen
+von \(\land I\). Für \(n=1\) bezeichnet die Schreibweise lediglich die
+bereits vorliegende Ableitung von \(P_1\); für \(n\geq2\) werden genau
+\(n-1\) Anwendungen von \(\land I\) ausgelassen.
+
+Wird dasselbe Ableitungsschema \(\rho\) für sämtliche Zielkonjunkte
+verwendet, schreiben wir dafür
+\[
+  \rAIRepeat{n}{\rho}{\sigma_1\mid\cdots\mid\sigma_n}.
+\]
+Hier bezeichnet \(\sigma_i\) die vollständige Quellenangabe für die
+\(i\)-te Instanz; sie kann selbst verschachtelte Regel- und
+Formelverweise enthalten. Benötigen alle Instanzen dieselbe
+Quellenangabe \(\sigma\), darf die Liste durch ein einziges
+\(\sigma\) ersetzt werden. Die Zielkonjunkte \(P_1,\ldots,P_n\) legen
+von links nach rechts die jeweilige Instanz beziehungsweise Substitution
+des Schemas fest.
+
+Die Wiederholungsnotation ist nur zulässig, wenn jede Instanz aus den
+in ihrer Quellenangabe zitierten, vorangehenden Zeilen ableitbar ist.
+Die Abhängigkeitsmenge der Schlusszeile ist die Vereinigung der
+Abhängigkeitsmengen sämtlicher zitierter Zeilen. Bereits verwendete
+Zeilen dürfen erneut herangezogen werden; dadurch entsteht keine neue
+Annahme. Soll eine bereits gewonnene Zeile lediglich mehrfach als
+Konjunkt verwendet werden, setzen wir \(\rho=\operatorname{id}\) und
+schreiben dafür noch kürzer
+\[
+  \rAIReuse{n}{\sigma}.
+\]
+Dies bezeichnet die metasprachliche Wiederaufnahme der durch
+\(\sigma\) zitierten Zeile und keine zusätzliche elementare
+Schlussregel.
+\end{definition}
+
+\begin{remark}[Ableitbarkeit der Kurznotation]
+Die Kurznotation führt keine neue Schlussregel ein. Ihre vollständige
+Herleitung ergibt sich induktiv aus der binären Regel \(\land I\):
+\[
+\begin{array}{c@{\qquad}c@{\qquad}l}
+  \text{Fall} & \text{Ziel} & \text{Ableitung} \\
+  \hline
+  n=1
+    & \operatorname{Konj}(P_1)=P_1
+    & P_1,\\[2pt]
+  n\mapsto n+1
+    & \operatorname{Konj}(P_1,\ldots,P_{n+1})
+    & \displaystyle
+      \frac{P_1\qquad
+        \operatorname{Konj}(P_2,\ldots,P_{n+1})}
+        {P_1\land\operatorname{Konj}(P_2,\ldots,P_{n+1})}\;\land I.
+\end{array}
+\]
+In der zweiten Tabellenzeile liefert die Induktionsannahme den rechten
+Prämissenausdruck. Nach der rekursiven Definition von
+\(\operatorname{Konj}\) ist die Konklusion genau das angegebene Ziel.
+Damit expandieren \(\rAIStar{\rho_1,\ldots,\rho_n}\),
+\(\rAIRepeat{n}{\rho}{\sigma_1\mid\cdots\mid\sigma_n}\) und die
+Spezialform \(\rAIReuse{n}{\sigma}\) stets zu einer endlichen Folge
+elementarer, einzeln prüfbarer Schritte.
+\end{remark}
+
 \subsection{Weitere (abgeleitete) Schlussregeln}
 
 Neben den elementaren Regeln aus dem letzten Abschnitt verwenden wir
@@ -1354,15 +1593,19 @@ $\lxor$
 $\exists!$
   & \label{rule:UEI}Einführung
   & \[
-      \exists x\,P(x),\;
-      [P(a),P(b)]\vdots a = b
-      \;\vdash_{\exists! I}\; \exists! x\,P(x)
+      \begin{aligned}
+        &\exists x\,P(x),\;
+          [P(a),P(b)]\vdots a=b,\\[-2pt]
+        &\hspace{18mm}\vdash_{\exists! I}\;\exists!x\,P(x)
+      \end{aligned}
     \] \\[0.8ex]
   & \label{rule:UEE}Eliminierung
   & \[
-      \exists! x\,P(x),\;
-      [P(a),\forall y\,(P(y)\rightarrow a=y)]\vdots Q\mid_a
-      \;\vdash_{\exists! E}\; Q
+      \begin{aligned}
+        &\exists!x\,P(x),\\[-2pt]
+        &[P(a),\forall y\,(P(y)\rightarrow a=y)]\vdots Q\mid_a,\\[-2pt]
+        &\hspace{18mm}\vdash_{\exists! E}\;Q
+      \end{aligned}
     \] \\[0.8ex]
 $\exists$
   & \label{rule:EIStar}Gebündelte Einführung

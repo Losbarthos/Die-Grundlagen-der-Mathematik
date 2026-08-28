@@ -41,11 +41,16 @@ identifiziert, deren Kreuzsummen übereinstimmen. Die allgemeine Theorie der
 Äquivalenzrelationen und Quotienten aus Band~11 liefert anschließend die
 Menge der ganzen Zahlen.
 
-Nach der Konstruktion werden Nachfolger, Vorgänger und die zweiseitige
-Induktion zunächst im Quotientenmodell bewiesen. Erst danach werden diese
-Eigenschaften als erweiterte Peano-Axiome registriert. Addition,
-Multiplikation und Negation werden stets erst nach einem Beweis ihrer
-Repräsentantenunabhängigkeit eingeführt.
+Nach der Konstruktion werden Nachfolger, Vorgänger, Ordnung und die
+zweiseitige Induktion zunächst vollständig im Quotientenmodell bewiesen.
+Die dabei schrittweise gewonnenen Gesetze bilden noch keinen
+Abstraktionsschnitt: Bis zum abschließenden Modellnachweis dürfen Klassen und
+Repräsentanten weiterhin verwendet werden, jedoch ausschließlich zur
+Herleitung der späteren Axiome. Erst im letzten Kapitel wird die Konstruktion
+verlassen. Von dort an beschreibt allein die vollständige Axiomatik die
+ganzen Zahlen; Addition, Multiplikation, Negation, Ordnung, Nachfolger und
+Vorgänger werden dann ohne Rückgriff auf Differenzenpaare oder Klassen
+verwendet.
 
 \chapter{Konstruktion der ganzen Zahlen}
 
@@ -58,6 +63,15 @@ Repräsentantenunabhängigkeit eingeführt.
   \DeltaRow{Neue Symbole}{D_{\mathbb Z}}%
 }
 
+Metasprachlich soll ein Paar \((a,b)\) die formale Differenz \(a-b\)
+darstellen. Diese Lesart kann hier noch nicht als Definition verwendet
+werden, denn eine Subtraktion mit Werten in \(\mathbb N\) steht für
+\(a<b\) nicht zur Verfügung. Die anschauliche Gleichheit
+\(a-b=c-d\) lässt sich jedoch ohne Subtraktion als
+\(a+d=b+c\) schreiben. Die folgende Relation verwendet deshalb nur die
+bereits definierte Addition natürlicher Zahlen und identifiziert genau die
+Paare, die dieselbe formale Differenz beschreiben sollen.
+
 \FormulaDefDeltaK[Äquivalenz von Differenzenpaaren]{%
   a,b,c,d\in\mathbb{N}\vdash
   (a,b)\IntPairRel(c,d)\coloneqq a+d=b+c%
@@ -67,22 +81,6 @@ Repräsentantenunabhängigkeit eingeführt.
   \DeltaRow{Trägermenge}{D_{\mathbb Z}}%
   \DeltaRow{Neue Symbole}{\IntPairRel}%
 }
-
-\FormulaThmDeltaK[Charakterisierung des Äquivalenzoperators auf Differenzenpaaren]{%
-  a,b,c,d\in\mathbb{N}\vdash
-  (a,b)\IntPairRel(c,d)
-  \leftrightarrow
-  a+d=b+c%
-}{IntRelationChar}{%
-  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}%
-  \DeltaRow{Relationsoperatoren}{\IntPairRel}%
-}
-\begin{tabproof}
-  \proofstep{1}{a,b,c,d\in\mathbb{N}}{\rA}
-  \proofstep{1}{%
-    (a,b)\IntPairRel(c,d)\leftrightarrow a+d=b+c}{%
-    \FormulaRefAuto{IntPairRelDef}[def]{1}}
-\end{tabproof}
 
 \FormulaThmDeltaK[Reflexivität auf Differenzenpaaren]{%
   a,b\in\mathbb{N}\vdash
@@ -95,7 +93,7 @@ Repräsentantenunabhängigkeit eingeführt.
   \proofstep{1}{a,b\in\mathbb{N}}{\rA}
   \proofstep{1}{a+b=b+a}{\FormulaRefAuto{PeanoAddCommutative}{1}}
   \proofstep{1}{(a,b)\IntPairRel(a,b)}{%
-    \FormulaRefAuto{IntRelationChar}{1,2}}
+    \FormulaRefAuto{IntPairRelDef}[def]{1,2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Symmetrie auf Differenzenpaaren]{%
@@ -110,17 +108,17 @@ Repräsentantenunabhängigkeit eingeführt.
   \proofstepwidestar[1]{a,b,c,d\in\mathbb{N}}{\rA}
   \proofstepwidestar[2]{(a,b)\IntPairRel(c,d)}{\rA}
   \proofstepwide[1,2]{a+d}{=}{b+c}{%
-    \FormulaRefAuto{IntRelationChar}{1,2}}
+    \FormulaRefAuto{IntPairRelDef}[def]{1,2}}
   \proofstepwide[1,2]{c+b}{=}{b+c}{%
     \FormulaRefAuto{PeanoAddCommutative}{1}}
-  \proofstepwide[1,2]{b+c}{=}{a+d}{%
+  \proofstepwide[1,2]{}{=}{a+d}{%
     \FormulaRefAuto{a=b\vdash b=a}{3}}
-  \proofstepwide[1,2]{a+d}{=}{d+a}{%
+  \proofstepwide[1,2]{}{=}{d+a}{%
     \FormulaRefAuto{PeanoAddCommutative}{1}}
   \proofstepwide[1,2]{c+b}{=}{d+a}{%
-    \rIE{4,5,6}}
+    \rChain{4,5,6}}
   \proofstepwidestar[1,2]{(c,d)\IntPairRel(a,b)}{%
-    \FormulaRefAuto{IntRelationChar}{1,7}}
+    \FormulaRefAuto{IntPairRelDef}[def]{1,7}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Transitivität auf Differenzenpaaren]{%
@@ -149,13 +147,16 @@ Repräsentantenunabhängigkeit eingeführt.
     \proofstepwidestar[1]{a,b,c,d,e,f\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{a+d=b+c}{\rA}
     \proofstepwidestar[3]{c+f=d+e}{\rA}
-    \proofstepwide[1,2,3]{(a+d)+(c+f)}{=}{(b+c)+(d+e)}{\rIE{2,3}}
-    \proofstepwide[1]{(a+d)+(c+f)}{=}{(a+f)+(c+d)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
-    \proofstepwide[1]{(b+c)+(d+e)}{=}{(b+e)+(c+d)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
-    \proofstepwide[1,2,3]{(a+f)+(c+d)}{=}{(b+e)+(c+d)}{%
-      \rIE{4,5,6}}
+    \proofstepwidestar[1,3]{f+c=e+d}{%
+      \rChain{%
+        \FormulaRefAuto{PeanoAddCommutative}{1},3,%
+        \FormulaRefAuto{PeanoAddCommutative}{1}}}
+    \proofstepwidestar[1]{d+c=c+d}{%
+      \FormulaRefAuto{PeanoAddCommutative}{1}}
+    \proofstepwidestar[1,2,3]{%
+      (a+f)+(c+d)=(b+e)+(c+d)}{%
+      \rIE{%
+        \FormulaRefAuto{PeanoSumEqualitiesAddition}{1,2,4},5}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Kürzen der gemeinsamen Summe]{%
@@ -181,14 +182,16 @@ Repräsentantenunabhängigkeit eingeführt.
     \proofstepwidestar[1]{a,b,c,d,e,f\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{(a,b)\IntPairRel(c,d)}{\rA}
     \proofstepwidestar[3]{(c,d)\IntPairRel(e,f)}{\rA}
-    \proofstepwidestar[1,2]{a+d=b+c}{\FormulaRefAuto{IntRelationChar}{1,2}}
-    \proofstepwidestar[1,3]{c+f=d+e}{\FormulaRefAuto{IntRelationChar}{1,3}}
+    \proofstepwidestar[1,2]{a+d=b+c}{%
+      \FormulaRefAuto{IntPairRelDef}[def]{1,2}}
+    \proofstepwidestar[1,3]{c+f=d+e}{%
+      \FormulaRefAuto{IntPairRelDef}[def]{1,3}}
     \proofstepwidestar[1,2,3]{(a+f)+(c+d)=(b+e)+(c+d)}{%
       \FormulaRefAuto{IntRelationTransitiveRearrangement}{1,4,5}}
     \proofstepwidestar[1,2,3]{a+f=b+e}{%
       \FormulaRefAuto{IntRelationTransitiveCancellation}{1,6}}
     \proofstepwidestar[1,2,3]{(a,b)\IntPairRel(e,f)}{%
-      \FormulaRefAuto{IntRelationChar}{1,7}}
+      \FormulaRefAuto{IntPairRelDef}[def]{1,7}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -318,39 +321,39 @@ Repräsentantenunabhängigkeit eingeführt.
     \IntClass{a}{b}=\IntClass{c}{d}
     \leftrightarrow (a,b)\IntPairRel(c,d)
   }[IntegerClassEqualityViaRelation]
-    \proofstepwidestar[1]{a,b,c,d\in\mathbb{N}}{\rA}
-    \proofstepwidestar[]{\EqRel{D_{\mathbb Z},\IntPairRel}}{%
+    \proofstepwidestarbreakkeep[1]{a,b,c,d\in\mathbb{N}}{\rA}
+    \proofstepwidestarbreakkeep[]{\EqRel{D_{\mathbb Z},\IntPairRel}}{%
       \FormulaRefAuto{IntegerPairEquivalence}}
-    \proofstepwidestar[1]{(a,b)\in D_{\mathbb Z}}{%
+    \proofstepwidestarbreakkeep[1]{(a,b)\in D_{\mathbb Z}}{%
       \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
-    \proofstepwidestar[1]{(c,d)\in D_{\mathbb Z}}{%
+    \proofstepwidestarbreakkeep[1]{(c,d)\in D_{\mathbb Z}}{%
       \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{1}}
-    \proofstepwidestar[1]{%
+    \proofstepwidestarbreakkeep[1]{%
       \EqClass{(a,b)}{\IntPairRel}{D_{\mathbb Z}}
       =\EqClass{(c,d)}{\IntPairRel}{D_{\mathbb Z}}
       \leftrightarrow (a,b)\IntPairRel(c,d)}{%
       \FormulaRefAuto{EqClassEqualIffRel}{2,3,4}}
-    \proofstepwidestar[1]{\IntClass{a}{b}=
+    \proofstepwidestarbreakkeep[1]{\IntClass{a}{b}=
       \EqClass{(a,b)}{\IntPairRel}{D_{\mathbb Z}}}{%
       \FormulaRefAuto{IntegerClassDef}{1}}
-    \proofstepwidestar[1]{\IntClass{c}{d}=
+    \proofstepwidestarbreakkeep[1]{\IntClass{c}{d}=
       \EqClass{(c,d)}{\IntPairRel}{D_{\mathbb Z}}}{%
       \FormulaRefAuto{IntegerClassDef}{1}}
-    \proofstepwidestar[1]{%
+    \proofstepwidestarbreakkeep[1]{%
       \IntClass{a}{b}=\IntClass{c}{d}
       \leftrightarrow (a,b)\IntPairRel(c,d)}{\rIE{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[1]{a,b,c,d\in\mathbb{N}}{\rA}
-    \proofstepwidestar[1]{%
+    \proofstepwidestarbreakkeep[1]{a,b,c,d\in\mathbb{N}}{\rA}
+    \proofstepwidestarbreakkeep[1]{%
       \IntClass{a}{b}=\IntClass{c}{d}
       \leftrightarrow (a,b)\IntPairRel(c,d)}{%
       \FormulaRefAuto{IntegerClassEqualityViaRelation}{1}}
-    \proofstepwidestar[1]{%
+    \proofstepwidestarbreakkeep[1]{%
       (a,b)\IntPairRel(c,d)\leftrightarrow a+d=b+c}{%
-      \FormulaRefAuto{IntRelationChar}{1}}
-    \proofstepwidestar[1]{%
+      \FormulaRefAuto{IntPairRelDef}[def]{1}}
+    \proofstepwidestarbreakkeep[1]{%
       \IntClass{a}{b}=\IntClass{c}{d}
       \leftrightarrow a+d=b+c}{%
       \FormulaRefAuto{P\leftrightarrow Q\dsep
@@ -360,7 +363,7 @@ Repräsentantenunabhängigkeit eingeführt.
 
 \FormulaThmDeltaK[Jede ganze Zahl besitzt ein Differenzenpaar]{%
   z\in\mathbb Z\vdash
-  \exists a\in\mathbb N\,\exists b\in\mathbb N\,
+  \exists a,b\in\mathbb N\,
   z=\IntClass{a}{b}%
 }{IntegerPairRepresentative}{%
   \DeltaRow{Mengen}{z\dsep a\dsep b\dsep D_{\mathbb Z}}%
@@ -395,8 +398,7 @@ Repräsentantenunabhängigkeit eingeführt.
       \FormulaRefAuto{IntegerQuotientRepresentative}{1}}
     \proofstepwidestar[3]{x\in D_{\mathbb Z}\land
       z=\EqClass{x}{\IntPairRel}{D_{\mathbb Z}}}{\rA}
-    \proofstepwidestar[3]{\exists a\in\mathbb N\,
-      \exists b\in\mathbb N\,x=(a,b)}{%
+    \proofstepwidestar[3]{\exists a,b\in\mathbb N\,x=(a,b)}{%
       \FormulaRefAuto{x\in A\times B\eqvdash
         \exists a\in A\,\exists b\in B\,x=(a,b)}{\rAEa{3}}}
     \proofstepwidestar[5]{a,b\in\mathbb N\land x=(a,b)}{\rA}
@@ -407,10 +409,10 @@ Repräsentantenunabhängigkeit eingeführt.
       \FormulaRefAuto{IntegerClassDef}{5}}
     \proofstepwidestar[3,5]{z=\IntClass{a}{b}}{%
       \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{6,7}}
-    \proofstepwidestar[3]{\exists a\in\mathbb N\,
-      \exists b\in\mathbb N\,z=\IntClass{a}{b}}{\rEE{4,5,8}}
-    \proofstepwidestar[1]{\exists a\in\mathbb N\,
-      \exists b\in\mathbb N\,z=\IntClass{a}{b}}{\rEE{2,3,9}}
+    \proofstepwidestar[3]{\exists a,b\in\mathbb N\,
+      z=\IntClass{a}{b}}{\rEE{4,5,8}}
+    \proofstepwidestar[1]{\exists a,b\in\mathbb N\,
+      z=\IntClass{a}{b}}{\rEE{2,3,9}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -485,9 +487,12 @@ Repräsentantenunabhängigkeit eingeführt.
     \proofstepwidestar[1,2]{\IntClass{m}{0}=\IntClass{n}{0}}{\rIE{3,4,2}}
     \proofstepwidestar[1,2]{m+0=0+n}{%
       \FormulaRefAuto{IntegerClassEquality}{1,5}}
-    \proofstepwidestar[1]{m+0=m}{\FormulaRefAuto{PeanoAddRightZero}{1}}
-    \proofstepwidestar[1]{0+n=n}{\FormulaRefAuto{PeanoAddLeftZero}{1}}
-    \proofstepwidestar[1,2]{m=n}{\rIE{7,8,6}}
+    \proofstepwide[1]{m}{=}{m+0}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{PeanoAddRightZero}{1}}}
+    \proofstepwide[1,2]{}{=}{0+n}{\rIE{6}}
+    \proofstepwide[1]{}{=}{n}{\FormulaRefAuto{PeanoAddLeftZero}{1}}
+    \proofstepwidestar[1,2]{m=n}{\rChain{7,8,9}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -503,12 +508,62 @@ Repräsentantenunabhängigkeit eingeführt.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\subsection{Kanonische Teilmengenkopie}
+
+Der Quotiententräger \(\mathbb Z\) enthält die natürlichen Zahlen in der
+vorliegenden Konstruktion nicht wörtlich.  Das Bild der natürlichen
+Einbettung liefert jedoch eine kanonische Kopie, die tatsächlich eine
+Teilmenge von \(\mathbb Z\) ist.
+
+\FormulaDefDeltaK[Kanonische natürliche Kopie in den ganzen Zahlen]{%
+  \NatCopyInInt\coloneqq\IntEmbed[\mathbb N]%
+}{NaturalCopyInIntegers}{%
+  \DeltaRow{Mengen}{\NatCopyInInt}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+  \DeltaRow{Neue Symbole}{\NatCopyInInt}%
+}
+
+\FormulaThmDeltaK[Die natürliche Kopie ist eine Teilmenge der ganzen Zahlen]{%
+  \NatCopyInInt\subseteq\mathbb Z%
+}{NaturalCopySubsetIntegers}{%
+  \DeltaRow{Mengen}{\NatCopyInInt}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproof}
+  \proofstep{}{\IntEmbed\colon\mathbb N\to\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]}
+  \proofstep{}{\IntEmbed[\mathbb N]\subseteq\mathbb Z}{%
+    \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{1}}
+  \proofstep{}{\NatCopyInInt=\IntEmbed[\mathbb N]}{%
+    \FormulaRefAuto{NaturalCopyInIntegers}[def]}
+  \proofstep{}{\NatCopyInInt\subseteq\mathbb Z}{\rIE{3,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Bijektive Identifikation der natürlichen Kopie]{%
+  \IntEmbed\colon\mathbb N\bij\NatCopyInInt%
+}{NaturalCopyIntegerBijection}{%
+  \DeltaRow{Mengen}{\NatCopyInInt}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproof}
+  \proofstep{}{\IntEmbed\colon\mathbb N\inj\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingInjective}[thm]}
+  \proofstep{}{\IntEmbed\colon\mathbb N\bij\IntEmbed[\mathbb N]}{%
+    \FormulaRefAuto{F\colon A\inj B\vdash F\colon A\bij F[A]}[thm]{1}}
+  \proofstep{}{\NatCopyInInt=\IntEmbed[\mathbb N]}{%
+    \FormulaRefAuto{NaturalCopyInIntegers}[def]}
+  \proofstep{}{\IntEmbed\colon\mathbb N\bij\NatCopyInInt}{\rIE{3,2}}
+\end{tabproof}
+
 Im ganzzahligen Kontext verwenden wir von nun an dieselben sichtbaren
 Zahlzeichen wie bei den natürlichen Zahlen.  Semantisch bezeichnet
 \(\IntNumeral{n}\) für \(n\in\mathbb N\) stets das Bild \(\IntOfNat{n}\).
-Dies ist eine typisierte Schreibkonvention und insbesondere keine Behauptung
-\(\mathbb N\subseteq\mathbb Z\).  Wo der umgebende Träger nicht eindeutig
-ist, bleibt die Einbettung mit \(\IntOfNat{n}\) ausdrücklich sichtbar.
+Die sichtbaren Zeichen allein behaupten keine Gleichheit der ursprünglichen
+Träger.  Die wörtliche Inklusion wird vielmehr durch
+\(\NatCopyInInt\subseteq\mathbb Z\) ausgedrückt; die vorstehende Bijektion
+rechtfertigt die übliche Identifikation mit \(\mathbb N\).  Wo der umgebende
+Träger nicht eindeutig ist, bleibt die Einbettung mit \(\IntOfNat{n}\)
+ausdrücklich sichtbar.
 Insbesondere stehen \(\IntZero,\IntOne,\IntNumeral{2},\IntNumeral{3},
 \IntNumeral{4},\ldots\) im ganzzahligen Kontext ohne Trägerindex.
 
@@ -546,7 +601,7 @@ Insbesondere stehen \(\IntZero,\IntOne,\IntNumeral{2},\IntNumeral{3},
   \proofstep{}{\IntEmbed(0)=\IntClass{0}{0}}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}
   \proofstep{}{\IntZero=\IntClass{0}{0}}{%
-    \FormulaRefAuto{a=b\dsep b=c\vdash a=c}{1,3}}
+    \rChain{1,3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Die Ganzzahlnull liegt im Quotienten]{%
@@ -893,13 +948,8 @@ vom gewählten Differenzenpaar genau ein Ergebnis in \(\mathbb Z\) festlegt.
     \proofstepwidestar[1]{a,b,a',b',c,d,c',d'\in\mathbb N}{\rA}
     \proofstepwidestar[2]{a+b'=b+a'}{\rA}
     \proofstepwidestar[3]{c+d'=d+c'}{\rA}
-    \proofstepwide[1,2,3]{(a+b')+(c+d')}{=}{(b+a')+(d+c')}{\rIE{2,3}}
-    \proofstepwide[1]{(a+b')+(c+d')}{=}{(a+c)+(b'+d')}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
-    \proofstepwide[1]{(b+a')+(d+c')}{=}{(b+d)+(a'+c')}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwide[1,2,3]{(a+c)+(b'+d')}{=}{(b+d)+(a'+c')}{%
-      \rIE{4,5,6}}
+      \FormulaRefAuto{PeanoSumEqualitiesAddition}{1,2,3}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -919,13 +969,16 @@ vom gewählten Differenzenpaar genau ein Ergebnis in \(\mathbb Z\) festlegt.
 \FormulaThmDeltaK[Quotientenabstieg der Addition]{%
   \begin{aligned}[t]
     &z,w\in\mathbb Z\vdash
-    \exists! u\in\mathbb Z\,
-    \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-    \exists r\in\mathbb N\,\exists s\in\mathbb N\,{}\\
+      \exists!u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,{}\\[-2pt]
     &\qquad
-    \bigl(z=\IntClass{p}{q}\land
-      w=\IntClass{r}{s}\land
-      u=\IntClass{p+r}{q+s}\bigr)
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.
   \end{aligned}%
 }{IntegerAdditionQuotientDescent}{%
   \DeltaRow{Mengen}{z\dsep w\dsep u\dsep v\dsep
@@ -934,284 +987,320 @@ vom gewählten Differenzenpaar genau ein Ergebnis in \(\mathbb Z\) festlegt.
     p\dsep q\dsep r\dsep s}%
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Ergebniskandidat fester Repräsentanten]{%
-    \begin{aligned}[t]
-      &a,b,c,d\in\mathbb N\dsep
-      z=\IntClass{a}{b}\dsep w=\IntClass{c}{d}\vdash{}\\
-      &\IntClass{a+c}{b+d}\in\mathbb Z\land
-      \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-      \exists r\in\mathbb N\,\exists s\in\mathbb N\,{}\\
-      &\quad
-      \bigl(z=\IntClass{p}{q}\land
-        w=\IntClass{r}{s}\land
-        \IntClass{a+c}{b+d}=\IntClass{p+r}{q+s}\bigr)
-    \end{aligned}%
-  }{%
-    a,b,c,d\in\mathbb N\dsep
-    z=\IntClass{a}{b}\dsep w=\IntClass{c}{d}\vdash
-    \IntClass{a+c}{b+d}\in\mathbb Z\land
-    \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-    \exists r\in\mathbb N\,\exists s\in\mathbb N\,
-    \bigl(z=\IntClass{p}{q}\land
-      w=\IntClass{r}{s}\land
-      \IntClass{a+c}{b+d}=\IntClass{p+r}{q+s}\bigr)%
-  }[IntegerAdditionDescentCandidate]
-    \proofstepwidestarbreakkeep[1]{a,b,c,d\in\mathbb N}{\rA}
-    \proofstepwidestarbreakkeep[2]{z=\IntClass{a}{b}}{\rA}
-    \proofstepwidestarbreakkeep[3]{w=\IntClass{c}{d}}{\rA}
-    \proofstepwidestarbreakkeep[1]{a+c\in\mathbb N}{%
-      \FormulaRefAuto{PeanoAddClosure}{1}}
-    \proofstepwidestarbreakkeep[1]{b+d\in\mathbb N}{%
-      \FormulaRefAuto{PeanoAddClosure}{1}}
-    \proofstepwidestarbreakkeep[1]{\IntClass{a+c}{b+d}\in\mathbb Z}{%
-      \FormulaRefAuto{IntegerClassInZ}{4,5}}
-    \proofstepwidestarbreakkeep[]{%
-      \IntClass{a+c}{b+d}=\IntClass{a+c}{b+d}}{\rII}
-    \proofstepwidestarbreakkeep[1,2,3]{%
-      \begin{aligned}[t]
-        &\exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land{}\\
-        &\qquad
-          \IntClass{a+c}{b+d}=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{%
-      \rEI{\rAI{1,\rAI{2,\rAI{3,7}}}}}
-    \proofstepwidestarbreakkeep[1,2,3]{%
-      \begin{aligned}[t]
-        &\IntClass{a+c}{b+d}\in\mathbb Z\land
-          \exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land{}\\
-        &\qquad
-          \IntClass{a+c}{b+d}=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{%
-      \rAI{6,8}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Existenz durch getrennte Repräsentantenwahl]{%
+  \proofpartwideindR[Existenz durch Wahl von Repräsentanten]{%
     \begin{aligned}[t]
       &z,w\in\mathbb Z\vdash
-      \exists u\in\mathbb Z\,
-      \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-      \exists r\in\mathbb N\,\exists s\in\mathbb N\,{}\\
+        \exists u\in\mathbb Z\,
+        \exists p,q,r,s\in\mathbb N\,{}\\[-2pt]
       &\qquad
-      \bigl(z=\IntClass{p}{q}\land
-        w=\IntClass{r}{s}\land
-        u=\IntClass{p+r}{q+s}\bigr)
+        \left\{
+        \begin{aligned}
+          z&=\IntClass{p}{q},\\
+          w&=\IntClass{r}{s},\\
+          u&=\IntClass{p+r}{q+s}.
+        \end{aligned}
+        \right.
     \end{aligned}%
   }{%
     z,w\in\mathbb Z\vdash
     \exists u\in\mathbb Z\,
-    \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-    \exists r\in\mathbb N\,\exists s\in\mathbb N\,
-    \bigl(z=\IntClass{p}{q}\land
-      w=\IntClass{r}{s}\land
-      u=\IntClass{p+r}{q+s}\bigr)%
+    \exists p,q,r,s\in\mathbb N\,
+    \left\{
+    \begin{aligned}
+      z&=\IntClass{p}{q},\\
+      w&=\IntClass{r}{s},\\
+      u&=\IntClass{p+r}{q+s}.
+    \end{aligned}
+    \right.%
   }[IntegerAdditionDescentExistence]
-    \proofstepwidestarbreakkeep[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[2]{w\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[1]{%
-      \exists a\in\mathbb N\,\exists b\in\mathbb N\,
+    \proofstepwidestar[1]{z,w\in\mathbb Z}{\rA}
+    \proofstepwidestar[1]{\exists a,b\in\mathbb N\,
       z=\IntClass{a}{b}}{%
-      \FormulaRefAuto{IntegerPairRepresentative}{1}}
-    \proofstepwidestarbreakkeep[2]{%
-      \exists c\in\mathbb N\,\exists d\in\mathbb N\,
+      \FormulaRefAuto{IntegerPairRepresentative}{\rAEa{1}}}
+    \proofstepwidestar[1]{\exists c,d\in\mathbb N\,
       w=\IntClass{c}{d}}{%
-      \FormulaRefAuto{IntegerPairRepresentative}{2}}
-    \proofstepwidestarbreakkeep[5]{%
-      a,b\in\mathbb N\land z=\IntClass{a}{b}}{\rA}
-    \proofstepwidestarbreakkeep[6]{%
-      c,d\in\mathbb N\land w=\IntClass{c}{d}}{\rA}
-    \proofstepwidestarbreakkeep[5]{a,b\in\mathbb N}{\rAEa{5}}
-    \proofstepwidestarbreakkeep[5]{z=\IntClass{a}{b}}{\rAEb{5}}
-    \proofstepwidestarbreakkeep[6]{c,d\in\mathbb N}{\rAEa{6}}
-    \proofstepwidestarbreakkeep[6]{w=\IntClass{c}{d}}{\rAEb{6}}
-    \proofstepwidestarbreakkeep[5,6]{a,b,c,d\in\mathbb N}{\rAI{7,9}}
-    \proofstepwidestarbreakkeep[5,6]{%
-      \begin{aligned}[t]
-        &\IntClass{a+c}{b+d}\in\mathbb Z\land
-          \exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land{}\\
-        &\qquad
-          \IntClass{a+c}{b+d}=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{%
-      \FormulaRefAuto{IntegerAdditionDescentCandidate}{11,8,10}}
-    \proofstepwidestarbreakkeep[5,6]{%
-      \begin{aligned}[t]
-        &\exists u\in\mathbb Z\,\exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land
-          u=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{\rEI{12}}
-    \proofstepwidestarbreakkeep[5]{%
-      \begin{aligned}[t]
-        &\exists u\in\mathbb Z\,\exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land
-          u=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{\rEE{4,6,13}}
-    \proofstepwidestarbreakkeep[1,2]{%
-      \begin{aligned}[t]
-        &\exists u\in\mathbb Z\,\exists p,q,r,s\in\mathbb N\,{}\\
-        &\bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}\land
-          u=\IntClass{p+r}{q+s}\bigr)
-      \end{aligned}}{\rEE{3,5,14}}
+      \FormulaRefAuto{IntegerPairRepresentative}{\rAEb{1}}}
+    \proofstepwidestar[4]{a,b\in\mathbb N\land
+      z=\IntClass{a}{b}}{\rA}
+    \proofstepwidestar[5]{c,d\in\mathbb N\land
+      w=\IntClass{c}{d}}{\rA}
+    \proofstepwidestar[4,5]{a,b,c,d\in\mathbb N}{%
+      \rAI{\rAEa{4},\rAEa{5}}}
+    \proofstepwidestar[4,5]{a+c\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{6}}
+    \proofstepwidestar[4,5]{b+d\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{6}}
+    \proofstepwidestar[4,5]{\IntClass{a+c}{b+d}\in\mathbb Z}{%
+      \FormulaRefAuto{IntegerClassInZ}{7,8}}
+    \proofstepwidestar[]{%
+      \IntClass{a+c}{b+d}=\IntClass{a+c}{b+d}}{\rII}
+    \proofstepwidestarbreak[4,5]{%
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a}{b},\\
+        w&=\IntClass{c}{d},\\
+        \IntClass{a+c}{b+d}&=\IntClass{a+c}{b+d}.
+      \end{aligned}
+      \right.}{%
+      \rAI{\rAEb{4},\rAI{\rAEb{5},10}}}
+    \proofstepwidestarbreak[4,5]{%
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        \IntClass{a+c}{b+d}&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{%
+      \rEI{\rAI{6,11}}}
+    \proofstepwidestarbreak[4,5]{%
+      \IntClass{a+c}{b+d}\in\mathbb Z\land
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        \IntClass{a+c}{b+d}&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{\rAI{9,12}}
+    \proofstepwidestarbreak[4,5]{%
+      \exists u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{\rEI{13}}
+    \proofstepwidestarbreak[1,4]{%
+      \exists u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{\rEE{3,5,14}}
+    \proofstepwidestarbreak[1]{%
+      \exists u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{\rEE{2,4,15}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Eindeutigkeit für feste Repräsentanten]{%
+  \proofpartwideindR[Repräsentantenunabhängigkeit und Eindeutigkeit]{%
     \begin{aligned}[t]
-      &a,b,c,d,a',b',c',d'\in\mathbb N\dsep{}\\
-      &z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-        \land u=\IntClass{a+c}{b+d}\dsep{}\\
-      &z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-        \land v=\IntClass{a'+c'}{b'+d'}
+      &\left(
+        u\in\mathbb Z\land
+        \exists a,b,c,d\in\mathbb N\,
+        \left\{
+        \begin{aligned}
+          z&=\IntClass{a}{b},\\
+          w&=\IntClass{c}{d},\\
+          u&=\IntClass{a+c}{b+d}
+        \end{aligned}
+        \right.
+      \right)\dsep{}\\
+      &\left(
+        v\in\mathbb Z\land
+        \exists a',b',c',d'\in\mathbb N\,
+        \left\{
+        \begin{aligned}
+          z&=\IntClass{a'}{b'},\\
+          w&=\IntClass{c'}{d'},\\
+          v&=\IntClass{a'+c'}{b'+d'}
+        \end{aligned}
+        \right.
+      \right)
       \vdash u=v
     \end{aligned}%
   }{%
-    a,b,c,d,a',b',c',d'\in\mathbb N\dsep
-    z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-      \land u=\IntClass{a+c}{b+d}\dsep
-    z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-      \land v=\IntClass{a'+c'}{b'+d'}
-    \vdash u=v%
-  }[IntegerAdditionDescentFixedUniqueness]
-    \proofstepwidestarbreakkeep[1]{%
-      a,b,c,d,a',b',c',d'\in\mathbb N}{\rA}
-    \proofstepwidestarbreakkeep[2]{%
-      z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-      \land u=\IntClass{a+c}{b+d}}{\rA}
-    \proofstepwidestarbreakkeep[3]{%
-      z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-      \land v=\IntClass{a'+c'}{b'+d'}}{\rA}
-    \proofstepwidestarbreakkeep[2]{z=\IntClass{a}{b}}{\rAEa{2}}
-    \proofstepwidestarbreakkeep[2]{w=\IntClass{c}{d}}{\rAEa{\rAEb{2}}}
-    \proofstepwidestarbreakkeep[2]{u=\IntClass{a+c}{b+d}}{\rAEb{\rAEb{2}}}
-    \proofstepwidestarbreakkeep[3]{z=\IntClass{a'}{b'}}{\rAEa{3}}
-    \proofstepwidestarbreakkeep[3]{w=\IntClass{c'}{d'}}{\rAEa{\rAEb{3}}}
-    \proofstepwidestarbreakkeep[3]{v=\IntClass{a'+c'}{b'+d'}}{%
-      \rAEb{\rAEb{3}}}
-    \proofstepwidestarbreakkeep[2,3]{%
-      \IntClass{a}{b}=\IntClass{a'}{b'}}{\rIE{4,7}}
-    \proofstepwidestarbreakkeep[2,3]{%
-      \IntClass{c}{d}=\IntClass{c'}{d'}}{\rIE{5,8}}
-    \proofstepwidestarbreakkeep[1,2,3]{%
-      \IntClass{a+c}{b+d}=\IntClass{a'+c'}{b'+d'}}{%
-      \FormulaRefAuto{IntegerAdditionCompatible}{1,10,11}}
-    \proofstepwidestarbreakkeep[1,2,3]{u=v}{\rIE{6,9,12}}
-  \closeproofpartwideindR
-
-  \proofpartwideindR[Eindeutigkeit beliebiger Ergebniszeugen]{%
-    \begin{aligned}[t]
-      &u\in\mathbb Z\land\exists a,b,c,d\in\mathbb N\,
-        \bigl(z=\IntClass{a}{b}\land w=\IntClass{c}{d}\land{}\\
-      &\qquad u=\IntClass{a+c}{b+d}\bigr)\dsep{}\\
-      &v\in\mathbb Z\land\exists a',b',c',d'\in\mathbb N\,
-        \bigl(z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}\land{}\\
-      &\qquad v=\IntClass{a'+c'}{b'+d'}\bigr)
-        \vdash u=v
-    \end{aligned}%
-  }{%
-    \bigl(u\in\mathbb Z\land
-    \exists a,b,c,d\in\mathbb N\,
-    (z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-     \land u=\IntClass{a+c}{b+d})\bigr)\dsep
-    \bigl(v\in\mathbb Z\land
-    \exists a',b',c',d'\in\mathbb N\,
-    (z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-     \land v=\IntClass{a'+c'}{b'+d'})\bigr)
+    \left(
+      u\in\mathbb Z\land
+      \exists a,b,c,d\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a}{b},\\
+        w&=\IntClass{c}{d},\\
+        u&=\IntClass{a+c}{b+d}
+      \end{aligned}
+      \right.
+    \right)\dsep
+    \left(
+      v\in\mathbb Z\land
+      \exists a',b',c',d'\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a'}{b'},\\
+        w&=\IntClass{c'}{d'},\\
+        v&=\IntClass{a'+c'}{b'+d'}
+      \end{aligned}
+      \right.
+    \right)
     \vdash u=v%
   }[IntegerAdditionDescentUniqueness]
-    \proofstepwidestarbreakkeep[1]{%
-      \begin{aligned}[t]
-        &u\in\mathbb Z\land\exists a,b,c,d\in\mathbb N\,{}\\
-        &(z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-          \land u=\IntClass{a+c}{b+d})
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[2]{%
-      \begin{aligned}[t]
-        &v\in\mathbb Z\land\exists a',b',c',d'\in\mathbb N\,{}\\
-        &(z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-          \land v=\IntClass{a'+c'}{b'+d'})
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[1]{%
+    \proofstepwidestarbreak[1]{%
+      u\in\mathbb Z\land
       \exists a,b,c,d\in\mathbb N\,
-      (z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-       \land u=\IntClass{a+c}{b+d})}{\rAEb{1}}
-    \proofstepwidestarbreakkeep[2]{%
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a}{b},\\
+        w&=\IntClass{c}{d},\\
+        u&=\IntClass{a+c}{b+d}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[2]{%
+      v\in\mathbb Z\land
       \exists a',b',c',d'\in\mathbb N\,
-      (z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-       \land v=\IntClass{a'+c'}{b'+d'})}{\rAEb{2}}
-    \proofstepwidestarbreakkeep[5]{%
-      \begin{aligned}[t]
-        &a,b,c,d\in\mathbb N\land z=\IntClass{a}{b}\land{}\\
-        &w=\IntClass{c}{d}\land u=\IntClass{a+c}{b+d}
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[6]{%
-      \begin{aligned}[t]
-        &a',b',c',d'\in\mathbb N\land z=\IntClass{a'}{b'}\land{}\\
-        &w=\IntClass{c'}{d'}\land v=\IntClass{a'+c'}{b'+d'}
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[5]{a,b,c,d\in\mathbb N}{\rAEa{5}}
-    \proofstepwidestarbreakkeep[5]{%
-      z=\IntClass{a}{b}\land w=\IntClass{c}{d}
-      \land u=\IntClass{a+c}{b+d}}{\rAEb{5}}
-    \proofstepwidestarbreakkeep[6]{a',b',c',d'\in\mathbb N}{\rAEa{6}}
-    \proofstepwidestarbreakkeep[6]{%
-      z=\IntClass{a'}{b'}\land w=\IntClass{c'}{d'}
-      \land v=\IntClass{a'+c'}{b'+d'}}{\rAEb{6}}
-    \proofstepwidestarbreakkeep[5,6]{%
-      a,b,c,d,a',b',c',d'\in\mathbb N}{\rAI{7,9}}
-    \proofstepwidestarbreakkeep[5,6]{u=v}{%
-      \FormulaRefAuto{IntegerAdditionDescentFixedUniqueness}{11,8,10}}
-    \proofstepwidestarbreakkeep[5]{u=v}{\rEE{4,6,12}}
-    \proofstepwidestarbreakkeep[1,2]{u=v}{\rEE{3,5,13}}
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a'}{b'},\\
+        w&=\IntClass{c'}{d'},\\
+        v&=\IntClass{a'+c'}{b'+d'}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[1]{%
+      \exists a,b,c,d\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a}{b},\\
+        w&=\IntClass{c}{d},\\
+        u&=\IntClass{a+c}{b+d}
+      \end{aligned}
+      \right.}{\rAEb{1}}
+    \proofstepwidestarbreak[2]{%
+      \exists a',b',c',d'\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a'}{b'},\\
+        w&=\IntClass{c'}{d'},\\
+        v&=\IntClass{a'+c'}{b'+d'}
+      \end{aligned}
+      \right.}{\rAEb{2}}
+    \proofstepwidestarbreak[5]{%
+      a,b,c,d\in\mathbb N\land
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a}{b},\\
+        w&=\IntClass{c}{d},\\
+        u&=\IntClass{a+c}{b+d}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[6]{%
+      a',b',c',d'\in\mathbb N\land
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{a'}{b'},\\
+        w&=\IntClass{c'}{d'},\\
+        v&=\IntClass{a'+c'}{b'+d'}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[5,6]{%
+      a,b,c,d,a',b',c',d'\in\mathbb N}{%
+      \rAI{\rAEa{5},\rAEa{6}}}
+    \proofstepwidestar[5]{z=\IntClass{a}{b}}{%
+      \rAEa{\rAEb{5}}}
+    \proofstepwidestar[5]{w=\IntClass{c}{d}}{%
+      \rAEa{\rAEb{\rAEb{5}}}}
+    \proofstepwidestar[5]{u=\IntClass{a+c}{b+d}}{%
+      \rAEb{\rAEb{\rAEb{5}}}}
+    \proofstepwidestar[6]{z=\IntClass{a'}{b'}}{%
+      \rAEa{\rAEb{6}}}
+    \proofstepwidestar[6]{w=\IntClass{c'}{d'}}{%
+      \rAEa{\rAEb{\rAEb{6}}}}
+    \proofstepwidestar[6]{v=\IntClass{a'+c'}{b'+d'}}{%
+      \rAEb{\rAEb{\rAEb{6}}}}
+    \proofstepwidestar[5,6]{%
+      \IntClass{a}{b}=\IntClass{a'}{b'}}{\rIE{8,11}}
+    \proofstepwidestar[5,6]{%
+      \IntClass{c}{d}=\IntClass{c'}{d'}}{\rIE{9,12}}
+    \proofstepwidestar[5,6]{%
+      \IntClass{a+c}{b+d}=\IntClass{a'+c'}{b'+d'}}{%
+      \FormulaRefAuto{IntegerAdditionCompatible}{7,14,15}}
+    \proofstepwidestar[5,6]{u=v}{\rIE{10,13,16}}
+    \proofstepwidestar[2,5]{u=v}{\rEE{4,6,17}}
+    \proofstepwidestar[1,2]{u=v}{\rEE{3,5,18}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Abschluss des Abstiegs]{%
+  \proofpartwideindR[Eindeutiger Existenzschluss]{%
     \begin{aligned}[t]
       &z,w\in\mathbb Z\vdash
-      \exists! u\in\mathbb Z\,
-      \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-      \exists r\in\mathbb N\,\exists s\in\mathbb N\,{}\\
+        \exists!u\in\mathbb Z\,
+        \exists p,q,r,s\in\mathbb N\,{}\\[-2pt]
       &\qquad
-      \bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-      \land u=\IntClass{p+r}{q+s}\bigr)
+        \left\{
+        \begin{aligned}
+          z&=\IntClass{p}{q},\\
+          w&=\IntClass{r}{s},\\
+          u&=\IntClass{p+r}{q+s}.
+        \end{aligned}
+        \right.
     \end{aligned}%
   }{%
     z,w\in\mathbb Z\vdash
-    \exists! u\in\mathbb Z\,
-    \exists p\in\mathbb N\,\exists q\in\mathbb N\,
-    \exists r\in\mathbb N\,\exists s\in\mathbb N\,
-    \bigl(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-    \land u=\IntClass{p+r}{q+s}\bigr)%
+    \exists!u\in\mathbb Z\,
+    \exists p,q,r,s\in\mathbb N\,
+    \left\{
+    \begin{aligned}
+      z&=\IntClass{p}{q},\\
+      w&=\IntClass{r}{s},\\
+      u&=\IntClass{p+r}{q+s}.
+    \end{aligned}
+    \right.%
   }[IntegerAdditionDescentConclusion]
-    \proofstepwidestarbreakkeep[1]{z,w\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[1]{%
-      \begin{aligned}[t]
-        &\exists u\in\mathbb Z\,\exists p,q,r,s\in\mathbb N\,{}\\
-        &(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-          \land u=\IntClass{p+r}{q+s})
-      \end{aligned}}{%
+    \proofstepwidestar[1]{z,w\in\mathbb Z}{\rA}
+    \proofstepwidestarbreak[1]{%
+      \exists u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{%
       \FormulaRefAuto{IntegerAdditionDescentExistence}{1}}
-    \proofstepwidestarbreakkeep[3]{%
-      \begin{aligned}[t]
-        &u\in\mathbb Z\land\exists p,q,r,s\in\mathbb N\,{}\\
-        &(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-          \land u=\IntClass{p+r}{q+s})
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[4]{%
-      \begin{aligned}[t]
-        &v\in\mathbb Z\land\exists p,q,r,s\in\mathbb N\,{}\\
-        &(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-          \land v=\IntClass{p+r}{q+s})
-      \end{aligned}}{\rA}
-    \proofstepwidestarbreakkeep[3,4]{u=v}{%
+    \proofstepwidestarbreak[3]{%
+      u\in\mathbb Z\land
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[4]{%
+      v\in\mathbb Z\land
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        v&=\IntClass{p+r}{q+s}
+      \end{aligned}
+      \right.}{\rA}
+    \proofstepwidestarbreak[3,4]{u=v}{%
       \FormulaRefAuto{IntegerAdditionDescentUniqueness}{3,4}}
-    \proofstepwidestarbreakkeep[1]{%
-      \begin{aligned}[t]
-        &\exists! u\in\mathbb Z\,\exists p,q,r,s\in\mathbb N\,{}\\
-        &(z=\IntClass{p}{q}\land w=\IntClass{r}{s}
-          \land u=\IntClass{p+r}{q+s})
-      \end{aligned}}{\UEI{2,3,4,5}}
+    \proofstepwidestarbreak[1]{%
+      \exists!u\in\mathbb Z\,
+      \exists p,q,r,s\in\mathbb N\,
+      \left\{
+      \begin{aligned}
+        z&=\IntClass{p}{q},\\
+        w&=\IntClass{r}{s},\\
+        u&=\IntClass{p+r}{q+s}.
+      \end{aligned}
+      \right.}{\UEI{2,3,4,5}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
-
 Der eindeutige Existenzsatz ist der Quotientenabstieg der Addition; die
 folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
 
@@ -1293,10 +1382,6 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
   }[IntAddAssociativeOnClasses]
     \proofstepwidestar[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
     \proofstepwidestar[1]{%
-      (\IntClass{a}{b}+\IntClass{c}{d})+\IntClass{e}{f}
-      =\IntClass{(a+c)+e}{(b+d)+f}}{%
-      \FormulaRefAuto{IntegerAdditionDef}{1}}
-    \proofstepwidestar[1]{%
       \IntClass{a}{b}+(\IntClass{c}{d}+\IntClass{e}{f})
       =\IntClass{a+(c+e)}{b+(d+f)}}{%
       \FormulaRefAuto{IntegerAdditionDef}{1}}
@@ -1304,13 +1389,19 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
       \FormulaRefAuto{PeanoAddAssociative}{1}}
     \proofstepwidestar[1]{(b+d)+f=b+(d+f)}{%
       \FormulaRefAuto{PeanoAddAssociative}{1}}
-    \proofstepwidestar[1]{%
-      \IntClass{(a+c)+e}{(b+d)+f}
-      =\IntClass{a+(c+e)}{b+(d+f)}}{\rIE{4,5}}
+    \proofstepwide[1]{%
+      (\IntClass{a}{b}+\IntClass{c}{d})+\IntClass{e}{f}}{=}{%
+      \IntClass{(a+c)+e}{(b+d)+f}}{%
+      \FormulaRefAuto{IntegerAdditionDef}{1}}
+    \proofstepwide[1]{}{=}{%
+      \IntClass{a+(c+e)}{b+(d+f)}}{\rIE{3,4}}
+    \proofstepwide[1]{}{=}{%
+      \IntClass{a}{b}+(\IntClass{c}{d}+\IntClass{e}{f})}{%
+      \FormulaRefAuto{a=b\vdash b=a}{2}}
     \proofstepwidestar[1]{%
       (\IntClass{a}{b}+\IntClass{c}{d})+\IntClass{e}{f}
       =\IntClass{a}{b}+(\IntClass{c}{d}+\IntClass{e}{f})}{%
-      \rIE{2,3,6}}
+      \rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -1356,17 +1447,18 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
   }[IntAddCommutativeOnRepresentatives]
     \proofstepwidestar[1]{a,b,c,d\in\mathbb N\land
       z=\IntClass{a}{b}\land w=\IntClass{c}{d}}{\rA}
-    \proofstepwidestar[1]{z+w=\IntClass{a+c}{b+d}}{%
-      \FormulaRefAuto{IntegerAdditionDef}{1}}
     \proofstepwidestar[1]{w+z=\IntClass{c+a}{d+b}}{%
       \FormulaRefAuto{IntegerAdditionDef}{1}}
     \proofstepwidestar[1]{a+c=c+a}{%
       \FormulaRefAuto{PeanoAddCommutative}{1}}
     \proofstepwidestar[1]{b+d=d+b}{%
       \FormulaRefAuto{PeanoAddCommutative}{1}}
-    \proofstepwidestar[1]{%
-      \IntClass{a+c}{b+d}=\IntClass{c+a}{d+b}}{\rIE{4,5}}
-    \proofstepwidestar[1]{z+w=w+z}{\rIE{2,3,6}}
+    \proofstepwide[1]{z+w}{=}{\IntClass{a+c}{b+d}}{%
+      \FormulaRefAuto{IntegerAdditionDef}{1}}
+    \proofstepwide[1]{}{=}{\IntClass{c+a}{d+b}}{\rIE{3,4}}
+    \proofstepwide[1]{}{=}{w+z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{2}}
+    \proofstepwidestar[1]{z+w=w+z}{\rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Getrennte Repräsentantenwahl]{%
@@ -1409,13 +1501,16 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
       z=\IntClass{a}{b}}{\rA}
     \proofstepwidestar[]{\IntZero=\IntClass{0}{0}}{%
       \FormulaRefAuto{IntegerZeroClass}}
-    \proofstepwidestar[1]{z+\IntZero=\IntClass{a+0}{b+0}}{%
-      \FormulaRefAuto{IntegerAdditionDef}{1,2}}
     \proofstepwidestar[1]{a+0=a}{%
       \FormulaRefAuto{PeanoAddRightZero}{1}}
     \proofstepwidestar[1]{b+0=b}{%
       \FormulaRefAuto{PeanoAddRightZero}{1}}
-    \proofstepwidestar[1]{z+\IntZero=z}{\rIE{1,3,4,5}}
+    \proofstepwide[1]{z+\IntZero}{=}{\IntClass{a+0}{b+0}}{%
+      \FormulaRefAuto{IntegerAdditionDef}{1,2}}
+    \proofstepwide[1]{}{=}{\IntClass{a}{b}}{\rIE{3,4}}
+    \proofstepwide[1]{}{=}{z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{\rAEb{1}}}
+    \proofstepwidestar[1]{z+\IntZero=z}{\rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Elimination des Repräsentanten]{%
@@ -1457,25 +1552,27 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
     a,b\in\mathbb N\vdash
     \IntClass{a}{b}+(-\IntClass{a}{b})=\IntZero%
   }[IntAddInverseOnClass]
-    \proofstepwidestarbreakkeep[1]{a,b\in\mathbb N}{\rA}
-    \proofstepwidestarbreakkeep[1]{-\IntClass{a}{b}=\IntClass{b}{a}}{%
+    \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
+    \proofstepwidestar[1]{-\IntClass{a}{b}=\IntClass{b}{a}}{%
       \FormulaRefAuto{IntegerNegationDef}{1}}
-    \proofstepwidestarbreakkeep[1]{%
+    \proofstepwidestar[1]{%
       \IntClass{a}{b}+(-\IntClass{a}{b})=\IntClass{a+b}{b+a}}{%
       \FormulaRefAuto{IntegerAdditionDef}{1,2}}
-    \proofstepwidestarbreakkeep[1]{a+b=b+a}{\FormulaRefAuto{PeanoAddCommutative}{1}}
-    \proofstepwidestarbreakkeep[1]{\IntClass{a+b}{b+a}=\IntClass{0}{0}}{%
-      \FormulaRefAuto{IntegerClassEquality}{%
-        \FormulaRefAuto{PeanoAddClosure}{1},
-        \FormulaRefAuto{PeanoAddClosure}{1},
-        \FormulaRefAuto{PeanoZero},
-        \FormulaRefAuto{PeanoZero},
-        \rIE{\FormulaRefAuto{PeanoAddRightZero},%
-             \FormulaRefAuto{PeanoAddLeftZero},4}}}
-    \proofstepwidestarbreakkeep[]{\IntZero=\IntClass{0}{0}}{%
-      \FormulaRefAuto{IntegerZeroClass}}
-    \proofstepwidestarbreakkeep[1]{%
-      \IntClass{a}{b}+(-\IntClass{a}{b})=\IntZero}{\rIE{3,5,6}}
+    \proofstepwidestar[1]{a+b\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{1}}
+    \proofstepwidestar[1]{b+a\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{1}}
+    \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}}
+    \proofstepwidestar[1]{(a+b)+0=(b+a)+0}{%
+      \FormulaRefAuto{PeanoAddCongruence}{%
+        4,5,6,6,\FormulaRefAuto{PeanoAddCommutative}{1},\rII}}
+    \proofstepwidestar[1]{\IntClass{a+b}{b+a}=\IntClass{0}{0}}{%
+      \FormulaRefAuto{IntegerClassEquality}{4,5,6,6,7}}
+    \proofstepwidestar[]{\IntClass{0}{0}=\IntZero}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{IntegerZeroClass}}}
+    \proofstepwidestar[1]{%
+      \IntClass{a}{b}+(-\IntClass{a}{b})=\IntZero}{\rChain{3,8,9}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -1488,7 +1585,7 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
     \proofstepwidestarbreakkeep[1]{-z\in\mathbb Z}{\FormulaRefAuto{IntNegClosure}{1}}
     \proofstepwidestarbreakkeep[1,3]{(-z)+z=z+(-z)}{%
       \FormulaRefAuto{IntAddCommutative}{5,1}}
-    \proofstepwidestarbreakkeep[1,3]{(-z)+z=\IntZero}{\rIE{6,4}}
+    \proofstepwidestarbreakkeep[1,3]{(-z)+z=\IntZero}{\rChain{6,4}}
     \proofstepwidestarbreakkeep[1,3]{%
       z+(-z)=\IntZero\land(-z)+z=\IntZero}{\rAI{4,7}}
     \proofstepwidestarbreakkeep[1]{%
@@ -1497,6 +1594,18 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
 \end{tabproofsplitwide}
 
 \section{Multiplikation}
+
+Metasprachlich lesen wir \(\IntClass{a}{b}\) als \(a-b\) und
+\(\IntClass{c}{d}\) als \(c-d\). Die vertraute Ausmultiplizierung
+\[
+  (a-b)(c-d)=(ac+bd)-(ad+bc)
+\]
+legt daher das Differenzenpaar \((ac+bd,ad+bc)\) als Produktrepräsentanten
+nahe. Da eine ganze Zahl viele Differenzenpaare besitzt, ist diese Formel
+aber erst dann eine zulässige Definition auf den Klassen, wenn ein Wechsel
+beider Repräsentanten dieselbe Ganzzahlklasse liefert. Genau diese
+Repräsentantenunabhängigkeit wird im folgenden Satz bewiesen; erst danach
+steigt die Operation auf den Quotienten \(\mathbb Z\) ab.
 
 \FormulaThmDeltaK[Repräsentantenunabhängigkeit der Multiplikation]{%
   \begin{aligned}[t]
@@ -1530,42 +1639,28 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
     \proofstepwidestar[2]{\IntClass{a}{b}=\IntClass{a'}{b'}}{\rA}
     \proofstepwidestar[1,2]{a+b'=b+a'}{%
       \FormulaRefAuto{IntegerClassEquality}{1,2}}
-    \proofstepwide[1,2]{(a+b')c}{=}{(b+a')c}{\rIE{3}}
-    \proofstepwide[1]{(a+b')c}{=}{ac+b'c}{%
-      \FormulaRefAuto{PeanoMulRightDistributive}{1}}
-    \proofstepwide[1]{(b+a')c}{=}{bc+a'c}{%
-      \FormulaRefAuto{PeanoMulRightDistributive}{1}}
-    \proofstepwidestar[1,2]{ac+b'c=bc+a'c}{\rIE{4,5,6}}
-    \proofstepwide[1,2]{(a+b')d}{=}{(b+a')d}{\rIE{3}}
-    \proofstepwide[1]{(a+b')d}{=}{ad+b'd}{%
-      \FormulaRefAuto{PeanoMulRightDistributive}{1}}
-    \proofstepwide[1]{(b+a')d}{=}{bd+a'd}{%
-      \FormulaRefAuto{PeanoMulRightDistributive}{1}}
-    \proofstepwidestar[1,2]{ad+b'd=bd+a'd}{\rIE{8,9,10}}
+    \proofstepwidestar[1,2]{ac+b'c=bc+a'c}{%
+      \FormulaRefAuto{PeanoScaledSumEqualityRight}{1,3}}
+    \proofstepwidestar[1,2]{bd+a'd=ad+b'd}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{PeanoScaledSumEqualityRight}{1,3}}}
     \proofstepwidestar[1]{a'd+b'c=b'c+a'd}{%
       \FormulaRefAuto{PeanoAddCommutative}{1}}
-    \proofstepwidestar[1,2]{%
-      (ac+bd)+(a'd+b'c)=(ac+bd)+(b'c+a'd)}{\rIE{12}}
-    \proofstepwidestar[1]{%
-      (ac+bd)+(b'c+a'd)=(ac+b'c)+(bd+a'd)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
-    \proofstepwidestar[1,2]{bd+a'd=ad+b'd}{%
-      \FormulaRefAuto{a=b\vdash b=a}{11}}
-    \proofstepwidestar[1,2]{%
-      (ac+b'c)+(bd+a'd)=(bc+a'c)+(ad+b'd)}{\rIE{7,15}}
-    \proofstepwidestar[1]{%
-      (bc+a'c)+(ad+b'd)=(bc+ad)+(a'c+b'd)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwidestar[1]{bc+ad=ad+bc}{%
       \FormulaRefAuto{PeanoAddCommutative}{1}}
-    \proofstepwidestar[1]{%
-      (bc+ad)+(a'c+b'd)=(ad+bc)+(a'c+b'd)}{\rIE{18}}
-    \proofstepwidestar[1,2]{%
+    \proofstepwidestarbreakkeep[1]{ac,b'c,bc,a'c\in\mathbb N}{%
+      \rAIRepeat{4}{\FormulaRefAuto{PeanoMulClosure}}{1}}
+    \proofstepwidestarbreakkeep[1]{bd,a'd,ad,b'd\in\mathbb N}{%
+      \rAIRepeat{4}{\FormulaRefAuto{PeanoMulClosure}}{1}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      (ac+bd)+(b'c+a'd)=(bc+ad)+(a'c+b'd)}{%
+      \FormulaRefAuto{PeanoSumEqualitiesAddition}{\rAI{8,9},4,5}}
+    \proofstepwidestarbreakkeep[1,2]{%
       (ac+bd)+(a'd+b'c)=(ad+bc)+(a'c+b'd)}{%
-      \rIE{13,14,16,17,19}}
-    \proofstepwidestar[1,2]{%
+      \rIE{6,10,7}}
+    \proofstepwidestarbreakkeep[1,2]{%
       \IntClass{ac+bd}{ad+bc}=\IntClass{a'c+b'd}{a'd+b'c}}{%
-      \FormulaRefAuto{IntegerClassEquality}{1,20}}
+      \FormulaRefAuto{IntegerClassEquality}{1,11}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Wechsel des zweiten Repräsentanten]{%
@@ -1586,34 +1681,21 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
     \proofstepwidestar[2]{\IntClass{c}{d}=\IntClass{c'}{d'}}{\rA}
     \proofstepwidestar[1,2]{c+d'=d+c'}{%
       \FormulaRefAuto{IntegerClassEquality}{1,2}}
-    \proofstepwide[1,2]{a(c+d')}{=}{a(d+c')}{\rIE{3}}
-    \proofstepwide[1]{a(c+d')}{=}{ac+ad'}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwide[1]{a(d+c')}{=}{ad+ac'}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestar[1,2]{ac+ad'=ad+ac'}{\rIE{4,5,6}}
-    \proofstepwide[1,2]{b(c+d')}{=}{b(d+c')}{\rIE{3}}
-    \proofstepwide[1]{b(c+d')}{=}{bc+bd'}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwide[1]{b(d+c')}{=}{bd+bc'}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestar[1,2]{bc+bd'=bd+bc'}{\rIE{8,9,10}}
-    \proofstepwidestar[1]{%
-      (ac+bd)+(ad'+bc')=(ac+ad')+(bd+bc')}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
+    \proofstepwidestar[1,2]{ac+ad'=ad+ac'}{%
+      \FormulaRefAuto{PeanoScaledSumEqualityLeft}{1,3}}
     \proofstepwidestar[1,2]{bd+bc'=bc+bd'}{%
-      \FormulaRefAuto{a=b\vdash b=a}{11}}
-    \proofstepwidestar[1,2]{%
-      (ac+ad')+(bd+bc')=(ad+ac')+(bc+bd')}{\rIE{7,13}}
-    \proofstepwidestar[1]{%
-      (ad+ac')+(bc+bd')=(ad+bc)+(ac'+bd')}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        \FormulaRefAuto{PeanoScaledSumEqualityLeft}{1,3}}}
+    \proofstepwidestarbreakkeep[1]{ac,ad',ad,ac'\in\mathbb N}{%
+      \rAIRepeat{4}{\FormulaRefAuto{PeanoMulClosure}}{1}}
+    \proofstepwidestarbreakkeep[1]{bd,bc',bc,bd'\in\mathbb N}{%
+      \rAIRepeat{4}{\FormulaRefAuto{PeanoMulClosure}}{1}}
     \proofstepwidestar[1,2]{%
       (ac+bd)+(ad'+bc')=(ad+bc)+(ac'+bd')}{%
-      \rIE{12,14,15}}
+      \FormulaRefAuto{PeanoSumEqualitiesAddition}{\rAI{6,7},4,5}}
     \proofstepwidestar[1,2]{%
       \IntClass{ac+bd}{ad+bc}=\IntClass{ac'+bd'}{ad'+bc'}}{%
-      \FormulaRefAuto{IntegerClassEquality}{1,16}}
+      \FormulaRefAuto{IntegerClassEquality}{1,8}}
   \closeproofpartwideindR
 
   \proofpartwide{Zusammenführung}
@@ -1631,7 +1713,7 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
     \proofstepwidestar[1,2,3]{%
       \IntClass{ac+bd}{ad+bc}
       =\IntClass{a'c'+b'd'}{a'd'+b'c'}}{%
-      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}{4,5}}
+      \rChain{4,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2104,14 +2186,12 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       z\cdot w=\IntClass{ac+bd}{ad+bc}\land
       w\cdot z=\IntClass{ca+db}{cb+da}}{%
       \FormulaRefAuto{IntMulCommutativeRepresentativeProducts}{6}}
-    \proofstepwidestar[6]{%
-      z\cdot w=\IntClass{ac+bd}{ad+bc}}{\rAEa{7}}
-    \proofstepwidestar[6]{%
-      w\cdot z=\IntClass{ca+db}{cb+da}}{\rAEb{7}}
-    \proofstepwidestar[6]{\IntClass{ac+bd}{ad+bc}=
-      \IntClass{ca+db}{cb+da}}{%
+    \proofstepwide[6]{z\cdot w}{=}{\IntClass{ac+bd}{ad+bc}}{\rAEa{7}}
+    \proofstepwide[6]{}{=}{\IntClass{ca+db}{cb+da}}{%
       \FormulaRefAuto{IntMulCommutativeClassCoordinates}{6}}
-    \proofstepwidestar[6]{z\cdot w=w\cdot z}{\rIE{8,9,10}}
+    \proofstepwide[6]{}{=}{w\cdot z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{\rAEb{7}}}
+    \proofstepwidestar[6]{z\cdot w=w\cdot z}{\rChain{8,9,10}}
     \proofstepwidestar[1]{z\cdot w=w\cdot z}{\rEE{4,5,6,11}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
@@ -2137,9 +2217,6 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestar[]{\IntEmbed(1)=\IntClass{1}{0}}{%
       \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
         \FormulaRefAuto{PeanoOneInN}}}
-    \proofstepwidestar[1]{z\cdot\IntOne=
-      \IntClass{a\cdot1+b\cdot0}{a\cdot0+b\cdot1}}{%
-      \FormulaRefAuto{IntegerMultiplicationDef}{1,2,3}}
     \proofstepwidestar[1]{a\cdot1=a}{%
       \FormulaRefAuto{PeanoMulRightOne}{1}}
     \proofstepwidestar[1]{b\cdot1=b}{%
@@ -2148,12 +2225,19 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \FormulaRefAuto{PeanoMulRightZero}{1}}
     \proofstepwidestar[1]{b\cdot0=0}{%
       \FormulaRefAuto{PeanoMulRightZero}{1}}
-    \proofstepwidestar[1]{a\cdot1+b\cdot0=a}{%
-      \rIE{5,8,\FormulaRefAuto{PeanoAddRightZero}{1}}}
-    \proofstepwidestar[1]{a\cdot0+b\cdot1=b}{%
-      \rIE{7,6,\FormulaRefAuto{PeanoAddLeftZero}{1}}}
-    \proofstepwidestar[1]{z\cdot\IntOne=z}{%
-      \rIE{1,4,9,10}}
+    \proofstepwide[1]{a\cdot1+b\cdot0}{=}{a+0}{\rIE{4,7}}
+    \proofstepwide[1]{}{=}{a}{\FormulaRefAuto{PeanoAddRightZero}{1}}
+    \proofstepwidestar[1]{a\cdot1+b\cdot0=a}{\rChain{8,9}}
+    \proofstepwide[1]{a\cdot0+b\cdot1}{=}{0+b}{\rIE{6,5}}
+    \proofstepwide[1]{}{=}{b}{\FormulaRefAuto{PeanoAddLeftZero}{1}}
+    \proofstepwidestar[1]{a\cdot0+b\cdot1=b}{\rChain{11,12}}
+    \proofstepwide[1]{z\cdot\IntOne}{=}{%
+      \IntClass{a\cdot1+b\cdot0}{a\cdot0+b\cdot1}}{%
+      \FormulaRefAuto{IntegerMultiplicationDef}{1,2,3}}
+    \proofstepwide[1]{}{=}{\IntClass{a}{b}}{\rIE{10,13}}
+    \proofstepwide[1]{}{=}{z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{\rAEb{1}}}
+    \proofstepwidestar[1]{z\cdot\IntOne=z}{\rChain{14,15,16}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Beidseitige Einheit]{%
@@ -2276,7 +2360,7 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \bigl((ac)e+(bd)e\bigr)+\bigl((ad)f+(bc)f\bigr)
       =
       \bigl(a(ce)+a(df)\bigr)+\bigl(b(cf)+b(de)\bigr)}{%
-      \rIE{6,7,9}}
+      \rChain{6,7,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Gleichheit der positiven Koordinaten]{%
@@ -2311,7 +2395,7 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestarbreakkeep[1]{%
       (ac+bd)e+(ad+bc)f
       =a(ce+df)+b(cf+de)}{%
-      \rIE{2,3,5}}
+      \rChain{2,3,5}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Negative Koordinate: linke Seite ausmultiplizieren]{%
@@ -2400,7 +2484,7 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \bigl((ac)f+(bd)f\bigr)+\bigl((ad)e+(bc)e\bigr)
       =
       \bigl(a(cf)+a(de)\bigr)+\bigl(b(ce)+b(df)\bigr)}{%
-      \rIE{6,7,9}}
+      \rChain{6,7,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Gleichheit der negativen Koordinaten]{%
@@ -2435,7 +2519,7 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestarbreakkeep[1]{%
       (ac+bd)f+(ad+bc)e
       =a(cf+de)+b(ce+df)}{%
-      \rIE{2,3,5}}
+      \rChain{2,3,5}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rechnung mit Klassen]{%
@@ -2454,14 +2538,6 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestarbreakkeep[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
     \proofstepwidestarbreakkeep[1]{%
       \begin{aligned}[t]
-        &(\IntClass{a}{b}\cdot\IntClass{c}{d})
-          \cdot\IntClass{e}{f}={}\\
-        &\IntClass{(ac+bd)e+(ad+bc)f}
-                 {(ac+bd)f+(ad+bc)e}
-      \end{aligned}}{%
-      \FormulaRefAuto{IntegerMultiplicationDef}{1}}
-    \proofstepwidestarbreakkeep[1]{%
-      \begin{aligned}[t]
         &\IntClass{a}{b}\cdot
           (\IntClass{c}{d}\cdot\IntClass{e}{f})={}\\
         &\IntClass{a(ce+df)+b(cf+de)}
@@ -2478,9 +2554,32 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \begin{aligned}[t]
         &(\IntClass{a}{b}\cdot\IntClass{c}{d})
           \cdot\IntClass{e}{f}={}\\
+        &\IntClass{(ac+bd)e+(ad+bc)f}
+                 {(ac+bd)f+(ad+bc)e}
+      \end{aligned}}{%
+      \FormulaRefAuto{IntegerMultiplicationDef}{1}}
+    \proofstepwidestarbreakkeep[1]{%
+      \begin{aligned}[t]
+        &\IntClass{(ac+bd)e+(ad+bc)f}
+                  {(ac+bd)f+(ad+bc)e}={}\\
+        &\IntClass{a(ce+df)+b(cf+de)}
+                  {a(cf+de)+b(ce+df)}
+      \end{aligned}}{\rIE{3,4}}
+    \proofstepwidestarbreakkeep[1]{%
+      \begin{aligned}[t]
+        &\IntClass{a(ce+df)+b(cf+de)}
+                 {a(cf+de)+b(ce+df)}={}\\
         &\IntClass{a}{b}\cdot
           (\IntClass{c}{d}\cdot\IntClass{e}{f})
-      \end{aligned}}{\rIE{2,3,4,5}}
+      \end{aligned}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{2}}
+    \proofstepwidestarbreakkeep[1]{%
+      \begin{aligned}[t]
+        &(\IntClass{a}{b}\cdot\IntClass{c}{d})
+          \cdot\IntClass{e}{f}={}\\
+        &\IntClass{a}{b}\cdot
+          (\IntClass{c}{d}\cdot\IntClass{e}{f})
+      \end{aligned}}{\rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -2530,18 +2629,9 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     a(c+e)+b(d+f)=(ac+bd)+(ae+bf)
   }[IntMulLeftDistributivePositiveCoordinate]
     \proofstepwidestarbreakkeep[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
-    \proofstepwidestarbreakkeep[1]{a(c+e)=ac+ae}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestarbreakkeep[1]{b(d+f)=bd+bf}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestarbreakkeep[1]{%
-      a(c+e)+b(d+f)=(ac+ae)+(bd+bf)}{\rIE{2,3}}
-    \proofstepwidestarbreakkeep[1]{%
-      (ac+ae)+(bd+bf)=(ac+bd)+(ae+bf)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwidestarbreakkeep[1]{%
       a(c+e)+b(d+f)=(ac+bd)+(ae+bf)}{%
-      \rIE{4,5}}
+      \FormulaRefAuto{PeanoBilinearAddInterchange}{1}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Negative Koordinate distributiv ausmultiplizieren]{%
@@ -2554,18 +2644,9 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     a(d+f)+b(c+e)=(ad+bc)+(af+be)
   }[IntMulLeftDistributiveNegativeCoordinate]
     \proofstepwidestarbreakkeep[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
-    \proofstepwidestarbreakkeep[1]{a(d+f)=ad+af}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestarbreakkeep[1]{b(c+e)=bc+be}{%
-      \FormulaRefAuto{PeanoMulLeftDistributive}{1}}
-    \proofstepwidestarbreakkeep[1]{%
-      a(d+f)+b(c+e)=(ad+af)+(bc+be)}{\rIE{2,3}}
-    \proofstepwidestarbreakkeep[1]{%
-      (ad+af)+(bc+be)=(ad+bc)+(af+be)}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwidestarbreakkeep[1]{%
       a(d+f)+b(c+e)=(ad+bc)+(af+be)}{%
-      \rIE{4,5}}
+      \FormulaRefAuto{PeanoBilinearAddInterchange}{1}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Distributivrechnung auf Klassen]{%
@@ -2588,15 +2669,6 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestarbreakkeep[1]{a,b,c,d,e,f\in\mathbb N}{\rA}
     \proofstepwidestarbreakkeep[1]{%
       \begin{aligned}[t]
-        &\IntClass{a}{b}\cdot
-          (\IntClass{c}{d}+\IntClass{e}{f})={}\\
-        &\IntClass{a(c+e)+b(d+f)}
-                 {a(d+f)+b(c+e)}
-      \end{aligned}}{%
-      \FormulaRefAuto{IntegerAdditionDef}{%
-        \FormulaRefAuto{IntegerMultiplicationDef}{1}}}
-    \proofstepwidestarbreakkeep[1]{%
-      \begin{aligned}[t]
         &\IntClass{a}{b}\cdot\IntClass{c}{d}
           +\IntClass{a}{b}\cdot\IntClass{e}{f}={}\\
         &\IntClass{(ac+bd)+(ae+bf)}
@@ -2614,9 +2686,31 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \begin{aligned}[t]
         &\IntClass{a}{b}\cdot
           (\IntClass{c}{d}+\IntClass{e}{f})={}\\
+        &\IntClass{a(c+e)+b(d+f)}
+                 {a(d+f)+b(c+e)}
+      \end{aligned}}{%
+      \FormulaRefAuto{IntegerAdditionDef}{%
+        \FormulaRefAuto{IntegerMultiplicationDef}{1}}}
+    \proofstepwidestarbreakkeep[1]{%
+      \IntClass{a(c+e)+b(d+f)}
+               {a(d+f)+b(c+e)}
+      =\IntClass{(ac+bd)+(ae+bf)}
+               {(ad+bc)+(af+be)}}{\rIE{3,4}}
+    \proofstepwidestarbreakkeep[1]{%
+      \begin{aligned}[t]
+        &\IntClass{(ac+bd)+(ae+bf)}
+                 {(ad+bc)+(af+be)}={}\\
         &\IntClass{a}{b}\cdot\IntClass{c}{d}
           +\IntClass{a}{b}\cdot\IntClass{e}{f}
-      \end{aligned}}{\rIE{2,3,4,5}}
+      \end{aligned}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{2}}
+    \proofstepwidestarbreakkeep[1]{%
+      \begin{aligned}[t]
+        &\IntClass{a}{b}\cdot
+          (\IntClass{c}{d}+\IntClass{e}{f})={}\\
+        &\IntClass{a}{b}\cdot\IntClass{c}{d}
+          +\IntClass{a}{b}\cdot\IntClass{e}{f}
+      \end{aligned}}{\rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -2654,19 +2748,21 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
 }{IntMulRightDistributive}{%
   \DeltaRow{Mengen}{z\dsep w\dsep u}%
 }
-\begin{tabproof}
-  \proofstep{1}{z,w,u\in\mathbb Z}{\rA}
-  \proofstep{1}{(z+w)\cdot u=u\cdot(z+w)}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{z,w,u\in\mathbb Z}{\rA}
+  \proofstepwidestar[1]{u\cdot z=z\cdot u}{%
+    \FormulaRefAuto{IntMulCommutative}{1}}
+  \proofstepwidestar[1]{u\cdot w=w\cdot u}{%
+    \FormulaRefAuto{IntMulCommutative}{1}}
+  \proofstepwide[1]{(z+w)\cdot u}{=}{u\cdot(z+w)}{%
     \FormulaRefAuto{IntMulCommutative}{%
       \FormulaRefAuto{IntAddClosure}{1},1}}
-  \proofstep{1}{u\cdot(z+w)=u\cdot z+u\cdot w}{%
+  \proofstepwide[1]{}{=}{u\cdot z+u\cdot w}{%
     \FormulaRefAuto{IntMulLeftDistributive}{1}}
-  \proofstep{1}{u\cdot z=z\cdot u}{\FormulaRefAuto{IntMulCommutative}{1}}
-  \proofstep{1}{u\cdot w=w\cdot u}{\FormulaRefAuto{IntMulCommutative}{1}}
-  \proofstep{1}{u\cdot z+u\cdot w=z\cdot u+w\cdot u}{\rIE{4,5}}
-  \proofstep{1}{(z+w)\cdot u=z\cdot u+w\cdot u}{%
-    \rIE{2,3,6}}
-\end{tabproof}
+  \proofstepwide[1]{}{=}{z\cdot u+w\cdot u}{\rIE{2,3}}
+  \proofstepwidestar[1]{(z+w)\cdot u=z\cdot u+w\cdot u}{%
+    \rChain{4,5,6}}
+\end{tabproofwide}
 
 \section{Verträglichkeit der Einbettung mit der Arithmetik}
 
@@ -2677,26 +2773,27 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
   \DeltaRow{Mengen}{m\dsep n}%
   \DeltaRow{Funktion}{\IntEmbed}%
 }
-\begin{tabproof}
-  \proofstep{1}{m,n\in\mathbb N}{\rA}
-  \proofstep{1}{m+n\in\mathbb N}{\FormulaRefAuto{PeanoAddClosure}{1}}
-  \proofstep{1}{\IntEmbed(m+n)=\IntClass{m+n}{0}}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}
-  \proofstep{1}{\IntEmbed(m)=\IntClass{m}{0}}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{m,n\in\mathbb N}{\rA}
+  \proofstepwidestar[1]{m+n\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}{1}}
+  \proofstepwidestar[1]{\IntEmbed(m)=\IntClass{m}{0}}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
-  \proofstep{1}{\IntEmbed(n)=\IntClass{n}{0}}{%
+  \proofstepwidestar[1]{\IntEmbed(n)=\IntClass{n}{0}}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
-  \proofstep{1}{\IntEmbed(m)+\IntEmbed(n)=
-    \IntClass{m+n}{0+0}}{%
-    \FormulaRefAuto{IntegerAdditionDef}{1,4,5}}
-  \proofstep{}{0+0=0}{%
+  \proofstepwidestar[]{0+0=0}{%
     \FormulaRefAuto{PeanoAddRightZero}{\FormulaRefAuto{PeanoZero}}}
-  \proofstep{1}{\IntEmbed(m)+\IntEmbed(n)=
-    \IntClass{m+n}{0}}{\rIE{7,6}}
-  \proofstep{1}{\IntEmbed(m+n)=
-    \IntEmbed(m)+\IntEmbed(n)}{%
-    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{3,8}}
-\end{tabproof}
+  \proofstepwidestar[]{0=0+0}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstepwide[1]{\IntEmbed(m+n)}{=}{\IntClass{m+n}{0}}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}
+  \proofstepwide[1]{}{=}{\IntClass{m+n}{0+0}}{\rIE{6}}
+  \proofstepwide[1]{}{=}{\IntEmbed(m)+\IntEmbed(n)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      \FormulaRefAuto{IntegerAdditionDef}{1,3,4}}}
+  \proofstepwidestar[1]{\IntEmbed(m+n)=
+    \IntEmbed(m)+\IntEmbed(n)}{\rChain{7,8,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Multiplikativität der natürlichen Einbettung]{%
   m,n\in\mathbb N\vdash
@@ -2720,9 +2817,6 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
       \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
     \proofstepwidestar[1]{\IntEmbed(n)=\IntClass{n}{0}}{%
       \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
-    \proofstepwidestar[1]{\IntEmbed(m)\cdot\IntEmbed(n)=
-      \IntClass{mn+0\cdot0}{m\cdot0+0\cdot n}}{%
-      \FormulaRefAuto{IntegerMultiplicationDef}{1,3,4}}
     \proofstepwidestar[]{0\cdot0=0}{%
       \FormulaRefAuto{PeanoMulLeftZero}{\FormulaRefAuto{PeanoZero}}}
     \proofstepwidestar[1]{m\cdot0=0}{%
@@ -2730,13 +2824,17 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestar[1]{0\cdot n=0}{%
       \FormulaRefAuto{PeanoMulLeftZero}{1}}
     \proofstepwidestar[1]{mn+0\cdot0=mn}{%
-      \rIE{6,\FormulaRefAuto{PeanoAddRightZero}{2}}}
+      \rIE{5,\FormulaRefAuto{PeanoAddRightZero}{2}}}
     \proofstepwidestar[1]{m\cdot0+0\cdot n=0}{%
-      \rIE{7,8,
+      \rIE{6,7,
         \FormulaRefAuto{PeanoAddRightZero}{\FormulaRefAuto{PeanoZero}}}}
+    \proofstepwide[1]{\IntEmbed(m)\cdot\IntEmbed(n)}{=}{%
+      \IntClass{mn+0\cdot0}{m\cdot0+0\cdot n}}{%
+      \FormulaRefAuto{IntegerMultiplicationDef}{1,3,4}}
+    \proofstepwide[1]{}{=}{\IntClass{mn}{0}}{\rIE{8,9}}
     \proofstepwidestar[1]{%
       \IntEmbed(m)\cdot\IntEmbed(n)=\IntClass{mn}{0}}{%
-      \rIE{5,9,10}}
+      \rChain{10,11}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Vergleich mit dem Produktbild]{%
@@ -2749,71 +2847,114 @@ von beiden gewählten Differenzenpaaren genau ein Ergebnis in \(\mathbb Z\).
     \proofstepwidestar[1]{m,n\in\mathbb N}{\rA}
     \proofstepwidestar[1]{mn\in\mathbb N}{%
       \FormulaRefAuto{PeanoMulClosure}{1}}
-    \proofstepwidestar[1]{\IntEmbed(mn)=\IntClass{mn}{0}}{%
-      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}
     \proofstepwidestar[1]{%
       \IntEmbed(m)\cdot\IntEmbed(n)=\IntClass{mn}{0}}{%
       \FormulaRefAuto{NaturalIntegerEmbeddingProductClass}{1}}
+    \proofstepwide[1]{\IntEmbed(mn)}{=}{\IntClass{mn}{0}}{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}
+    \proofstepwide[1]{}{=}{\IntEmbed(m)\cdot\IntEmbed(n)}{%
+      \FormulaRefAuto{a=b\vdash b=a}{3}}
     \proofstepwidestar[1]{\IntEmbed(mn)=
       \IntEmbed(m)\cdot\IntEmbed(n)}{%
-      \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{3,4}}
+      \rChain{4,5}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
-\section{Axiomatische Schnittstelle der Ganzzahlarithmetik}
+\section{Herleitung der arithmetischen Axiome}
 
 Bis hierher wurden Träger, Negation, Addition und Multiplikation am
 Quotienten konstruiert und ihre Wohldefiniertheit sowie die elementaren
-Rechengesetze am Modell bewiesen.  Erst jetzt werden diese Gesetze einzeln
-als Axiome registriert.  Damit können alle folgenden, nicht mehr von der
-konkreten Paarrepräsentation abhängigen Rechnungen ausschließlich auf die
-Schnittstelle verweisen; die jeweils angegebene Herkunft bleibt ein
-zirkelfreier Modellnachweis.
+Rechengesetze am Modell bewiesen. Diese Gesetze werden nun einzeln als
+künftige Axiome registriert. Das beendet die Modellphase noch nicht: Ordnung,
+Diskretheit, Normalformen und zweiseitige Induktion müssen ebenfalls am
+Konstruktionsmodell hergeleitet werden. Bis zu diesem vollständigen
+Modellnachweis bleiben Klassenargumente daher zulässig, aber auf die
+Herleitung genau dieser noch fehlenden Axiome beschränkt.
 
-Die Ordnung wird noch nicht vorweggenommen: Ihre Repräsentantenunabhängigkeit
-und die Ordnungsbeweise folgen weiter unten.  Unmittelbar nach diesem
-Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
+Der eigentliche Abstraktionsschnitt folgt erst im Kapitel
+\emph{Axiomatische Beschreibung der ganzen Zahlen}. Ab dort werden weder
+Paarrepräsentanten noch Äquivalenzklassen verwendet.
+
+Die fett gesetzten Zwischenzeilen gliedern die Einzelaxiome lediglich
+metasprachlich. Zusammen beschreiben die folgenden Blöcke einen kommutativen
+Ring mit Eins; der abstrakte Ringbegriff wird dafür nicht vorausgesetzt.
 
 \FormulaDefDeltaK[Elementare Axiome der Ganzzahlarithmetik]{%
   \IntegerArithmetic{\mathbb Z,\IntZero,\IntOne,-,+,\cdot}%
 }{IntegerArithmeticAxioms}{%
-  \DeltaRow{\textbf{Axiome}}{}%
+  \DeltaRow{\textbf{Träger und Konstanten}}{}%
   \DeltaRow{Null}{\IntZero\in\mathbb Z}
     [\FormulaRefAuto{IntegerZeroCarrierAxiom}]%
   \DeltaRow{Eins}{\IntOne\in\mathbb Z}
     [\FormulaRefAuto{IntegerOneCarrierAxiom}]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\makecell[l]{\textbf{Additive abelsche}\\
+    \textbf{Gruppe}}}{}%
   \DeltaRow{Abschluss Negation}{z\in\mathbb Z\vdash-z\in\mathbb Z}
     [\FormulaRefAuto{IntegerNegClosureAxiom}]%
   \DeltaRow{Abschluss Addition}{z,w\in\mathbb Z\vdash z+w\in\mathbb Z}
     [\FormulaRefAuto{IntegerAddClosureAxiom}]%
   \DeltaRow{Addition: assoziativ}
-    {(z+w)+u=z+(w+u)}
+    {\begin{aligned}[t]
+       &z,w,u\in\mathbb Z\vdash{}\\[-2pt]
+       &(z+w)+u=z+(w+u)
+     \end{aligned}}
     [\FormulaRefAuto{IntegerAddAssociativeAxiom}]%
-  \DeltaRow{Addition: kommutativ}{z+w=w+z}
+  \DeltaRow{Addition: kommutativ}
+    {z,w\in\mathbb Z\vdash z+w=w+z}
     [\FormulaRefAuto{IntegerAddCommutativeAxiom}]%
-  \DeltaRow{Addition: neutral}{z+\IntZero=z\dsep\IntZero+z=z}
+  \DeltaRow{Addition: neutral}
+    {\begin{aligned}[t]
+       &z\in\mathbb Z\vdash{}\\[-2pt]
+       &z+\IntZero=z\dsep\IntZero+z=z
+     \end{aligned}}
     [\FormulaRefAuto{IntegerAddZeroAxiom}]%
   \DeltaRow{Addition: invers}
-    {z+(-z)=\IntZero\dsep(-z)+z=\IntZero}
+    {\begin{aligned}[t]
+       &z\in\mathbb Z\vdash{}\\[-2pt]
+       &z+(-z)=\IntZero\dsep(-z)+z=\IntZero
+     \end{aligned}}
     [\FormulaRefAuto{IntegerAddInverseAxiom}]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\makecell[l]{\textbf{Kommutatives}\\\textbf{Monoid}}}{}%
   \DeltaRow{Abschluss Produkt}
     {z,w\in\mathbb Z\vdash z\cdot w\in\mathbb Z}
     [\FormulaRefAuto{IntegerMulClosureAxiom}]%
   \DeltaRow{Produkt: assoziativ}
-    {(z\cdot w)\cdot u=z\cdot(w\cdot u)}
+    {\begin{aligned}[t]
+       &z,w,u\in\mathbb Z\vdash{}\\[-2pt]
+       &(z\cdot w)\cdot u=z\cdot(w\cdot u)
+     \end{aligned}}
     [\FormulaRefAuto{IntegerMulAssociativeAxiom}]%
-  \DeltaRow{Produkt: kommutativ}{z\cdot w=w\cdot z}
+  \DeltaRow{Produkt: kommutativ}
+    {z,w\in\mathbb Z\vdash z\cdot w=w\cdot z}
     [\FormulaRefAuto{IntegerMulCommutativeAxiom}]%
   \DeltaRow{Produkt: neutral}
-    {z\cdot\IntOne=z\dsep\IntOne\cdot z=z}
+    {\begin{aligned}[t]
+       &z\in\mathbb Z\vdash{}\\[-2pt]
+       &z\cdot\IntOne=z\dsep\IntOne\cdot z=z
+     \end{aligned}}
     [\FormulaRefAuto{IntegerMulOneAxiom}]%
-  \DeltaRow{Linksdistributivität}
-    {z\cdot(w+u)=z\cdot w+z\cdot u}
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Distributivität}}{}%
+  \DeltaRow{\makecell[l]{Links-\\distributivität}}
+    {\begin{aligned}[t]
+       &z,w,u\in\mathbb Z\vdash{}\\[-2pt]
+       &z\cdot(w+u)=z\cdot w+z\cdot u
+     \end{aligned}}
     [\FormulaRefAuto{IntegerMulLeftDistributiveAxiom}]%
-  \DeltaRow{Rechtsdistributivität}
-    {(z+w)\cdot u=z\cdot u+w\cdot u}
+  \DeltaRow{\makecell[l]{Rechts-\\distributivität}}
+    {\begin{aligned}[t]
+       &z,w,u\in\mathbb Z\vdash{}\\[-2pt]
+       &(z+w)\cdot u=z\cdot u+w\cdot u
+     \end{aligned}}
     [\FormulaRefAuto{IntegerMulRightDistributiveAxiom}]%
-  \DeltaRow{\textbf{Neue Symbole}}{}%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Signatur}}{}%
   \DeltaRow{Ganze Zahlen}{\mathbb Z}%
   \DeltaRow{Konstanten}{\IntZero\dsep\IntOne}%
   \DeltaRow{Operationen}{-\dsep+\dsep\cdot}%
@@ -2909,23 +3050,179 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 \par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
 \FormulaRefAuto{IntMulRightDistributive}[thm].\par
 
+\FormulaThmDeltaK[Multiplikation ganzer Zahlen mit null aus den Axiomen]{%
+  z\in\mathbb Z\vdash
+  z\cdot\IntZero=\IntZero\dsep
+  \IntZero\cdot z=\IntZero%
+}{IntegerMulZeroFromAxioms}{%
+  \DeltaRow{Mengen}{z}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{z\in\mathbb Z}{\rA}
+  \proofstepwidestarbreak[1]{z\cdot\IntZero\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{%
+      1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}
+  \proofstepwidestarbreak[]{\IntZero+\IntZero=\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}}
+  \proofstepwidestarbreak[1]{z\cdot(\IntZero+\IntZero)
+    =z\cdot\IntZero+z\cdot\IntZero}{%
+    \FormulaRefAuto{IntegerMulLeftDistributiveAxiom}[ax]{%
+      1,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}}
+  \proofstepwidestarbreak[1]{z\cdot\IntZero
+    =z\cdot(\IntZero+\IntZero)}{\rIE{3}}
+  \proofstepwidestarbreak[1]{z\cdot\IntZero
+    =z\cdot\IntZero+z\cdot\IntZero}{\rChain{5,4}}
+  \proofstepwidestarbreak[1]{-(z\cdot\IntZero)
+    +(z\cdot\IntZero)=\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
+  \proofstepwidestarbreak[1]{-(z\cdot\IntZero)\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
+  \proofstepwidestarbreak[1]{%
+    \bigl(-(z\cdot\IntZero)+(z\cdot\IntZero)\bigr)
+      +z\cdot\IntZero
+    =-(z\cdot\IntZero)
+      +(z\cdot\IntZero+z\cdot\IntZero)}{%
+    \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{8,2,2}}
+  \proofstepwidestarbreak[1]{%
+    \bigl(-(z\cdot\IntZero)+(z\cdot\IntZero)\bigr)
+      +z\cdot\IntZero
+    =\IntZero+z\cdot\IntZero}{\rIE{7}}
+  \proofstepwidestarbreak[1]{\IntZero+z\cdot\IntZero
+    =z\cdot\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{2}}}
+  \proofstepwidestarbreak[1]{%
+    \bigl(-(z\cdot\IntZero)+(z\cdot\IntZero)\bigr)
+      +z\cdot\IntZero
+    =z\cdot\IntZero}{\rChain{10,11}}
+  \proofstepwide[1]{z\cdot\IntZero}{=}{%
+    -(z\cdot\IntZero)+(z\cdot\IntZero+z\cdot\IntZero)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\rIE{9,12}}}
+  \proofstepwide[1]{}{=}{%
+    -(z\cdot\IntZero)+(z\cdot\IntZero)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\rIE{6}}}
+  \proofstepwide[1]{}{=}{\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
+  \proofstepwidestarbreak[1]{z\cdot\IntZero=\IntZero}{%
+    \rChain{13,14,15}}
+  \proofstepwidestarbreak[1]{\IntZero\cdot z=z\cdot\IntZero}{%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],1}}
+  \proofstepwidestarbreak[1]{\IntZero\cdot z=\IntZero}{\rChain{17,16}}
+  \proofstepwidestarbreak[1]{z\cdot\IntZero=\IntZero\land
+    \IntZero\cdot z=\IntZero}{\rAI{16,18}}
+\end{tabproofwide}
+
 \FormulaThmDeltaK[Negation der Ganzzahlnull]{%
   -\IntZero=\IntZero%
 }{IntegerNegativeZero}{%
   \DeltaRow{Mengen}{\IntZero}%
 }
-\begin{tabproof}
-  \proofstep{}{\IntZero\in\mathbb Z}{%
+\begin{tabproofwide}
+  \proofstepwidestar[]{\IntZero\in\mathbb Z}{%
     \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}
-  \proofstep{}{-\IntZero\in\mathbb Z}{%
+  \proofstepwidestar[]{-\IntZero\in\mathbb Z}{%
     \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{1}}
-  \proofstep{}{(-\IntZero)+\IntZero=-\IntZero}{%
-    \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{2}}}
-  \proofstep{}{(-\IntZero)+\IntZero=\IntZero}{%
+  \proofstepwide[]{-\IntZero}{=}{(-\IntZero)+\IntZero}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{2}}}}
+  \proofstepwide[]{}{=}{\IntZero}{%
     \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{1}}}
-  \proofstep{}{-\IntZero=\IntZero}{%
-    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{3,4}}
-\end{tabproof}
+  \proofstepwidestar[]{-\IntZero=\IntZero}{\rChain{3,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Negatives Vorzeichen im rechten Faktor]{%
+  x,y\in\mathbb Z\vdash
+  x\cdot(-y)=-(x\cdot y)%
+}{IntegerRightNegativeProduct}{%
+  \DeltaRow{Mengen}{x\dsep y}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{x,y\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{x\in\mathbb Z}{\rAEa{1}}
+  \proofstepwidestarbreakkeep[1]{y\in\mathbb Z}{\rAEb{1}}
+  \proofstepwidestarbreakkeep[1]{-y\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1]{x\cdot y\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{2,3}}
+  \proofstepwidestarbreakkeep[1]{x\cdot(-y)\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{2,4}}
+  \proofstepwidestarbreakkeep[1]{-(x\cdot y)\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{5}}
+  \proofstepwidestarbreakkeep[1]{y+(-y)=\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{3}}}
+  \proofstepwidestarbreakkeep[1]{%
+    x\cdot\bigl(y+(-y)\bigr)
+      =x\cdot y+x\cdot(-y)}{%
+    \FormulaRefAuto{IntegerMulLeftDistributiveAxiom}[ax]{2,3,4}}
+  \proofstepwide[1]{x\cdot y+x\cdot(-y)}{=}{%
+    x\cdot\bigl(y+(-y)\bigr)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{9}}
+  \proofstepwide[1]{}{=}{x\cdot\IntZero}{\rIE{8}}
+  \proofstepwide[1]{}{=}{\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerMulZeroFromAxioms}[thm]{2}}}
+  \proofstepwidestarbreakkeep[1]{%
+    x\cdot y+x\cdot(-y)=\IntZero}{\rChain{10,11,12}}
+  \proofstepwidestarbreakkeep[1]{%
+    -(x\cdot y)+x\cdot y=\IntZero}{%
+    \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{5}}}
+  \proofstepwidestarbreakkeep[1]{%
+    \IntZero+x\cdot(-y)=x\cdot(-y)}{%
+    \rAEb{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{6}}}
+  \proofstepwide[1]{x\cdot(-y)}{=}{\IntZero+x\cdot(-y)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{15}}
+  \proofstepwidestarbreakkeep[1]{%
+    \IntZero=-(x\cdot y)+x\cdot y}{%
+    \FormulaRefAuto{a=b\vdash b=a}{14}}
+  \proofstepwide[1]{}{=}{%
+    \bigl(-(x\cdot y)+x\cdot y\bigr)+x\cdot(-y)}{\rIE{17}}
+  \proofstepwide[1]{}{=}{%
+    -(x\cdot y)+\bigl(x\cdot y+x\cdot(-y)\bigr)}{%
+    \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{7,5,6}}
+  \proofstepwide[1]{}{=}{-(x\cdot y)+\IntZero}{\rIE{13}}
+  \proofstepwide[1]{}{=}{-(x\cdot y)}{%
+    \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{7}}}
+  \proofstepwidestarbreakkeep[1]{%
+    x\cdot(-y)=-(x\cdot y)}{\rChain{16,18,19,20,21}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Produkt zweier negativer ganzer Zahlen]{%
+  x,y\in\mathbb Z\vdash
+  (-x)\cdot(-y)=x\cdot y%
+}{IntegerNegativeTimesNegative}{%
+  \DeltaRow{Mengen}{x\dsep y}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{x,y\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[1]{x\in\mathbb Z}{\rAEa{1}}
+  \proofstepwidestarbreakkeep[1]{y\in\mathbb Z}{\rAEb{1}}
+  \proofstepwidestarbreakkeep[1]{-x\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
+  \proofstepwidestarbreakkeep[1]{-y\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1]{y\cdot x=x\cdot y}{%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{3,2}}
+  \proofstepwide[1]{(-x)\cdot y}{=}{y\cdot(-x)}{%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{4,3}}
+  \proofstepwide[1]{}{=}{-(y\cdot x)}{%
+    \FormulaRefAuto{IntegerRightNegativeProduct}[thm]{3,2}}
+  \proofstepwide[1]{}{=}{-(x\cdot y)}{\rIE{6}}
+  \proofstepwidestarbreakkeep[1]{%
+    (-x)\cdot y=-(x\cdot y)}{\rChain{7,8,9}}
+  \proofstepwidestarbreakkeep[1]{x\cdot y\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{2,3}}
+  \proofstepwidestarbreakkeep[1]{%
+    -\bigl(-(x\cdot y)\bigr)=x\cdot y}{%
+    \FormulaRefAuto{IntegerDoubleNegation}[thm]{11}}
+  \proofstepwide[1]{(-x)\cdot(-y)}{=}{%
+    -\bigl((-x)\cdot y\bigr)}{%
+    \FormulaRefAuto{IntegerRightNegativeProduct}[thm]{4,3}}
+  \proofstepwide[1]{}{=}{-\bigl(-(x\cdot y)\bigr)}{\rIE{10}}
+  \proofstepwide[1]{}{=}{x\cdot y}{%
+    \FormulaRefAuto{IntegerDoubleNegation}[thm]{11}}
+  \proofstepwidestarbreakkeep[1]{%
+    (-x)\cdot(-y)=x\cdot y}{\rChain{13,14,15}}
+\end{tabproofwide}
 
 \chapter{Nachfolger, Vorgänger und Normalformen}
 
@@ -3034,27 +3331,28 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 }{IntegerSuccessorClassValue}{%
   \DeltaRow{Mengen}{a\dsep b}%
 }
-\begin{tabproof}
-  \proofstep{1}{a,b\in\mathbb N}{\rA}
-  \proofstep{1}{\IntClass{a}{b}\in\mathbb Z}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
+  \proofstepwidestar[1]{\IntClass{a}{b}\in\mathbb Z}{%
     \FormulaRefAuto{IntegerClassInZ}{1}}
-  \proofstep{}{\forall z\in\mathbb Z\,\bigl(\IntSucc(z)=z+\IntOne\bigr)}{%
+  \proofstepwidestar[]{%
+    \forall z\in\mathbb Z\,\bigl(\IntSucc(z)=z+\IntOne\bigr)}{%
     \FormulaRefAuto{IntegerSuccessorDef}[def]}
-  \proofstep{1}{\IntSucc(\IntClass{a}{b})=
-    \IntClass{a}{b}+\IntOne}{%
-    \rRE{\rUE{3},2}}
-  \proofstep{}{\IntOne=\IntClass{1}{0}}{%
+  \proofstepwidestar[]{\IntOne=\IntClass{1}{0}}{%
     \FormulaRefAuto{IntegerOneDef}{%
       \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
         \FormulaRefAuto{PeanoOneInN}}}}
-  \proofstep{1}{\IntClass{a}{b}+\IntOne
-    =\IntClass{a+1}{b+0}}{%
-    \FormulaRefAuto{IntegerAdditionDef}{1,5}}
-  \proofstep{1}{a+1=\Succ(a)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstep{1}{b+0=b}{\FormulaRefAuto{PeanoAddRightZero}{1}}
-  \proofstep{1}{\IntSucc(\IntClass{a}{b})=
-    \IntClass{\Succ(a)}{b}}{\rIE{4,6,7,8}}
-\end{tabproof}
+  \proofstepwidestar[1]{a+1=\Succ(a)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstepwidestar[1]{b+0=b}{\FormulaRefAuto{PeanoAddRightZero}{1}}
+  \proofstepwide[1]{\IntSucc(\IntClass{a}{b})}{=}{%
+    \IntClass{a}{b}+\IntOne}{\rRE{\rUE{3},2}}
+  \proofstepwide[1]{}{=}{\IntClass{a+1}{b+0}}{%
+    \FormulaRefAuto{IntegerAdditionDef}{1,4}}
+  \proofstepwide[1]{}{=}{\IntClass{\Succ(a)}{b}}{\rIE{5,6}}
+  \proofstepwidestar[1]{\IntSucc(\IntClass{a}{b})=
+    \IntClass{\Succ(a)}{b}}{\rChain{7,8,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Vorgänger auf Klassen]{%
   a,b\in\mathbb N\vdash
@@ -3062,28 +3360,27 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 }{IntegerPredecessorClassValue}{%
   \DeltaRow{Mengen}{a\dsep b}%
 }
-\begin{tabproof}
-  \proofstep{1}{a,b\in\mathbb N}{\rA}
-  \proofstep{1}{\IntClass{a}{b}\in\mathbb Z}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
+  \proofstepwidestar[1]{\IntClass{a}{b}\in\mathbb Z}{%
     \FormulaRefAuto{IntegerClassInZ}{1}}
-  \proofstep{}{%
+  \proofstepwidestar[]{%
     \forall z\in\mathbb Z\,\bigl(\IntPred(z)=z+(-\IntOne)\bigr)}{%
     \FormulaRefAuto{IntegerPredecessorDef}[def]}
-  \proofstep{1}{\IntPred(\IntClass{a}{b})=
-    \IntClass{a}{b}+(-\IntOne)}{%
-    \rRE{\rUE{3},2}}
-  \proofstep{}{-\IntOne=\IntClass{0}{1}}{%
+  \proofstepwidestar[]{-\IntOne=\IntClass{0}{1}}{%
     \FormulaRefAuto{IntegerNegationDef}{%
       \FormulaRefAuto{IntegerOneDef},%
       \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]}}
-  \proofstep{1}{\IntClass{a}{b}+(-\IntOne)
-    =\IntClass{a+0}{b+1}}{%
-    \FormulaRefAuto{IntegerAdditionDef}{1,5}}
-  \proofstep{1}{a+0=a}{\FormulaRefAuto{PeanoAddRightZero}{1}}
-  \proofstep{1}{b+1=\Succ(b)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstep{1}{\IntPred(\IntClass{a}{b})=
-    \IntClass{a}{\Succ(b)}}{\rIE{4,6,7,8}}
-\end{tabproof}
+  \proofstepwidestar[1]{a+0=a}{\FormulaRefAuto{PeanoAddRightZero}{1}}
+  \proofstepwidestar[1]{b+1=\Succ(b)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstepwide[1]{\IntPred(\IntClass{a}{b})}{=}{%
+    \IntClass{a}{b}+(-\IntOne)}{\rRE{\rUE{3},2}}
+  \proofstepwide[1]{}{=}{\IntClass{a+0}{b+1}}{%
+    \FormulaRefAuto{IntegerAdditionDef}{1,4}}
+  \proofstepwide[1]{}{=}{\IntClass{a}{\Succ(b)}}{\rIE{5,6}}
+  \proofstepwidestar[1]{\IntPred(\IntClass{a}{b})=
+    \IntClass{a}{\Succ(b)}}{\rChain{7,8,9}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Vorgänger nach Nachfolger]{%
   z\in\mathbb Z\vdash
@@ -3114,23 +3411,21 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(z))=
-      (z+\IntOne)+(-\IntOne)}{%
-      \FormulaRefAuto{IntegerPredAfterSuccExpansion}{1}}
     \proofstepwidestar[]{\IntOne\in\mathbb Z}{%
       \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
     \proofstepwidestar[]{\IntOne+(-\IntOne)=\IntZero}{%
-      \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{3}}}
-    \proofstepwidestar[1]{(z+\IntOne)+(-\IntOne)
-      =z+(\IntOne+(-\IntOne))}{%
-      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,3,%
-        \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{3}}}
-    \proofstepwidestar[1]{z+(\IntOne+(-\IntOne))
-      =z+\IntZero}{\rIE{4}}
-    \proofstepwidestar[1]{z+\IntZero=z}{%
+      \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
+    \proofstepwide[1]{\IntPred(\IntSucc(z))}{=}{%
+      (z+\IntOne)+(-\IntOne)}{%
+      \FormulaRefAuto{IntegerPredAfterSuccExpansion}{1}}
+    \proofstepwide[1]{}{=}{z+(\IntOne+(-\IntOne))}{%
+      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,2,%
+        \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}}
+    \proofstepwide[1]{}{=}{z+\IntZero}{\rIE{3}}
+    \proofstepwide[1]{}{=}{z}{%
       \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
     \proofstepwidestar[1]{\IntPred(\IntSucc(z))=z}{%
-      \rIE{2,5,6,7}}
+      \rChain{4,5,6,7}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3168,26 +3463,23 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
     z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z%
   }[IntegerSuccAfterPredConclusion]
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[1]{%
-      \IntSucc(\IntPred(z))=(z+(-\IntOne))+\IntOne}{%
-      \FormulaRefAuto{IntegerSuccAfterPredExpansion}{1}}
     \proofstepwidestar[]{\IntOne\in\mathbb Z}{%
       \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
     \proofstepwidestar[]{-\IntOne\in\mathbb Z}{%
-      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{3}}
+      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
     \proofstepwidestar[]{%
       (-\IntOne)+\IntOne=\IntZero}{%
-      \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{3}}}
-    \proofstepwidestar[1]{%
-      (z+(-\IntOne))+\IntOne
-      =z+((-\IntOne)+\IntOne)}{%
-      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,4,3}}
-    \proofstepwidestar[1]{%
-      z+((-\IntOne)+\IntOne)=z+\IntZero}{\rIE{5}}
-    \proofstepwidestar[1]{z+\IntZero=z}{%
+      \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
+    \proofstepwide[1]{\IntSucc(\IntPred(z))}{=}{%
+      (z+(-\IntOne))+\IntOne}{%
+      \FormulaRefAuto{IntegerSuccAfterPredExpansion}{1}}
+    \proofstepwide[1]{}{=}{z+((-\IntOne)+\IntOne)}{%
+      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,3,2}}
+    \proofstepwide[1]{}{=}{z+\IntZero}{\rIE{4}}
+    \proofstepwide[1]{}{=}{z}{%
       \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
     \proofstepwidestar[1]{\IntSucc(\IntPred(z))=z}{%
-      \rIE{2,6,7,8}}
+      \rChain{5,6,7,8}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
@@ -3210,9 +3502,12 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
       \FormulaRefAuto{IntegerPredAfterSucc}{1}}
     \proofstepwidestar[1]{\IntPred(\IntSucc(y))=y}{%
       \FormulaRefAuto{IntegerPredAfterSucc}{1}}
-    \proofstepwidestar[2]{\IntPred(\IntSucc(x))=
-      \IntPred(\IntSucc(y))}{\rIE{2}}
-    \proofstepwidestar[1,2]{x=y}{\rIE{3,4,5}}
+    \proofstepwide[1]{x}{=}{\IntPred(\IntSucc(x))}{%
+      \FormulaRefAuto{a=b\vdash b=a}{3}}
+    \proofstepwide[1,2]{}{=}{\IntPred(\IntSucc(y))}{\rIE{2}}
+    \proofstepwide[1]{}{=}{y}{%
+      \FormulaRefAuto{IntegerPredAfterSucc}{1}}
+    \proofstepwidestar[1,2]{x=y}{\rChain{5,6,7}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Surjektivität]{%
@@ -3260,21 +3555,24 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 }{IntegerSuccessorOnEmbedding}{%
   \DeltaRow{Mengen}{n}%
 }
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb N}{\rA}
-  \proofstep{1}{\IntSucc(\IntEmbed(n))=
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[]{\IntOne=\IntEmbed(1)}{\FormulaRefAuto{IntegerOneDef}}
+  \proofstepwidestarbreakkeep[1]{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
+  \proofstepwide[1]{\IntSucc(\IntEmbed(n))}{=}{%
     \IntEmbed(n)+\IntOne}{%
     \FormulaRefAuto{IntegerSuccessorValue}[thm]{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
         \FormulaRefAuto{NaturalIntegerEmbeddingFunction},1}}}
-  \proofstep{}{\IntOne=\IntEmbed(1)}{\FormulaRefAuto{IntegerOneDef}}
-  \proofstep{1}{\IntEmbed(n)+\IntEmbed(1)=\IntEmbed(n+1)}{%
+  \proofstepwide[1]{}{=}{\IntEmbed(n)+\IntEmbed(1)}{\rIE{2}}
+  \proofstepwide[1]{}{=}{\IntEmbed(n+1)}{%
     \FormulaRefAuto{a=b\vdash b=a}{%
       \FormulaRefAuto{NaturalIntegerEmbeddingAdditive}{1,%
         \FormulaRefAuto{PeanoOneInN}}}}
-  \proofstep{1}{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstep{1}{\IntSucc(\IntEmbed(n))=\IntEmbed(\Succ(n))}{\rIE{2,3,4,5}}
-\end{tabproof}
+  \proofstepwide[1]{}{=}{\IntEmbed(\Succ(n))}{\rIE{3}}
+  \proofstepwidestarbreakkeep[1]{%
+    \IntSucc(\IntEmbed(n))=\IntEmbed(\Succ(n))}{\rChain{4,5,6,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Negativer Strahl und Vorgänger]{%
   n\in\mathbb N\vdash
@@ -3282,22 +3580,25 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
 }{IntegerPredecessorOnNegativeEmbedding}{%
   \DeltaRow{Mengen}{n}%
 }
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb N}{\rA}
-  \proofstep{1}{\IntEmbed(n)=\IntClass{n}{0}}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[1]{\IntEmbed(n)=\IntClass{n}{0}}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
-  \proofstep{1}{-\IntEmbed(n)=\IntClass{0}{n}}{%
+  \proofstepwidestar[1]{-\IntEmbed(n)=\IntClass{0}{n}}{%
     \FormulaRefAuto{IntegerNegationDef}{1,2}}
-  \proofstep{1}{\IntPred(-\IntEmbed(n))=\IntClass{0}{\Succ(n)}}{%
-    \FormulaRefAuto{IntegerPredecessorClassValue}{1,3}}
-  \proofstep{1}{\IntEmbed(\Succ(n))=\IntClass{\Succ(n)}{0}}{%
+  \proofstepwidestar[1]{\IntEmbed(\Succ(n))=\IntClass{\Succ(n)}{0}}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
       \FormulaRefAuto{PeanoSuccClosure}{1}}}
-  \proofstep{1}{-\IntEmbed(\Succ(n))=\IntClass{0}{\Succ(n)}}{%
-    \FormulaRefAuto{IntegerNegationDef}{1,5}}
-  \proofstep{1}{\IntPred(-\IntEmbed(n))=-\IntEmbed(\Succ(n))}{%
-    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{4,6}}
-\end{tabproof}
+  \proofstepwidestar[1]{-\IntEmbed(\Succ(n))=\IntClass{0}{\Succ(n)}}{%
+    \FormulaRefAuto{IntegerNegationDef}{1,4}}
+  \proofstepwide[1]{\IntPred(-\IntEmbed(n))}{=}{%
+    \IntClass{0}{\Succ(n)}}{%
+    \FormulaRefAuto{IntegerPredecessorClassValue}{1,3}}
+  \proofstepwide[1]{}{=}{-\IntEmbed(\Succ(n))}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstepwidestar[1]{%
+    \IntPred(-\IntEmbed(n))=-\IntEmbed(\Succ(n))}{\rChain{6,7}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Normalform ganzer Zahlen]{%
   z\in\mathbb Z\vdash
@@ -3425,7 +3726,7 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
       \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwide[1,4]{(a+k)+c}{=}{b+c}{\rIE{\rAEb{4}}}
     \proofstepwidestar[1,4]{(a+c)+k=b+c}{%
-      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}{5,6}}
+      \rChain{5,6}}
     \proofstepwidestar[1,4]{a+c\leq b+c}{%
       \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
         m\leq n\leftrightarrow
@@ -3451,7 +3752,7 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
       \FormulaRefAuto{PeanoAddInterchange}{1}}
     \proofstepwide[1,4]{(a+c)+k}{=}{b+c}{\rAEb{4}}
     \proofstepwidestar[1,4]{(a+k)+c=b+c}{%
-      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}{5,6}}
+      \rChain{5,6}}
     \proofstepwidestar[1,4]{a+k=b}{%
       \FormulaRefAuto{PeanoAddRightCancellation}{%
         \FormulaRefAuto{PeanoAddClosure}{1,4},1,1,7}}
@@ -3828,10 +4129,11 @@ Modellkern wird die Schnittstelle um das Ordnungsaxiom ergänzt.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-Die Quotientenordnung ist nun vollständig am Modell verifiziert.  Damit kann
-die arithmetische Schnittstelle ohne Vorgriff um die Ordnung erweitert
-werden; spätere rein ordnungstheoretische Argumente dürfen das folgende
-Einzelaxiom verwenden.
+Die Quotientenordnung ist nun vollständig am Modell verifiziert. Damit können
+die für die spätere Axiomatik bestimmten Regeln ohne Vorgriff um die Ordnung
+erweitert werden. Der Abstraktionsschnitt ist damit noch nicht erreicht;
+zunächst werden auch Positivität, Diskretheit und Induktion am Modell
+hergeleitet.
 
 \FormulaAxiomAutoR[Totale Ordnung der Ganzzahlarithmetik]{%
   \TotOrd{\mathbb Z,\leq_{\mathbb Z}}%
@@ -3978,6 +4280,51 @@ Einzelaxiom verwenden.
 \par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
 die Hinrichtung von
 \FormulaRefAuto{IntegerOrderTranslationModel}[thm].\par
+
+\FormulaThmDeltaK[Negation einer negativen ganzen Zahl]{%
+  a\in\mathbb Z\dsep a<\IntZero\vdash\IntZero<-a%
+}{IntegerNegativeOrderReversal}{%
+  \DeltaRow{Mengen}{a}%
+  \DeltaRow{Relationsoperatoren}{<}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[2]{a<\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[]{\IntZero\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax]}
+  \proofstepwidestarbreakkeep[1,2]{%
+    a\leq\IntZero\land a\neq\IntZero}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,3,2}}
+  \proofstepwidestarbreakkeep[1]{-a\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{a+(-a)=\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{1}}}
+  \proofstepwidestarbreakkeep[1]{\IntZero+(-a)=-a}{%
+    \rAEb{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{5}}}
+  \proofstepwidestarbreakkeep[1]{%
+    a\leq\IntZero
+      \leftrightarrow a+(-a)\leq\IntZero+(-a)}{%
+    \FormulaRefAuto{IntegerOrderTranslationEquivalenceAxiom}[ax]{1,3,5}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    a+(-a)\leq\IntZero+(-a)}{\rRE{8,\rAEa{4}}}
+  \proofstepwidestarbreakkeep[1,2]{\IntZero\leq-a}{\rIE{6,7,9}}
+  \proofstepwidestarbreakkeep[11]{-a=\IntZero}{\rA}
+  \proofstepwidestarbreakkeep[11]{-(-a)=-\IntZero}{\rIE{11}}
+  \proofstepwidestarbreakkeep[1]{-(-a)=a}{%
+    \FormulaRefAuto{IntegerDoubleNegation}[thm]{1}}
+  \proofstepwidestarbreakkeep[]{-\IntZero=\IntZero}{%
+    \FormulaRefAuto{IntegerNegativeZero}[thm]}
+  \proofstepwidestarbreakkeep[1,11]{a=\IntZero}{\rIE{12,13,14}}
+  \proofstepwidestarbreakkeep[1,2,11]{\bot}{%
+    \rBI{\rAEb{4},15}}
+  \proofstepwidestarbreakkeep[1,2]{-a\neq\IntZero}{\rCI{11,16}}
+  \proofstepwidestarbreakkeep[1,2]{\IntZero\neq-a}{%
+    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{17}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    \IntZero\leq-a\land\IntZero\neq-a}{\rAI{10,18}}
+  \proofstepwidestarbreakkeep[1,2]{\IntZero<-a}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{3,5,19}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Null und Eins sind im Quotientenmodell verschieden]{%
   \IntZero\neq\IntOne%
@@ -4299,14 +4646,20 @@ die Hinrichtung von
       \rAEb{\rAEb{1}}}}
   \proofstepwidestarbreakkeep[1,5,8]{a\cdot k+\Succ(t)=c\cdot k}{%
     \rIE{\rAEb{5},\rAEb{8},9}}
+  \proofstepwidestarbreakkeep[1]{a\cdot k\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}[thm]{%
+      \rAEa{1},\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1]{c\cdot k\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMulClosure}[thm]{%
+      \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}}}
+  \proofstepwidestarbreakkeep[1,5,8]{%
+    \exists t\in\mathbb N\,(a\cdot k+\Succ(t)=c\cdot k)}{%
+    \rEI{\rAI{\rAEa{8},10}}}
   \proofstepwidestarbreakkeep[1,5,8]{a\cdot k<c\cdot k}{%
     \FormulaRefAuto{NaturalStrictOrderAdditiveCharacterization}[thm]{%
-      \FormulaRefAuto{PeanoMulClosure}[thm]{\rAEa{1},\rAEb{\rAEb{1}}},%
-      \FormulaRefAuto{PeanoMulClosure}[thm]{%
-        \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}},%
-      \rEI{\rAI{\rAEa{8},10}}}}
+      11,12,13}}
   \proofstepwidestarbreakkeep[1,2,3]{a\cdot k<c\cdot k}{%
-    \rEE{4,5,\rEE{7,8,11}}}
+    \rEE{4,5,\rEE{7,8,14}}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Positive natürliche Faktoren bewahren und reflektieren Ordnung]{%
@@ -4332,15 +4685,22 @@ die Hinrichtung von
     \proofstepwidestarbreakkeep[1,4]{a\cdot k+h\cdot k=c\cdot k}{%
       \rIE{\rAEb{4},\FormulaRefAuto{PeanoMulRightDistributive}[thm]{%
         \rAEa{1},\rAEa{4},\rAEb{\rAEb{1}}}}}
+    \proofstepwidestarbreakkeep[1]{a\cdot k\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{%
+        \rAEa{1},\rAEb{\rAEb{1}}}}
+    \proofstepwidestarbreakkeep[1]{c\cdot k\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{%
+        \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}}}
+    \proofstepwidestarbreakkeep[1,4]{h\cdot k\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{%
+        \rAEa{4},\rAEb{\rAEb{1}}}}
+    \proofstepwidestarbreakkeep[1,4]{%
+      \exists t\in\mathbb N\,(a\cdot k+t=c\cdot k)}{%
+      \rEI{\rAI{8,5}}}
     \proofstepwidestarbreakkeep[1,4]{a\cdot k\leq c\cdot k}{%
       \FormulaRefAuto{NaturalOrderAdditiveCharacterization}[thm]{%
-        \FormulaRefAuto{PeanoMulClosure}[thm]{%
-          \rAEa{1},\rAEb{\rAEb{1}}},%
-        \FormulaRefAuto{PeanoMulClosure}[thm]{%
-          \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}},%
-        \rEI{\rAI{\FormulaRefAuto{PeanoMulClosure}[thm]{%
-          \rAEa{4},\rAEb{\rAEb{1}}},5}}}}
-    \proofstepwidestarbreakkeep[1,2]{a\cdot k\leq c\cdot k}{\rEE{3,4,6}}
+        6,7,9}}
+    \proofstepwidestarbreakkeep[1,2]{a\cdot k\leq c\cdot k}{\rEE{3,4,10}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Reflexion]{%
@@ -4362,17 +4722,36 @@ die Hinrichtung von
         \rAEa{1},\rAEa{\rAEb{1}},5}}
     \proofstepwidestarbreakkeep[7]{a=c}{\rA}
     \proofstepwidestarbreakkeep[1,7]{a\leq c}{%
-      \rIE{7,\FormulaRefAuto{PeanoZeroLeq}[thm]{\rAEa{1}}}}
+      \rIE{7,\FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{1}}}}
     \proofstepwidestarbreakkeep[9]{c<a}{\rA}
     \proofstepwidestarbreakkeep[1,2,9]{c\cdot k<a\cdot k}{%
       \FormulaRefAuto{NaturalPositiveFactorStrictOrderForIntegerModel}[thm]{%
         \rAEa{\rAEb{1}},\rAEa{1},\rAEb{\rAEb{1}},2,9}}
-    \proofstepwidestarbreakkeep[1,2,3,9]{\bot}{%
-      \rBI{\FormulaRefAuto{NaturalStrictOrderNotation}[def]{10},3}}
+    \proofstepwidestarbreakkeep[1,2,9]{%
+      c\cdot k\leq a\cdot k\land c\cdot k\neq a\cdot k}{%
+      \FormulaRefAuto{NaturalStrictOrderNotation}[def]{%
+        \FormulaRefAuto{PeanoMulClosure}[thm]{%
+          \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}},%
+        \FormulaRefAuto{PeanoMulClosure}[thm]{%
+          \rAEa{1},\rAEb{\rAEb{1}}},10}}
+    \proofstepwidestarbreakkeep[1,2,9]{c\cdot k\leq a\cdot k}{\rAEa{11}}
+    \proofstepwidestarbreakkeep[1,2,9]{c\cdot k\neq a\cdot k}{\rAEb{11}}
+    \proofstepwidestarbreakkeep[1]{a\cdot k\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{%
+        \rAEa{1},\rAEb{\rAEb{1}}}}
+    \proofstepwidestarbreakkeep[1]{c\cdot k\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{%
+        \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}}}
+    \proofstepwidestarbreakkeep[1,2,3,9]{a\cdot k=c\cdot k}{%
+      \FormulaRefAuto{PeanoLeqAntisymmetric}[thm]{%
+        14,15,3,12}}
+    \proofstepwidestarbreakkeep[1,2,3,9]{c\cdot k=a\cdot k}{%
+      \FormulaRefAuto{a=b\vdash b=a}{16}}
+    \proofstepwidestarbreakkeep[1,2,3,9]{\bot}{\rBI{13,17}}
     \proofstepwidestarbreakkeep[1,2,3,9]{a\leq c}{%
-      \FormulaRefAuto{\bot\vdash P}{11}}
+      \FormulaRefAuto{\bot\vdash P}{18}}
     \proofstepwidestarbreakkeep[1,2,3]{a\leq c}{%
-      \rOE{4,5,6,7,8,9,12}}
+      \rOE{4,5,6,7,8,9,19}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -4430,23 +4809,48 @@ die Hinrichtung von
       \FormulaRefAuto{PeanoMulRightDistributive}[thm]{1}}
     \proofstepwidestarbreakkeep[1]{(u+y)\cdot k=u\cdot k+y\cdot k}{%
       \FormulaRefAuto{PeanoMulRightDistributive}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{\IntEmbed(k)=\IntClass{k}{0}}{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
+        \rAEb{\rAEb{\rAEb{\rAEb{1}}}}}}
+    \proofstepwidestarbreakkeep[1]{%
+      \IntClass{x}{y}\cdot\IntClass{k}{0}
+      =\IntClass{x\cdot k+y\cdot0}{x\cdot0+y\cdot k}}{%
+      \FormulaRefAuto{IntegerMultiplicationDef}[def]{1}}
+    \proofstepwidestarbreakkeep[1,3,5]{%
+      a\cdot d=\IntClass{x\cdot k+y\cdot0}{x\cdot0+y\cdot k}}{%
+      \rIE{3,5,10,11}}
+    \proofstepwidestarbreakkeep[1]{y\cdot0=0}{%
+      \FormulaRefAuto{PeanoMulRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{x\cdot0=0}{%
+      \FormulaRefAuto{PeanoMulRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{x\cdot k+0=x\cdot k}{%
+      \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{0+y\cdot k=y\cdot k}{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm]{1}}
     \proofstepwidestarbreakkeep[1,3,5]{a\cdot d=\IntClass{x\cdot k}{y\cdot k}}{%
-      \rIE{3,5,\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
-        \rAEb{\rAEb{\rAEb{\rAEb{1}}}}},%
-        \FormulaRefAuto{IntegerMultiplicationDef}[def]{1},%
-        \FormulaRefAuto{PeanoMulRightZero}[thm]{1},%
-        \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}}
+      \rIE{12,13,14,15,16}}
+    \proofstepwidestarbreakkeep[1]{%
+      \IntClass{u}{v}\cdot\IntClass{k}{0}
+      =\IntClass{u\cdot k+v\cdot0}{u\cdot0+v\cdot k}}{%
+      \FormulaRefAuto{IntegerMultiplicationDef}[def]{1}}
+    \proofstepwidestarbreakkeep[1,4,5]{%
+      c\cdot d=\IntClass{u\cdot k+v\cdot0}{u\cdot0+v\cdot k}}{%
+      \rIE{4,5,10,18}}
+    \proofstepwidestarbreakkeep[1]{v\cdot0=0}{%
+      \FormulaRefAuto{PeanoMulRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{u\cdot0=0}{%
+      \FormulaRefAuto{PeanoMulRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{u\cdot k+0=u\cdot k}{%
+      \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{0+v\cdot k=v\cdot k}{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm]{1}}
     \proofstepwidestarbreakkeep[1,4,5]{c\cdot d=\IntClass{u\cdot k}{v\cdot k}}{%
-      \rIE{4,5,\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
-        \rAEb{\rAEb{\rAEb{\rAEb{1}}}}},%
-        \FormulaRefAuto{IntegerMultiplicationDef}[def]{1},%
-        \FormulaRefAuto{PeanoMulRightZero}[thm]{1},%
-        \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}}
+      \rIE{19,20,21,22,23}}
     \proofstepwidestarbreakkeep[1,3,4,5]{a\cdot d\leq c\cdot d
       \leftrightarrow x\cdot k+v\cdot k\leq u\cdot k+y\cdot k}{%
-      \FormulaRefAuto{IntegerOrderClassChar}[thm]{1,10,11}}
+      \FormulaRefAuto{IntegerOrderClassChar}[thm]{1,17,24}}
     \proofstepwidestarbreakkeep[1,2,3,4,5]{a\leq c\leftrightarrow
-      a\cdot d\leq c\cdot d}{\rIE{6,7,8,9,12}}
+      a\cdot d\leq c\cdot d}{\rIE{6,7,8,9,25}}
   \closeproofpartwideindR
 
   \proofpartwide{Elimination der Repräsentanten}
@@ -4549,40 +4953,314 @@ die Hinrichtung von
     \FormulaRefAuto{IntegerStrictOrderDef}[def]{10,11,12}}
 \end{tabproofwide}
 
-\FormulaDefDeltaK[Geordnete Axiomenschnittstelle der ganzen Zahlen]{%
+\FormulaDefDeltaK[Hergeleitete geordnete Ganzzahlaxiome]{%
   \IntegerArithmetic{%
     \mathbb Z,\IntZero,\IntOne,-,+,\cdot,\leq_{\mathbb Z}}%
 }{IntegerOrderedArithmeticAxioms}{%
+  \DeltaRow{\textbf{Ring mit Eins}}{}%
   \DeltaRow{Arithmetik}{%
     \IntegerArithmetic{\mathbb Z,\IntZero,\IntOne,-,+,\cdot}}
     [\FormulaRefAuto{IntegerArithmeticAxioms}]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Ordnungsstruktur}}{}%
   \DeltaRow{Totale Ordnung}{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}
     [\FormulaRefAuto{IntegerOrderTotalAxiom}]%
-  \DeltaRow{Reflexivität}{z\leq z}
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Entfaltete Regeln}}{}%
+  \DeltaRow{Reflexivität}{z\in\mathbb Z\vdash z\leq z}
     [\FormulaRefAuto{IntegerOrderReflexiveAxiom}]%
-  \DeltaRow{Antisymmetrie}{z\leq w\dsep w\leq z\vdash z=w}
+  \DeltaRow{Antisymmetrie}{%
+    \begin{aligned}[t]
+      &z,w\in\mathbb Z\dsep z\leq w\dsep{}\\[-2pt]
+      &w\leq z\vdash z=w
+    \end{aligned}}
     [\FormulaRefAuto{IntegerOrderAntisymmetricAxiom}]%
-  \DeltaRow{Transitivität}{z\leq w\dsep w\leq u\vdash z\leq u}
+  \DeltaRow{Transitivität}{%
+    \begin{aligned}[t]
+      &z,w,u\in\mathbb Z\dsep z\leq w\dsep{}\\[-2pt]
+      &w\leq u\vdash z\leq u
+    \end{aligned}}
     [\FormulaRefAuto{IntegerOrderTransitiveAxiom}]%
-  \DeltaRow{Vergleichbarkeit}{z\leq w\lor w\leq z}
+  \DeltaRow{Vergleichbarkeit}{%
+    z,w\in\mathbb Z\vdash z\leq w\lor w\leq z}
     [\FormulaRefAuto{IntegerOrderComparableAxiom}]%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Verträglichkeit}}{}%
   \DeltaRow{Translation}{%
-    z\leq w\leftrightarrow z+u\leq w+u}
+    \begin{aligned}[t]
+      &z,w,u\in\mathbb Z\vdash{}\\[-2pt]
+      &z\leq w\leftrightarrow z+u\leq w+u
+    \end{aligned}}
     [\FormulaRefAuto{IntegerOrderTranslationEquivalenceAxiom}]%
   \DeltaRow{Nichttrivialität}{\IntZero\neq\IntOne}
     [\FormulaRefAuto{IntegerZeroNeOneAxiom}]%
   \DeltaRow{Orientierung}{\IntZero<\IntOne}
     [\FormulaRefAuto{IntegerOnePositiveAxiom}]%
-  \DeltaRow{Positivitätsabschluss}{%
-    \IntZero<z\dsep\IntZero<w\vdash\IntZero<z\cdot w}
+  \DeltaRow{Positives Produkt}{%
+    \begin{aligned}[t]
+      &z,w\in\mathbb Z\dsep\IntZero<z\dsep{}\\[-2pt]
+      &\IntZero<w\vdash\IntZero<z\cdot w
+    \end{aligned}}
     [\FormulaRefAuto{IntegerPositiveProductAxiom}]%
-  \DeltaRow{Positive Faktorordnung}{%
-    \IntZero<d\vdash
-    (a\leq c\leftrightarrow a\cdot d\leq c\cdot d)}
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Abgeleitet}}{}%
+  \DeltaRow{Faktorordnung}{%
+    \begin{aligned}[t]
+      &a,c,d\in\mathbb Z\dsep\IntZero<d\vdash{}\\[-2pt]
+      &a\leq c\leftrightarrow a\cdot d\leq c\cdot d
+    \end{aligned}}
     [\FormulaRefAuto{IntegerPositiveFactorOrderAxiom}]%
-  \DeltaRow{\textbf{Neues Symbol}}{}%
+  \end{DeltaContext}
+  \begin{DeltaContext}{ }%
+  \DeltaRow{\textbf{Signatur}}{}%
   \DeltaRow{Ordnung}{\leq_{\mathbb Z}}%
 }
+
+Die als aus \(\mathsf{TotOrd}\) entfaltet beziehungsweise als abgeleitete
+Schnittstellenregel aufgeführten Zeilen sind keine zusätzlichen
+unabhängigen Axiome: Die vier Ordnungsregeln sind bereits in
+\(\TotOrd{\mathbb Z,\leq_{\mathbb Z}}\) enthalten, und die positive
+Faktorordnung wurde oben hergeleitet. Sie bleiben hier mit ihren eigenen
+Registrierschlüsseln sichtbar, damit spätere Beweise kurze und stabile
+Verweise verwenden können.
+
+Auch diese Zusammenstellung schließt die Konstruktion noch nicht ab. Die
+folgenden Modellargumente liefern insbesondere die diskrete
+Nachfolgerorientierung und das zweiseitige Induktionsschema; erst danach wird
+die vollständige Axiomatik zur alleinigen Grundlage gemacht.
+
+\subsection{Abgeleitete gemischte Transitivitätsregeln}
+
+\FormulaThmDeltaK[Gemischte Transitivität, links nicht-strikt]{%
+  x,y,z\in\mathbb Z\dsep x\leq y\dsep y<z\vdash x<z%
+}{IntegerLeqStrictTransitiveFromAxioms}{%
+  \DeltaRow{Mengen}{x\dsep y\dsep z}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x,y,z\in\mathbb Z}{\rA}
+  \proofstepwidestar[2]{x\leq y}{\rA}
+  \proofstepwidestar[3]{y<z}{\rA}
+  \proofstepwidestar[1,3]{y\leq z\land y\neq z}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,3}}
+  \proofstepwidestar[1,2,3]{x\leq z}{%
+    \FormulaRefAuto{IntegerOrderTransitiveAxiom}[ax]{1,2,\rAEa{4}}}
+  \proofstepwidestar[6]{x=z}{\rA}
+  \proofstepwidestar[2,6]{z\leq y}{\rIE{6,2}}
+  \proofstepwidestar[1,2,3,6]{y=z}{%
+    \FormulaRefAuto{IntegerOrderAntisymmetricAxiom}[ax]{%
+      1,\rAEa{4},7}}
+  \proofstepwidestar[1,2,3,6]{\bot}{\rBI{\rAEb{4},8}}
+  \proofstepwidestar[1,2,3]{x\neq z}{\rCI{6,9}}
+  \proofstepwidestar[1,2,3]{x\leq z\land x\neq z}{\rAI{5,10}}
+  \proofstepwidestar[1,2,3]{x<z}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,11}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gemischte Transitivität, rechts nicht-strikt]{%
+  x,y,z\in\mathbb Z\dsep x<y\dsep y\leq z\vdash x<z%
+}{IntegerStrictLeqTransitiveFromAxioms}{%
+  \DeltaRow{Mengen}{x\dsep y\dsep z}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{x,y,z\in\mathbb Z}{\rA}
+  \proofstepwidestar[2]{x<y}{\rA}
+  \proofstepwidestar[3]{y\leq z}{\rA}
+  \proofstepwidestar[1,2]{x\leq y\land x\neq y}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,2}}
+  \proofstepwidestar[1,2,3]{x\leq z}{%
+    \FormulaRefAuto{IntegerOrderTransitiveAxiom}[ax]{1,\rAEa{4},3}}
+  \proofstepwidestar[6]{x=z}{\rA}
+  \proofstepwidestar[2,6]{z\leq y}{\rIE{6,\rAEa{4}}}
+  \proofstepwidestar[1,2,3,6]{y=z}{%
+    \FormulaRefAuto{IntegerOrderAntisymmetricAxiom}[ax]{1,3,7}}
+  \proofstepwidestar[1,2,3,6]{x=y}{\rIE{6,8}}
+  \proofstepwidestar[1,2,3,6]{\bot}{\rBI{\rAEb{4},9}}
+  \proofstepwidestar[1,2,3]{x\neq z}{\rCI{6,10}}
+  \proofstepwidestar[1,2,3]{x\leq z\land x\neq z}{\rAI{5,11}}
+  \proofstepwidestar[1,2,3]{x<z}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{1,12}}
+\end{tabproofwide}
+
+\section{Positive ganze Zahlen und Kürzungslemmata}
+
+\FormulaDefDeltaK[Positive ganze Zahlen]{%
+  \PositiveIntegers\coloneqq
+  \{b\in\mathbb Z\mid \IntZero<b\}%
+}{PositiveIntegersDef}{%
+  \DeltaRow{Mengen}{\PositiveIntegers}%
+  \DeltaRow{Relationsoperatoren}{<}%
+  \DeltaRow{Neue Symbole}{\PositiveIntegers}%
+}
+
+\FormulaThmDeltaK[Die Ganzzahleins ist positiv]{%
+  \IntOne\in\PositiveIntegers%
+}{IntegerOnePositive}{%
+  \DeltaRow{Mengen}{\PositiveIntegers}%
+}
+\begin{tabproof}
+  \proofstep{}{\IntZero<\IntOne}{%
+    \FormulaRefAuto{IntegerOnePositiveAxiom}[ax]}
+  \proofstep{}{\IntOne\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+  \proofstep{}{\IntOne\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Positive ganze Zahlen sind von null verschieden]{%
+  b\in\PositiveIntegers\vdash b\neq\IntZero%
+}{PositiveIntegerNonzero}{%
+  \DeltaRow{Mengen}{b}%
+}
+\begin{tabproof}
+  \proofstep{1}{b\in\PositiveIntegers}{\rA}
+  \proofstep{1}{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstep{1}{\IntZero\leq b\land\IntZero\neq b}{%
+    \FormulaRefAuto{IntegerStrictOrderDef}[def]{2}}
+  \proofstep{1}{b\neq\IntZero}{%
+    \FormulaRefAuto{a\neq b\vdash b\neq a}{\rAEb{3}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Ganzzahleins ist kleinste positive ganze Zahl]{%
+  b\in\PositiveIntegers\vdash\IntOne\leq b%
+}{PositiveIntegerOneLowerBound}{%
+  \DeltaRow{Mengen}{b\dsep k\dsep h}%
+  \DeltaRow{Relationsoperatoren}{\leq}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestar[1]{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstepwidestar[1]{%
+    \exists k\in\mathbb N\,(k\neq0\land b=\IntEmbed(k))}{%
+    \FormulaRefAuto{IntegerPositiveEmbeddingRepresentativeModel}[thm]{%
+      \rAEa{2},\rAEb{2}}}
+  \proofstepwidestar[4]{%
+    k\in\mathbb N\land k\neq0\land b=\IntEmbed(k)}{\rA}
+  \proofstepwidestar[4]{\exists h\in\mathbb N\,(k=\Succ(h))}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{\rAEa{4},\rAEa{\rAEb{4}}}}
+  \proofstepwidestar[6]{h\in\mathbb N\land k=\Succ(h)}{\rA}
+  \proofstepwidestar[6]{h+1=\Succ(h)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{\rAEa{6}}}
+  \proofstepwidestar[6]{1+h=h+1}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{%
+      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{6}}}
+  \proofstepwidestar[6]{1+h=\Succ(h)}{\rChain{8,7}}
+  \proofstepwidestar[4,6]{1+h=k}{\rIE{9,\rAEb{6}}}
+  \proofstepwidestar[4,6]{h\in\mathbb N\land 1+h=k}{%
+    \rAI{\rAEa{6},10}}
+  \proofstepwidestar[4,6]{\exists h\in\mathbb N\,(1+h=k)}{\rEI{11}}
+  \proofstepwidestar[4,6]{1\leq k}{%
+    \FormulaRefAuto{NaturalOrderAdditiveCharacterization}[thm]{%
+      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{4},%
+      12}}
+  \proofstepwidestar[4,6]{\IntEmbed(1)\leq\IntEmbed(k)}{%
+    \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
+      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{4},13}}
+  \proofstepwidestar[]{\IntOne=\IntEmbed(1)}{%
+    \FormulaRefAuto{IntegerOneDef}[def]}
+  \proofstepwidestar[4]{b=\IntEmbed(k)}{\rAEb{\rAEb{4}}}
+  \proofstepwidestar[4,6]{\IntOne\leq b}{%
+    \rIE{15,14,16}}
+  \proofstepwidestar[4]{\IntOne\leq b}{\rEE{5,6,17}}
+  \proofstepwidestar[1]{\IntOne\leq b}{\rEE{3,4,18}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Abgeschlossenheit positiver ganzer Zahlen unter Multiplikation]{%
+  b\in\PositiveIntegers\dsep d\in\PositiveIntegers
+  \vdash b\cdot d\in\PositiveIntegers%
+}{PositiveIntegerMulClosure}{%
+  \DeltaRow{Mengen}{b\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{b\in\PositiveIntegers}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{1}{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2}{b\cdot d\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{\rAEa{3},\rAEa{4}}}
+  \proofstep{1,2}{\IntZero<b\cdot d}{%
+    \FormulaRefAuto{IntegerPositiveProductAxiom}[ax]{3,4}}
+  \proofstep{1,2}{b\cdot d\in\PositiveIntegers}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{5,6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Positive ganzzahlige Faktoren bewahren und reflektieren die Ordnung]{%
+  a,c\in\mathbb Z\dsep d\in\PositiveIntegers
+  \vdash
+  \bigl(a\leq c\leftrightarrow a\cdot d\leq c\cdot d\bigr)%
+}{IntegerPositiveFactorOrder}{%
+  \DeltaRow{Mengen}{a\dsep c\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{a,c\in\mathbb Z}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2}{a\leq c\leftrightarrow
+    a\cdot d\leq c\cdot d}{%
+    \FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{1,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Kürzung eines positiven ganzzahligen Faktors]{%
+  a,c\in\mathbb Z\dsep d\in\PositiveIntegers\dsep
+  a\cdot d=c\cdot d\vdash a=c%
+}{IntegerPositiveFactorCancellation}{%
+  \DeltaRow{Mengen}{a\dsep c\dsep d}%
+}
+\begin{tabproof}
+  \proofstep{1}{a,c\in\mathbb Z}{\rA}
+  \proofstep{2}{d\in\PositiveIntegers}{\rA}
+  \proofstep{3}{a\cdot d=c\cdot d}{\rA}
+  \proofstep{2}{d\in\mathbb Z\land\IntZero<d}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstep{1,2,3}{a=c}{%
+    \FormulaRefAuto{IntegerPositiveFactorCancellationFromAxioms}[thm]{%
+      1,4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Positive natürliche Bilder wachsen unter positiven Faktoren]{%
+  n\in\mathbb N\dsep n\neq0\dsep b\in\PositiveIntegers
+  \vdash \IntEmbed(n)\leq\IntEmbed(n)\cdot b%
+}{PositiveIntegerEmbeddingFactorLowerBound}{%
+  \DeltaRow{Mengen}{n\dsep b}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{n\neq0}{\rA}
+  \proofstepwidestar[3]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestar[1]{\IntEmbed(n)\in\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{1}}
+  \proofstepwidestar[1,2]{\IntZero<\IntEmbed(n)}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingPositiveModel}[thm]{1,2}}
+  \proofstepwidestar[3]{\IntOne\leq b}{%
+    \FormulaRefAuto{PositiveIntegerOneLowerBound}[thm]{3}}
+  \proofstepwidestar[3]{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{3}}
+  \proofstepwidestar[]{\IntOne\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+  \proofstepwidestar[1,2,3]{%
+    \IntOne\cdot\IntEmbed(n)\leq b\cdot\IntEmbed(n)}{%
+    \rRE{\FormulaRefAuto{IntegerPositiveFactorOrderAxiom}[ax]{%
+      8,\rAEa{7},4,5},6}}
+  \proofstepwidestar[1]{\IntOne\cdot\IntEmbed(n)=\IntEmbed(n)}{%
+    \rAEb{\FormulaRefAuto{IntegerMulOneAxiom}[ax]{4}}}
+  \proofstepwidestar[1,3]{b\cdot\IntEmbed(n)
+    =\IntEmbed(n)\cdot b}{%
+    \FormulaRefAuto{IntegerMulCommutativeAxiom}[ax]{\rAEa{7},4}}
+  \proofstepwidestar[1,2,3]{\IntEmbed(n)\leq\IntEmbed(n)\cdot b}{%
+    \rIE{10,9,11}}
+\end{tabproofwide}
+
+
+\section{Nachfolger und Diskretheit der Ganzzahlordnung}
 
 \FormulaThmDeltaK[Jede ganze Zahl ist kleiner als ihr Nachfolger]{%
   z\in\mathbb Z\vdash z<\IntSucc(z)%
@@ -4655,9 +5333,110 @@ die Hinrichtung von
 \par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
 \FormulaRefAuto{IntegerSuccessorPositive}[thm].\par
 
-\chapter{Erweiterte Peano-Axiome der ganzen Zahlen}
+\subsection{Ganzzahlschranken mit positiven Faktoren}
 
-\section{Herleitung der zweiseitigen Induktion}
+\FormulaThmDeltaK[Die Nachfolgerhöhe einer Normalform ist eine strikte Schranke]{%
+  a\in\mathbb Z\dsep m\in\mathbb N\dsep
+  \bigl(a=\IntEmbed(m)\lor a=-\IntEmbed(m)\bigr)
+  \vdash a<\IntEmbed(\Succ(m))%
+}{IntegerNormalFormSuccessorBound}{%
+  \DeltaRow{Mengen}{a\dsep m}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestar[2]{m\in\mathbb N}{\rA}
+  \proofstepwidestar[3]{a=\IntEmbed(m)\lor a=-\IntEmbed(m)}{\rA}
+  \proofstepwidestar[2]{\IntEmbed(m)\in\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{2}}
+  \proofstepwidestar[2]{\IntEmbed(m)<\IntSucc(\IntEmbed(m))}{%
+    \FormulaRefAuto{IntegerSuccessorPositiveAxiom}[ax]{4}}
+  \proofstepwidestar[2]{\IntSucc(\IntEmbed(m))
+    =\IntEmbed(\Succ(m))}{%
+    \FormulaRefAuto{IntegerSuccessorOnEmbedding}[thm]{2}}
+  \proofstepwidestar[2]{\IntEmbed(m)<\IntEmbed(\Succ(m))}{\rIE{5,6}}
+  \proofstepwidestar[8]{a=\IntEmbed(m)}{\rA}
+  \proofstepwidestar[2,8]{a<\IntEmbed(\Succ(m))}{\rIE{8,7}}
+  \proofstepwidestar[10]{a=-\IntEmbed(m)}{\rA}
+  \proofstepwidestar[2]{0\leq m}{%
+    \FormulaRefAuto{PeanoZeroLeq}[thm]{2}}
+  \proofstepwidestar[2]{\IntEmbed(0)\leq\IntEmbed(m)}{%
+    \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
+      \FormulaRefAuto{PeanoZero}[ax],2,11}}
+  \proofstepwidestar[]{\IntZero=\IntEmbed(0)}{%
+    \FormulaRefAuto{IntegerZeroDef}[def]}
+  \proofstepwidestar[2]{\IntZero\leq\IntEmbed(m)}{\rIE{13,12}}
+  \proofstepwidestar[2]{-\IntEmbed(m)\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{4}}
+  \proofstepwidestar[2]{%
+    \IntZero+(-\IntEmbed(m))
+    \leq\IntEmbed(m)+(-\IntEmbed(m))}{%
+    \FormulaRefAuto{IntegerOrderTranslationAxiom}[ax]{%
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],4,15,14}}
+  \proofstepwidestar[2]{\IntZero+(-\IntEmbed(m))=-\IntEmbed(m)}{%
+    \rAEb{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{15}}}
+  \proofstepwidestar[2]{\IntEmbed(m)+(-\IntEmbed(m))=\IntZero}{%
+    \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{4}}}
+  \proofstepwidestar[2]{-\IntEmbed(m)\leq\IntZero}{\rIE{16,17,18}}
+  \proofstepwidestar[2]{\Succ(m)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{2}}
+  \proofstepwidestar[2]{\IntEmbed(\Succ(m))\in\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{20}}
+  \proofstepwidestar[2]{\Succ(m)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{2}}
+  \proofstepwidestar[2]{\IntZero<\IntEmbed(\Succ(m))}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingPositiveModel}[thm]{20,22}}
+  \proofstepwidestar[2]{-\IntEmbed(m)<\IntEmbed(\Succ(m))}{%
+    \FormulaRefAuto{IntegerLeqStrictTransitiveFromAxioms}[thm]{%
+      15,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],21,19,23}}
+  \proofstepwidestar[2,10]{a<\IntEmbed(\Succ(m))}{\rIE{10,24}}
+  \proofstepwidestar[1,2,3]{a<\IntEmbed(\Succ(m))}{%
+    \rOE{3,8,9,10,25}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ganzzahlschranke für positive ganzzahlige Faktoren]{%
+  a\in\mathbb Z\dsep b\in\PositiveIntegers\vdash
+  \exists n\in\mathbb N\,
+  a<\IntEmbed(n)\cdot b%
+}{RationalIntegerFractionBoundModel}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep n}%
+  \DeltaRow{Funktion}{\IntEmbed}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in\mathbb Z}{\rA}
+  \proofstepwidestar[2]{b\in\PositiveIntegers}{\rA}
+  \proofstepwidestar[1]{\exists m\in\mathbb N\,
+    (a=\IntEmbed(m)\lor a=-\IntEmbed(m))}{%
+    \FormulaRefAuto{IntegerSignedNormalForm}[thm]{1}}
+  \proofstepwidestar[4]{m\in\mathbb N\land
+    (a=\IntEmbed(m)\lor a=-\IntEmbed(m))}{\rA}
+  \proofstepwidestar[4]{\Succ(m)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{4}}}
+  \proofstepwidestar[1,4]{a<\IntEmbed(\Succ(m))}{%
+    \FormulaRefAuto{IntegerNormalFormSuccessorBound}[thm]{1,4}}
+  \proofstepwidestar[4]{\Succ(m)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{\rAEa{4}}}
+  \proofstepwidestar[2,4]{\IntEmbed(\Succ(m))
+    \leq\IntEmbed(\Succ(m))\cdot b}{%
+    \FormulaRefAuto{PositiveIntegerEmbeddingFactorLowerBound}[thm]{5,7,2}}
+  \proofstepwidestar[4]{\IntEmbed(\Succ(m))\in\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{5}}
+  \proofstepwidestar[2]{b\in\mathbb Z\land\IntZero<b}{%
+    \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
+  \proofstepwidestar[2,4]{\IntEmbed(\Succ(m))\cdot b\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{9,\rAEa{10}}}
+  \proofstepwidestar[1,2,4]{a<\IntEmbed(\Succ(m))\cdot b}{%
+    \FormulaRefAuto{IntegerStrictLeqTransitiveFromAxioms}[thm]{%
+      1,9,11,6,8}}
+  \proofstepwidestar[1,2,4]{\exists n\in\mathbb N\,
+    a<\IntEmbed(n)\cdot b}{\rEI{\rAI{5,12}}}
+  \proofstepwidestar[1,2]{\exists n\in\mathbb N\,
+    a<\IntEmbed(n)\cdot b}{\rEE{3,4,13}}
+\end{tabproofwide}
+
+\chapter{Abschluss der Modellkonstruktion}
+
+\section{Herleitung der zweiseitigen Induktion im Modell}
 
 \FormulaThmDeltaK[Zweiseitige Induktion im Quotientenmodell]{%
   \begin{aligned}[t]
@@ -4794,79 +5573,19 @@ die Hinrichtung von
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaAxiomAutoR[Zweiseitige Induktion der ganzen Zahlen]{%
-  \begin{aligned}[t]
-    &P(\IntZero)\dsep
-    \forall z\in\mathbb Z\,
-      (P(z)\to P(\IntSucc(z)))\dsep{}\\
-    &\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntPred(z)))
-    \vdash\forall z\in\mathbb Z\,P(z)
-  \end{aligned}%
-}{IntegerTwoSidedInductionAxiom}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
-\FormulaRefAuto{IntegerTwoSidedInductionModel}[thm].\par
+\section{Abschluss des Modellnachweises}
 
-\section{Axiomatische Zusammenfassung}
-
-Die folgenden Axiome erweitern die Peano-Struktur um einen überall
-definierten Vorgänger. Anders als auf \(\mathbb N\) ist der Nachfolger auf
-\(\mathbb Z\) bijektiv. Die totale Ordnung und die strikte
-Nachfolgerorientierung verhindern zyklische Nachfolgermodelle; die
-zweiseitige Induktion verbindet den positiven und den negativen Strahl.
-
-Metalogisch ist dabei zwischen zwei Lesarten zu unterscheiden: Als
-erststufiges Axiomenschema ist die Beschreibung nicht kategorisch und
-besitzt nichtstandardmäßige Modelle. Unter voller zweitstufiger Lesart der
-Induktion beschreibt sie dagegen die intendierte zweiseitige, von
-\(\IntZero\) durch Nachfolger und Vorgänger erzeugte Kette.
-
-\FormulaDefDeltaK[Erweiterte Peano-Axiome der ganzen Zahlen]{%
-  \IntegerPeano{%
-    \mathbb Z,\IntZero,\IntSucc,\IntPred,\leq_{\mathbb Z}}%
-}{IntegerPeanoAxioms}{%
-  \DeltaRow{\textbf{Axiome}}{}%
-  \DeltaRow{Geordnete Arithmetik}{\IntegerArithmetic{\mathbb Z}}
-    [\FormulaRefAuto{IntegerOrderedArithmeticAxioms}]%
-  \DeltaRow{Null}{\IntZero\in\mathbb Z}
-    [\FormulaRefAuto{IntegerPeanoZero}]%
-  \DeltaRow{Nachfolger}{\IntSucc\colon\mathbb Z\to\mathbb Z}
-    [\FormulaRefAuto{IntegerPeanoSuccFunction}]%
-  \DeltaRow{Vorgänger}{\IntPred\colon\mathbb Z\to\mathbb Z}
-    [\FormulaRefAuto{IntegerPeanoPredFunction}]%
-  \DeltaRow{Linksinverses Gesetz}
-    {z\in\mathbb Z\vdash\IntPred(\IntSucc(z))=z}
-    [\FormulaRefAuto{IntegerPeanoPredSucc}]%
-  \DeltaRow{Rechtsinverses Gesetz}
-    {z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z}
-    [\FormulaRefAuto{IntegerPeanoSuccPred}]%
-  \DeltaRow{Totale Ordnung}
-    {\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}
-    [\FormulaRefAuto{IntegerOrderTotalAxiom}]%
-  \DeltaRow{Nachfolgerorientierung}
-    {z\in\mathbb Z\vdash z<\IntSucc(z)}
-    [\FormulaRefAuto{IntegerSuccessorPositiveAxiom}]%
-  \DeltaRow{Induktionsbasis}{P(\IntZero)}
-    [\FormulaRefAuto{IntegerTwoSidedInductionAxiom}]%
-  \DeltaRow{Vorwärtsschritt}{%
-    \forall z\in\mathbb Z\,(P(z)\to P(\IntSucc(z)))}%
-  \DeltaRow{Rückwärtsschritt}{%
-    \forall z\in\mathbb Z\,(P(z)\to P(\IntPred(z)))}%
-  \DeltaRow{Induktionsschluss}{\forall z\in\mathbb Z\,P(z)}
-    [\FormulaRefAuto{IntegerTwoSidedInductionAxiom}]%
-  \DeltaRow{\textbf{Neue Symbole}}{}%
-  \DeltaRow{Ganze Zahlen}{\mathbb Z}%
-  \DeltaRow{Null}{\IntZero}%
-  \DeltaRow{Nachfolger}{\IntSucc}%
-  \DeltaRow{Vorgänger}{\IntPred}%
-  \DeltaRow{Ordnung}{\leq_{\mathbb Z}}%
-}
+Die vorangegangenen Herleitungen erfassen nun Ringoperationen, Ordnung,
+Schrittstruktur und zweiseitige Induktion. Der folgende Satz bündelt diese
+Ergebnisse und beendet die konkrete Konstruktion. Er ist zugleich der letzte
+Satz dieses Bandes, in dem der konstruierte Träger selbst auftritt.
 
 \FormulaThmDeltaK[Das Quotientenmodell erfüllt die Ganzzahlaxiome]{%
   \begin{aligned}[t]
     &\mathbb Z=\QuotientSet{D_{\mathbb Z}}{\IntPairRel}\ \land{}\\
     &\IntegerPeano{%
-      \mathbb Z,\IntZero,\IntSucc,\IntPred,\leq_{\mathbb Z}}
+      \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
+      \IntSucc,\IntPred,\leq_{\mathbb Z}}
   \end{aligned}%
 }{IntQuotientModelsIntegerPeano}{%
   \DeltaRow{Mengen}{z\dsep D_{\mathbb Z}}%
@@ -4960,85 +5679,124 @@ Induktion beschreibt sie dagegen die intendierte zweiseitige, von
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
-    \proofstepwidestar[]{%
+    \proofstepwidestarbreakkeep[]{%
       \mathbb Z=\QuotientSet{D_{\mathbb Z}}{\IntPairRel}}{%
       \FormulaRefAuto{IntegersAsQuotient}}
-    \proofstepwidestar[]{\IntZero\in\mathbb Z}{%
+    \proofstepwidestarbreakkeep[]{%
+      \IntegerArithmetic{%
+        \mathbb Z,\IntZero,\IntOne,-,+,\cdot,\leq_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerOrderedArithmeticAxioms}}
+    \proofstepwidestarbreakkeep[]{\IntZero\in\mathbb Z}{%
       \rAEa{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestarbreakkeep[]{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
       \rAEa{\rAEb{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}}
-    \proofstepwidestar[]{\IntPred\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestarbreakkeep[]{\IntPred\colon\mathbb Z\to\mathbb Z}{%
       \rAEb{\rAEb{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}}
-    \proofstepwidestar[5]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[5]{\IntPred(\IntSucc(z))=z}{%
-      \rRE{5,\rAEa{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
-    \proofstepwidestar[5]{\IntSucc(\IntPred(z))=z}{%
-      \rRE{5,\rAEb{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
-    \proofstepwidestar[]{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}{%
+    \proofstepwidestarbreakkeep[6]{z\in\mathbb Z}{\rA}
+    \proofstepwidestarbreakkeep[6]{\IntPred(\IntSucc(z))=z}{%
+      \rRE{6,\rAEa{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
+    \proofstepwidestarbreakkeep[6]{\IntSucc(\IntPred(z))=z}{%
+      \rRE{6,\rAEb{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
+    \proofstepwidestarbreakkeep[]{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}{%
       \rAEa{\FormulaRefAuto{IntegerPeanoModelOrder}}}
-    \proofstepwidestar[5]{z<\IntSucc(z)}{%
-      \rRE{5,\rAEb{\FormulaRefAuto{IntegerPeanoModelOrder}}}}
-    \proofstepwidestar[10]{P(\IntZero)}{\rA}
-    \proofstepwidestar[11]{%
+    \proofstepwidestarbreakkeep[6]{z<\IntSucc(z)}{%
+      \rRE{6,\rAEb{\FormulaRefAuto{IntegerPeanoModelOrder}}}}
+    \proofstepwidestarbreakkeep[11]{P(\IntZero)}{\rA}
+    \proofstepwidestarbreakkeep[12]{%
       \forall z\in\mathbb Z(P(z)\to P(\IntSucc(z)))}{\rA}
-    \proofstepwidestar[12]{%
+    \proofstepwidestarbreakkeep[13]{%
       \forall z\in\mathbb Z(P(z)\to P(\IntPred(z)))}{\rA}
-    \proofstepwidestar[10,11,12]{\forall z\in\mathbb Z\,P(z)}{%
-      \FormulaRefAuto{IntegerPeanoModelInduction}[thm]{10,11,12}}
-    \proofstepwidestar[]{%
+    \proofstepwidestarbreakkeep[11,12,13]{\forall z\in\mathbb Z\,P(z)}{%
+      \FormulaRefAuto{IntegerPeanoModelInduction}[thm]{11,12,13}}
+    \proofstepwidestarbreakkeep[]{%
       \IntegerPeano{%
-        \mathbb Z,\IntZero,\IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
-      \FormulaRefAuto{IntegerPeanoAxioms}{2,3,4,6,7,8,9,13}}
-    \proofstepwidestar[]{%
+        \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
+        \IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
+      \FormulaRefAuto{IntegerPeanoAxioms}{2,3,4,5,7,8,10,14}}
+    \proofstepwidestarbreakkeep[]{%
       \mathbb Z=\QuotientSet{D_{\mathbb Z}}{\IntPairRel}
       \land
       \IntegerPeano{%
-        \mathbb Z,\IntZero,\IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
-      \rAI{1,14}}
+        \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
+        \IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
+      \rAI{1,15}}
   \closeproofpartwide
 \end{tabproofsplitwide}
+
+\chapter{Axiomatische Beschreibung der ganzen Zahlen}
+
+\section{Abstraktionsschnitt}
+
+Der Modellnachweis ist abgeschlossen. Ab hier bezeichnet \(\mathbb Z\) eine
+Struktur mit den unten aufgeführten Konstanten, Operationen, Schrittoperatoren
+und der Ordnung. Ihre Eigenschaften werden ausschließlich durch die
+registrierten Axiome und die daraus abgeleiteten Sätze bestimmt. Die konkrete
+Realisierung hat von diesem Punkt an nur noch die Rolle eines
+Existenznachweises und ist kein Bestandteil der weiteren Sprache.
+
+Die Definitionen
+\(\IntSucc(z)=z+\IntOne\) und
+\(\IntPred(z)=z+(-\IntOne)\) verbinden die Schrittstruktur mit der
+Arithmetik. Zusammen mit der geordneten Ringstruktur und der zweiseitigen
+Induktion bildet dies die vollständige Schnittstelle für alle späteren
+Verwendungen der ganzen Zahlen.
+
+\section{Axiome der Schrittstruktur}
 
 \FormulaAxiomAutoR[Null-Axiom der ganzen Zahlen]{%
   \IntZero\in\mathbb Z%
 }{IntegerPeanoZero}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntZeroCarrier}[thm].\par
 
 \FormulaAxiomAutoR[Nachfolgerfunktion der ganzen Zahlen]{%
   \IntSucc\colon\mathbb Z\to\mathbb Z%
 }{IntegerPeanoSuccFunction}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccessorFunction}[thm].\par
 
 \FormulaAxiomAutoR[Vorgängerfunktion der ganzen Zahlen]{%
   \IntPred\colon\mathbb Z\to\mathbb Z%
 }{IntegerPeanoPredFunction}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerPredecessorFunction}[thm].\par
 
 \FormulaAxiomAutoR[Vorgänger nach Nachfolger]{%
   z\in\mathbb Z\vdash\IntPred(\IntSucc(z))=z%
 }{IntegerPeanoPredSucc}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerPredAfterSucc}[thm].\par
 
 \FormulaAxiomAutoR[Nachfolger nach Vorgänger]{%
   z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z%
 }{IntegerPeanoSuccPred}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccAfterPred}[thm].\par
 
 \FormulaAxiomAutoR[Totale Ordnung der ganzen Zahlen]{%
   \TotOrd{\mathbb Z,\leq_{\mathbb Z}}%
 }{IntegerPeanoOrder}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerOrderTotal}[thm].\par
 
 \FormulaAxiomAutoR[Strikte Nachfolgerorientierung]{%
   z\in\mathbb Z\vdash z<\IntSucc(z)%
 }{IntegerPeanoSuccPositive}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccessorPositive}[thm].\par
+
+\FormulaAxiomAutoR[Zweiseitige Induktion der ganzen Zahlen]{%
+  \begin{aligned}[t]
+    &P(\IntZero)\dsep
+    \forall z\in\mathbb Z\,
+      (P(z)\to P(\IntSucc(z)))\dsep{}\\
+    &\forall z\in\mathbb Z\,
+      (P(z)\to P(\IntPred(z)))
+    \vdash\forall z\in\mathbb Z\,P(z)
+  \end{aligned}%
+}{IntegerTwoSidedInductionAxiom}
+\par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
+\FormulaRefAuto{IntegerTwoSidedInductionModel}[thm].\par
 
 \FormulaAxiomAutoR[Zweiseitiges Induktionsaxiom]{%
   \begin{aligned}[t]
@@ -5050,7 +5808,71 @@ Induktion beschreibt sie dagegen die intendierte zweiseitige, von
     \vdash\forall z\in\mathbb Z\,P(z)
   \end{aligned}%
 }{IntegerPeanoInduction}
-\par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
-\FormulaRefAuto{IntegerTwoSidedInductionModel}[thm].\par
+\par\noindent\emph{Registrierte Kurzform:}
+\FormulaRefAuto{IntegerTwoSidedInductionAxiom}[ax].\par
+
+\section{Vollständige Axiomatik}
+
+Die vollständige Schnittstelle verbindet die bereits registrierte geordnete
+Ringarithmetik mit der Schrittstruktur. Anders als auf \(\mathbb N\) ist der
+Nachfolger auf \(\mathbb Z\) bijektiv. Die totale Ordnung und die strikte
+Nachfolgerorientierung verhindern zyklische Nachfolgermodelle; die
+zweiseitige Induktion verbindet den positiven und den negativen Strahl.
+
+Metalogisch ist dabei zwischen zwei Lesarten zu unterscheiden: Als
+erststufiges Axiomenschema ist die Beschreibung nicht kategorisch und
+besitzt nichtstandardmäßige Modelle. Unter voller zweitstufiger Lesart der
+Induktion beschreibt sie dagegen die intendierte zweiseitige, von
+\(\IntZero\) durch Nachfolger und Vorgänger erzeugte Kette.
+
+\FormulaDefDeltaK[Erweiterte Peano-Axiome der ganzen Zahlen]{%
+  \IntegerPeano{%
+    \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
+    \IntSucc,\IntPred,\leq_{\mathbb Z}}%
+}{IntegerPeanoAxioms}{%
+  \DeltaRow{\textbf{Ring und Ordnung}}{}%
+  \DeltaRow{Arithmetik}{%
+    \IntegerArithmetic{%
+      \mathbb Z,\IntZero,\IntOne,-,+,\cdot,\leq_{\mathbb Z}}}
+    [\FormulaRefAuto{IntegerOrderedArithmeticAxioms}]%
+  \DeltaRow{\textbf{Schrittstruktur}}{}%
+  \DeltaRow{Null}{\IntZero\in\mathbb Z}
+    [\FormulaRefAuto{IntegerPeanoZero}]%
+  \DeltaRow{Nachfolger}{\IntSucc\colon\mathbb Z\to\mathbb Z}
+    [\FormulaRefAuto{IntegerPeanoSuccFunction}]%
+  \DeltaRow{Vorgänger}{\IntPred\colon\mathbb Z\to\mathbb Z}
+    [\FormulaRefAuto{IntegerPeanoPredFunction}]%
+  \DeltaRow{Links invers}
+    {z\in\mathbb Z\vdash\IntPred(\IntSucc(z))=z}
+    [\FormulaRefAuto{IntegerPeanoPredSucc}]%
+  \DeltaRow{Rechts invers}
+    {z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z}
+    [\FormulaRefAuto{IntegerPeanoSuccPred}]%
+  \DeltaRow{Orientierung}
+    {z\in\mathbb Z\vdash z<\IntSucc(z)}
+    [\FormulaRefAuto{IntegerSuccessorPositiveAxiom}]%
+  \DeltaRow{\textbf{Induktionsschema}}{}%
+  \DeltaRow{Induktion}{%
+    \begin{aligned}[t]
+      &P(\IntZero)\dsep{}\\[-2pt]
+      &\forall z\in\mathbb Z\,(P(z)\to P(\IntSucc(z)))\dsep{}\\[-2pt]
+      &\forall z\in\mathbb Z\,(P(z)\to P(\IntPred(z)))\dsep{}\\[-2pt]
+      &\vdash\forall z\in\mathbb Z\,P(z)
+    \end{aligned}}
+    [\FormulaRefAuto{IntegerTwoSidedInductionAxiom}]%
+  \DeltaRow{\textbf{Signatur}}{}%
+  \DeltaRow{Ganze Zahlen}{\mathbb Z}%
+  \DeltaRow{Konstanten}{\IntZero\dsep\IntOne}%
+  \DeltaRow{Operationen}{-\dsep+\dsep\cdot}%
+  \DeltaRow{Schrittoperatoren}{\IntSucc\dsep\IntPred}%
+  \DeltaRow{Ordnung}{\leq_{\mathbb Z}}%
+}
+
+\section*{Axiomatische Verwendung}
+
+Von nun an ist \FormulaRefAuto{IntegerPeanoAxioms}[def] die alleinige
+Grundlage für Aussagen über ganze Zahlen. Verwendet werden nur diese Axiome
+und ihre bereits hergeleiteten Folgerungen. Die konkrete Realisierung ist für
+solche Argumente weder Voraussetzung noch zulässiger Beweisschritt.
 
 \end{document}

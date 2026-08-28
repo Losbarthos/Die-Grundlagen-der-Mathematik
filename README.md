@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B35
+### Standalone-Bände B03 bis B36
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -77,6 +77,7 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B33 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32 |
 | B34 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33 |
 | B35 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33, B34 |
+| B36 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -117,6 +118,7 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B33 | Gruppen und Ringe |
 | B34 | Halbverbände und Verbände |
 | B35 | Frankls Vermutung |
+| B36 | Metrische Räume und Vollständigkeit |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
 Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
@@ -149,7 +151,11 @@ Axiomstrukturen getrennt. Die Bände B31--B33 behandeln Monoid-, Halbring-,
 Gruppen- und Ringstrukturen. Ihre allgemeinen
 Abbildungseigenschaften werden mit den
 Sätzen aus B06--B08 nachgewiesen. Die Nummerierung bezeichnet damit eine
-Beweisreihenfolge, keine ausschließliche thematische Zuordnung.
+Beweisreihenfolge, keine ausschließliche thematische Zuordnung. B36 eröffnet
+einen analytischen Zweig, der nur B01--B21 voraussetzt: Der reelle Abstand
+wird zu einer allgemeinen Metrik abstrahiert; Konvergenz, Cauchy-Folgen,
+metrische Vollständigkeit, Stetigkeit und Folgenkompaktheit werden darauf
+aufgebaut. Normen werden bis zur späteren Vektorraumtheorie zurückgestellt.
 
 TeX/Lua, `latexmkrc` und das PowerShell-Skript lesen dieselbe Datei. Die dort
 ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
@@ -157,7 +163,7 @@ ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
 unveränderte tex→aux-Standardregel.
 Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
 unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
-Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B35`
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B36`
 und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 ### PDF-Titel und File Juggler
@@ -208,6 +214,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B33
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B34
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B35
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B36
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne

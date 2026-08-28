@@ -38,7 +38,13 @@ Dieser Band führt das primitive Endlichkeitsprädikat und seine drei Axiome
 ein. Er entwickelt deren Konsequenzen, verbindet sie mit den in Band~10
 aufgebauten natürlichen Zahlen und untersucht die verschiedenen
 Charakterisierungen endlicher Mengen. Als ordnungstheoretische Anwendung
-werden außerdem endliche partielle Ordnungen behandelt.
+werden außerdem endliche partielle Ordnungen behandelt. Das Schlusskapitel
+überschreitet anschließend die Endlichkeitsschwelle: Es führt den kardinalen
+Größenvergleich ein, unterscheidet abzählbare von überabzählbaren Mengen und
+entwickelt mit Cantors Satz die ersten strikt verschiedenen
+Unendlichkeitsstufen. Eine darstellungsfreie Intervall-Diagonalisierung zeigt
+darüber hinaus, dass die reellen Zahlen strikt mächtiger als die natürlichen
+Zahlen sind.
 
 \chapter{Endlichkeitsaxiome}
 
@@ -4004,9 +4010,9 @@ der hier gegebenen Beweisroute vom Auswahlaxiom ab.
 
 \paragraph{Schluss: Dedekind-Endlichkeit impliziert Tarski-Endlichkeit}
 
-\FormulaThmDelta[Dedekind-Endlichkeit impliziert Tarski-Endlichkeit]{%
+\FormulaThmDeltaK[Dedekind-Endlichkeit impliziert Tarski-Endlichkeit]{%
   \neg\exists H\colon \mathbb{N}\inj M\vdash \TarskiFinite(M)
-}{%
+}{DedekindFiniteImpliesTarskiFinite}{%
   \DeltaDecl{Mengen}{M\dsep B\dsep x\dsep y}%
   \DeltaDecl{Funktionen}{H}%
 }
@@ -4267,6 +4273,52 @@ Endlichkeit ist damit nicht mitbewiesen.
     \FormulaRefAuto{FiniteWitnessNoNatInjection}[thm]{4,5}}
   \proofstep{1}{\neg\exists H\colon \mathbb{N}\inj M}{\rEE{2,3,6}}
 \end{tabproof}
+
+\FormulaThmDeltaK[Endliche Wertebereiche erzwingen eine Wiederholung]{%
+  \begin{aligned}[t]
+    &\Finite{M}\dsep F\colon\mathbb N\to M\vdash{}\\[-2pt]
+    &\exists k\,\exists n\,
+      \bigl(k\in\mathbb N\land n\in\mathbb N\land
+        k<n\land F(k)=F(n)\bigr)
+  \end{aligned}%
+}{FiniteSequenceRepetition}{%
+  \DeltaRow{Mengen}{M\dsep k\dsep n}
+  \DeltaRow{Funktionen}{F\dsep H}
+  \DeltaRow{Relationsoperatoren}{<_{\mathbb N}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite{M}}{\rA}
+  \proofstepwidestar[2]{F\colon\mathbb N\to M}{\rA}
+  \proofstepwidestar[3]{%
+    \neg\exists k\,\exists n\,
+      \bigl(k\in\mathbb N\land n\in\mathbb N\land
+        k<n\land F(k)=F(n)\bigr)}{\rA}
+  \proofstepwidestar[4]{k\in\mathbb N}{\rA}
+  \proofstepwidestar[5]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[6]{k<n}{\rA}
+  \proofstepwidestar[7]{F(k)=F(n)}{\rA}
+  \proofstepwidestarbreak[4,5,6,7]{%
+    \exists k\,\exists n\,
+      \bigl(k\in\mathbb N\land n\in\mathbb N\land
+        k<n\land F(k)=F(n)\bigr)}{%
+    \rEI{\rEI{\rAI{4,\rAI{5,\rAI{6,7}}}}}}
+  \proofstepwidestar[3,4,5,6,7]{\bot}{\rBI{8,3}}
+  \proofstepwidestar[3,4,5,6]{F(k)\neq F(n)}{\rCI{7,9}}
+  \proofstepwidestarbreak[3]{%
+    \forall k,n\in\mathbb N\,
+      \bigl(k<n\rightarrow F(k)\neq F(n)\bigr)}{%
+    \rUI{\rRI{4,\rRI{5,\rRI{6,10}}}}}
+  \proofstepwidestarbreak[2,3]{F\colon\mathbb N\inj M}{%
+    \FormulaRefAuto{B04PeanoStrictSeparationInjection}[thm]{2,11}}
+  \proofstepwidestar[2,3]{\exists H\colon\mathbb N\inj M}{\rEI{12}}
+  \proofstepwidestar[1]{\neg\exists H\colon\mathbb N\inj M}{%
+    \FormulaRefAuto{FiniteNoNatInjection}[thm]{1}}
+  \proofstepwidestar[1,2,3]{\bot}{\rBI{13,14}}
+  \proofstepwidestar[1,2]{%
+    \exists k\,\exists n\,
+      \bigl(k\in\mathbb N\land n\in\mathbb N\land
+        k<n\land F(k)=F(n)\bigr)}{\rCE{3,15}}
+\end{tabproofwide}
 
 \FormulaThmDelta[Endliche Mengen sind Tarski-endlich]{%
   \Finite{M}\vdash \TarskiFinite(M)
@@ -5180,7 +5232,7 @@ das gefundene Extremum zurück.
   \DeltaRow{Termsymbol}{\tCard}
 }
 
-\subsection{Vergleich endlicher Mengen}
+\subsection{Grundlegende Eigenschaften der Kardinalzahl}
 
 \FormulaThmDeltaK[Kardinalzahl einer endlichen Menge ist natürlich]{%
   \Finite{M}\vdash \tCard(M)\in\mathbb{N}
@@ -5206,12 +5258,320 @@ das gefundene Extremum zurück.
   \proofstep{1}{\NatSeg{\tCard(M)}\EqCard M}{\rAEb{2}}
 \end{tabproof}
 
-\FormulaThmDelta[Kardinalzahlenvergleich liefert Inklusionsinjektion]{%
-  \Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
-  \vdash
-  \iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
-  \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}
-}{%
+\subsection{Kardinalzahl der Potenzmenge}
+
+Die Binärcodierung wird zunächst als Funktion auf den natürlichen
+Anfangsabschnitten festgelegt.
+
+\FormulaDefDeltaK[Binäre Teilmengencodierung]{%
+  \begin{aligned}[t]
+    &n\in\mathbb{N}\dsep X\in\powerset(\NatSeg{n})\vdash{}\\[-2pt]
+    &\varepsilon_X\colon\NatSeg{n}\to\{0,1\},\qquad
+      \varepsilon_X(i)\coloneqq
+      \begin{cases}
+        1,&i\in X,\\
+        0,&i\notin X,
+      \end{cases}\\[-2pt]
+    &c_n\colon\powerset(\NatSeg{n})\to\mathbb{N},\qquad
+      c_n(X)\coloneqq\sum_{i<n}\varepsilon_X(i)\cdot2^i
+  \end{aligned}%
+}{BinarySubsetCode}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep X}%
+  \DeltaRow{Funktionen}{\varepsilon_X\dsep c_n}%
+}
+
+\FormulaThmDeltaK[Binärcodierung der Teilmengen eines Anfangsabschnitts]{%
+  n\in\mathbb{N}\vdash
+  c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}%
+}{BinarySubsetCodeBijective}{%
+  \DeltaRow{Mengen}{n\dsep i\dsep X}%
+  \DeltaRow{Funktionen}{c_n\dsep\PowAdj{n}\dsep\AddStep{2^n}}%
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    c_0\colon\powerset(\NatSeg{0})\bij\NatSeg{2^0}%
+  }{%
+    c_0\colon\powerset(\NatSeg{0})\bij\NatSeg{2^0}%
+  }[BinarySubsetCodeBase]
+    \proofstepwidestar[]{\NatSeg{0}=\varnothing}{%
+      \FormulaRefAuto{PeanoNatSegZero}[thm]}
+    \proofstepwidestar[]{\powerset(\NatSeg{0})=\{\varnothing\}}{%
+      \rIE{1,\FormulaRefAuto{\powerset(\varnothing)=\{\varnothing\}}[thm]}}
+    \proofstepwidestar[]{2^0=\Succ(0)}{%
+      \FormulaRefAuto{PeanoPowerZero}[thm]{%
+        \FormulaRefAuto{PeanoTwoInN}[thm]}}
+    \proofstepwidestar[]{\Succ(0)=1}{%
+      \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{PeanoOne}[def]}}
+    \proofstepwidestar[]{\NatSeg{2^0}=\{0\}}{%
+      \rIE{3,4,\FormulaRefAuto{PeanoNatSegOneMembership}[thm]}}
+    \proofstepwidestar[]{c_0(\varnothing)=0}{%
+      \FormulaRefAuto{BinarySubsetCode}[def]}
+    \proofstepwidestar[]{%
+      c_0\colon\powerset(\NatSeg{0})\bij\NatSeg{2^0}}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{2,5,6}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &n\in\mathbb{N}\dsep
+       c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}
+       \vdash{}\\[-2pt]
+      &c_{\Succ(n)}\colon
+       \powerset(\NatSeg{\Succ(n)})\bij\NatSeg{2^{\Succ(n)}}
+    \end{aligned}%
+  }{%
+    n\in\mathbb{N}\dsep
+    c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}
+    \vdash
+    c_{\Succ(n)}\colon
+    \powerset(\NatSeg{\Succ(n)})\bij\NatSeg{2^{\Succ(n)}}%
+  }[BinarySubsetCodeStep]
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[2]{%
+      c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}}{\rA}
+    \proofstepwidestar[1]{%
+      \powerset(\NatSeg{\Succ(n)})=
+      \powerset(\NatSeg{n})\cup
+      \PowAdj{n}[\powerset(\NatSeg{n})]}{%
+      \FormulaRefAuto{n\in\mathbb{N}\vdash
+        \powerset(\NatSeg{\Succ(n)})=
+        \powerset(\NatSeg{n})\cup
+        \PowAdj{n}[\powerset(\NatSeg{n})]}{1}}
+    \proofstepwidestar[1]{2^{\Succ(n)}=2^n\cdot2}{%
+      \FormulaRefAuto{PeanoPowerSucc}[thm]{%
+        \FormulaRefAuto{PeanoTwoInN}[thm],1}}
+    \proofstepwidestar[1,2]{%
+      c_{\Succ(n)}\colon
+      \powerset(\NatSeg{\Succ(n)})\bij\NatSeg{2^{\Succ(n)}}}{%
+      \makecell[l]{%
+        \FormulaRefAuto{BinarySubsetCode}[def],\quad
+        \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{2},\\[-2pt]
+        \rIE{3,4}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[1]{%
+      c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}}{%
+      \FormulaRefAuto{PeanoInductionRule}[ax]{IA,IS,1}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Potenzmenge einer Menge mit \(n\) Elementen]{%
+  \Finite{A}\dsep n\in\mathbb{N}\dsep \tCard(A)=n
+  \vdash \tCard\bigl(\powerset(A)\bigr)=2^n%
+}{FinitePowerSetCardinality}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep n\dsep i}%
+  \DeltaRow{Funktionen}{F\dsep c_{n,F}}%
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite{A}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[3]{\tCard(A)=n}{\rA}
+  \proofstepwidestar[1]{\Finite{\powerset(A)}}{%
+    \FormulaRefAuto{FinitePowerSet}[thm]{1}}
+  \proofstepwidestar[1]{\NatSeg{\tCard(A)}\EqCard A}{%
+    \FormulaRefAuto{FiniteCardCounts}[thm]{1}}
+  \proofstepwidestar[1,3]{\NatSeg{n}\EqCard A}{\rIE{3,5}}
+  \proofstepwidestar[1,3]{%
+    \powerset(\NatSeg{n})\EqCard\powerset(A)}{%
+    \FormulaRefAuto{EqCardPowerSetForward}[thm]{6}}
+  \proofstepwidestar[2]{%
+    c_n\colon\powerset(\NatSeg{n})\bij\NatSeg{2^n}}{%
+    \FormulaRefAuto{BinarySubsetCodeBijective}[thm]{2}}
+  \proofstepwidestar[2]{%
+    \powerset(\NatSeg{n})\EqCard\NatSeg{2^n}}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{\rEI{8}}}
+  \proofstepwidestar[2]{%
+    \NatSeg{2^n}\EqCard\powerset(\NatSeg{n})}{%
+    \FormulaRefAuto{A\EqCard B\vdash B\EqCard A}[thm]{9}}
+  \proofstepwidestar[1,2,3]{\NatSeg{2^n}\EqCard\powerset(A)}{%
+    \FormulaRefAuto{A\EqCard B\dsep B\EqCard C\vdash A\EqCard C}[thm]{10,7}}
+  \proofstepwidestar[]{2\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoTwoInN}[thm]}
+  \proofstepwidestar[2]{2^n\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoPowerClosure}[thm]{12,2}}
+  \proofstepwidestar[1]{\tCard(\powerset(A))\in\mathbb{N}}{%
+    \FormulaRefAuto{FiniteCardNatural}[thm]{4}}
+  \proofstepwidestar[1]{%
+    \NatSeg{\tCard(\powerset(A))}\EqCard\powerset(A)}{%
+    \FormulaRefAuto{FiniteCardCounts}[thm]{4}}
+  \proofstepwidestar[1,2,3]{\tCard(\powerset(A))=2^n}{%
+    \FormulaRefAuto{FiniteCardWitnessUnique}[thm]{14,13,15,11}}
+\end{tabproofwide}
+
+Für positive natürliche Zahlen verwenden wir die in Band~10 eingeführte
+Schreibweise \(m-1\) für den Vorgänger von \(m\).  Damit lässt sich die
+Kardinalität der nichtleeren Potenzmenge in der üblichen Form angeben.
+
+\FormulaThmDeltaK[Nichtleere Potenzmengen endlicher Mengen sind endlich]{%
+  \Finite{A}\vdash\Finite{\PowNE{A}}%
+}{FiniteNonemptyPowerSet}{%
+  \DeltaRow{Mengen}{A\dsep X}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite{A}}{\rA}
+  \proofstepwidestar[2]{X\in\PowNE{A}}{\rA}
+  \proofstepwidestar[2]{X\subseteq A}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{2}}}
+  \proofstepwidestar[2]{X\in\powerset(A)}{%
+    \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{3}}
+  \proofstepwidestar[]{\PowNE{A}\subseteq\powerset(A)}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{%
+        \rUI{\rRI{2,4}}}}
+  \proofstepwidestar[1]{\Finite{\powerset(A)}}{%
+    \FormulaRefAuto{FinitePowerSet}[thm]{1}}
+  \proofstepwidestar[1]{\Finite{\PowNE{A}}}{%
+    \FormulaRefAuto{FiniteSubset}[thm]{5,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Kardinalität der nichtleeren Potenzmenge]{%
+  \begin{aligned}[t]
+    &\Finite{A}\dsep n\in\mathbb N\dsep \tCard(A)=n\vdash{}\\[-2pt]
+    &\tCard\bigl(\PowNE{A}\bigr)+1=2^n
+      \land
+      \tCard\bigl(\PowNE{A}\bigr)=2^n-1
+  \end{aligned}%
+}{FiniteNonemptyPowerSetCardinality}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep n\dsep p}
+}
+\begin{proof}
+Nach \FormulaRefAuto{FiniteNonemptyPowerSet}[thm] ist
+\(\PowNE{A}\) endlich.
+
+Außerdem ist
+\[
+  \powerset(A)=\PowNE{A}\cup\{\varnothing\}.                 \tag{1}
+\]
+Liegt \(X\) in \(\powerset(A)\), so ist \(X\subseteq A\). Im Fall
+\(X=\varnothing\) liegt \(X\) in \(\{\varnothing\}\); im Fall
+\(X\neq\varnothing\) liefert
+\FormulaRefAuto{NonemptyPowersetMembership}[thm]
+\(X\in\PowNE{A}\). Umgekehrt ist jedes Element von \(\PowNE{A}\) eine
+Teilmenge von \(A\), und auch \(\varnothing\subseteq A\). Die
+Mengengleichheit folgt daher durch Extensionalität. Dass
+\(\varnothing\notin\PowNE{A}\) gilt, folgt ebenfalls unmittelbar aus
+\FormulaRefAuto{NonemptyPowersetMembership}[thm].
+
+Setze \(p\coloneqq\tCard(\PowNE{A})\). Nach
+\FormulaRefAuto{FiniteCardNatural}[thm] und
+\FormulaRefAuto{FiniteCardCounts}[thm] gelten
+\[
+  p\in\mathbb N,
+  \qquad
+  \NatSeg{p}\EqCard\PowNE{A}.
+\]
+Ferner ist \(p\notin\NatSeg{p}\) nach
+\FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]. Mit
+\(\varnothing\notin\PowNE{A}\) liefert
+\FormulaRefAuto{EqCardFreshAdjunction}[thm]
+\[
+  \NatSeg{p}\cup\{p\}
+  \EqCard
+  \PowNE{A}\cup\{\varnothing\}.
+\]
+Die Gleichung (1) und
+\FormulaRefAuto{PeanoNatSegSucc}[thm] ergeben somit
+\[
+  \NatSeg{\Succ(p)}\EqCard\powerset(A).                     \tag{2}
+\]
+
+Andererseits liefert der unmittelbar vorangehende Satz
+\FormulaRefAuto{FinitePowerSetCardinality}[thm] aus
+\(\Finite{A}\), \(n\in\mathbb N\) und \(\tCard(A)=n\)
+\[
+  \tCard(\powerset(A))=2^n.
+\]
+Zusammen mit \FormulaRefAuto{FiniteCardCounts}[thm] folgt
+\[
+  \NatSeg{2^n}\EqCard\powerset(A).                          \tag{3}
+\]
+Dabei ist \(2^n\in\mathbb N\) nach
+\FormulaRefAuto{PeanoPowerClosure}[thm] und
+\FormulaRefAuto{PeanoTwoInN}[thm]. Aus (2), (3) und
+\FormulaRefAuto{FiniteCardWitnessUnique}[thm] folgt
+\[
+  \Succ(p)=2^n.                                             \tag{4}
+\]
+Da \(p\in\mathbb N\), gilt
+\(\Succ(p)\neq0\) nach \FormulaRefAuto{PeanoSuccNonzero}[ax]. Wegen (4)
+ist daher auch \(2^n\neq0\). Zusammen mit \(2^n\in\mathbb N\) folgt
+\(2^n\in\mathbb N\setminus\{0\}\), also liegt die rechte Seite von (4)
+im Definitionsbereich der Vorgängerfunktion aus
+\FormulaRefAuto{PeanoPredFunction}[thm]. Wenden wir nun \(\Pred\) auf (4)
+an und benutzen \FormulaRefAuto{PeanoPredSucc}[thm], so erhalten wir
+\[
+  p=\Pred(2^n).
+\]
+Nach \FormulaRefAuto{PeanoAddOneSucc}[thm] ist (4) gleichbedeutend mit
+\(p+1=2^n\).  Ferner liefert
+\FormulaRefAuto{PeanoMinusOneNotation}[def] aus
+\(2^n\in\mathbb N\) und \(2^n\neq0\) die Schreibweise
+\(\Pred(2^n)=2^n-1\).  Wegen \(p=\tCard(\PowNE{A})\) sind dies die beiden
+Konjunktionen der Behauptung.
+\end{proof}
+
+\FormulaThmDeltaK[Die nichtleere Potenzmenge reflektiert endliche Kardinalität]{%
+  \Finite{A}\dsep\Finite{B}\dsep
+  \PowNE{A}\EqCard\PowNE{B}
+  \vdash \tCard(A)=\tCard(B)%
+}{FiniteNonemptyPowerSetReflectsCardinality}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep a\dsep b\dsep p\dsep q}
+  \DeltaRow{Funktionensymbol}{\operatorname{pow}_2}
+}
+\begin{proof}
+Setze
+\[
+\begin{aligned}
+  a&\coloneqq\tCard(A), & b&\coloneqq\tCard(B),\\
+  p&\coloneqq\tCard(\PowNE{A}), &
+  q&\coloneqq\tCard(\PowNE{B}).
+\end{aligned}
+\]
+Aus \FormulaRefAuto{FiniteNonemptyPowerSet}[thm] folgt die Endlichkeit
+beider nichtleeren Potenzmengen. Daher liefern
+\FormulaRefAuto{FiniteCardNatural}[thm] und
+\FormulaRefAuto{FiniteCardCounts}[thm]
+\[
+  p,q\in\mathbb N,\qquad
+  \NatSeg{p}\EqCard\PowNE{A},\qquad
+  \NatSeg{q}\EqCard\PowNE{B}.
+\]
+Die vorausgesetzte Gleichmächtigkeit und
+\FormulaRefAuto{A \EqCard B \dsep B \EqCard C
+  \vdash A \EqCard C}[thm] ergeben
+\(\NatSeg{p}\EqCard\PowNE{B}\). Zusammen mit dem letzten der angezeigten
+Zählzeugnisse folgt aus
+\FormulaRefAuto{FiniteCardWitnessUnique}[thm]
+\[
+  p=q.                                                       \tag{1}
+\]
+
+Weiter sind \(a,b\in\mathbb N\) nach
+\FormulaRefAuto{FiniteCardNatural}[thm]. Wir wenden
+\FormulaRefAuto{FiniteNonemptyPowerSetCardinality}[thm] einmal mit \(n=a\)
+und einmal mit \(n=b\) an. Die jeweils erste Konjunktion liefert
+\[
+  p+1=2^a,\qquad q+1=2^b.                                  \tag{2}
+\]
+Aus (1) und (2) folgt \(2^a=2^b\). Nach
+\FormulaRefAuto{PeanoPowerTwoFunction}[def] ist dies
+\(\operatorname{pow}_2(a)=\operatorname{pow}_2(b)\). Die Injektivität aus
+\FormulaRefAuto{PeanoPowerTwoStrictMonotoneInjective}[thm] ergibt daher
+\(a=b\), also \(\tCard(A)=\tCard(B)\).
+\end{proof}
+
+\subsection{Vergleich endlicher Mengen}
+
+\FormulaThmDeltaK[Kardinalzahlenvergleich liefert Inklusionsinjektion]{%
+  \begin{aligned}[t]
+    &\Finite{M}\dsep \Finite{N}\dsep
+      \tCard(M)\leq \tCard(N)\vdash{}\\[-2pt]
+    &\iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
+      \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}
+  \end{aligned}
+}{FiniteCardComparisonInclusionInjection}{%
   \DeltaRow{Mengen}{M\dsep N}
 }
 \begin{tabproof}
@@ -5236,24 +5596,21 @@ das gefundene Extremum zurück.
   \DeltaRow{Mengen}{M\dsep N}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{\Finite{M}}{\rA}
-  \proofstep{2}{\Finite{N}}{\rA}
-  \proofstep{3}{\tCard(M)\leq \tCard(N)}{\rA}
-  \proofstep{1}{\NatSeg{\tCard(M)}\EqCard M}{%
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite{M}}{\rA}
+  \proofstepwidestar[2]{\Finite{N}}{\rA}
+  \proofstepwidestar[3]{\tCard(M)\leq \tCard(N)}{\rA}
+  \proofstepwidestar[1]{\NatSeg{\tCard(M)}\EqCard M}{%
     \FormulaRefAuto{FiniteCardCounts}[thm]{1}}
-  \proofstep{2}{\NatSeg{\tCard(N)}\EqCard N}{%
+  \proofstepwidestar[2]{\NatSeg{\tCard(N)}\EqCard N}{%
     \FormulaRefAuto{FiniteCardCounts}[thm]{2}}
-  \proofstep{1,2,3}{\iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
+  \proofstepwidestarbreak[1,2,3]{\iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
     \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}}{%
-    \FormulaRefAuto{\Finite{M}\dsep \Finite{N}\dsep \tCard(M)\leq \tCard(N)
-    \vdash
-    \iota_{\NatSeg{\tCard(M)},\NatSeg{\tCard(N)}}\colon
-    \NatSeg{\tCard(M)}\inj \NatSeg{\tCard(N)}}{1,2,3}}
-  \proofstep{1,2,3}{\exists F\colon M\inj N}{%
+    \FormulaRefAuto{FiniteCardComparisonInclusionInjection}[thm]{1,2,3}}
+  \proofstepwidestarbreak[1,2,3]{\exists F\colon M\inj N}{%
     \FormulaRefAuto{A \EqCard M\dsep B \EqCard N\dsep F\colon A\inj B
     \vdash \exists G\colon M\inj N}{4,5,6}}
-\end{tabproof}
+\end{tabproofwide}
 
 \FormulaThmDelta[Vergleich endlicher Mengen durch Injektionen]{%
   \Finite{M}\dsep \Finite{N}\dsep
@@ -5963,5 +6320,1745 @@ natürliche Zahlen und Gleichmächtigkeit hergeleitet.
 % Die frühere definitionelle Fassung wird nicht mehr registriert.  Der
 % folgende alte Herleitungsblock bleibt nur als historische Arbeitsfassung
 % im Quelltext und ist vollständig deaktiviert.
+
+\chapter{Unendliche Mengen und Kardinalstufen}
+
+% Die neuen Beweise enthalten mehrfach verschachtelte Bild- und
+% Komplementausdrücke. Ab hier verwendet die breite Tabellenzeile daher die
+% automatische Break-Variante aus proof-tables.tex.
+\let\proofstepwidestar\proofstepwidestarbreak
+
+Die endliche Kardinalzahl \(\tCard(M)\) wurde nur für endliche Mengen
+definiert. Für beliebige Mengen vergleichen wir Größen deshalb zunächst
+direkt durch Injektionen und Bijektionen. Dieser relationale Zugang benötigt
+noch keine Kardinalzahlen als besondere Mengen und reicht aus, um
+verschiedene Stufen der Unendlichkeit streng auseinanderzuhalten.
+
+\section{Kardinaler Größenvergleich}
+
+\FormulaDefDeltaK[Höchstens gleichmächtig]{%
+  A\CardLeq B \coloneqq \exists F\colon A\inj B%
+}{CardLeqDef}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Kardinaler Vergleich}{\CardLeq}
+}
+
+\FormulaDefDeltaK[Strikt weniger mächtig]{%
+  A\CardLt B \coloneqq
+  \bigl(A\CardLeq B\land\neg(A\EqCard B)\bigr)%
+}{CardLtDef}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Strikter kardinaler Vergleich}{\CardLt}
+}
+
+\FormulaThmDeltaK[Reflexivität des kardinalen Vergleichs]{%
+  A\CardLeq A%
+}{CardLeqReflexive}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{}{\Id_A\colon A\bij A}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}}
+  \proofstep{}{\Id_A\colon A\inj A}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{1}}
+  \proofstep{}{\exists F\colon A\inj A}{\rEI{2}}
+  \proofstep{}{A\CardLeq A}{\FormulaRefAuto{CardLeqDef}[def]{3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Transitivität des kardinalen Vergleichs]{%
+  A\CardLeq B\dsep B\CardLeq C\vdash A\CardLeq C%
+}{CardLeqTransitive}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Komposition fester Injektionen]{%
+    F\colon A\inj B\dsep G\colon B\inj C
+    \vdash \exists H\colon A\inj C%
+  }{%
+    F\colon A\inj B\dsep G\colon B\inj C
+    \vdash \exists H\colon A\inj C%
+  }[CardLeqTransitiveFixedInjections]
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj C}{\rA}
+    \proofstepwidestar[1,2]{G\circ F\colon A\inj C}{%
+      \FormulaRefAuto{F\colon A\inj B\dsep G\colon B\inj C
+        \vdash G\circ F\colon A\inj C}{1,2}}
+    \proofstepwidestar[1,2]{\exists H\colon A\inj C}{\rEI{3}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{A\CardLeq B}{\rA}
+    \proofstepwidestar[2]{B\CardLeq C}{\rA}
+    \proofstepwidestar[1]{\exists F\colon A\inj B}{%
+      \FormulaRefAuto{CardLeqDef}[def]{1}}
+    \proofstepwidestar[2]{\exists G\colon B\inj C}{%
+      \FormulaRefAuto{CardLeqDef}[def]{2}}
+    \proofstepwidestar[5]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[6]{G\colon B\inj C}{\rA}
+    \proofstepwidestar[5,6]{\exists H\colon A\inj C}{%
+      \FormulaRefAuto{CardLeqTransitiveFixedInjections}[thm]{5,6}}
+    \proofstepwidestar[2,5]{\exists H\colon A\inj C}{\rEE{4,6,7}}
+    \proofstepwidestar[1,2]{\exists H\colon A\inj C}{\rEE{3,5,8}}
+    \proofstepwidestar[1,2]{A\CardLeq C}{%
+      \FormulaRefAuto{CardLeqDef}[def]{9}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Gleichmächtigkeit liefert Vergleiche in beide Richtungen]{%
+  A\EqCard B\vdash A\CardLeq B\land B\CardLeq A%
+}{EqCardImpliesMutualCardLeq}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{A\EqCard B}{\rA}
+  \proofstep{1}{\exists F\colon A\bij B}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{1}}
+  \proofstep{3}{F\colon A\bij B}{\rA}
+  \proofstep{3}{F\colon A\inj B}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{3}}
+  \proofstep{3}{F^{-1}\colon B\bij A}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}{3}}
+  \proofstep{3}{F^{-1}\colon B\inj A}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{5}}
+  \proofstep{3}{\exists G\colon A\inj B}{\rEI{4}}
+  \proofstep{3}{\exists G\colon B\inj A}{\rEI{6}}
+  \proofstep{3}{A\CardLeq B}{\FormulaRefAuto{CardLeqDef}[def]{7}}
+  \proofstep{3}{B\CardLeq A}{\FormulaRefAuto{CardLeqDef}[def]{8}}
+  \proofstep{3}{A\CardLeq B\land B\CardLeq A}{\rAI{9,10}}
+  \proofstep{1}{A\CardLeq B\land B\CardLeq A}{\rEE{2,3,11}}
+\end{tabproof}
+
+\ProofWideReasonsNearFormula
+\subsection{Der Satz von Cantor--Schröder--Bernstein}
+
+Die beiden Injektionen liefern noch nicht unmittelbar eine Bijektion. Die
+naheliegende Strategie besteht darin, \(A\) in zwei Bereiche zu zerlegen: Auf
+dem ersten folgen wir dem \(F\)-Pfeil vorwärts nach \(B\), auf dem zweiten
+einem \(G\)-Pfeil rückwärts nach \(B\). Weil \(G\) injektiv ist, besitzt ein
+Punkt aus \(G[B]\) genau einen solchen \(G\)-Vorgänger. Die eigentliche
+Schwierigkeit liegt daher in der Wahl der beiden Bereiche: Jeder benötigte
+Rückwärtspfeil muss vorhanden sein, und die beiden Bildbereiche müssen
+disjunkt sein und zusammen ganz \(B\) ergeben.
+
+Zur Anschauung betrachten wir disjunkt markierte Kopien von \(A\) und \(B\).
+Für jedes \(a\in A\) zeichnen wir einen Pfeil von \(a\) zu \(F(a)\), für
+jedes \(b\in B\) einen Pfeil von \(b\) zu \(G(b)\). Da beide Funktionen
+injektiv sind, hat jeder Punkt höchstens einen eingehenden Pfeil. Es entstehen
+also abwechselnde Pfeilketten und gegebenenfalls Zyklen.
+
+Die Punkte in \(A\setminus G[B]\) besitzen keinen eingehenden
+\(G\)-Pfeil. Bei ihnen ist der Rückweg unmöglich; sie müssen deshalb zum
+\(F\)-Bereich gehören. Gehört nun \(a\) zum \(F\)-Bereich, so ist der
+Zielpunkt \(F(a)\) bereits durch diesen Zweig belegt. Läge \(G(F(a))\) im
+rückwärts behandelten Bereich, so würde dieser Punkt über \(G\) ebenfalls auf
+\(F(a)\) geschickt. Deshalb muss sich die Entscheidung für den \(F\)-Zweig
+durch den Doppelschritt \(a\longmapsto G(F(a))\) fortpflanzen.
+
+Für den gesuchten \(F\)-Bereich \(C\subseteq A\) ergeben sich damit die
+beiden Bedingungen
+\[
+  A\setminus G[B]\subseteq C
+  \qquad\text{und}\qquad
+  G[F[C]]\subseteq C.
+\]
+Wir wählen die kleinste solche Menge. Anschaulich enthält sie genau die
+\(A\)-Punkte, die von \(A\setminus G[B]\) aus durch endlich viele
+Doppelschritte \(G\circ F\) erreicht werden. Damit erfasst sie alle
+erzwungenen \(F\)-Ketten, aber keine weiteren Komponenten.
+
+Die folgende Definition formuliert diese Kleinheit ohne eine zusätzliche
+Iterationskonstruktion: Ein Punkt gehört genau dann zu \(\CBPart{F}{G}\),
+wenn er in jeder Teilmenge \(X\subseteq A\) liegt, welche die Startpunkte
+\(A\setminus G[B]\) enthält und unter \(G\circ F\) abgeschlossen ist. Die
+anschließend bewiesene Fixpunktgleichung zeigt, dass jeder Punkt dieses
+Bereichs entweder ein Startpunkt ist oder durch einen Doppelschritt aus einem
+bereits enthaltenen Punkt entsteht. Auf \(\CBPart{F}{G}\) wird schließlich
+\(F\) verwendet; auf dem Komplement die Umkehrung der passenden Einschränkung
+von \(G\). So entstehen zwei disjunkte Zweige, die zusammen ganz \(B\)
+treffen.
+
+\FormulaDefDeltaK[Cantor--Bernstein-Teilmenge]{%
+  \begin{aligned}[t]
+    &F\colon A\inj B\dsep G\colon B\inj A\vdash{}\\[-2pt]
+    &\CBPart{F}{G}\coloneqq
+      \{x\in A\mid \forall X\in\powerset(A)\,\bigl(\\[-2pt]
+    &\qquad ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+      \rightarrow x\in X\bigr)\}
+  \end{aligned}%
+}{CantorBernsteinPartDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep X\dsep x}
+  \DeltaRow{Funktionen}{F\dsep G}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Cantor--Bernstein-Teilmenge}{\CBPart{F}{G}}
+}
+
+\FormulaThmDeltaK[Die Cantor--Bernstein-Teilmenge liegt im Ausgangsbereich]{%
+  F\colon A\inj B\dsep G\colon B\inj A
+  \vdash \CBPart{F}{G}\subseteq A%
+}{CantorBernsteinPartSubset}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep x}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\inj B}{\rA}
+  \proofstep{2}{G\colon B\inj A}{\rA}
+  \proofstep{3}{x\in\CBPart{F}{G}}{\rA}
+  \proofstep{1,2,3}{x\in A}{%
+    \FormulaRefAuto{CantorBernsteinPartDef}[def]{1,2,3}}
+  \proofstep{1,2}{\CBPart{F}{G}\subseteq A}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{3,4}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Der Startbereich liegt im Cantor--Bernstein-Teil]{%
+  F\colon A\inj B\dsep G\colon B\inj A
+  \vdash A\setminus G[B]\subseteq\CBPart{F}{G}%
+}{CantorBernsteinPartContainsSeed}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep X\dsep x}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[3]{x\in A\setminus G[B]}{\rA}
+  \proofstepwidestar[4]{%
+    (A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X}{\rA}
+  \proofstepwidestar[4]{A\setminus G[B]\subseteq X}{\rAEa{4}}
+  \proofstepwidestar[3,4]{x\in X}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}{5,3}}
+  \proofstepwidestar[3]{%
+    ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+      \rightarrow x\in X}{\rRI{4,6}}
+  \proofstepwidestar[3]{%
+    X\in\powerset(A)\rightarrow\bigl(
+      ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow x\in X\bigr)}{%
+    \FormulaRefAuto{Q \vdash P \rightarrow Q}[thm]{7}}
+  \proofstepwidestar[3]{%
+    \forall X\in\powerset(A)\,\bigl(
+      ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+      \rightarrow x\in X\bigr)}{\rUI{8}}
+  \proofstepwidestar[3]{x\in A}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\in A}{3}}
+  \proofstepwidestar[1,2,3]{x\in\CBPart{F}{G}}{%
+    \FormulaRefAuto{CantorBernsteinPartDef}[def]{1,2,\rAI{10,9}}}
+  \proofstepwidestar[1,2]{A\setminus G[B]\subseteq\CBPart{F}{G}}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{3,11}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Minimalität des Cantor--Bernstein-Teils]{%
+  \begin{aligned}[t]
+    &F\colon A\inj B\dsep G\colon B\inj A\dsep X\subseteq A\dsep
+      A\setminus G[B]\subseteq X\dsep G[F[X]]\subseteq X\vdash{}\\[-2pt]
+    &\CBPart{F}{G}\subseteq X
+  \end{aligned}%
+}{CantorBernsteinPartMinimal}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep X\dsep Y\dsep x\dsep z}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[3]{X\subseteq A}{\rA}
+  \proofstepwidestar[4]{A\setminus G[B]\subseteq X}{\rA}
+  \proofstepwidestar[5]{G[F[X]]\subseteq X}{\rA}
+  \proofstepwidestar[6]{x\in\CBPart{F}{G}}{\rA}
+  \proofstepwidestar[3]{X\in\powerset(A)}{%
+    \FormulaRefAuto{X\in\powerset(A)\eqvdash X\subseteq A}{3}}
+  \proofstepwidestar[4,5]{%
+    (A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X}{\rAI{4,5}}
+  \proofstepwidestar[1,2]{%
+    \CBPart{F}{G}=\bigl\{z\in A\bigm|
+      \forall Y\in\powerset(A)\,\bigl(
+        ((A\setminus G[B])\subseteq Y\land G[F[Y]]\subseteq Y)
+          \rightarrow z\in Y\bigr)\bigr\}}{%
+    \FormulaRefAuto{CantorBernsteinPartDef}[def]{1,2}}
+  \proofstepwidestar[1,2,6]{%
+    \forall Y\in\powerset(A)\,\bigl(
+      ((A\setminus G[B])\subseteq Y\land G[F[Y]]\subseteq Y)
+        \rightarrow x\in Y\bigr)}{%
+    \FormulaRefAuto{x \in A\dsep A=\{x \in B \mid P(x)\}
+      \vdash P(x)}[thm]{6,9}}
+  \proofstepwidestar[1,2,6]{%
+    X\in\powerset(A)\rightarrow\bigl(
+      ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow x\in X\bigr)}{\rUE{10}}
+  \proofstepwidestar[1,2,3,6]{%
+    ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+      \rightarrow x\in X}{\rRE{11,7}}
+  \proofstepwidestar[1,2,3,4,5,6]{x\in X}{\rRE{12,8}}
+  \proofstepwidestar[1,2,3,4,5]{\CBPart{F}{G}\subseteq X}{%
+    \FormulaRefAuto{A\subseteq B \coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{6,13}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Abgeschlossenheit des Cantor--Bernstein-Teils]{%
+  F\colon A\inj B\dsep G\colon B\inj A
+  \vdash G[F[\CBPart{F}{G}]]\subseteq\CBPart{F}{G}%
+}{CantorBernsteinPartClosed}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep X\dsep y}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Bildpunkte liegen in jeder zulässigen Teilmenge]{%
+    \begin{aligned}[t]
+      &F\colon A\inj B\dsep G\colon B\inj A\dsep
+        y\in G[F[\CBPart{F}{G}]]\vdash{}\\[-2pt]
+      &\forall X\in\powerset(A)\,\bigl(
+        ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow y\in X\bigr)
+    \end{aligned}%
+  }{%
+    F\colon A\inj B\dsep G\colon B\inj A\dsep
+    y\in G[F[\CBPart{F}{G}]]\vdash
+    \forall X\in\powerset(A)\,\bigl(
+      ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+      \rightarrow y\in X\bigr)
+  }[CantorBernsteinPartClosedUniversal]
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+    \proofstepwidestar[3]{y\in G[F[\CBPart{F}{G}]]}{\rA}
+    \proofstepwidestar[4]{X\in\powerset(A)}{\rA}
+    \proofstepwidestar[5]{%
+      (A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X}{\rA}
+    \proofstepwidestar[4]{X\subseteq A}{%
+      \FormulaRefAuto{X\in\powerset(A)\eqvdash X\subseteq A}{4}}
+    \proofstepwidestar[5]{A\setminus G[B]\subseteq X}{\rAEa{5}}
+    \proofstepwidestar[5]{G[F[X]]\subseteq X}{\rAEb{5}}
+    \proofstepwidestar[1,2,4,5]{\CBPart{F}{G}\subseteq X}{%
+      \FormulaRefAuto{CantorBernsteinPartMinimal}[thm]{1,2,6,7,8}}
+    \proofstepwidestar[1]{F\colon A\to B}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1}}
+    \proofstepwidestar[2]{G\colon B\to A}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{2}}
+    \proofstepwidestar[1,2,4,5]{F[\CBPart{F}{G}]\subseteq F[X]}{%
+      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M
+        \vdash F[A]\subseteq F[B]}[thm]{10,9,6}}
+    \proofstepwidestar[1,4]{F[X]\subseteq B}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+        \vdash F[C]\subseteq B}[thm]{6,10}}
+    \proofstepwidestar[1,2,4,5]{%
+      G[F[\CBPart{F}{G}]]\subseteq G[F[X]]}{%
+      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M
+        \vdash F[A]\subseteq F[B]}[thm]{11,12,13}}
+    \proofstepwidestar[1,2,3,4,5]{y\in G[F[X]]}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{14,3}}
+    \proofstepwidestar[1,2,3,4,5]{y\in X}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{8,15}}
+    \proofstepwidestar[1,2,3,4]{%
+      ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow y\in X}{\rRI{5,16}}
+    \proofstepwidestar[1,2,3]{%
+      \forall X\in\powerset(A)\,\bigl(
+        ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow y\in X\bigr)}{\rUI{\rRI{4,17}}}
+  \closeproofpartwideindR
+
+  \newpage
+  \proofpartwide{Zugehörigkeit zu \(A\) und Schluss}
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+    \proofstepwidestar[3]{y\in G[F[\CBPart{F}{G}]]}{\rA}
+    \proofstepwidestar[1,2,3]{%
+      \forall X\in\powerset(A)\,\bigl(
+        ((A\setminus G[B])\subseteq X\land G[F[X]]\subseteq X)
+        \rightarrow y\in X\bigr)}{%
+      \FormulaRefAuto{CantorBernsteinPartClosedUniversal}[thm]{1,2,3}}
+    \proofstepwidestar[1]{F\colon A\to B}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1}}
+    \proofstepwidestar[2]{G\colon B\to A}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{2}}
+    \proofstepwidestar[1,2]{\CBPart{F}{G}\subseteq A}{%
+      \FormulaRefAuto{CantorBernsteinPartSubset}[thm]{1,2}}
+    \proofstepwidestar[1,2]{F[\CBPart{F}{G}]\subseteq B}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+        \vdash F[C]\subseteq B}[thm]{7,5}}
+    \proofstepwidestar[1,2]{G[F[\CBPart{F}{G}]]\subseteq A}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+        \vdash F[C]\subseteq B}[thm]{8,6}}
+    \proofstepwidestar[1,2,3]{y\in A}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{9,3}}
+    \proofstepwidestar[1,2,3]{y\in\CBPart{F}{G}}{%
+      \FormulaRefAuto{CantorBernsteinPartDef}[def]{1,2,\rAI{10,4}}}
+    \proofstepwidestar[1,2]{%
+      G[F[\CBPart{F}{G}]]\subseteq\CBPart{F}{G}}{%
+      \FormulaRefAuto{A\subseteq B \coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{3,11}}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Fixpunktgleichung des Cantor--Bernstein-Teils]{%
+  \begin{aligned}[t]
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    \CBPart{F}{G}={}&(A\setminus G[B])\\[-2pt]
+      &{}\cup G[F[\CBPart{F}{G}]]
+  \end{aligned}%
+}{CantorBernsteinPartFixedPoint}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[1,2]{A\setminus G[B]\subseteq\CBPart{F}{G}}{%
+    \FormulaRefAuto{CantorBernsteinPartContainsSeed}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    G[F[\CBPart{F}{G}]]\subseteq\CBPart{F}{G}}{%
+    \FormulaRefAuto{CantorBernsteinPartClosed}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]
+      \subseteq\CBPart{F}{G}}{%
+    \FormulaRefAuto{UnionSubsetCommonSuperset}[thm]{3,4}}
+  \proofstepwidestar[]{%
+    A\setminus G[B]\subseteq
+      (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{A\subseteq A\cup B}[thm]}
+  \proofstepwidestar[1,2]{\CBPart{F}{G}\subseteq A}{%
+    \FormulaRefAuto{CantorBernsteinPartSubset}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]\subseteq A}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{5,7}}
+  \proofstepwidestar[1]{F\colon A\to B}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1}}
+  \proofstepwidestar[2]{G\colon B\to A}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    F[(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]]
+      \subseteq F[\CBPart{F}{G}]}{%
+    \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M
+      \vdash F[A]\subseteq F[B]}[thm]{9,5,7}}
+  \proofstepwidestar[1,2]{F[\CBPart{F}{G}]\subseteq B}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+      \vdash F[C]\subseteq B}[thm]{7,9}}
+  \proofstepwidestar[1,2]{%
+    G[F[(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]]]
+      \subseteq G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M
+      \vdash F[A]\subseteq F[B]}[thm]{10,11,12}}
+  \proofstepwidestar[]{%
+    G[F[\CBPart{F}{G}]]\subseteq
+      (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{B\subseteq A\cup B}[thm]}
+  \proofstepwidestar[1,2]{%
+    G[F[(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]]]
+      \subseteq (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{13,14}}
+  \proofstepwidestar[1,2]{%
+    \CBPart{F}{G}\subseteq
+      (A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{CantorBernsteinPartMinimal}[thm]{1,2,8,6,15}}
+  \proofstepwidestar[1,2]{%
+    \CBPart{F}{G}=(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{16,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Einschränkung einer Injektion auf ihr Bild]{%
+  F\colon A\inj B\dsep C\subseteq A
+  \vdash F\restriction_C\colon C\bij F[C]%
+}{InjectionRestrictionToImageBijective}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\inj B}{\rA}
+  \proofstep{2}{C\subseteq A}{\rA}
+  \proofstep{1,2}{F\restriction_C\colon C\inj B}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep C\subseteq A
+      \vdash F\restriction_C\colon C\inj B}[thm]{1,2}}
+  \proofstep{1,2}{F\restriction_C\colon C\bij(F\restriction_C)[C]}{%
+    \FormulaRefAuto{F\colon A\inj B\vdash F\colon A\bij F[A]}[thm]{3}}
+  \proofstep{1}{F\colon A\to B}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1}}
+  \proofstep{1,2}{(F\restriction_C)[C]=F[C]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+      \vdash(F\restriction_C)[C]=F[C]}[thm]{2,5}}
+  \proofstep{1,2}{F\restriction_C\colon C\bij F[C]}{\rIE{6,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Bild einer Differenz unter einer Injektion]{%
+  F\colon M\inj N\dsep C\subseteq A\dsep A\subseteq M
+  \vdash F[A\setminus C]=F[A]\setminus F[C]%
+}{InjectiveImageDifference}{%
+  \DeltaRow{Mengen}{A\dsep C\dsep M\dsep N\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Teilmengenrichtung \(\subseteq\)]{%
+    F\colon M\inj N\dsep C\subseteq A\dsep A\subseteq M
+    \vdash F[A\setminus C]\subseteq F[A]\setminus F[C]
+  }{%
+    F\colon M\inj N\dsep C\subseteq A\dsep A\subseteq M
+    \vdash F[A\setminus C]\subseteq F[A]\setminus F[C]
+  }[InjectiveImageDifferenceForward]
+    \proofstepwidestar[1]{F\colon M\inj N}{\rA}
+    \proofstepwidestar[2]{C\subseteq A}{\rA}
+    \proofstepwidestar[3]{A\subseteq M}{\rA}
+    \proofstepwidestar[4]{y\in F[A\setminus C]}{\rA}
+    \proofstepwidestar[1]{F\colon M\to N}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1}}
+    \proofstepwidestar[3]{A\setminus C\subseteq M}{%
+      \FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}[thm]{3}}
+    \proofstepwidestar[1,3,4]{\exists x\in A\setminus C\,y=F(x)}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep y\in F[C]
+        \vdash\exists x\in C\,y=F(x)}[thm]{6,5,4}}
+    \proofstepwidestar[8]{x\in A\setminus C\land y=F(x)}{\rA}
+    \proofstepwidestar[8]{x\in A\setminus C}{\rAEa{8}}
+    \proofstepwidestar[8]{y=F(x)}{\rAEb{8}}
+    \proofstepwidestar[8]{x\in A}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{9}}
+    \proofstepwidestar[1,3,8]{F(x)\in F[A]}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C
+        \vdash F(x)\in F[C]}[thm]{3,5,11}}
+    \proofstepwidestar[1,3,8]{y\in F[A]}{\rIE{10,12}}
+    \proofstepwidestar[14]{y\in F[C]}{\rA}
+    \proofstepwidestar[1,2,3,14]{\exists z\in C\,y=F(z)}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep y\in F[C]
+        \vdash\exists x\in C\,y=F(x)}[thm]{%
+          \FormulaRefAuto{A\subseteq B\dsep B\subseteq C
+            \vdash A\subseteq C}[thm]{2,3},5,14}}
+    \proofstepwidestar[16]{z\in C\land y=F(z)}{\rA}
+    \proofstepwidestar[16]{z\in C}{\rAEa{16}}
+    \proofstepwidestar[16]{y=F(z)}{\rAEb{16}}
+    \proofstepwidestar[2,16]{z\in A}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,17}}
+    \proofstepwidestar[3,8]{x\in M}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{3,11}}
+    \proofstepwidestar[2,3,16]{z\in M}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{3,19}}
+    \proofstepwidestar[8,16]{F(x)=F(z)}{%
+      \rChain{\FormulaRefAuto{a=b\vdash b=a}[thm]{10},18}}
+    \proofstepwidestar[1,2,3,8,16]{x=z}{%
+      \FormulaRefAuto{Injektivität}[ax]{1,20,21,22}}
+    \proofstepwidestar[1,2,3,8,16]{x\in C}{\rIE{23,17}}
+    \proofstepwidestar[8]{x\notin C}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{9}}
+    \proofstepwidestar[1,2,3,8,16]{\bot}{\rBI{24,25}}
+    \proofstepwidestar[1,2,3,8,14]{\bot}{\rEE{15,16,26}}
+    \proofstepwidestar[1,2,3,8]{y\notin F[C]}{\rCI{14,27}}
+    \proofstepwidestar[1,2,3,8]{y\in F[A]\setminus F[C]}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{%
+        \rAI{13,28}}}
+    \proofstepwidestar[1,2,3,4]{y\in F[A]\setminus F[C]}{%
+      \rEE{7,8,29}}
+    \proofstepwidestar[1,2,3]{F[A\setminus C]\subseteq F[A]\setminus F[C]}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{4,30}}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Teilmengenrichtung \(\supseteq\)]{%
+    F\colon M\inj N\dsep C\subseteq A\dsep A\subseteq M
+    \vdash F[A]\setminus F[C]\subseteq F[A\setminus C]
+  }{%
+    F\colon M\inj N\dsep C\subseteq A\dsep A\subseteq M
+    \vdash F[A]\setminus F[C]\subseteq F[A\setminus C]
+  }[InjectiveImageDifferenceBackward]
+    \proofstepwidestar[1]{F\colon M\inj N}{\rA}
+    \proofstepwidestar[2]{C\subseteq A}{\rA}
+    \proofstepwidestar[3]{A\subseteq M}{\rA}
+    \proofstepwidestar[4]{y\in F[A]\setminus F[C]}{\rA}
+    \proofstepwidestar[4]{y\in F[A]}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{4}}
+    \proofstepwidestar[4]{y\notin F[C]}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{4}}
+    \proofstepwidestar[1]{F\colon M\to N}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1}}
+    \proofstepwidestar[1,3,4]{\exists x\in A\,y=F(x)}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep y\in F[C]
+        \vdash\exists x\in C\,y=F(x)}[thm]{3,7,5}}
+    \proofstepwidestar[9]{x\in A\land y=F(x)}{\rA}
+    \proofstepwidestar[9]{x\in A}{\rAEa{9}}
+    \proofstepwidestar[9]{y=F(x)}{\rAEb{9}}
+    \proofstepwidestar[12]{x\in C}{\rA}
+    \proofstepwidestar[1,2,3,9,12]{F(x)\in F[C]}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C
+        \vdash F(x)\in F[C]}[thm]{%
+          \FormulaRefAuto{A\subseteq B\dsep B\subseteq C
+            \vdash A\subseteq C}[thm]{2,3},7,12}}
+    \proofstepwidestar[1,2,3,9,12]{y\in F[C]}{\rIE{11,13}}
+    \proofstepwidestar[1,2,3,4,9,12]{\bot}{\rBI{14,6}}
+    \proofstepwidestar[1,2,3,4,9]{x\notin C}{\rCI{12,15}}
+    \proofstepwidestar[1,2,3,4,9]{x\in A\setminus C}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{%
+        \rAI{10,16}}}
+    \proofstepwidestar[3]{A\setminus C\subseteq M}{%
+      \FormulaRefAuto{A\subseteq C\vdash A\setminus B\subseteq C}[thm]{3}}
+    \proofstepwidestar[1,2,3,4,9]{\exists x\in A\setminus C\,y=F(x)}{%
+      \rEI{\rAI{17,11}}}
+    \proofstepwidestar[1,2,3,4,9]{y\in F[A\setminus C]}{%
+      \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep
+        \exists x\in C\,y=F(x)\vdash y\in F[C]}[thm]{18,7,19}}
+    \proofstepwidestar[1,2,3,4]{y\in F[A\setminus C]}{\rEE{8,9,20}}
+    \proofstepwidestar[1,2,3]{F[A]\setminus F[C]\subseteq F[A\setminus C]}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{4,21}}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{F\colon M\inj N}{\rA}
+    \proofstepwidestar[2]{C\subseteq A}{\rA}
+    \proofstepwidestar[3]{A\subseteq M}{\rA}
+    \proofstepwidestar[1,2,3]{F[A\setminus C]\subseteq F[A]\setminus F[C]}{%
+      \FormulaRefAuto{InjectiveImageDifferenceForward}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{F[A]\setminus F[C]\subseteq F[A\setminus C]}{%
+      \FormulaRefAuto{InjectiveImageDifferenceBackward}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{F[A\setminus C]=F[A]\setminus F[C]}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Komplementform der Fixpunktgleichung]{%
+  F\colon A\inj B\dsep G\colon B\inj A
+  \vdash G[B]\setminus G[F[\CBPart{F}{G}]]=A\setminus\CBPart{F}{G}%
+}{CantorBernsteinComplementIdentity}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep y}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Teilmengenrichtung \(\subseteq\)]{%
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    G[B]\setminus G[F[\CBPart{F}{G}]]
+      \subseteq A\setminus\CBPart{F}{G}
+  }{%
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    G[B]\setminus G[F[\CBPart{F}{G}]]
+      \subseteq A\setminus\CBPart{F}{G}
+  }[CantorBernsteinComplementForward]
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+    \proofstepwidestar[3]{y\in G[B]\setminus G[F[\CBPart{F}{G}]]}{\rA}
+    \proofstepwidestar[3]{y\in G[B]}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{3}}
+    \proofstepwidestar[3]{y\notin G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{3}}
+    \proofstepwidestar[2]{G\colon B\to A}{%
+      \FormulaRefAuto{Injektive Funktion}[def]{2}}
+    \proofstepwidestar[2]{G[B]\subseteq A}{%
+      \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{6}}
+    \proofstepwidestar[2,3]{y\in A}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,4}}
+  \proofstepwidestar[2,3]{y\notin A\setminus G[B]}{%
+      \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}[thm]{%
+        \FormulaRefAuto{RelCompNotMembership}[thm]{8},4}}
+    \proofstepwidestar[1,2]{%
+      \CBPart{F}{G}=(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{CantorBernsteinPartFixedPoint}[thm]{1,2}}
+  \proofstepwidestar[1,2,3]{%
+    y\notin(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{NotInUnion}[thm]{9,5}}
+    \proofstepwidestar[1,2,3]{y\notin\CBPart{F}{G}}{\rIE{10,11}}
+    \proofstepwidestar[1,2,3]{y\in A\setminus\CBPart{F}{G}}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{%
+        \rAI{8,12}}}
+    \proofstepwidestar[1,2]{%
+      G[B]\setminus G[F[\CBPart{F}{G}]]
+        \subseteq A\setminus\CBPart{F}{G}}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{3,13}}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Teilmengenrichtung \(\supseteq\)]{%
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    A\setminus\CBPart{F}{G}
+      \subseteq G[B]\setminus G[F[\CBPart{F}{G}]]
+  }{%
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    A\setminus\CBPart{F}{G}
+      \subseteq G[B]\setminus G[F[\CBPart{F}{G}]]
+  }[CantorBernsteinComplementBackward]
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+    \proofstepwidestar[3]{y\in A\setminus\CBPart{F}{G}}{\rA}
+    \proofstepwidestar[3]{y\in A}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{3}}
+    \proofstepwidestar[3]{y\notin\CBPart{F}{G}}{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{3}}
+    \proofstepwidestar[1,2]{%
+      \CBPart{F}{G}=(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{CantorBernsteinPartFixedPoint}[thm]{1,2}}
+    \proofstepwidestar[1,2,3]{%
+      y\notin(A\setminus G[B])\cup G[F[\CBPart{F}{G}]]}{\rIE{6,5}}
+  \proofstepwidestar[1,2,3]{y\notin A\setminus G[B]}{%
+      \rAEa{\FormulaRefAuto{OutsideUnionComponents}[thm]{7}}}
+  \proofstepwidestar[1,2,3]{y\notin G[F[\CBPart{F}{G}]]}{%
+      \rAEb{\FormulaRefAuto{OutsideUnionComponents}[thm]{7}}}
+    \proofstepwidestar[10]{y\notin G[B]}{\rA}
+    \proofstepwidestar[3,10]{y\in A\setminus G[B]}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{%
+        \rAI{4,10}}}
+    \proofstepwidestar[1,2,3,10]{\bot}{\rBI{11,8}}
+    \proofstepwidestar[1,2,3]{\neg(y\notin G[B])}{\rCI{10,12}}
+    \proofstepwidestar[1,2,3]{y\in G[B]}{\FormulaRefAuto{rDN}[thm]{13}}
+    \proofstepwidestar[1,2,3]{%
+      y\in G[B]\setminus G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{%
+        \rAI{14,9}}}
+    \proofstepwidestar[1,2]{%
+      A\setminus\CBPart{F}{G}
+        \subseteq G[B]\setminus G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{3,15}}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+    \proofstepwidestar[1,2]{%
+      G[B]\setminus G[F[\CBPart{F}{G}]]
+        \subseteq A\setminus\CBPart{F}{G}}{%
+      \FormulaRefAuto{CantorBernsteinComplementForward}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      A\setminus\CBPart{F}{G}
+        \subseteq G[B]\setminus G[F[\CBPart{F}{G}]]}{%
+      \FormulaRefAuto{CantorBernsteinComplementBackward}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      G[B]\setminus G[F[\CBPart{F}{G}]]
+        =A\setminus\CBPart{F}{G}}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{3,4}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Bild des zweiten Cantor--Bernstein-Zweigs]{%
+  \begin{aligned}[t]
+    F\colon A\inj B\dsep G\colon B\inj A\vdash
+    G[B\setminus F[\CBPart{F}{G}]]
+      =A\setminus\CBPart{F}{G}
+  \end{aligned}%
+}{CantorBernsteinSecondBranchImage}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[1,2]{\CBPart{F}{G}\subseteq A}{%
+    \FormulaRefAuto{CantorBernsteinPartSubset}[thm]{1,2}}
+  \proofstepwidestar[1]{F\colon A\to B}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1}}
+  \proofstepwidestar[1,2]{F[\CBPart{F}{G}]\subseteq B}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+      \vdash F[C]\subseteq B}[thm]{3,4}}
+  \proofstepwidestar[1,2]{%
+    G[B\setminus F[\CBPart{F}{G}]]
+      =G[B]\setminus G[F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{InjectiveImageDifference}[thm]{2,5,
+      \FormulaRefAuto{A\subseteq A}[thm]}}
+  \proofstepwidestar[1,2]{%
+    G[B]\setminus G[F[\CBPart{F}{G}]]
+      =A\setminus\CBPart{F}{G}}{%
+    \FormulaRefAuto{CantorBernsteinComplementIdentity}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    G[B\setminus F[\CBPart{F}{G}]]
+      =A\setminus\CBPart{F}{G}}{\rChain{6,7}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Cantor--Schröder--Bernstein für feste Injektionen]{%
+  F\colon A\inj B\dsep G\colon B\inj A
+  \vdash \exists H\colon A\bij B%
+}{CantorBernsteinFixedInjections}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[2]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[1,2]{\CBPart{F}{G}\subseteq A}{%
+    \FormulaRefAuto{CantorBernsteinPartSubset}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    F\restriction_{\CBPart{F}{G}}\colon
+      \CBPart{F}{G}\bij F[\CBPart{F}{G}]}{%
+    \FormulaRefAuto{InjectionRestrictionToImageBijective}[thm]{1,3}}
+  \proofstepwidestar[1]{F\colon A\to B}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{1}}
+  \proofstepwidestar[1,2]{F[\CBPart{F}{G}]\subseteq B}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B
+      \vdash F[C]\subseteq B}[thm]{3,5}}
+  \proofstepwidestar[1,2]{B\setminus F[\CBPart{F}{G}]\subseteq B}{%
+    \FormulaRefAuto{A\setminus B\subseteq A}[thm]}
+  \proofstepwidestar[1,2]{%
+    G\restriction_{B\setminus F[\CBPart{F}{G}]}\colon
+      B\setminus F[\CBPart{F}{G}]
+      \bij G[B\setminus F[\CBPart{F}{G}]]}{%
+    \FormulaRefAuto{InjectionRestrictionToImageBijective}[thm]{2,7}}
+  \proofstepwidestar[1,2]{%
+    G[B\setminus F[\CBPart{F}{G}]]
+      =A\setminus\CBPart{F}{G}}{%
+    \FormulaRefAuto{CantorBernsteinSecondBranchImage}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    G\restriction_{B\setminus F[\CBPart{F}{G}]}\colon
+      B\setminus F[\CBPart{F}{G}]
+      \bij A\setminus\CBPart{F}{G}}{\rIE{9,8}}
+  \proofstepwidestar[1,2]{%
+    \bigl(G\restriction_{B\setminus F[\CBPart{F}{G}]}\bigr)^{-1}
+      \colon A\setminus\CBPart{F}{G}
+      \bij B\setminus F[\CBPart{F}{G}]}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}[thm]{10}}
+  \proofstepwidestar[]{%
+    \CBPart{F}{G}\cap(A\setminus\CBPart{F}{G})=\varnothing}{%
+    \FormulaRefAuto{K\subseteq H\setminus M\vdash M\cap K=\varnothing}[thm]{%
+      \FormulaRefAuto{A\subseteq A}[thm]}}
+  \proofstepwidestar[]{%
+    F[\CBPart{F}{G}]\cap
+      (B\setminus F[\CBPart{F}{G}])=\varnothing}{%
+    \FormulaRefAuto{K\subseteq H\setminus M\vdash M\cap K=\varnothing}[thm]{%
+      \FormulaRefAuto{A\subseteq A}[thm]}}
+  \proofstepwidestar[1,2]{%
+    \CaseFun{\CBPart{F}{G}}{A\setminus\CBPart{F}{G}}
+      {F\restriction_{\CBPart{F}{G}}}
+      {\bigl(G\restriction_{B\setminus F[\CBPart{F}{G}]}\bigr)^{-1}}
+      \colon
+      \CBPart{F}{G}\cup(A\setminus\CBPart{F}{G})
+      \bij F[\CBPart{F}{G}]
+        \cup(B\setminus F[\CBPart{F}{G}])}{%
+    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{12,13,4,11}}
+  \proofstepwidestar[1,2]{%
+    A=\CBPart{F}{G}\cup(A\setminus\CBPart{F}{G})}{%
+    \FormulaRefAuto{M\subseteq H\vdash H=M\cup(H\setminus M)}[thm]{3}}
+  \proofstepwidestar[1,2]{%
+    B=F[\CBPart{F}{G}]\cup(B\setminus F[\CBPart{F}{G}])}{%
+    \FormulaRefAuto{M\subseteq H\vdash H=M\cup(H\setminus M)}[thm]{6}}
+  \proofstepwidestar[1,2]{%
+    \CaseFun{\CBPart{F}{G}}{A\setminus\CBPart{F}{G}}
+      {F\restriction_{\CBPart{F}{G}}}
+      {\bigl(G\restriction_{B\setminus F[\CBPart{F}{G}]}\bigr)^{-1}}
+      \colon A\bij B}{\rIE{15,\rIE{16,14}}}
+  \proofstepwidestar[1,2]{\exists H\colon A\bij B}{\rEI{17}}
+\end{tabproofwide}
+
+\pagebreak[4]
+\FormulaThmDeltaK[Satz von Cantor--Schröder--Bernstein]{%
+  A\CardLeq B\dsep B\CardLeq A\vdash A\EqCard B%
+}{CantorSchroederBernstein}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A\CardLeq B}{\rA}
+  \proofstepwidestar[2]{B\CardLeq A}{\rA}
+  \proofstepwidestar[1]{\exists F\colon A\inj B}{%
+    \FormulaRefAuto{CardLeqDef}[def]{1}}
+  \proofstepwidestar[2]{\exists G\colon B\inj A}{%
+    \FormulaRefAuto{CardLeqDef}[def]{2}}
+  \proofstepwidestar[5]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[6]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[5,6]{\exists H\colon A\bij B}{%
+    \FormulaRefAuto{CantorBernsteinFixedInjections}[thm]{5,6}}
+  \proofstepwidestar[5,6]{A\EqCard B}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{7}}
+  \proofstepwidestar[2,5]{A\EqCard B}{\rEE{4,6,8}}
+  \proofstepwidestar[1,2]{A\EqCard B}{\rEE{3,5,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Charakterisierung der Gleichmächtigkeit durch Vergleich]{%
+  A\EqCard B\eqvdash A\CardLeq B\land B\CardLeq A%
+}{EqCardMutualCardLeqEquiv}{%
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{A\EqCard B}{\rA}
+    \proofstep{1}{A\CardLeq B\land B\CardLeq A}{%
+      \FormulaRefAuto{EqCardImpliesMutualCardLeq}[thm]{1}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{A\CardLeq B\land B\CardLeq A}{\rA}
+    \proofstep{1}{A\CardLeq B}{\rAEa{1}}
+    \proofstep{1}{B\CardLeq A}{\rAEb{1}}
+    \proofstep{1}{A\EqCard B}{%
+      \FormulaRefAuto{CantorSchroederBernstein}[thm]{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\FormulaThmDeltaK[Strikter kardinaler Vergleich ist irreflexiv]{%
+  \neg(A\CardLt A)%
+}{CardLtIrreflexive}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{A\CardLt A}{\rA}
+  \proofstep{1}{A\CardLeq A\land\neg(A\EqCard A)}{%
+    \FormulaRefAuto{CardLtDef}[def]{1}}
+  \proofstep{1}{\neg(A\EqCard A)}{\rAEb{2}}
+  \proofstep{}{A\EqCard A}{\FormulaRefAuto{EqCardReflexive}[thm]}
+  \proofstep{1}{\bot}{\rBI{4,3}}
+  \proofstep{}{\neg(A\CardLt A)}{\rCI{1,5}}
+\end{tabproof}
+
+\ProofWideReasonsAtRight
+\section{Abzählbare und überabzählbare Mengen}
+
+Die erste unendliche Vergleichsstufe wird durch die natürlichen Zahlen
+festgelegt. Dabei bedeutet \emph{höchstens abzählbar}, dass eine Menge in
+die natürlichen Zahlen injiziert werden kann; eine Aufzählung muss also
+nicht eigens als Reihenfolge gewählt werden.
+
+\FormulaDefDeltaK[Unendliche Menge]{%
+  \Infinite{A}\coloneqq\neg\Finite{A}%
+}{InfiniteDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Prädikat}}{}
+  \DeltaRow{Unendlich}{\Infinite{A}}
+}
+
+\FormulaDefDeltaK[Höchstens abzählbare Menge]{%
+  \AtMostCountable{A}\coloneqq A\CardLeq\mathbb N%
+}{AtMostCountableDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Prädikat}}{}
+  \DeltaRow{Höchstens abzählbar}{\AtMostCountable{A}}
+}
+
+\FormulaDefDeltaK[Abzählbar unendliche Menge]{%
+  \CountablyInfinite{A}\coloneqq A\EqCard\mathbb N%
+}{CountablyInfiniteDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Prädikat}}{}
+  \DeltaRow{Abzählbar unendlich}{\CountablyInfinite{A}}
+}
+
+\FormulaDefDeltaK[Überabzählbare Menge]{%
+  \Uncountable{A}\coloneqq\neg\AtMostCountable{A}%
+}{UncountableDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Prädikat}}{}
+  \DeltaRow{Überabzählbar}{\Uncountable{A}}
+}
+
+\FormulaThmDeltaK[Die natürlichen Zahlen sind unendlich]{%
+  \Infinite{\mathbb N}%
+}{NaturalNumbersInfinite}{%
+  \DeltaRow{Funktionen}{H\dsep\Id_{\mathbb N}}
+}
+\begin{tabproof}
+  \proofstep{1}{\Finite{\mathbb N}}{\rA}
+  \proofstep{1}{\neg\exists H\colon\mathbb N\inj\mathbb N}{%
+    \FormulaRefAuto{FiniteNoNatInjection}[thm]{1}}
+  \proofstep{}{\Id_{\mathbb N}\colon\mathbb N\bij\mathbb N}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
+  \proofstep{}{\Id_{\mathbb N}\colon\mathbb N\inj\mathbb N}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}[thm]{3}}
+  \proofstep{}{\exists H\colon\mathbb N\inj\mathbb N}{\rEI{4}}
+  \proofstep{1}{\bot}{\rBI{2,5}}
+  \proofstep{}{\neg\Finite{\mathbb N}}{\rCI{1,6}}
+  \proofstep{}{\Infinite{\mathbb N}}{%
+    \FormulaRefAuto{InfiniteDef}[def]{7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Injektionscharakterisierung unendlicher Mengen]{%
+  \Infinite{A}\eqvdash\mathbb N\CardLeq A%
+}{InfiniteInjectionCharacterization}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Abhängigkeit}{\text{Auswahlaxiom in der Richtung }\vdash}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Richtung \(\vdash\)]{%
+    \Infinite{A}\vdash\mathbb N\CardLeq A
+  }{%
+    \Infinite{A}\vdash\mathbb N\CardLeq A
+  }[InfiniteContainsNaturalInjection]
+    \proofstepwidestar[1]{\Infinite{A}}{\rA}
+    \proofstepwidestar[1]{\neg\Finite{A}}{%
+      \FormulaRefAuto{InfiniteDef}[def]{1}}
+    \proofstepwidestar[3]{\neg(\mathbb N\CardLeq A)}{\rA}
+    \proofstepwidestar[3]{\neg\exists F\colon\mathbb N\inj A}{%
+      \FormulaRefAuto{CardLeqDef}[def]{3}}
+    \proofstepwidestar[3]{\TarskiFinite(A)}{%
+      \FormulaRefAuto{DedekindFiniteImpliesTarskiFinite}[thm]{4},
+      \FormulaRefAuto{Auswahlaxiom}[ax]}
+    \proofstepwidestar[3]{\Finite{A}}{%
+      \FormulaRefAuto{\TarskiFinite(M)\vdash\Finite{M}}[thm]{5}}
+    \proofstepwidestar[1,3]{\bot}{\rBI{6,2}}
+    \proofstepwidestar[1]{\neg\neg(\mathbb N\CardLeq A)}{\rCI{3,7}}
+    \proofstepwidestar[1]{\mathbb N\CardLeq A}{%
+      \FormulaRefAuto{rDN}[thm]{8}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Richtung \(\dashv\)]{%
+    \mathbb N\CardLeq A\vdash\Infinite{A}
+  }{%
+    \mathbb N\CardLeq A\vdash\Infinite{A}
+  }[NaturalInjectionImpliesInfinite]
+    \proofstepwidestar[1]{\mathbb N\CardLeq A}{\rA}
+    \proofstepwidestar[1]{\exists F\colon\mathbb N\inj A}{%
+      \FormulaRefAuto{CardLeqDef}[def]{1}}
+    \proofstepwidestar[3]{\Finite{A}}{\rA}
+    \proofstepwidestar[3]{\neg\exists F\colon\mathbb N\inj A}{%
+      \FormulaRefAuto{FiniteNoNatInjection}[thm]{3}}
+    \proofstepwidestar[1,3]{\bot}{\rBI{2,4}}
+    \proofstepwidestar[1]{\neg\Finite{A}}{\rCI{3,5}}
+    \proofstepwidestar[1]{\Infinite{A}}{%
+      \FormulaRefAuto{InfiniteDef}[def]{6}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Zusammenfassung}
+    \proofstepwidestar[1]{\Infinite{A}}{\rA}
+    \proofstepwidestar[1]{\mathbb N\CardLeq A}{%
+      \FormulaRefAuto{InfiniteContainsNaturalInjection}[thm]{1}}
+    \proofstepwidestar[3]{\mathbb N\CardLeq A}{\rA}
+    \proofstepwidestar[3]{\Infinite{A}}{%
+      \FormulaRefAuto{NaturalInjectionImpliesInfinite}[thm]{3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\begin{remark}
+Die Richtung von einer unendlichen Menge zu einer Injektion
+\(\mathbb N\inj A\) verwendet hier dieselbe Auswahlabhängigkeit wie die
+zuvor bewiesene Äquivalenz von Endlichkeit und Dedekind-Endlichkeit. Die
+umgekehrte Richtung sowie die Unendlichkeit von \(\mathbb N\) sind
+auswahlfrei.
+\end{remark}
+
+\FormulaThmDeltaK[Endliche Mengen sind höchstens abzählbar]{%
+  \Finite{A}\vdash\AtMostCountable{A}%
+}{FiniteImpliesAtMostCountable}{%
+  \DeltaRow{Mengen}{A\dsep n\dsep\NatSeg n}
+  \DeltaRow{Funktionen}{F\dsep\iota_{\NatSeg n,\mathbb N}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite{A}}{\rA}
+  \proofstepwidestar[1]{%
+    \exists n\in\mathbb N\,(\NatSeg n\EqCard A)}{%
+    \FormulaRefAuto{FiniteEqCardEquiv}[thm]{1}}
+  \proofstepwidestar[3]{n\in\mathbb N\land\NatSeg n\EqCard A}{\rA}
+  \proofstepwidestar[3]{n\in\mathbb N}{\rAEa{3}}
+  \proofstepwidestar[3]{\NatSeg n\EqCard A}{\rAEb{3}}
+  \proofstepwidestar[3]{A\EqCard\NatSeg n}{%
+    \FormulaRefAuto{EqCardSymmetric}[thm]{5}}
+  \proofstepwidestar[3]{A\CardLeq\NatSeg n}{%
+    \rAEa{\FormulaRefAuto{EqCardImpliesMutualCardLeq}[thm]{6}}}
+  \proofstepwidestar[3]{\NatSeg n\subseteq\mathbb N}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{4}}
+  \proofstepwidestar[3]{%
+    \iota_{\NatSeg n,\mathbb N}\colon\NatSeg n\inj\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\vdash\iota_{A,B}\colon A\inj B}[thm]{8}}
+  \proofstepwidestar[3]{\NatSeg n\CardLeq\mathbb N}{%
+    \FormulaRefAuto{CardLeqDef}[def]{\rEI{9}}}
+  \proofstepwidestar[3]{A\CardLeq\mathbb N}{%
+    \FormulaRefAuto{CardLeqTransitive}[thm]{7,10}}
+  \proofstepwidestar[3]{\AtMostCountable{A}}{%
+    \FormulaRefAuto{AtMostCountableDef}[def]{11}}
+  \proofstepwidestar[1]{\AtMostCountable{A}}{\rEE{2,3,12}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Abzählbar unendliche Mengen sind unendlich]{%
+  \CountablyInfinite{A}\vdash\Infinite{A}%
+}{CountablyInfiniteImpliesInfinite}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{\CountablyInfinite{A}}{\rA}
+  \proofstep{1}{A\EqCard\mathbb N}{%
+    \FormulaRefAuto{CountablyInfiniteDef}[def]{1}}
+  \proofstep{3}{\Finite{A}}{\rA}
+  \proofstep{2,3}{\Finite{\mathbb N}}{%
+    \FormulaRefAuto{FiniteEqCardTransport}[thm]{3,2}}
+  \proofstep{}{\Infinite{\mathbb N}}{%
+    \FormulaRefAuto{NaturalNumbersInfinite}[thm]}
+  \proofstep{}{\neg\Finite{\mathbb N}}{%
+    \FormulaRefAuto{InfiniteDef}[def]{5}}
+  \proofstep{2,3}{\bot}{\rBI{4,6}}
+  \proofstep{1}{\neg\Finite{A}}{\rCI{3,7}}
+  \proofstep{1}{\Infinite{A}}{\FormulaRefAuto{InfiniteDef}[def]{8}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Unendlich und höchstens abzählbar ist abzählbar unendlich]{%
+  \Infinite{A}\dsep\AtMostCountable{A}\vdash\CountablyInfinite{A}%
+}{InfiniteAtMostCountableImpliesCountablyInfinite}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{\Infinite{A}}{\rA}
+  \proofstep{2}{\AtMostCountable{A}}{\rA}
+  \proofstep{1}{\mathbb N\CardLeq A}{%
+    \FormulaRefAuto{InfiniteInjectionCharacterization}[thm]{1}}
+  \proofstep{2}{A\CardLeq\mathbb N}{%
+    \FormulaRefAuto{AtMostCountableDef}[def]{2}}
+  \proofstep{1,2}{A\EqCard\mathbb N}{%
+    \FormulaRefAuto{CantorSchroederBernstein}[thm]{4,3}}
+  \proofstep{1,2}{\CountablyInfinite{A}}{%
+    \FormulaRefAuto{CountablyInfiniteDef}[def]{5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zerlegung der höchstens abzählbaren Mengen]{%
+  \AtMostCountable{A}\eqvdash
+  \Finite{A}\lor\CountablyInfinite{A}%
+}{AtMostCountableDichotomy}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Abhängigkeit}{\text{Auswahlaxiom in der Richtung }\vdash}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{\(\vdash\)}
+    \proofstepwidestar[1]{\AtMostCountable{A}}{\rA}
+    \proofstepwidestar[]{\Finite{A}\lor\neg\Finite{A}}{%
+      \FormulaRefAuto{P\lor\neg P}[thm]}
+    \proofstepwidestar[3]{\Finite{A}}{\rA}
+    \proofstepwidestar[3]{\Finite{A}\lor\CountablyInfinite{A}}{%
+      \rOIa{3}}
+    \proofstepwidestar[5]{\neg\Finite{A}}{\rA}
+    \proofstepwidestar[5]{\Infinite{A}}{%
+      \FormulaRefAuto{InfiniteDef}[def]{5}}
+    \proofstepwidestar[1,5]{\CountablyInfinite{A}}{%
+      \FormulaRefAuto{InfiniteAtMostCountableImpliesCountablyInfinite}[thm]{6,1}}
+    \proofstepwidestar[1,5]{\Finite{A}\lor\CountablyInfinite{A}}{%
+      \rOIb{7}}
+    \proofstepwidestar[1]{\Finite{A}\lor\CountablyInfinite{A}}{%
+      \rOE{2,3,4,5,8}}
+  \closeproofpartwide
+
+  \proofpartwide{\(\dashv\)}
+    \proofstepwidestar[1]{\Finite{A}\lor\CountablyInfinite{A}}{\rA}
+    \proofstepwidestar[2]{\Finite{A}}{\rA}
+    \proofstepwidestar[2]{\AtMostCountable{A}}{%
+      \FormulaRefAuto{FiniteImpliesAtMostCountable}[thm]{2}}
+    \proofstepwidestar[4]{\CountablyInfinite{A}}{\rA}
+    \proofstepwidestar[4]{A\EqCard\mathbb N}{%
+      \FormulaRefAuto{CountablyInfiniteDef}[def]{4}}
+    \proofstepwidestar[4]{A\CardLeq\mathbb N}{%
+      \rAEa{\FormulaRefAuto{EqCardImpliesMutualCardLeq}[thm]{5}}}
+    \proofstepwidestar[4]{\AtMostCountable{A}}{%
+      \FormulaRefAuto{AtMostCountableDef}[def]{6}}
+    \proofstepwidestar[1]{\AtMostCountable{A}}{\rOE{1,2,3,4,7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Überabzählbare Mengen sind unendlich]{%
+  \Uncountable{A}\vdash\Infinite{A}%
+}{UncountableImpliesInfinite}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{\Uncountable{A}}{\rA}
+  \proofstep{1}{\neg\AtMostCountable{A}}{%
+    \FormulaRefAuto{UncountableDef}[def]{1}}
+  \proofstep{3}{\Finite{A}}{\rA}
+  \proofstep{3}{\AtMostCountable{A}}{%
+    \FormulaRefAuto{FiniteImpliesAtMostCountable}[thm]{3}}
+  \proofstep{1,3}{\bot}{\rBI{4,2}}
+  \proofstep{1}{\neg\Finite{A}}{\rCI{3,5}}
+  \proofstep{1}{\Infinite{A}}{\FormulaRefAuto{InfiniteDef}[def]{6}}
+\end{tabproof}
+
+\pagebreak[4]
+\subsection{Hilbertsches Hotel}
+
+\FormulaThmDeltaK[Die Nichtnullzahlen bilden eine echte Teilmenge]{%
+  (\mathbb N\setminus\{0\})\subseteq\mathbb N\land
+  (\mathbb N\setminus\{0\})\neq\mathbb N%
+}{NonzeroNaturalsProperSubset}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep 0}
+}
+\begin{tabproof}
+  \proofstep{}{\mathbb N\setminus\{0\}\subseteq\mathbb N}{%
+    \FormulaRefAuto{A\setminus B\subseteq A}[thm]}
+  \proofstep{}{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{0\notin\mathbb N\setminus\{0\}}{%
+    \FormulaRefAuto{a\notin A\setminus\{a\}}[thm]}
+  \proofstep{4}{\mathbb N\setminus\{0\}=\mathbb N}{\rA}
+  \proofstep{4}{0\in\mathbb N\setminus\{0\}}{\rIE{4,2}}
+  \proofstep{4}{\bot}{\rBI{5,3}}
+  \proofstep{}{\mathbb N\setminus\{0\}\neq\mathbb N}{\rCI{4,6}}
+  \proofstep{}{%
+    (\mathbb N\setminus\{0\})\subseteq\mathbb N\land
+    (\mathbb N\setminus\{0\})\neq\mathbb N}{\rAI{1,7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Hilbertsches Verschieben der natürlichen Zahlen]{%
+  \mathbb N\EqCard\mathbb N\setminus\{0\}%
+}{NaturalNumbersEqCardNonzero}{%
+  \DeltaRow{Funktionen}{\Succ}
+}
+\begin{tabproof}
+  \proofstep{}{\Succ\colon\mathbb N\bij\mathbb N\setminus\{0\}}{%
+    \FormulaRefAuto{PeanoSuccNonzeroBijection}[thm]}
+  \proofstep{}{\exists F\colon\mathbb N\bij\mathbb N\setminus\{0\}}{%
+    \rEI{1}}
+  \proofstep{}{\mathbb N\EqCard\mathbb N\setminus\{0\}}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{2}}
+\end{tabproof}
+
+Die beiden letzten Sätze formalisieren das Hilbert-Hotel-Phänomen:
+Eine abzählbar unendliche Menge kann zu einer echten Teilmenge
+gleichmächtig sein.
+
+\section{Cantors Potenzmengenstufen}
+
+Für jede Menge liefert die Einermengenabbildung zunächst eine Injektion in
+ihre Potenzmenge. Cantors Diagonalargument zeigt anschließend, dass keine
+Bijektion in der Gegenrichtung möglich ist. Zusammen entsteht damit ein
+strikter Größensprung.
+
+\FormulaDefDeltaK[Einermengenabbildung]{%
+  \begin{aligned}[t]
+    &\SingletonEmbedding{A}\colon A\to\powerset(A),\\[-2pt]
+    &\forall x\in A\,
+      \bigl(\SingletonEmbedding{A}(x)\coloneqq\{x\}\bigr)
+  \end{aligned}%
+}{SingletonEmbeddingDef}{%
+  \DeltaRow{Mengen}{A\dsep x}
+  \DeltaRow{Funktionen}{\SingletonEmbedding{A}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Einermengenabbildung}{\SingletonEmbedding{A}}
+}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{\{x\}\subseteq A}{%
+    \FormulaRefAuto{x\in A\vdash\{x\}\subseteq A}[thm]{1}}
+  \proofstep{1}{\{x\}\in\powerset(A)}{%
+    \FormulaRefAuto{X\in\powerset(A)\eqvdash X\subseteq A}[thm]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Einermengenabbildung ist injektiv]{%
+  \SingletonEmbedding{A}\colon A\inj\powerset(A)%
+}{SingletonPowerSetInjection}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\SingletonEmbedding{A}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\SingletonEmbedding{A}\colon A\to\powerset(A)}{%
+    \FormulaRefAuto{SingletonEmbeddingDef}[def]}
+  \proofstepwidestar[2]{x\in A}{\rA}
+  \proofstepwidestar[3]{y\in A}{\rA}
+  \proofstepwidestar[4]{%
+    \SingletonEmbedding{A}(x)=\SingletonEmbedding{A}(y)}{\rA}
+  \proofstepwidestar[2]{\SingletonEmbedding{A}(x)=\{x\}}{%
+    \FormulaRefAuto{SingletonEmbeddingDef}[def]{2}}
+  \proofstepwidestar[3]{\SingletonEmbedding{A}(y)=\{y\}}{%
+    \FormulaRefAuto{SingletonEmbeddingDef}[def]{3}}
+  \proofstepwidestar[2,3,4]{\{x\}=\{y\}}{%
+    \rChain{\FormulaRefAuto{a=b\vdash b=a}[thm]{5},\rChain{4,6}}}
+  \proofstepwidestar[]{x\in\{x\}}{%
+    \FormulaRefAuto{x\in\{x\}}[thm]}
+  \proofstepwidestar[2,3,4]{x\in\{y\}}{\rIE{7,8}}
+  \proofstepwidestar[2,3,4]{x=y}{%
+    \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{9}}
+  \proofstepwidestar[]{\SingletonEmbedding{A}\colon A\inj\powerset(A)}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{%
+      1,\rUI{\rRI{2,\rRI{3,\rRI{4,10}}}}}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Cantorsche Diagonalmenge]{%
+  \begin{aligned}[t]
+    &F\colon A\to\powerset(A)\vdash{}\\[-2pt]
+    &D_F^A\coloneqq\{x\in A\mid x\notin F(x)\}
+  \end{aligned}%
+}{CantorDiagonalSetDef}{%
+  \DeltaRow{Mengen}{A\dsep D_F^A\dsep x}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Diagonalmenge}{D_F^A}
+}
+
+Die Diagonalmenge trifft für jedes Argument genau die entgegengesetzte
+Mitgliedschaftsentscheidung wie der zugehörige Funktionswert. Die nächsten
+drei Sätze isolieren diesen einen Gedanken, damit Cantors Satz in diesem Band
+nicht nur als Verweis auf ein früheres Resultat erscheint.
+
+\FormulaThmDeltaK[Die Diagonalmenge ist eine Teilmenge des Ausgangsbereichs]{%
+  F\colon A\to\powerset(A)\vdash D_F^A\in\powerset(A)%
+}{CantorDiagonalSetInPowerSet}{%
+  \DeltaRow{Mengen}{A\dsep D_F^A\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\to\powerset(A)}{\rA}
+  \proofstep{1}{\{x\in A\mid x\notin F(x)\}\subseteq A}{%
+    \FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}
+  \proofstep{1}{D_F^A=\{x\in A\mid x\notin F(x)\}}{%
+    \FormulaRefAuto{CantorDiagonalSetDef}[def]{1}}
+  \proofstep{1}{D_F^A\subseteq A}{\rIE{3,2}}
+  \proofstep{1}{D_F^A\in\powerset(A)}{%
+    \FormulaRefAuto{X\in\powerset(A)\eqvdash X\subseteq A}[thm]{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Charakteristische Eigenschaft der Diagonalmenge]{%
+  F\colon A\to\powerset(A)\dsep a\in A
+  \vdash
+  \bigl(a\in D_F^A\leftrightarrow a\notin F(a)\bigr)%
+}{CantorDiagonalMembership}{%
+  \DeltaRow{Mengen}{A\dsep D_F^A\dsep a\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\to\powerset(A)}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{D_F^A=\{x\in A\mid x\notin F(x)\}}{%
+    \FormulaRefAuto{CantorDiagonalSetDef}[def]{1}}
+  \proofstepwide[1,2]{a\in D_F^A}{\leftrightarrow}{%
+    a\in\{x\in A\mid x\notin F(x)\}}{%
+    \rUE{\FormulaRefAuto{\forall x\,
+      (x\in A\leftrightarrow x\in B)\eqvdash A=B}{3}}}
+  \proofstepwide[1,2]{}{\leftrightarrow}{%
+    a\in A\land a\notin F(a)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}
+      \eqvdash x\in A\land P(x)}{4}}
+  \proofstepwide[1,2]{}{\leftrightarrow}{a\notin F(a)}{%
+    \FormulaRefAuto{Q\vdash
+      (P\leftrightarrow Q\land R)\leftrightarrow
+      (P\leftrightarrow R)}{2}}
+  \proofstepwidestar[1,2]{%
+    a\in D_F^A\leftrightarrow a\notin F(a)}{\rChain{4,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Jeder Funktionswert verfehlt die Diagonalmenge]{%
+  F\colon A\to\powerset(A)\vdash
+  \forall a\in A\,\bigl(F(a)\neq D_F^A\bigr)%
+}{CantorDiagonalMissed}{%
+  \DeltaRow{Mengen}{A\dsep D_F^A\dsep a\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon A\to\powerset(A)}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[3]{F(a)=D_F^A}{\rA}
+  \proofstepwide[2,3]{a\in F(a)}{\leftrightarrow}{a\in D_F^A}{%
+    \rUE{\FormulaRefAuto{\forall x\,
+      (x\in A\leftrightarrow x\in B)\eqvdash A=B}{3}}}
+  \proofstepwidestar[1,2]{%
+    a\in D_F^A\leftrightarrow a\notin F(a)}{%
+    \FormulaRefAuto{CantorDiagonalMembership}[thm]{1,2}}
+  \proofstepwidestar[1,2,3]{%
+    a\in F(a)\leftrightarrow a\notin F(a)}{\rChain{4,5}}
+  \proofstepwidestar[]{%
+    \neg\bigl(a\in F(a)\leftrightarrow a\notin F(a)\bigr)}{%
+    \FormulaRefAuto{\neg(P\leftrightarrow\neg P)}}
+  \proofstepwidestar[1,2,3]{\bot}{\rBI{6,7}}
+  \proofstepwidestar[1,2]{F(a)\neq D_F^A}{\rCI{3,8}}
+  \proofstepwidestar[1]{%
+    \forall a\in A\,\bigl(F(a)\neq D_F^A\bigr)}{%
+    \rUI{\rRI{2,9}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Cantors Satz in Bijektionsform]{%
+  \neg\bigl(A\EqCard\powerset(A)\bigr)%
+}{CantorNoPowerSetBijection}{%
+  \DeltaRow{Mengen}{A\dsep D_F^A\dsep a\dsep Y}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A\EqCard\powerset(A)}{\rA}
+  \proofstepwidestar[1]{\exists F\colon A\bij\powerset(A)}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{1}}
+  \proofstepwidestar[2]{F\colon A\bij\powerset(A)}{\rA}
+  \proofstepwidestar[2]{F\colon A\to\powerset(A)}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{3}}
+  \proofstepwidestar[2]{D_F^A\in\powerset(A)}{%
+    \FormulaRefAuto{CantorDiagonalSetInPowerSet}[thm]{4}}
+  \proofstepwidestar[2]{%
+    \forall a\in A\,\bigl(F(a)\neq D_F^A\bigr)}{%
+    \FormulaRefAuto{CantorDiagonalMissed}[thm]{4}}
+  \proofstepwidestar[2]{F\colon A\sur\powerset(A)}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\sur B}[thm]{3}}
+  \proofstepwidestar[2]{%
+    \forall Y\in\powerset(A)\,\exists a\in A\,(F(a)=Y)}{%
+    \FormulaRefAuto{y\in B\vdash\exists x\in A\;F(x)=y}{7}}
+  \proofstepwidestar[2]{%
+    \exists a\in A\,\bigl(F(a)=D_F^A\bigr)}{\rUE{8,5}}
+  \proofstepwidestar[3]{a\in A\land F(a)=D_F^A}{\rA}
+  \proofstepwidestar[2,3]{F(a)\neq D_F^A}{%
+    \rUE{6,\rAEa{10}}}
+  \proofstepwidestar[3]{F(a)=D_F^A}{\rAEb{10}}
+  \proofstepwidestar[2,3]{\bot}{\rBI{12,11}}
+  \proofstepwidestar[2]{\bot}{\rEE{9,10,13}}
+  \proofstepwidestar[1]{\bot}{\rEE{2,3,14}}
+  \proofstepwidestar[]{%
+    \neg\bigl(A\EqCard\powerset(A)\bigr)}{\rCI{1,15}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Cantors strikter Potenzmengensatz]{%
+  A\CardLt\powerset(A)%
+}{CantorStrictPowerSet}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{\SingletonEmbedding{A}}
+}
+\begin{tabproof}
+  \proofstep{}{\SingletonEmbedding{A}\colon A\inj\powerset(A)}{%
+    \FormulaRefAuto{SingletonPowerSetInjection}[thm]}
+  \proofstep{}{A\CardLeq\powerset(A)}{%
+    \FormulaRefAuto{CardLeqDef}[def]{\rEI{1}}}
+  \proofstep{}{\neg\bigl(A\EqCard\powerset(A)\bigr)}{%
+    \FormulaRefAuto{CantorNoPowerSetBijection}[thm]}
+  \proofstep{}{A\CardLeq\powerset(A)\land
+    \neg\bigl(A\EqCard\powerset(A)\bigr)}{\rAI{2,3}}
+  \proofstep{}{A\CardLt\powerset(A)}{%
+    \FormulaRefAuto{CardLtDef}[def]{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Potenzmenge der natürlichen Zahlen ist überabzählbar]{%
+  \Uncountable{\powerset(\mathbb N)}%
+}{PowerSetNaturalsUncountable}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\powerset(\mathbb N)}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\AtMostCountable{\powerset(\mathbb N)}}{\rA}
+  \proofstepwidestar[1]{\powerset(\mathbb N)\CardLeq\mathbb N}{%
+    \FormulaRefAuto{AtMostCountableDef}[def]{1}}
+  \proofstepwidestar[]{\mathbb N\CardLt\powerset(\mathbb N)}{%
+    \FormulaRefAuto{CantorStrictPowerSet}[thm]}
+  \proofstepwidestar[]{\mathbb N\CardLeq\powerset(\mathbb N)}{%
+    \rAEa{\FormulaRefAuto{CardLtDef}[def]{3}}}
+  \proofstepwidestar[1]{\mathbb N\EqCard\powerset(\mathbb N)}{%
+    \FormulaRefAuto{CantorSchroederBernstein}[thm]{4,2}}
+  \proofstepwidestar[]{\neg\bigl(\mathbb N\EqCard\powerset(\mathbb N)\bigr)}{%
+    \FormulaRefAuto{CantorNoPowerSetBijection}[thm]}
+  \proofstepwidestar[1]{\bot}{\rBI{5,6}}
+  \proofstepwidestar[]{\neg\AtMostCountable{\powerset(\mathbb N)}}{%
+    \rCI{1,7}}
+  \proofstepwidestar[]{\Uncountable{\powerset(\mathbb N)}}{%
+    \FormulaRefAuto{UncountableDef}[def]{8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Keine Liste enthält alle Teilmengen der natürlichen Zahlen]{%
+  F\colon\mathbb N\to\powerset(\mathbb N)\vdash
+  \exists D\in\powerset(\mathbb N)\,
+    \forall n\in\mathbb N\,\bigl(F(n)\neq D\bigr)%
+}{NaturalPowerSetDiagonalNoEnumeration}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep D_{F}^{\mathbb N}\dsep D\dsep n}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{F\colon\mathbb N\to\powerset(\mathbb N)}{\rA}
+  \proofstepwidestar[1]{D_F^{\mathbb N}\in\powerset(\mathbb N)}{%
+    \FormulaRefAuto{CantorDiagonalSetInPowerSet}[thm]{1}}
+  \proofstepwidestar[1]{%
+    \forall n\in\mathbb N\,
+      \bigl(F(n)\neq D_F^{\mathbb N}\bigr)}{%
+    \FormulaRefAuto{CantorDiagonalMissed}[thm]{1}}
+  \proofstepwidestar[1]{%
+    D_F^{\mathbb N}\in\powerset(\mathbb N)\land
+    \forall n\in\mathbb N\,
+      \bigl(F(n)\neq D_F^{\mathbb N}\bigr)}{\rAI{2,3}}
+  \proofstepwidestar[1]{%
+    \exists D\in\powerset(\mathbb N)\,
+      \forall n\in\mathbb N\,\bigl(F(n)\neq D\bigr)}{\rEI{4}}
+\end{tabproofwide}
+
+\begin{remark}[Das Diagonalverfahren als unendliche Tabelle]
+Schreibt man in die \(n\)-te Zeile die Mitgliedschaftsentscheidungen der Menge
+\(F(n)\subseteq\mathbb N\), dann wird die \(n\)-te Entscheidung dieser Zeile
+auf der Diagonale umgekehrt:
+\[
+  n\in D_F^{\mathbb N}
+  \quad\Longleftrightarrow\quad
+  n\notin F(n).
+\]
+Folglich unterscheidet sich \(D_F^{\mathbb N}\) von der \(n\)-ten Zeile an
+mindestens der \(n\)-ten Stelle. Der Beweis benötigt weder eine Anordnung der
+übrigen Tabelleneinträge noch eine Wahl zusätzlicher Elemente.
+\end{remark}
+
+\subsection{Die reellen Zahlen sind nicht aufzählbar}
+
+Das bekannte Zifferndiagonalverfahren muss zusätzlich ausschließen, dass ein
+reeller Wert zwei Dezimaldarstellungen besitzt. Die folgende Variante umgeht
+diese Schwierigkeit vollständig. Sie konstruiert zu jeder vorgegebenen Liste
+reeller Zahlen verschachtelte Drittelintervalle und schließt im \(n\)-ten
+Schritt den \(n\)-ten Listenwert aus. Dabei werden nur der Rekursionssatz aus
+Band~10 sowie Ordnung, Körperoperationen und Vollständigkeit aus Band~19
+verwendet; die Dedekindsche Schnittdarstellung der reellen Zahlen wird nicht
+mehr entfaltet.
+
+Im Beweis verwenden wir die gewöhnliche reelle Körper-, Ordnungs- und
+Bruchschreibweise. Sie kürzt ausschließlich die in Band~19 konstruierten
+Operationen ab; rationale Zahlzeichen bezeichnen ihre kanonischen reellen
+Bilder. Sind beide Seiten einer Ungleichung natürlich typisiert, so bezeichnet
+\(\leq\) weiterhin die natürliche Ordnung aus Band~10.
+
+\FormulaThmDeltaK[Cantors Intervall-Diagonalverfahren]{%
+  F\colon\mathbb N\to\mathbb R\vdash
+  \exists x\in[\RealZero,\RealOne]_{\mathbb R}\,
+    \forall n\in\mathbb N\,\bigl(F(n)\neq x\bigr)%
+}{CantorRealIntervalDiagonal}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\mathbb R\dsep L\dsep m\dsep n
+    \dsep p\dsep q\dsep x}
+  \DeltaRow{Funktionen}{F\dsep T_F\dsep u\dsep v\dsep\ell\dsep r}
+  \DeltaRow{Relationsoperatoren}{\RealLe\dsep\RealLt}
+  \DeltaRow{Funktionsoperatoren}{\RealAdd\dsep\RealMul
+    \dsep\RealInv{\,\cdot\,}}
+}
+\begin{proof}
+Sei \(F\colon\mathbb N\to\mathbb R\) fest. Für \(p,q\in\mathbb R\) setzen
+wir
+\[
+  u(p,q)\coloneqq\frac{2p+q}{3},
+  \qquad
+  v(p,q)\coloneqq\frac{p+2q}{3}.
+\]
+Im vollständig angeordneten reellen Körper ist \(3>0\), insbesondere
+\(3\neq0\). Die Abgeschlossenheit der Körperoperationen aus
+\FormulaRefAuto{RealCutsCompleteOrderedField}[thm] zeigt deshalb, dass
+\(u,v\colon\mathbb R\times\mathbb R\to\mathbb R\) wohldefiniert sind.
+Auf \(\mathbb N\times\mathbb R\times\mathbb R\) betrachten wir die totale
+Schrittabbildung
+\[
+  T_F(n,p,q)\coloneqq
+  \begin{cases}
+    \bigl(\Succ(n),v(p,q),q\bigr),&F(n)\leq u(p,q),\\
+    \bigl(\Succ(n),p,u(p,q)\bigr),&u(p,q)<F(n).
+  \end{cases}
+\]
+Die beiden Fälle sind wegen der Totalität der reellen Ordnung erschöpfend und
+disjunkt; alle Ausgabekomponenten liegen wieder im Zustandsraum. Das typisierte
+Funktionsdefinitionsprinzip
+\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm] liefert somit
+\[
+  T_F\colon
+  \mathbb N\times\mathbb R\times\mathbb R
+  \longrightarrow
+  \mathbb N\times\mathbb R\times\mathbb R.
+\]
+Der Dedekindsche Rekursionssatz
+\FormulaRefAuto{DedekindRecursionTheorem}[thm] liefert, angewandt auf den
+Startzustand \((0,\RealZero,\RealOne)\), eine Funktion in diesen Zustandsraum.
+Die erste Komponente ist durch natürliche Induktion der jeweilige Index;
+die beiden anderen Projektionen sind daher wohldefinierte Funktionen
+\(\ell,r\colon\mathbb N\to\mathbb R\). Es gilt
+\(\ell(0)=0\), \(r(0)=1\), und die obige Fallvorschrift bestimmt
+\(\ell(\Succ(n))\) und \(r(\Succ(n))\).
+
+Aus \(p<q\) folgt nach denselben Körper- und Ordnungsgesetzen
+\[
+  p<u(p,q)<v(p,q)<q,
+\]
+denn jede der drei aufeinanderfolgenden Differenzen ist
+\((q-p)/3>0\). Daher liefert die natürliche Induktion für jedes
+\(n\in\mathbb N\)
+\[
+  \begin{aligned}
+    &\ell(n)<r(n),\\[-2pt]
+    &\ell(n)\leq\ell(\Succ(n))
+      <r(\Succ(n))\leq r(n),\\[-2pt]
+    &F(n)\notin
+      [\ell(\Succ(n)),r(\Succ(n))]_{\mathbb R}.
+  \end{aligned}
+\]
+Im ersten Fall liegt nämlich \(F(n)\leq u(\ell(n),r(n))\) strikt links vom
+neuen linken Rand \(v(\ell(n),r(n))\); im zweiten Fall liegt \(F(n)\)
+strikt rechts vom neuen rechten Rand \(u(\ell(n),r(n))\).
+
+Aus der mittleren Zeile folgt durch eine zweite natürliche Induktion die
+globale Schachtelung
+\[
+  m,k\in\mathbb N\dsep m\leq k
+  \quad\vdash\quad
+  \ell(m)\leq\ell(k)\land r(k)\leq r(m).
+\]
+Im Nullfall erzwingt \(m\leq0\) die Gleichheit \(m=0\). Im
+Nachfolgerschritt gilt aus \(m\leq\Succ(k)\) entweder \(m\leq k\) oder
+\(m=\Succ(k)\); Transitivität zusammen mit den lokalen Ungleichungen liefert
+in beiden Fällen die Behauptung.
+
+Sei nun \(L\coloneqq\ell[\mathbb N]\). Wegen
+\(\ell\colon\mathbb N\to\mathbb R\) gilt
+\(\varnothing\neq L\subseteq\mathbb R\). Die globale Schachtelung und
+\(\ell(m)<r(m)\leq r(0)=1\) zeigen, dass \(r(0)\) eine obere Schranke von
+\(L\) ist. Die reelle Vollständigkeit
+\FormulaRefAuto{RealLeastUpperBoundProperty}[thm] liefert nun einen reellen
+kleinsten-obere-Schranke-Zeugen und damit genau die Existenzvoraussetzung des
+allgemeinen Supremumsbegriffs aus Band~13. Wir setzen
+\[
+  x\coloneqq\sup_{\mathbb R,\RealLe}(L).
+\]
+Nach \FormulaRefAuto{SupremumInCarrier}[thm] gilt \(x\in\mathbb R\).
+Fixiere \(n\in\mathbb N\). Weil \(\ell(\Succ(n))\in L\), liefert
+\FormulaRefAuto{SupremumDominatesMember}[thm]
+\(\ell(\Succ(n))\leq x\). Außerdem ist \(r(\Succ(n))\) eine obere Schranke
+von \(L\): Für jedes
+\(m\in\mathbb N\) gilt entweder \(m\leq\Succ(n)\), und dann
+\(\ell(m)\leq\ell(\Succ(n))<r(\Succ(n))\), oder
+\(\Succ(n)\leq m\), und dann
+\(\ell(m)<r(m)\leq r(\Succ(n))\). Der Satz
+\FormulaRefAuto{SupremumLeastUpperBound}[thm] ergibt somit
+\(x\leq r(\Succ(n))\). Also
+\[
+  x\in[\ell(\Succ(n)),r(\Succ(n))]_{\mathbb R}
+  \quad\text{und folglich}\quad F(n)\neq x.
+\]
+Da \(n\) beliebig war, wird \(x\) von keinem Funktionswert getroffen. Aus
+\(\ell(0)=0\leq x\leq r(0)=1\) folgt zugleich
+\(x\in[\RealZero,\RealOne]_{\mathbb R}\) nach
+\FormulaRefAuto{RealBoundedIntervals}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Keine Liste erfasst alle reellen Zahlen]{%
+  F\colon\mathbb N\to\mathbb R
+  \vdash\neg\bigl(F\colon\mathbb N\sur\mathbb R\bigr)%
+}{CantorNoRealSurjection}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\mathbb R\dsep x}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{proof}
+Nach \FormulaRefAuto{CantorRealIntervalDiagonal}[thm] gibt es ein
+\(x\in\mathbb R\), das nicht in \(F[\mathbb N]\) liegt. Somit ist
+\(F[\mathbb N]\neq\mathbb R\). Die Charakterisierung
+\FormulaRefAuto{SurjectiveIffImageEqualsCodomain}[thm] schließt daher die
+Surjektivität von \(F\) aus.
+\end{proof}
+
+\FormulaThmDeltaK[Die kanonische natürliche Einbettung in die reellen Zahlen]{%
+  \RealEmb\circ(\RatEmbed\circ\IntEmbed)
+  \colon\mathbb N\inj\mathbb R%
+}{NaturalRealEmbeddingInjective}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\mathbb Z\dsep\mathbb Q\dsep\mathbb R}
+  \DeltaRow{Funktionen}{\IntEmbed\dsep\RatEmbed\dsep\RealEmb}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\IntEmbed\colon\mathbb N\inj\mathbb Z}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingInjective}[thm]}
+  \proofstepwidestar[]{\RatEmbed\colon\mathbb Z\inj\mathbb Q}{%
+    \FormulaRefAuto{IntegerRationalEmbeddingInjective}[thm]}
+  \proofstepwidestar[]{%
+    \RatEmbed\circ\IntEmbed\colon\mathbb N\inj\mathbb Q}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep G\colon B\inj C
+      \vdash G\circ F\colon A\inj C}[thm]{1,2}}
+  \proofstepwidestar[]{\RealEmb\colon\mathbb Q\inj\mathbb R}{%
+    \FormulaRefAuto{RationalToRealEmbeddingInjective}[thm]}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\RealEmb\circ(\RatEmbed\circ\IntEmbed)\colon{}\\[-2pt]
+      &\qquad\mathbb N\inj\mathbb R
+    \end{aligned}}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep G\colon B\inj C
+      \vdash G\circ F\colon A\inj C}[thm]{3,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die reellen Zahlen sind strikt mächtiger als die natürlichen]{%
+  \mathbb N\CardLt\mathbb R%
+}{NaturalsStrictlyLessPowerfulThanReals}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\mathbb R}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &\RealEmb\circ(\RatEmbed\circ\IntEmbed)\colon{}\\[-2pt]
+      &\qquad\mathbb N\inj\mathbb R
+    \end{aligned}}{%
+    \FormulaRefAuto{NaturalRealEmbeddingInjective}[thm]}
+  \proofstepwidestar[]{\exists F\colon\mathbb N\inj\mathbb R}{\rEI{1}}
+  \proofstepwidestar[]{\mathbb N\CardLeq\mathbb R}{%
+    \FormulaRefAuto{CardLeqDef}[def]{2}}
+  \proofstepwidestar[1]{\mathbb N\EqCard\mathbb R}{\rA}
+  \proofstepwidestar[1]{\exists G\colon\mathbb N\bij\mathbb R}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{4}}
+  \proofstepwidestar[2]{G\colon\mathbb N\bij\mathbb R}{\rA}
+  \proofstepwidestar[2]{G\colon\mathbb N\to\mathbb R}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{6}}
+  \proofstepwidestar[2]{G\colon\mathbb N\sur\mathbb R}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\sur B}[thm]{6}}
+  \proofstepwidestar[2]{\neg(G\colon\mathbb N\sur\mathbb R)}{%
+    \FormulaRefAuto{CantorNoRealSurjection}[thm]{7}}
+  \proofstepwidestar[2]{\bot}{\rBI{8,9}}
+  \proofstepwidestar[1]{\bot}{\rEE{5,6,10}}
+  \proofstepwidestar[]{\neg(\mathbb N\EqCard\mathbb R)}{\rCI{1,11}}
+  \proofstepwidestar[]{%
+    \mathbb N\CardLeq\mathbb R\land
+    \neg(\mathbb N\EqCard\mathbb R)}{\rAI{3,12}}
+  \proofstepwidestar[]{\mathbb N\CardLt\mathbb R}{%
+    \FormulaRefAuto{CardLtDef}[def]{13}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die reellen Zahlen sind überabzählbar]{%
+  \Uncountable{\mathbb R}%
+}{RealsUncountable}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\mathbb R}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\mathbb N\CardLt\mathbb R}{%
+    \FormulaRefAuto{NaturalsStrictlyLessPowerfulThanReals}[thm]}
+  \proofstepwidestar[]{\mathbb N\CardLeq\mathbb R}{%
+    \rAEa{\FormulaRefAuto{CardLtDef}[def]{1}}}
+  \proofstepwidestar[]{\neg(\mathbb N\EqCard\mathbb R)}{%
+    \rAEb{\FormulaRefAuto{CardLtDef}[def]{1}}}
+  \proofstepwidestar[1]{\AtMostCountable{\mathbb R}}{\rA}
+  \proofstepwidestar[1]{\mathbb R\CardLeq\mathbb N}{%
+    \FormulaRefAuto{AtMostCountableDef}[def]{4}}
+  \proofstepwidestar[1]{\mathbb N\EqCard\mathbb R}{%
+    \FormulaRefAuto{CantorSchroederBernstein}[thm]{2,5}}
+  \proofstepwidestar[1]{\bot}{\rBI{6,3}}
+  \proofstepwidestar[]{\neg\AtMostCountable{\mathbb R}}{\rCI{1,7}}
+  \proofstepwidestar[]{\Uncountable{\mathbb R}}{%
+    \FormulaRefAuto{UncountableDef}[def]{8}}
+\end{tabproofwide}
+
+\begin{remark}[Diagonalargument und Kontinuumsstufe]
+Die beiden letzten Sätze beweisen den hier benötigten strikten Vergleich
+\(\mathbb N\CardLt\mathbb R\). Die stärkere Identifikation
+\(\mathbb R\EqCard\powerset(\mathbb N)\) folgt nicht allein aus dem
+Diagonalargument; sie verlangt zusätzlich einen Kodierungssatz in beide
+Richtungen. Eine solche Kodierung wird hier nicht stillschweigend
+vorausgesetzt.
+\end{remark}
+
+\FormulaThmDeltaK[Zu jeder Menge existiert eine größere Mächtigkeitsstufe]{%
+  \exists B\,\bigl(A\CardLt B\bigr)%
+}{NoGreatestCardinality}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep\powerset(A)}
+}
+\begin{tabproof}
+  \proofstep{}{A\CardLt\powerset(A)}{%
+    \FormulaRefAuto{CantorStrictPowerSet}[thm]}
+  \proofstep{}{\exists B\,\bigl(A\CardLt B\bigr)}{\rEI{1}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die ersten drei unendlichen Potenzmengenstufen]{%
+  \mathbb N\CardLt\powerset(\mathbb N)\land
+  \powerset(\mathbb N)\CardLt\powerset(\powerset(\mathbb N))%
+}{FirstInfinitePowerSetLevels}{%
+  \DeltaRow{Mengen}{\mathbb N\dsep\powerset(\mathbb N)
+    \dsep\powerset(\powerset(\mathbb N))}
+}
+\begin{tabproof}
+  \proofstep{}{\mathbb N\CardLt\powerset(\mathbb N)}{%
+    \FormulaRefAuto{CantorStrictPowerSet}[thm]}
+  \proofstep{}{%
+    \powerset(\mathbb N)\CardLt\powerset(\powerset(\mathbb N))}{%
+    \FormulaRefAuto{CantorStrictPowerSet}[thm]}
+  \proofstep{}{%
+    \mathbb N\CardLt\powerset(\mathbb N)\land
+    \powerset(\mathbb N)\CardLt\powerset(\powerset(\mathbb N))}{%
+    \rAI{1,2}}
+\end{tabproof}
+
+\begin{remark}[Traditionelle Namen der ersten Stufen]
+Traditionell bezeichnet \(\aleph_0\) die Mächtigkeitsstufe von
+\(\mathbb N\). Die Stufe von \(\powerset(\mathbb N)\) wird
+\(2^{\aleph_0}\) oder \(\beth_1\) genannt, diejenige von
+\(\powerset(\powerset(\mathbb N))\) entsprechend \(\beth_2\).
+Der soeben bewiesene Satz liefert objektsprachlich
+\[
+  \aleph_0<2^{\aleph_0}<2^{2^{\aleph_0}}.
+\]
+Die Symbole in dieser Anzeige sind traditionelle Namen von
+Mächtigkeitsstufen; sie werden in diesem Band noch nicht als besondere
+Mengen konstruiert.
+\end{remark}
+
+\FormulaDefDeltaK[Kontinuumshypothese in relationaler Form]{%
+  \mathsf{CH}\coloneqq
+  \neg\exists A\,\bigl(
+    \mathbb N\CardLt A\land A\CardLt\powerset(\mathbb N)\bigr)%
+}{ContinuumHypothesisRelational}{%
+  \DeltaRow{Mengen}{A\dsep\mathbb N\dsep\powerset(\mathbb N)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Kontinuumshypothese}{\mathsf{CH}}
+}
+
+\begin{remark}[Grenze des vorliegenden Bandes]
+Die Kontinuumshypothese behauptet, dass zwischen der abzählbaren Stufe und
+der Potenzmengenstufe von \(\mathbb N\) keine weitere Mächtigkeitsstufe
+liegt. Sie wird hier weder bewiesen noch widerlegt. Eine vollständige
+Aleph- und Beth-Hierarchie mit Nachfolger- und Limesstufen benötigt eine
+Theorie der Ordinalzahlen sowie transfinite Rekursion. Diese Grundlagen
+sind in den bisherigen Bänden noch nicht eingeführt und gehören daher in
+einen späteren Band über Ordinal- und Kardinalzahlen.
+\end{remark}
 
 \end{document}
