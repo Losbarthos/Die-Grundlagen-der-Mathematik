@@ -70,6 +70,52 @@ Strukturaxiome werden in den folgenden Bänden getrennt untersucht.
   \DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}
 }
 
+\FormulaThmDeltaK[Fünfgliedrige Umklammerung in Halbgruppen]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep a,b,c,d,e\in A\vdash{}\\[-2pt]
+    &(a\star b)\star\bigl((c\star d)\star e\bigr)
+      =\bigl((a\star(b\star c))\star d\bigr)\star e
+  \end{aligned}%
+}{SemigroupFiveFactorReassociation}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep d\dsep e}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestar[2]{a,b,c,d,e\in A}{\rA}
+  \proofstepwidestar[1,2]{a\star b\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,2}}
+  \proofstepwidestar[1,2]{d\star e\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,2}}
+  \proofstepwidestar[1,2]{(a\star b)\star c\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,3,2}}
+  \proofstepwidestar[1,2]{%
+    (c\star d)\star e=c\star(d\star e)}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{1,2}}
+  \proofstepwidestar[1,2]{%
+    (a\star b)\star\bigl(c\star(d\star e)\bigr)
+      =\bigl((a\star b)\star c\bigr)\star(d\star e)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{1,3,2,4}}}
+  \proofstepwidestar[1,2]{%
+    \bigl((a\star b)\star c\bigr)\star(d\star e)
+      =\bigl(((a\star b)\star c)\star d\bigr)\star e}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{1,5,2}}}
+  \proofstepwidestar[1,2]{%
+    (a\star b)\star c=a\star(b\star c)}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{1,2}}
+  \proofstepwidestarbreak[1,2]{%
+    \begin{aligned}[t]
+      (a\star b)\star\bigl((c\star d)\star e\bigr)
+      &= (a\star b)\star\bigl(c\star(d\star e)\bigr)\\[-2pt]
+      &= \bigl((a\star b)\star c\bigr)\star(d\star e)\\[-2pt]
+      &= \bigl(((a\star b)\star c)\star d\bigr)\star e\\[-2pt]
+      &= \bigl((a\star(b\star c))\star d\bigr)\star e
+    \end{aligned}}{%
+    \text{Schritte 6--9; Gleichheitssubstitution und Transitivität}}
+\end{tabproofwide}
+
 \FormulaAxiomDeltaK[Zugriff auf die binäre Operation einer Halbgruppe]{%
   \SemigroupAlg{A}{\star}\vdash
   \mathsf{BinOp}\!\left(A,\star\right)%
@@ -4728,6 +4774,603 @@ darin, diese Bedingungen in die zugeh\"origen Teilbarkeitsaussagen zu
   \proofstep{1,2}{\SemigroupIso{g\circ f}{A,\star}{C,\bullet}}{%
     \FormulaRefAuto{SemigroupIsoDef}[def]{5,8}}
 \end{tabproof}
+
+\section{Koordinatenisomorphismen von Halbgruppen}
+
+Die folgende Konstruktion trennt die beiden Koordinaten eines Produkts:
+Die erste Koordinate eines Produkts stammt vom linken, die zweite vom
+rechten Faktor.  F\"ur ein festes Element \(e\) werden die daf\"ur ben\"otigten
+Koordinaten durch Rechts- beziehungsweise Linksmultiplikation mit \(e\)
+gewonnen.  Der Ausdruck \emph{\(e\)-Koordinatenisomorphismus} ist die in
+diesem Werk verwendete Bezeichnung f\"ur diese spezielle Darstellung.
+
+\subsection{Axiomatische Definition}
+
+\FormulaDefDeltaK[Koordinatentr\"ager bez\"uglich eines
+Halbgruppenelements]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\vdash{}\\[-2pt]
+    &\SemigroupCoordinateCarrier{A}{\star}{e}\coloneqq
+      \bigl\{p\in A\bigm|\exists x\in A\,(p=x\star e)\bigr\}
+      \times
+      \bigl\{q\in A\bigm|\exists y\in A\,(q=e\star y)\bigr\}
+  \end{aligned}%
+}{SemigroupCoordinateCarrierDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Koordinatentr\"ager}{%
+    \SemigroupCoordinateCarrier{A}{\star}{e}}
+}
+
+\FormulaDefDeltaK[Koordinatenprodukt]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\vdash{}\\[-2pt]
+    &\SemigroupCoordinateProductOp{A}{\star}{e}\colon
+      \SemigroupCoordinateCarrier{A}{\star}{e}
+      \times\SemigroupCoordinateCarrier{A}{\star}{e}
+      \longrightarrow\SemigroupCoordinateCarrier{A}{\star}{e},\\[-2pt]
+    &(p,q),(r,s)\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash
+      (p,q)\SemigroupCoordinateProductOp{A}{\star}{e}(r,s)
+      \coloneqq(p,s)
+  \end{aligned}%
+}{SemigroupCoordinateProductDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep r\dsep s}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Koordinatenprodukt}{%
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+
+\FormulaDefDeltaK[\(e\)-Koordinatenabbildung]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\vdash{}\\[-2pt]
+    &\SemigroupCoordinateMap{A}{\star}{e}\colon
+      A\longrightarrow\SemigroupCoordinateCarrier{A}{\star}{e},\\[-2pt]
+    &\forall x\in A\quad
+      \SemigroupCoordinateMap{A}{\star}{e}(x)
+      \coloneqq(x\star e,e\star x)
+  \end{aligned}%
+}{SemigroupCoordinateMapDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{\(e\)-Koordinatenabbildung}{%
+    \SemigroupCoordinateMap{A}{\star}{e}}
+}
+
+\FormulaDefDeltaK[Multiplikationsabbildung der \(e\)-Koordinaten]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\vdash{}\\[-2pt]
+    &\SemigroupCoordinateMultiplicationMap{A}{\star}{e}\colon
+      \SemigroupCoordinateCarrier{A}{\star}{e}\longrightarrow A,\\[-2pt]
+    &(p,q)\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash
+      \SemigroupCoordinateMultiplicationMap{A}{\star}{e}(p,q)
+      \coloneqq p\star q
+  \end{aligned}%
+}{SemigroupCoordinateMultiplicationMapDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMultiplicationMap{A}{\star}{e}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Multiplikationsabbildung}{%
+    \SemigroupCoordinateMultiplicationMap{A}{\star}{e}}
+}
+
+Der neue Strukturbegriff wird nicht als lange Konjunktion notiert.  Seine
+vier Bestandteile werden vielmehr als getrennte Axiome eingef\"uhrt und sind
+anschlie\ss end einzeln zug\"anglich.
+
+\FormulaDefDeltaK[Begriff des \(e\)-Koordinatenisomorphismus]{%
+  \SemigroupCoordinateIso{A}{\star}{e}%
+}{SemigroupCoordinateIsoDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Quellhalbgruppe}{\SemigroupAlg{A}{\star}}
+  \DeltaPrem{Basiselement}{e\in A}
+  \DeltaPrem{Bijektive Koordinatenabbildung}{%
+    \SemigroupCoordinateMap{A}{\star}{e}\colon
+    A\bij\SemigroupCoordinateCarrier{A}{\star}{e}}
+  \DeltaRow{Operationserhaltung}{%
+    \begin{gathered}
+      x,y\in A\vdash{}\\[-2pt]
+      \SemigroupCoordinateMap{A}{\star}{e}(x\star y)
+      =\SemigroupCoordinateMap{A}{\star}{e}(x)
+        \SemigroupCoordinateProductOp{A}{\star}{e}
+        \SemigroupCoordinateMap{A}{\star}{e}(y)
+    \end{gathered}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{\(e\)-Koordinatenisomorphismus}{%
+    \SemigroupCoordinateIso{A}{\star}{e}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Quellhalbgruppe eines
+Koordinatenisomorphismus]{%
+  \SemigroupCoordinateIso{A}{\star}{e}
+  \vdash\SemigroupAlg{A}{\star}%
+}{SemigroupCoordinateIsoSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{Funktionen}{\star}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf das Basiselement eines
+Koordinatenisomorphismus]{%
+  \SemigroupCoordinateIso{A}{\star}{e}\vdash e\in A%
+}{SemigroupCoordinateIsoBaseElementAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{Funktionen}{\star}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Bijektivit\"at der
+Koordinatenabbildung]{%
+  \SemigroupCoordinateIso{A}{\star}{e}\vdash
+  \SemigroupCoordinateMap{A}{\star}{e}\colon
+  A\bij\SemigroupCoordinateCarrier{A}{\star}{e}%
+}{SemigroupCoordinateIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Operationserhaltung der
+Koordinatenabbildung]{%
+  \begin{aligned}[t]
+    &\SemigroupCoordinateIso{A}{\star}{e}\dsep x,y\in A\vdash{}\\[-2pt]
+    &\SemigroupCoordinateMap{A}{\star}{e}(x\star y)
+      =\SemigroupCoordinateMap{A}{\star}{e}(x)
+       \SemigroupCoordinateProductOp{A}{\star}{e}
+       \SemigroupCoordinateMap{A}{\star}{e}(y)
+  \end{aligned}%
+}{SemigroupCoordinateIsoOperationAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+
+\subsection{Grundlegende Eigenschaften}
+
+\FormulaThmDeltaK[Elementkriterium des Koordinatentr\"agers]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\vdash{}\\[-2pt]
+    &(p,q)\in\SemigroupCoordinateCarrier{A}{\star}{e}
+      \leftrightarrow\\[-2pt]
+    &\quad\Bigl(p\in A\land\exists x\in A\,(p=x\star e)\Bigr)
+      \land
+      \Bigl(q\in A\land\exists y\in A\,(q=e\star y)\Bigr)
+  \end{aligned}%
+}{SemigroupCoordinateCarrierMembership}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{proof}
+Setze in \FormulaRefAuto{SemigroupCoordinateCarrierDef}[def] die
+Definition des Koordinatentr\"agers ein.  Das Elementkriterium des
+kartesischen Produkts und zweimal das Elementkriterium einer
+ausgesonderten Teilmenge liefern genau die beiden Konjunkte der rechten
+Seite.
+\end{proof}
+
+\FormulaThmDeltaK[Der Koordinatentr\"ager ist nichtleer]{%
+  \SemigroupAlg{A}{\star}\dsep e\in A\vdash
+  \SemigroupCoordinateCarrier{A}{\star}{e}\neq\varnothing%
+}{SemigroupCoordinateCarrierNonempty}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{proof}
+Nach der Abgeschlossenheit liegt \(e\star e\) in \(A\).  In beiden
+Faktoren des Koordinatentr\"agers dient \(e\) als Zeuge, also liegt
+\((e\star e,e\star e)\) nach
+\FormulaRefAuto{SemigroupCoordinateCarrierMembership}[thm] im
+Koordinatentr\"ager.  Dieser ist daher nichtleer.
+\end{proof}
+
+\FormulaThmDeltaK[Auswertung des Koordinatenprodukts]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      (p,q),(r,s)\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash{}\\[-2pt]
+    &(p,q)\SemigroupCoordinateProductOp{A}{\star}{e}(r,s)=(p,s)
+  \end{aligned}%
+}{SemigroupCoordinateProductEvaluation}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep r\dsep s}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Dies ist die Auswertungsregel aus
+\FormulaRefAuto{SemigroupCoordinateProductDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Das Koordinatenprodukt bildet eine Halbgruppe]{%
+  \SemigroupAlg{A}{\star}\dsep e\in A\vdash
+  \SemigroupAlg{\SemigroupCoordinateCarrier{A}{\star}{e}}
+    {\SemigroupCoordinateProductOp{A}{\star}{e}}%
+}{SemigroupCoordinateProductSemigroup}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep r\dsep s\dsep
+    t\dsep u}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Die Abgeschlossenheit ist Teil der Typisierung in
+\FormulaRefAuto{SemigroupCoordinateProductDef}[def].  Sind
+\((p,q),(r,s),(t,u)\) Elemente des Koordinatentr\"agers, so liefert
+\FormulaRefAuto{SemigroupCoordinateProductEvaluation}[thm] zweimal
+\[
+ \bigl((p,q)\SemigroupCoordinateProductOp{A}{\star}{e}(r,s)\bigr)
+      \SemigroupCoordinateProductOp{A}{\star}{e}(t,u)
+ =(p,u)
+ =(p,q)\SemigroupCoordinateProductOp{A}{\star}{e}
+      \bigl((r,s)\SemigroupCoordinateProductOp{A}{\star}{e}(t,u)\bigr).
+\]
+Damit ist das Koordinatenprodukt assoziativ; zusammen mit der
+Abgeschlossenheit folgt die Behauptung aus
+\FormulaRefAuto{SemigroupDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Idempotenz des Koordinatenprodukts]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      u\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash{}\\[-2pt]
+    &u\SemigroupCoordinateProductOp{A}{\star}{e}u=u
+  \end{aligned}%
+}{SemigroupCoordinateProductIdempotence}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep p\dsep q}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Nach dem Elementkriterium des kartesischen Produkts hat \(u\) die Form
+\((p,q)\).  Die Auswertungsregel ergibt
+\[
+ (p,q)\SemigroupCoordinateProductOp{A}{\star}{e}(p,q)=(p,q).
+\]
+\end{proof}
+
+\FormulaThmDeltaK[Dreitermgesetz des Koordinatenprodukts]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      u,v,w\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash{}\\[-2pt]
+    &(u\SemigroupCoordinateProductOp{A}{\star}{e}v)
+       \SemigroupCoordinateProductOp{A}{\star}{e}w
+      =u\SemigroupCoordinateProductOp{A}{\star}{e}w
+  \end{aligned}%
+}{SemigroupCoordinateProductThreeTermLaw}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v\dsep w\dsep
+    p\dsep q\dsep r\dsep s\dsep t\dsep z}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Schreibe \(u=(p,q)\), \(v=(r,s)\) und \(w=(t,z)\).  Zweimalige
+Anwendung von
+\FormulaRefAuto{SemigroupCoordinateProductEvaluation}[thm] ergibt auf
+beiden Seiten \((p,z)\).
+\end{proof}
+
+\FormulaThmDeltaK[Rechtecksidentit\"at des Koordinatenprodukts]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      u,v\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash{}\\[-2pt]
+    &(u\SemigroupCoordinateProductOp{A}{\star}{e}v)
+       \SemigroupCoordinateProductOp{A}{\star}{e}u=u
+  \end{aligned}%
+}{SemigroupCoordinateProductRectangularIdentity}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestar[2]{e\in A}{\rA}
+  \proofstepwidestar[3]{u,v\in
+    \SemigroupCoordinateCarrier{A}{\star}{e}}{\rA}
+  \proofstepwidestar[1,2,3]{%
+    (u\SemigroupCoordinateProductOp{A}{\star}{e}v)
+      \SemigroupCoordinateProductOp{A}{\star}{e}u
+    =u\SemigroupCoordinateProductOp{A}{\star}{e}u}{%
+    \FormulaRefAuto{SemigroupCoordinateProductThreeTermLaw}[thm]{1,2,3}}
+  \proofstepwidestar[1,2,3]{%
+    u\SemigroupCoordinateProductOp{A}{\star}{e}u=u}{%
+    \FormulaRefAuto{SemigroupCoordinateProductIdempotence}[thm]{1,2,3}}
+  \proofstepwidestar[1,2,3]{%
+    (u\SemigroupCoordinateProductOp{A}{\star}{e}v)
+      \SemigroupCoordinateProductOp{A}{\star}{e}u=u}{\rChain{4,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die \(e\)-Koordinatenabbildung ist eine Abbildung]{%
+  \SemigroupAlg{A}{\star}\dsep e\in A\vdash
+  \SemigroupCoordinateMap{A}{\star}{e}\colon
+  A\to\SemigroupCoordinateCarrier{A}{\star}{e}%
+}{SemigroupCoordinateMapFunction}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}}
+}
+\begin{proof}
+F\"ur \(x\in A\) liegen \(x\star e\) und \(e\star x\) nach der
+Abgeschlossenheit in \(A\).  In den beiden Faktoren des
+Koordinatentr\"agers dient jeweils \(x\) als Zeuge.  Somit liegt
+\((x\star e,e\star x)\) im Koordinatentr\"ager.  Die Behauptung folgt aus
+\FormulaRefAuto{SemigroupCoordinateMapDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Auswertung der \(e\)-Koordinatenabbildung]{%
+  \SemigroupAlg{A}{\star}\dsep e,x\in A\vdash
+  \SemigroupCoordinateMap{A}{\star}{e}(x)=(x\star e,e\star x)%
+}{SemigroupCoordinateMapEvaluation}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}}
+}
+\begin{proof}
+Dies ist die Auswertungsregel aus
+\FormulaRefAuto{SemigroupCoordinateMapDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Die Multiplikationsabbildung ist eine Abbildung]{%
+  \SemigroupAlg{A}{\star}\dsep e\in A\vdash
+  \SemigroupCoordinateMultiplicationMap{A}{\star}{e}\colon
+  \SemigroupCoordinateCarrier{A}{\star}{e}\to A%
+}{SemigroupCoordinateMultiplicationMapFunction}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMultiplicationMap{A}{\star}{e}}
+}
+\begin{proof}
+Ist \((p,q)\) im Koordinatentr\"ager, so sind \(p,q\in A\).  Daher liegt
+\(p\star q\) nach der Abgeschlossenheit in \(A\).  Dies ist genau die
+Wohldefiniertheit der Abbildung aus
+\FormulaRefAuto{SemigroupCoordinateMultiplicationMapDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Auswertung der Multiplikationsabbildung]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      (p,q)\in\SemigroupCoordinateCarrier{A}{\star}{e}\vdash{}\\[-2pt]
+    &\SemigroupCoordinateMultiplicationMap{A}{\star}{e}(p,q)=p\star q
+  \end{aligned}%
+}{SemigroupCoordinateMultiplicationMapEvaluation}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMultiplicationMap{A}{\star}{e}}
+}
+\begin{proof}
+Dies ist die Auswertungsregel aus
+\FormulaRefAuto{SemigroupCoordinateMultiplicationMapDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Der Koordinatenisomorphismus ist ein
+Halbgruppenisomorphismus]{%
+  \SemigroupCoordinateIso{A}{\star}{e}\vdash
+  \SemigroupIso{\SemigroupCoordinateMap{A}{\star}{e}}
+    {A,\star}
+    {\SemigroupCoordinateCarrier{A}{\star}{e},
+     \SemigroupCoordinateProductOp{A}{\star}{e}}%
+}{SemigroupCoordinateIsoIsSemigroupIso}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\SemigroupCoordinateIso{A}{\star}{e}}{\rA}
+  \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{SemigroupCoordinateIsoSourceAxiom}[ax]{1}}
+  \proofstepwidestar[1]{e\in A}{%
+    \FormulaRefAuto{SemigroupCoordinateIsoBaseElementAxiom}[ax]{1}}
+  \proofstepwidestar[1]{%
+    \SemigroupAlg{\SemigroupCoordinateCarrier{A}{\star}{e}}
+      {\SemigroupCoordinateProductOp{A}{\star}{e}}}{%
+    \FormulaRefAuto{SemigroupCoordinateProductSemigroup}[thm]{2,3}}
+  \proofstepwidestar[1]{%
+    \SemigroupCoordinateMap{A}{\star}{e}\colon
+    A\bij\SemigroupCoordinateCarrier{A}{\star}{e}}{%
+    \FormulaRefAuto{SemigroupCoordinateIsoBijectiveAxiom}[ax]{1}}
+  \proofstepwidestar[1]{%
+    \SemigroupCoordinateMap{A}{\star}{e}\colon
+    A\to\SemigroupCoordinateCarrier{A}{\star}{e}}{%
+    \FormulaRefAuto{SemigroupCoordinateMapFunction}[thm]{2,3}}
+  \proofstepwidestarbreak[1]{%
+    \forall x\in A\,\forall y\in A\,
+    \Bigl(
+      \SemigroupCoordinateMap{A}{\star}{e}(x\star y)
+      =\SemigroupCoordinateMap{A}{\star}{e}(x)
+       \SemigroupCoordinateProductOp{A}{\star}{e}
+       \SemigroupCoordinateMap{A}{\star}{e}(y)
+    \Bigr)}{%
+    \text{Allgemeinheit von }x,y\text{ und }%
+    \FormulaRefAuto{SemigroupCoordinateIsoOperationAxiom}[ax]{1}}
+  \proofstepwidestar[1]{%
+    \SemigroupHom{\SemigroupCoordinateMap{A}{\star}{e}}
+      {A,\star}
+      {\SemigroupCoordinateCarrier{A}{\star}{e},
+       \SemigroupCoordinateProductOp{A}{\star}{e}}}{%
+    \FormulaRefAuto{SemigroupHomDef}[def]{2,4,6,7}}
+  \proofstepwidestar[1]{%
+    \SemigroupIso{\SemigroupCoordinateMap{A}{\star}{e}}
+      {A,\star}
+      {\SemigroupCoordinateCarrier{A}{\star}{e},
+       \SemigroupCoordinateProductOp{A}{\star}{e}}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{8,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Idempotenz- und Dreitermkriterium f\"ur den
+Koordinatenisomorphismus]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep e\in A\dsep
+      \forall x\in A\,(x\star x=x)\dsep{}\\[-2pt]
+    &\forall x,y,z\in A\,\bigl((x\star y)\star z=x\star z\bigr)
+      \vdash\SemigroupCoordinateIso{A}{\star}{e}
+  \end{aligned}%
+}{SemigroupCoordinateIsoCriterion}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep p\dsep q\dsep r\dsep s\dsep
+    x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateMultiplicationMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Schreibe kurz
+
+\[
+ K=\SemigroupCoordinateCarrier{A}{\star}{e},\qquad
+ \chi=\SemigroupCoordinateMap{A}{\star}{e},\qquad
+ \mu=\SemigroupCoordinateMultiplicationMap{A}{\star}{e}.
+\]
+
+Nach
+\FormulaRefAuto{SemigroupCoordinateMapFunction}[thm] und
+\FormulaRefAuto{SemigroupCoordinateMultiplicationMapFunction}[thm]
+sind \(\chi\colon A\to K\) und \(\mu\colon K\to A\) Abbildungen.  F\"ur
+\(x\in A\) liefern Assoziativit\"at, Dreitermgesetz und Idempotenz die
+vollst\"andig geklammerte Kette
+\[
+\begin{aligned}
+ \mu(\chi(x))
+ &=(x\star e)\star(e\star x)\\
+ &=\bigl((x\star e)\star e\bigr)\star x\\
+ &=(x\star e)\star x\\
+ &=x\star x=x.
+\end{aligned}
+\]
+Ist \((p,q)\in K\), so gibt es \(a,b\in A\) mit
+\(p=a\star e\) und \(q=e\star b\).  Nach dem Dreitermgesetz,
+der Assoziativit\"at und der Idempotenz gilt
+\[
+ p\star e=p,\qquad e\star q=q,\qquad
+ (p\star q)\star e=p\star e,
+ \qquad e\star(p\star q)=(e\star p)\star q=e\star q.
+\]
+Mit den Auswertungsregeln von \(\chi\) und \(\mu\) folgt daher
+\[
+ \chi(\mu(p,q))
+ =\bigl((p\star q)\star e,e\star(p\star q)\bigr)
+ =(p,q).
+\]
+Die Allgemeinheit der eingesetzten Elemente und
+\FormulaRefAuto{FunctionExtensionality}[thm] liefern aus den beiden
+Gleichungen
+\[
+ \mu\circ\chi=\Id_A,
+ \qquad
+ \chi\circ\mu=\Id_K.
+\]
+Der Satz
+\FormulaRefAuto{F\circ G = \Id_A\dsep G\circ F =\Id_B
+  \vdash G\colon A\bij B}[thm]
+\emph{(zwei wechselseitige Inversengleichungen liefern eine
+Bijektion)} ergibt daher \(\chi\colon A\bij K\).
+
+F\"ur \(x,y\in A\) ergibt sich schlie\ss lich
+\[
+\begin{aligned}
+ \chi(x\star y)
+ &=\bigl((x\star y)\star e,e\star(x\star y)\bigr)\\
+ &=\bigl(x\star e,(e\star x)\star y\bigr)\\
+ &=\bigl(x\star e,e\star y\bigr)
+  =\chi(x)\SemigroupCoordinateProductOp{A}{\star}{e}\chi(y).
+\end{aligned}
+\]
+In der zweiten Zeile wurden das Dreitermgesetz und die Assoziativit\"at,
+in der dritten Zeile erneut das Dreitermgesetz verwendet.  Die
+Quellhalbgruppe, das Basiselement, die soeben bewiesene Bijektivit\"at und
+die zuletzt gezeigte Operationserhaltung sind genau die vier Axiome aus
+\FormulaRefAuto{SemigroupCoordinateIsoDef}[def].
+\end{proof}
+
+\FormulaThmDeltaK[Idempotenz aus einem Koordinatenisomorphismus]{%
+  \SemigroupCoordinateIso{A}{\star}{e}\vdash
+  \forall x\in A\,(x\star x=x)%
+}{SemigroupCoordinateIsoIdempotence}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Der abgeleitete Halbgruppenisomorphismus aus
+\FormulaRefAuto{SemigroupCoordinateIsoIsSemigroupIso}[thm] ist injektiv
+und erh\"alt die Operation.  F\"ur \(x\in A\) ist sein Bild ein Element
+des Koordinatentr\"agers.  Nach
+\FormulaRefAuto{SemigroupCoordinateProductIdempotence}[thm] gilt daher
+\[
+ \begin{aligned}
+ &\SemigroupCoordinateMap{A}{\star}{e}(x\star x)\\
+ &\quad=
+ \SemigroupCoordinateMap{A}{\star}{e}(x)
+ \SemigroupCoordinateProductOp{A}{\star}{e}
+ \SemigroupCoordinateMap{A}{\star}{e}(x)
+ =\SemigroupCoordinateMap{A}{\star}{e}(x).
+ \end{aligned}
+\]
+Die Injektivit\"at der Koordinatenabbildung liefert \(x\star x=x\);
+die Allgemeinheit
+von \(x\) ergibt die Behauptung.
+\end{proof}
+
+\FormulaThmDeltaK[Dreitermgesetz aus einem Koordinatenisomorphismus]{%
+  \begin{aligned}[t]
+    &\SemigroupCoordinateIso{A}{\star}{e}\vdash{}\\[-2pt]
+    &\forall x,y,z\in A\,
+      \bigl((x\star y)\star z=x\star z\bigr)
+  \end{aligned}%
+}{SemigroupCoordinateIsoThreeTermLaw}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\star\dsep
+    \SemigroupCoordinateMap{A}{\star}{e}\dsep
+    \SemigroupCoordinateProductOp{A}{\star}{e}}
+}
+\begin{proof}
+Wie im vorigen Satz ist die Koordinatenabbildung ein injektiver
+Homomorphismus.  F\"ur \(x,y,z\in A\) liefert das Dreitermgesetz des
+Koordinatenprodukts
+\[
+\begin{aligned}
+ &\SemigroupCoordinateMap{A}{\star}{e}
+   \bigl((x\star y)\star z\bigr)\\
+ &\quad=\Bigl(
+   \SemigroupCoordinateMap{A}{\star}{e}(x)
+   \SemigroupCoordinateProductOp{A}{\star}{e}
+   \SemigroupCoordinateMap{A}{\star}{e}(y)
+   \Bigr)
+   \SemigroupCoordinateProductOp{A}{\star}{e}
+   \SemigroupCoordinateMap{A}{\star}{e}(z)\\
+ &\quad=\SemigroupCoordinateMap{A}{\star}{e}(x)
+   \SemigroupCoordinateProductOp{A}{\star}{e}
+   \SemigroupCoordinateMap{A}{\star}{e}(z)
+   =\SemigroupCoordinateMap{A}{\star}{e}(x\star z).
+\end{aligned}
+\]
+Injektivit\"at und Allgemeinheit der drei Elemente ergeben die Aussage.
+\end{proof}
+
+\FormulaThmDeltaK[Rechtecksidentit\"at aus einem
+Koordinatenisomorphismus]{%
+  \begin{aligned}[t]
+    &\SemigroupCoordinateIso{A}{\star}{e}\vdash{}\\[-2pt]
+    &\forall x,y\in A\,\bigl((x\star y)\star x=x\bigr)
+  \end{aligned}%
+}{SemigroupCoordinateIsoRectangularIdentity}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{proof}
+Nach \FormulaRefAuto{SemigroupCoordinateIsoThreeTermLaw}[thm] und
+\FormulaRefAuto{SemigroupCoordinateIsoIdempotence}[thm] gilt f\"ur
+\(x,y\in A\)
+\[
+ (x\star y)\star x=x\star x=x.
+\]
+Die Allgemeinheit von \(x,y\) liefert die Behauptung.
+\end{proof}
 
 \section{Morphismen von Potenzhalbgruppen}
 

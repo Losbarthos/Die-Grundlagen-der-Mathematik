@@ -1,0 +1,37 @@
+%============================================================
+%  Bd. 31 - Endliche Halbgruppen: reMarkable-Ausgabe
+%============================================================
+% Separater Build-Wrapper. Die A4-Fassung und ihre Registry-Artefakte
+% bleiben unveraendert.
+
+\AddToHook{class/subfiles/after}{%
+  \RequirePackage[
+    paperwidth=156mm,
+    paperheight=208mm,
+    left=9mm,
+    right=17mm,
+    top=10mm,
+    bottom=12mm,
+    footskip=7mm,
+    includefoot
+  ]{geometry}%
+
+  % Der Sonderbuild schreibt seine Formel-Registry unter einem eigenen Namen.
+  % Die regulaeren B31-Artefakte bleiben dadurch unveraendert.
+  \renewcommand{\BandSetupStandalone}[1]{%
+    \directlua{banddeps.emit_external_documents("B31")}%
+    \directlua{
+      thmlookup.registry_path = "registry/_B31-remarkable.registry.tsv"
+      thmlookup.debug_path = "registry/_B31-remarkable.debug.log"
+      thmlookup.prepare_run()
+      banddeps.load_predecessor_registries("B31")
+    }%
+  }%
+
+  \setlength{\emergencystretch}{2em}%
+  \linespread{1.04}%
+  \AtBeginDocument{\raggedbottom}%
+  \hypersetup{pdfstartview=FitH}%
+}
+
+\input{Bd. 31 - Endliche Halbgruppen.tex}
