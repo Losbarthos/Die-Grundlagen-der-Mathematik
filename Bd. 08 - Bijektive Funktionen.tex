@@ -63,6 +63,20 @@ Komposition und Erweiterung.
   \DeltaPrem{Bijektive Funktionen}{ }
 }
 
+\FormulaThmDeltaK[Subbeweiseinsetzung für bijektive Funktionen]{%
+  [F\colon A\to B]\vdots P\dsep F\colon A\bij B\vdash P%
+}{BijectiveFunctionSubproofElimination}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Aussagevariablen}{P}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{1}{F\colon A\bij B}{\rA}
+  \proofstep{1}{F\colon A\to B}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{1}}
+  \proofstep{1}{P}{[F\colon A\to B]\vdots P(2)}
+\end{tabproof}
+
 \FormulaThmDelta{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}{
 \DeltaRow{Mengen}{A\dsep B}
 }
@@ -398,11 +412,74 @@ punktweise dessen Urbild beschreibt.
     \Bigr)
   \end{aligned}%
 }{BijectiveRestrictionIffPointwiseCompatibility}{%
-  \DeltaRow{Mengen}{A\dsep B\dsep S\dsep T\dsep x\dsep y}
+  \DeltaRow{Mengen}{A\dsep B\dsep S\dsep T\dsep x}
   \DeltaRow{Funktionen}{F}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Aus der eingeschränkten Bijektivität]{%
+  \proofpartwideindR[Bildrichtung \(x\in S\Rightarrow F(x)\in T\)]{%
+    \begin{aligned}[t]
+      &F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
+        F\restriction_S\colon S\bij T\dsep x\in A\dsep x\in S\\[-2pt]
+      &\vdash F(x)\in T
+    \end{aligned}%
+  }{%
+    F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
+    F\restriction_S\colon S\bij T\dsep x\in A\dsep x\in S
+    \vdash F(x)\in T
+  }[BijectiveRestrictionSubsetMembershipImpliesTargetMembership]
+    \proofstepwidestar[1]{F\colon A\bij B}{\rA}
+    \proofstepwidestar[2]{S\subseteq A}{\rA}
+    \proofstepwidestar[3]{T\subseteq B}{\rA}
+    \proofstepwidestar[4]{F\restriction_S\colon S\bij T}{\rA}
+    \proofstepwidestar[5]{x\in A}{\rA}
+    \proofstepwidestar[6]{x\in S}{\rA}
+    \proofstepwidestar[4,6]{(F\restriction_S)(x)\in T}{%
+      \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{4,6}}
+    \proofstepwidestarbreakkeep[2,6]{(F\restriction_S)(x)=F(x)}{%
+      \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
+        F\restriction_C(x)=F(x)}[thm]{2,6}}
+    \proofstepwidestar[2,4,6]{F(x)\in T}{\rIE{8,7}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Urbildrichtung \(F(x)\in T\Rightarrow x\in S\)]{%
+    \begin{aligned}[t]
+      &F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
+        F\restriction_S\colon S\bij T\dsep x\in A\dsep F(x)\in T\\[-2pt]
+      &\vdash x\in S
+    \end{aligned}%
+  }{%
+    F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
+    F\restriction_S\colon S\bij T\dsep x\in A\dsep F(x)\in T
+    \vdash x\in S
+  }[BijectiveRestrictionTargetMembershipImpliesSubsetMembership]
+    \proofstepwidestar[1]{F\colon A\bij B}{\rA}
+    \proofstepwidestar[2]{S\subseteq A}{\rA}
+    \proofstepwidestar[3]{T\subseteq B}{\rA}
+    \proofstepwidestar[4]{F\restriction_S\colon S\bij T}{\rA}
+    \proofstepwidestar[5]{x\in A}{\rA}
+    \proofstepwidestar[6]{F(x)\in T}{\rA}
+    \proofstepwidestar[4]{(F\restriction_S)[S]=T}{%
+      \FormulaRefAuto{F\colon A\bij B \vdash F[A]=B}[thm]{4}}
+    \proofstepwidestar[1]{F\colon A\to B}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{1}}
+    \proofstepwidestarbreakkeep[1,2]{(F\restriction_S)[S]=F[S]}{%
+      \FormulaRefAuto{C\subseteq A \dsep F\colon A\to B
+        \vdash (F\restriction_C)[C]=F[C]}[thm]{2,8}}
+    \proofstepwidestar[1,2,4]{T=F[S]}{%
+      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{7,9}}
+    \proofstepwidestar[1,2,4,6]{F(x)\in F[S]}{\rIE{10,6}}
+    \proofstepwidestar[1]{F\colon A\inj B}{%
+      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}[thm]{1}}
+    \proofstepwidestar[2]{S\in\powerset(A)}{%
+      \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{2}}
+    \proofstepwidestar[1,2,4,5,6]{x\in S}{%
+      \FormulaRefAuto{F\colon A\inj B \dsep Y\in\powerset(A)
+        \dsep x\in A\dsep F(x)\in F[Y] \vdash x\in Y}[thm]{%
+        12,13,5,11}}
+  \closeproofpartwideindR
+
+  \pagebreak[3]
+  \proofpartwideindR[Zusammenführung zur punktweisen Äquivalenz]{%
     \begin{aligned}[t]
       &F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
         F\restriction_S\colon S\bij T\\[-2pt]
@@ -419,51 +496,27 @@ punktweise dessen Urbild beschreibt.
     \proofstepwidestar[2]{S\subseteq A}{\rA}
     \proofstepwidestar[3]{T\subseteq B}{\rA}
     \proofstepwidestar[4]{F\restriction_S\colon S\bij T}{\rA}
-    \proofstepwidestar[4]{F\restriction_S\colon S\to T}{%
-      \FormulaRefAuto{Bijektive Funktion}[def]{4}}
-    \proofstepwidestar[4]{F\restriction_S\colon S\sur T}{%
-      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\sur B}[thm]{4}}
-    \proofstepwidestar[1]{F\colon A\inj B}{%
-      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}[thm]{1}}
-    \proofstepwidestar[8]{x\in A}{\rA}
-    \proofstepwidestar[9]{x\in S}{\rA}
-    \proofstepwidestar[4,9]{(F\restriction_S)(x)\in T}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{5,9}}
-    \proofstepwidestar[2,9]{(F\restriction_S)(x)=F(x)}{%
-      \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
-        F\restriction_C(x)=F(x)}[thm]{2,9}}
-    \proofstepwidestar[2,4,9]{F(x)\in T}{\rIE{11,10}}
-    \proofstepwidestar[2,4]{x\in S\rightarrow F(x)\in T}{\rRI{9,12}}
-    \proofstepwidestar[14]{F(x)\in T}{\rA}
-    \proofstepwidestar[4,14]{%
-      \exists y\in S\,\bigl((F\restriction_S)(y)=F(x)\bigr)}{%
-      \FormulaRefAuto{Surjektivität}[ax]{6,14}}
-    \proofstepwidestar[16]{%
-      y\in S\land (F\restriction_S)(y)=F(x)}{\rA}
-    \proofstepwidestar[16]{y\in S}{\rAEa{16}}
-    \proofstepwidestar[16]{(F\restriction_S)(y)=F(x)}{\rAEb{16}}
-    \proofstepwidestar[2,16]{y\in A}{%
-      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,17}}
-    \proofstepwidestar[2,16]{(F\restriction_S)(y)=F(y)}{%
-      \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
-        F\restriction_C(x)=F(x)}[thm]{2,17}}
-    \proofstepwidestar[2,16]{F(x)=F(y)}{%
-      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{18,20}}
-    \proofstepwidestar[1,2,8,16]{x=y}{%
-      \FormulaRefAuto{Injektivität}[ax]{7,8,19,21}}
-    \proofstepwidestar[1,2,8,16]{y=x}{%
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{22}}
-    \proofstepwidestar[1,2,8,16]{x\in S}{\rIE{23,17}}
-    \proofstepwidestar[1,2,4,8,14]{x\in S}{\rEE{15,16,24}}
-    \proofstepwidestar[1,2,4,8]{F(x)\in T\rightarrow x\in S}{\rRI{14,25}}
-    \proofstepwidestar[1,2,4,8]{x\in S\leftrightarrow F(x)\in T}{%
-      \rLRI{13,26}}
-    \proofstepwidestar[1,2,4]{%
+    \proofstepwidestar[5]{x\in A}{\rA}
+    \proofstepwidestar[6]{x\in S}{\rA}
+    \proofstepwidestar[1,2,3,4,5,6]{F(x)\in T}{%
+      \FormulaRefAuto{BijectiveRestrictionSubsetMembershipImpliesTargetMembership}[thm]{%
+        1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5]{x\in S\rightarrow F(x)\in T}{%
+      \rRI{6,7}}
+    \proofstepwidestar[9]{F(x)\in T}{\rA}
+    \proofstepwidestar[1,2,3,4,5,9]{x\in S}{%
+      \FormulaRefAuto{BijectiveRestrictionTargetMembershipImpliesSubsetMembership}[thm]{%
+        1,2,3,4,5,9}}
+    \proofstepwidestar[1,2,3,4,5]{F(x)\in T\rightarrow x\in S}{%
+      \rRI{9,10}}
+    \proofstepwidestar[1,2,3,4,5]{x\in S\leftrightarrow F(x)\in T}{%
+      \rLRI{8,11}}
+    \proofstepwidestar[1,2,3,4]{%
       \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)}{%
-      \rUI{\rRI{8,27}}}
+      \rUI{\rRI{5,12}}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Aus der punktweisen Verträglichkeit]{%
+  \proofpartwideindR[Rückrichtung zur eingeschränkten Bijektivität]{%
     \begin{aligned}[t]
       &F\colon A\bij B\dsep S\subseteq A\dsep T\subseteq B\dsep
         \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)\\[-2pt]
@@ -499,6 +552,7 @@ punktweise dessen Urbild beschreibt.
       \rIE{10,11}}
   \closeproofpartwideindR
 
+  \pagebreak[4]
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{F\colon A\bij B}{\rA}
     \proofstepwidestar[2]{S\subseteq A}{\rA}
@@ -508,7 +562,7 @@ punktweise dessen Urbild beschreibt.
       \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)}{%
       \FormulaRefAuto{BijectiveRestrictionImpliesPointwiseCompatibility}[thm]{%
         1,2,3,4}}
-    \proofstepwidestar[1,2,3]{%
+    \proofstepwidestarbreakkeep[1,2,3]{%
       F\restriction_S\colon S\bij T
       \rightarrow
       \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)}{%
@@ -518,10 +572,10 @@ punktweise dessen Urbild beschreibt.
     \proofstepwidestar[1,2,3,7]{F\restriction_S\colon S\bij T}{%
       \FormulaRefAuto{PointwiseCompatibilityImpliesBijectiveRestriction}[thm]{%
         1,2,3,7}}
-    \proofstepwidestar[1,2,3]{%
+    \proofstepwidestarbreakkeep[1,2,3]{%
       \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)
       \rightarrow F\restriction_S\colon S\bij T}{\rRI{7,8}}
-    \proofstepwidestar[1,2,3]{%
+    \proofstepwidestarbreakkeep[1,2,3]{%
       F\restriction_S\colon S\bij T
       \leftrightarrow
       \forall x\in A\,\bigl(x\in S\leftrightarrow F(x)\in T\bigr)}{%
@@ -1659,43 +1713,31 @@ Potenzmengenabbildung]{%
       \FormulaRefAuto{BijectiveRestrictionImpliesPointwiseCompatibility}[thm]{%
         4,6,7,2}}
     \proofstepwidestar[9]{X\in\powerset(A)}{\rA}
-    \proofstepwidestar[1,2,9]{%
-      X\in\powerset(A)\setminus C
-      \leftrightarrow
-      \PowMap{F}(X)\in\powerset(B)\setminus C}{%
-      \rRE{\rUE{8},9}}
-    \proofstepwidestar[1,2,9]{%
-      X\notin\powerset(A)\setminus C
-      \leftrightarrow
-      \PowMap{F}(X)\notin\powerset(B)\setminus C}{%
-      \FormulaRefAuto{P \leftrightarrow Q \eqvdash
-        \neg P \leftrightarrow \neg Q}[thm]{10}}
-    \proofstepwidestar[9]{%
-      X\notin\powerset(A)\setminus C\leftrightarrow X\in C}{%
-      \FormulaRefAuto{RelCompNotMembership}[thm]{9}}
     \proofstepwidestar[1,9]{\PowMap{F}(X)\in\powerset(B)}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
         5,9}}
-    \proofstepwidestar[1,9]{%
-      \PowMap{F}(X)\notin\powerset(B)\setminus C
-      \leftrightarrow
-      \PowMap{F}(X)\in C}{%
-      \FormulaRefAuto{RelCompNotMembership}[thm]{13}}
-    \proofstepwidestar[9]{%
-      X\in C\leftrightarrow X\notin\powerset(A)\setminus C}{%
-      \FormulaRefAuto{P\leftrightarrow Q\vdash Q\leftrightarrow P}[thm]{12}}
-    \proofstepwidestar[1,2,9]{%
-      X\in C\leftrightarrow\PowMap{F}(X)\in C}{%
-      \rChain{15,11,14}}
+    \proofstepwide[9]{X\in C}{\leftrightarrow}{%
+      X\notin\powerset(A)\setminus C}{%
+      \FormulaRefAuto{P\leftrightarrow Q\vdash Q\leftrightarrow P}[thm]{%
+        \FormulaRefAuto{RelCompNotMembership}[thm]{9}}}
+    \proofstepwide[1,2,9]{}{\leftrightarrow}{%
+      \PowMap{F}(X)\notin\powerset(B)\setminus C}{%
+      \FormulaRefAuto{P \leftrightarrow Q \eqvdash
+        \neg P \leftrightarrow \neg Q}[thm]{%
+        \rRE{\rUE{8},9}}}
+    \proofstepwide[1,9]{}{\leftrightarrow}{\PowMap{F}(X)\in C}{%
+      \FormulaRefAuto{RelCompNotMembership}[thm]{10}}
+    \proofstepwide[1,2,9]{X\in C}{\leftrightarrow}{%
+      \PowMap{F}(X)\in C}{\rChain{11,13}}
     \proofstepwidestar[1,9]{\PowMap{F}(X)=F[X]}{%
       \FormulaRefAuto{F\colon A\to B\dsep X\in\powerset(A)
         \vdash\PowMap{F}(X)=F[X]}[thm]{3,9}}
     \proofstepwidestar[1,2,9]{X\in C\leftrightarrow F[X]\in C}{%
-      \rIE{17,16}}
+      \rIE{15,14}}
     \proofstepwidestar[1,2]{%
       \forall X\in\powerset(A)\,
         \bigl(X\in C\leftrightarrow F[X]\in C\bigr)}{%
-      \rUI{\rRI{9,18}}}
+      \rUI{\rRI{9,16}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Aus der \(C\)-Verträglichkeit]{%
@@ -2191,83 +2233,115 @@ vollkommen beliebig.
   \end{aligned}%
 }{CaseFunBijectiveDisjointTargets}{%
   \DeltaRow{Mengen}{A_0\dsep A_1\dsep B_0\dsep B_1\dsep x\dsep y}
+  \DeltaRow{Hilfsmengen und -variablen}{A\dsep B\dsep C\dsep D\dsep u}
   \DeltaRow{Funktionen}{f_0\dsep f_1\dsep
     \CaseFun{A_0}{A_1}{f_0}{f_1}}
+  \DeltaRow{Hilfsfunktionen}{f\dsep G}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Surjektivität]{%
+  \proofpartwideindR[Urbildtransport entlang eines surjektiven Zweiges]{%
+    \begin{aligned}[t]
+      &f\colon A\sur B\dsep A\subseteq C\dsep G\colon C\to D\dsep
+        u\in A\vdots G(u)=f(u)\mid_u\dsep y\in B\vdash{}\\[-2pt]
+      &\exists x\in C\,G(x)=y
+    \end{aligned}%
+  }{%
+    f\colon A\sur B\dsep A\subseteq C\dsep G\colon C\to D\dsep
+    u\in A\vdots G(u)=f(u)\mid_u\dsep y\in B
+    \vdash \exists x\in C\,G(x)=y
+  }[SurjectiveBranchWitnessTransfer]
+    \proofstepwidestar[1]{f\colon A\sur B}{\rA}
+    \proofstepwidestar[2]{A\subseteq C}{\rA}
+    \proofstepwidestar[3]{G\colon C\to D}{\rA}
+    \proofstepwidestar[4]{y\in B}{\rA}
+    \proofstepwidestar[1,4]{\exists x\in A\,(f(x)=y)}{%
+      \FormulaRefAuto{Surjektivität}[ax]{1,4}}
+    \proofstepwidestar[6]{x\in A\land f(x)=y}{\rA}
+    \proofstepwidestar[6]{x\in A}{\rAEa{6}}
+    \proofstepwidestar[6]{f(x)=y}{\rAEb{6}}
+    \proofstepwidestar[3,6]{G(x)=f(x)}{%
+      \ensuremath{u\in A\vdots G(u)=f(u)\mid_u(7)}}
+    \proofstepwidestar[3,6]{G(x)=y}{%
+      \FormulaRefAuto{a=b \dsep c=d \dsep P(b,d)\vdash P(a,c)}[thm]{%
+        9,\rII,8}}
+    \proofstepwidestar[2,6]{x\in C}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,7}}
+    \proofstepwidestar[2,3,6]{\exists x\in C\,(G(x)=y)}{%
+      \rEI{\rAI{11,10}}}
+    \proofstepwidestar[1,2,3,4]{\exists x\in C\,(G(x)=y)}{%
+      \rEE{5,6,12}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Surjektives Verkleben]{%
     \begin{aligned}[t]
       &A_0\cap A_1=\varnothing\dsep
-        f_0\colon A_0\bij B_0\dsep f_1\colon A_1\bij B_1\dsep
-        y\in B_0\cup B_1\vdash{}\\[-2pt]
-      &\exists x\in A_0\cup A_1\,
-        \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y
+        f_0\colon A_0\bij B_0\dsep f_1\colon A_1\bij B_1\vdash{}\\[-2pt]
+      &\CaseFun{A_0}{A_1}{f_0}{f_1}
+        \colon A_0\cup A_1\sur B_0\cup B_1
     \end{aligned}%
   }{%
     A_0\cap A_1=\varnothing\dsep
-    f_0\colon A_0\bij B_0\dsep f_1\colon A_1\bij B_1\dsep
-    y\in B_0\cup B_1\vdash
-    \exists x\in A_0\cup A_1\,
-    \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y
+    f_0\colon A_0\bij B_0\dsep f_1\colon A_1\bij B_1
+    \vdash \CaseFun{A_0}{A_1}{f_0}{f_1}
+    \colon A_0\cup A_1\sur B_0\cup B_1
   }[CaseFunBijectiveDisjointTargetsSurjectivity]
     \proofstepwidestar[1]{A_0\cap A_1=\varnothing}{\rA}
     \proofstepwidestar[2]{f_0\colon A_0\bij B_0}{\rA}
     \proofstepwidestar[3]{f_1\colon A_1\bij B_1}{\rA}
-    \proofstepwidestar[4]{y\in B_0\cup B_1}{\rA}
-    \proofstepwidestar[4]{y\in B_0\lor y\in B_1}{%
-      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{4}}
-    \proofstepwidestar[6]{y\in B_0}{\rA}
-    \proofstepwidestar[2,6]{\exists x\in A_0\,(f_0(x)=y)}{%
-      \FormulaRefAuto{Surjektivität}[ax]{2,6}}
-    \proofstepwidestar[8]{x\in A_0\land f_0(x)=y}{\rA}
-    \proofstepwidestar[8]{x\in A_0}{\rAEa{8}}
-    \proofstepwidestar[8]{f_0(x)=y}{\rAEb{8}}
-    \proofstepwidestar[2]{f_0\colon A_0\to B_0}{%
-      \FormulaRefAuto{Bijektive Funktion}[def]{2}}
-    \proofstepwidestar[3]{f_1\colon A_1\to B_1}{%
-      \FormulaRefAuto{Bijektive Funktion}[def]{3}}
-    \proofstepwidestar[]{B_0\subseteq B_0\cup B_1}{%
-      \FormulaRefAuto{A\subseteq A\cup B}[thm]}
-    \proofstepwidestar[]{B_1\subseteq B_0\cup B_1}{%
-      \FormulaRefAuto{B\subseteq A\cup B}[thm]}
-    \proofstepwidestar[2]{f_0\colon A_0\to B_0\cup B_1}{%
-      \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
-        F\colon A\to C}[thm]{11,13}}
-    \proofstepwidestar[3]{f_1\colon A_1\to B_0\cup B_1}{%
-      \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
-        F\colon A\to C}[thm]{12,14}}
-    \proofstepwidestar[2,3,8]{%
+    \proofstepwidestarbreakkeep[2]{f_0\colon A_0\to B_0\cup B_1}{%
+      \FormulaRefAuto{BijectiveFunctionSubproofElimination}[thm]{%
+        \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
+          F\colon A\to C}[thm]{%
+            \FormulaRefAuto{A\subseteq A\cup B}[thm]},2}}
+    \proofstepwidestarbreakkeep[3]{f_1\colon A_1\to B_0\cup B_1}{%
+      \FormulaRefAuto{BijectiveFunctionSubproofElimination}[thm]{%
+        \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash
+          F\colon A\to C}[thm]{%
+            \FormulaRefAuto{B\subseteq A\cup B}[thm]},3}}
+    \proofstepwidestar[2,3]{%
+      \CaseFun{A_0}{A_1}{f_0}{f_1}
+        \colon A_0\cup A_1\to B_0\cup B_1}{%
+      \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\vdash
+        \CaseFun{A}{B}{f}{g}\colon A\cup B\to C}[thm]{4,5}}
+    \proofstepwidestar[2]{f_0\colon A_0\sur B_0}{%
+      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\sur B}[thm]{2}}
+    \proofstepwidestar[3]{f_1\colon A_1\sur B_1}{%
+      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\sur B}[thm]{3}}
+    \proofstepwidestar[9]{x\in A_0}{\rA}
+    \proofstepwidestarbreakkeep[2,3,9]{%
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=f_0(x)}{%
       \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
-        \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{15,16,9}}
-    \proofstepwidestar[2,3,8]{%
-      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{\rChain{17,10}}
-    \proofstepwidestar[8]{x\in A_0\cup A_1}{%
-      \FormulaRefAuto{z \in A \vdash z \in A \cup B}[thm]{9}}
-    \proofstepwidestar[2,3,6]{\exists x\in A_0\cup A_1\,
-      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
-      \rEE{7,8,\rEI{\rAI{19,18}}}}
-    \proofstepwidestar[21]{y\in B_1}{\rA}
-    \proofstepwidestar[3,21]{\exists x\in A_1\,(f_1(x)=y)}{%
-      \FormulaRefAuto{Surjektivität}[ax]{3,21}}
-    \proofstepwidestar[23]{x\in A_1\land f_1(x)=y}{\rA}
-    \proofstepwidestar[23]{x\in A_1}{\rAEa{23}}
-    \proofstepwidestar[23]{f_1(x)=y}{\rAEb{23}}
-    \proofstepwidestar[1,2,3,23]{%
+        \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{4,5,9}}
+    \proofstepwidestar[11]{x\in A_1}{\rA}
+    \proofstepwidestarbreakkeep[1,2,3,11]{%
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=f_1(x)}{%
       \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
         g\colon B\to C\dsep x\in B\vdash
-        \CaseFun{A}{B}{f}{g}(x)=g(x)}[thm]{1,15,16,24}}
-    \proofstepwidestar[1,2,3,23]{%
-      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{\rChain{26,25}}
-    \proofstepwidestar[23]{x\in A_0\cup A_1}{%
-      \FormulaRefAuto{z \in B \vdash z \in A \cup B}[thm]{24}}
-    \proofstepwidestar[1,2,3,21]{\exists x\in A_0\cup A_1\,
+        \CaseFun{A}{B}{f}{g}(x)=g(x)}[thm]{1,4,5,11}}
+    \proofstepwidestar[13]{y\in B_0\cup B_1}{\rA}
+    \proofstepwidestar[13]{y\in B_0\lor y\in B_1}{%
+      \FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{13}}
+    \proofstepwidestar[15]{y\in B_0}{\rA}
+    \proofstepwidestarbreakkeep[2,3,15]{\exists x\in A_0\cup A_1\,
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
-      \rEE{22,23,\rEI{\rAI{28,27}}}}
-    \proofstepwidestar[1,2,3,4]{\exists x\in A_0\cup A_1\,
+      \FormulaRefAuto{SurjectiveBranchWitnessTransfer}[thm]{%
+        7,\FormulaRefAuto{A\subseteq A\cup B}[thm],6,9,10,15}}
+    \proofstepwidestar[17]{y\in B_1}{\rA}
+    \proofstepwidestarbreakkeep[1,2,3,17]{\exists x\in A_0\cup A_1\,
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
-      \rOE{5,6,20,21,29}}
+      \FormulaRefAuto{SurjectiveBranchWitnessTransfer}[thm]{%
+        8,\FormulaRefAuto{B\subseteq A\cup B}[thm],6,11,12,17}}
+    \proofstepwidestar[1,2,3,13]{\exists x\in A_0\cup A_1\,
+      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
+      \rOE{14,15,16,17,18}}
+    \proofstepwidestar[1,2,3]{\forall y\in B_0\cup B_1\,
+      \exists x\in A_0\cup A_1\,
+      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
+      \rUI{\rRI{13,19}}}
+    \proofstepwidestar[1,2,3]{%
+      \CaseFun{A_0}{A_1}{f_0}{f_1}
+        \colon A_0\cup A_1\sur B_0\cup B_1}{%
+      \FormulaRefAuto{Surjektive Funktion}[def]{6,20}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -2287,20 +2361,16 @@ vollkommen beliebig.
       \CaseFun{A_0}{A_1}{f_0}{f_1}\colon
       A_0\cup A_1\inj B_0\cup B_1}{%
       \FormulaRefAuto{CaseFunInjectiveDisjointImages}[thm]{1,5,6,7}}
-    \proofstepwidestar[9]{y\in B_0\cup B_1}{\rA}
-    \proofstepwidestar[1,3,4,9]{\exists x\in A_0\cup A_1\,
-      \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
-      \FormulaRefAuto{CaseFunBijectiveDisjointTargetsSurjectivity}[thm]{%
-        1,3,4,9}}
     \proofstepwidestar[1,2,3,4]{%
       \CaseFun{A_0}{A_1}{f_0}{f_1}\colon
       A_0\cup A_1\sur B_0\cup B_1}{%
-      \FormulaRefAuto{Surjektive Funktion}[def]{8,\rUI{\rRI{9,10}}}}
+      \FormulaRefAuto{CaseFunBijectiveDisjointTargetsSurjectivity}[thm]{%
+        1,3,4}}
     \proofstepwidestar[1,2,3,4]{%
       \CaseFun{A_0}{A_1}{f_0}{f_1}\colon
       A_0\cup A_1\bij B_0\cup B_1}{%
       \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
-        \vdash F\colon A\bij B}[thm]{8,11}}
+        \vdash F\colon A\bij B}[thm]{8,9}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
