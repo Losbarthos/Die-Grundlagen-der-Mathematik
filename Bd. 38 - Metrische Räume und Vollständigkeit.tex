@@ -1,0 +1,1410 @@
+%============================================================
+%  Bd. 38 - Metrische Räume und Vollständigkeit
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B38}
+}{
+}
+
+\title{Bd. 38 - Metrische Räume und Vollständigkeit}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{38}
+
+\hypersetup{
+  pdftitle={Bd. 38 - Metrische Räume und Vollständigkeit},
+  pdfauthor={Martin Kunze}
+}
+
+\begin{document}
+
+\title{Bd. 38 - Metrische Räume und Vollständigkeit}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{38}
+\renewcommand{\FormulaBandID}{38}
+
+\chapter{Einleitung}
+
+Band~19 hat auf den reellen Zahlen den Abstand
+\(\RealDist{x}{y}=|x-y|\) konstruiert und seine vier Grundgesetze bewiesen.
+Band~20 stellt die dabei benötigten Aussagen über endliche Anfangsabschnitte
+bereit. Band~21 hat mit dem reellen Abstand Konvergenz und die
+Cauchy-Eigenschaft reeller Folgen untersucht. In vielen dieser Beweise wurden
+jedoch weder die Ordnung noch die Rechenoperationen der reellen Zahlen
+benutzt. Benötigt wurden nur Positivität, Definitheit, Symmetrie und
+Dreiecksungleichung des Abstands.
+
+Dieser Band erhebt genau diese vier Eigenschaften zu Axiomen einer
+\textbf{Metrik}. Dadurch werden Kugeln, Konvergenz, Cauchy-Folgen,
+Vollständigkeit, Stetigkeit und Folgenkompaktheit auf beliebigen Mengen
+verfügbar. Die bereits entwickelte reelle Theorie bleibt dabei das leitende
+Beispiel und wird nicht ersetzt: Sie erscheint nun als Spezialfall des
+metrischen Raums \((\mathbb R,d_{\mathbb R})\).
+
+Eine Metrik setzt auf ihrer Trägermenge keine Addition und keine
+Skalarmultiplikation voraus. Normen werden deshalb noch nicht als
+Grundbegriff eingeführt. Sie gehören in die spätere Theorie der Vektorräume;
+das Schlusskapitel ordnet bereits ein, wie jede Norm eine Metrik erzeugt.
+
+Wie in Band~21 werden für reelle Zahlen die gewöhnlichen Symbole
+\(0,1,+,-,\cdot,|\,\cdot\,|,<,\leq\) verwendet. Dies sind weiterhin nur die
+dort vereinbarten Abkürzungen für die in Band~19 konstruierten Operationen.
+
+\chapter{Metriken und offene Kugeln}
+
+\section{Der metrische Grundbegriff}
+
+\FormulaDefDeltaK[Metrik und metrischer Raum]{%
+  \begin{aligned}[t]
+  &d\colon X\times X\to\mathbb R\vdash
+    \operatorname{Metrik}_{X}(d)\coloneqq{}\\[-2pt]
+  &\quad\forall x,y,z\in X\,
+    \Bigl(0\leq d(x,y)\land{}\\[-2pt]
+  &\hspace{38mm}
+      \bigl(d(x,y)=0\leftrightarrow x=y\bigr)\land{}\\[-2pt]
+  &\hspace{38mm}
+      d(x,y)=d(y,x)\land{}\\[-2pt]
+  &\hspace{38mm}
+      d(x,z)\leq d(x,y)+d(y,z)\Bigr).
+  \end{aligned}%
+}{MetricSpaceDef}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{d}
+  \DeltaRow{Neues Prädikat}{\operatorname{Metrik}_{X}}
+}
+
+Gilt \(\operatorname{Metrik}_{X}(d)\), so heißt \(d\) eine
+\textbf{Metrik auf \(X\)} und das Paar \((X,d)\) ein
+\textbf{metrischer Raum}. Die vier Zeilen heißen Positivität,
+Definitheit, Symmetrie und Dreiecksungleichung. Nur die Werte von \(d\) sind
+reelle Zahlen; die Punkte von \(X\) brauchen keinerlei algebraische Struktur.
+
+Die Definitheit trennt verschiedene Punkte: Der Abstand null ist nicht bloß
+klein, sondern kennzeichnet Gleichheit. Die Dreiecksungleichung besagt, dass
+ein Umweg über einen dritten Punkt den direkten Abstand nicht unterschreiten
+kann.
+
+\FormulaThmDeltaK[Umgekehrte Dreiecksungleichung]{%
+  \operatorname{Metrik}_{X}(d)\dsep x,y,z\in X
+  \vdash
+  |d(x,z)-d(y,z)|\leq d(x,y)%
+}{MetricReverseTriangleInequality}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{d}
+}
+\begin{proof}
+Aus der Dreiecksungleichung folgen
+\[
+ d(x,z)\leq d(x,y)+d(y,z)
+ \quad\text{und}\quad
+ d(y,z)\leq d(y,x)+d(x,z)=d(x,y)+d(x,z).
+\]
+Nach Umstellen erhält man
+\[
+ d(x,z)-d(y,z)\leq d(x,y),
+ \qquad
+ d(y,z)-d(x,z)\leq d(x,y).
+\]
+Diese beiden Ungleichungen sind zusammen genau die behauptete
+Abschätzung des Absolutbetrags.
+\end{proof}
+
+\section{Das reelle und das diskrete Beispiel}
+
+Die in Band~19 eingeführte zweistellige Abstandsvorschrift besitzt für jedes
+reelle Zahlenpaar genau einen reellen Wert. Das Prinzip der typisierten
+Funktionsdefinition fasst diese Vorschrift daher zu einer Abbildung zusammen.
+
+\FormulaDefDeltaK[Die reelle Abstandsfunktion]{%
+  \begin{aligned}[t]
+  &d_{\mathbb R}\colon\mathbb R\times\mathbb R\to\mathbb R,\\[-2pt]
+  &x,y\in\mathbb R\vdash
+    d_{\mathbb R}(x,y)\coloneqq|x-y|.
+  \end{aligned}%
+}{RealMetricDistanceFunctionDef}{%
+  \DeltaRow{Mengen}{\mathbb R\dsep x\dsep y}
+  \DeltaRow{Neue Funktion}{d_{\mathbb R}}
+}
+
+\FormulaThmDeltaK[Der reelle Abstand ist eine Metrik]{%
+  \operatorname{Metrik}_{\mathbb R}(d_{\mathbb R})%
+}{RealDistanceIsMetric}{%
+  \DeltaRow{Mengen}{\mathbb R}
+  \DeltaRow{Funktionen}{d_{\mathbb R}}
+}
+\begin{proof}
+Die Funktionstypisierung stammt aus
+\FormulaRefAuto{RealMetricDistanceFunctionDef}[def].
+
+Nach
+\FormulaRefAuto{RealDistance}[def] ist
+\(d_{\mathbb R}(x,y)=|x-y|\). Positivität, Definitheit, Symmetrie und
+Dreiecksungleichung sind genau die vier Aussagen aus
+\FormulaRefAuto{RealDistanceLaws}[thm].
+\end{proof}
+
+Das nächste Beispiel zeigt, dass eine Metrik weder aus Zahlen noch aus einer
+geometrischen Konstruktion stammen muss.
+
+\FormulaDefDeltaK[Diskrete Metrik]{%
+  \begin{aligned}[t]
+  &\delta_X\colon X\times X\to\mathbb R,\\[-2pt]
+  &x,y\in X\vdash\delta_X(x,y)\coloneqq
+  \begin{cases}
+    0,&x=y,\\
+    1,&x\neq y,
+  \end{cases}
+  \end{aligned}%
+}{DiscreteMetricDef}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y}
+  \DeltaRow{Neue Funktion}{\delta_X}
+}
+
+\FormulaThmDeltaK[Die diskrete Metrik ist eine Metrik]{%
+  \operatorname{Metrik}_{X}(\delta_X)%
+}{DiscreteMetricIsMetric}{%
+  \DeltaRow{Mengen}{X}
+  \DeltaRow{Funktionen}{\delta_X}
+}
+\begin{proof}
+Die Werte \(0\) und \(1\) sind nichtnegativ. Nach Definition gilt
+\(\delta_X(x,y)=0\) genau für \(x=y\), und die Fallunterscheidung ist
+symmetrisch in \(x\) und \(y\). Für die Dreiecksungleichung ist nur der Fall
+\(x\neq z\) zu betrachten. Dann ist die linke Seite gleich \(1\). Wären
+beide Summanden rechts null, so wäre \(x=y=z\), ein Widerspruch. Daher ist
+mindestens einer der beiden Summanden gleich \(1\), und die Ungleichung gilt.
+\end{proof}
+
+\section{Teilmengen und eingeschränkte Metriken}
+
+\FormulaDefDeltaK[Teilraummetrik]{%
+  \operatorname{Metrik}_{X}(d)\dsep Y\subseteq X
+  \vdash
+  d_Y\coloneqq d\restriction_{Y\times Y}%
+}{MetricSubspaceRestrictionDef}{%
+  \DeltaRow{Mengen}{X\dsep Y}
+  \DeltaRow{Funktionen}{d\dsep d_Y}
+}
+
+\FormulaThmDeltaK[Einschränkung einer Metrik]{%
+  \operatorname{Metrik}_{X}(d)\dsep Y\subseteq X
+  \vdash
+  \operatorname{Metrik}_{Y}(d_Y)%
+}{MetricSubspaceRestrictionIsMetric}{%
+  \DeltaRow{Mengen}{X\dsep Y}
+  \DeltaRow{Funktionen}{d\dsep d_Y}
+}
+\begin{proof}
+Für Punkte aus \(Y\) stimmen alle Werte von \(d_Y\) mit den entsprechenden
+Werten von \(d\) überein. Daher vererben sich alle vier Metrikaxiome an die
+Einschränkung.
+\end{proof}
+
+Wenn von einer Teilmenge eines metrischen Raums als metrischem Raum gesprochen
+wird, ist ohne weiteren Zusatz stets diese Teilraummetrik gemeint.
+
+\section{Offene Kugeln und offene Mengen}
+
+\FormulaDefDeltaK[Offene metrische Kugel]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep x\in X\dsep r\in\mathbb R\dsep0<r
+  \vdash\\[-2pt]
+  &\quad\MetricBall{d}{x}{r}\coloneqq
+    \{y\in X\mid d(y,x)<r\}.
+  \end{aligned}%
+}{MetricOpenBallDef}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y\dsep r}
+  \DeltaRow{Funktionen}{d}
+  \DeltaRow{Neue Schreibweise}{\MetricBall{d}{x}{r}}
+}
+
+Der Radius ist positiv und der Mittelpunkt gehört wegen
+\(d(x,x)=0<r\) zu seiner Kugel. In \(\mathbb R\) sind diese Kugeln genau die
+bereits bekannten offenen Intervalle.
+
+\FormulaThmDeltaK[Reelle Kugeln sind Epsilon-Umgebungen]{%
+  x,r\in\mathbb R\dsep0<r
+  \vdash
+  \MetricBall{d_{\mathbb R}}{x}{r}=B_r(x)%
+}{RealMetricBallIsEpsilonNeighborhood}{%
+  \DeltaRow{Mengen}{x\dsep r}
+  \DeltaRow{Funktionen}{d_{\mathbb R}}
+}
+\begin{proof}
+Beide Mengen bestehen nach
+\FormulaRefAuto{MetricOpenBallDef}[def] und
+\FormulaRefAuto{RealEpsilonNeighborhood}[def] genau aus den reellen Zahlen
+\(y\) mit \(d_{\mathbb R}(y,x)<r\).
+\end{proof}
+
+\FormulaThmDeltaK[Kugelverkleinerung]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep x\in X\dsep r>0\dsep
+    y\in\MetricBall{d}{x}{r}\vdash\\[-2pt]
+  &\quad \Bigl(r-d(x,y)>0\land
+    \MetricBall{d}{y}{r-d(x,y)}
+      \subseteq\MetricBall{d}{x}{r}\Bigr).
+  \end{aligned}%
+}{MetricBallShrinking}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y\dsep r}
+  \DeltaRow{Funktionen}{d}
+}
+\begin{proof}
+Aus \(y\in B_r^d(x)\) folgt \(d(x,y)<r\), also
+\(r-d(x,y)>0\). Ist
+\(z\in B_{r-d(x,y)}^d(y)\), so liefert die Dreiecksungleichung
+\[
+ d(x,z)\leq d(x,y)+d(y,z)
+ <d(x,y)+r-d(x,y)=r.
+\]
+Somit liegt \(z\) in \(B_r^d(x)\).
+\end{proof}
+
+\FormulaDefDeltaK[Offene und abgeschlossene Teilmenge]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep U,A\subseteq X\vdash\\[-2pt]
+  &\quad\operatorname{Offen}_{d}(U)\coloneqq
+    \forall x\in U\,\exists r\in\mathbb R\,
+      \bigl(0<r\land\MetricBall{d}{x}{r}\subseteq U\bigr),\\[-2pt]
+  &\quad\operatorname{Abgeschlossen}_{d}(A)\coloneqq
+    \operatorname{Offen}_{d}(X\setminus A).
+  \end{aligned}%
+}{MetricOpenClosedSetDef}{%
+  \DeltaRow{Mengen}{X\dsep U\dsep A\dsep x\dsep r}
+  \DeltaRow{Funktionen}{d}
+  \DeltaRow{Neue Prädikate}{\operatorname{Offen}_{d}\dsep
+    \operatorname{Abgeschlossen}_{d}}
+}
+
+\FormulaThmDeltaK[Offene Kugeln sind offen]{%
+  \operatorname{Metrik}_{X}(d)\dsep x\in X\dsep r>0
+  \vdash
+  \operatorname{Offen}_{d}\!\left(\MetricBall{d}{x}{r}\right)%
+}{MetricOpenBallsAreOpen}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep r}
+  \DeltaRow{Funktionen}{d}
+}
+\begin{proof}
+Für jeden Punkt \(y\in B_r^d(x)\) liefert
+\FormulaRefAuto{MetricBallShrinking}[thm] den positiven Radius
+\(r-d(x,y)\) einer um \(y\) liegenden Kugel, die ganz in
+\(B_r^d(x)\) enthalten ist. Dies ist genau die Offenheitsbedingung.
+\end{proof}
+
+\chapter{Folgen in metrischen Räumen}
+
+\section{Metrische Konvergenz}
+
+\FormulaDefDeltaK[Konvergenz in einem metrischen Raum]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep x\in X
+  \vdash\\[-2pt]
+  &\quad\bigl(a_n\MetricTo{d}x\bigr)\coloneqq
+    \forall\varepsilon\in\mathbb R\,
+    \Bigl(0<\varepsilon\rightarrow
+      \exists N\in\mathbb N\,\forall n\in\mathbb N\\[-2pt]
+  &\hspace{63mm}
+      (N\leq n\rightarrow d(a_n,x)<\varepsilon)\Bigr).
+  \end{aligned}%
+}{MetricSequenceConvergenceDef}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a}
+  \DeltaRow{Neue Schreibweise}{a_n\MetricTo{d}x}
+}
+
+Die Aussage bedeutet: Jede noch so kleine Kugel um \(x\) enthält alle bis
+auf endlich viele Folgenglieder. Die Folge darf dieselben Werte mehrfach
+annehmen; entscheidend ist ihre Reihenfolge, nicht nur ihre Wertemenge.
+
+\FormulaThmDeltaK[Übereinstimmung mit der reellen Konvergenz]{%
+  a\colon\mathbb N\to\mathbb R\dsep L\in\mathbb R
+  \vdash
+  \bigl(a_n\MetricTo{d_{\mathbb R}}L\bigr)
+  \leftrightarrow
+  \bigl(a_n\longrightarrow L\bigr)%
+}{RealAndMetricSequenceConvergenceAgree}{%
+  \DeltaRow{Mengen}{L}
+  \DeltaRow{Funktionen}{a\dsep d_{\mathbb R}}
+}
+\begin{proof}
+Nach \FormulaRefAuto{RealDistance}[def] gilt
+\(d_{\mathbb R}(a_n,L)=|a_n-L|\). Nach Einsetzen dieser Gleichheit stimmen
+\FormulaRefAuto{MetricSequenceConvergenceDef}[def] und
+\FormulaRefAuto{RealSequenceConvergenceDef}[def] Wort für Wort überein.
+\end{proof}
+
+\FormulaThmDeltaK[Konvergenz in einem metrischen Teilraum]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep Y\subseteq X\dsep
+    a\colon\mathbb N\to Y\dsep y\in Y\vdash\\[-2pt]
+  &\quad
+    \bigl(a_n\MetricTo{d_Y}y\bigr)
+    \leftrightarrow
+    \bigl(a_n\MetricTo{d}y\bigr).
+  \end{aligned}%
+}{MetricSubspaceConvergenceAgree}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep y\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{d\dsep d_Y\dsep a}
+}
+\begin{proof}
+Da \(Y\subseteq X\), kann \(a\) zugleich als Folge mit Werten in \(X\)
+aufgefasst werden. Für alle Folgenglieder gilt nach
+\FormulaRefAuto{MetricSubspaceRestrictionDef}[def]
+\(d_Y(a_n,y)=d(a_n,y)\). Nach Einsetzen dieser Gleichheit sind beide
+Konvergenzbedingungen identisch.
+\end{proof}
+
+\FormulaThmDeltaK[Eindeutigkeit metrischer Grenzwerte]{%
+  \operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep x,y\in X
+  \dsep a_n\MetricTo{d}x\dsep a_n\MetricTo{d}y
+  \vdash x=y%
+}{MetricSequenceLimitUnique}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep y\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a}
+}
+\begin{proof}
+Angenommen, \(x\neq y\). Dann ist
+\(\varepsilon=d(x,y)/3>0\). Für einen hinreichend großen gemeinsamen
+Index \(n\) gelten
+\(d(a_n,x)<\varepsilon\) und \(d(a_n,y)<\varepsilon\). Mit Symmetrie und
+Dreiecksungleichung folgt
+\[
+ d(x,y)\leq d(x,a_n)+d(a_n,y)
+ <2\varepsilon=\frac23d(x,y),
+\]
+ein Widerspruch.
+\end{proof}
+
+\FormulaThmDeltaK[Konstante Folgen konvergieren]{%
+  \operatorname{Metrik}_{X}(d)\dsep x\in X
+  \vdash
+  (\operatorname{const}_{\mathbb N,x})_n\MetricTo{d}x%
+}{ConstantMetricSequenceConverges}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep n}
+  \DeltaRow{Funktionen}{d\dsep\operatorname{const}_{\mathbb N,x}}
+}
+\begin{proof}
+Jedes Folgenglied ist \(x\), und \(d(x,x)=0<\varepsilon\) für jeden
+positiven Radius \(\varepsilon\).
+\end{proof}
+
+\FormulaThmDeltaK[Teilfolgen erhalten metrische Grenzwerte]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep x\in X
+    \dsep a_n\MetricTo{d}x\dsep
+    \varphi\colon\mathbb N\to\mathbb N\dsep{}\\[-2pt]
+  &\quad\forall n\in\mathbb N\,
+      \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)
+    \vdash a_{\varphi(n)}\MetricTo{d}x.
+  \end{aligned}%
+}{MetricSubsequencePreservesLimit}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep\varphi}
+}
+\begin{proof}
+Eine streng wachsende Folge natürlicher Indizes erfüllt
+\(n\leq\varphi(n)\). Sobald \(n\geq N\) gilt, ist daher auch
+\(\varphi(n)\geq N\), und die Abschätzung der Ausgangsfolge ist anwendbar.
+\end{proof}
+
+\FormulaThmDeltaK[Endliche Änderungen erhalten metrische Grenzwerte]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep a,b\colon\mathbb N\to X\dsep
+    \exists N_0\in\mathbb N\,\forall n\in\mathbb N\,
+      (N_0\leq n\rightarrow a_n=b_n)\vdash\\[-2pt]
+  &\quad\forall x\in X\,
+    \bigl(a_n\MetricTo{d}x\leftrightarrow b_n\MetricTo{d}x\bigr).
+  \end{aligned}%
+}{MetricFiniteModificationPreservesLimit}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep N_0\dsep N\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep b}
+}
+\begin{proof}
+Zu einem Konvergenzindex \(N\) der einen Folge verwendet man für die andere
+den größeren der beiden Indizes \(N\) und \(N_0\). Ab diesem Index stimmen
+die Folgenglieder und damit ihre Abstände von \(x\) überein.
+\end{proof}
+
+\FormulaThmDeltaK[Restfolgen haben denselben metrischen Grenzwert]{%
+  \operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep
+  r\in\mathbb N\dsep x\in X\vdash
+  a_n\MetricTo{d}x
+  \leftrightarrow
+  a^{\langle r\rangle}_n\MetricTo{d}x%
+}{MetricSequenceTailSameLimit}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep r\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep a^{\langle r\rangle}}
+}
+\begin{proof}
+Konvergiert \(a\), so genügt für die Restfolge derselbe Index, denn
+\(n+r\geq n\). Konvergiert umgekehrt die Restfolge ab dem Index \(N\), so
+gilt die benötigte Abschätzung für \(a_n\) ab \(N+r\): Dann ist
+\(n=k+r\) mit \(k\geq N\), und
+\(a_n=a_{k+r}=a^{\langle r\rangle}_k\).
+\end{proof}
+
+\section{Metrische Beschränktheit}
+
+\FormulaDefDeltaK[Beschränkte Teilmenge und beschränkte Folge]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep A\subseteq X\vdash\\[-2pt]
+  &\quad\operatorname{Beschr}_{d}(A)\coloneqq
+    \Bigl(A=\varnothing\lor
+      \exists c\in X\,\exists r\in\mathbb R\,
+      \bigl(0<r\land A\subseteq\MetricBall{d}{c}{r}\bigr)\Bigr),\\[-2pt]
+  &\operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\vdash\\[-2pt]
+  &\quad\operatorname{Beschr}_{d}(a)\coloneqq
+    \operatorname{Beschr}_{d}\bigl(a[\mathbb N]\bigr).
+  \end{aligned}%
+}{MetricBoundedSetSequenceDef}{%
+  \DeltaRow{Mengen}{X\dsep A\dsep c\dsep r}
+  \DeltaRow{Funktionen}{d\dsep a}
+  \DeltaRow{Neues Prädikat}{\operatorname{Beschr}_{d}}
+}
+
+Die ausdrückliche Leermengenalternative sorgt dafür, dass auch die leere
+Teilmenge eines leeren metrischen Raums beschränkt ist. Für nichtleere Mengen
+ist die Definition gleichbedeutend mit der üblichen Forderung, dass alle
+Punkte in einer hinreichend großen Kugel liegen.
+
+\FormulaThmDeltaK[Konvergente metrische Folgen sind beschränkt]{%
+  \operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep x\in X
+  \dsep a_n\MetricTo{d}x
+  \vdash\operatorname{Beschr}_{d}(a)%
+}{ConvergentMetricSequenceBounded}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep N\dsep n\dsep r}
+  \DeltaRow{Funktionen}{d\dsep a}
+}
+\begin{proof}
+Für den Radius \(1\) gibt es einen Index \(N\), ab dem alle Glieder in
+\(B_1^d(x)\) liegen. Die Menge der vorherigen Glieder ist endlich. Daher sind
+auch die endlich vielen reellen Abstände \(d(a_n,x)\) mit \(n<N\) gemeinsam
+nach oben beschränkt. Wählt man \(r>1\), das auch größer als alle diese
+Abstände ist, so liegt die gesamte Wertemenge in \(B_r^d(x)\).
+\end{proof}
+
+\FormulaThmDeltaK[Reelle und metrische Beschränktheit stimmen überein]{%
+  a\colon\mathbb N\to\mathbb R
+  \vdash
+  \operatorname{Beschr}_{d_{\mathbb R}}(a)
+  \leftrightarrow
+  \operatorname{Beschr}(a)%
+}{RealAndMetricSequenceBoundednessAgree}{%
+  \DeltaRow{Mengen}{\mathbb R}
+  \DeltaRow{Funktionen}{a\dsep d_{\mathbb R}}
+}
+\begin{proof}
+Da \(0\in\mathbb N\) und \(a_0\in a[\mathbb N]\), ist die Wertemenge der
+Folge nichtleer. In der metrischen Beschränktheitsdefinition kann daher die
+Leermengenalternative nicht eintreten.
+
+Ist \(|a_n|\leq C\) für alle \(n\), so liegt die Wertemenge in
+\(B_{C+1}^{d_{\mathbb R}}(0)\). Liegt sie umgekehrt in
+\(B_r^{d_{\mathbb R}}(c)\), so gilt mit der Dreiecksungleichung
+\[
+ |a_n|=d_{\mathbb R}(a_n,0)
+ \leq d_{\mathbb R}(a_n,c)+d_{\mathbb R}(c,0)
+ <r+|c|.
+\]
+Somit besitzt die Folge auch eine Schranke im Sinne von
+\FormulaRefAuto{BoundedRealSequenceDef}[def].
+\end{proof}
+
+\chapter{Cauchy-Folgen und Vollständigkeit}
+
+\section{Cauchy-Folgen}
+
+\FormulaDefDeltaK[Cauchy-Folge in einem metrischen Raum]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\vdash
+    \operatorname{Cauchy}_{d}(a)\coloneqq{}\\[-2pt]
+  &\quad\forall\varepsilon\in\mathbb R\,
+    \Bigl(0<\varepsilon\rightarrow
+      \exists N\in\mathbb N\,\forall m,n\in\mathbb N\\[-2pt]
+  &\hspace{50mm}
+      \bigl((N\leq m\land N\leq n)
+      \rightarrow d(a_m,a_n)<\varepsilon\bigr)\Bigr).
+  \end{aligned}%
+}{MetricCauchySequenceDef}{%
+  \DeltaRow{Mengen}{X\dsep\varepsilon\dsep N\dsep m\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a}
+  \DeltaRow{Neues Prädikat}{\operatorname{Cauchy}_{d}}
+}
+
+Die Bedingung nennt keinen Grenzwert. Sie prüft nur, ob späte Glieder
+untereinander beliebig nahe liegen. Genau deshalb kann sie auch in einem Raum
+formuliert werden, in dem der erwartete Grenzpunkt fehlt.
+
+\FormulaThmDeltaK[Übereinstimmung der beiden reellen Cauchy-Begriffe]{%
+  a\colon\mathbb N\to\mathbb R
+  \vdash
+  \operatorname{Cauchy}_{d_{\mathbb R}}(a)
+  \leftrightarrow
+  \operatorname{Cauchy}(a)%
+}{RealAndMetricCauchySequenceAgree}{%
+  \DeltaRow{Mengen}{\mathbb R}
+  \DeltaRow{Funktionen}{a\dsep d_{\mathbb R}}
+}
+\begin{proof}
+Nach \FormulaRefAuto{RealDistance}[def] gilt
+\(d_{\mathbb R}(a_m,a_n)=|a_m-a_n|\). Mit dieser Gleichheit sind
+\FormulaRefAuto{MetricCauchySequenceDef}[def] und
+\FormulaRefAuto{RealCauchySequenceDef}[def] dieselbe Bedingung.
+\end{proof}
+
+\FormulaThmDeltaK[Cauchy-Eigenschaft in einem metrischen Teilraum]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep Y\subseteq X\dsep
+    a\colon\mathbb N\to Y\vdash\\[-2pt]
+  &\quad
+    \operatorname{Cauchy}_{d_Y}(a)
+    \leftrightarrow
+    \operatorname{Cauchy}_{d}(a).
+  \end{aligned}%
+}{MetricSubspaceCauchyAgree}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep\varepsilon\dsep N\dsep m\dsep n}
+  \DeltaRow{Funktionen}{d\dsep d_Y\dsep a}
+}
+\begin{proof}
+Da \(Y\subseteq X\), kann \(a\) zugleich als Folge mit Werten in \(X\)
+aufgefasst werden. Für alle \(m,n\in\mathbb N\) gilt
+\(d_Y(a_m,a_n)=d(a_m,a_n)\). Daher stimmen die beiden Cauchy-Bedingungen
+nach \FormulaRefAuto{MetricCauchySequenceDef}[def] vollständig überein.
+\end{proof}
+
+\FormulaThmDeltaK[Konvergenz impliziert die metrische Cauchy-Eigenschaft]{%
+  \operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep x\in X
+  \dsep a_n\MetricTo{d}x
+  \vdash\operatorname{Cauchy}_{d}(a)%
+}{MetricConvergentSequenceIsCauchy}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep\varepsilon\dsep N\dsep m\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a}
+}
+\begin{proof}
+Zu \(\varepsilon>0\) wähle \(N\) so, dass
+\(d(a_k,x)<\varepsilon/2\) für alle \(k\geq N\). Für \(m,n\geq N\)
+folgt
+\[
+ d(a_m,a_n)\leq d(a_m,x)+d(x,a_n)<\varepsilon.
+\]
+\end{proof}
+
+\FormulaThmDeltaK[Metrische Cauchy-Folgen sind beschränkt]{%
+  \operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep
+  \operatorname{Cauchy}_{d}(a)
+  \vdash\operatorname{Beschr}_{d}(a)%
+}{MetricCauchySequenceBounded}{%
+  \DeltaRow{Mengen}{X\dsep N\dsep n\dsep r}
+  \DeltaRow{Funktionen}{d\dsep a}
+}
+\begin{proof}
+Für \(\varepsilon=1\) liegen ab einem Index \(N\) alle Glieder in
+\(B_1^d(a_N)\). Die endlich vielen vorherigen Glieder besitzen gemeinsam mit
+dieser Kugel eine hinreichend große Kugel um \(a_N\), genau wie im Beweis von
+\FormulaRefAuto{ConvergentMetricSequenceBounded}[thm].
+\end{proof}
+
+\FormulaThmDeltaK[Cauchy-Folge mit konvergenter Teilfolge]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep a\colon\mathbb N\to X\dsep
+    \operatorname{Cauchy}_{d}(a)\dsep x\in X\dsep
+    \varphi\colon\mathbb N\to\mathbb N\dsep{}\\[-2pt]
+  &\quad\forall n\in\mathbb N\,
+      \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)
+    \dsep a_{\varphi(n)}\MetricTo{d}x
+    \vdash a_n\MetricTo{d}x.
+  \end{aligned}%
+}{MetricCauchyWithConvergentSubsequence}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep\varepsilon\dsep N\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep\varphi}
+}
+\begin{proof}
+Zu \(\varepsilon>0\) wähle \(N_1\) für die Cauchy-Bedingung mit
+\(\varepsilon/2\) und \(N_2\) so, dass
+\(d(a_{\varphi(k)},x)<\varepsilon/2\) für \(k\geq N_2\). Wähle ein
+\(k\geq N_2\) mit \(\varphi(k)\geq N_1\). Für jedes \(n\geq N_1\) gilt
+dann
+\[
+ d(a_n,x)\leq d(a_n,a_{\varphi(k)})
+               +d(a_{\varphi(k)},x)<\varepsilon.
+\]
+\end{proof}
+
+\section{Vollständige metrische Räume}
+
+\FormulaDefDeltaK[Vollständiger metrischer Raum]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\vdash
+    \operatorname{Vollst}(X,d)\coloneqq{}\\[-2pt]
+  &\quad\forall a\colon\mathbb N\to X\,
+    \Bigl(\operatorname{Cauchy}_{d}(a)\rightarrow
+      \exists x\in X\,(a_n\MetricTo{d}x)\Bigr).
+  \end{aligned}%
+}{CompleteMetricSpaceDef}{%
+  \DeltaRow{Mengen}{X\dsep x}
+  \DeltaRow{Funktionen}{d\dsep a}
+  \DeltaRow{Neues Prädikat}{\operatorname{Vollst}}
+}
+
+Vollständigkeit bedeutet, dass im Raum kein Grenzpunkt fehlt, den seine
+eigene Abstandsmessung durch eine Cauchy-Folge ankündigt. Sie ist von der
+Ordnungsvollständigkeit zu unterscheiden: Die Vollständigkeit eines
+geordneten Körpers handelt von Suprema, die metrische Vollständigkeit von
+Cauchy-Folgen.
+
+\FormulaThmDeltaK[Die reellen Zahlen sind metrisch vollständig]{%
+  \operatorname{Vollst}(\mathbb R,d_{\mathbb R})%
+}{RealMetricSpaceComplete}{%
+  \DeltaRow{Mengen}{\mathbb R}
+  \DeltaRow{Funktionen}{d_{\mathbb R}}
+}
+\begin{proof}
+Nach \FormulaRefAuto{RealAndMetricSequenceConvergenceAgree}[thm] stimmt die
+metrische Konvergenz mit der reellen Konvergenz aus Band~21 überein. Ebenso
+stimmt nach
+\FormulaRefAuto{RealAndMetricCauchySequenceAgree}[thm] die metrische
+Cauchy-Bedingung mit der reellen überein. Das in
+\FormulaRefAuto{RealSequenceCauchyCriterion}[thm] bewiesene reelle
+Cauchy-Kriterium liefert daher für jede metrische Cauchy-Folge einen reellen
+Grenzwert.
+
+Das Cauchy-Kriterium aus Band~21 beruht seinerseits auf der Existenz von
+Infima und Suprema aus
+\FormulaRefAuto{RealInfimumCharacterization}[thm] und
+\FormulaRefAuto{RealLeastUpperBoundProperty}[thm]. Damit ist die
+Abhängigkeitskette ausdrücklich sichtbar:
+Ordnungsvollständigkeit der reellen Zahlen liefert ihr Cauchy-Kriterium und
+dieses wiederum die metrische Vollständigkeit von
+\((\mathbb R,d_{\mathbb R})\).
+\end{proof}
+
+\FormulaThmDeltaK[Diskrete metrische Räume sind vollständig]{%
+  \operatorname{Vollst}(X,\delta_X)%
+}{DiscreteMetricSpaceComplete}{%
+  \DeltaRow{Mengen}{X}
+  \DeltaRow{Funktionen}{\delta_X}
+}
+\begin{proof}
+Sei \(a\colon\mathbb N\to X\) eine Cauchy-Folge. Für
+\(\varepsilon=1/2\) gibt es ein \(N\), so dass
+\(\delta_X(a_m,a_n)<1/2\) für alle \(m,n\geq N\). Nach Definition der
+diskreten Metrik ist dann \(a_m=a_n\). Die Folge ist also ab \(N\) konstant
+gleich \(a_N\) und konvergiert gegen diesen Punkt.
+\end{proof}
+
+Für das folgende Gegenbeispiel benötigen wir eine elementare Nullfolge.
+
+\FormulaThmDeltaK[Kehrwerte positiver natürlicher Zahlen bilden eine Nullfolge]{%
+  \begin{aligned}[t]
+  &r\colon\mathbb N\to\mathbb R\dsep
+    \forall n\in\mathbb N\,
+      \left(r_n=\frac{1}{n+1}\right)
+    \vdash r_n\longrightarrow0.
+  \end{aligned}%
+}{ReciprocalNaturalSequenceConvergesToZero}{%
+  \DeltaRow{Mengen}{n\dsep N}
+  \DeltaRow{Funktionen}{r}
+}
+\begin{proof}
+Sei \(\varepsilon>0\). Nach der archimedischen Eigenschaft der reellen
+Zahlen aus \FormulaRefAuto{RealArchimedeanProperty}[thm] gibt es ein
+\(N\in\mathbb N\) mit \(1/\varepsilon<N+1\). Für \(n\geq N\) gilt dann
+\[
+ 0<\frac1{n+1}\leq\frac1{N+1}<\varepsilon.
+\]
+Damit ist die Konvergenzdefinition erfüllt.
+\end{proof}
+
+\FormulaThmDeltaK[Die punktierte reelle Gerade ist nicht vollständig]{%
+  \neg\operatorname{Vollst}
+    \bigl(\mathbb R\setminus\{0\},d_{\mathbb R\setminus\{0\}}\bigr)%
+}{PuncturedRealLineIncomplete}{%
+  \DeltaRow{Mengen}{\mathbb R\dsep\mathbb R\setminus\{0\}\dsep 0}
+  \DeltaRow{Funktionen}{d_{\mathbb R}\dsep
+    d_{\mathbb R\setminus\{0\}}\dsep a}
+}
+\begin{proof}
+Setze \(A=\mathbb R\setminus\{0\}\) und
+\(a_n=1/(n+1)\). Dann ist \(a\colon\mathbb N\to A\). Nach
+\FormulaRefAuto{ReciprocalNaturalSequenceConvergesToZero}[thm] und
+\FormulaRefAuto{RealAndMetricSequenceConvergenceAgree}[thm] gilt
+\(a_n\MetricTo{d_{\mathbb R}}0\). Daher ist \(a\) nach
+\FormulaRefAuto{MetricConvergentSequenceIsCauchy}[thm] eine Cauchy-Folge in
+\((\mathbb R,d_{\mathbb R})\), nach
+\FormulaRefAuto{MetricSubspaceCauchyAgree}[thm] also auch in
+\((A,d_A)\).
+
+Wäre dieser Teilraum vollständig, so gäbe es ein \(x\in A\) mit
+\(a_n\MetricTo{d_A}x\). Nach
+\FormulaRefAuto{MetricSubspaceConvergenceAgree}[thm] konvergierte \(a\) im
+reellen metrischen Raum auch gegen \(x\). Die Eindeutigkeit metrischer
+Grenzwerte ergäbe aus der gleichzeitigen Konvergenz gegen \(0\) die Gleichheit
+\(x=0\), im Widerspruch zu \(x\in A\).
+\end{proof}
+
+Das Gegenbeispiel entfernt genau den Punkt, den die Cauchy-Folge als Grenzwert
+ankündigt. Der folgende Satz zeigt, welche Teilmengen eines vollständigen
+Raums dieses Problem vermeiden.
+
+\FormulaThmDeltaK[Abgeschlossene Mengen enthalten ihre Folgengrenzwerte]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep A\subseteq X\dsep
+    \operatorname{Abgeschlossen}_{d}(A)\dsep
+    a\colon\mathbb N\to A\dsep x\in X\dsep{}\\[-2pt]
+  &\quad a_n\MetricTo{d}x\vdash x\in A.
+  \end{aligned}%
+}{MetricClosedSetContainsSequenceLimits}{%
+  \DeltaRow{Mengen}{X\dsep A\dsep x\dsep r\dsep N}
+  \DeltaRow{Funktionen}{d\dsep a}
+}
+\begin{proof}
+Wäre \(x\notin A\), so läge \(x\) in der offenen Menge
+\(X\setminus A\). Dann gäbe es ein \(r>0\) mit
+\(\MetricBall{d}{x}{r}\subseteq X\setminus A\). Aus der Konvergenz folgte
+aber \(a_N\in\MetricBall{d}{x}{r}\) für einen hinreichend großen Index
+\(N\), obwohl \(a_N\in A\) gilt. Dieser Widerspruch zeigt \(x\in A\).
+\end{proof}
+
+\FormulaThmDeltaK[Abgeschlossene Teilräume vollständiger Räume]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep\operatorname{Vollst}(X,d)
+    \dsep A\subseteq X\dsep\operatorname{Abgeschlossen}_{d}(A)
+    \vdash\\[-2pt]
+  &\quad\operatorname{Vollst}(A,d_A).
+  \end{aligned}%
+}{ClosedSubspaceOfCompleteMetricSpace}{%
+  \DeltaRow{Mengen}{X\dsep A}
+  \DeltaRow{Funktionen}{d\dsep d_A}
+}
+\begin{proof}
+Nach \FormulaRefAuto{MetricSubspaceRestrictionIsMetric}[thm] ist \(d_A\) eine
+Metrik auf \(A\). Sei \(a\colon\mathbb N\to A\) eine Cauchy-Folge bezüglich
+\(d_A\). Nach \FormulaRefAuto{MetricSubspaceCauchyAgree}[thm] ist sie als
+Folge in \(X\) ebenfalls Cauchy und besitzt wegen der Vollständigkeit einen
+Grenzwert \(x\in X\). Aus
+\FormulaRefAuto{MetricClosedSetContainsSequenceLimits}[thm] folgt \(x\in A\).
+Schließlich zeigt \FormulaRefAuto{MetricSubspaceConvergenceAgree}[thm], dass
+die Folge auch bezüglich der Teilraummetrik \(d_A\) gegen \(x\) konvergiert.
+\end{proof}
+
+\chapter{Stetige Abbildungen}
+
+\section{Stetigkeit in einem Punkt}
+
+\FormulaDefDeltaK[Metrische Stetigkeit]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep
+    f\colon X\to Y\dsep x\in X\vdash\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_Y}(f,x)\coloneqq
+    \forall\varepsilon\in\mathbb R\,
+    \Bigl(0<\varepsilon\rightarrow
+      \exists\delta\in\mathbb R\,\bigl(0<\delta\land{}\\[-2pt]
+  &\hspace{34mm}
+      \forall u\in X\,
+      (d_X(u,x)<\delta\rightarrow
+       d_Y(f(u),f(x))<\varepsilon)\bigr)\Bigr),\\[2pt]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep
+    f\colon X\to Y\vdash\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_Y}(f)\coloneqq
+    \forall x\in X\,\operatorname{Stetig}_{d_X,d_Y}(f,x).
+  \end{aligned}%
+}{MetricContinuityDef}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep x\dsep u\dsep\varepsilon\dsep\delta}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f}
+  \DeltaRow{Neues Prädikat}{\operatorname{Stetig}_{d_X,d_Y}}
+}
+
+Das Bild eines Punktes soll also nahe bei \(f(x)\) liegen, sobald der Punkt
+selbst hinreichend nahe bei \(x\) liegt. Der zulässige Eingangsradius
+\(\delta\) darf von \(x\) und vom gewünschten Ausgangsradius
+\(\varepsilon\) abhängen.
+
+\FormulaThmDeltaK[Identität und konstante Abbildungen sind stetig]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep y_0\in Y\vdash\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_X}(\Id_X)\land
+    \operatorname{Stetig}_{d_X,d_Y}
+      (\operatorname{const}_{X,y_0}).
+  \end{aligned}%
+}{MetricIdentityConstantContinuous}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep y_0}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep\Id_X\dsep
+    \operatorname{const}_{X,y_0}}
+}
+\begin{proof}
+Für die Identität kann zu \(\varepsilon>0\) derselbe Radius
+\(\delta=\varepsilon\) verwendet werden. Bei der konstanten Abbildung ist
+der Abstand der beiden Bildpunkte stets \(d_Y(y_0,y_0)=0\); jeder positive
+Eingangsradius ist geeignet.
+\end{proof}
+
+\FormulaThmDeltaK[Der Abstand von einem festen Punkt ist stetig]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep z\in X\dsep
+    \rho_z\colon X\to\mathbb R\dsep
+    \forall u\in X\,\bigl(\rho_z(u)=d(u,z)\bigr)\vdash\\[-2pt]
+  &\quad\operatorname{Stetig}_{d,d_{\mathbb R}}(\rho_z).
+  \end{aligned}%
+}{MetricDistanceFromPointContinuous}{%
+  \DeltaRow{Mengen}{X\dsep z\dsep x\dsep u\dsep\varepsilon}
+  \DeltaRow{Funktionen}{d\dsep d_{\mathbb R}\dsep\rho_z}
+}
+\begin{proof}
+Fixiere \(x\in X\) und übernimm zu \(\varepsilon>0\) den Radius
+\(\delta=\varepsilon\). Aus \(d(u,x)<\delta\) folgt mit der umgekehrten
+Dreiecksungleichung
+\[
+ d_{\mathbb R}\bigl(\rho_z(u),\rho_z(x)\bigr)
+ =|d(u,z)-d(x,z)|
+ \leq d(u,x)<\varepsilon.
+\]
+Damit ist \(\rho_z\) in jedem Punkt \(x\) stetig.
+\end{proof}
+
+\FormulaThmDeltaK[Stetige Abbildungen erhalten Folgengrenzwerte]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep
+    f\colon X\to Y\dsep x\in X\dsep
+    \operatorname{Stetig}_{d_X,d_Y}(f,x)\dsep{}\\[-2pt]
+  &\quad a\colon\mathbb N\to X\dsep a_n\MetricTo{d_X}x
+    \vdash
+    f(a_n)\MetricTo{d_Y}f(x).
+  \end{aligned}%
+}{MetricContinuousMapsPreserveLimits}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep x\dsep\varepsilon\dsep\delta\dsep N}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f\dsep a}
+}
+\begin{proof}
+Zu \(\varepsilon>0\) liefert die Stetigkeit einen Radius \(\delta>0\).
+Die Konvergenz von \(a\) liefert anschließend einen Index \(N\), ab dem
+\(d_X(a_n,x)<\delta\) gilt. Dann ist für alle \(n\geq N\) auch
+\(d_Y(f(a_n),f(x))<\varepsilon\).
+\end{proof}
+
+\section{Das Folgenkriterium}
+
+Für die Rückrichtung verwenden wir die bereits bewiesene Nullfolge
+\(1/(n+1)\), um eine Folge von Gegenbeispielen in immer kleineren Kugeln zu
+konstruieren.
+
+\FormulaThmDeltaK[Folgenkriterium für metrische Stetigkeit]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep
+    f\colon X\to Y\dsep x\in X\vdash\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_Y}(f,x)
+    \leftrightarrow
+    \forall a\colon\mathbb N\to X\,
+      \bigl(a_n\MetricTo{d_X}x
+      \rightarrow f(a_n)\MetricTo{d_Y}f(x)\bigr).
+  \end{aligned}%
+}{MetricSequentialContinuityCriterion}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep x\dsep\varepsilon\dsep n}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f\dsep a\dsep r}
+}
+\begin{proof}
+Die Hinrichtung ist
+\FormulaRefAuto{MetricContinuousMapsPreserveLimits}[thm].
+
+Für die Rückrichtung nehme man an, \(f\) sei in \(x\) nicht stetig. Dann
+gibt es ein \(\varepsilon_0>0\), so dass für jedes \(\delta>0\) ein
+\(u\in X\) mit
+\[
+ d_X(u,x)<\delta,
+ \qquad
+ d_Y(f(u),f(x))\geq\varepsilon_0
+\]
+existiert. Definiere die reelle Folge \(r\colon\mathbb N\to\mathbb R\) durch
+\(r_n=1/(n+1)\). Nach
+\FormulaRefAuto{ReciprocalNaturalSequenceConvergesToZero}[thm] gilt
+\(r_n\to0\). Setzt man \(\delta=r_n\), so ist die entsprechende Menge
+zulässiger Punkte für jedes \(n\) nichtleer. Das Auswahlprinzip
+\FormulaRefAuto{Auswahlaxiom}[ax] liefert eine Folge \(a\colon\mathbb N\to X\)
+mit
+\[
+ d_X(a_n,x)<r_n,
+ \qquad
+ d_Y(f(a_n),f(x))\geq\varepsilon_0.
+\]
+Zu jedem \(\varepsilon>0\) gilt ab einem Index \(N\) die Ungleichung
+\(r_n<\varepsilon\); dann ist auch
+\(d_X(a_n,x)<r_n<\varepsilon\). Somit konvergiert \(a\) gegen \(x\), aber die
+Bildfolge konvergiert nicht gegen \(f(x)\). Dies widerspricht der rechten
+Seite.
+\end{proof}
+
+\FormulaThmDeltaK[Komposition stetiger Abbildungen]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep
+    \operatorname{Metrik}_{Z}(d_Z)\dsep
+    f\colon X\to Y\dsep g\colon Y\to Z\dsep{}\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_Y}(f)\dsep
+    \operatorname{Stetig}_{d_Y,d_Z}(g)
+    \vdash
+    \operatorname{Stetig}_{d_X,d_Z}(g\circ f).
+\end{aligned}%
+}{MetricContinuousComposition}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep Z\dsep x\dsep u\dsep v\dsep
+    \varepsilon\dsep\eta\dsep\delta}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep d_Z\dsep f\dsep g\dsep g\circ f}
+}
+\begin{proof}
+Fixiere \(x\in X\) und \(\varepsilon>0\). Aus der Stetigkeit von \(g\) in
+\(f(x)\) erhält man einen Radius \(\eta>0\), so dass
+\[
+ \forall v\in Y\,
+ \Bigl(d_Y(v,f(x))<\eta
+ \longrightarrow
+ d_Z(g(v),g(f(x)))<\varepsilon\Bigr).
+\]
+Die Stetigkeit von \(f\) in \(x\) liefert zu diesem \(\eta\) einen Radius
+\(\delta>0\), so dass
+\[
+ \forall u\in X\,
+ \Bigl(d_X(u,x)<\delta
+ \longrightarrow
+ d_Y(f(u),f(x))<\eta\Bigr).
+\]
+Zusammen folgt für jedes \(u\in X\) mit \(d_X(u,x)<\delta\) die Abschätzung
+\(d_Z((g\circ f)(u),(g\circ f)(x))<\varepsilon\). Dies ist die
+Stetigkeit von \(g\circ f\) in \(x\); da \(x\) beliebig war, gilt sie auf
+ganz \(X\).
+\end{proof}
+
+\section{Isometrien}
+
+\FormulaDefDeltaK[Isometrische Abbildung]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep f\colon X\to Y\vdash\\[-2pt]
+  &\quad\operatorname{Isometrie}_{d_X,d_Y}(f)\coloneqq
+    \forall x,u\in X\,
+      \bigl(d_Y(f(x),f(u))=d_X(x,u)\bigr).
+  \end{aligned}%
+}{MetricIsometryDef}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep x\dsep u}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f}
+  \DeltaRow{Neues Prädikat}{\operatorname{Isometrie}_{d_X,d_Y}}
+}
+
+\FormulaThmDeltaK[Isometrien erhalten die metrische Struktur]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep f\colon X\to Y\dsep{}\\[-2pt]
+  &\quad\operatorname{Isometrie}_{d_X,d_Y}(f)\vdash
+    \Bigl(\operatorname{Stetig}_{d_X,d_Y}(f)\land{}\\[-2pt]
+  &\qquad\forall a\colon\mathbb N\to X\,
+    \bigl(\operatorname{Cauchy}_{d_X}(a)
+      \rightarrow\operatorname{Cauchy}_{d_Y}(f\circ a)\bigr)\Bigr).
+  \end{aligned}%
+}{MetricIsometryPreservesStructure}{%
+  \DeltaRow{Mengen}{X\dsep Y}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f\dsep a\dsep f\circ a}
+}
+\begin{proof}
+In beiden Definitionen werden nur Abstände verglichen. Eine Isometrie
+ersetzt jeden Abstand im Urbildraum durch denselben reellen Wert im
+Bildraum. Für die Stetigkeit kann daher \(\delta=\varepsilon\) gewählt
+werden; dieselbe Gleichheit überträgt die Cauchy-Ungleichungen.
+\end{proof}
+
+\chapter{Folgenkompaktheit}
+
+\section{Definition und erste Folgerungen}
+
+\FormulaDefDeltaK[Folgenkompakte Teilmenge]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d)\dsep K\subseteq X\vdash
+    \operatorname{Folgenkompakt}_{d}(K)\coloneqq{}\\[-2pt]
+  &\quad\forall a\colon\mathbb N\to K\,
+    \exists x\in K\,\exists\varphi\colon\mathbb N\to\mathbb N\,
+    \Bigl(\forall n\in\mathbb N\,
+      \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)\\[-2pt]
+  &\hspace{64mm}\land
+      a_{\varphi(n)}\MetricTo{d}x\Bigr).
+  \end{aligned}%
+}{MetricSequentialCompactnessDef}{%
+  \DeltaRow{Mengen}{X\dsep K\dsep x\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep\varphi}
+  \DeltaRow{Neues Prädikat}{\operatorname{Folgenkompakt}_{d}}
+}
+
+Der Grenzwert muss in \(K\) liegen. Eine bloß in \(X\) konvergente Teilfolge
+genügt daher nicht. Der Begriff wird zunächst bewusst als
+\emph{Folgenkompaktheit} bezeichnet; die spätere Gleichwertigkeit mit der
+Überdeckungskompaktheit ist ein eigener topologischer Satz.
+
+\FormulaThmDeltaK[Wachsende Aufzählung unendlicher Mengen natürlicher Zahlen]{%
+  \begin{aligned}[t]
+  &J\subseteq\mathbb N\dsep\Infinite{J}\vdash
+    \exists\varphi\colon\mathbb N\to\mathbb N\,\forall n\in\mathbb N\,{}\\[-2pt]
+  &\quad\Bigl(\varphi(n)\in J\land
+    \varphi(n)<\varphi(\Succ(n))\Bigr).
+  \end{aligned}%
+}{InfiniteNaturalSubsetIncreasingEnumeration}{%
+  \DeltaRow{Mengen}{J\dsep p\dsep n}
+  \DeltaRow{Funktionen}{s_J\dsep\varphi}
+}
+\begin{proof}
+Die Menge \(J\) ist nichtleer. Außerdem ist sie nach oben unbeschränkt:
+Wären alle ihre Elemente höchstens \(p\in\mathbb N\), so wäre
+\(J\subseteq\NatSeg{\Succ(p)}\) und damit nach
+\FormulaRefAuto{FiniteNatSegSubset}[thm] endlich, ein Widerspruch.
+
+Somit ist für jedes \(p\in\mathbb N\) die Menge
+\[
+ J_{>p}\coloneqq\{j\in J\mid p<j\}
+\]
+nichtleer. Das Wohlordnungsprinzip
+\FormulaRefAuto{NaturalWellOrderingPrinciple}[thm] liefert ihr jeweils ein
+eindeutiges kleinstes Element. Das Prinzip der typisierten
+Funktionsdefinition liefert daher eine Funktion
+\(s_J\colon\mathbb N\to\mathbb N\) mit
+\(s_J(p)=\min J_{>p}\).
+
+Wähle ferner \(j_0=\min J\). Der Dedekindsche Rekursionssatz
+\FormulaRefAuto{DedekindRecursionTheorem}[thm] liefert eine Funktion
+\(\varphi\colon\mathbb N\to\mathbb N\) mit
+\[
+ \varphi(0)=j_0,
+ \qquad
+ \varphi(\Succ(n))=s_J(\varphi(n)).
+\]
+Nach Konstruktion liegen alle Werte in \(J\), und jeder Nachfolgerwert ist
+strikt größer als sein Vorgänger.
+\end{proof}
+
+\FormulaThmDeltaK[Endliche Teilmengen sind folgenkompakt]{%
+  \operatorname{Metrik}_{X}(d)\dsep K\subseteq X\dsep\Finite{K}
+  \vdash\operatorname{Folgenkompakt}_{d}(K)%
+}{FiniteMetricSetSequentiallyCompact}{%
+  \DeltaRow{Mengen}{X\dsep K\dsep x\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep\varphi}
+}
+\begin{proof}
+Sei \(a\colon\mathbb N\to K\). Mindestens ein Wert \(x\in K\) wird
+unendlich oft angenommen. Denn wäre jede Faser \(a^{-1}[\{x\}]\) endlich,
+so zeigte die endliche Induktion über \(K\) gemäß
+\FormulaRefAuto{FiniteInductionRule}[ax], dass auch ihre Vereinigung
+endlich ist: Im Induktionsanfang ist sie leer, und beim Hinzufügen eines
+Punktes kommt nach \FormulaRefAuto{FiniteUnion}[thm] nur eine weitere endliche
+Faser hinzu. Wegen
+\[
+ \mathbb N=\bigcup_{x\in K}a^{-1}[\{x\}]
+\]
+widerspräche dies
+\FormulaRefAuto{NaturalNumbersInfinite}[thm]. Also ist für ein \(x\in K\) die
+Indexmenge
+\[
+ J\coloneqq\{n\in\mathbb N\mid a_n=x\}
+\]
+unendlich. Nach
+\FormulaRefAuto{InfiniteNaturalSubsetIncreasingEnumeration}[thm] besitzt sie
+eine streng wachsende Aufzählung \(\varphi\). Damit gilt
+\(a_{\varphi(n)}=x\) für alle \(n\), und die konstante Teilfolge konvergiert
+gegen \(x\in K\).
+\end{proof}
+
+\FormulaThmDeltaK[Folgenkompakte Teilmengen sind beschränkt]{%
+  \operatorname{Metrik}_{X}(d)\dsep K\subseteq X\dsep
+  \operatorname{Folgenkompakt}_{d}(K)
+  \vdash\operatorname{Beschr}_{d}(K)%
+}{MetricSequentiallyCompactSetBounded}{%
+  \DeltaRow{Mengen}{X\dsep K\dsep c\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep\varphi}
+}
+\begin{proof}
+Für \(K=\varnothing\) gilt die Behauptung nach Definition. Sei also
+\(c\in K\). Wäre \(K\) unbeschränkt, so gäbe es für jedes
+  \(n\in\mathbb N\) einen Punkt \(a_n\in K\) mit
+\(d(a_n,c)\geq n+1\). Das Auswahlprinzip
+\FormulaRefAuto{Auswahlaxiom}[ax] liefert daraus eine Folge
+\(a\colon\mathbb N\to K\). Dies ist die einzige Auswahlstelle dieses
+Beweises.
+
+Nach Folgenkompaktheit besitzt sie eine gegen einen Punkt von \(K\)
+konvergente Teilfolge \(a_{\varphi(n)}\). Diese Teilfolge ist nach
+\FormulaRefAuto{ConvergentMetricSequenceBounded}[thm] beschränkt. Andererseits
+gilt wegen \(\varphi(n)\geq n\)
+\[
+ d(a_{\varphi(n)},c)\geq\varphi(n)+1\geq n+1,
+\]
+Die archimedische Eigenschaft
+\FormulaRefAuto{RealArchimedeanProperty}[thm] liefert zu jedem reellen Radius
+\(r>0\) ein \(n\) mit \(r<n+1\). Daher liegt die Teilfolge in keiner Kugel um
+\(c\). Jede Kugel um einen anderen Mittelpunkt liegt nach der
+Dreiecksungleichung in einer hinreichend großen Kugel um \(c\). Damit ist die
+Teilfolge unbeschränkt, ein Widerspruch.
+\end{proof}
+
+\FormulaThmDeltaK[Folgenkompakte Teilräume sind vollständig]{%
+  \operatorname{Metrik}_{X}(d)\dsep K\subseteq X\dsep
+  \operatorname{Folgenkompakt}_{d}(K)
+  \vdash\operatorname{Vollst}(K,d_K)%
+}{MetricSequentiallyCompactSetComplete}{%
+  \DeltaRow{Mengen}{X\dsep K}
+  \DeltaRow{Funktionen}{d\dsep d_K\dsep a\dsep\varphi}
+}
+\begin{proof}
+Nach \FormulaRefAuto{MetricSubspaceRestrictionIsMetric}[thm] ist \(d_K\) eine
+Metrik auf \(K\). Sei \(a\colon\mathbb N\to K\) eine Cauchy-Folge bezüglich
+\(d_K\). Nach \FormulaRefAuto{MetricSubspaceCauchyAgree}[thm] ist sie auch
+bezüglich \(d\) Cauchy. Die Folgenkompaktheit liefert eine bezüglich \(d\)
+gegen ein \(x\in K\) konvergente Teilfolge. Nach
+\FormulaRefAuto{MetricSubspaceConvergenceAgree}[thm] konvergiert diese
+Teilfolge auch bezüglich \(d_K\). Nun ist
+\FormulaRefAuto{MetricCauchyWithConvergentSubsequence}[thm] im metrischen Raum
+\((K,d_K)\) anwendbar und zeigt, dass die ganze Folge gegen \(x\) konvergiert.
+\end{proof}
+
+\FormulaThmDeltaK[Folgenkompakte Teilmengen sind abgeschlossen]{%
+  \operatorname{Metrik}_{X}(d)\dsep K\subseteq X\dsep
+  \operatorname{Folgenkompakt}_{d}(K)
+  \vdash\operatorname{Abgeschlossen}_{d}(K)%
+}{MetricSequentiallyCompactSetClosed}{%
+  \DeltaRow{Mengen}{X\dsep K\dsep x\dsep y\dsep n}
+  \DeltaRow{Funktionen}{d\dsep a\dsep r\dsep\varphi}
+}
+\begin{proof}
+Angenommen, \(K\) sei nicht abgeschlossen. Dann ist \(X\setminus K\) nicht
+offen. Folglich gibt es ein \(x\in X\setminus K\), so dass jede positive
+Kugel um \(x\) einen Punkt aus \(K\) enthält. Definiere die reelle Folge
+\(r\colon\mathbb N\to\mathbb R\) durch \(r_n=1/(n+1)\). Dann ist für jedes
+\(n\in\mathbb N\) die Menge
+\[
+ K\cap\MetricBall{d}{x}{r_n}
+\]
+nichtleer. Das Auswahlprinzip
+\FormulaRefAuto{Auswahlaxiom}[ax] liefert eine Folge
+\(a\colon\mathbb N\to K\) mit
+\(d(a_n,x)<r_n\). Nach
+\FormulaRefAuto{ReciprocalNaturalSequenceConvergesToZero}[thm] gilt
+\(r_n\to0\). Zu \(\varepsilon>0\) ist daher ab einem Index \(N\)
+\(r_n<\varepsilon\), also auch \(d(a_n,x)<\varepsilon\). Somit gilt
+\(a_n\MetricTo{d}x\).
+
+Die Folgenkompaktheit liefert eine Teilfolge \(a_{\varphi(n)}\), die gegen
+ein \(y\in K\) konvergiert. Nach
+\FormulaRefAuto{MetricSubsequencePreservesLimit}[thm] konvergiert dieselbe
+Teilfolge auch gegen \(x\). Die Eindeutigkeit metrischer Grenzwerte ergibt
+\(x=y\in K\), im Widerspruch zu \(x\notin K\).
+\end{proof}
+
+\FormulaThmDeltaK[Stetige Bilder folgenkompakter Mengen]{%
+  \begin{aligned}[t]
+  &\operatorname{Metrik}_{X}(d_X)\dsep
+    \operatorname{Metrik}_{Y}(d_Y)\dsep f\colon X\to Y\dsep
+    K\subseteq X\dsep{}\\[-2pt]
+  &\quad\operatorname{Stetig}_{d_X,d_Y}(f)\dsep
+    \operatorname{Folgenkompakt}_{d_X}(K)
+    \vdash
+    \operatorname{Folgenkompakt}_{d_Y}(f[K]).
+  \end{aligned}%
+}{MetricContinuousImageSequentiallyCompact}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep K}
+  \DeltaRow{Funktionen}{d_X\dsep d_Y\dsep f\dsep a\dsep b\dsep\varphi}
+}
+\begin{proof}
+Sei \(b\colon\mathbb N\to f[K]\). Für jedes \(n\) ist die Menge
+\(K\cap f^{-1}[\{b_n\}]\) nichtleer. Das Auswahlprinzip liefert eine Folge
+\(a\colon\mathbb N\to K\) mit \(f(a_n)=b_n\); formal wird hier
+\FormulaRefAuto{Auswahlaxiom}[ax] verwendet. Aus der Folgenkompaktheit von
+\(K\) folgt eine Teilfolge \(a_{\varphi(n)}\), die gegen ein \(x\in K\)
+konvergiert. Die Stetigkeit und
+\FormulaRefAuto{MetricContinuousMapsPreserveLimits}[thm] liefern
+\[
+ b_{\varphi(n)}=f(a_{\varphi(n)})\MetricTo{d_Y}f(x),
+\]
+wobei \(f(x)\in f[K]\) gilt.
+\end{proof}
+
+\section{Warum Beschränktheit allein nicht genügt}
+
+\FormulaThmDeltaK[Konvergenz in der diskreten Metrik]{%
+  a\colon\mathbb N\to X\dsep x\in X
+  \vdash
+  \bigl(a_n\MetricTo{\delta_X}x\bigr)
+  \leftrightarrow
+  \exists N\in\mathbb N\,\forall n\in\mathbb N\,
+    (N\leq n\rightarrow a_n=x)%
+}{DiscreteMetricConvergenceEventuallyConstant}{%
+  \DeltaRow{Mengen}{X\dsep x\dsep N\dsep n}
+  \DeltaRow{Funktionen}{a\dsep\delta_X}
+}
+\begin{proof}
+Konvergiert \(a\) gegen \(x\), so gilt ab einem Index
+\(\delta_X(a_n,x)<1/2\). Die diskrete Metrik kann dann nicht den Wert \(1\)
+haben, also ist \(a_n=x\). Die Rückrichtung folgt unmittelbar, weil eine
+schließlich konstante Folge gegen ihren konstanten Wert konvergiert.
+\end{proof}
+
+\FormulaThmDeltaK[Eine beschränkte, nicht folgenkompakte Metrik]{%
+  \operatorname{Beschr}_{\delta_{\mathbb N}}(\mathbb N)
+  \land
+  \neg\operatorname{Folgenkompakt}_{\delta_{\mathbb N}}(\mathbb N)%
+}{BoundedDiscreteNaturalNumbersNotSequentiallyCompact}{%
+  \DeltaRow{Mengen}{\mathbb N}
+  \DeltaRow{Funktionen}{\delta_{\mathbb N}}
+}
+\begin{proof}
+Die Kugel \(B_2^{\delta_{\mathbb N}}(0)\) ist ganz \(\mathbb N\), also ist
+der Raum beschränkt. Die kanonische Folge \(a_n=n\) besitzt jedoch keine
+konvergente Teilfolge. Jede Teilfolge mit streng wachsenden Indizes nimmt
+weiterhin paarweise verschiedene Werte an und ist daher nicht schließlich
+konstant. Nach
+\FormulaRefAuto{DiscreteMetricConvergenceEventuallyConstant}[thm] kann sie
+nicht konvergieren.
+\end{proof}
+
+Dieses Beispiel markiert eine entscheidende Grenze der Verallgemeinerung:
+In einem beliebigen metrischen Raum folgt aus Beschränktheit keine
+konvergente Teilfolge. Der Satz von Bolzano--Weierstraß ist daher kein bloßer
+Metriksatz.
+
+\section{Bolzano--Weierstraß auf den reellen Zahlen}
+
+\FormulaThmDeltaK[Satz von der monotonen Teilfolge]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\vdash
+    \exists\varphi\colon\mathbb N\to\mathbb N\,\Bigl({}\\[-2pt]
+  &\quad\forall n\in\mathbb N\,
+      \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)\land{}\\[-2pt]
+  &\quad\bigl(\operatorname{Mon}_{\uparrow}(a\circ\varphi)
+    \lor
+    \operatorname{Mon}_{\downarrow}(a\circ\varphi)\bigr)\Bigr).
+  \end{aligned}%
+}{RealSequenceMonotoneSubsequence}{%
+  \DeltaRow{Mengen}{n\dsep m}
+  \DeltaRow{Funktionen}{a\dsep\varphi\dsep a\circ\varphi}
+}
+\begin{proof}
+Nenne einen Index \(n\) einen Spitzenindex, wenn
+\[
+  \forall m\in\mathbb N\,(n<m\rightarrow a_m\leq a_n).
+\]
+Gibt es unendlich viele Spitzenindizes, so liefert
+\FormulaRefAuto{InfiniteNaturalSubsetIncreasingEnumeration}[thm] eine streng
+wachsende Aufzählung \(\varphi\) dieser Indizes. Aus der Spitzeneigenschaft
+folgt
+\(a_{\varphi(\Succ(n))}\leq a_{\varphi(n)}\). Die Teilfolge ist monoton
+fallend.
+
+Gibt es nur endlich viele Spitzenindizes, so wähle man einen Index
+\(N\), oberhalb dessen keiner mehr liegt. Jeder Index \(n\geq N\) besitzt
+dann einen späteren Index \(m>n\) mit \(a_n<a_m\). Beginnend mit
+\(\varphi(0)=N\) wählt man rekursiv den jeweils kleinsten solchen Index.
+Dann ist sowohl \(\varphi\) als auch die Wertfolge
+\(a_{\varphi(n)}\) streng wachsend.
+\end{proof}
+
+\FormulaThmDeltaK[Bolzano--Weierstraß für reelle Folgen]{%
+  \begin{aligned}[t]
+  &a\colon\mathbb N\to\mathbb R\dsep\operatorname{Beschr}(a)
+    \vdash\\[-2pt]
+  &\quad\exists L\in\mathbb R\,
+    \exists\varphi\colon\mathbb N\to\mathbb N\,
+    \Bigl(\forall n\in\mathbb N\,
+      \bigl(\varphi(n)<\varphi(\Succ(n))\bigr)\\[-2pt]
+  &\hspace{65mm}\land
+      a_{\varphi(n)}\longrightarrow L\Bigr).
+  \end{aligned}%
+}{RealSequenceBolzanoWeierstrass}{%
+  \DeltaRow{Mengen}{L\dsep n}
+  \DeltaRow{Funktionen}{a\dsep\varphi\dsep a\circ\varphi}
+}
+\begin{proof}
+Nach \FormulaRefAuto{RealSequenceMonotoneSubsequence}[thm] besitzt \(a\) eine
+monotone Teilfolge. Die Beschränktheit von \(a\) vererbt sich an diese
+Teilfolge. Ist sie wachsend, so ist sie nach oben beschränkt; ist sie
+fallend, so ist sie nach unten beschränkt. In beiden Fällen liefert
+\FormulaRefAuto{MonotoneRealSequenceConvergence}[thm] einen reellen Grenzwert.
+\end{proof}
+
+\FormulaThmDeltaK[Abgeschlossene beschränkte reelle Intervalle sind folgenkompakt]{%
+  A,B\in\mathbb R\dsep A\leq B
+  \vdash
+  \operatorname{Folgenkompakt}_{d_{\mathbb R}}
+    \bigl([A,B]_{\mathbb R}\bigr)%
+}{RealClosedBoundedIntervalSequentiallyCompact}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep L\dsep n}
+  \DeltaRow{Funktionen}{d_{\mathbb R}\dsep a\dsep\varphi}
+}
+\begin{proof}
+Jede Folge in \([A,B]_{\mathbb R}\) ist reell beschränkt. Nach
+\FormulaRefAuto{RealSequenceBolzanoWeierstrass}[thm] besitzt sie eine gegen
+ein \(L\in\mathbb R\) konvergente Teilfolge. Für jedes Glied dieser
+Teilfolge gilt \(A\leq a_{\varphi(n)}\leq B\). Die konstanten Folgen mit den
+Werten \(A\) und \(B\) konvergieren gegen \(A\) beziehungsweise \(B\); daher
+liefert
+\FormulaRefAuto{RealSequenceLimitPreservesOrder}[thm]
+\[
+ A\leq L\leq B.
+\]
+Somit liegt der Grenzwert in \([A,B]_{\mathbb R}\). Nach
+\FormulaRefAuto{RealAndMetricSequenceConvergenceAgree}[thm] ist dies zugleich
+metrische Konvergenz.
+\end{proof}
+
+Der Vergleich fasst die Lage zusammen: In jedem metrischen Raum folgt aus
+Folgenkompaktheit die Beschränktheit, aber nicht umgekehrt. Im besonderen
+Raum \((\mathbb R,d_{\mathbb R})\) besitzt dagegen jede beschränkte Folge
+eine konvergente Teilfolge; deshalb sind die abgeschlossenen beschränkten
+Intervalle folgenkompakt.
+
+\chapter{Ausblick: Normen}
+
+Eine Norm misst zunächst die Größe eines einzelnen Vektors. Erst die
+Vektorraumoperationen erlauben es, daraus den Abstand zweier Punkte durch die
+Größe ihrer Differenz zu gewinnen. Ist \(V\) ein reeller Vektorraum, so
+fordert eine Norm in der späteren formalen Definition
+\[
+\begin{aligned}
+ &\|v\|\geq0,
+ &&\|v\|=0\leftrightarrow v=0,\\
+ &\|\lambda v\|=|\lambda|\,\|v\|,
+ &&\|u+v\|\leq\|u\|+\|v\|.
+\end{aligned}
+\]
+Dann erzeugt
+\[
+ d_{\|\cdot\|}(u,v)\coloneqq\|u-v\|
+\]
+eine Metrik: Positivität und Definitheit kommen aus den ersten beiden
+Normgesetzen, Symmetrie aus
+\(\|u-v\|=\|-(v-u)\|=\|v-u\|\), und die Dreiecksungleichung aus
+\[
+ \|u-w\|=\|(u-v)+(v-w)\|
+ \leq\|u-v\|+\|v-w\|.
+\]
+
+Damit gilt die begriffliche Richtung
+\[
+ \text{Normraum}\quad\Longrightarrow\quad\text{metrischer Raum}.
+\]
+Die Umkehrung gilt nicht: Eine allgemeine Metrik kennt weder Vektoraddition
+noch Skalarmultiplikation. Eine formale Normdefinition an dieser Stelle würde
+daher Begriffe voraussetzen, die im bisherigen Aufbau noch nicht vorhanden
+sind. Sie wird nach der Konstruktion der Vektorräume eingeführt; alle bis
+dahin bewiesenen metrischen Sätze stehen dort sofort zur Verfügung.
+
+Die nächsten Schritte der Analysis können nun auf einer klaren Grundlage
+aufbauen: Reihen verwenden zunächst die Vollständigkeit von
+\(\mathbb R\), Stetigkeit reeller Funktionen ist ein Spezialfall der hier
+definierten metrischen Stetigkeit, und Kompaktheit kann ausgehend von der
+Folgenkompaktheit abgeschlossener Intervalle entwickelt werden.
+
+\end{document}

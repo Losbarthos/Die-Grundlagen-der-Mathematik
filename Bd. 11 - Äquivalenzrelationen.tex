@@ -54,14 +54,14 @@ Ununterscheidbarkeitsquotient spezialisiert beide Konstruktionen.
 }
 
 \FormulaAxiomDeltaK[Symmetrie]{%
-  x\sim y \vdash y\sim x%
+  x,y\in A \dsep x\sim y \vdash y\sim x%
 }{EqRelSymmetry}{
   \DeltaRow{Mengen}{A \dsep x \dsep y}
   \DeltaRow{Relationsoperatoren}{\sim}
 }
 
 \FormulaAxiomDeltaK[Transitivität]{%
-  x\sim y \dsep y\sim z \vdash x\sim z%
+  x,y,z\in A \dsep x\sim y \dsep y\sim z \vdash x\sim z%
 }{EqRelTransitivity}{
   \DeltaRow{Mengen}{A \dsep x \dsep y \dsep z}
   \DeltaRow{Relationsoperatoren}{\sim}
@@ -79,10 +79,10 @@ Ununterscheidbarkeitsquotient spezialisiert beide Konstruktionen.
            {x\in A \vdash x\sim x}
            [\FormulaRefAuto{EqRelReflexivity}[ax]]
   \DeltaRow{Symmetrie}
-           {x\sim y \vdash y\sim x}
+           {x,y\in A \dsep x\sim y \vdash y\sim x}
            [\FormulaRefAuto{EqRelSymmetry}[ax]]
   \DeltaRow{Transitivität}
-           {x\sim y \dsep y\sim z \vdash x\sim z}
+           {x,y,z\in A \dsep x\sim y \dsep y\sim z \vdash x\sim z}
            [\FormulaRefAuto{EqRelTransitivity}[ax]]
   \DeltaRow{\textbf{Neue Symbole}}{}
   \DeltaPrem{Äquivalenzrelation}{\EqRel{A,\sim}}
@@ -150,6 +150,7 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 \end{tabproof}
 
 \FormulaThmDeltaK[Symmetrie der Ununterscheidbarkeitsrelation]{%
+  a,b\in\bigcup M \dsep
   a\mathrel{\SameOccRel{M}}b \vdash b\mathrel{\SameOccRel{M}}a
 }{SameOccRelSymmetry}{%
   \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
@@ -172,6 +173,7 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Transitivität der Ununterscheidbarkeitsrelation]{%
+  a,b,c\in\bigcup M \dsep
   a\mathrel{\SameOccRel{M}}b\dsep b\mathrel{\SameOccRel{M}}c
   \vdash a\mathrel{\SameOccRel{M}}c
 }{SameOccRelTransitivity}{%
@@ -209,15 +211,19 @@ Mitglied von \(M\) entweder beide enthalten oder beide nicht enthalten sind.
   \DeltaRow{Relationsoperatoren}{\SameOccRel{M}}
 }
 \begin{tabproof}
-  \proofstep{}{a\in\bigcup M \rightarrow a\mathrel{\SameOccRel{M}}a}{%
+  \proofstep{}{\forall a\in\bigcup M\,
+    a\mathrel{\SameOccRel{M}}a}{%
     \FormulaRefAuto{SameOccRelReflexivity}}
   \proofstep{}{%
-    a\mathrel{\SameOccRel{M}}b \rightarrow b\mathrel{\SameOccRel{M}}a}{%
+    \forall a,b\in\bigcup M\,
+    \bigl(a\mathrel{\SameOccRel{M}}b
+    \rightarrow b\mathrel{\SameOccRel{M}}a\bigr)}{%
     \FormulaRefAuto{SameOccRelSymmetry}}
   \proofstep{}{%
-    \bigl(a\mathrel{\SameOccRel{M}}b\land
-          b\mathrel{\SameOccRel{M}}c\bigr)
-    \rightarrow a\mathrel{\SameOccRel{M}}c}{%
+    \forall a,b,c\in\bigcup M\,
+    \bigl(\bigl(a\mathrel{\SameOccRel{M}}b\land
+                 b\mathrel{\SameOccRel{M}}c\bigr)
+    \rightarrow a\mathrel{\SameOccRel{M}}c\bigr)}{%
     \FormulaRefAuto{SameOccRelTransitivity}}
   \proofstep{}{\EqRel{\bigcup M,\SameOccRel{M}}}{%
     \FormulaRefAuto{EqRelDef}{1,2,3}}
@@ -362,12 +368,14 @@ zusammen angegeben; eine zusätzliche Menge geordneter Paare ist nicht nötig.
   \DeltaRow{Relationsoperatoren}{\EqCard}
 }
 \begin{tabproof}
-  \proofstep{}{A\EqCard A}{\FormulaRefAuto{EqCardReflexive}}
-  \proofstep{}{A\EqCard B\rightarrow B\EqCard A}{%
+  \proofstep{}{\forall A\in M\,(A\EqCard A)}{\FormulaRefAuto{EqCardReflexive}}
+  \proofstep{}{%
+    \forall A,B\in M\,(A\EqCard B\rightarrow B\EqCard A)}{%
     \FormulaRefAuto{EqCardSymmetric}}
   \proofstep{}{%
-    \bigl(A\EqCard B\land B\EqCard C\bigr)
-    \rightarrow A\EqCard C}{\FormulaRefAuto{EqCardTransitive}}
+    \forall A,B,C\in M\,
+    \bigl((A\EqCard B\land B\EqCard C)\rightarrow A\EqCard C\bigr)}{%
+    \FormulaRefAuto{EqCardTransitive}}
   \proofstep{}{\EqRel{M,\EqCard}}{%
     \FormulaRefAuto{EqRelDef}{1,2,3}}
 \end{tabproof}
@@ -504,7 +512,7 @@ zusammen angegeben; eine zusätzliche Menge geordneter Paare ist nicht nötig.
 \FormulaThmDeltaK[Gleichmächtigkeit und ein induzierter
 Potenzmengenzeuge]{%
   \begin{aligned}[t]
-    A\EqCard B\quad\leftrightarrow\quad
+    A\EqCard B\quad\eqvdash\quad
     \exists F\,\bigl(&F\colon A\to B\land{}\\[-2pt]
       &\PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)
   \end{aligned}%
@@ -513,7 +521,7 @@ Potenzmengenzeuge]{%
   \DeltaRow{Funktionen}{F\dsep\PowMap{F}}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Hinrichtung]{%
+  \proofpartwideindR[\(\vdash\)]{%
     A\EqCard B\vdash
     \exists F\,\bigl(F\colon A\to B\land
       \PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)%
@@ -544,7 +552,7 @@ Potenzmengenzeuge]{%
       \rEE{2,3,7}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Rückrichtung]{%
+  \proofpartwideindR[\(\dashv\)]{%
     \begin{aligned}[t]
       &\exists F\,\bigl(F\colon A\to B\land
         \PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)\vdash{}\\[-2pt]
@@ -572,24 +580,6 @@ Potenzmengenzeuge]{%
     \proofstepwidestar[1]{A\EqCard B}{\rEE{1,2,7}}
   \closeproofpartwideindR
 
-  \proofpartwide{Zusammenführung}
-    \proofstepwidestar[]{%
-      A\EqCard B\rightarrow
-      \exists F\,\bigl(F\colon A\to B\land
-        \PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)}{%
-      \FormulaRefAuto{EqCardPowerMapWitnessForward}}
-    \proofstepwidestar[]{%
-      \exists F\,\bigl(F\colon A\to B\land
-        \PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)
-      \rightarrow A\EqCard B}{%
-      \FormulaRefAuto{EqCardPowerMapWitnessBackward}}
-    \proofstepwidestar[]{%
-      \begin{aligned}[t]
-        A\EqCard B\quad\leftrightarrow\quad
-        \exists F\,\bigl(&F\colon A\to B\land{}\\[-2pt]
-          &\PowMap{F}\colon\powerset(A)\bij\powerset(B)\bigr)
-      \end{aligned}}{\rLRI{1,2}}
-  \closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Induzierte Restfamilienbijektion erzwingt Gleichmächtigkeit]{%
@@ -838,9 +828,10 @@ induzierte Fassung mit hinreichenden Einermengenbedingungen.
       \FormulaRefAuto{EqClassElementInCarrier}{1,2,5}}
     \proofstepwidestar[1,2,5]{x\sim z}{%
       \FormulaRefAuto{EqClassElementRelated}{1,2,5}}
-    \proofstepwidestar[1,4]{y\sim x}{\FormulaRefAuto{EqRelSymmetry}{4}}
-    \proofstepwidestar[1,2,4,5]{y\sim z}{%
-      \FormulaRefAuto{x\sim y \dsep y\sim z \vdash x\sim z}[ax]{8,7}}
+    \proofstepwidestar[1,2,3,4]{y\sim x}{%
+      \FormulaRefAuto{EqRelSymmetry}[ax]{2,3,4}}
+    \proofstepwidestar[1,2,3,4,5]{y\sim z}{%
+      \FormulaRefAuto{EqRelTransitivity}[ax]{3,2,6,8,7}}
     \proofstepwidestar[1,2,3,4,5]{z\in A\land y\sim z}{\rAI{6,9}}
     \proofstepwidestar[1,3]{z\in \EqClass{y}{\sim}{A}\leftrightarrow
       z\in A\land y\sim z}{\FormulaRefAuto{EqClassChar}{1,3}}
@@ -869,8 +860,8 @@ induzierte Fassung mit hinreichenden Einermengenbedingungen.
       \FormulaRefAuto{EqClassElementInCarrier}{1,3,5}}
     \proofstepwidestar[1,3,5]{y\sim z}{%
       \FormulaRefAuto{EqClassElementRelated}{1,3,5}}
-    \proofstepwidestar[1,3,4,5]{x\sim z}{%
-      \FormulaRefAuto{x\sim y \dsep y\sim z \vdash x\sim z}[ax]{4,7}}
+    \proofstepwidestar[1,2,3,4,5]{x\sim z}{%
+      \FormulaRefAuto{EqRelTransitivity}[ax]{2,3,6,4,7}}
     \proofstepwidestar[1,2,3,4,5]{z\in A\land x\sim z}{\rAI{6,8}}
     \proofstepwidestar[1,2]{z\in \EqClass{x}{\sim}{A}\leftrightarrow
       z\in A\land x\sim z}{\FormulaRefAuto{EqClassChar}{1,2}}
@@ -914,7 +905,8 @@ induzierte Fassung mit hinreichenden Einermengenbedingungen.
   \proofstep{1,2,4}{x\in \EqClass{y}{\sim}{A}}{\rIE{4,5}}
   \proofstep{1,2,3,4}{y\sim x}{%
     \FormulaRefAuto{EqClassElementRelated}{1,3,6}}
-  \proofstep{1,2,3,4}{x\sim y}{\FormulaRefAuto{EqRelSymmetry}{7}}
+  \proofstep{1,2,3,4}{x\sim y}{%
+    \FormulaRefAuto{EqRelSymmetry}[ax]{3,2,7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Charakterisierung gleicher Äquivalenzklassen]{%

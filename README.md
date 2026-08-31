@@ -38,7 +38,7 @@ Alle Builds verwenden LuaLaTeX. Der Gesamtband entsteht mit:
 latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-### Standalone-Bände B03 bis B37
+### Standalone-Bände B03 bis B38
 
 Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 
@@ -78,7 +78,8 @@ Der einzige Abhängigkeitsgraph steht in `band-dependencies.tsv`:
 | B34 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33 |
 | B35 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33, B34 |
 | B36 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33, B34, B35 |
-| B37 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21 |
+| B37 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21, B22, B23, B24, B25, B26, B27, B28, B29, B30, B31, B32, B33, B34, B35, B36 |
+| B38 | B01, B02, B03, B04, B05, B06, B07, B08, B09, B10, B11, B12, B13, B14, B15, B16, B17, B18, B19, B20, B21 |
 
 Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 
@@ -105,22 +106,23 @@ Die chronologische Gliederung folgt den Begriffsabhängigkeiten:
 | B19 | Reelle Zahlen |
 | B20 | Endliche Mengen |
 | B21 | Folgen |
-| B22 | Halbgruppen |
-| B23 | Kommutative Halbgruppen |
-| B24 | Idempotente Halbgruppen |
-| B25 | Rechtecksbänder |
-| B26 | Kommutative idempotente Halbgruppen |
-| B27 | Halbgruppen mit Nullelement |
-| B28 | Linkskürzbare Halbgruppen |
-| B29 | Rechtskürzbare Halbgruppen |
-| B30 | Kürzbare Halbgruppen |
-| B31 | Endliche Halbgruppen |
-| B32 | Monoide |
-| B33 | Halbringe |
-| B34 | Gruppen und Ringe |
-| B35 | Halbverbände und Verbände |
-| B36 | Frankls Vermutung |
-| B37 | Metrische Räume und Vollständigkeit |
+| B22 | Endliche Wörter und Klammerungsbäume |
+| B23 | Halbgruppen |
+| B24 | Kommutative Halbgruppen |
+| B25 | Idempotente Halbgruppen |
+| B26 | Rechtecksbänder |
+| B27 | Kommutative idempotente Halbgruppen |
+| B28 | Halbgruppen mit Nullelement |
+| B29 | Linkskürzbare Halbgruppen |
+| B30 | Rechtskürzbare Halbgruppen |
+| B31 | Kürzbare Halbgruppen |
+| B32 | Endliche Halbgruppen |
+| B33 | Monoide |
+| B34 | Halbringe |
+| B35 | Gruppen und Ringe |
+| B36 | Halbverbände und Verbände |
+| B37 | Frankls Vermutung |
+| B38 | Metrische Räume und Vollständigkeit |
 
 Spätere Fachbände dürfen Beispiele früher eingeführter Strukturen enthalten.
 Eigenschaftsneutrale allgemeine Funktionskonstruktionen stehen in B05.
@@ -148,12 +150,14 @@ werden typisiert, aber ohne sichtbaren Trägerindex geschrieben
 (beispielsweise `\IntNumeral{2}` und `\RatNumeral{2}`); für mehrdeutige
 Kontexte bleiben die expliziten Einbettungen `\IntOfNat`, `\RatOfInt` und
 `\RatOfNat` verfügbar.
-Die Bände B22--B31 untersuchen Halbgruppen und ihre zusätzlichen
-Axiomstrukturen getrennt. Die Bände B32--B34 behandeln Monoid-, Halbring-,
+Band B22 konstruiert endliche Wörter und volle planare Klammerungsbäume aus
+bereits vorhandenen Mengen und Folgen; er führt keine zusätzliche
+axiomatische Algebra ein. Die Bände B23--B32 untersuchen Halbgruppen und ihre
+zusätzlichen Axiomstrukturen getrennt. Die Bände B33--B35 behandeln Monoid-, Halbring-,
 Gruppen- und Ringstrukturen. Ihre allgemeinen
 Abbildungseigenschaften werden mit den
 Sätzen aus B06--B08 nachgewiesen. Die Nummerierung bezeichnet damit eine
-Beweisreihenfolge, keine ausschließliche thematische Zuordnung. B37 eröffnet
+Beweisreihenfolge, keine ausschließliche thematische Zuordnung. B38 eröffnet
 einen analytischen Zweig, der nur B01--B21 voraussetzt: Der reelle Abstand
 wird zu einer allgemeinen Metrik abstrahiert; Konvergenz, Cauchy-Folgen,
 metrische Vollständigkeit, Stetigkeit und Folgenkompaktheit werden darauf
@@ -165,7 +169,7 @@ ebenfalls festgelegte explizite Zuordnung lautet beispielsweise
 unveränderte tex→aux-Standardregel.
 Die Dateinamen folgen dem sichtbaren Dokumenttitel. Nur die unter Windows
 unzulässigen Doppelpunkte in den Titeln von Band 01 und Band 02 sind im
-Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B37`
+Dateinamen durch ` - ` ersetzt. Die internen Bandkennungen `B01` bis `B38`
 und die daraus erzeugten Artefaktnamen bleiben davon unberührt.
 
 ### PDF-Titel und File Juggler
@@ -218,6 +222,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Tar
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B35
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B36
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B37
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-b03.ps1 -Target B38
 ```
 
 Mit PowerShell 7 kann `powershell` durch `pwsh` ersetzt werden. Ohne
@@ -258,10 +263,10 @@ Zuordnung der titelbasierten Quelldateien zu `registry/_Bxx` im dokumentierten
 Benötigt wird latexmk 4.84 oder neuer.
 
 Damit genügt lokal wie auf Overleaf, bei ausgewählter Hauptdatei
-`Bd. 36 - Frankls Vermutung.tex`:
+`Bd. 37 - Frankls Vermutung.tex`:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 36 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 37 - Frankls Vermutung.tex"
 ```
 
 Auch bei vorhandenen Artefakten erhält jeder Vorgänger mindestens einen
