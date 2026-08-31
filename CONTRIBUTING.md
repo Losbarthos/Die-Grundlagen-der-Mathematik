@@ -40,12 +40,17 @@ description; a successful LaTeX build alone is not evidence of correctness.
 
 ## Licensing note / Lizenzhinweis
 
-The project does not yet have a reuse license. Small corrections and issue
-reports are welcome, but larger textual or code contributions should wait until
-the licensing terms have been chosen explicitly.
+By submitting a contribution, you agree to license it under the license that
+applies to the files it changes: [CC BY 4.0](LICENSE.md) for manuscript or
+editorial content, and [MIT](LICENSES/MIT.txt) for software or build
+infrastructure. Please submit only material that you have the right to license.
+Discuss any required exception before opening the pull request.
 
-Das Projekt besitzt derzeit noch keine Lizenz zur Weiterverwendung. Kleine
-Korrekturen und Issues sind willkommen; umfangreichere Text- oder
-Codebeiträge sollten bis zur ausdrücklichen Lizenzentscheidung warten.
+Mit dem Einreichen eines Beitrags erklärst du dich mit der Lizenz einverstanden,
+die für die bearbeiteten Dateien gilt: [CC BY 4.0](LICENSE.md) für Manuskript-
+und Redaktionsinhalte, [MIT](LICENSES/MIT.txt) für Software und
+Build-Infrastruktur. Bitte reiche nur Material ein, das du entsprechend
+lizenzieren darfst. Notwendige Ausnahmen sollten vor dem Pull Request
+abgesprochen werden.
 
 [Back to the README / Zurück zur README](README.md)

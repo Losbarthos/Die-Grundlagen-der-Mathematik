@@ -10,7 +10,7 @@ aufbaut.**
 
 [English](#english) · [Deutsch](#deutsch) ·
 [PDF catalogue / PDF-Verzeichnis](VOLUMES.md) · [Building](BUILDING.md) ·
-[Contributing](CONTRIBUTING.md)
+[Contributing](CONTRIBUTING.md) · [License / Lizenz](LICENSE.md)
 
 ---
 
@@ -93,8 +93,11 @@ Standalone builds, cross-volume dependencies, the verified registry cache, and
 Overleaf notes are documented in [BUILDING.md](BUILDING.md). Citation metadata
 is available in [CITATION.cff](CITATION.cff).
 
-No reuse license has been selected yet. Until a license file is added, the
-usual copyright restrictions apply.
+The original manuscript and editorial content are licensed under
+[CC BY 4.0](LICENSE.md#manuscript-and-project-content-cc-by-40); the software
+and build infrastructure are licensed under the
+[MIT License](LICENSE.md#software-and-build-infrastructure-mit). See
+[LICENSE.md](LICENSE.md) for the exact file scope and attribution guidance.
 
 ---
 
@@ -175,5 +178,9 @@ Standalone-Builds, Bandabhängigkeiten, der verifizierte Registry-Cache und
 Overleaf-Hinweise stehen in [BUILDING.md](BUILDING.md). Zitiermetadaten enthält
 [CITATION.cff](CITATION.cff).
 
-Eine Lizenz zur Weiterverwendung wurde noch nicht gewählt. Bis eine
-Lizenzdatei ergänzt ist, gelten die üblichen urheberrechtlichen Beschränkungen.
+Die ursprünglichen Manuskript- und Redaktionsinhalte stehen unter
+[CC BY 4.0](LICENSE.md#manuscript-and-project-content-cc-by-40); Software und
+Build-Infrastruktur stehen unter der
+[MIT-Lizenz](LICENSE.md#software-and-build-infrastructure-mit). Die genaue
+Dateizuordnung und Hinweise zur Namensnennung enthält
+[LICENSE.md](LICENSE.md).
