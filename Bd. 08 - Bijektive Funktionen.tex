@@ -2357,7 +2357,7 @@ vollkommen beliebig.
       \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
         \vdash \CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{4,5,9}}
     \proofstepwidestar[11]{x\in A_1}{\rA}
-    \proofstepwidestarbreakkeep[1,2,3,11]{%
+    \proofstepwidestar[1,2,3,11]{%
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=f_1(x)}{%
       \FormulaRefAuto{A\cap B=\varnothing\dsep f\colon A\to C\dsep
         g\colon B\to C\dsep x\in B\vdash
@@ -2368,14 +2368,14 @@ vollkommen beliebig.
     \proofstepwidestar[15]{y\in B_0}{\rA}
     \proofstepwidestar[]{A_0\subseteq A_0\cup A_1}{%
       \FormulaRefAuto{A\subseteq A\cup B}[thm]}
-    \proofstepwidestarbreakkeep[2,3,15]{\exists x\in A_0\cup A_1\,
+    \proofstepwidestar[2,3,15]{\exists x\in A_0\cup A_1\,
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
       \FormulaRefAuto{SurjectiveBranchWitnessTransfer}[thm]{%
         7,16,6,9,10,15}}
     \proofstepwidestar[18]{y\in B_1}{\rA}
     \proofstepwidestar[]{A_1\subseteq A_0\cup A_1}{%
       \FormulaRefAuto{B\subseteq A\cup B}[thm]}
-    \proofstepwidestarbreakkeep[1,2,3,18]{\exists x\in A_0\cup A_1\,
+    \proofstepwidestar[1,2,3,18]{\exists x\in A_0\cup A_1\,
       \CaseFun{A_0}{A_1}{f_0}{f_1}(x)=y}{%
       \FormulaRefAuto{SurjectiveBranchWitnessTransfer}[thm]{%
         8,19,6,11,12,18}}
@@ -2454,14 +2454,14 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \CoreFamily{P}{A}\dsep\mathfrak{I}[P,P\cup A]}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[]{\CoreFamily{P}{A}
-    =\bigl\{H\in\powerset(P\cup A)\bigm|P\subseteq H\bigr\}}{%
+  \proofstepwide[]{\CoreFamily{P}{A}}{=}{%
+    \bigl\{H\in\powerset(P\cup A)\bigm|P\subseteq H\bigr\}}{%
     \FormulaRefAuto{CoreFamilyDef}[def]}
-  \proofstepwidestar[]{\mathfrak{I}[P,P\cup A]
-    =\bigl\{H\in\powerset(P\cup A)\bigm|P\subseteq H\bigr\}}{%
-    \FormulaRefAuto{BooleanSetIntervalDef}[def]}
-  \proofstepwidestar[]{\CoreFamily{P}{A}=\mathfrak{I}[P,P\cup A]}{%
-    \rChain{1,\FormulaRefAuto{a=b\vdash b=a}[thm]{2}}}
+  \proofstepwide[]{}{=}{\mathfrak{I}[P,P\cup A]}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{BooleanSetIntervalDef}[def]}}
+  \proofstepwide[]{\CoreFamily{P}{A}}{=}{\mathfrak{I}[P,P\cup A]}{%
+    \rChain{1,2}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Elementkriterium einer Kernfamilie]{%
@@ -2469,15 +2469,17 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
 }{CoreFamilyMembership}{%
   \DeltaRow{Mengen}{P\dsep A\dsep H\dsep\CoreFamily{P}{A}}
 }
-\begin{tabproof}
-  \proofstep{}{\CoreFamily{P}{A}=\mathfrak{I}[P,P\cup A]}{%
-    \FormulaRefAuto{CoreFamilyBooleanInterval}[thm]}
-  \proofstep{}{H\in\mathfrak{I}[P,P\cup A]\eqvdash
+\begin{tabproofwide}
+  \proofstepwide[]{H\in\CoreFamily{P}{A}}{\leftrightarrow}{%
+    H\in\mathfrak{I}[P,P\cup A]}{%
+    \rIE{\FormulaRefAuto{CoreFamilyBooleanInterval}[thm],
+      \FormulaRefAuto{P\leftrightarrow P}[thm]}}
+  \proofstepwide[]{}{\leftrightarrow}{%
     P\subseteq H\land H\subseteq P\cup A}{%
     \FormulaRefAuto{BooleanSetIntervalMembership}[thm]}
-  \proofstep{}{H\in\CoreFamily{P}{A}\eqvdash
-    P\subseteq H\land H\subseteq P\cup A}{\rIE{1,2}}
-\end{tabproof}
+  \proofstepwide[]{H\in\CoreFamily{P}{A}}{\leftrightarrow}{%
+    P\subseteq H\land H\subseteq P\cup A}{\rChain{1,2}}
+\end{tabproofwide}
 
 \FormulaThmDeltaK[Jede Kernfamilie liegt in der Potenzmenge ihres Trägers]{%
   \CoreFamily{P}{A}\subseteq\powerset(P\cup A)%
@@ -3080,17 +3082,12 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
   \proofstepwidestar[5]{\mathcal O=\powerset(D)\setminus\mathcal C}{\rA}
   \proofstepwidestar[6]{%
     \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}{\rA}
+  \CoreProofStepWideStarBreak[]{\powerset(D\cup\{k\})
+    =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
+    \FormulaRefAuto{PowerSetAdjoinedPointPartitionCover}[thm]}
   \CoreProofStepWideStarBreak[1]{%
-    \begin{aligned}[t]
-      &\powerset(D\cup\{k\})
-        =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]\land{}\\[-2pt]
-      &\powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing
-    \end{aligned}}{%
-    \FormulaRefAuto{PowerSetAdjoinedPointPartition}[thm]{1}}
-  \CoreProofStepWideStarBreak[1]{\powerset(D\cup\{k\})
-    =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rAEa{7}}
-  \CoreProofStepWideStarBreak[1]{%
-    \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{\rAEb{7}}
+    \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
+    \FormulaRefAuto{PowerSetAdjoinedPointPartitionDisjoint}[thm]{1}}
   \proofstepwidestar[5]{\mathcal O\cap\mathcal C=\varnothing}{%
     \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}[thm]{5}}
   \proofstepwidestar[5]{\mathcal O\subseteq\powerset(D)}{%
@@ -3101,7 +3098,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \FormulaRefAuto{A\subseteq A}[thm]}
   \CoreProofStepWideStarBreak[1,5]{%
     \mathcal O\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
-    \FormulaRefAuto{SubsetsOfDisjointSets}[thm]{11,12,9}}
+    \FormulaRefAuto{SubsetsOfDisjointSets}[thm]{10,11,8}}
   \CoreProofStepWideStarBreak[1,5]{%
     \begin{aligned}[t]
       &\mathcal O\cap
@@ -3110,8 +3107,8 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \end{aligned}}{%
     \rChain{%
       \FormulaRefAuto{A\cap(B\cup C)=(A\cap B)\cup(A\cap C)}[thm],
-      \rLRS{10},
-      \rLRS{13},
+      \rLRS{9},
+      \rLRS{12},
       \FormulaRefAuto{\varnothing\cup\varnothing=\varnothing}[thm]}}
   \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\bij\mathcal O}{%
     \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
@@ -3122,7 +3119,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       &\qquad\bij\mathcal O\cup
         \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
     \end{aligned}}{%
-    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{10,14,15,4}}
+    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{9,13,14,4}}
   \CoreProofStepWideStarBreak[2,5]{\mathcal O\cup\mathcal C=\powerset(D)}{%
     \rChain{%
       \rLRS{5},
@@ -3138,19 +3135,19 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \rChain{%
       \FormulaRefAuto{a=b\vdash b=a}[thm]{%
         \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]},
-      \rLRS{17},
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{8}}}
+      \rLRS{16},
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}}
   \CoreProofStepWideStarBreak[1,2,4,5]{%
     \begin{aligned}[t]
       &\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}\\[-2pt]
       &\qquad\colon\powerset(D)\bij\powerset(D\cup\{k\})
     \end{aligned}}{%
-    \rIE{17,18,16}}
+    \rIE{16,17,15}}
   \CoreProofStepWideStarBreak[1,2,4,5,6]{%
-    \eta\colon\powerset(D)\bij\powerset(D\cup\{k\})}{\rIE{6,19}}
+    \eta\colon\powerset(D)\bij\powerset(D\cup\{k\})}{\rIE{6,18}}
 
   \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\to\mathcal O}{%
-    \FormulaRefAuto{Bijektive Funktion}[def]{15}}
+    \FormulaRefAuto{Bijektive Funktion}[def]{14}}
   \proofstepwidestar[]{\mathcal O\subseteq
     \mathcal O\cup
       \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
@@ -3162,7 +3159,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
         \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
     \end{aligned}}{%
     \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
-      \vdash F\colon A\to C}[thm]{21,22}}
+      \vdash F\colon A\to C}[thm]{20,21}}
   \proofstepwidestar[4]{\psi\colon\mathcal C\to
     \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
     \FormulaRefAuto{Bijektive Funktion}[def]{4}}
@@ -3180,38 +3177,38 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
         \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
     \end{aligned}}{%
     \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
-      \vdash F\colon A\to C}[thm]{24,25}}
+      \vdash F\colon A\to C}[thm]{23,24}}
 
-  \proofstepwidestar[27]{H\in\powerset(D)}{\rA}
-  \proofstepwidestar[28]{H\notin\mathcal C}{\rA}
-  \proofstepwidestar[5,27,28]{H\in\mathcal O}{%
+  \proofstepwidestar[26]{H\in\powerset(D)}{\rA}
+  \proofstepwidestar[27]{H\notin\mathcal C}{\rA}
+  \proofstepwidestar[5,26,27]{H\in\mathcal O}{%
     \FormulaRefAuto{x\in A\setminus B\eqvdash
-      x\in A\land x\notin B}[thm]{\rAI{27,28},5}}
-  \CoreProofStepWideStarBreak[4,5,27,28]{%
+      x\in A\land x\notin B}[thm]{\rAI{26,27},5}}
+  \CoreProofStepWideStarBreak[4,5,26,27]{%
     \begin{aligned}[t]
       &\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}(H)\\[-2pt]
       &\qquad=\Id_{\mathcal O}(H)
     \end{aligned}}{%
     \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
-      \vdash\CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{23,26,29}}
-  \proofstepwidestar[4,5,6,27,28]{\eta(H)=\Id_{\mathcal O}(H)}{%
-    \rIE{6,30}}
-  \proofstepwidestar[5,27,28]{\Id_{\mathcal O}(H)=H}{%
-    \FormulaRefAuto{x\in A\vdash\Id_A(x)=x}[thm]{29}}
-  \proofstepwidestar[4,5,6,27,28]{\eta(H)=H}{\rChain{31,32}}
-  \proofstepwidestar[4,5,6,27]{%
-    H\notin\mathcal C\rightarrow\eta(H)=H}{\rRI{28,33}}
+      \vdash\CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{22,25,28}}
+  \proofstepwidestar[4,5,6,26,27]{\eta(H)=\Id_{\mathcal O}(H)}{%
+    \rIE{6,29}}
+  \proofstepwidestar[5,26,27]{\Id_{\mathcal O}(H)=H}{%
+    \FormulaRefAuto{x\in A\vdash\Id_A(x)=x}[thm]{28}}
+  \proofstepwidestar[4,5,6,26,27]{\eta(H)=H}{\rChain{30,31}}
+  \proofstepwidestar[4,5,6,26]{%
+    H\notin\mathcal C\rightarrow\eta(H)=H}{\rRI{27,32}}
   \CoreProofStepWideStarBreak[4,5,6]{%
     \forall H\in\powerset(D)\,
       \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)}{%
-    \rUI{\rRI{27,34}}}
+    \rUI{\rRI{26,33}}}
   \proofstepwidestar[]{\varnothing\in\powerset(D)}{%
     \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{%
       \FormulaRefAuto{\varnothing\subseteq A}[thm]}}
   \proofstepwidestar[4,5,6]{%
     \varnothing\notin\mathcal C\rightarrow
-      \eta(\varnothing)=\varnothing}{\rRE{\rUE{35},36}}
-  \proofstepwidestar[3,4,5,6]{\eta(\varnothing)=\varnothing}{\rRE{37,3}}
+      \eta(\varnothing)=\varnothing}{\rRE{\rUE{34},35}}
+  \proofstepwidestar[3,4,5,6]{\eta(\varnothing)=\varnothing}{\rRE{36,3}}
   \CoreProofStepWideStarBreak[1,2,3,4,5,6]{%
     \begin{aligned}[t]
       &\bigl(\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})\bigr)\\[-2pt]
@@ -3219,7 +3216,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       &\qquad\forall H\in\powerset(D)\,
         \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)\Bigr)
     \end{aligned}}{%
-    \rAI{20,\rAI{38,35}}}
+    \rAI{19,\rAI{37,34}}}
 \end{tabproofwide}
 
 Die lokale Fortsetzung ver\"andert damit nur die gesch\"utzte Familie
