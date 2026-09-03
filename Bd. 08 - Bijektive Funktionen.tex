@@ -2227,6 +2227,39 @@ sein.  Gerade diese Bindung an die Grundabbildung \(F\) ist daher wesentlich.
 
 \section{Zusammengesetzte Bijektionen auf Mengenfamilien}
 
+% In diesem Abschnitt treten viele lange Mengenfamilien- und Funktionsterme
+% auf.  Feste, oben ausgerichtete Absatzspalten halten Formel und Begründung
+% dennoch in jeder Beweiszeile an derselben Stelle.  Die Anpassung wird am
+% Abschnittsende wieder zurückgenommen.
+\let\BandEightFamiliesOriginalProofStepWideStar\proofstepwidestar
+\let\BandEightFamiliesOriginalProofStepWideStarBreakKeep\proofstepwidestarbreakkeep
+\ExplSyntaxOn
+\tl_new:N \l_mx_band_eight_families_break_args_tl
+\NewDocumentCommand{\BandEightFamiliesBreakArgs}{m}
+  {
+    \group_begin:
+      \tl_set:Nn \l_mx_band_eight_families_break_args_tl {#1}
+      \tl_replace_all:Nnn
+        \l_mx_band_eight_families_break_args_tl {,} {,\allowbreak}
+      \tl_use:N \l_mx_band_eight_families_break_args_tl
+    \group_end:
+  }
+\ExplSyntaxOff
+\makeatletter
+\newcol@{G}[0]{>{\raggedleft\arraybackslash\scriptsize}p{.10\linewidth}}
+\makeatother
+\RenewDocumentCommand{\proofstepwidestar}{O{} m m}{%
+  \stepcounter{proofstepnr}%
+  \BandEightFamiliesBreakArgs{#1} & \theproofstepnr
+     & \multicolumn{3}{@{}>{\raggedright\arraybackslash}p{.59\linewidth}@{}}{%
+         \ensuremath{#2}}%
+     & \multicolumn{1}{@{\hspace{.4em}}l@{}}{%
+         \makebox[.23\linewidth][l]{\scriptsize #3}}\\%
+}
+\RenewDocumentCommand{\proofstepwidestarbreakkeep}{O{} m m}{%
+  \proofstepwidestar[#1]{#2}{#3}%
+}
+
 Die folgenden drei Konstruktionen fassen ein wiederkehrendes Verfahren
 zusammen.  Zunächst werden Bijektionen auf disjunkten Teilen verklebt.  Dann
 wird eine veränderliche Restmenge bei festgehaltenem Kern transportiert.
@@ -2426,16 +2459,6 @@ vollkommen beliebig.
 \end{tabproofsplitwide}
 
 \subsection{Boolesche Intervalle mit festem Kern und ihr Transport}
-
-% Bei besonders langen Formeln steht die Begründung in einer eigenen
-% Tabellenzeile.  Abhängigkeiten und Schrittzählung bleiben unverändert.
-\NewDocumentCommand{\CoreProofStepWideStarBreak}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  #1 & \theproofstepnr
-     & \multicolumn{3}{@{}>{$}l<{$}@{}}{#2} & \\[-.2ex]%
-     & & \multicolumn{4}{@{}r@{}}{%
-       \makebox[0pt][r]{\ensuremath{#3}}}\\%
-}
 Die folgende Notation ist die auf den Tr\"ager \(P\cup A\) spezialisierte
 Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
 \(P\) und die frei ver\"anderlichen Koordinaten \(A\setminus P\) hervor.
@@ -2498,133 +2521,162 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Zerlegung einer Kernfamilie an einem adjungierten Punkt]{%
+  c\notin P\cup A\vdash
   \begin{aligned}[t]
-    &c\notin P\cup A\vdash{}\\[-2pt]
-    &\CoreFamily{P}{A\cup\{c\}}
-      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}\dsep{}\\[-2pt]
-    &\CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing
+    &\text{(i)}\;\CoreFamily{P}{A\cup\{c\}}
+      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}\\[-2pt]
+    &\text{(ii)}\;\CoreFamily{P}{A}\cap
+      \CoreFamily{P\cup\{c\}}{A}=\varnothing
   \end{aligned}%
 }{CoreFamilyAdjoinedSplit}{%
   \DeltaRow{Mengen}{P\dsep A\dsep c\dsep H\dsep
     \CoreFamily{P}{A\cup\{c\}}\dsep\CoreFamily{P}{A}\dsep
     \CoreFamily{P\cup\{c\}}{A}}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{c\notin P\cup A}{\rA}
-  \proofstepwidestar[]{P\cup(A\cup\{c\})=(P\cup A)\cup\{c\}}{%
-    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
-      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}}
-  \proofstepwidestar[]{P\cup(A\cup\{c\})=(P\cup\{c\})\cup A}{%
-    \rChain{%
-      \rLRS{\FormulaRefAuto{A\cup B=B\cup A}[thm]},
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
-        \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}}}
-  \proofstepwidestar[4]{H\in\CoreFamily{P}{A\cup\{c\}}}{\rA}
-  \proofstepwidestar[4]{P\subseteq H\land H\subseteq P\cup(A\cup\{c\})}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{4}}
-  \proofstepwidestar[4]{c\in H\lor c\notin H}{%
-    \FormulaRefAuto{P\lor\neg P}[thm]}
-  \proofstepwidestar[7]{c\in H}{\rA}
-  \proofstepwidestar[7]{\{c\}\subseteq H}{%
-    \FormulaRefAuto{x\in A\vdash\{x\}\subseteq A}[thm]{7}}
-  \proofstepwidestar[4,7]{P\cup\{c\}\subseteq H}{%
-    \FormulaRefAuto{A\subseteq B\dsep C\subseteq B\vdash
-      A\cup C\subseteq B}[thm]{\rAEa{5},8}}
-  \proofstepwidestar[4]{H\subseteq(P\cup\{c\})\cup A}{%
-    \rIE{3,\rAEb{5}}}
-  \proofstepwidestar[4,7]{H\in\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{9,10}}}
-  \proofstepwidestar[4,7]{H\in
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
-      \rOIb{11}}}
-  \proofstepwidestar[13]{c\notin H}{\rA}
-  \proofstepwidestar[4]{H\subseteq(P\cup A)\cup\{c\}}{%
-    \rIE{2,\rAEb{5}}}
-  \proofstepwidestar[1,4,13]{H\subseteq P\cup A}{%
-    \FormulaRefAuto{SubsetAdjoinWithoutPoint}[thm]{14,13}}
-  \proofstepwidestar[1,4,13]{H\in\CoreFamily{P}{A}}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{\rAEa{5},15}}}
-  \proofstepwidestar[1,4,13]{H\in
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
-      \rOIa{16}}}
-  \proofstepwidestar[1,4]{H\in
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
-    \rOE{6,7,12,13,17}}
-  \proofstepwidestar[1]{\CoreFamily{P}{A\cup\{c\}}\subseteq
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{4,18}}}}
-  \proofstepwidestar[20]{H\in
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{\rA}
-  \proofstepwidestar[20]{H\in\CoreFamily{P}{A}\lor
-    H\in\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{20}}
-  \proofstepwidestar[22]{H\in\CoreFamily{P}{A}}{\rA}
-  \proofstepwidestar[22]{P\subseteq H\land H\subseteq P\cup A}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{22}}
-  \proofstepwidestar[]{P\cup A\subseteq P\cup(A\cup\{c\})}{%
-    \FormulaRefAuto{A\subseteq B,\, C\subseteq D\vdash
-      A\cup C\subseteq B\cup D}[thm]{%
-      \FormulaRefAuto{A\subseteq A}[thm],
-      \FormulaRefAuto{A\subseteq A\cup B}[thm]}}
-  \proofstepwidestar[22]{H\subseteq P\cup(A\cup\{c\})}{%
-    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{%
-      \rAEb{23},24}}
-  \proofstepwidestar[22]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{\rAEa{23},25}}}
-  \proofstepwidestar[27]{H\in\CoreFamily{P\cup\{c\}}{A}}{\rA}
-  \proofstepwidestar[27]{P\cup\{c\}\subseteq H\land
-    H\subseteq(P\cup\{c\})\cup A}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{27}}
-  \proofstepwidestar[]{P\subseteq P\cup\{c\}}{%
-    \FormulaRefAuto{A\subseteq A\cup B}[thm]}
-  \proofstepwidestar[27]{P\subseteq H}{%
-    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{%
-      29,\rAEa{28}}}
-  \proofstepwidestar[27]{H\subseteq P\cup(A\cup\{c\})}{%
-    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{3},\rAEb{28}}}
-  \proofstepwidestar[27]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
-    \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{30,31}}}
-  \proofstepwidestar[20]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
-    \rOE{21,22,26,27,32}}
-  \proofstepwidestar[]{%
-    \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}
-    \subseteq\CoreFamily{P}{A\cup\{c\}}}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{20,33}}}}
-  \proofstepwidestar[1]{\CoreFamily{P}{A\cup\{c\}}
-    =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{19,34}}
-  \proofstepwidestar[36]{H\in
-    \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}}{\rA}
-  \proofstepwidestar[36]{H\in\CoreFamily{P}{A}\land
-    H\in\CoreFamily{P\cup\{c\}}{A}}{%
-    \FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}[thm]{36}}
-  \proofstepwidestar[36]{H\subseteq P\cup A}{%
-    \rAEb{\FormulaRefAuto{CoreFamilyMembership}[thm]{\rAEa{37}}}}
-  \proofstepwidestar[36]{P\cup\{c\}\subseteq H}{%
-    \rAEa{\FormulaRefAuto{CoreFamilyMembership}[thm]{\rAEb{37}}}}
-  \proofstepwidestar[]{c\in P\cup\{c\}}{%
-    \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
-      \rOIb{\FormulaRefAuto{a\in\{a\}}[thm]}}}
-  \proofstepwidestar[36]{c\in H}{%
-    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{39,40}}
-  \proofstepwidestar[36]{c\in P\cup A}{%
-    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{38,41}}
-  \proofstepwidestar[1,36]{\bot}{\rBI{1,42}}
-  \proofstepwidestar[1]{%
-    \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing}{%
-    \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{%
-      \rUI{\rCI{36,43}}}}
-  \proofstepwidestarbreakkeep[1]{%
-    \begin{aligned}[t]
-      &\CoreFamily{P}{A\cup\{c\}}
-        =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A},\\[-2pt]
-      &\CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing
-    \end{aligned}}{\rAI{35,44}}
-\end{tabproofwide}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Zerlegung]{%
+    c\notin P\cup A\vdash
+    \CoreFamily{P}{A\cup\{c\}}
+      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}%
+  }{%
+    c\notin P\cup A\vdash
+    \CoreFamily{P}{A\cup\{c\}}
+      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}%
+  }[CoreFamilyAdjoinedSplitCover]
+    \multicolumn{6}{@{}l}{\textbf{Hinrichtung: Fallzerlegung nach \(c\in H\)}}\\[.4ex]
+    \proofstepwidestar[1]{c\notin P\cup A}{\rA}
+    \proofstepwidestar[]{P\cup(A\cup\{c\})=(P\cup A)\cup\{c\}}{%
+      \FormulaRefAuto{A\cup(B\cup C)=(A\cup B)\cup C}[thm]}
+    \proofstepwidestar[]{A\cup\{c\}=\{c\}\cup A}{%
+      \FormulaRefAuto{A\cup B=B\cup A}[thm]}
+    \proofstepwidestar[]{P\cup(A\cup\{c\})=P\cup(\{c\}\cup A)}{%
+      \rLRS{3}}
+    \proofstepwidestar[]{P\cup(\{c\}\cup A)=(P\cup\{c\})\cup A}{%
+      \FormulaRefAuto{A\cup(B\cup C)=(A\cup B)\cup C}[thm]}
+    \proofstepwidestar[]{P\cup(A\cup\{c\})=(P\cup\{c\})\cup A}{%
+      \rChain{4,5}}
+    \proofstepwidestar[7]{H\in\CoreFamily{P}{A\cup\{c\}}}{\rA}
+    \proofstepwidestar[7]{P\subseteq H\land H\subseteq P\cup(A\cup\{c\})}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{7}}
+    \proofstepwidestar[7]{c\in H\lor c\notin H}{%
+      \FormulaRefAuto{P\lor\neg P}[thm]}
+    \proofstepwidestar[10]{c\in H}{\rA}
+    \proofstepwidestar[10]{\{c\}\subseteq H}{%
+      \FormulaRefAuto{x\in A\vdash\{x\}\subseteq A}[thm]{10}}
+    \proofstepwidestar[7,10]{P\cup\{c\}\subseteq H}{%
+      \FormulaRefAuto{A\subseteq B\dsep C\subseteq B\vdash
+        A\cup C\subseteq B}[thm]{\rAEa{8},11}}
+    \proofstepwidestar[7]{H\subseteq(P\cup\{c\})\cup A}{%
+      \rIE{6,\rAEb{8}}}
+    \proofstepwidestar[7,10]{H\in\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{12,13}}}
+    \proofstepwidestar[7,10]{H\in
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
+        \rOIb{14}}}
+    \proofstepwidestar[16]{c\notin H}{\rA}
+    \proofstepwidestar[7]{H\subseteq(P\cup A)\cup\{c\}}{%
+      \rIE{2,\rAEb{8}}}
+    \proofstepwidestar[1,7,16]{H\subseteq P\cup A}{%
+      \FormulaRefAuto{SubsetAdjoinWithoutPoint}[thm]{17,16}}
+    \proofstepwidestar[1,7,16]{H\in\CoreFamily{P}{A}}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{\rAEa{8},18}}}
+    \proofstepwidestar[1,7,16]{H\in
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
+        \rOIa{19}}}
+    \proofstepwidestar[1,7]{H\in
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+      \rOE{9,10,15,16,20}}
+    \proofstepwidestar[1]{\CoreFamily{P}{A\cup\{c\}}\subseteq
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{7,21}}}}
+
+    \addlinespace[.8ex]
+    \multicolumn{6}{@{}l}{\textbf{Rückrichtung: Einbettung beider Teile}}\\[.4ex]
+    \proofstepwidestar[23]{H\in
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{\rA}
+    \proofstepwidestar[23]{H\in\CoreFamily{P}{A}\lor
+      H\in\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{23}}
+    \proofstepwidestar[25]{H\in\CoreFamily{P}{A}}{\rA}
+    \proofstepwidestar[25]{P\subseteq H\land H\subseteq P\cup A}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{25}}
+    \proofstepwidestar[]{P\cup A\subseteq P\cup(A\cup\{c\})}{%
+      \FormulaRefAuto{A\subseteq B\dsep C\subseteq D\vdash
+        A\cup C\subseteq B\cup D}[thm]{%
+        \FormulaRefAuto{A\subseteq A}[thm],
+        \FormulaRefAuto{A\subseteq A\cup B}[thm]}}
+    \proofstepwidestar[25]{H\subseteq P\cup(A\cup\{c\})}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{%
+        \rAEb{26},27}}
+    \proofstepwidestar[25]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{\rAEa{26},28}}}
+    \proofstepwidestar[30]{H\in\CoreFamily{P\cup\{c\}}{A}}{\rA}
+    \proofstepwidestar[30]{P\cup\{c\}\subseteq H\land
+      H\subseteq(P\cup\{c\})\cup A}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{30}}
+    \proofstepwidestar[]{P\subseteq P\cup\{c\}}{%
+      \FormulaRefAuto{A\subseteq A\cup B}[thm]}
+    \proofstepwidestar[30]{P\subseteq H}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{%
+        32,\rAEa{31}}}
+    \proofstepwidestar[]{(P\cup\{c\})\cup A=P\cup(\{c\}\cup A)}{%
+      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}
+    \proofstepwidestar[]{\{c\}\cup A=A\cup\{c\}}{%
+      \FormulaRefAuto{A\cup B=B\cup A}[thm]}
+    \proofstepwidestar[]{P\cup(\{c\}\cup A)=P\cup(A\cup\{c\})}{%
+      \rLRS{35}}
+    \proofstepwidestar[]{(P\cup\{c\})\cup A=P\cup(A\cup\{c\})}{%
+      \rChain{34,36}}
+    \proofstepwidestar[30]{H\subseteq P\cup(A\cup\{c\})}{%
+      \rIE{37,\rAEb{31}}}
+    \proofstepwidestar[30]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
+      \FormulaRefAuto{CoreFamilyMembership}[thm]{\rAI{33,38}}}
+    \proofstepwidestar[23]{H\in\CoreFamily{P}{A\cup\{c\}}}{%
+      \rOE{24,25,29,30,39}}
+    \proofstepwidestar[]{%
+      \CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}
+      \subseteq\CoreFamily{P}{A\cup\{c\}}}{%
+      \FormulaRefAuto{A\subseteq B\coloneq
+        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{23,40}}}}
+    \proofstepwidestar[1]{\CoreFamily{P}{A\cup\{c\}}
+      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{22,41}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Disjunktheit]{%
+    c\notin P\cup A\vdash
+    \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing
+  }{%
+    c\notin P\cup A\vdash
+    \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing
+  }[CoreFamilyAdjoinedSplitDisjoint]
+    \proofstepwidestar[1]{c\notin P\cup A}{\rA}
+    \proofstepwidestar[2]{H\in
+      \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}}{\rA}
+    \proofstepwidestar[2]{H\in\CoreFamily{P}{A}\land
+      H\in\CoreFamily{P\cup\{c\}}{A}}{%
+      \FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}[thm]{2}}
+    \proofstepwidestar[2]{H\subseteq P\cup A}{%
+      \rAEb{\FormulaRefAuto{CoreFamilyMembership}[thm]{\rAEa{3}}}}
+    \proofstepwidestar[2]{P\cup\{c\}\subseteq H}{%
+      \rAEa{\FormulaRefAuto{CoreFamilyMembership}[thm]{\rAEb{3}}}}
+    \proofstepwidestar[]{c\in P\cup\{c\}}{%
+      \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{%
+        \rOIb{\FormulaRefAuto{a\in\{a\}}[thm]}}}
+    \proofstepwidestar[2]{c\in H}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,6}}
+    \proofstepwidestar[2]{c\in P\cup A}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,7}}
+    \proofstepwidestar[1,2]{\bot}{\rBI{1,8}}
+    \proofstepwidestar[1]{%
+      \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing}{%
+      \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{%
+        \rUI{\rCI{2,9}}}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Typisierung des Kerntransports]{%
   \begin{aligned}[t]
@@ -2696,33 +2748,56 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
 
 \FormulaThmDeltaK[Typ und Grundgleichung des Kerntransports]{%
   \begin{aligned}[t]
-    &P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
-      \vdash \CoreTransport{P}{Q}{f}\colon
-      \CoreFamily{P}{A}\to\CoreFamily{Q}{B},\\[-2pt]
-    &P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
-      \dsep H\in\CoreFamily{P}{A}\vdash
+    &\text{(i)}\;P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep
+      f\colon A\to B\vdash \CoreTransport{P}{Q}{f}\colon
+      \CoreFamily{P}{A}\to\CoreFamily{Q}{B}\\[-2pt]
+    &\text{(ii)}\;P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep
+      f\colon A\to B\dsep H\in\CoreFamily{P}{A}\vdash
       \CoreTransport{P}{Q}{f}(H)=Q\cup f[H\setminus P]
   \end{aligned}%
 }{CoreTransportValue}{%
   \DeltaRow{Mengen}{P\dsep Q\dsep A\dsep B\dsep H}
   \DeltaRow{Funktionen}{f\dsep\CoreTransport{P}{Q}{f}}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{P\cap A=\varnothing}{\rA}
-  \proofstepwidestar[2]{Q\cap B=\varnothing}{\rA}
-  \proofstepwidestar[3]{f\colon A\to B}{\rA}
-  \CoreProofStepWideStarBreak[1,2,3]{\CoreTransport{P}{Q}{f}\colon
-    \CoreFamily{P}{A}\to\CoreFamily{Q}{B}}{%
-    \FormulaRefAuto{CoreTransportDef}[def]{1,2,3}}
-  \CoreProofStepWideStarBreak[1,2,3]{%
-    \forall K\in\CoreFamily{P}{A}\,
-      \bigl(\CoreTransport{P}{Q}{f}(K)=Q\cup f[K\setminus P]\bigr)}{%
-    \FormulaRefAuto{CoreTransportDef}[def]{1,2,3}}
-  \proofstepwidestar[6]{H\in\CoreFamily{P}{A}}{\rA}
-  \CoreProofStepWideStarBreak[1,2,3,6]{\CoreTransport{P}{Q}{f}(H)=
-    Q\cup f[H\setminus P]}{%
-    \rRE{\rUE{5},6}}
-\end{tabproofwide}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Typ]{%
+    P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
+    \vdash \CoreTransport{P}{Q}{f}\colon
+      \CoreFamily{P}{A}\to\CoreFamily{Q}{B}%
+  }{%
+    P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
+    \vdash \CoreTransport{P}{Q}{f}\colon
+      \CoreFamily{P}{A}\to\CoreFamily{Q}{B}%
+  }[CoreTransportMapping]
+    \proofstepwidestar[1]{P\cap A=\varnothing}{\rA}
+    \proofstepwidestar[2]{Q\cap B=\varnothing}{\rA}
+    \proofstepwidestar[3]{f\colon A\to B}{\rA}
+    \proofstepwidestar[1,2,3]{\CoreTransport{P}{Q}{f}\colon
+      \CoreFamily{P}{A}\to\CoreFamily{Q}{B}}{%
+      \FormulaRefAuto{CoreTransportDef}[def]{1,2,3}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Grundgleichung]{%
+    P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
+    \dsep H\in\CoreFamily{P}{A}\vdash
+    \CoreTransport{P}{Q}{f}(H)=Q\cup f[H\setminus P]%
+  }{%
+    P\cap A=\varnothing\dsep Q\cap B=\varnothing\dsep f\colon A\to B
+    \dsep H\in\CoreFamily{P}{A}\vdash
+    \CoreTransport{P}{Q}{f}(H)=Q\cup f[H\setminus P]%
+  }[CoreTransportEvaluation]
+    \proofstepwidestar[1]{P\cap A=\varnothing}{\rA}
+    \proofstepwidestar[2]{Q\cap B=\varnothing}{\rA}
+    \proofstepwidestar[3]{f\colon A\to B}{\rA}
+    \proofstepwidestar[4]{H\in\CoreFamily{P}{A}}{\rA}
+    \proofstepwidestar[1,2,3]{%
+      \forall K\in\CoreFamily{P}{A}\,
+        \bigl(\CoreTransport{P}{Q}{f}(K)=Q\cup f[K\setminus P]\bigr)}{%
+      \FormulaRefAuto{CoreTransportDef}[def]{1,2,3}}
+    \proofstepwidestar[1,2,3,4]{\CoreTransport{P}{Q}{f}(H)=
+      Q\cup f[H\setminus P]}{\rRE{\rUE{5},4}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Rest einer Kernfamilie liegt in der variablen Schicht]{%
   P\cap A=\varnothing\dsep H\in\CoreFamily{P}{A}
@@ -2780,15 +2855,15 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       \FormulaRefAuto{A\subseteq A}[thm],8,2}}
   \proofstepwidestar[1,2,3,6]{%
     \CoreTransport{P}{Q}{f}(H)=Q\cup f[H\setminus P]}{%
-    \FormulaRefAuto{CoreTransportValue}[thm]{1,2,3,6}}
+    \FormulaRefAuto{CoreTransportEvaluation}[thm]{1,2,3,6}}
   \proofstepwidestar[1,2,3,6]{%
     \CoreTransport{P}{Q}{f}(H)\in\CoreFamily{Q}{B}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
-      \FormulaRefAuto{CoreTransportValue}[thm]{1,2,3},6}}
+      \FormulaRefAuto{CoreTransportMapping}[thm]{1,2,3},6}}
   \proofstepwidestarbreakkeep[1,2,3,4,6]{%
     \CoreTransport{Q}{P}{g}(\CoreTransport{P}{Q}{f}(H))
     =P\cup g[\CoreTransport{P}{Q}{f}(H)\setminus Q]}{%
-    \FormulaRefAuto{CoreTransportValue}[thm]{2,1,4,11}}
+    \FormulaRefAuto{CoreTransportEvaluation}[thm]{2,1,4,11}}
   \proofstepwidestarbreakkeep[2,3,6]{%
     (Q\cup f[H\setminus P])\setminus Q=f[H\setminus P]}{%
     \FormulaRefAuto{RemoveDisjointUnionSummand}[thm]{9}}
@@ -2850,10 +2925,10 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       \FormulaRefAuto{x\in A \vdash F^{-1}(F(x))=x}[thm]{3}}
     \proofstepwidestar[1,2,3]{\CoreTransport{P}{Q}{f}\colon
       \CoreFamily{P}{A}\to\CoreFamily{Q}{B}}{%
-      \FormulaRefAuto{CoreTransportValue}[thm]{1,2,7}}
+      \FormulaRefAuto{CoreTransportMapping}[thm]{1,2,7}}
     \proofstepwidestar[1,2,3]{\CoreTransport{Q}{P}{f^{-1}}\colon
       \CoreFamily{Q}{B}\to\CoreFamily{P}{A}}{%
-      \FormulaRefAuto{CoreTransportValue}[thm]{2,1,6}}
+      \FormulaRefAuto{CoreTransportMapping}[thm]{2,1,6}}
     \proofstepwidestar[1,2,3,4]{\CoreTransport{P}{Q}{f}(H)
       \in\CoreFamily{Q}{B}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
@@ -2903,7 +2978,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       \FormulaRefAuto{Bijektive Funktion}[def]{3}}
     \proofstepwidestar[2,1,3]{\CoreTransport{Q}{P}{f^{-1}}\colon
       \CoreFamily{Q}{B}\to\CoreFamily{P}{A}}{%
-      \FormulaRefAuto{CoreTransportValue}[thm]{2,1,6}}
+      \FormulaRefAuto{CoreTransportMapping}[thm]{2,1,6}}
     \proofstepwidestar[1,2,3,4]{\CoreTransport{Q}{P}{f^{-1}}(J)
       \in\CoreFamily{P}{A}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{8,4}}
@@ -2923,7 +2998,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \proofstepwidestar[3]{f\colon A\bij B}{\rA}
     \proofstepwidestar[1,2,3]{\CoreTransport{P}{Q}{f}\colon
       \CoreFamily{P}{A}\to\CoreFamily{Q}{B}}{%
-      \FormulaRefAuto{CoreTransportValue}[thm]{1,2,
+      \FormulaRefAuto{CoreTransportMapping}[thm]{1,2,
         \FormulaRefAuto{Bijektive Funktion}[def]{3}}}
     \proofstepwidestar[5]{H,K\in\CoreFamily{P}{A}}{\rA}
     \proofstepwidestar[6]{\CoreTransport{P}{Q}{f}(H)=
@@ -2992,7 +3067,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
   \proofstepwidestar[2]{c\notin A}{\rAEb{7}}
   \proofstepwidestar[2]{P\cap\{c\}=\varnothing}{%
     \FormulaRefAuto{AvoidedSingletonDisjoint}[thm]{8}}
-  \CoreProofStepWideStarBreak[1,2]{P\cap(A\cup\{c\})=\varnothing}{%
+  \proofstepwidestar[1,2]{P\cap(A\cup\{c\})=\varnothing}{%
     \rChain{%
       \FormulaRefAuto{A\cap(B\cup C)=(A\cap B)\cup(A\cap C)}[thm],
       \rLRS{1},
@@ -3002,27 +3077,20 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
     \FormulaRefAuto{AdjoinOutsideIntersection}[thm]{9}}
   \proofstepwidestar[1,2]{(P\cup\{c\})\cap A=\varnothing}{%
     \rChain{12,1}}
-  \CoreProofStepWideStarBreak[2]{%
-    \begin{aligned}[t]
-      \CoreFamily{P}{A\cup\{c\}}
-        &=\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}\dsep{}\\[-2pt]
-      \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}
-        &=\varnothing
-    \end{aligned}}{%
-    \FormulaRefAuto{CoreFamilyAdjoinedSplit}[thm]{2}}
   \proofstepwidestar[2]{%
     \CoreFamily{P}{A\cup\{c\}}
-      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{\rAEa{14}}
+      =\CoreFamily{P}{A}\cup\CoreFamily{P\cup\{c\}}{A}}{%
+    \FormulaRefAuto{CoreFamilyAdjoinedSplitCover}[thm]{2}}
   \proofstepwidestar[2]{%
     \CoreFamily{P}{A}\cap\CoreFamily{P\cup\{c\}}{A}=\varnothing}{%
-    \rAEb{14}}
-  \CoreProofStepWideStarBreak[1,2,4]{\CoreTransport{P}{P}{\sigma}\colon
+    \FormulaRefAuto{CoreFamilyAdjoinedSplitDisjoint}[thm]{2}}
+  \proofstepwidestar[1,2,4]{\CoreTransport{P}{P}{\sigma}\colon
     \CoreFamily{P}{A}\bij\CoreFamily{P}{A\cup\{c\}}}{%
     \FormulaRefAuto{CoreFamilyTransportBijective}[thm]{1,11,4}}
-  \CoreProofStepWideStarBreak[1,2,3,5]{\CoreTransport{P\cup\{c\}}{Q}{\theta}\colon
+  \proofstepwidestar[1,2,3,5]{\CoreTransport{P\cup\{c\}}{Q}{\theta}\colon
     \CoreFamily{P\cup\{c\}}{A}\bij\CoreFamily{Q}{B}}{%
     \FormulaRefAuto{CoreFamilyTransportBijective}[thm]{13,3,5}}
-  \CoreProofStepWideStarBreak[1,2,3,4,5,6]{%
+  \proofstepwidestar[1,2,3,4,5,6]{%
     \begin{aligned}[t]
       &\CaseFun
         {\CoreFamily{P}{A}}
@@ -3033,8 +3101,8 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       &\qquad\bij
         \CoreFamily{P}{A\cup\{c\}}\cup\CoreFamily{Q}{B}
     \end{aligned}}{%
-    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{16,6,17,18}}
-  \CoreProofStepWideStarBreak[1,2,3,4,5,6]{%
+    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{15,6,16,17}}
+  \proofstepwidestar[1,2,3,4,5,6]{%
     \begin{aligned}[t]
       &\CaseFun
         {\CoreFamily{P}{A}}
@@ -3045,7 +3113,7 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       &\qquad\bij
         \CoreFamily{P}{A\cup\{c\}}\cup\CoreFamily{Q}{B}
     \end{aligned}}{%
-    \rIE{15,19}}
+    \rIE{14,18}}
 \end{tabproofwide}
 
 \newpage
@@ -3059,11 +3127,12 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
       \mathcal O=\powerset(D)\setminus\mathcal C\dsep{}\\[-2pt]
     &\eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
       \vdash{}\\[-2pt]
-    &\bigl(\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})\bigr)
-      \land{}\\[-2pt]
-    &\quad\Bigl(\eta(\varnothing)=\varnothing\land{}\\[-2pt]
-    &\qquad\forall H\in\powerset(D)\,
-      \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)\Bigr)
+    &\begin{aligned}[t]
+      &\text{(i)}\;\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})\\[-2pt]
+      &\text{(ii)}\;\forall H\in\powerset(D)\,
+        \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)\\[-2pt]
+      &\text{(iii)}\;\eta(\varnothing)=\varnothing
+    \end{aligned}
   \end{aligned}%
 }{ProtectedPowerSetExtension}{%
   \DeltaRow{Mengen}{D\dsep k\dsep H\dsep
@@ -3073,151 +3142,210 @@ Intervallnotation aus der Mengenlehre.  Sie hebt den festen unteren Rand
   \DeltaRow{Fallfunktion}{%
     \CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{k\notin D}{\rA}
-  \proofstepwidestar[2]{\mathcal C\subseteq\powerset(D)}{\rA}
-  \proofstepwidestar[3]{\varnothing\notin\mathcal C}{\rA}
-  \CoreProofStepWideStarBreak[4]{\psi\colon\mathcal C\bij
-    \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
-  \proofstepwidestar[5]{\mathcal O=\powerset(D)\setminus\mathcal C}{\rA}
-  \proofstepwidestar[6]{%
-    \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}{\rA}
-  \CoreProofStepWideStarBreak[]{\powerset(D\cup\{k\})
-    =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
-    \FormulaRefAuto{PowerSetAdjoinedPointPartitionCover}[thm]}
-  \CoreProofStepWideStarBreak[1]{%
-    \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
-    \FormulaRefAuto{PowerSetAdjoinedPointPartitionDisjoint}[thm]{1}}
-  \proofstepwidestar[5]{\mathcal O\cap\mathcal C=\varnothing}{%
-    \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}[thm]{5}}
-  \proofstepwidestar[5]{\mathcal O\subseteq\powerset(D)}{%
-    \FormulaRefAuto{A\setminus B\subseteq A}[thm]{5}}
-  \proofstepwidestar[]{%
-    \mathfrak{I}[\{k\},D\cup\{k\}]
-      \subseteq\mathfrak{I}[\{k\},D\cup\{k\}]}{%
-    \FormulaRefAuto{A\subseteq A}[thm]}
-  \CoreProofStepWideStarBreak[1,5]{%
-    \mathcal O\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
-    \FormulaRefAuto{SubsetsOfDisjointSets}[thm]{10,11,8}}
-  \CoreProofStepWideStarBreak[1,5]{%
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Bijektivität]{%
     \begin{aligned}[t]
-      &\mathcal O\cap
-        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)\\[-2pt]
-      &\qquad=\varnothing
-    \end{aligned}}{%
-    \rChain{%
-      \FormulaRefAuto{A\cap(B\cup C)=(A\cap B)\cup(A\cap C)}[thm],
-      \rLRS{9},
-      \rLRS{12},
-      \FormulaRefAuto{\varnothing\cup\varnothing=\varnothing}[thm]}}
-  \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\bij\mathcal O}{%
-    \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
-  \CoreProofStepWideStarBreak[1,4,5]{%
-    \begin{aligned}[t]
-      &\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
-        \colon\mathcal O\cup\mathcal C\\[-2pt]
-      &\qquad\bij\mathcal O\cup
+      &k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+        \varnothing\notin\mathcal C\dsep{}\\[-2pt]
+      &\psi\colon\mathcal C\bij
+        \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+        \mathcal O=\powerset(D)\setminus\mathcal C\dsep{}\\[-2pt]
+      &\eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+        \vdash\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})
+    \end{aligned}%
+  }{%
+    k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+    \varnothing\notin\mathcal C\dsep
+    \psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+    \mathcal O=\powerset(D)\setminus\mathcal C\dsep
+    \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+    \vdash\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})%
+  }[ProtectedPowerSetExtensionBijective]
+    \proofstepwidestar[1]{k\notin D}{\rA}
+    \proofstepwidestar[2]{\mathcal C\subseteq\powerset(D)}{\rA}
+    \proofstepwidestar[3]{\varnothing\notin\mathcal C}{\rA}
+    \proofstepwidestar[4]{\psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
+    \proofstepwidestar[5]{\mathcal O=\powerset(D)\setminus\mathcal C}{\rA}
+    \proofstepwidestar[6]{%
+      \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}{\rA}
+    \proofstepwidestar[]{\powerset(D\cup\{k\})
+      =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
+      \FormulaRefAuto{PowerSetAdjoinedPointPartitionCover}[thm]}
+    \proofstepwidestar[1]{%
+      \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
+      \FormulaRefAuto{PowerSetAdjoinedPointPartitionDisjoint}[thm]{1}}
+    \proofstepwidestar[5]{\mathcal O\cap\mathcal C=\varnothing}{%
+      \FormulaRefAuto{A=B\setminus C\vdash A\cap C=\varnothing}[thm]{5}}
+    \proofstepwidestar[5]{\mathcal O\subseteq\powerset(D)}{%
+      \FormulaRefAuto{A\setminus B\subseteq A}[thm]{5}}
+    \proofstepwidestar[]{%
+      \mathfrak{I}[\{k\},D\cup\{k\}]
+        \subseteq\mathfrak{I}[\{k\},D\cup\{k\}]}{%
+      \FormulaRefAuto{A\subseteq A}[thm]}
+    \proofstepwidestar[1,5]{%
+      \mathcal O\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
+      \FormulaRefAuto{SubsetsOfDisjointSets}[thm]{10,11,8}}
+    \proofstepwidestar[1,5]{%
+      \mathcal O\cap
         \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
-    \end{aligned}}{%
-    \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{9,13,14,4}}
-  \CoreProofStepWideStarBreak[2,5]{\mathcal O\cup\mathcal C=\powerset(D)}{%
-    \rChain{%
-      \rLRS{5},
-      \FormulaRefAuto{A\cup B=B\cup A}[thm],
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
-        \FormulaRefAuto{UnionWithRelativeRemainder}[thm]{2}}}}
-  \CoreProofStepWideStarBreak[1,2,5]{%
-    \begin{aligned}[t]
-      &\mathcal O\cup
-        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)\\[-2pt]
-      &\qquad=\powerset(D\cup\{k\})
-    \end{aligned}}{%
-    \rChain{%
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
-        \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]},
-      \rLRS{16},
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}}
-  \CoreProofStepWideStarBreak[1,2,4,5]{%
-    \begin{aligned}[t]
-      &\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}\\[-2pt]
-      &\qquad\colon\powerset(D)\bij\powerset(D\cup\{k\})
-    \end{aligned}}{%
-    \rIE{16,17,15}}
-  \CoreProofStepWideStarBreak[1,2,4,5,6]{%
-    \eta\colon\powerset(D)\bij\powerset(D\cup\{k\})}{\rIE{6,18}}
+      =\varnothing}{%
+      \rChain{%
+        \FormulaRefAuto{A\cap(B\cup C)=(A\cap B)\cup(A\cap C)}[thm],
+        \rLRS{9},\rLRS{12},
+        \FormulaRefAuto{\varnothing\cup\varnothing=\varnothing}[thm]}}
+    \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\bij\mathcal O}{%
+      \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
+    \proofstepwidestar[1,4,5]{%
+      \CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+        \colon\mathcal O\cup\mathcal C
+        \bij\mathcal O\cup
+          \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
+      \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{9,13,14,4}}
+    \proofstepwidestar[2,5]{\mathcal O\cup\mathcal C=\powerset(D)}{%
+      \rChain{%
+        \rLRS{5},
+        \FormulaRefAuto{A\cup B=B\cup A}[thm],
+        \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+          \FormulaRefAuto{UnionWithRelativeRemainder}[thm]{2}}}}
+    \proofstepwidestar[1,2,5]{%
+      \mathcal O\cup
+        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
+      =\powerset(D\cup\{k\})}{%
+      \rChain{%
+        \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+          \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]},
+        \rLRS{16},
+        \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}}
+    \proofstepwidestar[1,2,4,5]{%
+      \CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+        \colon\powerset(D)\bij\powerset(D\cup\{k\})}{%
+      \rIE{16,17,15}}
+    \proofstepwidestar[1,2,4,5,6]{%
+      \eta\colon\powerset(D)\bij\powerset(D\cup\{k\})}{\rIE{6,18}}
+  \closeproofpartwideindR
 
-  \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\to\mathcal O}{%
-    \FormulaRefAuto{Bijektive Funktion}[def]{14}}
-  \proofstepwidestar[]{\mathcal O\subseteq
-    \mathcal O\cup
-      \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
-    \FormulaRefAuto{A\subseteq A\cup B}[thm]}
-  \CoreProofStepWideStarBreak[]{%
+  \proofpartwideindR[Fixierung außerhalb der geschützten Familie]{%
     \begin{aligned}[t]
-      &\Id_{\mathcal O}\colon\mathcal O\to\\[-2pt]
-      &\qquad\mathcal O\cup
-        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
-    \end{aligned}}{%
-    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
-      \vdash F\colon A\to C}[thm]{20,21}}
-  \proofstepwidestar[4]{\psi\colon\mathcal C\to
-    \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
-    \FormulaRefAuto{Bijektive Funktion}[def]{4}}
-  \proofstepwidestar[]{%
-    \begin{aligned}[t]
-      &\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\\[-2pt]
-      &\qquad\subseteq\mathcal O\cup
-        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
-    \end{aligned}}{%
-    \FormulaRefAuto{B\subseteq A\cup B}[thm]}
-  \CoreProofStepWideStarBreak[4]{%
-    \begin{aligned}[t]
-      &\psi\colon\mathcal C\to\\[-2pt]
-      &\qquad\mathcal O\cup
-        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)
-    \end{aligned}}{%
-    \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
-      \vdash F\colon A\to C}[thm]{23,24}}
+      &k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+        \varnothing\notin\mathcal C\dsep{}\\[-2pt]
+      &\psi\colon\mathcal C\bij
+        \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+        \mathcal O=\powerset(D)\setminus\mathcal C\dsep{}\\[-2pt]
+      &\eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+        \vdash
+        \forall H\in\powerset(D)\,
+          \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)
+    \end{aligned}%
+  }{%
+    k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+    \varnothing\notin\mathcal C\dsep
+    \psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+    \mathcal O=\powerset(D)\setminus\mathcal C\dsep
+    \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+    \vdash\forall H\in\powerset(D)\,
+      \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)%
+  }[ProtectedPowerSetExtensionFixesOutside]
+    \proofstepwidestar[1]{k\notin D}{\rA}
+    \proofstepwidestar[2]{\mathcal C\subseteq\powerset(D)}{\rA}
+    \proofstepwidestar[3]{\varnothing\notin\mathcal C}{\rA}
+    \proofstepwidestar[4]{\psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
+    \proofstepwidestar[5]{\mathcal O=\powerset(D)\setminus\mathcal C}{\rA}
+    \proofstepwidestar[6]{%
+      \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}{\rA}
+    \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\bij\mathcal O}{%
+      \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
+    \proofstepwidestar[]{\mathcal O\subseteq
+      \mathcal O\cup
+        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
+      \FormulaRefAuto{A\subseteq A\cup B}[thm]}
+    \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\to\mathcal O}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{7}}
+    \proofstepwidestar[]{\Id_{\mathcal O}\colon\mathcal O\to
+      \mathcal O\cup
+        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
+      \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
+        \vdash F\colon A\to C}[thm]{9,8}}
+    \proofstepwidestar[4]{\psi\colon\mathcal C\to
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{4}}
+    \proofstepwidestar[]{%
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]
+      \subseteq\mathcal O\cup
+        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
+      \FormulaRefAuto{B\subseteq A\cup B}[thm]}
+    \proofstepwidestar[4]{\psi\colon\mathcal C\to
+      \mathcal O\cup
+        \bigl(\mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\bigr)}{%
+      \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C
+        \vdash F\colon A\to C}[thm]{11,12}}
+    \proofstepwidestar[14]{H\in\powerset(D)}{\rA}
+    \proofstepwidestar[15]{H\notin\mathcal C}{\rA}
+    \proofstepwidestar[5,14,15]{H\in\mathcal O}{%
+      \FormulaRefAuto{x\in A\setminus B\eqvdash
+        x\in A\land x\notin B}[thm]{\rAI{14,15},5}}
+    \proofstepwidestar[4,5,14,15]{%
+      \CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}(H)
+        =\Id_{\mathcal O}(H)}{%
+      \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
+        \vdash\CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{10,13,16}}
+    \proofstepwidestar[4,5,6,14,15]{\eta(H)=\Id_{\mathcal O}(H)}{%
+      \rIE{6,17}}
+    \proofstepwidestar[5,14,15]{\Id_{\mathcal O}(H)=H}{%
+      \FormulaRefAuto{x\in A\vdash\Id_A(x)=x}[thm]{16}}
+    \proofstepwidestar[4,5,6,14,15]{\eta(H)=H}{\rChain{18,19}}
+    \proofstepwidestar[4,5,6,14]{%
+      H\notin\mathcal C\rightarrow\eta(H)=H}{\rRI{15,20}}
+    \proofstepwidestar[4,5,6]{%
+      \forall H\in\powerset(D)\,
+        \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)}{%
+      \rUI{\rRI{14,21}}}
+  \closeproofpartwideindR
 
-  \proofstepwidestar[26]{H\in\powerset(D)}{\rA}
-  \proofstepwidestar[27]{H\notin\mathcal C}{\rA}
-  \proofstepwidestar[5,26,27]{H\in\mathcal O}{%
-    \FormulaRefAuto{x\in A\setminus B\eqvdash
-      x\in A\land x\notin B}[thm]{\rAI{26,27},5}}
-  \CoreProofStepWideStarBreak[4,5,26,27]{%
+  \proofpartwideindR[Fixierung der leeren Menge]{%
     \begin{aligned}[t]
-      &\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}(H)\\[-2pt]
-      &\qquad=\Id_{\mathcal O}(H)
-    \end{aligned}}{%
-    \FormulaRefAuto{f\colon A\to C\dsep g\colon B\to C\dsep x\in A
-      \vdash\CaseFun{A}{B}{f}{g}(x)=f(x)}[thm]{22,25,28}}
-  \proofstepwidestar[4,5,6,26,27]{\eta(H)=\Id_{\mathcal O}(H)}{%
-    \rIE{6,29}}
-  \proofstepwidestar[5,26,27]{\Id_{\mathcal O}(H)=H}{%
-    \FormulaRefAuto{x\in A\vdash\Id_A(x)=x}[thm]{28}}
-  \proofstepwidestar[4,5,6,26,27]{\eta(H)=H}{\rChain{30,31}}
-  \proofstepwidestar[4,5,6,26]{%
-    H\notin\mathcal C\rightarrow\eta(H)=H}{\rRI{27,32}}
-  \CoreProofStepWideStarBreak[4,5,6]{%
-    \forall H\in\powerset(D)\,
-      \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)}{%
-    \rUI{\rRI{26,33}}}
-  \proofstepwidestar[]{\varnothing\in\powerset(D)}{%
-    \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{%
-      \FormulaRefAuto{\varnothing\subseteq A}[thm]}}
-  \proofstepwidestar[4,5,6]{%
-    \varnothing\notin\mathcal C\rightarrow
-      \eta(\varnothing)=\varnothing}{\rRE{\rUE{34},35}}
-  \proofstepwidestar[3,4,5,6]{\eta(\varnothing)=\varnothing}{\rRE{36,3}}
-  \CoreProofStepWideStarBreak[1,2,3,4,5,6]{%
-    \begin{aligned}[t]
-      &\bigl(\eta\colon\powerset(D)\bij\powerset(D\cup\{k\})\bigr)\\[-2pt]
-      &\quad\land\Bigl(\eta(\varnothing)=\varnothing\land{}\\[-2pt]
-      &\qquad\forall H\in\powerset(D)\,
-        \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)\Bigr)
-    \end{aligned}}{%
-    \rAI{19,\rAI{37,34}}}
-\end{tabproofwide}
+      &k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+        \varnothing\notin\mathcal C\dsep{}\\[-2pt]
+      &\psi\colon\mathcal C\bij
+        \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+        \mathcal O=\powerset(D)\setminus\mathcal C\dsep{}\\[-2pt]
+      &\eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+        \vdash\eta(\varnothing)=\varnothing
+    \end{aligned}%
+  }{%
+    k\notin D\dsep\mathcal C\subseteq\powerset(D)\dsep
+    \varnothing\notin\mathcal C\dsep
+    \psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]\dsep
+    \mathcal O=\powerset(D)\setminus\mathcal C\dsep
+    \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}
+    \vdash\eta(\varnothing)=\varnothing%
+  }[ProtectedPowerSetExtensionFixesEmpty]
+    \proofstepwidestar[1]{k\notin D}{\rA}
+    \proofstepwidestar[2]{\mathcal C\subseteq\powerset(D)}{\rA}
+    \proofstepwidestar[3]{\varnothing\notin\mathcal C}{\rA}
+    \proofstepwidestar[4]{\psi\colon\mathcal C\bij
+      \mathcal C\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
+    \proofstepwidestar[5]{\mathcal O=\powerset(D)\setminus\mathcal C}{\rA}
+    \proofstepwidestar[6]{%
+      \eta=\CaseFun{\mathcal O}{\mathcal C}{\Id_{\mathcal O}}{\psi}}{\rA}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \forall H\in\powerset(D)\,
+        \bigl(H\notin\mathcal C\rightarrow\eta(H)=H\bigr)}{%
+      \FormulaRefAuto{ProtectedPowerSetExtensionFixesOutside}[thm]{1,2,3,4,5,6}}
+    \proofstepwidestar[]{\varnothing\in\powerset(D)}{%
+      \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{%
+        \FormulaRefAuto{\varnothing\subseteq A}[thm]}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \varnothing\notin\mathcal C\rightarrow
+        \eta(\varnothing)=\varnothing}{\rRE{\rUE{7},8}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \eta(\varnothing)=\varnothing}{\rRE{9,3}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
 
 Die lokale Fortsetzung ver\"andert damit nur die gesch\"utzte Familie
 \(\mathcal C\).  Die folgende Schichtfortsetzung h\"alt zus\"atzlich eine
@@ -3251,7 +3379,7 @@ disjunkte Tr\"agerschicht punktweise fest.
   \proofstepwidestar[1]{(X\cap A)\cup g(X\cap D)\subseteq A\cup E}{%
     \FormulaRefAuto{A\subseteq B\dsep C\subseteq D\vdash
       A\cup C\subseteq B\cup D}[thm]{7,6}}
-  \CoreProofStepWideStarBreak[1]{%
+  \proofstepwidestar[1]{%
     (X\cap A)\cup g(X\cap D)\in\powerset(A\cup E)}{%
     \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}[thm]{8}}
 \end{tabproofwide}
@@ -3278,10 +3406,10 @@ disjunkte Tr\"agerschicht punktweise fest.
 
 \FormulaThmDeltaK[Typ und Grundgleichung der Schichtfortsetzung]{%
   \begin{aligned}[t]
-    &g\colon\powerset(D)\to\powerset(E)\vdash
+    &\text{(i)}\;g\colon\powerset(D)\to\powerset(E)\vdash
       \LayerPowerMap{A}{D}{E}{g}\colon
-      \powerset(A\cup D)\to\powerset(A\cup E),\\[-2pt]
-    &g\colon\powerset(D)\to\powerset(E)\dsep
+      \powerset(A\cup D)\to\powerset(A\cup E)\\[-2pt]
+    &\text{(ii)}\;g\colon\powerset(D)\to\powerset(E)\dsep
       X\in\powerset(A\cup D)\vdash
       \LayerPowerMap{A}{D}{E}{g}(X)=(X\cap A)\cup g(X\cap D)
   \end{aligned}%
@@ -3289,21 +3417,42 @@ disjunkte Tr\"agerschicht punktweise fest.
   \DeltaRow{Mengen}{A\dsep D\dsep E\dsep X}
   \DeltaRow{Funktionen}{g\dsep\LayerPowerMap{A}{D}{E}{g}}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{g\colon\powerset(D)\to\powerset(E)}{\rA}
-  \proofstepwidestar[1]{\LayerPowerMap{A}{D}{E}{g}\colon
-    \powerset(A\cup D)\to\powerset(A\cup E)}{%
-    \FormulaRefAuto{LayerPowerMapDef}[def]{1}}
-  \CoreProofStepWideStarBreak[1]{%
-    \forall Y\in\powerset(A\cup D)\,
-      \bigl(\LayerPowerMap{A}{D}{E}{g}(Y)
-        =(Y\cap A)\cup g(Y\cap D)\bigr)}{%
-    \FormulaRefAuto{LayerPowerMapDef}[def]{1}}
-  \proofstepwidestar[4]{X\in\powerset(A\cup D)}{\rA}
-  \CoreProofStepWideStarBreak[1,4]{\LayerPowerMap{A}{D}{E}{g}(X)=
-    (X\cap A)\cup g(X\cap D)}{%
-    \rRE{\rUE{3},4}}
-\end{tabproofwide}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Typ]{%
+    g\colon\powerset(D)\to\powerset(E)\vdash
+    \LayerPowerMap{A}{D}{E}{g}\colon
+      \powerset(A\cup D)\to\powerset(A\cup E)%
+  }{%
+    g\colon\powerset(D)\to\powerset(E)\vdash
+    \LayerPowerMap{A}{D}{E}{g}\colon
+      \powerset(A\cup D)\to\powerset(A\cup E)%
+  }[LayerPowerMapMapping]
+    \proofstepwidestar[1]{g\colon\powerset(D)\to\powerset(E)}{\rA}
+    \proofstepwidestar[1]{\LayerPowerMap{A}{D}{E}{g}\colon
+      \powerset(A\cup D)\to\powerset(A\cup E)}{%
+      \FormulaRefAuto{LayerPowerMapDef}[def]{1}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Grundgleichung]{%
+    g\colon\powerset(D)\to\powerset(E)\dsep
+    X\in\powerset(A\cup D)\vdash
+    \LayerPowerMap{A}{D}{E}{g}(X)=(X\cap A)\cup g(X\cap D)%
+  }{%
+    g\colon\powerset(D)\to\powerset(E)\dsep
+    X\in\powerset(A\cup D)\vdash
+    \LayerPowerMap{A}{D}{E}{g}(X)=(X\cap A)\cup g(X\cap D)%
+  }[LayerPowerMapEvaluation]
+    \proofstepwidestar[1]{g\colon\powerset(D)\to\powerset(E)}{\rA}
+    \proofstepwidestar[2]{X\in\powerset(A\cup D)}{\rA}
+    \proofstepwidestar[1]{%
+      \forall Y\in\powerset(A\cup D)\,
+        \bigl(\LayerPowerMap{A}{D}{E}{g}(Y)
+          =(Y\cap A)\cup g(Y\cap D)\bigr)}{%
+      \FormulaRefAuto{LayerPowerMapDef}[def]{1}}
+    \proofstepwidestar[1,2]{\LayerPowerMap{A}{D}{E}{g}(X)=
+      (X\cap A)\cup g(X\cap D)}{\rRE{\rUE{3},2}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Zerlegung einer Menge in zwei Schichten]{%
   X\in\powerset(A\cup D)\vdash
@@ -3338,7 +3487,7 @@ disjunkte Tr\"agerschicht punktweise fest.
   \proofstepwidestar[2]{g\colon\powerset(D)\to\powerset(E)}{\rA}
   \proofstepwidestar[3]{X\in\powerset(A\cup D)}{\rA}
   \proofstepwidestar[2,3]{\LayerPowerMap{A}{D}{E}{g}(X)=
-    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapValue}[thm]{2,3}}
+    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapEvaluation}[thm]{2,3}}
   \proofstepwidestarbreakkeep[2]{g(X\cap D)\subseteq E}{%
     \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}[thm]{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
@@ -3377,7 +3526,7 @@ disjunkte Tr\"agerschicht punktweise fest.
   \proofstepwidestar[2]{g\colon\powerset(D)\to\powerset(E)}{\rA}
   \proofstepwidestar[3]{X\in\powerset(A\cup D)}{\rA}
   \proofstepwidestar[2,3]{\LayerPowerMap{A}{D}{E}{g}(X)=
-    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapValue}[thm]{2,3}}
+    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapEvaluation}[thm]{2,3}}
   \proofstepwidestarbreakkeep[1]{(X\cap A)\cap E=\varnothing}{%
     \FormulaRefAuto{SubsetsOfDisjointSets}[thm]{%
       \FormulaRefAuto{A\cap B\subseteq B}[thm],
@@ -3424,7 +3573,7 @@ disjunkte Tr\"agerschicht punktweise fest.
   \proofstepwidestar[3,6]{\LayerPowerMap{A}{D}{E}{g}(X)
     \in\powerset(A\cup E)}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
-      \FormulaRefAuto{LayerPowerMapValue}[thm]{3},6}}
+      \FormulaRefAuto{LayerPowerMapMapping}[thm]{3},6}}
   \proofstepwidestar[2,3,6]{\LayerPowerMap{A}{D}{E}{g}(X)\cap A=X\cap A}{%
     \FormulaRefAuto{LayerPowerMapStablePart}[thm]{2,3,6}}
   \proofstepwidestarbreakkeep[2,3,6]{\LayerPowerMap{A}{D}{E}{g}(X)\cap E=g(X\cap D)}{%
@@ -3435,7 +3584,7 @@ disjunkte Tr\"agerschicht punktweise fest.
       &\quad=(\LayerPowerMap{A}{D}{E}{g}(X)\cap A)\cup\\[-2pt]
       &\qquad h(\LayerPowerMap{A}{D}{E}{g}(X)\cap E)
     \end{aligned}}{%
-    \FormulaRefAuto{LayerPowerMapValue}[thm]{4,7}}
+    \FormulaRefAuto{LayerPowerMapEvaluation}[thm]{4,7}}
   \proofstepwidestar[]{X\cap D\in\powerset(D)}{%
     \FormulaRefAuto{x \in \powerset(A)\eqvdash x \subseteq A}[thm]{%
       \FormulaRefAuto{A\cap B\subseteq B}[thm]}}
@@ -3494,10 +3643,10 @@ disjunkte Tr\"agerschicht punktweise fest.
       \FormulaRefAuto{x\in A \vdash F^{-1}(F(x))=x}[thm]{3}}
     \proofstepwidestar[3]{\LayerPowerMap{A}{D}{E}{g}\colon
       \powerset(A\cup D)\to\powerset(A\cup E)}{%
-      \FormulaRefAuto{LayerPowerMapValue}[thm]{7}}
+      \FormulaRefAuto{LayerPowerMapMapping}[thm]{7}}
     \proofstepwidestar[3]{\LayerPowerMap{A}{E}{D}{g^{-1}}\colon
       \powerset(A\cup E)\to\powerset(A\cup D)}{%
-      \FormulaRefAuto{LayerPowerMapValue}[thm]{6}}
+      \FormulaRefAuto{LayerPowerMapMapping}[thm]{6}}
     \proofstepwidestarbreakkeep[3,4]{\LayerPowerMap{A}{D}{E}{g}(X)
       \in\powerset(A\cup E)}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
@@ -3546,7 +3695,7 @@ disjunkte Tr\"agerschicht punktweise fest.
       \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}[thm]{3}}
     \proofstepwidestarbreakkeep[3]{\LayerPowerMap{A}{E}{D}{g^{-1}}\colon
       \powerset(A\cup E)\to\powerset(A\cup D)}{%
-      \FormulaRefAuto{LayerPowerMapValue}[thm]{%
+      \FormulaRefAuto{LayerPowerMapMapping}[thm]{%
         \FormulaRefAuto{Bijektive Funktion}[def]{5}}}
     \proofstepwidestar[3,4]{\LayerPowerMap{A}{E}{D}{g^{-1}}(Z)
       \in\powerset(A\cup D)}{%
@@ -3569,7 +3718,7 @@ disjunkte Tr\"agerschicht punktweise fest.
     \proofstepwidestar[3]{g\colon\powerset(D)\bij\powerset(E)}{\rA}
     \proofstepwidestarbreakkeep[3]{\LayerPowerMap{A}{D}{E}{g}\colon
       \powerset(A\cup D)\to\powerset(A\cup E)}{%
-      \FormulaRefAuto{LayerPowerMapValue}[thm]{\FormulaRefAuto{Bijektive Funktion}[def]{3}}}
+      \FormulaRefAuto{LayerPowerMapMapping}[thm]{\FormulaRefAuto{Bijektive Funktion}[def]{3}}}
     \proofstepwidestar[5]{X,Y\in\powerset(A\cup D)}{\rA}
     \proofstepwidestar[6]{\LayerPowerMap{A}{D}{E}{g}(X)=
       \LayerPowerMap{A}{D}{E}{g}(Y)}{\rA}
@@ -3607,7 +3756,7 @@ disjunkte Tr\"agerschicht punktweise fest.
   \proofstepwidestar[2]{X\in\powerset(A\cup D)}{\rA}
   \proofstepwidestar[3]{g(X\cap D)=X\cap D}{\rA}
   \proofstepwidestarbreakkeep[1,2]{\LayerPowerMap{A}{D}{E}{g}(X)=
-    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapValue}[thm]{1,2}}
+    (X\cap A)\cup g(X\cap D)}{\FormulaRefAuto{LayerPowerMapEvaluation}[thm]{1,2}}
   \proofstepwidestar[1,2,3]{\LayerPowerMap{A}{D}{E}{g}(X)=
     (X\cap A)\cup(X\cap D)}{\rLRS{3,4}}
   \proofstepwidestar[2]{X=(X\cap A)\cup(X\cap D)}{%
@@ -3718,7 +3867,7 @@ disjunkte Tr\"agerschicht punktweise fest.
     \proofstepwidestar[3,6]{\LayerPowerMap{A}{D}{E}{g}(X)
       \in\powerset(A\cup E)}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
-        \FormulaRefAuto{LayerPowerMapValue}[thm]{%
+        \FormulaRefAuto{LayerPowerMapMapping}[thm]{%
           \FormulaRefAuto{Bijektive Funktion}[def]{3}},6}}
     \proofstepwidestarbreakkeep[2,3,4,5,6,7]{%
       \LayerPowerMap{A}{E}{D}{g^{-1}}
@@ -3897,7 +4046,7 @@ disjunkte Tr\"agerschicht punktweise fest.
       \FormulaRefAuto{\varnothing\subseteq A}[thm]}}
   \proofstepwidestar[3,6]{\LayerPowerMap{A}{D}{E}{g}(\varnothing)=
     (\varnothing\cap A)\cup g(\varnothing\cap D)}{%
-    \FormulaRefAuto{LayerPowerMapValue}[thm]{%
+    \FormulaRefAuto{LayerPowerMapEvaluation}[thm]{%
       \FormulaRefAuto{Bijektive Funktion}[def]{3},6}}
   \proofstepwidestarbreakkeep[3,4]{\LayerPowerMap{A}{D}{E}{g}(\varnothing)=\varnothing}{%
     \rChain{7,\rLRS{\FormulaRefAuto{\varnothing\cap A=\varnothing}[thm]},
@@ -3922,6 +4071,14 @@ disjunkte Tr\"agerschicht punktweise fest.
     \LayerPowerMap{A}{D}{E}{g}\restriction_{\PowNE{A\cup D}}
     \colon\PowNE{A\cup D}\bij\PowNE{A\cup E}}{\rIE{9,11}}
 \end{tabproofwide}
+
+% Die abschnittslokalen Tabellenanpassungen dürfen nicht in die folgenden
+% Abschnitte und beim Gesamtsatz nicht in spätere Bände hineinwirken.
+\let\proofstepwidestar\BandEightFamiliesOriginalProofStepWideStar
+\let\proofstepwidestarbreakkeep\BandEightFamiliesOriginalProofStepWideStarBreakKeep
+\makeatletter
+\newcol@{G}[0]{>{\scriptsize}r}
+\makeatother
 
 \section{Erweiterung einer Bijektion}
 

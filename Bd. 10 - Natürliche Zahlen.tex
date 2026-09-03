@@ -4357,6 +4357,21 @@ Fallterm eingeführt; ein separates Vorschriftssymbol ist nicht erforderlich.
     \UEI{5,6,7,8,9,11}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Eindeutiger Vorgänger einer getrennt typisierten Nichtnullzahl]{%
+  n\in\mathbb N\dsep n\neq0\vdash
+  \exists!k\in\mathbb N\,(n=\Succ(k))%
+}{PeanoNonzeroUniquePredecessor}{%
+  \DeltaRow{Mengen}{k\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb N}{\rA}
+  \proofstep{2}{n\neq0}{\rA}
+  \proofstep{1,2}{n\in\mathbb N\setminus\{0\}}{%
+    \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{\rAI{1,2}}}
+  \proofstep{1,2}{\exists!k\in\mathbb N\,(n=\Succ(k))}{%
+    \FormulaRefAuto{PeanoUniquePredecessor}[thm]{3}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Nachfolgerbijektion auf die Nichtnullzahlen]{%
   \Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}%
 }{PeanoSuccNonzeroBijection}{%
@@ -9002,6 +9017,58 @@ In der eingeführten Schreibweise ist diese Abbildung
   \proofstep{}{1\in\mathbb{N}}{\rIE{1,3}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Eins ist nicht null]{%
+  1\neq0%
+}{PeanoOneNeZero}{%
+  \DeltaRow{Mengen}{0\dsep1}%
+}
+\begin{tabproof}
+  \proofstep{}{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{}{\Succ(0)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{1}}
+  \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstep{}{1\neq0}{\rIE{3,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nichtnullsummand auf der linken Seite]{%
+  r,s\in\mathbb N\dsep r\neq0\vdash r+s\neq0%
+}{PeanoAddNonzeroLeft}{%
+  \DeltaRow{Mengen}{k\dsep r\dsep s}%
+}
+\begin{tabproof}
+  \proofstep{1}{r\in\mathbb N}{\rA}
+  \proofstep{2}{s\in\mathbb N}{\rA}
+  \proofstep{3}{r\neq0}{\rA}
+  \proofstep{1,3}{\exists k\in\mathbb N\,(r=\Succ(k))}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{1,3}}
+  \proofstep{5}{k\in\mathbb N\land r=\Succ(k)}{\rA}
+  \proofstep{2,5}{k+s\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{\rAEa{5},2}}
+  \proofstep{2,5}{\Succ(k)+s=\Succ(k+s)}{%
+    \FormulaRefAuto{PeanoAddSuccLeft}[thm]{\rAEa{5},2}}
+  \proofstep{2,5}{r+s=\Succ(k+s)}{\rIE{\rAEb{5},7}}
+  \proofstep{2,5}{\Succ(k+s)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{6}}
+  \proofstep{2,5}{r+s\neq0}{\rIE{8,9}}
+  \proofstep{1,2,3}{r+s\neq0}{\rEE{4,5,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nichtnullsummand auf der rechten Seite]{%
+  r,s\in\mathbb N\dsep s\neq0\vdash r+s\neq0%
+}{PeanoAddNonzeroRight}{%
+  \DeltaRow{Mengen}{r\dsep s}%
+}
+\begin{tabproof}
+  \proofstep{1}{r\in\mathbb N}{\rA}
+  \proofstep{2}{s\in\mathbb N}{\rA}
+  \proofstep{3}{s\neq0}{\rA}
+  \proofstep{1,2,3}{s+r\neq0}{%
+    \FormulaRefAuto{PeanoAddNonzeroLeft}[thm]{2,1,3}}
+  \proofstep{1,2}{r+s=s+r}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{1,2}}
+  \proofstep{1,2,3}{r+s\neq0}{\rIE{5,4}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Nachfolger als Addition von \(1\)]{%
   n\in\mathbb{N}\vdash n+1=\Succ(n)%
 }{PeanoAddOneSucc}{%
@@ -9066,6 +9133,37 @@ ein. Eine allgemeine Subtraktion auf \(\mathbb N\) ist damit nicht gemeint.
   \proofstep{1,2}{\Succ(\Pred(n))=n}{%
     \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
   \proofstep{1,2}{(n-1)+1=n}{\rChain{5,6,8}}
+\end{tabproof}
+
+Für Induktionsbeweise in der gebräuchlichen Plus-eins-Schreibweise
+leiten wir aus \(n+1=\Succ(n)\) die folgende Form der Induktionsregel ab.
+
+\FormulaThmDeltaK[Induktionsregel in Plus-eins-Schreibweise]{%
+  P(0)\dsep [x\in\mathbb N,P(x)]\vdots P(x+1)\dsep
+  n\in\mathbb N\vdash P(n)%
+}{PeanoInductionRuleAddOne}{%
+  \DeltaRow{Einstelliges Prädikat}{P}%
+  \DeltaRow{Mengen}{n\dsep x}%
+}
+\begin{tabproof}
+  \proofstep{1}{P(0)}{\rA}
+  \proofstep{2}{n\in\mathbb N}{\rA}
+  \proofstep{3}{x\in\mathbb N}{\rA}
+  \proofstep{4}{P(x)}{\rA}
+  \proofstep{3,4}{P(x+1)}{%
+    [x\in\mathbb N,P(x)]\vdots P(x+1)(3,4)}
+  \proofstep{3}{x+1=\Succ(x)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{3}}
+  \proofstep{3,4}{P(\Succ(x))}{\rIE{6,5}}
+  \proofstep{3}{P(x)\rightarrow P(\Succ(x))}{\rRI{4,7}}
+  \proofstep{}{x\in\mathbb N\rightarrow
+    \bigl(P(x)\rightarrow P(\Succ(x))\bigr)}{\rRI{3,8}}
+  \proofstep{}{\forall x\in\mathbb N\,
+    \bigl(P(x)\rightarrow P(\Succ(x))\bigr)}{\rUI{9}}
+  \proofstep{1}{\forall x\in\mathbb N\,P(x)}{%
+    \FormulaRefAuto{PeanoInductionAxiom}[ax]{1,10}}
+  \proofstep{1}{n\in\mathbb N\rightarrow P(n)}{\rUE{11}}
+  \proofstep{1,2}{P(n)}{\rRE{2,12}}
 \end{tabproof}
 
 \section{Natürliche Ordnung}
@@ -10738,6 +10836,20 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{A=\{x\in B\mid P(x)\}\vdash A\subseteq B}{2}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Elemente eines Anfangsabschnitts sind natürlich]{%
+  n\in\mathbb N\dsep k\in\NatSeg n\vdash k\in\mathbb N%
+}{PeanoNatSegElementNatural}{%
+  \DeltaRow{Mengen}{k\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb N}{\rA}
+  \proofstep{2}{k\in\NatSeg n}{\rA}
+  \proofstep{1}{\NatSeg n\subseteq\mathbb N}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{1}}
+  \proofstep{1,2}{k\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{3,2}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Null ist kleiner oder gleich jeder natuerlichen Zahl]{%
   n\in\mathbb{N}\vdash 0\leq n%
 }{PeanoZeroLeq}{%
@@ -11333,6 +11445,21 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstepwidestar[1,2]{m+r\notin\NatSeg{r}}{\rCI{8,10}}
 \end{tabproofwide}
 
+\FormulaThmDeltaK[Ein links verschobener Index liegt außerhalb des Anfangsabschnitts]{%
+  r,j\in\mathbb N\vdash r+j\notin\NatSeg r%
+}{PeanoTailAvoidsInitialSegmentLeft}{%
+  \DeltaRow{Mengen}{j\dsep r}%
+}
+\begin{tabproof}
+  \proofstep{1}{r\in\mathbb N}{\rA}
+  \proofstep{2}{j\in\mathbb N}{\rA}
+  \proofstep{1,2}{j+r\notin\NatSeg r}{%
+    \FormulaRefAuto{PeanoTailAvoidsInitialSegment}[thm]{2,1}}
+  \proofstep{1,2}{r+j=j+r}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{1,2}}
+  \proofstep{1,2}{r+j\notin\NatSeg r}{\rIE{4,3}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Ein Anfangswert ist kein additiver Rest]{%
   m,r\in\mathbb{N}\dsep q\in\NatSeg{r}\vdash m+r\neq q%
 }{PeanoTailAvoidsInitialValue}{%
@@ -11401,6 +11528,24 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{PeanoNatSegStrictMembership}{1,3}}
   \proofstep{1,2}{m\leq n \leftrightarrow m\in \NatSeg{\Succ(n)}}{%
     \FormulaRefAuto{P\leftrightarrow Q\dsep Q\leftrightarrow R\vdash P\leftrightarrow R}{4,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Nichtstrikte Ordnung als um eins erweiterter Anfangsabschnitt]{%
+  m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+  m\leq n \leftrightarrow m\in \NatSeg{n+1}%
+}{PeanoNatSegLeqAddOneMembership}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+  \DeltaRow{Relationsoperatoren}{\leq_{\mathbb{N}}}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb{N}}{\rA}
+  \proofstep{2}{n\in\mathbb{N}}{\rA}
+  \proofstep{2}{n+1=\Succ(n)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{2}}
+  \proofstep{1,2}{m\leq n\leftrightarrow m\in\NatSeg{\Succ(n)}}{%
+    \FormulaRefAuto{PeanoNatSegLeqSuccMembership}[thm]{1,2}}
+  \proofstep{1,2}{m\leq n\leftrightarrow m\in\NatSeg{n+1}}{%
+    \rIE{3,4}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Ordnung liefert Anfangsabschnittsinklusion]{%
@@ -11508,6 +11653,27 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{PeanoNatSegSubsetLeqBackward}{1,2,6}}
   \proofstep{1,2}{\NatSeg{m}\subseteq\NatSeg{n}\rightarrow m\leq n}{\rRI{6,7}}
   \proofstep{1,2}{m\leq n\leftrightarrow\NatSeg{m}\subseteq\NatSeg{n}}{\rLRI{5,8}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Eindeutiger Endpunkt eines Anfangsabschnitts]{%
+  m,n\in\mathbb N\dsep\NatSeg m=\NatSeg n\vdash m=n%
+}{PeanoNatSegInjective}{%
+  \DeltaRow{Mengen}{m\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb N}{\rA}
+  \proofstep{2}{n\in\mathbb N}{\rA}
+  \proofstep{3}{\NatSeg m=\NatSeg n}{\rA}
+  \proofstep{3}{\NatSeg m\subseteq\NatSeg n}{%
+    \FormulaRefAuto{A=B\vdash A\subseteq B}[thm]{3}}
+  \proofstep{3}{\NatSeg n\subseteq\NatSeg m}{%
+    \FormulaRefAuto{A=B\vdash B\subseteq A}[thm]{3}}
+  \proofstep{1,2,3}{m\leq n}{%
+    \FormulaRefAuto{PeanoNatSegLeqSubset}[thm]{1,2,4}}
+  \proofstep{1,2,3}{n\leq m}{%
+    \FormulaRefAuto{PeanoNatSegLeqSubset}[thm]{2,1,5}}
+  \proofstep{1,2,3}{m=n}{%
+    \FormulaRefAuto{PeanoLeqAntisymmetric}[thm]{1,2,6,7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Strikte Ordnung liefert Anfangsabschnittsinklusion]{%
@@ -12058,6 +12224,343 @@ $x_0$ aus.
 \end{tabproof}
 
 
+
+\FormulaThmDeltaK[Anfangsabschnitt bei Addition von (1)]{%
+  n\in\mathbb N\vdash
+  \NatSeg{n+1}=\NatSeg n\cup\{n\}%
+}{PeanoNatSegAddOne}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{1}{n\in\mathbb N}{\rA}
+  \proofstep{1}{n+1=\Succ(n)}{%
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{1}}
+  \proofstep{1}{\NatSeg{\Succ(n)}=\NatSeg n\cup\{n\}}{%
+    \FormulaRefAuto{PeanoNatSegSucc}[thm]{1}}
+  \proofstep{1}{\NatSeg{n+1}=\NatSeg n\cup\{n\}}{\rIE{2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein Anfangsabschnitt liegt in jedem additiv erweiterten Anfangsabschnitt]{%
+  m,n\in\mathbb N\vdash
+  \NatSeg m\subseteq\NatSeg{m+n}%
+}{PeanoNatSegSubsetAddRight}{%
+  \DeltaRow{Mengen}{k\dsep m\dsep n}%
+}
+\begin{tabproof}
+  \proofstep{1}{m\in\mathbb N}{\rA}
+  \proofstep{2}{n\in\mathbb N}{\rA}
+  \proofstep{1,2}{m+n\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{1,2}}
+  \proofstep{1,2}{\exists k\in\mathbb N\,(m+k=m+n)}{%
+    \rEI{\rAI{2,\rII}}}
+  \proofstep{1,2}{m\leq m+n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+      m\leq n\leftrightarrow
+      \exists k\in\mathbb{N}\,(m+k=n)}[thm]{1,3,4}}
+  \proofstep{1,2}{\NatSeg m\subseteq\NatSeg{m+n}}{%
+    \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{1,3,5}}
+\end{tabproof}
+
+
+\subsection{Verschobene Bildmengen und Blockzerlegung}
+
+Die Addition verschiebt die Elemente einer Menge um einen festen Wert.
+Für Anfangsabschnitte beschreibt die folgende Blockzerlegung genau die
+Stellen vor und nach einem solchen Versatz.
+
+\FormulaThmDeltaK[Eindeutige Existenz der verschobenen Bildmenge]{%
+  \exists!X\,\forall x\,\Bigl(
+    x\in X\leftrightarrow
+    \exists j\,(j\in J\land x=r+j)\Bigr)%
+}{TranslatedImageSetUniqueExists}{%
+  \DeltaRow{Mengen}{J\dsep X\dsep j\dsep r\dsep x}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[]{%
+    \exists!X\,\forall x\,\Bigl(
+      x\in X\leftrightarrow
+      \exists j\,(j\in J\land x=r+j)\Bigr)}{%
+    \FormulaRefAuto{TermImageSetUniqueExists}[thm]}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Verschobene Bildmenge]{%
+  \{r+j\mid j\in J\}\coloneqq
+  \iota X\,\forall x\,\Bigl(
+    x\in X\leftrightarrow
+    \exists j\,(j\in J\land x=r+j)\Bigr)%
+}{TranslatedImageSetDef}{%
+  \DeltaRow{Mengen}{J\dsep X\dsep j\dsep r\dsep x}%
+}
+
+\FormulaThmDeltaK[Elementkriterium der verschobenen Bildmenge]{%
+  x\in\{r+j\mid j\in J\}\leftrightarrow
+    \exists j\,(j\in J\land x=r+j)%
+}{TranslatedImageSetMembership}{%
+  \DeltaRow{Mengen}{J\dsep X\dsep j\dsep r\dsep x}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[]{%
+    \exists!X\,\forall x\,\Bigl(
+      x\in X\leftrightarrow
+      \exists j\,(j\in J\land x=r+j)\Bigr)}{%
+    \FormulaRefAuto{TranslatedImageSetUniqueExists}[thm]}
+  \proofstepwidestarbreakkeep[]{%
+    \{r+j\mid j\in J\}=\iota X\,\forall x\,\Bigl(
+      x\in X\leftrightarrow
+      \exists j\,(j\in J\land x=r+j)\Bigr)}{%
+    \FormulaRefAuto{TranslatedImageSetDef}[def]}
+  \proofstepwidestarbreakkeep[]{%
+    \forall x\,\Bigl(x\in\{r+j\mid j\in J\}\leftrightarrow
+      \exists j\,(j\in J\land x=r+j)\Bigr)}{%
+    \FormulaRefAuto{IotaEvaluation}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[]{%
+    x\in\{r+j\mid j\in J\}\leftrightarrow
+      \exists j\,(j\in J\land x=r+j)}{\rUE{3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Blockzerlegung eines Anfangsabschnitts]{%
+  r,s\in\mathbb N\vdash
+  \NatSeg{r+s}
+  =\NatSeg{r}\cup
+    \bigl\{r+j\bigm|j\in\NatSeg{s}\bigr\}%
+}{WordIndexBlockDecomposition}{%
+  \DeltaRow{Mengen}{j\dsep r\dsep s}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Induktionsanfang]{%
+    r\in\mathbb N\vdash
+    \NatSeg{r+0}=\NatSeg r\cup
+      \{r+j\mid j\in\NatSeg 0\}
+  }{%
+    r\in\mathbb N\vdash
+    \NatSeg{r+0}=\NatSeg r\cup
+      \{r+j\mid j\in\NatSeg 0\}
+  }[NatSegBlockDecompositionBase]
+    \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep{\NatSeg 0=\varnothing}{%
+      \FormulaRefAuto{PeanoNatSegZero}[thm]}
+    \proofstepwidestarbreakkeep{%
+      \forall x\,\Bigl(x\in\{r+j\mid j\in\NatSeg 0\}
+      \leftrightarrow
+      \exists j\,(j\in\NatSeg 0\land x=r+j)\Bigr)}{%
+      \FormulaRefAuto{TranslatedImageSetDef}[def]}
+    \proofstepwidestarbreakkeep{%
+      \forall x\,x\notin\{r+j\mid j\in\NatSeg 0\}}{%
+      \FormulaRefAuto{x \not\in \varnothing}[thm]{2,3}}
+    \proofstepwidestarbreakkeep{\{r+j\mid j\in\NatSeg 0\}=\varnothing}{%
+      \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{4}}
+    \proofstepwidestarbreakkeep[1]{r+0=r}{%
+      \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{%
+      \NatSeg{r+0}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg 0\}}{%
+      \FormulaRefAuto{A\cup\varnothing=A}[thm]{5,6}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Induktionsschritt]{%
+    \begin{aligned}[t]
+      &r,s\in\mathbb N\dsep
+        \NatSeg{r+s}=\NatSeg r\cup
+          \{r+j\mid j\in\NatSeg s\}\vdash{}\\[-2pt]
+      &\NatSeg{r+(s+1)}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg{s+1}\}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &r,s\in\mathbb N\dsep
+        \NatSeg{r+s}=\NatSeg r\cup
+          \{r+j\mid j\in\NatSeg s\}\vdash{}\\[-2pt]
+      &\NatSeg{r+(s+1)}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg{s+1}\}
+    \end{aligned}
+  }[NatSegBlockDecompositionStep]
+    \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[2]{s\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[3]{%
+      \NatSeg{r+s}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg s\}}{\rA}
+    \proofstepwidestarbreakkeep[1,2]{r+s\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{1,2}}
+    \proofstepwidestarbreakkeep[1,2]{r+(s+1)=(r+s)+1}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+        \FormulaRefAuto{PeanoAddAssociative}[thm]{%
+          1,2,\FormulaRefAuto{PeanoOneInN}[thm]}}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \NatSeg{(r+s)+1}=\NatSeg{r+s}\cup\{r+s\}}{%
+      \FormulaRefAuto{PeanoNatSegAddOne}[thm]{4}}
+    \proofstepwidestarbreakkeep[2]{%
+      \NatSeg{s+1}=\NatSeg s\cup\{s\}}{%
+      \FormulaRefAuto{PeanoNatSegAddOne}[thm]{2}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\Bigl(
+        x\in\{r+j\mid j\in\NatSeg{s+1}\}
+        \leftrightarrow
+        \exists j\,(j\in\NatSeg{s+1}\land x=r+j)\Bigr)}{%
+      \FormulaRefAuto{TranslatedImageSetDef}[def]}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\Bigl(
+        x\in\{r+j\mid j\in\NatSeg s\}
+        \leftrightarrow
+        \exists j\,(j\in\NatSeg s\land x=r+j)\Bigr)}{%
+      \FormulaRefAuto{TranslatedImageSetDef}[def]}
+    \proofstepwidestarbreakkeep[2]{%
+      \forall j\,\Bigl(
+        j\in\NatSeg{s+1}
+        \leftrightarrow
+        j\in\NatSeg s\lor j\in\{s\}\Bigr)}{%
+      \FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{7}}
+    \proofstepwidestarbreakkeep[2]{%
+      \forall j\,\Bigl(
+        j\in\NatSeg{s+1}
+        \leftrightarrow
+        j\in\NatSeg s\lor j=s\Bigr)}{%
+      \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{10}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\Bigl(
+        x\in\{r+j\mid j\in\NatSeg{s+1}\}
+        \leftrightarrow
+        x\in\{r+j\mid j\in\NatSeg s\}\lor x=r+s\Bigr)}{%
+      \rLRS{8,9,11}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\Bigl(
+        x\in\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}
+        \leftrightarrow
+        x\in\{r+j\mid j\in\NatSeg s\}\lor x\in\{r+s\}\Bigr)}{%
+      \FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\bigl(x\in\{r+s\}\leftrightarrow x=r+s\bigr)}{%
+      \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \forall x\,\Bigl(
+        x\in\{r+j\mid j\in\NatSeg{s+1}\}
+        \leftrightarrow
+        x\in\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}\Bigr)}{%
+      \rLRS{12,13,14}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \{r+j\mid j\in\NatSeg{s+1}\}
+      =\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}}{%
+      \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)
+        \vdash A=B}[ax]{15}}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \NatSeg{r+(s+1)}=\NatSeg{(r+s)+1}}{\rIE{5}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
+      \NatSeg{(r+s)+1}
+      =\bigl(\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}\bigr)
+        \cup\{r+s\}}{\rIE{3,6}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
+      \bigl(\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}\bigr)
+        \cup\{r+s\}
+      =\NatSeg r\cup
+        \bigl(\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}\bigr)}{%
+      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \NatSeg r\cup
+        \bigl(\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}\bigr)
+      =\NatSeg r\cup\{r+j\mid j\in\NatSeg{s+1}\}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{16}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
+      \NatSeg{r+(s+1)}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg{s+1}\}}{%
+      \rChain{17,18,19,20}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Induktionsschluss}
+    \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[2]{s\in\mathbb N}{\rA}
+    \proofstepwidestarbreakkeep[1,2]{%
+      \NatSeg{r+s}=\NatSeg r\cup
+        \{r+j\mid j\in\NatSeg s\}}{%
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,1,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Elementkriterium der Blockzerlegung]{%
+  r,s\in\mathbb N\vdash
+  k\in\NatSeg{r+s}\leftrightarrow
+    \Bigl(k\in\NatSeg r\lor
+      \exists j\in\NatSeg s\,(k=r+j)\Bigr)%
+}{PeanoNatSegAddMembership}{%
+  \DeltaRow{Mengen}{j\dsep k\dsep r\dsep s}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[2]{s\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{%
+    \NatSeg{r+s}=\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}}{%
+    \FormulaRefAuto{WordIndexBlockDecomposition}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[]{%
+    k\in\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}
+      \leftrightarrow
+    \Bigl(k\in\NatSeg r\lor k\in\{r+j\mid j\in\NatSeg s\}\Bigr)}{%
+    \FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]}
+  \proofstepwidestarbreakkeep[]{%
+    k\in\{r+j\mid j\in\NatSeg s\}\leftrightarrow
+      \exists j\in\NatSeg s\,(k=r+j)}{%
+    \FormulaRefAuto{TranslatedImageSetMembership}[thm]}
+  \proofstepwidestarbreakkeep[]{%
+    k\in\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}
+      \leftrightarrow
+    \Bigl(k\in\NatSeg r\lor\exists j\in\NatSeg s\,(k=r+j)\Bigr)}{%
+    \rLRS{5,4}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    k\in\NatSeg{r+s}\leftrightarrow
+    \Bigl(k\in\NatSeg r\lor\exists j\in\NatSeg s\,(k=r+j)\Bigr)}{%
+    \rIE{3,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein verschobener Index liegt im erweiterten Anfangsabschnitt]{%
+  r,s\in\mathbb N\dsep j\in\NatSeg s\vdash r+j\in\NatSeg{r+s}%
+}{PeanoNatSegShiftMembership}{%
+  \DeltaRow{Mengen}{j\dsep k\dsep r\dsep s}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[2]{s\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[3]{j\in\NatSeg s}{\rA}
+  \proofstepwidestarbreakkeep[3]{%
+    \exists k\in\NatSeg s\,(r+j=r+k)}{\rEI{\rAI{3,\rII}}}
+  \proofstepwidestarbreakkeep[3]{%
+    r+j\in\NatSeg r\lor\exists k\in\NatSeg s\,(r+j=r+k)}{\rOIb{4}}
+  \proofstepwidestarbreakkeep[1,2,3]{r+j\in\NatSeg{r+s}}{%
+    \FormulaRefAuto{PeanoNatSegAddMembership}[thm]{1,2,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Dreifachzerlegung eines Anfangsabschnitts]{%
+  \begin{aligned}[t]
+    &r,s,t\in\mathbb N\dsep k\in\NatSeg{(r+s)+t}\vdash{}\\[-2pt]
+    &k\in\NatSeg r\lor
+      \bigl(\exists j\in\NatSeg s\,(k=r+j)\bigr)\lor{}\\[-2pt]
+    &\bigl(\exists h\in\NatSeg t\,(k=(r+s)+h)\bigr)
+  \end{aligned}%
+}{PeanoNatSegThreeBlockMembership}{%
+  \DeltaRow{Mengen}{h\dsep j\dsep k\dsep r\dsep s\dsep t}%
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{r\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[2]{s\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[3]{t\in\mathbb N}{\rA}
+  \proofstepwidestarbreakkeep[4]{k\in\NatSeg{(r+s)+t}}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{r+s\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    k\in\NatSeg{r+s}\lor
+      \exists h\in\NatSeg t\,(k=(r+s)+h)}{%
+    \FormulaRefAuto{PeanoNatSegAddMembership}[thm]{5,3,4}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    k\in\NatSeg{r+s}\leftrightarrow
+      \Bigl(k\in\NatSeg r\lor\exists j\in\NatSeg s\,(k=r+j)\Bigr)}{%
+    \FormulaRefAuto{PeanoNatSegAddMembership}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    \Bigl(k\in\NatSeg r\lor\exists j\in\NatSeg s\,(k=r+j)\Bigr)
+      \lor\exists h\in\NatSeg t\,(k=(r+s)+h)}{\rLRS{7,6}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{%
+    \begin{aligned}[t]
+      &k\in\NatSeg r\lor
+        \bigl(\exists j\in\NatSeg s\,(k=r+j)\bigr)\lor{}\\[-2pt]
+      &\bigl(\exists h\in\NatSeg t\,(k=(r+s)+h)\bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R}[thm]{8}}
+\end{tabproofwide}
 
 \section{Multiplikation}
 
@@ -14911,10 +15414,10 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
   \proofstep{}{2\neq3}{\rIE{8,9}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Elemente des Eins-Anfangsabschnitts]{%
-  n\in\NatSeg{1}\leftrightarrow n=0%
-}{PeanoNatSegOneMembership}{%
-  \DeltaRow{Mengen}{n}%
+\FormulaThmDeltaK[Der Eins-Anfangsabschnitt besteht aus null]{%
+  \NatSeg{1}=\{0\}%
+}{PeanoNatSegOneEquality}{%
+  \DeltaRow{Mengen}{0\dsep1}%
 }
 \begin{tabproof}
   \proofstep{}{0\in\mathbb{N}}{\FormulaRefAuto{PeanoZero}[ax]}
@@ -14930,9 +15433,19 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
   \proofstep{}{\NatSeg{\Succ(0)}=\{0\}}{\rChain{5,6}}
   \proofstep{}{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
   \proofstep{}{\NatSeg{1}=\{0\}}{\rIE{8,7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Elemente des Eins-Anfangsabschnitts]{%
+  n\in\NatSeg{1}\leftrightarrow n=0%
+}{PeanoNatSegOneMembership}{%
+  \DeltaRow{Mengen}{n}%
+}
+\begin{tabproof}
+  \proofstep{}{\NatSeg{1}=\{0\}}{%
+    \FormulaRefAuto{PeanoNatSegOneEquality}[thm]}
   \proofstep{}{n\in\{0\}\leftrightarrow n=0}{%
     \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]}
-  \proofstep{}{n\in\NatSeg{1}\leftrightarrow n=0}{\rIE{9,10}}
+  \proofstep{}{n\in\NatSeg{1}\leftrightarrow n=0}{\rIE{1,2}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Elemente des Zwei-Anfangsabschnitts]{%

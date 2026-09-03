@@ -2,7 +2,8 @@
 param(
     [Parameter()]
     [ValidatePattern('^B[0-9]{2}$')]
-    [string]$Target = 'B03'
+    [string]$Target = 'B03',
+    [switch]$FunctionsOnly
 )
 
 Set-StrictMode -Version Latest
@@ -278,7 +279,8 @@ function Assert-Artifact {
     if (-not $AllowEmpty -and $item.Length -eq 0) {
         throw "Expected build artifact is empty: $RelativePath"
     }
-    if ($item.LastWriteTimeUtc -lt $NotBefore.ToUniversalTime().AddSeconds(-2)) {
+    if ($NotBefore -ne [datetime]::MinValue -and
+        $item.LastWriteTimeUtc -lt $NotBefore.ToUniversalTime().AddSeconds(-2)) {
         throw "Build artifact was not freshly generated: $RelativePath"
     }
 }
@@ -295,6 +297,10 @@ function Assert-RegistryLabelsInAux {
         [System.StringComparer]::Ordinal
     )
     $auxContent = [System.IO.File]::ReadAllText($aux)
+    $auxNumbers = @{}
+    foreach ($match in [regex]::Matches($auxContent, '(?m)^\\newlabel\{([^}]*)\}\{\{([^}]*)\}')) {
+        $auxNumbers[$match.Groups[1].Value] = $match.Groups[2].Value.Trim()
+    }
     foreach ($match in [regex]::Matches($auxContent, '(?m)^\\newlabel\{([^}]*)\}')) {
         [void]$auxLabels.Add($match.Groups[1].Value)
     }
@@ -315,10 +321,20 @@ function Assert-RegistryLabelsInAux {
             $label = $columns[3]
         }
         else {
-            if ($columns.Count -lt 2) {
+            if ($columns.Count -lt 4) {
                 throw "Malformed theorem row in ${RegistryPath}: $line"
             }
             $label = $columns[1]
+            $number = $columns[3].Trim()
+            if ($auxNumbers.ContainsKey($label) -and $auxNumbers[$label] -ne $number) {
+                throw "$RegistryPath number '$number' differs from AUX number '$($auxNumbers[$label])' for $label."
+            }
+            if ($RegistryPath -match '_B([0-9]{2})(?:[.-]|$)') {
+                $expectedPrefix = ([int]$Matches[1]).ToString() + '.'
+                if (-not $number.StartsWith($expectedPrefix, [System.StringComparison]::Ordinal)) {
+                    throw "$RegistryPath contains a result from the wrong volume: $label ($number)."
+                }
+            }
         }
 
         if ($label -and -not $auxLabels.Contains($label)) {
@@ -598,6 +614,8 @@ function Assert-BuildStageArtifacts {
     Assert-Artifact -RelativePath $Stage.Debug -NotBefore $Stage.Started -AllowEmpty
     Assert-RegistryLabelsInAux -RegistryPath $Stage.Registry -AuxPath $Stage.Aux
 }
+
+if ($FunctionsOnly) { return }
 
 Assert-Command 'latexmk'
 Assert-Command 'lualatex'

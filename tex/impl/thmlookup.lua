@@ -547,6 +547,7 @@ function M.ref_by_id(id)
   id = id or ""
   local r = M.by_id[id]
   if not r then
+    write_debug_block(id, id, "id:" .. id, "none", {})
     tex.sprint("\\textbf{[Theorem nicht gefunden]}")
     return
   end

@@ -1,10 +1,10 @@
 # Die Grundlagen der Mathematik
 
-**A German-language, 38-volume LaTeX manuscript that develops mathematics from
+**A German-language, 43-volume LaTeX manuscript that develops mathematics from
 logic and set theory using explicit natural-deduction proof tables in the style
 of E. J. Lemmon.**
 
-**Ein deutschsprachiges LaTeX-Manuskript in 38 Bänden, das Mathematik aus Logik
+**Ein deutschsprachiges LaTeX-Manuskript in 43 Bänden, das Mathematik aus Logik
 und Mengenlehre mithilfe expliziter Beweistabellen im Stil von E. J. Lemmon
 aufbaut.**
 
@@ -21,8 +21,8 @@ aufbaut.**
 *Die Grundlagen der Mathematik* (*Foundations of Mathematics*) is a work in
 progress that makes proof dependencies unusually explicit. Its current scope
 runs from propositional and predicate logic through ZFC set theory, functions,
-number systems and order theory to semigroups, lattices, Frankl's conjecture,
-and metric spaces.
+number systems, order theory and graph theory to semigroups, lattices, Frankl's
+conjecture, and metric spaces.
 
 The combined manuscript currently contains more than 1,700 pages. The project
 is written primarily in German; formulas and proof tables are largely
@@ -49,16 +49,18 @@ they do **not** certify mathematical correctness.
   introduces the formal language and explains how to read the proof tables.
 - [Volume 03: Set Theory](<output/pdf/Bd. 03 - Mengenlehre.pdf>) shows the
   foundational method on a substantial body of mathematics.
-- [Volume 37: Frankl's Conjecture](<output/pdf/Bd. 37 - Frankls Vermutung.pdf>)
+- [Volume 26: Trees](<output/pdf/Bd. 26 - Bäume.pdf>) develops the axiomatic
+  tree language used by the subsequent construction of bracketing trees.
+- [Volume 42: Frankl's Conjecture](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>)
   is a research-oriented application collecting set-theoretic, quotient, and
   semilattice formulations and proved special cases.
-- [Volume 38: Metric Spaces and Completeness](<output/pdf/Bd. 38 - Metrische Räume und Vollständigkeit.pdf>)
+- [Volume 43: Metric Spaces and Completeness](<output/pdf/Bd. 43 - Metrische Räume und Vollständigkeit.pdf>)
   is a comparatively compact entry into the analytic branch.
 - The [complete bilingual volume catalogue](VOLUMES.md) links all current PDFs.
 
-[![A page with Lemmon-style proof tables from Volume 37](docs/assets/lemmon-proof-example.png)](<output/pdf/Bd. 37 - Frankls Vermutung.pdf>)
+[![A page with Lemmon-style proof tables from Volume 42](docs/assets/lemmon-proof-example.png)](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>)
 
-*Example: explicit proof tables in Volume 37. Click the image to open the
+*Example: explicit proof tables in Volume 42. Click the image to open the
 volume.*
 
 ### Intended audience
@@ -108,8 +110,8 @@ and build infrastructure are licensed under the
 *Die Grundlagen der Mathematik* ist ein im Aufbau befindliches Manuskript, das
 Beweisabhängigkeiten ungewöhnlich explizit sichtbar macht. Der derzeitige
 Umfang reicht von Aussagen- und Prädikatenlogik über ZFC-Mengenlehre,
-Funktionen, Zahlbereiche und Ordnungstheorie bis zu Halbgruppen, Verbänden,
-Frankls Vermutung und metrischen Räumen.
+Funktionen, Zahlbereiche, Ordnungs- und Graphentheorie bis zu Halbgruppen,
+Verbänden, Frankls Vermutung und metrischen Räumen.
 
 Der Gesamtband umfasst gegenwärtig mehr als 1.700 Seiten. Der Text ist
 überwiegend deutsch; Formeln und Beweistabellen sind weitgehend
@@ -137,10 +139,13 @@ Korrektheit.
   führt die formale Sprache ein und erklärt die Beweistabellen.
 - [Band 03: Mengenlehre](<output/pdf/Bd. 03 - Mengenlehre.pdf>) zeigt die
   Methode an einem umfangreichen mathematischen Gebiet.
-- [Band 37: Frankls Vermutung](<output/pdf/Bd. 37 - Frankls Vermutung.pdf>) ist
+- [Band 26: Bäume](<output/pdf/Bd. 26 - Bäume.pdf>) entwickelt die
+  axiomatische Baumsprache für die anschließende Konstruktion der
+  Klammerungsbäume.
+- [Band 42: Frankls Vermutung](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>) ist
   eine forschungsnahe Anwendung mit Mengen-, Quotienten- und
   Halbverbandsfassungen sowie bewiesenen Spezialfällen.
-- [Band 38: Metrische Räume und Vollständigkeit](<output/pdf/Bd. 38 - Metrische Räume und Vollständigkeit.pdf>)
+- [Band 43: Metrische Räume und Vollständigkeit](<output/pdf/Bd. 43 - Metrische Räume und Vollständigkeit.pdf>)
   bietet einen vergleichsweise kompakten Einstieg in den analytischen Zweig.
 - Das [vollständige zweisprachige Bandverzeichnis](VOLUMES.md) verlinkt alle
   aktuellen PDFs.

@@ -1,0 +1,3118 @@
+%============================================================
+%  Bd. 26 - Bäume
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B26}
+}{
+}
+
+\title{Bd. 26 - Bäume}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{26}
+
+\hypersetup{
+  pdftitle={Bd. 26 - Bäume},
+  pdfauthor={Martin Kunze}
+}
+
+% Die allgemeinen Graphsymbole stehen in tex/impl/commands/graphs.tex.
+% Die folgenden Bezeichnungen sind auf diesen Band beschränkt und werden mit
+% \providecommand definiert, damit ein späteres Herausziehen in die zentrale
+% Befehlsdatei ohne Kollision möglich bleibt.
+\providecommand{\GraphPathsBetween}[4]{%
+  \ensuremath{\mathcal P_{#1,#2}\!\left(#3,#4\right)}%
+}
+\providecommand{\ForestStruct}[1]{%
+  \ensuremath{\mathsf{Wald}\!\left(#1\right)}%
+}
+\providecommand{\TreeStruct}[1]{%
+  \ensuremath{\mathsf{Baum}\!\left(#1\right)}%
+}
+\providecommand{\PathAcyclicGraphStruct}[1]{%
+  \ensuremath{\mathsf{WegAzyk}\!\left(#1\right)}%
+}
+\providecommand{\RootedTreeStruct}[1]{%
+  \ensuremath{\mathsf{WBaum}\!\left(#1\right)}%
+}
+\providecommand{\TreeParentRel}[5]{%
+  \ensuremath{\operatorname{Elter}_{#1,#2,#3}\!\left(#4,#5\right)}%
+}
+\providecommand{\TreeChildRel}[5]{%
+  \ensuremath{\operatorname{Kind}_{#1,#2,#3}\!\left(#4,#5\right)}%
+}
+\providecommand{\TreeAncestorRel}[5]{%
+  \ensuremath{\operatorname{Vorfahr}_{#1,#2,#3}\!\left(#4,#5\right)}%
+}
+\providecommand{\TreeChildren}[4]{%
+  \ensuremath{\operatorname{Kind}_{#1,#2,#3}\!\left[#4\right]}%
+}
+\providecommand{\TreeLeafPred}[4]{%
+  \ensuremath{\operatorname{Blatt}_{#1,#2,#3}\!\left(#4\right)}%
+}
+\providecommand{\TreeInnerPred}[4]{%
+  \ensuremath{\operatorname{Innen}_{#1,#2,#3}\!\left(#4\right)}%
+}
+\providecommand{\TreeInnerVertices}[3]{%
+  \ensuremath{\operatorname{Innen}_{#1,#2,#3}}%
+}
+\providecommand{\BinaryTreeStruct}[1]{%
+  \ensuremath{\mathsf{BinBaum}\!\left(#1\right)}%
+}
+\providecommand{\FullBinaryTreeStruct}[1]{%
+  \ensuremath{\mathsf{VollBinBaum}\!\left(#1\right)}%
+}
+\providecommand{\OrderedFullBinaryTreeStruct}[1]{%
+  \ensuremath{\mathsf{GVollBinBaum}\!\left(#1\right)}%
+}
+\providecommand{\FinitePathTransportProperty}[3]{%
+  \ensuremath{\mathsf{Transp}_{#1,#2}\!\left(#3\right)}%
+}
+\providecommand{\FinitePathReversalProperty}[3]{%
+  \ensuremath{\mathsf{Umkehr}_{#1,#2}\!\left(#3\right)}%
+}
+\providecommand{\FinitePathSuffixProperty}[5]{%
+  \ensuremath{\mathsf{Schwanz}_{#1,#2,#3,#4}\!\left(#5\right)}%
+}
+\providecommand{\FinitePathSpliceProperty}[3]{%
+  \ensuremath{\mathsf{Füge}_{#1,#2}\!\left(#3\right)}%
+}
+\providecommand{\FinitePathCycleCore}[3]{%
+  \ensuremath{%
+    #3\subseteq #1\land #3\neq\varnothing\land
+    \forall x\in #3\,\exists y\in #3\,
+    \exists m\in\mathbb N\,\exists n\in\mathbb N\,
+    \exists p\in\powerset(\mathbb N\times #1)\,
+    \exists q\in\powerset(\mathbb N\times #1)\,\Bigl(
+      x\neq y\land
+      \DirectedPath{#1}{#2}{p}{m}\land p(0)=x\land p(m)=y\land
+      \DirectedPath{#1}{#2}{q}{n}\land q(0)=x\land q(n)=y\land
+      (m,p)\neq(n,q)\land
+      p[\NatSeg{m+1}]\cap q[\NatSeg{n+1}]=\{x,y\}\land
+      p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\subseteq #3
+    \Bigr)%
+  }%
+}
+
+\begin{document}
+
+\title{Bd. 26 - Bäume}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{26}
+\renewcommand{\FormulaBandID}{26}
+
+\chapter{Einleitung}
+
+Ein Baum ist in diesem Band kein Bild, sondern ein schlichter ungerichteter
+Graph mit einer ausgezeichneten Wegeigenschaft. Ein endlicher einfacher Weg
+wird dabei durch eine natürliche Kantenlänge und eine injektive endliche Folge
+seiner Knoten dargestellt. Der Graph selbst darf unendlich sein; nur jeder
+einzelne Weg ist endlich.
+
+Wälder werden dadurch charakterisiert, dass zwischen zwei Knoten höchstens
+ein endlicher einfacher Weg liegt. Bei einem Baum ist der Träger nicht leer
+und zwischen je zwei Knoten liegt genau ein solcher Weg. Diese Definition
+liefert Azyklizität und Zusammenhang getrennt und ohne ein zusätzliches
+Endlichkeitsaxiom. Nach der Wahl einer Wurzel entstehen Eltern, Kinder und
+Vorfahren aus den eindeutigen Wurzelwegen. Den Abschluss bilden binäre, volle
+binäre und geordnete volle Binärbäume. Im folgenden Band werden die dort
+konstruierten Klammerungsbäume als besondere geordnete volle Binärbäume
+erkannt.
+
+\chapter{Endliche einfache Wege}
+
+\section{Wege zwischen festgelegten Endpunkten}
+
+Mit \(\DirectedPath{V}{E}{p}{n}\) bezeichnet Band~22 einen endlichen
+einfachen Weg. Dabei ist \(p\colon\NatSeg{n+1}\to V\) injektiv, und
+aufeinanderfolgende Knoten sind durch Kanten aus \(E\) verbunden. Für
+ungerichtete Graphen darf dieselbe Aussage verwendet werden, weil ihre
+Kantenrelation symmetrisch ist.
+
+\FormulaDefDeltaK[Menge der endlichen einfachen Wege]{%
+  \begin{aligned}
+  \GraphPathsBetween{V}{E}{u}{v}\coloneqq
+  \bigl\{(n,p)\in
+    \mathbb N\times\powerset(\mathbb N\times V)\bigm|{}&
+      \DirectedPath{V}{E}{p}{n}\land{}\\[-2pt]
+      &p(0)=u\land p(n)=v\bigr\}
+  \end{aligned}%
+}{FiniteSimplePathFamilyDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep n\dsep p}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+  \DeltaRow{Neue Schreibweise}{\GraphPathsBetween{V}{E}{u}{v}}
+}
+
+Ein Element von \(\GraphPathsBetween{V}{E}{u}{v}\) enthält die Länge und
+die Knotenfolge. Dadurch werden Wege verschiedener Länge nicht versehentlich
+miteinander identifiziert.
+
+\FormulaThmDeltaK[Zugriff auf einen endlichen einfachen Weg]{%
+  \begin{aligned}[t]
+  z\in\GraphPathsBetween{V}{E}{u}{v}\eqvdash
+  \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,\bigl(&
+    z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land{}\\[-2pt]
+    &p(0)=u\land p(n)=v\bigr)
+  \end{aligned}%
+}{FiniteSimplePathFamilyMembership}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep z\dsep n\dsep p}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{z\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[1]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+      \bigl(z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land
+      p(0)=u\land p(n)=v\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyDef}[def]{1}}
+  \proofstepwidestarbreak[3]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+      \bigl(z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land
+      p(0)=u\land p(n)=v\bigr)}{\rA}
+  \proofstepwidestarbreak[3]{z\in\GraphPathsBetween{V}{E}{u}{v}}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyDef}[def]{3}}
+  \proofstepwidestarbreak[]{%
+    z\in\GraphPathsBetween{V}{E}{u}{v}\leftrightarrow
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+      \bigl(z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land
+      p(0)=u\land p(n)=v\bigr)}{\rLRI{\rRI{1,2},\rRI{3,4}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Endpunkte eines Weges gehören zum Träger]{%
+  \GraphStruct{V,E}\dsep
+  (n,p)\in\GraphPathsBetween{V}{E}{u}{v}
+  \vdash u\in V\land v\in V%
+}{FiniteSimplePathEndpointTyping}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep n\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{(n,p)\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}\land
+    p(0)=u\land p(n)=v}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{2}}
+  \proofstepwidestarbreak[1,2]{p(0)\in V\land p(n)\in V}{%
+    \FormulaRefAuto{DirectedWalkEndpointTyping}[thm]{%
+      1,\FormulaRefAuto{DirectedPathIsWalk}[thm]{1,\rAEa{3}}}}
+  \proofstepwidestarbreak[1,2]{u\in V\land v\in V}{%
+    \rIE{\rAEb{3},\rIE{\rAEn{3},4}}}
+\end{tabproofwide}
+
+\section{Elementare Operationen mit endlichen Wegen}
+
+Die folgenden Hilfssätze formulieren die drei endlichen Operationen, die
+später benötigt werden: Abschneiden eines Anfangsstücks, Fortsetzen um eine
+Kante unter sofortiger Entfernung einer entstehenden Wiederholung und
+Umkehrung in einem ungerichteten Graphen. Die Beweise benutzen durchgehend
+die Plus-eins-Indizierung aus Band~22.
+
+\FormulaThmDeltaK[Indexangaben für einen Weganfang]{%
+  n\in\mathbb N\dsep k\in\NatSeg{n+1}\vdash
+  k\in\mathbb N\land k\leq n\land
+  \NatSeg{k+1}\subseteq\NatSeg{n+1}%
+}{FinitePathPrefixIndexData}{%
+  \DeltaRow{Mengen}{n\dsep k}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{k\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[]{1\in\mathbb N}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestarbreak[1]{n+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{1,3}}
+  \proofstepwidestarbreak[1]{\NatSeg{n+1}\subseteq\mathbb N}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{4}}
+  \proofstepwidestarbreak[1,2]{k\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,2}}
+  \proofstepwidestarbreak[1,2]{k<n+1}{%
+    \FormulaRefAuto{PeanoNatSegStrictMembership}[thm]{6,4,2}}
+  \proofstepwidestarbreak[1,2]{k+1\leq n+1}{%
+    \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{6,4,7}}
+  \proofstepwidestarbreak[1,2]{k\leq n}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{6,1},2}}
+  \proofstepwidestarbreak[1,2]{k+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{6,3}}
+  \proofstepwidestarbreak[1,2]{\NatSeg{k+1}\subseteq\NatSeg{n+1}}{%
+    \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{10,4,8}}
+  \proofstepwidestarbreak[1,2]{%
+    k\in\mathbb N\land k\leq n\land
+    \NatSeg{k+1}\subseteq\NatSeg{n+1}}{\rAI{6,9,11}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Verschiebung eines Wegindex um eins]{%
+  n\in\mathbb N\dsep i\in\NatSeg n\vdash
+  i+1\in\NatSeg{n+1}%
+}{FinitePathIndexShiftOne}{%
+  \DeltaRow{Mengen}{n\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{i\in\NatSeg n}{\rA}
+  \proofstepwidestarbreak[1]{\NatSeg n\subseteq\mathbb N}{%
+    \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{1}}
+  \proofstepwidestarbreak[1,2]{i\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{3,2}}
+  \proofstepwidestarbreak[1,2]{i<n}{%
+    \FormulaRefAuto{PeanoNatSegStrictMembership}[thm]{4,1,2}}
+  \proofstepwidestarbreak[]{1\in\mathbb N}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestarbreak[1,2]{1+i<1+n}{%
+    \FormulaRefAuto{PeanoAddLeftStrictMonotone}[thm]{6,4,1,5}}
+  \proofstepwidestarbreak[1,2]{i+1<n+1}{%
+    \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{4,6},
+      \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{1,6},7}}}
+  \proofstepwidestarbreak[1,2]{i+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{4,6}}
+  \proofstepwidestarbreak[1]{n+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{1,6}}
+  \proofstepwidestarbreak[1,2]{i+1\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{PeanoNatSegStrictMembership}[thm]{9,10,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Zugriff auf die Typdaten eines endlichen Pfads]{%
+  \GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\vdash
+  n\in\mathbb N\land p\colon\NatSeg{n+1}\to V\land
+  p\colon\NatSeg{n+1}\inj V%
+}{FinitePathTyping}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{1,2}}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N\land
+    p\colon\NatSeg{n+1}\to V\land
+    \forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,3}}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\inj V}{%
+    \rAEb{\FormulaRefAuto{DirectedPathDef}[def]{1,2}}}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N\land
+    p\colon\NatSeg{n+1}\to V\land p\colon\NatSeg{n+1}\inj V}{%
+    \rAI{\rAEa{4},
+      \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{4},5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein endlicher Walk ist als Relation typisiert]{%
+  \GraphStruct{V,E}\dsep\DirectedWalk{V}{E}{p}{n}\vdash
+  p\in\powerset(\mathbb N\times V)%
+}{FiniteWalkPowerSetTyping}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedWalk{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N\land
+    p\colon\NatSeg{n+1}\to V\land
+    \forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,2}}
+  \proofstepwidestarbreak[1,2]{p\subseteq\NatSeg{n+1}\times V}{%
+    \FormulaRefAuto{F\colon A\to B\vdash F\subseteq A\times B}[thm]{%
+      \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{3}}}
+  \proofstepwidestarbreak[1,2]{\NatSeg{n+1}\times V
+      \subseteq\mathbb N\times V}{%
+    \FormulaRefAuto{CartesianProductMonotoneLeft}[thm]{%
+      \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{\rAEa{3}}}}
+  \proofstepwidestarbreak[1,2]{p\subseteq\mathbb N\times V}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{4,5}}
+  \proofstepwidestarbreak[1,2]{p\in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}[thm],6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein endlicher Pfad ist als Relation typisiert]{%
+  \GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\vdash
+  p\in\powerset(\mathbb N\times V)%
+}{FinitePathPowerSetTyping}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\to V}{%
+    \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{%
+      \FormulaRefAuto{FinitePathTyping}[thm]{1,2}}}
+  \proofstepwidestarbreak[1,2]{p\subseteq\NatSeg{n+1}\times V}{%
+    \FormulaRefAuto{F\colon A\to B\vdash F\subseteq A\times B}[thm]{3}}
+  \proofstepwidestarbreak[1,2]{\NatSeg{n+1}\times V
+      \subseteq\mathbb N\times V}{%
+    \FormulaRefAuto{CartesianProductMonotoneLeft}[thm]{%
+      \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+        \rAEa{\FormulaRefAuto{FinitePathTyping}[thm]{1,2}}}}}
+  \proofstepwidestarbreak[1,2]{p\subseteq\mathbb N\times V}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{4,5}}
+  \proofstepwidestarbreak[1,2]{p\in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}[thm],6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Anfangsabschnitt eines endlichen Walks]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep\DirectedWalk{V}{E}{p}{n}\dsep
+    k\in\NatSeg{n+1}\vdash{}\\[-2pt]
+  &\quad\DirectedWalk{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}
+    \land p\restriction_{\NatSeg{k+1}}(0)=p(0)
+    \land p\restriction_{\NatSeg{k+1}}(k)=p(k)
+  \end{aligned}%
+}{FiniteWalkInitialSegment}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep k\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedWalk{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[3]{k\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N\land
+    p\colon\NatSeg{n+1}\to V\land
+    \forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,2}}
+  \proofstepwidestarbreak[1,2,3]{k\in\mathbb N\land k\leq n\land
+    \NatSeg{k+1}\subseteq\NatSeg{n+1}}{%
+    \FormulaRefAuto{FinitePathPrefixIndexData}[thm]{\rAEa{4},3}}
+  \proofstepwidestarbreak[1,2,3]{%
+    p\restriction_{\NatSeg{k+1}}\colon\NatSeg{k+1}\to V}{%
+    \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}[thm]{%
+      \rAEn{5},\FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{4}}}
+  \proofstepwidestarbreak[7]{i\in\NatSeg k}{\rA}
+  \proofstepwidestarbreak[1,2,3]{\NatSeg k\subseteq\NatSeg n}{%
+    \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{%
+      \rAEa{5},\rAEa{4},\rAEb{5}}}
+  \proofstepwidestarbreak[1,2,3,7]{i\in\NatSeg n}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{8,7}}
+  \proofstepwidestarbreak[1,2,3,7]{i+1\in\NatSeg{k+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{\rAEa{5},7}}
+  \proofstepwidestarbreak[1,2,3,7]{i\in\NatSeg{k+1}}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{%
+        \rAEa{5},\rAEa{5},\FormulaRefAuto{PeanoLeqAddOne}[thm]{\rAEa{5}}},7}}
+  \proofstepwidestarbreak[1,2,3,7]{%
+    p\restriction_{\NatSeg{k+1}}(i)=p(i)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash
+      F\restriction_C(x)=F(x)}[thm]{\rAEn{5},11}}
+  \proofstepwidestarbreak[1,2,3,7]{%
+    p\restriction_{\NatSeg{k+1}}(i+1)=p(i+1)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash
+      F\restriction_C(x)=F(x)}[thm]{\rAEn{5},10}}
+  \proofstepwidestarbreak[1,2,3,7]{(p(i),p(i+1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{1,2,9}}
+  \proofstepwidestarbreak[1,2,3,7]{%
+    (p\restriction_{\NatSeg{k+1}}(i),
+      p\restriction_{\NatSeg{k+1}}(i+1))\in E}{\rIE{12,\rIE{13,14}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \forall i\in\NatSeg k\,
+      \bigl((p\restriction_{\NatSeg{k+1}}(i),
+        p\restriction_{\NatSeg{k+1}}(i+1))\in E\bigr)}{%
+    \rUI{\rRI{7,15}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \DirectedWalk{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,\rAEa{5},6,16}}
+  \proofstepwidestarbreak[1,2,3]{%
+    p\restriction_{\NatSeg{k+1}}(0)=p(0)\land
+    p\restriction_{\NatSeg{k+1}}(k)=p(k)}{%
+    \rAI{%
+      \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash
+        F\restriction_C(x)=F(x)}[thm]{\rAEn{5},
+          \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+            \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+              \FormulaRefAuto{PeanoZero}[ax],\rAEa{5}},
+            \FormulaRefAuto{PeanoZeroLeq}[thm]{\rAEa{5}}}},
+      \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash
+        F\restriction_C(x)=F(x)}[thm]{\rAEn{5},
+          \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+            \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+              \rAEa{5},\rAEa{5}},
+            \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{5}}}}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \DirectedWalk{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}
+    \land p\restriction_{\NatSeg{k+1}}(0)=p(0)
+    \land p\restriction_{\NatSeg{k+1}}(k)=p(k)}{%
+    \rAI{17,\rAEa{18},\rAEb{18}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Anfangsabschnitt eines endlichen Pfads]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\dsep
+    k\in\NatSeg{n+1}\vdash{}\\[-2pt]
+  &\quad\DirectedPath{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}
+    \land p\restriction_{\NatSeg{k+1}}(0)=p(0)
+    \land p\restriction_{\NatSeg{k+1}}(k)=p(k)
+  \end{aligned}%
+}{FinitePathInitialSegment}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep k}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[3]{k\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{1,2}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \DirectedWalk{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}
+    \land p\restriction_{\NatSeg{k+1}}(0)=p(0)
+    \land p\restriction_{\NatSeg{k+1}}(k)=p(k)}{%
+    \FormulaRefAuto{FiniteWalkInitialSegment}[thm]{1,4,3}}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\inj V}{%
+    \rAEb{\FormulaRefAuto{DirectedPathDef}[def]{1,2}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    p\restriction_{\NatSeg{k+1}}\colon\NatSeg{k+1}\inj V}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep C\subseteq A\vdash
+      F\restriction_C\colon C\inj B}[thm]{6,
+      \rAEn{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{%
+        \rAEa{\FormulaRefAuto{DirectedWalkDef}[def]{1,4}},3}}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \DirectedPath{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}}{%
+    \FormulaRefAuto{DirectedPathDef}[def]{1,\rAEa{5},7}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \DirectedPath{V}{E}{p\restriction_{\NatSeg{k+1}}}{k}
+    \land p\restriction_{\NatSeg{k+1}}(0)=p(0)
+    \land p\restriction_{\NatSeg{k+1}}(k)=p(k)}{%
+    \rAI{8,\rAEa{5},\rAEb{5}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Schwanzsegment eines endlichen Pfads]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+    \DirectedPath{V}{E}{p}{n+1}\vdash{}\\[-2pt]
+  &\quad\exists q\in\powerset(\mathbb N\times V)\,\Bigl(
+    \DirectedPath{V}{E}{q}{n}\land q(0)=p(1)\land q(n)=p(n+1)\land
+    \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\Bigr)
+  \end{aligned}%
+}{FinitePathTailSegment}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep i\dsep j}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{\DirectedPath{V}{E}{p}{n+1}}{\rA}
+  \proofstepwidestarbreak[1,3]{\DirectedWalk{V}{E}{p}{n+1}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{1,3}}
+  \proofstepwidestarbreak[1,2,3]{p\colon\NatSeg{(n+1)+1}\inj V}{%
+    \rAEb{\FormulaRefAuto{DirectedPathDef}[def]{1,3}}}
+  \proofstepwidestarbreak[6]{i\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[2,6]{i+1\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+        \FormulaRefAuto{PeanoOneInN}[thm]},6}}
+  \proofstepwidestarbreak[1,2,3,6]{p(i+1)\in V}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{Injektive Funktion}[def]{5},7}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \forall i\in\NatSeg{n+1}\,p(i+1)\in V}{\rUI{\rRI{6,8}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \exists!q\,\Bigl(q\colon\NatSeg{n+1}\to V\land
+      \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\Bigr)}{%
+    \FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]{9}}
+  \proofstepwidestarbreak[11]{q\colon\NatSeg{n+1}\to V\land
+    \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))}{\rA}
+  \proofstepwidestarbreak[12]{i\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[13]{j\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[14]{q(i)=q(j)}{\rA}
+  \proofstepwidestarbreak[2,12]{i+1\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+        \FormulaRefAuto{PeanoOneInN}[thm]},12}}
+  \proofstepwidestarbreak[2,13]{j+1\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+        \FormulaRefAuto{PeanoOneInN}[thm]},13}}
+  \proofstepwidestarbreak[11,12]{q(i)=p(i+1)}{\rRE{12,\rUE{\rAEb{11}}}}
+  \proofstepwidestarbreak[11,13]{q(j)=p(j+1)}{\rRE{13,\rUE{\rAEb{11}}}}
+  \proofstepwidestarbreak[11,12,13,14]{p(i+1)=p(j+1)}{%
+    \rIE{17,\rIE{18,14}}}
+  \proofstepwidestarbreak[1,2,3,11,12,13,14]{i+1=j+1}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+      F(x)=F(y)\vdash x=y}[ax]{5,15,16,19}}
+  \proofstepwidestarbreak[2,12]{i\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+      \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},12}}
+  \proofstepwidestarbreak[2,13]{j\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+      \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},13}}
+  \proofstepwidestarbreak[1,2,3,11,12,13,14]{i=j}{%
+    \FormulaRefAuto{PeanoAddRightCancellation}[thm]{%
+      21,22,\FormulaRefAuto{PeanoOneInN}[thm],20}}
+  \proofstepwidestarbreak[1,2,3,11]{q\colon\NatSeg{n+1}\inj V}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{\rAEa{11},12,13,14,23}}
+  \proofstepwidestarbreak[25]{i\in\NatSeg n}{\rA}
+  \proofstepwidestarbreak[2,25]{i+1\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{2,25}}
+  \proofstepwidestarbreak[1,2,3,25]{(p(i+1),p((i+1)+1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{1,4,26}}
+  \proofstepwidestarbreak[11,25]{q(i)=p(i+1)}{%
+    \rRE{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+        \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{%
+          2,\FormulaRefAuto{PeanoAddClosure}[thm]{2,
+            \FormulaRefAuto{PeanoOneInN}[thm]},
+          \FormulaRefAuto{PeanoLeqAddOne}[thm]{2}},25},
+      \rUE{\rAEb{11}}}}
+  \proofstepwidestarbreak[11,2,25]{q(i+1)=p((i+1)+1)}{%
+    \rRE{26,\rUE{\rAEb{11}}}}
+  \proofstepwidestarbreak[1,2,3,11,25]{(q(i),q(i+1))\in E}{%
+    \rIE{28,\rIE{29,27}}}
+  \proofstepwidestarbreak[1,2,3,11]{%
+    \forall i\in\NatSeg n\,((q(i),q(i+1))\in E)}{\rUI{\rRI{25,30}}}
+  \proofstepwidestarbreak[1,2,3,11]{\DirectedWalk{V}{E}{q}{n}}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,2,\rAEa{11},31}}
+  \proofstepwidestarbreak[1,2,3,11]{\DirectedPath{V}{E}{q}{n}}{%
+    \FormulaRefAuto{DirectedPathDef}[def]{1,32,24}}
+  \proofstepwidestarbreak[11]{q(0)=p(1)}{%
+    \rIE{\FormulaRefAuto{PeanoAddLeftZero}[thm]{%
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \rRE{%
+        \FormulaRefAuto{PeanoNatSegOneMembership}[thm]{\rII},
+        \rUE{\rAEb{11}}}}}
+  \proofstepwidestarbreak[2,11]{q(n)=p(n+1)}{%
+    \rRE{%
+      \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+        \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{2,2},
+        \FormulaRefAuto{PeanoLeqReflexive}[thm]{2}},
+      \rUE{\rAEb{11}}}}
+  \proofstepwidestarbreak[1,2,3,11]{q\in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{FinitePathPowerSetTyping}[thm]{1,32}}
+  \proofstepwidestarbreak[1,2,3,11]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(1)\land q(n)=p(n+1)\land
+      \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\bigr)}{%
+    \rEI{\rAI{36,33,34,35,\rAEb{11}}}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(1)\land q(n)=p(n+1)\land
+      \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\bigr)}{%
+    \rEE{\FormulaRefAuto{\exists! x\,P(x)\vdash\exists x\,P(x)}[thm]{10},11,37}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Das Schwanzsegment meidet den ersten Knoten]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+    \DirectedPath{V}{E}{p}{n+1}\dsep
+    q\colon\NatSeg{n+1}\to V\dsep{}\\[-2pt]
+  &\forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))
+    \vdash p(0)\notin q[\NatSeg{n+1}]
+  \end{aligned}%
+}{FinitePathTailAvoidsFirstVertex}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{\DirectedPath{V}{E}{p}{n+1}}{\rA}
+  \proofstepwidestarbreak[4]{q\colon\NatSeg{n+1}\to V}{\rA}
+  \proofstepwidestarbreak[5]{\forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))}{\rA}
+  \proofstepwidestarbreak[6]{p(0)\in q[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[4,6]{\exists i\in\NatSeg{n+1}\,(p(0)=q(i))}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}[thm]{4,6}}
+  \proofstepwidestarbreak[8]{i\in\NatSeg{n+1}\land p(0)=q(i)}{\rA}
+  \proofstepwidestarbreak[5,8]{q(i)=p(i+1)}{\rRE{\rAEa{8},\rUE{5}}}
+  \proofstepwidestarbreak[5,8]{p(0)=p(i+1)}{\rIE{9,\rAEb{8}}}
+  \proofstepwidestarbreak[1,2,3]{p\colon\NatSeg{(n+1)+1}\inj V}{%
+    \rAEb{\FormulaRefAuto{DirectedPathDef}[def]{1,3}}}
+  \proofstepwidestarbreak[2]{0\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+      \FormulaRefAuto{PeanoZero}[ax],
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \FormulaRefAuto{PeanoZeroLeq}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+          \FormulaRefAuto{PeanoOneInN}[thm]}}}}
+  \proofstepwidestarbreak[2,8]{i+1\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+        \FormulaRefAuto{PeanoOneInN}[thm]},\rAEa{8}}}
+  \proofstepwidestarbreak[1,2,3,5,8]{0=i+1}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+      F(x)=F(y)\vdash x=y}[ax]{11,12,13,10}}
+  \proofstepwidestarbreak[2,8]{i+1\neq0}{%
+    \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+        \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+          \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+            \FormulaRefAuto{PeanoOneInN}[thm]}},\rAEa{8}},
+      \FormulaRefAuto{PeanoAddClosure}[thm]{%
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},\rAEa{8}},
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \FormulaRefAuto{PeanoLtAddOne}[thm]{%
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},\rAEa{8}}}}}
+  \proofstepwidestarbreak[1,2,3,4,5,8]{\bot}{%
+    \rBI{\FormulaRefAuto{a=b\vdash b=a}[thm]{14},15}}
+  \proofstepwidestarbreak[1,2,3,4,5,6]{\bot}{\rEE{7,8,16}}
+  \proofstepwidestarbreak[1,2,3,4,5]{p(0)\notin q[\NatSeg{n+1}]}{%
+    \rCI{6,17}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Das Bild des Schwanzsegments bleibt im Pfadbild]{%
+  \begin{aligned}[t]
+  &n\in\mathbb N\dsep p\colon\NatSeg{(n+1)+1}\to V\dsep
+    q\colon\NatSeg{n+1}\to V\dsep{}\\[-2pt]
+  &\forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\vdash
+    q[\NatSeg{n+1}]\subseteq p[\NatSeg{(n+1)+1}]
+  \end{aligned}%
+}{FinitePathTailImageSubset}{%
+  \DeltaRow{Mengen}{V\dsep p\dsep q\dsep n\dsep i\dsep y}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{p\colon\NatSeg{(n+1)+1}\to V}{\rA}
+  \proofstepwidestarbreak[3]{q\colon\NatSeg{n+1}\to V}{\rA}
+  \proofstepwidestarbreak[4]{\forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))}{\rA}
+  \proofstepwidestarbreak[5]{y\in q[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[3,5]{\exists i\in\NatSeg{n+1}\,(y=q(i))}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}[thm]{3,5}}
+  \proofstepwidestarbreak[7]{i\in\NatSeg{n+1}\land y=q(i)}{\rA}
+  \proofstepwidestarbreak[1,7]{i+1\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+        \FormulaRefAuto{PeanoOneInN}[thm]},\rAEa{7}}}
+  \proofstepwidestarbreak[4,7]{q(i)=p(i+1)}{\rRE{\rAEa{7},\rUE{4}}}
+  \proofstepwidestarbreak[2,4,7]{y\in p[\NatSeg{(n+1)+1}]}{%
+    \FormulaRefAuto{F\colon A\to B\dsep\exists x\in A\,y=F(x)\vdash
+      y\in F[A]}[thm]{2,\rEI{\rAI{8,\rIE{9,\rAEb{7}}}}}}
+  \proofstepwidestarbreak[1,2,3,4,5]{y\in p[\NatSeg{(n+1)+1}]}{%
+    \rEE{6,7,10}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    q[\NatSeg{n+1}]\subseteq p[\NatSeg{(n+1)+1}]}{%
+    \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}[def]{%
+      \rUI{\rRI{5,11}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Frische Fortsetzung eines endlichen Pfads]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\dsep y\in V\dsep
+    y\notin p[\NatSeg{n+1}]\dsep(p(n),y)\in E\vdash{}\\[-2pt]
+  &\quad\exists q\in\powerset(\mathbb N\times V)\,\Bigl(
+    \DirectedPath{V}{E}{q}{n+1}\land q(0)=p(0)\land q(n+1)=y\land
+    q[\NatSeg{(n+1)+1}]=p[\NatSeg{n+1}]\cup\{y\}\Bigr)
+  \end{aligned}%
+}{FinitePathFreshEndpointExtension}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep i\dsep y}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[3]{y\in V}{\rA}
+  \proofstepwidestarbreak[4]{y\notin p[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[5]{(p(n),y)\in E}{\rA}
+  \proofstepwidestarbreak[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{1,2}}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N}{%
+    \rAEa{\FormulaRefAuto{DirectedWalkDef}[def]{1,6}}}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\inj V}{%
+    \rAEb{\FormulaRefAuto{DirectedPathDef}[def]{1,2}}}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\bij p[\NatSeg{n+1}]}{%
+    \FormulaRefAuto{F\colon A\inj B\vdash F\colon A\bij F[A]}[thm]{8}}
+  \proofstepwidestarbreak[1,2]{p[\NatSeg{n+1}]\subseteq V}{%
+    \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{%
+      \FormulaRefAuto{Injektive Funktion}[def]{8}}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}
+      \colon\NatSeg{n+1}\cup\{n+1\}
+        \bij p[\NatSeg{n+1}]\cup\{y\}}{%
+    \FormulaRefAuto{FreshExtMapBijective}[thm]{%
+      9,
+      \FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},4}}
+  \proofstepwidestarbreak[1,2]{%
+    \NatSeg{(n+1)+1}=\NatSeg{n+1}\cup\{n+1\}}{%
+    \FormulaRefAuto{PeanoNatSegAddOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+        \FormulaRefAuto{PeanoOneInN}[thm]}}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}
+      \colon\NatSeg{(n+1)+1}\bij p[\NatSeg{n+1}]\cup\{y\}}{%
+    \rIE{11,12}}
+  \proofstepwidestarbreak[1,2,3]{p[\NatSeg{n+1}]\cup\{y\}\subseteq V}{%
+    \FormulaRefAuto{A\subseteq C\dsep B\subseteq C\vdash A\cup B\subseteq C}[thm]{%
+      10,\FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{3}}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}
+      \colon\NatSeg{(n+1)+1}\inj V}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep B\subseteq C\vdash
+      F\colon A\inj C}[thm]{%
+        \FormulaRefAuto{Bijektive Funktion}[def]{13},14}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}
+      [\NatSeg{(n+1)+1}]=p[\NatSeg{n+1}]\cup\{y\}}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}[thm]{13}}
+  \proofstepwidestarbreak[17]{i\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,17]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i)=p(i)}{%
+    \FormulaRefAuto{FreshExtMapOnBase}[thm]{10,
+      \FormulaRefAuto{Bijektive Funktion}[def]{9},
+      \FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},3,17}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(n+1)=y}{%
+    \FormulaRefAuto{FreshExtMapAtNew}[thm]{10,
+      \FormulaRefAuto{Bijektive Funktion}[def]{9},
+      \FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},3}}
+  \proofstepwidestarbreak[20]{i\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[7,20]{i\in\NatSeg n\lor i=n}{%
+    \rIE{\FormulaRefAuto{PeanoNatSegAddOne}[thm]{7},15}}
+  \proofstepwidestarbreak[22]{i\in\NatSeg n}{\rA}
+  \proofstepwidestarbreak[1,2,22]{(p(i),p(i+1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{1,6,22}}
+  \proofstepwidestarbreak[1,2,3,4,22]{%
+    \left(\ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i),
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i+1)\right)\in E}{%
+    \rIE{18,\rIE{%
+      \FormulaRefAuto{FreshExtMapOnBase}[thm]{10,
+        \FormulaRefAuto{Bijektive Funktion}[def]{9},
+        \FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]{%
+          \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+            \FormulaRefAuto{PeanoOneInN}[thm]}},3,
+        \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{7,22}},23}}}
+  \proofstepwidestarbreak[25]{i=n}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,25]{%
+    \left(\ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i),
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i+1)\right)\in E}{%
+    \rIE{25,\rIE{18,\rIE{19,5}}}}
+  \proofstepwidestarbreak[1,2,3,4,5,20]{%
+    \left(\ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i),
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i+1)\right)\in E}{%
+    \rOE{21,22,24,25,26}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \forall i\in\NatSeg{n+1}\,
+    \left(\ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i),
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(i+1)\right)\in E}{%
+    \rUI{\rRI{20,27}}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \DirectedWalk{V}{E}{%
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}}{n+1}}{%
+    \FormulaRefAuto{DirectedWalkDef}[def]{1,
+      \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \FormulaRefAuto{Injektive Funktion}[def]{15},28}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \DirectedPath{V}{E}{%
+      \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}}{n+1}}{%
+    \FormulaRefAuto{DirectedPathDef}[def]{1,29,15}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}
+      \in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{FinitePathPowerSetTyping}[thm]{1,30}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \ExtMap{\iota_{p[\NatSeg{n+1}],V}\circ p}{n+1}{y}(0)=p(0)}{%
+    \FormulaRefAuto{FreshExtMapOnBase}[thm]{10,
+      \FormulaRefAuto{Bijektive Funktion}[def]{9},
+      \FormulaRefAuto{PeanoNatSegEndpointNotIn}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},3,
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{PeanoZero}[ax],7,
+        \FormulaRefAuto{PeanoZeroLeq}[thm]{7}}}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n+1}\land q(0)=p(0)\land q(n+1)=y\land
+      q[\NatSeg{(n+1)+1}]=p[\NatSeg{n+1}]\cup\{y\}\bigr)}{%
+    \rEI{\rAI{31,30,32,19,16}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Fortsetzung eines Pfads um eine Kante]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\dsep
+    (p(n),y)\in E\vdash{}\\[-2pt]
+  &\quad\exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)
+  \end{aligned}%
+}{FinitePathEndpointStep}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep m\dsep i\dsep y}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[3]{(p(n),y)\in E}{\rA}
+  \proofstepwidestarbreak[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{1,2}}
+  \proofstepwidestarbreak[1,2]{n\in\mathbb N}{%
+    \rAEa{\FormulaRefAuto{DirectedWalkDef}[def]{1,4}}}
+  \proofstepwidestarbreak[1,3]{y\in V}{%
+    \rAEb{\FormulaRefAuto{GraphEdgeEndpointTyping}[thm]{1,3}}}
+  \proofstepwidestarbreak[1,2]{p\colon\NatSeg{n+1}\to V}{%
+    \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{%
+      \FormulaRefAuto{DirectedWalkDef}[def]{1,4}}}
+  \proofstepwidestarbreak[]{y\in p[\NatSeg{n+1}]\lor
+    y\notin p[\NatSeg{n+1}]}{\FormulaRefAuto{P\lor\neg P}[thm]}
+  \proofstepwidestarbreak[9]{y\in p[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[1,2,9]{%
+    \exists i\in\NatSeg{n+1}\,(y=p(i))}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}[thm]{7,9}}
+  \proofstepwidestarbreak[11]{i\in\NatSeg{n+1}\land y=p(i)}{\rA}
+  \proofstepwidestarbreak[1,2,11]{%
+    \DirectedPath{V}{E}{p\restriction_{\NatSeg{i+1}}}{i}\land
+    p\restriction_{\NatSeg{i+1}}(0)=p(0)\land
+    p\restriction_{\NatSeg{i+1}}(i)=p(i)}{%
+    \FormulaRefAuto{FinitePathInitialSegment}[thm]{1,2,\rAEa{11}}}
+  \proofstepwidestarbreak[1,2,11]{i\in\mathbb N}{%
+    \rAEa{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{5,\rAEa{11}}}}
+  \proofstepwidestarbreak[1,2,11]{%
+    p\restriction_{\NatSeg{i+1}}\in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{FinitePathPowerSetTyping}[thm]{1,\rAEa{12}}}
+  \proofstepwidestarbreak[1,2,11]{%
+    \exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)}{%
+    \rEI{\rAI{13,\rEI{\rAI{14,\rAEa{12},\rAEb{12},
+      \rIE{\rAEb{11},\rAEn{12}}}}}}}
+  \proofstepwidestarbreak[1,2,9]{%
+    \exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)}{%
+    \rEE{10,11,15}}
+  \proofstepwidestarbreak[17]{y\notin p[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[1,2,3,6,17]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n+1}\land q(0)=p(0)\land q(n+1)=y\bigr)}{%
+    \FormulaRefAuto{FinitePathFreshEndpointExtension}[thm]{1,2,6,17,3}}
+  \proofstepwidestarbreak[19]{q\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{q}{n+1}\land q(0)=p(0)\land q(n+1)=y\land
+    q[\NatSeg{(n+1)+1}]=p[\NatSeg{n+1}]\cup\{y\}}{\rA}
+  \proofstepwidestarbreak[1,2,3,17,19]{%
+    \exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)}{%
+    \rEI{\rAI{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{5,\FormulaRefAuto{PeanoOneInN}[thm]},
+      \rEI{19}}}}
+  \proofstepwidestarbreak[1,2,3,6,17]{%
+    \exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)}{%
+    \rEE{18,19,20}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{q}{m}\land q(0)=p(0)\land q(m)=y\bigr)}{%
+    \rOE{8,9,16,17,21}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Transporteigenschaft für Walklängen]{%
+  \begin{aligned}[t]
+  \FinitePathTransportProperty{V}{E}{n}\coloneqq
+  \forall p\in\powerset(\mathbb N\times V)\,\forall m\in\mathbb N\,
+  \forall q\in\powerset(\mathbb N\times V)\,\Bigl(&
+    \DirectedWalk{V}{E}{p}{n}\land\DirectedPath{V}{E}{q}{m}\land
+    q(m)=p(0)\rightarrow{}\\[-2pt]
+  &\exists l\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(n))\Bigr)
+  \end{aligned}%
+}{FinitePathTransportPropertyDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep m\dsep l\dsep p\dsep q\dsep s}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+  \DeltaRow{Neue Eigenschaft}{\FinitePathTransportProperty{V}{E}{n}}
+}
+
+\FormulaThmDeltaK[Transportbasis]{%
+  \GraphStruct{V,E}\vdash\FinitePathTransportProperty{V}{E}{0}%
+}{FinitePathTransportBase}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep m\dsep p\dsep q}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[3]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{q\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[5]{\DirectedWalk{V}{E}{p}{0}\land
+    \DirectedPath{V}{E}{q}{m}\land q(m)=p(0)}{\rA}
+  \proofstepwidestarbreak[3,4,5]{%
+    \exists l\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(0))}{%
+    \rEI{\rAI{3,\rEI{\rAI{4,\rAEb{5},\rII,\rAEn{5}}}}}}
+  \proofstepwidestarbreak[1]{\FinitePathTransportProperty{V}{E}{0}}{%
+    \FormulaRefAuto{FinitePathTransportPropertyDef}[def]{%
+      \rUI{\rRI{2,\rUI{\rRI{3,\rUI{\rRI{4,\rRI{5,6}}}}}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Transportschritt]{%
+  \GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+  \FinitePathTransportProperty{V}{E}{n}\vdash
+  \FinitePathTransportProperty{V}{E}{n+1}%
+}{FinitePathTransportStep}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep m\dsep l\dsep h\dsep
+    p\dsep q\dsep s\dsep t}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{\FinitePathTransportProperty{V}{E}{n}}{\rA}
+  \proofstepwidestarbreak[4]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[5]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[6]{q\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[7]{\DirectedWalk{V}{E}{p}{n+1}\land
+    \DirectedPath{V}{E}{q}{m}\land q(m)=p(0)}{\rA}
+  \proofstepwidestarbreak[2]{n\leq n+1}{\FormulaRefAuto{PeanoLeqAddOne}[thm]{2}}
+  \proofstepwidestarbreak[2]{n+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{2,\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstepwidestarbreak[2]{n\in\NatSeg{(n+1)+1}}{%
+    \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{2,9,8}}
+  \proofstepwidestarbreak[1,2,7]{%
+    \DirectedWalk{V}{E}{p\restriction_{\NatSeg{n+1}}}{n}\land
+    p\restriction_{\NatSeg{n+1}}(0)=p(0)\land
+    p\restriction_{\NatSeg{n+1}}(n)=p(n)}{%
+    \FormulaRefAuto{FiniteWalkInitialSegment}[thm]{1,\rAEa{7},10}}
+  \proofstepwidestarbreak[1,2,3,5,6,7]{%
+    \exists l\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(n))}{%
+    \FormulaRefAuto{FinitePathTransportPropertyDef}[def]{%
+      3,\rAEa{11},\rAEb{7},\rIE{\rAEb{11},\rAEn{7}}}}
+  \proofstepwidestarbreak[13]{l\in\mathbb N\land
+    s\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(n)}{\rA}
+  \proofstepwidestarbreak[2]{n\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+      2,2,\FormulaRefAuto{PeanoLeqReflexive}[thm]{2}}}
+  \proofstepwidestarbreak[1,2,7]{(p(n),p(n+1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{1,\rAEa{7},14}}
+  \proofstepwidestarbreak[1,2,7,13]{%
+    \exists h\in\mathbb N\,\exists t\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{t}{h}\land t(0)=s(0)\land t(h)=p(n+1))}{%
+    \FormulaRefAuto{FinitePathEndpointStep}[thm]{%
+      1,\rAEn{13},\rIE{\rAEn{13},15}}}
+  \proofstepwidestarbreak[17]{h\in\mathbb N\land
+    t\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{t}{h}\land t(0)=s(0)\land t(h)=p(n+1)}{\rA}
+  \proofstepwidestarbreak[1,2,3,5,6,7,13,17]{%
+    \exists h\in\mathbb N\,\exists t\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{t}{h}\land t(0)=q(0)\land t(h)=p(n+1))}{%
+    \rEI{\rAI{\rAEa{17},\rEI{\rAI{\rAEb{17},\rAEn{17},
+      \rIE{\rAEn{13},\rAEb{\rAEn{17}}},\rAEn{17}}}}}}
+  \proofstepwidestarbreak[1,2,3,5,6,7]{%
+    \exists h\in\mathbb N\,\exists t\in\powerset(\mathbb N\times V)\,
+    (\DirectedPath{V}{E}{t}{h}\land t(0)=q(0)\land t(h)=p(n+1))}{%
+    \rEE{12,13,\rEE{16,17,18}}}
+  \proofstepwidestarbreak[1,2,3]{\FinitePathTransportProperty{V}{E}{n+1}}{%
+    \FormulaRefAuto{FinitePathTransportPropertyDef}[def]{%
+      \rUI{\rRI{4,\rUI{\rRI{5,\rUI{\rRI{6,\rRI{7,19}}}}}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Transport entlang eines endlichen Walks]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep n,m\in\mathbb N\dsep
+    \DirectedWalk{V}{E}{p}{n}\dsep\DirectedPath{V}{E}{q}{m}\dsep
+    q(m)=p(0)\vdash{}\\[-2pt]
+  &\quad\exists l\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(n)\bigr)
+  \end{aligned}%
+}{FinitePathTransportAlongWalk}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep m\dsep l\dsep p\dsep q\dsep s}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n,m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{\DirectedWalk{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[4]{\DirectedPath{V}{E}{q}{m}}{\rA}
+  \proofstepwidestarbreak[5]{q(m)=p(0)}{\rA}
+  \proofstepwidestarbreak[1]{\FinitePathTransportProperty{V}{E}{0}}{%
+    \FormulaRefAuto{FinitePathTransportBase}[thm]{1}}
+  \proofstepwidestarbreak[1,2]{\FinitePathTransportProperty{V}{E}{n}}{%
+    \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{%
+      6,\FormulaRefAuto{FinitePathTransportStep}[thm]{1},\rAEa{2}}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \exists l\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{s}{l}\land s(0)=q(0)\land s(l)=p(n)\bigr)}{%
+    \FormulaRefAuto{FinitePathTransportPropertyDef}[def]{%
+      7,3,\rAEb{2},4,5}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Umkehreigenschaft für Pfadlängen]{%
+  \begin{aligned}[t]
+  \FinitePathReversalProperty{V}{E}{n}\coloneqq
+  \forall p\in\powerset(\mathbb N\times V)\,\Bigl(
+    \DirectedPath{V}{E}{p}{n}\rightarrow{}&
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land{}\\[-2pt]
+    &q(0)=p(n)\land q(n)=p(0)\land
+      q[\NatSeg{n+1}]\subseteq p[\NatSeg{n+1}]\bigr)\Bigr)
+  \end{aligned}%
+}{FinitePathReversalPropertyDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep p\dsep q}
+  \DeltaPrem{Ungerichteter Graph}{\UndirectedGraphStruct{V,E}}
+  \DeltaRow{Neue Eigenschaft}{\FinitePathReversalProperty{V}{E}{n}}
+}
+
+\FormulaThmDeltaK[Umkehrbasis]{%
+  \UndirectedGraphStruct{V,E}\vdash
+  \FinitePathReversalProperty{V}{E}{0}%
+}{FinitePathReversalBase}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[3]{\DirectedPath{V}{E}{p}{0}}{\rA}
+  \proofstepwidestarbreak[2,3]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{0}\land q(0)=p(0)\land q(0)=p(0)\land
+      q[\NatSeg{0+1}]\subseteq p[\NatSeg{0+1}]\bigr)}{%
+    \rEI{\rAI{2,3,\rII,\rII,\FormulaRefAuto{A\subseteq A}[thm]}}}
+  \proofstepwidestarbreak[1]{\FinitePathReversalProperty{V}{E}{0}}{%
+    \FormulaRefAuto{FinitePathReversalPropertyDef}[def]{%
+      \rUI{\rRI{2,\rRI{3,4}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Umkehrschritt]{%
+  \UndirectedGraphStruct{V,E}\dsep n\in\mathbb N\dsep
+  \FinitePathReversalProperty{V}{E}{n}\vdash
+  \FinitePathReversalProperty{V}{E}{n+1}%
+}{FinitePathReversalStep}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep p\dsep q\dsep s\dsep t\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{\FinitePathReversalProperty{V}{E}{n}}{\rA}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{%
+    \FormulaRefAuto{UndirectedGraphAccess}[thm]{1}}
+  \proofstepwidestarbreak[5]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[6]{\DirectedPath{V}{E}{p}{n+1}}{\rA}
+  \proofstepwidestarbreak[1,2,5,6]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(1)\land q(n)=p(n+1)\land
+      \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))\bigr)}{%
+    \FormulaRefAuto{FinitePathTailSegment}[thm]{4,2,6}}
+  \proofstepwidestarbreak[8]{q\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{q}{n}\land q(0)=p(1)\land q(n)=p(n+1)\land
+    \forall i\in\NatSeg{n+1}\,(q(i)=p(i+1))}{\rA}
+  \proofstepwidestarbreak[1,2,3,8]{%
+    \exists s\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{s}{n}\land s(0)=q(n)\land s(n)=q(0)\land
+      s[\NatSeg{n+1}]\subseteq q[\NatSeg{n+1}]\bigr)}{%
+    \FormulaRefAuto{FinitePathReversalPropertyDef}[def]{3,\rAEa{8},\rAEb{8}}}
+  \proofstepwidestarbreak[10]{s\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{s}{n}\land s(0)=q(n)\land s(n)=q(0)\land
+    s[\NatSeg{n+1}]\subseteq q[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[4,8]{q\colon\NatSeg{n+1}\to V}{%
+    \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{4,\rAEb{8}}}}
+  \proofstepwidestarbreak[4,8]{p\colon\NatSeg{(n+1)+1}\to V}{%
+    \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{4,6}}}
+  \proofstepwidestarbreak[2,8]{%
+    q[\NatSeg{n+1}]\subseteq p[\NatSeg{(n+1)+1}]}{%
+    \FormulaRefAuto{FinitePathTailImageSubset}[thm]{%
+      2,12,11,\rAEn{8}}}
+  \proofstepwidestarbreak[1,2,8]{p(0)\notin q[\NatSeg{n+1}]}{%
+    \FormulaRefAuto{FinitePathTailAvoidsFirstVertex}[thm]{%
+      4,2,6,11,\rAEn{8}}}
+  \proofstepwidestarbreak[2,8,10]{%
+    p(0)\notin s[\NatSeg{n+1}]}{%
+    \FormulaRefAuto{P\rightarrow Q, \neg Q\vdash\neg P}[thm]{%
+      \rUE{\FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}[def]{%
+        \rAEn{10}}},14}}
+  \proofstepwidestarbreak[4,6]{p(0),p(1)\in V}{%
+    \FormulaRefAuto{DirectedWalkEndpointTyping}[thm]{%
+      4,\FormulaRefAuto{DirectedPathIsWalk}[thm]{4,6}}}
+  \proofstepwidestarbreak[2]{0\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+      \FormulaRefAuto{PeanoZero}[ax],2,
+      \FormulaRefAuto{PeanoZeroLeq}[thm]{2}}}
+  \proofstepwidestarbreak[1,2,6]{(p(0),p(1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{%
+      4,\FormulaRefAuto{DirectedPathIsWalk}[thm]{4,6},17}}
+  \proofstepwidestarbreak[1,2,6]{(p(1),p(0))\in E}{%
+    \FormulaRefAuto{UndirectedAdjacencySymmetric}[thm]{%
+      1,\rAEa{16},\rAEb{16},18}}
+  \proofstepwidestarbreak[1,2,8,10]{s(n)=p(1)}{%
+    \rIE{\rAEa{\rAEn{8}},\rAEn{10}}}
+  \proofstepwidestarbreak[1,2,8,10]{s(0)=p(n+1)}{%
+    \rIE{\rAEb{\rAEn{8}},\rAEb{10}}}
+  \proofstepwidestarbreak[1,2,6,8,10]{%
+    \exists t\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{t}{n+1}\land t(0)=s(0)\land t(n+1)=p(0)\land
+      t[\NatSeg{(n+1)+1}]=s[\NatSeg{n+1}]\cup\{p(0)\}\bigr)}{%
+    \FormulaRefAuto{FinitePathFreshEndpointExtension}[thm]{%
+      4,\rAEb{10},\rAEa{16},15,\rIE{20,19}}}
+  \proofstepwidestarbreak[23]{t\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{t}{n+1}\land t(0)=s(0)\land t(n+1)=p(0)\land
+    t[\NatSeg{(n+1)+1}]=s[\NatSeg{n+1}]\cup\{p(0)\}}{\rA}
+  \proofstepwidestarbreak[2,5,6,8,10,23]{%
+    t[\NatSeg{(n+1)+1}]\subseteq p[\NatSeg{(n+1)+1}]}{%
+    \rIE{\rAEn{23},
+      \FormulaRefAuto{A\subseteq C\dsep B\subseteq C\vdash
+        A\cup B\subseteq C}[thm]{%
+          \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{%
+            \rAEn{10},13},
+          \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{%
+            \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}[thm]{%
+              \FormulaRefAuto{A\subseteq A}[thm],12,17}}}}}
+  \proofstepwidestarbreak[1,2,5,6,8,10,23]{%
+    \exists t\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{t}{n+1}\land t(0)=p(n+1)\land t(n+1)=p(0)\land
+      t[\NatSeg{(n+1)+1}]\subseteq p[\NatSeg{(n+1)+1}]\bigr)}{%
+    \rEI{\rAI{\rAEa{23},\rAEb{23},\rIE{21,\rAEn{23}},
+      \rAEn{23},24}}}
+  \proofstepwidestarbreak[1,2,5,6]{%
+    \exists t\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{t}{n+1}\land t(0)=p(n+1)\land t(n+1)=p(0)\land
+      t[\NatSeg{(n+1)+1}]\subseteq p[\NatSeg{(n+1)+1}]\bigr)}{%
+    \rEE{7,8,\rEE{9,10,\rEE{22,23,25}}}}
+  \proofstepwidestarbreak[1,2,3]{\FinitePathReversalProperty{V}{E}{n+1}}{%
+    \FormulaRefAuto{FinitePathReversalPropertyDef}[def]{%
+      \rUI{\rRI{5,\rRI{6,26}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Umkehrung eines Pfads im ungerichteten Graphen]{%
+  \begin{aligned}[t]
+  &\UndirectedGraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\vdash{}\\[-2pt]
+  &\quad\exists q\in\powerset(\mathbb N\times V)\,\bigl(
+    \DirectedPath{V}{E}{q}{n}\land q(0)=p(n)\land q(n)=p(0)\bigr)
+  \end{aligned}%
+}{UndirectedFinitePathReversal}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep p\dsep q}
+}
+\begin{tabproofwide}
+  \proofstepwidestarinline[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarinline[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarinline[1]{\GraphStruct{V,E}}{%
+    \FormulaRefAuto{UndirectedGraphAccess}[thm]{1}}
+  \proofstepwidestarbreakkeep[1,2]{n\in\mathbb N}{%
+    \rAEa{\FormulaRefAuto{DirectedWalkDef}[def]{%
+      3,\FormulaRefAuto{DirectedPathIsWalk}[thm]{3,2}}}}
+  \proofstepwidestarinline[1]{\FinitePathReversalProperty{V}{E}{0}}{%
+    \FormulaRefAuto{FinitePathReversalBase}[thm]{1}}
+  \proofstepwidestarbreakkeep[1,2]{\FinitePathReversalProperty{V}{E}{n}}{%
+    \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{%
+      5,\FormulaRefAuto{FinitePathReversalStep}[thm]{1},4}}
+  \proofstepwidestarinline[1,2]{p\in\powerset(\mathbb N\times V)}{%
+    \FormulaRefAuto{FinitePathPowerSetTyping}[thm]{3,2}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(n)\land q(n)=p(0)\land
+      q[\NatSeg{n+1}]\subseteq p[\NatSeg{n+1}]\bigr)}{%
+    \FormulaRefAuto{FinitePathReversalPropertyDef}[def]{6,7,2}}
+  \proofstepwidestarbreakkeep[9]{%
+    q\in\powerset(\mathbb N\times V)\land\Bigl(
+      \bigl(\DirectedPath{V}{E}{q}{n}\land q(0)=p(n)\land q(n)=p(0)\bigr)\land
+      q[\NatSeg{n+1}]\subseteq p[\NatSeg{n+1}]\Bigr)}{\rA}
+  \proofstepwidestarbreakkeep[9]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(n)\land q(n)=p(0)\bigr)}{%
+    \rEI{\rAI{\rAEa{9},\rAEa{\rAEb{9}}}}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{n}\land q(0)=p(n)\land q(n)=p(0)\bigr)}{%
+    \rEE{8,9,10}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Schwanzeigenschaft an einer Wegstelle]{%
+  \begin{aligned}[t]
+  &\FinitePathSuffixProperty{V}{E}{p}{n}{k}\coloneqq{}\\[-2pt]
+  &\quad\forall l\in\mathbb N\,\Bigl(k+l=n\rightarrow{}\\[-2pt]
+  &\qquad\exists q\in\powerset(\mathbb N\times V)\,\bigl(
+    \DirectedPath{V}{E}{q}{l}\land q(0)=p(k)\land q(l)=p(n)\land{}\\[-2pt]
+  &\qquad\quad\forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)\Bigr)
+  \end{aligned}%
+}{FinitePathSuffixPropertyDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep k\dsep l\dsep i}
+  \DeltaRow{Neue Eigenschaft}{\FinitePathSuffixProperty{V}{E}{p}{n}{k}}
+}
+
+\FormulaThmDeltaK[Schwanzbasis]{%
+  \GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+  p\in\powerset(\mathbb N\times V)\dsep
+  \DirectedPath{V}{E}{p}{n}\vdash
+  \FinitePathSuffixProperty{V}{E}{p}{n}{0}%
+}{FinitePathSuffixBase}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep l\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[4]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[5]{l\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[6]{0+l=n}{\rA}
+  \proofstepwidestarbreak[5]{0+l=l}{%
+    \FormulaRefAuto{PeanoAddLeftZero}[thm]{5}}
+  \proofstepwidestarbreak[5,6]{l=n}{\rIE{7,6}}
+  \proofstepwidestarbreak[4,5,6]{\DirectedPath{V}{E}{p}{l}}{\rIE{8,4}}
+  \proofstepwidestarbreak[5,6]{p(l)=p(n)}{\rIE{8,\rII}}
+  \proofstepwidestarbreak[11]{i\in\NatSeg{l+1}}{\rA}
+  \proofstepwidestarbreak[5,11]{i\in\mathbb N}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+      \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{5,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},11}}
+  \proofstepwidestarbreak[5,11]{0+i=i}{%
+    \FormulaRefAuto{PeanoAddLeftZero}[thm]{12}}
+  \proofstepwidestarbreak[5,11]{p(i)=p(0+i)}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{13},\rII}}
+  \proofstepwidestarbreak[5]{%
+    \forall i\in\NatSeg{l+1}\,(p(i)=p(0+i))}{%
+    \rUI{\rRI{11,14}}}
+  \proofstepwidestarbreak[2,3,4,5,6]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{l}\land q(0)=p(0)\land q(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(q(i)=p(0+i))\bigr)}{%
+    \rEI{\rAI{3,9,\rII,10,15}}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \FinitePathSuffixProperty{V}{E}{p}{n}{0}}{%
+    \FormulaRefAuto{FinitePathSuffixPropertyDef}[def]{%
+      \rUI{\rRI{5,\rRI{6,16}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Schwanzschritt]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep n,k\in\mathbb N\dsep
+    p\in\powerset(\mathbb N\times V)\dsep
+    \DirectedPath{V}{E}{p}{n}\dsep
+    \FinitePathSuffixProperty{V}{E}{p}{n}{k}\vdash{}\\[-2pt]
+  &\qquad\FinitePathSuffixProperty{V}{E}{p}{n}{k+1}
+  \end{aligned}%
+}{FinitePathSuffixStep}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep s\dsep n\dsep k\dsep l\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{k\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[5]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[6]{\FinitePathSuffixProperty{V}{E}{p}{n}{k}}{\rA}
+  \proofstepwidestarbreak[7]{l\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[8]{(k+1)+l=n}{\rA}
+  \proofstepwidestarbreak[3,7]{k+(l+1)=(k+1)+l}{%
+    \rChain{%
+      \rIE{%
+        \FormulaRefAuto{PeanoAddCommutative}[thm]{%
+          7,\FormulaRefAuto{PeanoOneInN}[thm]},\rII},
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+        \FormulaRefAuto{PeanoAddAssociative}[thm]{%
+          3,\FormulaRefAuto{PeanoOneInN}[thm],7}}}}
+  \proofstepwidestarbreak[3,7,8]{k+(l+1)=n}{\rIE{9,8}}
+  \proofstepwidestarbreak[7]{l+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+      \FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstepwidestarbreak[3,6,7,8]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{l+1}\land q(0)=p(k)\land q(l+1)=p(n)\land
+      \forall i\in\NatSeg{(l+1)+1}\,(q(i)=p(k+i))\bigr)}{%
+    \FormulaRefAuto{FinitePathSuffixPropertyDef}[def]{6,11,10}}
+  \proofstepwidestarbreak[13]{q\in\powerset(\mathbb N\times V)\land
+      \DirectedPath{V}{E}{q}{l+1}\land q(0)=p(k)\land q(l+1)=p(n)\land
+      \forall i\in\NatSeg{(l+1)+1}\,(q(i)=p(k+i))}{\rA}
+  \proofstepwidestarbreak[1,7,13]{%
+    \exists s\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{s}{l}\land s(0)=q(1)\land s(l)=q(l+1)\land
+      \forall i\in\NatSeg{l+1}\,(s(i)=q(i+1))\bigr)}{%
+    \FormulaRefAuto{FinitePathTailSegment}[thm]{1,7,\rAEb{13}}}
+  \proofstepwidestarbreak[15]{s\in\powerset(\mathbb N\times V)\land
+      \DirectedPath{V}{E}{s}{l}\land s(0)=q(1)\land s(l)=q(l+1)\land
+      \forall i\in\NatSeg{l+1}\,(s(i)=q(i+1))}{\rA}
+  \proofstepwidestarbreak[7]{1\in\NatSeg{(l+1)+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{PeanoOneInN}[thm],
+        \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+          \FormulaRefAuto{PeanoOneInN}[thm]}},
+      \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+        \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+          m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{%
+          \FormulaRefAuto{PeanoOneInN}[thm],
+          \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+            \FormulaRefAuto{PeanoOneInN}[thm]}},
+        \rEI{\rAI{7,
+          \FormulaRefAuto{PeanoAddCommutative}[thm]{%
+            \FormulaRefAuto{PeanoOneInN}[thm],7}}}}}}
+  \proofstepwidestarbreak[7,13]{q(1)=p(k+1)}{%
+    \rUE{\rAEn{13},17}}
+  \proofstepwidestarbreak[7,13,15]{s(0)=p(k+1)}{%
+    \rIE{18,\rAEa{\rAEn{15}}}}
+  \proofstepwidestarbreak[8,13,15]{s(l)=p(n)}{%
+    \rIE{\rAEb{\rAEn{15}},\rAEn{13}}}
+  \proofstepwidestarbreak[21]{i\in\NatSeg{l+1}}{\rA}
+  \proofstepwidestarbreak[7,21]{i+1\in\NatSeg{(l+1)+1}}{%
+    \FormulaRefAuto{FinitePathIndexShiftOne}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+        \FormulaRefAuto{PeanoOneInN}[thm]},21}}
+  \proofstepwidestarbreak[13,21]{q(i+1)=p(k+(i+1))}{%
+    \rUE{\rAEn{13},22}}
+  \proofstepwidestarbreak[3,7,21]{k+(i+1)=(k+1)+i}{%
+    \rChain{%
+      \FormulaRefAuto{PeanoAddAssociative}[thm]{%
+        3,
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},21},
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \FormulaRefAuto{PeanoAddCommutative}[thm]{%
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},21},
+        \FormulaRefAuto{PeanoOneInN}[thm]},
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+        \FormulaRefAuto{PeanoAddAssociative}[thm]{%
+          3,\FormulaRefAuto{PeanoOneInN}[thm],
+          \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+            \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+              \FormulaRefAuto{PeanoAddClosure}[thm]{7,
+                \FormulaRefAuto{PeanoOneInN}[thm]}},21}}}}}
+  \proofstepwidestarbreak[13,15,21]{s(i)=q(i+1)}{\rUE{\rAEn{15},21}}
+  \proofstepwidestarbreak[3,7,13,15,21]{s(i)=p((k+1)+i)}{%
+    \rIE{24,\rIE{23,25}}}
+  \proofstepwidestarbreak[3,7,13,15]{%
+    \forall i\in\NatSeg{l+1}\,(s(i)=p((k+1)+i))}{%
+    \rUI{\rRI{21,26}}}
+  \proofstepwidestarbreak[3,7,8,13,15]{%
+    \exists s\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{s}{l}\land s(0)=p(k+1)\land s(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(s(i)=p((k+1)+i))\bigr)}{%
+    \rEI{\rAI{\rAEa{15},\rAEb{15},19,20,27}}}
+  \proofstepwidestarbreak[1,3,6,7,8]{%
+    \exists s\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{s}{l}\land s(0)=p(k+1)\land s(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(s(i)=p((k+1)+i))\bigr)}{%
+    \rEE{12,13,\rEE{14,15,28}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6]{%
+    \FinitePathSuffixProperty{V}{E}{p}{n}{k+1}}{%
+    \FormulaRefAuto{FinitePathSuffixPropertyDef}[def]{%
+      \rUI{\rRI{7,\rRI{8,29}}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Endabschnitt eines endlichen Pfads]{%
+  \begin{aligned}[t]
+  &\GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+    p\in\powerset(\mathbb N\times V)\dsep
+    \DirectedPath{V}{E}{p}{n}\dsep k\in\NatSeg{n+1}\vdash{}\\[-2pt]
+  &\quad\exists l\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(k+l=n\land\DirectedPath{V}{E}{q}{l}\land
+      q(0)=p(k)\land q(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)
+  \end{aligned}%
+}{FinitePathFinalSegment}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep n\dsep k\dsep l\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[4]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestarbreak[5]{k\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestarbreak[2,5]{k\in\mathbb N}{%
+    \rAEa{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{2,5}}}
+  \proofstepwidestarbreak[2,5]{k\leq n}{%
+    \rAEb{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{2,5}}}
+  \proofstepwidestarbreak[2,5]{\exists l\in\mathbb N\,(k+l=n)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
+        m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{%
+        6,2},7}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \FinitePathSuffixProperty{V}{E}{p}{n}{k}}{%
+    \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{%
+      \FormulaRefAuto{FinitePathSuffixBase}[thm]{1,2,3,4},
+      \FormulaRefAuto{FinitePathSuffixStep}[thm]{1,2,3,4},6}}
+  \proofstepwidestarbreak[10]{l\in\mathbb N\land k+l=n}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,9,10]{%
+    \exists q\in\powerset(\mathbb N\times V)\,\bigl(
+      \DirectedPath{V}{E}{q}{l}\land q(0)=p(k)\land q(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)}{%
+    \FormulaRefAuto{FinitePathSuffixPropertyDef}[def]{9,\rAEa{10},\rAEb{10}}}
+  \proofstepwidestarbreak[12]{q\in\powerset(\mathbb N\times V)\land
+      \DirectedPath{V}{E}{q}{l}\land q(0)=p(k)\land q(l)=p(n)\land
+      \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))}{\rA}
+  \proofstepwidestarbreak[10,12]{%
+    \exists l\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+      \bigl(k+l=n\land\DirectedPath{V}{E}{q}{l}\land
+        q(0)=p(k)\land q(l)=p(n)\land
+        \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)}{%
+    \rEI{\rAI{\rAEa{10},\rEI{\rAI{\rAEa{12},\rAEb{10},
+      \rAEb{12},\rAEn{12},\rAEn{12},\rAEn{12}}}}}}
+  \proofstepwidestarbreak[1,2,3,4,5,9,10]{%
+    \exists l\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+      \bigl(k+l=n\land\DirectedPath{V}{E}{q}{l}\land
+        q(0)=p(k)\land q(l)=p(n)\land
+        \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)}{%
+    \rEE{11,12,13}}
+  \proofstepwidestarbreak[1,2,3,4,5,9]{%
+    \exists l\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+      \bigl(k+l=n\land\DirectedPath{V}{E}{q}{l}\land
+        q(0)=p(k)\land q(l)=p(n)\land
+        \forall i\in\NatSeg{l+1}\,(q(i)=p(k+i))\bigr)}{%
+    \rEE{8,10,14}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Linkskürzung einer nichtstrikten Summenungleichung]{%
+  a,b,c\in\mathbb N\dsep a+b\leq a+c\vdash b\leq c%
+}{PeanoAddLeftLeqCancellation}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{a\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{b\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{c\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{a+b\leq a+c}{\rA}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \exists d\in\mathbb N\,((a+b)+d=a+c)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{1,2},
+        \FormulaRefAuto{PeanoAddClosure}[thm]{1,3}},4}}
+  \proofstepwidestarbreak[6]{d\in\mathbb N\land(a+b)+d=a+c}{\rA}
+  \proofstepwidestarbreak[1,2,6]{a+(b+d)=a+c}{%
+    \rIE{\FormulaRefAuto{PeanoAddAssociative}[thm]{%
+      1,2,\rAEa{6}},\rAEb{6}}}
+  \proofstepwidestarbreak[1,2,3,6]{b+d=c}{%
+    \FormulaRefAuto{PeanoAddLeftCancellation}[thm]{%
+      1,\FormulaRefAuto{PeanoAddClosure}[thm]{2,\rAEa{6}},3,7}}
+  \proofstepwidestarbreak[1,2,3,6]{b\leq c}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{2,3},
+      \rEI{\rAI{\rAEa{6},8}}}}
+  \proofstepwidestarbreak[1,2,3,4]{b\leq c}{\rEE{5,6,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Nichtstrikte Ordnung ohne Gleichheit ist strikt]{%
+  m,n\in\mathbb N\dsep m\leq n\dsep m\neq n\vdash m<n%
+}{PeanoLeqNeqStrict}{%
+  \DeltaRow{Mengen}{m\dsep n}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{m\leq n}{\rA}
+  \proofstepwidestarbreak[4]{m\neq n}{\rA}
+  \proofstepwidestarbreak[1,2,3]{m<n\lor m=n}{%
+    \FormulaRefAuto{PeanoLeqSplit}[thm]{1,2,3}}
+  \proofstepwidestarbreak[6]{m<n}{\rA}
+  \proofstepwidestarbreak[7]{m=n}{\rA}
+  \proofstepwidestarbreak[4,7]{m<n}{%
+    \FormulaRefAuto{P,\neg P\vdash Q}[thm]{7,4}}
+  \proofstepwidestarbreak[1,2,3,4]{m<n}{\rOE{5,6,6,7,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Strikte Monotonie der Summe in beiden Summanden]{%
+  a,b,c,d\in\mathbb N\dsep a<b\dsep c<d\vdash a+c<b+d%
+}{PeanoAddStrictMonotoneBoth}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{a\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{b\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{c\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{d\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[5]{a<b}{\rA}
+  \proofstepwidestarbreak[6]{c<d}{\rA}
+  \proofstepwidestarbreak[1,2,3,5]{c+a<c+b}{%
+    \FormulaRefAuto{PeanoAddLeftStrictMonotone}[thm]{3,1,2,5}}
+  \proofstepwidestarbreak[1,2,3,5]{a+c<b+c}{%
+    \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{3,1},
+      \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{3,2},7}}}
+  \proofstepwidestarbreak[2,3,4,6]{b+c<b+d}{%
+    \FormulaRefAuto{PeanoAddLeftStrictMonotone}[thm]{2,3,4,6}}
+  \proofstepwidestarbreak[1,2,3,4,5,6]{a+c<b+d}{%
+    \FormulaRefAuto{PeanoLtTransitive}[thm]{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{1,3},
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,3},
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,4},8,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein endlicher Weg ist durch zwei anschließende Abschnitte bestimmt]{%
+  \begin{aligned}[t]
+  &m,n,i,j,h,k\in\mathbb N\dsep i+h=m\dsep j+k=n\dsep
+    p\colon\NatSeg{m+1}\to V\dsep q\colon\NatSeg{n+1}\to V\dsep{}\\[-2pt]
+  &(i,p\restriction_{\NatSeg{i+1}})
+      =(j,q\restriction_{\NatSeg{j+1}})\dsep
+    s\colon\NatSeg{h+1}\to V\dsep t\colon\NatSeg{k+1}\to V\dsep{}\\[-2pt]
+  &\forall a\in\NatSeg{h+1}\,(s(a)=p(i+a))\dsep
+    \forall a\in\NatSeg{k+1}\,(t(a)=q(j+a))\dsep
+    (h,s)=(k,t)\vdash(m,p)=(n,q)
+  \end{aligned}%
+}{FinitePathSplitRigidity}{%
+  \DeltaRow{Mengen}{V\dsep p\dsep q\dsep s\dsep t\dsep
+    m\dsep n\dsep i\dsep j\dsep h\dsep k\dsep a\dsep b\dsep c}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{i\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{j\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[5]{h\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[6]{k\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[7]{i+h=m}{\rA}
+  \proofstepwidestarbreak[8]{j+k=n}{\rA}
+  \proofstepwidestarbreak[9]{p\colon\NatSeg{m+1}\to V}{\rA}
+  \proofstepwidestarbreak[10]{q\colon\NatSeg{n+1}\to V}{\rA}
+  \proofstepwidestarbreak[11]{%
+    (i,p\restriction_{\NatSeg{i+1}})
+      =(j,q\restriction_{\NatSeg{j+1}})}{\rA}
+  \proofstepwidestarbreak[12]{s\colon\NatSeg{h+1}\to V}{\rA}
+  \proofstepwidestarbreak[13]{t\colon\NatSeg{k+1}\to V}{\rA}
+  \proofstepwidestarbreak[14]{%
+    \forall a\in\NatSeg{h+1}\,(s(a)=p(i+a))}{\rA}
+  \proofstepwidestarbreak[15]{%
+    \forall a\in\NatSeg{k+1}\,(t(a)=q(j+a))}{\rA}
+  \proofstepwidestarbreak[16]{(h,s)=(k,t)}{\rA}
+  \proofstepwidestarbreak[11]{i=j}{%
+    \rAEa{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{11}}}
+  \proofstepwidestarbreak[11]{%
+    p\restriction_{\NatSeg{i+1}}=q\restriction_{\NatSeg{j+1}}}{%
+    \rAEb{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{11}}}
+  \proofstepwidestarbreak[16]{h=k}{%
+    \rAEa{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{16}}}
+  \proofstepwidestarbreak[16]{s=t}{%
+    \rAEb{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{16}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,11,16]{m=n}{%
+    \rIE{17,\rIE{19,\rIE{7,\rIE{8,\rII}}}}}
+  \proofstepwidestarbreak[22]{a\in\NatSeg{m+1}}{\rA}
+  \proofstepwidestarbreak[1,3,5,7]{i\leq m}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{%
+        3,1},\rEI{\rAI{5,7}}}}
+  \proofstepwidestarbreak[1,3,22]{a\leq i\lor i<a}{%
+    \FormulaRefAuto{PeanoOrderComparison}[thm]{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+        \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+          \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+            \FormulaRefAuto{PeanoOneInN}[thm]}},22},3}}
+  \proofstepwidestarbreak[25]{a\leq i}{\rA}
+  \proofstepwidestarbreak[3,22,25]{a\in\NatSeg{i+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},22},3},25}}
+  \proofstepwidestarbreak[9,22,25]{%
+    p\restriction_{\NatSeg{i+1}}(a)=p(a)}{%
+    \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
+      F\restriction_C(x)=F(x)}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{3,
+          \FormulaRefAuto{PeanoOneInN}[thm]},
+        \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+          \FormulaRefAuto{PeanoOneInN}[thm]},23},26}}
+  \proofstepwidestarbreak[10,11,21,22,25]{%
+    q\restriction_{\NatSeg{j+1}}(a)=q(a)}{%
+    \rIE{17,
+      \FormulaRefAuto{C\subseteq A\dsep x\in C\vdash
+        F\restriction_C(x)=F(x)}[thm]{%
+        \FormulaRefAuto{PeanoNatSegLeqSubsetForward}[thm]{%
+          \FormulaRefAuto{PeanoAddClosure}[thm]{4,
+            \FormulaRefAuto{PeanoOneInN}[thm]},
+          \FormulaRefAuto{PeanoAddClosure}[thm]{2,
+            \FormulaRefAuto{PeanoOneInN}[thm]},
+          \rIE{17,\rIE{21,23}}},\rIE{17,26}}}}
+  \proofstepwidestarbreak[9,10,11,22,25]{p(a)=q(a)}{%
+    \rChain{\FormulaRefAuto{a=b\vdash b=a}[thm]{27},
+      \rIE{18,\rII},28}}
+  \proofstepwidestarbreak[30]{i<a}{\rA}
+  \proofstepwidestarbreak[1,3,22,30]{%
+    \exists b\in\mathbb N\,(i+(b+1)=a)}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoStrictAddOneDistance}[thm]{%
+        3,
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},22}},30}}
+  \proofstepwidestarbreak[32]{b\in\mathbb N\land i+(b+1)=a}{\rA}
+  \proofstepwidestarbreak[1,22]{a\leq m}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep Q\vdash P}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+          \FormulaRefAuto{PeanoNatSegSubsetN}[thm]{%
+            \FormulaRefAuto{PeanoAddClosure}[thm]{1,
+              \FormulaRefAuto{PeanoOneInN}[thm]}},22},1},22}}
+  \proofstepwidestarbreak[1,3,5,7,22,32]{b+1\leq h}{%
+    \FormulaRefAuto{PeanoAddLeftLeqCancellation}[thm]{%
+      3,
+      \FormulaRefAuto{PeanoAddClosure}[thm]{\rAEa{32},
+        \FormulaRefAuto{PeanoOneInN}[thm]},5,
+      \rIE{\rAEb{32},\rIE{7,34}}}}
+  \proofstepwidestarbreak[5,32,35]{b+1\in\NatSeg{h+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{PeanoAddClosure}[thm]{\rAEa{32},
+          \FormulaRefAuto{PeanoOneInN}[thm]},5},35}}
+  \proofstepwidestarbreak[14,32,35]{s(b+1)=p(a)}{%
+    \rIE{\rAEb{32},\rUE{14,36}}}
+  \proofstepwidestarbreak[2,5,6,8,11,15,16,32,35]{t(b+1)=q(a)}{%
+    \rIE{17,\rIE{19,\rIE{\rAEb{32},\rUE{15,\rIE{19,36}}}}}}
+  \proofstepwidestarbreak[14,15,16,32,35]{p(a)=q(a)}{%
+    \rChain{\FormulaRefAuto{a=b\vdash b=a}[thm]{37},
+      \rIE{20,\rII},38}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22]{%
+    p(a)=q(a)}{%
+    \rOE{24,25,29,30,\rEE{31,32,39}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]{%
+    \forall a\in\NatSeg{m+1}\,(p(a)=q(a))}{%
+    \rUI{\rRI{22,40}}}
+  \proofstepwidestarbreak[1,2,9,10,21,41]{p=q}{%
+    \FormulaRefAuto{FunctionExtensionality}[thm]{9,\rIE{21,10},41}}
+  \proofstepwidestarbreak[1,2,9,10,21,41]{(m,p)=(n,q)}{%
+    \FormulaRefAuto{a=c,\, b=d\vdash(a,b)=(c,d)}[thm]{21,42}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Reduktion an einem gemeinsamen inneren Wegknoten]{%
+  \begin{aligned}[t]
+  &\UndirectedGraphStruct{V,E}\dsep m,n\in\mathbb N\dsep
+    p,q\in\powerset(\mathbb N\times V)\dsep
+    \DirectedPath{V}{E}{p}{m}\dsep\DirectedPath{V}{E}{q}{n}\dsep{}\\[-2pt]
+  &p(0)=q(0)\dsep p(m)=q(n)\dsep(m,p)\neq(n,q)\dsep
+    z\in\bigl(p[\NatSeg{m+1}]\cap q[\NatSeg{n+1}]\bigr)
+      \setminus\{p(0),p(m)\}\vdash{}\\[-2pt]
+  &\quad\exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)
+  \end{aligned}%
+}{FinitePathInteriorPairReduction}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep q\dsep s\dsep t\dsep
+    m\dsep n\dsep h\dsep k\dsep i\dsep j\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[3]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[4]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[5]{q\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[6]{\DirectedPath{V}{E}{p}{m}}{\rA}
+  \proofstepwidestarbreak[7]{\DirectedPath{V}{E}{q}{n}}{\rA}
+  \proofstepwidestarbreak[8]{p(0)=q(0)}{\rA}
+  \proofstepwidestarbreak[9]{p(m)=q(n)}{\rA}
+  \proofstepwidestarbreak[10]{(m,p)\neq(n,q)}{\rA}
+  \proofstepwidestarbreak[11]{%
+    z\in\bigl(p[\NatSeg{m+1}]\cap q[\NatSeg{n+1}]\bigr)
+      \setminus\{p(0),p(m)\}}{\rA}
+  \proofstepwidestarbreak[4,11]{%
+    \exists i\in\NatSeg{m+1}\,(p(i)=z)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}[thm]{%
+      \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{%
+        \FormulaRefAuto{DirectedWalkDef}[def]{%
+          \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},
+          \FormulaRefAuto{DirectedPathIsWalk}[thm]{%
+            \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},6}}},
+      \FormulaRefAuto{x\in A\cap B\vdash x\in A}[thm]{%
+        \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{11}}}}
+  \proofstepwidestarbreak[5,11]{%
+    \exists j\in\NatSeg{n+1}\,(q(j)=z)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
+      \exists x\in A\,y=F(x)}[thm]{%
+      \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{%
+        \FormulaRefAuto{DirectedWalkDef}[def]{%
+          \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},
+          \FormulaRefAuto{DirectedPathIsWalk}[thm]{%
+            \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},7}}},
+      \FormulaRefAuto{x\in A\cap B\vdash x\in B}[thm]{%
+        \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{11}}}}
+  \proofstepwidestarbreak[14]{i\in\NatSeg{m+1}\land p(i)=z}{\rA}
+  \proofstepwidestarbreak[15]{j\in\NatSeg{n+1}\land q(j)=z}{\rA}
+  \proofstepwidestarbreak[6,14]{%
+    \DirectedPath{V}{E}{p\restriction_{\NatSeg{i+1}}}{i}\land
+    p\restriction_{\NatSeg{i+1}}(0)=p(0)\land
+    p\restriction_{\NatSeg{i+1}}(i)=z}{%
+    \rIE{\rAEb{14},
+      \FormulaRefAuto{FinitePathInitialSegment}[thm]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},6,\rAEa{14}}}}
+  \proofstepwidestarbreak[7,15]{%
+    \DirectedPath{V}{E}{q\restriction_{\NatSeg{j+1}}}{j}\land
+    q\restriction_{\NatSeg{j+1}}(0)=q(0)\land
+    q\restriction_{\NatSeg{j+1}}(j)=z}{%
+    \rIE{\rAEb{15},
+      \FormulaRefAuto{FinitePathInitialSegment}[thm]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},7,\rAEa{15}}}}
+  \proofstepwidestarbreak[1,2,4,6,14]{%
+    \exists h\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,
+    \bigl(i+h=m\land\DirectedPath{V}{E}{s}{h}\land
+      s(0)=z\land s(h)=p(m)\land
+      \forall k\in\NatSeg{h+1}\,(s(k)=p(i+k))\bigr)}{%
+    \rIE{\rAEb{14},
+      \FormulaRefAuto{FinitePathFinalSegment}[thm]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},2,4,6,\rAEa{14}}}}
+  \proofstepwidestarbreak[1,3,5,7,15]{%
+    \exists k\in\mathbb N\,\exists t\in\powerset(\mathbb N\times V)\,
+    \bigl(j+k=n\land\DirectedPath{V}{E}{t}{k}\land
+      t(0)=z\land t(k)=q(n)\land
+      \forall h\in\NatSeg{k+1}\,(t(h)=q(j+h))\bigr)}{%
+    \rIE{\rAEb{15},
+      \FormulaRefAuto{FinitePathFinalSegment}[thm]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},3,5,7,\rAEa{15}}}}
+  \proofstepwidestarbreak[11]{z\neq p(0)}{%
+    \rAEa{\FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{NotInPairSet}[thm],
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{11}}}}
+  \proofstepwidestarbreak[11]{z\neq p(m)}{%
+    \rAEb{\FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{NotInPairSet}[thm],
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{11}}}}
+  \proofstepwidestarbreak[6,14,20]{i\neq0}{%
+    \rCI{\rA,\rBI{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{\rIE{\rA,\rAEb{14}}},20}}}
+  \proofstepwidestarbreak[6,14,21]{i\neq m}{%
+    \rCI{\rA,\rBI{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{\rIE{\rA,\rAEb{14}}},21}}}
+  \proofstepwidestarbreak[7,8,15,20]{j\neq0}{%
+    \rCI{\rA,\rBI{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+        \rIE{8,\rIE{\rA,\rAEb{15}}}},20}}}
+  \proofstepwidestarbreak[7,9,15,21]{j\neq n}{%
+    \rCI{\rA,\rBI{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+        \rIE{9,\rIE{\rA,\rAEb{15}}}},21}}}
+  \proofstepwidestarbreak[2,14]{i\in\mathbb N\land i\leq m}{%
+    \rAI{%
+      \rAEa{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{2,\rAEa{14}}},
+      \rAEa{\rAEb{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{%
+        2,\rAEa{14}}}}}}
+  \proofstepwidestarbreak[3,15]{j\in\mathbb N\land j\leq n}{%
+    \rAI{%
+      \rAEa{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{3,\rAEa{15}}},
+      \rAEa{\rAEb{\FormulaRefAuto{FinitePathPrefixIndexData}[thm]{%
+        3,\rAEa{15}}}}}}
+  \proofstepwidestarbreak[2,14,23]{i<m}{%
+    \FormulaRefAuto{PeanoLeqNeqStrict}[thm]{%
+      \rAEa{26},2,\rAEb{26},23}}
+  \proofstepwidestarbreak[3,15,25]{j<n}{%
+    \FormulaRefAuto{PeanoLeqNeqStrict}[thm]{%
+      \rAEa{27},3,\rAEb{27},25}}
+  \proofstepwidestarbreak[2,3,14,15,23,25]{i+j<m+n}{%
+    \FormulaRefAuto{PeanoAddStrictMonotoneBoth}[thm]{%
+      \rAEa{26},2,\rAEa{27},3,28,29}}
+  \proofstepwidestarbreak[]{%
+    (i,p\restriction_{\NatSeg{i+1}})\neq
+      (j,q\restriction_{\NatSeg{j+1}})\lor
+    (i,p\restriction_{\NatSeg{i+1}})=
+      (j,q\restriction_{\NatSeg{j+1}})}{%
+    \FormulaRefAuto{P\lor\neg P}[thm]}
+  \proofstepwidestarbreak[32]{%
+    (i,p\restriction_{\NatSeg{i+1}})\neq
+      (j,q\restriction_{\NatSeg{j+1}})}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,14,15,28,29,32]{%
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)}{%
+    \rEI{\rAI{\rAEa{26},\rEI{\rAI{\rAEa{27},
+      \rEI{\rAI{4,\rEI{\rAI{5,\rAEa{16},\rAEa{17},
+        \rIE{8,\rIE{\rAEa{\rAEn{16}},\rAEa{\rAEn{17}}}},
+        \rIE{\rAEn{16},\rAEn{17}},32,30}}}}}}}}}
+  \proofstepwidestarbreak[34]{%
+    (i,p\restriction_{\NatSeg{i+1}})=
+      (j,q\restriction_{\NatSeg{j+1}})}{\rA}
+  \proofstepwidestarbreak[18]{h\in\mathbb N\land
+    s\in\powerset(\mathbb N\times V)\land i+h=m\land
+    \DirectedPath{V}{E}{s}{h}\land s(0)=z\land s(h)=p(m)\land
+    \forall a\in\NatSeg{h+1}\,(s(a)=p(i+a))}{\rA}
+  \proofstepwidestarbreak[19]{k\in\mathbb N\land
+    t\in\powerset(\mathbb N\times V)\land j+k=n\land
+    \DirectedPath{V}{E}{t}{k}\land t(0)=z\land t(k)=q(n)\land
+    \forall a\in\NatSeg{k+1}\,(t(a)=q(j+a))}{\rA}
+  \proofstepwidestarbreak[37]{(h,s)=(k,t)}{\rA}
+  \proofstepwidestarbreak[1,2,3,6,7,34,35,36,37]{(m,p)=(n,q)}{%
+    \FormulaRefAuto{FinitePathSplitRigidity}[thm]{%
+      2,3,\rAEa{26},\rAEa{27},\rAEa{35},\rAEa{36},
+      \rAEb{\rAEb{35}},\rAEb{\rAEb{36}},
+      \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},6}},
+      \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},7}},34,
+      \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},\rAEn{35}}},
+      \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},\rAEn{36}}},
+      \rAEn{35},\rAEn{36},37}}
+  \proofstepwidestarbreak[10,34,35,36]{(h,s)\neq(k,t)}{%
+    \rCI{37,\rBI{38,10}}}
+  \proofstepwidestarbreak[2,22,26,35]{h<m}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep m+k=n\dsep k\neq0\vdash m<n}[thm]{%
+      \rAEa{35},2,\rAEa{26},
+       \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{%
+         \rAEa{26},\rAEa{35}},\rAEb{\rAEb{35}}},20}}
+  \proofstepwidestarbreak[3,24,27,36]{k<n}{%
+    \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep k\in\mathbb{N}\dsep m+k=n\dsep k\neq0\vdash m<n}[thm]{%
+      \rAEa{36},3,\rAEa{27},
+       \rIE{\FormulaRefAuto{PeanoAddCommutative}[thm]{%
+         \rAEa{27},\rAEa{36}},\rAEb{\rAEb{36}}},22}}
+  \proofstepwidestarbreak[2,3,35,36,40,41]{h+k<m+n}{%
+    \FormulaRefAuto{PeanoAddStrictMonotoneBoth}[thm]{%
+      \rAEa{35},2,\rAEa{36},3,40,41}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,34,35,36]{%
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)}{%
+    \rEI{\rAI{\rAEa{35},\rEI{\rAI{\rAEa{36},
+      \rEI{\rAI{\rAEb{35},\rEI{\rAI{\rAEb{36},
+        \rAEn{35},\rAEn{36},\rIE{\rAEn{35},\rAEn{36}},
+        \rIE{9,\rIE{\rAEn{35},\rAEn{36}}},39,42}}}}}}}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,34]{%
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)}{%
+    \rEE{18,35,\rEE{19,36,43}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,14,15]{%
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)}{%
+    \rOE{31,32,33,34,44}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11]{%
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      \DirectedPath{V}{E}{s}{h}\land\DirectedPath{V}{E}{t}{k}\land
+      s(0)=t(0)\land s(h)=t(k)\land
+      (h,s)\neq(k,t)\land h+k<m+n\Bigr)}{%
+    \rEE{12,14,\rEE{13,15,45}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Intern disjunkte Wegbögen tragen einen endlichen Wegzyklus]{%
+  \begin{aligned}[t]
+  &\UndirectedGraphStruct{V,E}\dsep x,y\in V\dsep m,n\in\mathbb N\dsep
+    p,q\in\powerset(\mathbb N\times V)\dsep
+    \DirectedPath{V}{E}{p}{m}\dsep\DirectedPath{V}{E}{q}{n}\dsep{}\\[-2pt]
+  &p(0)=x\dsep p(m)=y\dsep q(0)=x\dsep q(n)=y\dsep
+    x\neq y\dsep(m,p)\neq(n,q)\dsep
+    p[\NatSeg{m+1}]\cap q[\NatSeg{n+1}]=\{x,y\}\vdash{}\\[-2pt]
+  &\qquad\FinitePathCycleCore{V}{E}{%
+    p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]}
+  \end{aligned}%
+}{InternallyDisjointPathsFormCycleCore}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep x\dsep y\dsep z\dsep w\dsep
+    m\dsep n\dsep h\dsep k\dsep p\dsep q\dsep s\dsep t}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{\rA}
+  \proofstepwidestarbreak[3]{y\in V}{\rA}
+  \proofstepwidestarbreak[4]{m\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[5]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[6]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[7]{q\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestarbreak[8]{\DirectedPath{V}{E}{p}{m}}{\rA}
+  \proofstepwidestarbreak[9]{\DirectedPath{V}{E}{q}{n}}{\rA}
+  \proofstepwidestarbreak[10]{p(0)=x\land p(m)=y\land
+    q(0)=x\land q(n)=y}{\rA}
+  \proofstepwidestarbreak[11]{x\neq y}{\rA}
+  \proofstepwidestarbreak[12]{(m,p)\neq(n,q)}{\rA}
+  \proofstepwidestarbreak[13]{%
+    p[\NatSeg{m+1}]\cap q[\NatSeg{n+1}]=\{x,y\}}{\rA}
+  \proofstepwidestarbreak[1,4,5,6,7,8,9]{%
+    p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\subseteq V}{%
+    \FormulaRefAuto{A\subseteq C\dsep B\subseteq C\vdash
+      A\cup B\subseteq C}[thm]{%
+      \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{%
+        \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+          \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},8}}},
+      \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{%
+        \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+          \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},9}}}}}
+  \proofstepwidestarbreak[2,4,6,8,10]{%
+    p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+        \FormulaRefAuto{A\subseteq A\cup B}[thm],
+        \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}[thm]{%
+          \FormulaRefAuto{A\subseteq A}[thm],
+          \rAEa{\FormulaRefAuto{DirectedPathDef}[def]{%
+            \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},8}},
+          \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+            \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+              \FormulaRefAuto{PeanoZero}[ax],4},
+            \FormulaRefAuto{PeanoZeroLeq}[thm]{4}}}}}}
+  \proofstepwidestarbreak[16]{%
+    z\in p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11,12,13,16]{%
+    \exists w\in p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\,
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      z\neq w\land
+      \DirectedPath{V}{E}{s}{h}\land s(0)=z\land s(h)=w\land
+      \DirectedPath{V}{E}{t}{k}\land t(0)=z\land t(k)=w\land
+      (h,s)\neq(k,t)\land
+      s[\NatSeg{h+1}]\cap t[\NatSeg{k+1}]=\{z,w\}\land
+      s[\NatSeg{h+1}]\cup t[\NatSeg{k+1}]
+        \subseteq p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\Bigr)}{%
+    \rIE{%
+      \FormulaRefAuto{FinitePathInitialSegment}[thm]{%
+        \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},8},
+      \rIE{%
+        \FormulaRefAuto{FinitePathFinalSegment}[thm]{%
+          \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},4,6,8},
+        \rIE{%
+          \FormulaRefAuto{UndirectedFinitePathReversal}[thm]{1,8},
+          \FormulaRefAuto{FinitePathTransportAlongWalk}[thm]{%
+            \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},5,4}}}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11,12,13]{%
+    \forall z\in p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\,
+    \exists w\in p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\,
+    \exists h\in\mathbb N\,\exists k\in\mathbb N\,
+    \exists s\in\powerset(\mathbb N\times V)\,
+    \exists t\in\powerset(\mathbb N\times V)\,\Bigl(
+      z\neq w\land
+      \DirectedPath{V}{E}{s}{h}\land s(0)=z\land s(h)=w\land
+      \DirectedPath{V}{E}{t}{k}\land t(0)=z\land t(k)=w\land
+      (h,s)\neq(k,t)\land
+      s[\NatSeg{h+1}]\cap t[\NatSeg{k+1}]=\{z,w\}\land
+      s[\NatSeg{h+1}]\cup t[\NatSeg{k+1}]
+        \subseteq p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]\Bigr)}{%
+    \rUI{\rRI{16,17}}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,9,10,11,12,13]{%
+    \FinitePathCycleCore{V}{E}{%
+      p[\NatSeg{m+1}]\cup q[\NatSeg{n+1}]}}{%
+    \rAI{14,15,18}}
+\end{tabproofwide}
+
+\chapter{Wälder und Bäume}
+
+\section{Wälder und Wegeindeutigkeit}
+
+\FormulaDefDeltaK[Wald]{%
+  \begin{aligned}
+  \ForestStruct{V,E}\coloneqq{}&
+  \SimpleUndirectedGraphStruct{V,E}\land{}\\[-2pt]
+  &\forall u\in V\,\forall v\in V\,\forall a\,\forall b\,\\[-2pt]
+  &\qquad\Bigl(a\in\GraphPathsBetween{V}{E}{u}{v}\land
+          b\in\GraphPathsBetween{V}{E}{u}{v}\rightarrow a=b\Bigr)
+  \end{aligned}%
+}{ForestDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+  \DeltaRow{Neue Struktur}{\ForestStruct{V,E}}
+}
+
+Die Leermenge ist als Träger eines Waldes zugelassen. Nichtleerheit wird erst
+beim Baum gefordert.
+
+\FormulaThmDeltaK[Zugriff auf die Waldaxiome]{%
+  \begin{aligned}[t]
+  \ForestStruct{V,E}\vdash{}&
+  \SimpleUndirectedGraphStruct{V,E}\dsep{}\\[-2pt]
+  &u,v\in V\dsep
+    a\in\GraphPathsBetween{V}{E}{u}{v}\dsep
+    b\in\GraphPathsBetween{V}{E}{u}{v}\vdash a=b
+  \end{aligned}%
+}{ForestAccess}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\ForestStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{ForestDef}[def]{1}}
+  \proofstepwidestarbreak[3]{u\in V}{\rA}
+  \proofstepwidestarbreak[4]{v\in V}{\rA}
+  \proofstepwidestarbreak[5]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[6]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[1,3,4,5,6]{a=b}{%
+    \FormulaRefAuto{ForestDef}[def]{1,3,4,5,6}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Wegezyklus und Azyklizität]{%
+  \begin{aligned}
+  \PathAcyclicGraphStruct{V,E}\coloneqq{}&
+  \SimpleUndirectedGraphStruct{V,E}\land{}\\[-2pt]
+  &\neg\exists u\in V\,\exists v\in V\,\exists a\,\exists b\,\\[-2pt]
+  &\qquad\Bigl(a\in\GraphPathsBetween{V}{E}{u}{v}\land
+          b\in\GraphPathsBetween{V}{E}{u}{v}\land a\neq b\Bigr).
+  \end{aligned}%
+}{PathAcyclicGraphDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+  \DeltaRow{Neue Struktur}{\PathAcyclicGraphStruct{V,E}}
+}
+
+Ein Paar verschiedener einfacher Wege mit denselben Endpunkten heißt hier
+ein \textbf{Wegezyklus}. In einem schlichten ungerichteten Graphen ist das
+genau die für die Baumtheorie benötigte Form der Azyklizität: Die Vereinigung
+zweier solcher Wege enthält einen üblichen einfachen Kreis, während ein
+einfacher Kreis zwei verschiedene Wege zwischen zwei seiner Knoten liefert.
+
+\FormulaThmDeltaK[Wälder sind genau die azyklischen schlichten Graphen]{%
+  \ForestStruct{V,E}\eqvdash\PathAcyclicGraphStruct{V,E}%
+}{ForestIffPathAcyclic}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\ForestStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{ForestAccess}[thm]{1}}
+  \proofstepwidestarbreak[3]{%
+    \exists u\in V\,\exists v\in V\,\exists a\,\exists b\,
+    \bigl(a\in\GraphPathsBetween{V}{E}{u}{v}\land
+          b\in\GraphPathsBetween{V}{E}{u}{v}\land a\neq b\bigr)}{\rA}
+  \proofstepwidestarbreak[1,3]{a=b}{%
+    \FormulaRefAuto{ForestAccess}[thm]{1,3}}
+  \proofstepwidestarbreak[3]{a\neq b}{\rAEn{3}}
+  \proofstepwidestarbreak[1,3]{\bot}{\rBI{4,5}}
+  \proofstepwidestarbreak[1]{\PathAcyclicGraphStruct{V,E}}{%
+    \FormulaRefAuto{PathAcyclicGraphDef}[def]{2,\rCI{3,6}}}
+  \proofstepwidestarbreak[8]{\PathAcyclicGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[8]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{PathAcyclicGraphDef}[def]{8}}
+  \proofstepwidestarbreak[10]{u\in V}{\rA}
+  \proofstepwidestarbreak[11]{v\in V}{\rA}
+  \proofstepwidestarbreak[12]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[13]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[15]{a\neq b}{\rA}
+  \proofstepwidestarbreak[8,10,11,12,13]{\neg(a\neq b)}{%
+    \FormulaRefAuto{PathAcyclicGraphDef}[def]{8,10,11,12,13}}
+  \proofstepwidestarbreak[8,10,11,12,13]{a=b}{%
+    \FormulaRefAuto{rDN}[thm]{16}}
+  \proofstepwidestarbreak[8]{\ForestStruct{V,E}}{%
+    \FormulaRefAuto{ForestDef}[def]{9,10,11,12,13,17}}
+  \proofstepwidestarbreak[]{\ForestStruct{V,E}\leftrightarrow
+    \PathAcyclicGraphStruct{V,E}}{\rLRI{\rRI{1,7},\rRI{8,18}}}
+\end{tabproofwide}
+
+\section{Bäume}
+
+\FormulaDefDeltaK[Baum]{%
+  \begin{aligned}
+  \TreeStruct{V,E}\coloneqq{}&
+  \SimpleUndirectedGraphStruct{V,E}\land V\neq\varnothing\land{}\\[-2pt]
+  &\forall u\in V\,\forall v\in V\,
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)
+  \end{aligned}%
+}{TreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep z}
+  \DeltaRow{Neue Struktur}{\TreeStruct{V,E}}
+}
+
+\FormulaThmDeltaK[Zugriff auf die Baumaxiome]{%
+  \begin{aligned}[t]
+  \TreeStruct{V,E}\vdash{}&
+    \SimpleUndirectedGraphStruct{V,E}\dsep V\neq\varnothing\dsep{}\\[-2pt]
+  &u,v\in V\vdash
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)
+  \end{aligned}%
+}{TreeAccess}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeDef}[def]{1}}
+  \proofstepwidestarbreak[1]{V\neq\varnothing}{%
+    \FormulaRefAuto{TreeDef}[def]{1}}
+  \proofstepwidestarbreak[4]{u\in V}{\rA}
+  \proofstepwidestarbreak[5]{v\in V}{\rA}
+  \proofstepwidestarbreak[1,4,5]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \FormulaRefAuto{TreeDef}[def]{1,4,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Wegeindeutigkeit im Baum]{%
+  \begin{aligned}[t]
+  &\TreeStruct{V,E}\dsep u,v\in V\dsep
+    a\in\GraphPathsBetween{V}{E}{u}{v}\dsep
+    b\in\GraphPathsBetween{V}{E}{u}{v}\vdash a=b
+  \end{aligned}%
+}{TreePathUnique}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{u\in V}{\rA}
+  \proofstepwidestarbreak[3]{v\in V}{\rA}
+  \proofstepwidestarbreak[4]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[5]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[1,2,3]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \FormulaRefAuto{TreeAccess}[thm]{1,2,3}}
+  \proofstepwidestarbreak[1,2,3,4,5]{a=b}{%
+    \FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]{6,4,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Jeder Baum ist ein nichtleerer Wald]{%
+  \TreeStruct{V,E}\vdash\ForestStruct{V,E}\land V\neq\varnothing%
+}{TreeIsNonemptyForest}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeAccess}[thm]{1}}
+  \proofstepwidestarbreak[1]{V\neq\varnothing}{%
+    \FormulaRefAuto{TreeAccess}[thm]{1}}
+  \proofstepwidestarbreak[4]{u\in V}{\rA}
+  \proofstepwidestarbreak[5]{v\in V}{\rA}
+  \proofstepwidestarbreak[6]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[7]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[1,4,5,6,7]{a=b}{%
+    \FormulaRefAuto{TreePathUnique}[thm]{1,4,5,6,7}}
+  \proofstepwidestarbreak[1]{\ForestStruct{V,E}}{%
+    \FormulaRefAuto{ForestDef}[def]{2,4,5,6,7,8}}
+  \proofstepwidestarbreak[1]{\ForestStruct{V,E}\land V\neq\varnothing}{%
+    \rAI{9,3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Bäume sind zusammenhängend]{%
+  \TreeStruct{V,E}\vdash\ConnectedGraphStruct{V,E}%
+}{TreeConnected}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v\dsep z\dsep n\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeAccess}[thm]{1}}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{2}}}
+  \proofstepwidestarbreak[4]{u\in V}{\rA}
+  \proofstepwidestarbreak[5]{v\in V}{\rA}
+  \proofstepwidestarbreak[1,4,5]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \FormulaRefAuto{TreeAccess}[thm]{1,4,5}}
+  \proofstepwidestarbreak[1,4,5]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{6}}
+  \proofstepwidestarbreak[8]{z\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[8]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl(z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land
+      p(0)=u\land p(n)=v\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{8}}
+  \proofstepwidestarbreak[10]{n\in\mathbb N\land
+    \DirectedPath{V}{E}{p}{n}\land p(0)=u\land p(n)=v}{\rA}
+  \proofstepwidestarbreak[10]{\DirectedWalk{V}{E}{p}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{%
+      \rAEb{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{2}},
+      \rAEn{10}}}
+  \proofstepwidestarbreak[10]{u\mathrel{\GraphReach{E}}v}{%
+    \FormulaRefAuto{DirectedReachabilityDef}[def]{%
+      \rAEb{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{2}},
+      4,5,10,11}}
+  \proofstepwidestarbreak[1,4,5]{u\mathrel{\GraphReach{E}}v}{%
+    \rEE{7,8,\rEE{9,10,12}}}
+  \proofstepwidestarbreak[1]{%
+    \forall u\in V\,\forall v\in V\,
+      u\mathrel{\GraphReach{E}}v}{\rUI{\rRI{4,\rUI{\rRI{5,13}}}}}
+  \proofstepwidestarbreak[1]{\ConnectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{ConnectedGraphDef}[def]{3,14}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Bäume sind zusammenhängend und azyklisch]{%
+  \TreeStruct{V,E}\vdash
+    \ConnectedGraphStruct{V,E}\land\PathAcyclicGraphStruct{V,E}%
+}{TreeConnectedAcyclic}{%
+  \DeltaRow{Mengen}{V\dsep E}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[1]{\ConnectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeConnected}[thm]{1}}
+  \proofstepwidestarbreak[1]{\ForestStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{TreeIsNonemptyForest}[thm]{1}}}
+  \proofstepwidestarbreak[1]{\PathAcyclicGraphStruct{V,E}}{%
+    \FormulaRefAuto{ForestIffPathAcyclic}[thm]{3}}
+  \proofstepwidestarbreak[1]{%
+    \ConnectedGraphStruct{V,E}\land\PathAcyclicGraphStruct{V,E}}{%
+    \rAI{2,4}}
+\end{tabproofwide}
+
+\section{Übertragung eindeutiger Wurzelwege}
+
+Für konkrete Bäume ist es oft wesentlich kürzer, nur die Wege von einem
+festen Knoten aus zu untersuchen. Die beiden folgenden endlichen
+Wegargumente bereiten dieses Kriterium vor.
+
+\FormulaThmDeltaK[Wurzelwege erzeugen Wege zwischen beliebigen Endpunkten]{%
+  \begin{aligned}[t]
+  &\UndirectedGraphStruct{V,E}\dsep r,u,v\in V\dsep
+    a\in\GraphPathsBetween{V}{E}{r}{u}\dsep
+    b\in\GraphPathsBetween{V}{E}{r}{v}\vdash{}\\[-2pt]
+  &\qquad\exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)
+  \end{aligned}%
+}{RootPathsGivePairPath}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep u\dsep v\dsep a\dsep b\dsep z}
+}
+
+Die Umkehrung des ersten Wurzelwegs liefert einen Pfad von \(u\) nach \(r\).
+Der kantenweise Transport dieses Pfads entlang des zweiten Wurzelwegs
+schneidet jede entstehende Wiederholung sofort ab und endet daher mit einem
+einfachen Pfad von \(u\) nach \(v\).
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{r\in V}{\rA}
+  \proofstepwidestarbreak[3]{u\in V}{\rA}
+  \proofstepwidestarbreak[4]{v\in V}{\rA}
+  \proofstepwidestarbreak[5]{a\in\GraphPathsBetween{V}{E}{r}{u}}{\rA}
+  \proofstepwidestarbreak[6]{b\in\GraphPathsBetween{V}{E}{r}{v}}{\rA}
+  \proofstepwidestarbreak[5]{%
+    \exists m\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl(a=(m,p)\land\DirectedPath{V}{E}{p}{m}\land
+      p(0)=r\land p(m)=u\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{5}}
+  \proofstepwidestarbreak[6]{%
+    \exists n\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl(b=(n,q)\land\DirectedPath{V}{E}{q}{n}\land
+      q(0)=r\land q(n)=v\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{6}}
+  \proofstepwidestarbreak[9]{m\in\mathbb N\land
+    p\in\powerset(\mathbb N\times V)\land\DirectedPath{V}{E}{p}{m}\land
+    p(0)=r\land p(m)=u}{\rA}
+  \proofstepwidestarbreak[10]{n\in\mathbb N\land
+    q\in\powerset(\mathbb N\times V)\land\DirectedPath{V}{E}{q}{n}\land
+    q(0)=r\land q(n)=v}{\rA}
+  \proofstepwidestarbreak[1,9]{%
+    \exists s\in\powerset(\mathbb N\times V)\,
+      \bigl(\DirectedPath{V}{E}{s}{m}\land s(0)=u\land s(m)=r\bigr)}{%
+    \FormulaRefAuto{UndirectedFinitePathReversal}[thm]{1,\rAEn{9}}}
+  \proofstepwidestarbreak[12]{s\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{s}{m}\land s(0)=u\land s(m)=r}{\rA}
+  \proofstepwidestarbreak[1,10]{\DirectedWalk{V}{E}{q}{n}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{%
+      \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},\rAEn{10}}}
+  \proofstepwidestarbreak[1,9,10,12]{%
+    \exists l\in\mathbb N\,\exists t\in\powerset(\mathbb N\times V)\,
+    \bigl(\DirectedPath{V}{E}{t}{l}\land t(0)=u\land t(l)=v\bigr)}{%
+    \FormulaRefAuto{FinitePathTransportAlongWalk}[thm]{%
+      \FormulaRefAuto{UndirectedGraphAccess}[thm]{1},
+      \rAEa{10},\rAEa{9},13,\rAEb{12},
+      \rIE{\rAEa{\rAEn{10}},\rIE{\rAEn{12},\rAEb{\rAEn{9}}}}}}
+  \proofstepwidestarbreak[15]{l\in\mathbb N\land
+    t\in\powerset(\mathbb N\times V)\land
+    \DirectedPath{V}{E}{t}{l}\land t(0)=u\land t(l)=v}{\rA}
+  \proofstepwidestarbreak[1,3,4,9,10,12,15]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rEI{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{%
+      \rAEa{15},\rAEb{15},\rAEn{15},\rAEn{15}}}}
+  \proofstepwidestarbreak[1,3,4,9,10,12]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rEE{14,15,16}}
+  \proofstepwidestarbreak[1,3,4,9,10]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rEE{11,12,17}}
+  \proofstepwidestarbreak[1,3,4,9]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rEE{8,10,18}}
+  \proofstepwidestarbreak[1,3,4,5,6]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rEE{7,9,19}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Eindeutigkeit von Wurzelwegen überträgt sich]{%
+  \begin{aligned}[t]
+  &\SimpleUndirectedGraphStruct{V,E}\dsep r\in V\dsep
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)\dsep{}\\[-2pt]
+  &u,v\in V\dsep
+    a\in\GraphPathsBetween{V}{E}{u}{v}\dsep
+    b\in\GraphPathsBetween{V}{E}{u}{v}\vdash a=b
+  \end{aligned}%
+}{RootPathUniquenessTransfers}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep u\dsep v\dsep a\dsep b\dsep c\dsep d}
+}
+
+Der entscheidende Widerspruch ist endlich. Angenommen, \(a\) und \(b\) seien
+verschieden. Vom ersten Auseinanderlaufen bis zum ersten erneuten
+Zusammentreffen enthalten ihre Knotenfolgen zwei intern disjunkte Wege und
+damit einen einfachen Kreis. Unter den Wurzelwegen zu den endlich vielen
+Kreisknoten wähle man einen mit kleinster Länge. Er trifft den Kreis vor
+seinem Endpunkt nicht, denn sein entsprechender Anfangsabschnitt wäre sonst
+ein kürzerer Wurzelweg zu einem Kreisknoten. Vom Endpunkt dieses Wurzelwegs zu
+einem anderen Kreisknoten gibt es auf dem Kreis zwei intern disjunkte Bögen.
+Das Anfügen beider Bögen erzeugt zwei verschiedene einfache Wurzelwege und
+widerspricht der vorausgesetzten Eindeutigkeit.
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{r\in V}{\rA}
+  \proofstepwidestarbreak[3]{%
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{\rA}
+  \proofstepwidestarbreak[4]{u\in V}{\rA}
+  \proofstepwidestarbreak[5]{v\in V}{\rA}
+  \proofstepwidestarbreak[6]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[7]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[8]{a\neq b}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8]{%
+    \exists x\in V\,\exists c\,\exists d\,\bigl(
+      c\in\GraphPathsBetween{V}{E}{r}{x}\land
+      d\in\GraphPathsBetween{V}{E}{r}{x}\land c\neq d\bigr)}{%
+    \text{\makecell[l]{Erster Kreisabschnitt und kürzester Wurzelweg\\
+      zu diesem endlichen Kreis}}}
+  \proofstepwidestarbreak[10]{x\in V\land
+      c\in\GraphPathsBetween{V}{E}{r}{x}\land
+      d\in\GraphPathsBetween{V}{E}{r}{x}\land c\neq d}{\rA}
+  \proofstepwidestarbreak[3,10]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \rUE{3,\rAEa{10}}}
+  \proofstepwidestarbreak[3,10]{c=d}{%
+    \FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]{%
+      11,\rAEn{10},\rAEn{10}}}
+  \proofstepwidestarbreak[10]{c\neq d}{\rAEn{10}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7,8,10]{\bot}{\rBI{12,13}}
+  \proofstepwidestarbreak[1,2,3,4,5,6,7]{a=b}{%
+    \FormulaRefAuto{rDN}[thm]{%
+      \rCI{8,\rEE{9,10,14}}}}
+\end{tabproofwide}
+
+\chapter{Verwurzelte Bäume}
+
+\section{Wurzel und Wurzelwege}
+
+\FormulaDefDeltaK[Verwurzelter Baum]{%
+  \RootedTreeStruct{V,E,r}\coloneqq\TreeStruct{V,E}\land r\in V%
+}{RootedTreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r}
+  \DeltaRow{Neue Struktur}{\RootedTreeStruct{V,E,r}}
+}
+
+\FormulaThmDeltaK[Zugriff auf einen verwurzelten Baum]{%
+  \RootedTreeStruct{V,E,r}\vdash\TreeStruct{V,E}\land r\in V%
+}{RootedTreeAccess}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r}
+}
+\begin{tabproof}
+  \proofstep{1}{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstep{1}{\TreeStruct{V,E}\land r\in V}{%
+    \FormulaRefAuto{RootedTreeDef}[def]{1}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Eindeutiger Wurzelweg]{%
+  \RootedTreeStruct{V,E,r}\dsep x\in V\vdash
+  \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)%
+}{RootPathUnique}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{\rA}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1]{r\in V}{%
+    \rAEb{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \FormulaRefAuto{TreeAccess}[thm]{3,4,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Baumkriterium durch eindeutige Wurzelwege]{%
+  \begin{aligned}[t]
+  &\SimpleUndirectedGraphStruct{V,E}\dsep r\in V\dsep
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)\vdash{}\\[-2pt]
+  &\qquad\RootedTreeStruct{V,E,r}
+  \end{aligned}%
+}{RootedTreeFromUniqueRootPaths}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep u\dsep v\dsep a\dsep b\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{\rA}
+  \proofstepwidestarbreak[2]{r\in V}{\rA}
+  \proofstepwidestarbreak[3]{%
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{\rA}
+  \proofstepwidestarbreak[4]{u\in V}{\rA}
+  \proofstepwidestarbreak[5]{v\in V}{\rA}
+  \proofstepwidestarbreak[2,3,4]{%
+    \exists a\,\bigl(a\in\GraphPathsBetween{V}{E}{r}{u}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{\rUE{3,4}}}
+  \proofstepwidestarbreak[2,3,5]{%
+    \exists b\,\bigl(b\in\GraphPathsBetween{V}{E}{r}{v}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{\rUE{3,5}}}
+  \proofstepwidestarbreak[8]{a\in\GraphPathsBetween{V}{E}{r}{u}}{\rA}
+  \proofstepwidestarbreak[9]{b\in\GraphPathsBetween{V}{E}{r}{v}}{\rA}
+  \proofstepwidestarbreak[1]{\UndirectedGraphStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1,2,3,4,5,8,9]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \FormulaRefAuto{RootPathsGivePairPath}[thm]{10,2,4,5,8,9}}
+  \proofstepwidestarbreak[12]{a\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[13]{b\in\GraphPathsBetween{V}{E}{u}{v}}{\rA}
+  \proofstepwidestarbreak[1,2,3,4,5,12,13]{a=b}{%
+    \FormulaRefAuto{RootPathUniquenessTransfers}[thm]{1,2,3,4,5,12,13}}
+  \proofstepwidestarbreak[1,2,3,4,5]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \UEI{\rEE{6,8,\rEE{7,9,11}},12,13,14}}
+  \proofstepwidestarbreak[1,2,3]{%
+    \forall u\in V\,\forall v\in V\,
+      \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{u}{v}\bigr)}{%
+    \rUI{\rRI{4,\rUI{\rRI{5,15}}}}}
+  \proofstepwidestarbreak[2]{V\neq\varnothing}{%
+    \FormulaRefAuto{a \in A \vdash A \neq \varnothing}[thm]{2}}
+  \proofstepwidestarbreak[1,2,3]{\TreeStruct{V,E}}{%
+    \FormulaRefAuto{TreeDef}[def]{1,16,17}}
+  \proofstepwidestarbreak[1,2,3]{\RootedTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{RootedTreeDef}[def]{18,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Verwurzelte Bäume und eindeutige Wurzelwege]{%
+  \begin{aligned}[t]
+  \RootedTreeStruct{V,E,r}\eqvdash{}&
+    \SimpleUndirectedGraphStruct{V,E}\land r\in V\land{}\\[-2pt]
+  &\forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)
+  \end{aligned}%
+}{RootedTreeIffUniqueRootPaths}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep z}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1]{r\in V}{%
+    \rAEb{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeAccess}[thm]{2}}
+  \proofstepwidestarbreak[1]{%
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \rUI{\rRI{\FormulaRefAuto{RootPathUnique}[thm]{1}}}}
+  \proofstepwidestarbreak[1]{%
+    \SimpleUndirectedGraphStruct{V,E}\land r\in V\land
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \rAIStar{4,3,5}}
+  \proofstepwidestarbreak[7]{%
+    \SimpleUndirectedGraphStruct{V,E}\land r\in V\land
+    \forall x\in V\,\exists!z\,
+      \bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{\rA}
+  \proofstepwidestarbreak[7]{\RootedTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{RootedTreeFromUniqueRootPaths}[thm]{7}}
+  \proofstepwidestarbreak[]{%
+    \RootedTreeStruct{V,E,r}\leftrightarrow
+    \bigl(\SimpleUndirectedGraphStruct{V,E}\land r\in V\land
+    \forall x\in V\,\exists!z\,
+      (z\in\GraphPathsBetween{V}{E}{r}{x})\bigr)}{%
+    \rLRI{\rRI{1,6},\rRI{7,8}}}
+\end{tabproofwide}
+
+\section{Eltern und Kinder}
+
+\FormulaDefDeltaK[Elternrelation]{%
+  \begin{aligned}
+  &\TreeParentRel{V}{E}{r}{a}{x}\\[-2pt]
+  &\quad\coloneqq a\in V\land x\in V\setminus\{r\}\land{}\\[-2pt]
+  &\qquad\exists k\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,\\[-2pt]
+  &\qquad\quad
+    \Bigl((k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}
+          \land p(k)=a\Bigr).
+  \end{aligned}%
+}{TreeParentDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x\dsep k\dsep p}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Relation}{\TreeParentRel{V}{E}{r}{a}{x}}
+}
+
+Die Definition liest \(a\) als den vorletzten Knoten des eindeutigen
+Wurzelwegs nach \(x\). Der Ausschluss \(x\neq r\) verhindert einen
+künstlichen Elternknoten der Wurzel.
+
+\FormulaThmDeltaK[Zugriff auf die Elternrelation]{%
+  \begin{aligned}[t]
+  \TreeParentRel{V}{E}{r}{a}{x}\vdash{}&
+    a\in V\dsep x\in V\setminus\{r\}\dsep{}\\[-2pt]
+  &\exists k\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,\\[-2pt]
+  &\quad
+    \Bigl((k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}
+          \land p(k)=a\Bigr)
+  \end{aligned}%
+}{TreeParentAccess}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x\dsep k\dsep p}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\TreeParentRel{V}{E}{r}{a}{x}}{\rA}
+  \proofstepwidestarbreak[1]{a\in V}{\FormulaRefAuto{TreeParentDef}[def]{1}}
+  \proofstepwidestarbreak[1]{x\in V\setminus\{r\}}{%
+    \FormulaRefAuto{TreeParentDef}[def]{1}}
+  \proofstepwidestarbreak[1]{%
+    \exists k\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl((k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}
+          \land p(k)=a\bigr)}{%
+    \FormulaRefAuto{TreeParentDef}[def]{1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Ein nichttrivialer Wurzelweg hat positive Länge]{%
+  \begin{aligned}[t]
+  &\RootedTreeStruct{V,E,r}\dsep x\in V\setminus\{r\}\dsep
+    (n,p)\in\GraphPathsBetween{V}{E}{r}{x}\vdash n\neq0
+  \end{aligned}%
+}{NonrootPathLengthNonzero}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep n\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V\setminus\{r\}}{\rA}
+  \proofstepwidestarbreak[3]{(n,p)\in\GraphPathsBetween{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[3]{p(0)=r\land p(n)=x}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{3}}
+  \proofstepwidestarbreak[5]{n=0}{\rA}
+  \proofstepwidestarbreak[3,5]{p(n)=p(0)}{\rIE{5}}
+  \proofstepwidestarbreak[3,5]{x=r}{\rIE{\rAEb{4},\rIE{6,\rAEa{4}}}}
+  \proofstepwidestarbreak[2]{x\neq r}{%
+    \FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}[thm]{%
+      \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{2}}}
+  \proofstepwidestarbreak[2,3,5]{\bot}{\rBI{7,8}}
+  \proofstepwidestarbreak[1,2,3]{n\neq0}{\rCI{5,9}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Jeder Nichtwurzelknoten besitzt einen Elternknoten]{%
+  \RootedTreeStruct{V,E,r}\dsep x\in V\setminus\{r\}\vdash
+  \exists a\in V\,\TreeParentRel{V}{E}{r}{a}{x}%
+}{TreeParentExists}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep a\dsep n\dsep p\dsep k}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V\setminus\{r\}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{2}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists!z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \FormulaRefAuto{RootPathUnique}[thm]{1,3}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{4}}
+  \proofstepwidestarbreak[6]{z\in\GraphPathsBetween{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[6]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl(z=(n,p)\land\DirectedPath{V}{E}{p}{n}\land
+          p(0)=r\land p(n)=x\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{6}}
+  \proofstepwidestarbreak[8]{n\in\mathbb N\land
+    p\in\powerset(\mathbb N\times V)\land
+    (n,p)\in\GraphPathsBetween{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[1,2,8]{n\neq0}{%
+    \FormulaRefAuto{NonrootPathLengthNonzero}[thm]{1,2,\rAEn{8}}}
+  \proofstepwidestarbreak[1,2,8]{%
+    \exists k\in\mathbb N\,(n=k+1)}{%
+    \FormulaRefAuto{PeanoIndexSplitAtOne}[thm]{\rAEa{8},9}}
+  \proofstepwidestarbreak[11]{k\in\mathbb N\land n=k+1}{\rA}
+  \proofstepwidestarbreak[11]{k\in\NatSeg{k+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \rAEa{11},\rAEa{11}},
+      \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{11}}}}
+  \proofstepwidestarbreak[8,11]{p\colon\NatSeg{k+1}\to V}{%
+    \FormulaRefAuto{DirectedPathDef}[def]{%
+      \rAEb{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{%
+        \FormulaRefAuto{TreeAccess}[thm]{%
+          \rAEa{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}}},
+      \rAEn{8},\rAEb{11}}}
+  \proofstepwidestarbreak[8,11]{p(k)\in V}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{13,12}}
+  \proofstepwidestarbreak[1,2,8,11]{%
+    \TreeParentRel{V}{E}{r}{p(k)}{x}}{%
+    \FormulaRefAuto{TreeParentDef}[def]{14,2,\rAEa{11},\rAEn{8},\rII}}
+  \proofstepwidestarbreak[1,2,8,11]{%
+    \exists a\in V\,\TreeParentRel{V}{E}{r}{a}{x}}{\rEI{14,15}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists a\in V\,\TreeParentRel{V}{E}{r}{a}{x}}{%
+    \rEE{5,6,\rEE{7,8,\rEE{10,11,16}}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Höchstens ein Elternknoten]{%
+  \begin{aligned}[t]
+  &\RootedTreeStruct{V,E,r}\dsep
+    \TreeParentRel{V}{E}{r}{a}{x}\dsep
+    \TreeParentRel{V}{E}{r}{b}{x}\vdash a=b
+  \end{aligned}%
+}{TreeParentAtMostOne}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep b\dsep x\dsep k\dsep l\dsep p\dsep q}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{\TreeParentRel{V}{E}{r}{a}{x}}{\rA}
+  \proofstepwidestarbreak[3]{\TreeParentRel{V}{E}{r}{b}{x}}{\rA}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1]{r\in V}{%
+    \rAEb{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[2]{x\in V}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{%
+      \FormulaRefAuto{TreeParentAccess}[thm]{2}}}
+  \proofstepwidestarbreak[2]{%
+    \exists k\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl((k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(k)=a\bigr)}{%
+    \FormulaRefAuto{TreeParentAccess}[thm]{2}}
+  \proofstepwidestarbreak[3]{%
+    \exists l\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\,
+    \bigl((l+1,q)\in\GraphPathsBetween{V}{E}{r}{x}\land q(l)=b\bigr)}{%
+    \FormulaRefAuto{TreeParentAccess}[thm]{3}}
+  \proofstepwidestarbreak[9]{k\in\mathbb N\land p\in\powerset(\mathbb N\times V)\land
+    (k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(k)=a}{\rA}
+  \proofstepwidestarbreak[10]{l\in\mathbb N\land q\in\powerset(\mathbb N\times V)\land
+    (l+1,q)\in\GraphPathsBetween{V}{E}{r}{x}\land q(l)=b}{\rA}
+  \proofstepwidestarbreak[1,2,3,9,10]{(k+1,p)=(l+1,q)}{%
+    \FormulaRefAuto{TreePathUnique}[thm]{4,5,6,\rAEn{9},\rAEn{10}}}
+  \proofstepwidestarbreak[1,2,3,9,10]{k+1=l+1\land p=q}{%
+    \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{11}}
+  \proofstepwidestarbreak[1,2,3,9,10]{k=l}{%
+    \FormulaRefAuto{PeanoAddRightCancellation}[thm]{%
+      \rAEa{9},\rAEa{10},\FormulaRefAuto{PeanoOneInN}[thm],\rAEa{12}}}
+  \proofstepwidestarbreak[1,2,3,9,10]{p(k)=q(l)}{%
+    \rIE{\rAEb{12},\rIE{13}}}
+  \proofstepwidestarbreak[1,2,3,9,10]{a=b}{%
+    \rIE{\rAEn{9},\rIE{14,\rAEn{10}}}}
+  \proofstepwidestarbreak[1,2,3]{a=b}{%
+    \rEE{7,9,\rEE{8,10,15}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Eindeutiger Elternknoten]{%
+  \RootedTreeStruct{V,E,r}\dsep x\in V\setminus\{r\}\vdash
+  \exists!a\in V\,\TreeParentRel{V}{E}{r}{a}{x}%
+}{TreeParentUnique}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V\setminus\{r\}}{\rA}
+  \proofstepwidestarbreak[1,2]{%
+    \exists a\in V\,\TreeParentRel{V}{E}{r}{a}{x}}{%
+    \FormulaRefAuto{TreeParentExists}[thm]{1,2}}
+  \proofstepwidestarbreak[4]{a\in V\land\TreeParentRel{V}{E}{r}{a}{x}}{\rA}
+  \proofstepwidestarbreak[5]{b\in V\land\TreeParentRel{V}{E}{r}{b}{x}}{\rA}
+  \proofstepwidestarbreak[1,4,5]{a=b}{%
+    \FormulaRefAuto{TreeParentAtMostOne}[thm]{1,\rAEb{4},\rAEb{5}}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists!a\in V\,\TreeParentRel{V}{E}{r}{a}{x}}{%
+    \UEI{3,4,5,6}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Elternknoten sind benachbart]{%
+  \RootedTreeStruct{V,E,r}\dsep\TreeParentRel{V}{E}{r}{a}{x}
+  \vdash(a,x)\in E%
+}{TreeParentAdjacent}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x\dsep k\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{\TreeParentRel{V}{E}{r}{a}{x}}{\rA}
+  \proofstepwidestarbreak[1]{\TreeStruct{V,E}}{%
+    \rAEa{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1]{\SimpleUndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{TreeAccess}[thm]{3}}
+  \proofstepwidestarbreak[1]{\GraphStruct{V,E}}{%
+    \rAEb{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{4}}}
+  \proofstepwidestarbreak[2]{%
+    \exists k\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl((k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(k)=a\bigr)}{%
+    \FormulaRefAuto{TreeParentAccess}[thm]{2}}
+  \proofstepwidestarbreak[7]{k\in\mathbb N\land
+    (k+1,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(k)=a}{\rA}
+  \proofstepwidestarbreak[7]{\DirectedPath{V}{E}{p}{k+1}\land
+    p(k+1)=x}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{\rAEn{7}}}
+  \proofstepwidestarbreak[1,7]{\DirectedWalk{V}{E}{p}{k+1}}{%
+    \FormulaRefAuto{DirectedPathIsWalk}[thm]{5,\rAEa{8}}}
+  \proofstepwidestarbreak[7]{k\in\NatSeg{k+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \rAEa{7},\rAEa{7}},
+      \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{7}}}}
+  \proofstepwidestarbreak[1,7]{(p(k),p(k+1))\in E}{%
+    \FormulaRefAuto{DirectedWalkStepEdge}[thm]{5,9,10}}
+  \proofstepwidestarbreak[1,7]{(a,x)\in E}{%
+    \rIE{\rAEn{7},\rIE{\rAEb{8},11}}}
+  \proofstepwidestarbreak[1,2]{(a,x)\in E}{\rEE{6,7,12}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Wurzel besitzt keinen Elternknoten]{%
+  \RootedTreeStruct{V,E,r}\vdash
+  \neg\exists a\in V\,\TreeParentRel{V}{E}{r}{a}{r}%
+}{RootHasNoParent}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{\exists a\in V\,\TreeParentRel{V}{E}{r}{a}{r}}{\rA}
+  \proofstepwidestarbreak[3]{a\in V\land\TreeParentRel{V}{E}{r}{a}{r}}{\rA}
+  \proofstepwidestarbreak[3]{r\in V\setminus\{r\}}{%
+    \FormulaRefAuto{TreeParentAccess}[thm]{\rAEb{3}}}
+  \proofstepwidestarbreak[]{r\in\{r\}}{\FormulaRefAuto{a\in\{a\}}[thm]}
+  \proofstepwidestarbreak[3]{r\notin\{r\}}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{4}}
+  \proofstepwidestarbreak[3]{\bot}{\rBI{5,6}}
+  \proofstepwidestarbreak[1]{%
+    \neg\exists a\in V\,\TreeParentRel{V}{E}{r}{a}{r}}{%
+    \rCI{2,\rEE{2,3,7}}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Kindrelation]{%
+  \TreeChildRel{V}{E}{r}{x}{a}\coloneqq
+  \TreeParentRel{V}{E}{r}{a}{x}%
+}{TreeChildDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Relation}{\TreeChildRel{V}{E}{r}{x}{a}}
+}
+
+\FormulaDefDeltaK[Kindermenge eines Knotens]{%
+  \TreeChildren{V}{E}{r}{a}\coloneqq
+  \bigl\{x\in V\bigm|\TreeChildRel{V}{E}{r}{x}{a}\bigr\}%
+}{TreeChildrenDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Menge}{\TreeChildren{V}{E}{r}{a}}
+}
+
+\FormulaThmDeltaK[Elementkriterium der Kindermenge]{%
+  \RootedTreeStruct{V,E,r}\dsep a\in V\vdash
+  x\in\TreeChildren{V}{E}{r}{a}
+  \leftrightarrow\TreeParentRel{V}{E}{r}{a}{x}%
+}{TreeChildrenMembership}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{a\in V}{\rA}
+  \proofstepwidestarbreak[3]{x\in\TreeChildren{V}{E}{r}{a}}{\rA}
+  \proofstepwidestarbreak[3]{x\in V\land\TreeChildRel{V}{E}{r}{x}{a}}{%
+    \FormulaRefAuto{TreeChildrenDef}[def]{3}}
+  \proofstepwidestarbreak[3]{\TreeParentRel{V}{E}{r}{a}{x}}{%
+    \FormulaRefAuto{TreeChildDef}[def]{\rAEb{4}}}
+  \proofstepwidestarbreak[6]{\TreeParentRel{V}{E}{r}{a}{x}}{\rA}
+  \proofstepwidestarbreak[6]{x\in V}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{%
+      \FormulaRefAuto{TreeParentAccess}[thm]{6}}}
+  \proofstepwidestarbreak[6]{\TreeChildRel{V}{E}{r}{x}{a}}{%
+    \FormulaRefAuto{TreeChildDef}[def]{6}}
+  \proofstepwidestarbreak[6]{x\in V\land\TreeChildRel{V}{E}{r}{x}{a}}{%
+    \rAI{7,8}}
+  \proofstepwidestarbreak[6]{x\in\TreeChildren{V}{E}{r}{a}}{%
+    \FormulaRefAuto{TreeChildrenDef}[def]{9}}
+  \proofstepwidestarbreak[1,2]{%
+    x\in\TreeChildren{V}{E}{r}{a}\leftrightarrow
+    \TreeParentRel{V}{E}{r}{a}{x}}{%
+    \rLRI{\rRI{3,5},\rRI{6,10}}}
+\end{tabproofwide}
+
+\section{Vorfahren}
+
+\FormulaDefDeltaK[Vorfahrrelation]{%
+  \begin{aligned}
+  &\TreeAncestorRel{V}{E}{r}{a}{x}\\[-2pt]
+  &\quad\coloneqq a\in V\land x\in V\land{}\\[-2pt]
+  &\qquad\exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,\\[-2pt]
+  &\qquad\quad\exists k\in\NatSeg{n+1}\,\Bigl(
+      (n,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(k)=a\Bigr).
+  \end{aligned}%
+}{TreeAncestorDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x\dsep n\dsep p\dsep k}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Relation}{\TreeAncestorRel{V}{E}{r}{a}{x}}
+}
+
+Der Knoten selbst ist als Vorfahr zugelassen. Ein \textbf{echter Vorfahr}
+von \(x\) ist ein Vorfahr \(a\) mit \(a\neq x\).
+
+\FormulaThmDeltaK[Jeder Knoten ist sein eigener Vorfahr]{%
+  \RootedTreeStruct{V,E,r}\dsep x\in V\vdash
+  \TreeAncestorRel{V}{E}{r}{x}{x}%
+}{TreeAncestorReflexive}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep z\dsep n\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{\rA}
+  \proofstepwidestarbreak[1]{r\in V}{%
+    \rAEb{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{%
+      \FormulaRefAuto{RootPathUnique}[thm]{1,2}}}
+  \proofstepwidestarbreak[5]{z\in\GraphPathsBetween{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[5]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl(z=(n,p)\land(n,p)\in\GraphPathsBetween{V}{E}{r}{x}
+      \land p(n)=x\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{5}}
+  \proofstepwidestarbreak[7]{n\in\mathbb N\land
+    (n,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(n)=x}{\rA}
+  \proofstepwidestarbreak[7]{n\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \rAEa{7},\rAEa{7}},
+      \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{7}}}}
+  \proofstepwidestarbreak[1,2,7]{\TreeAncestorRel{V}{E}{r}{x}{x}}{%
+    \FormulaRefAuto{TreeAncestorDef}[def]{2,2,\rAEa{7},\rAEn{7},8,\rAEn{7}}}
+  \proofstepwidestarbreak[1,2]{\TreeAncestorRel{V}{E}{r}{x}{x}}{%
+    \rEE{4,5,\rEE{6,7,9}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Wurzel ist Vorfahr jedes Knotens]{%
+  \RootedTreeStruct{V,E,r}\dsep x\in V\vdash
+  \TreeAncestorRel{V}{E}{r}{r}{x}%
+}{RootAncestorEveryVertex}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep z\dsep n\dsep p}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{\rA}
+  \proofstepwidestarbreak[1]{r\in V}{%
+    \rAEb{\FormulaRefAuto{RootedTreeAccess}[thm]{1}}}
+  \proofstepwidestarbreak[1,2]{%
+    \exists z\,\bigl(z\in\GraphPathsBetween{V}{E}{r}{x}\bigr)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{%
+      \FormulaRefAuto{RootPathUnique}[thm]{1,2}}}
+  \proofstepwidestarbreak[5]{z\in\GraphPathsBetween{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[5]{%
+    \exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\,
+    \bigl(z=(n,p)\land(n,p)\in\GraphPathsBetween{V}{E}{r}{x}
+      \land p(0)=r\bigr)}{%
+    \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{5}}
+  \proofstepwidestarbreak[7]{n\in\mathbb N\land
+    (n,p)\in\GraphPathsBetween{V}{E}{r}{x}\land p(0)=r}{\rA}
+  \proofstepwidestarbreak[7]{0\leq n}{%
+    \FormulaRefAuto{PeanoZeroLeq}[thm]{\rAEa{7}}}
+  \proofstepwidestarbreak[7]{0\in\NatSeg{n+1}}{%
+    \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{%
+      \FormulaRefAuto{PeanoNatSegLeqAddOneMembership}[thm]{%
+        \FormulaRefAuto{PeanoZero}[ax],\rAEa{7}},8}}
+  \proofstepwidestarbreak[1,2,7]{\TreeAncestorRel{V}{E}{r}{r}{x}}{%
+    \FormulaRefAuto{TreeAncestorDef}[def]{3,2,\rAEa{7},\rAEn{7},9,\rAEn{7}}}
+  \proofstepwidestarbreak[1,2]{\TreeAncestorRel{V}{E}{r}{r}{x}}{%
+    \rEE{4,5,\rEE{6,7,10}}}
+\end{tabproofwide}
+
+\chapter{Blätter und binäre Bäume}
+
+\section{Blätter und innere Knoten}
+
+\FormulaDefDeltaK[Blatt und innerer Knoten]{%
+  \begin{aligned}
+  \TreeLeafPred{V}{E}{r}{x}&\coloneqq
+    x\in V\land\TreeChildren{V}{E}{r}{x}=\varnothing,\\
+  \TreeInnerPred{V}{E}{r}{x}&\coloneqq
+    x\in V\land\TreeChildren{V}{E}{r}{x}\neq\varnothing.
+  \end{aligned}%
+}{TreeLeafInnerDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Prädikate}{%
+    \TreeLeafPred{V}{E}{r}{x}\dsep\TreeInnerPred{V}{E}{r}{x}}
+}
+
+\FormulaThmDeltaK[Blätter und innere Knoten zerlegen den Träger]{%
+  \begin{aligned}[t]
+  &\RootedTreeStruct{V,E,r}\dsep x\in V\vdash{}\\[-2pt]
+  &\quad
+    \bigl(\TreeLeafPred{V}{E}{r}{x}\lor
+          \TreeInnerPred{V}{E}{r}{x}\bigr)\land
+    \neg\bigl(\TreeLeafPred{V}{E}{r}{x}\land
+              \TreeInnerPred{V}{E}{r}{x}\bigr)
+  \end{aligned}%
+}{TreeLeafInnerPartition}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{\rA}
+  \proofstepwidestarbreak[]{%
+    \TreeChildren{V}{E}{r}{x}=\varnothing\lor
+    \TreeChildren{V}{E}{r}{x}\neq\varnothing}{%
+    \FormulaRefAuto{P\lor\neg P}[thm]}
+  \proofstepwidestarbreak[4]{\TreeChildren{V}{E}{r}{x}=\varnothing}{\rA}
+  \proofstepwidestarbreak[2,4]{\TreeLeafPred{V}{E}{r}{x}}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{2,4}}
+  \proofstepwidestarbreak[6]{\TreeChildren{V}{E}{r}{x}\neq\varnothing}{\rA}
+  \proofstepwidestarbreak[2,6]{\TreeInnerPred{V}{E}{r}{x}}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{2,6}}
+  \proofstepwidestarbreak[2]{%
+    \TreeLeafPred{V}{E}{r}{x}\lor\TreeInnerPred{V}{E}{r}{x}}{%
+    \rOE{3,4,\rOIa{5},6,\rOIb{7}}}
+  \proofstepwidestarbreak[9]{%
+    \TreeLeafPred{V}{E}{r}{x}\land\TreeInnerPred{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[9]{\TreeChildren{V}{E}{r}{x}=\varnothing}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{\rAEa{9}}}
+  \proofstepwidestarbreak[9]{\TreeChildren{V}{E}{r}{x}\neq\varnothing}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{\rAEb{9}}}
+  \proofstepwidestarbreak[9]{\bot}{\rBI{10,11}}
+  \proofstepwidestarbreak[]{%
+    \neg\bigl(\TreeLeafPred{V}{E}{r}{x}\land
+              \TreeInnerPred{V}{E}{r}{x}\bigr)}{\rCI{9,12}}
+  \proofstepwidestarbreak[1,2]{%
+    \bigl(\TreeLeafPred{V}{E}{r}{x}\lor
+          \TreeInnerPred{V}{E}{r}{x}\bigr)\land
+    \neg\bigl(\TreeLeafPred{V}{E}{r}{x}\land
+              \TreeInnerPred{V}{E}{r}{x}\bigr)}{\rAI{8,13}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Menge der inneren Knoten]{%
+  \TreeInnerVertices{V}{E}{r}\coloneqq
+  \bigl\{x\in V\bigm|\TreeInnerPred{V}{E}{r}{x}\bigr\}%
+}{TreeInnerVertexSetDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x}
+  \DeltaPrem{Verwurzelter Baum}{\RootedTreeStruct{V,E,r}}
+  \DeltaRow{Neue Menge}{\TreeInnerVertices{V}{E}{r}}
+}
+
+\section{Binäre und volle Binärbäume}
+
+\FormulaDefDeltaK[Binärer Baum]{%
+  \begin{aligned}
+  \BinaryTreeStruct{V,E,r}\coloneqq{}&
+    \RootedTreeStruct{V,E,r}\land{}\\[-2pt]
+  &\forall x\in V\,\forall a,b,c\in\TreeChildren{V}{E}{r}{x}\,
+    (a=b\lor a=c\lor b=c).
+  \end{aligned}%
+}{BinaryTreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep a\dsep b\dsep c}
+  \DeltaRow{Neue Struktur}{\BinaryTreeStruct{V,E,r}}
+}
+
+Die zweite Zeile besagt ohne Kardinalzahlschreibweise, dass kein Knoten drei
+paarweise verschiedene Kinder besitzt.
+
+\FormulaDefDeltaK[Voller Binärbaum]{%
+  \begin{aligned}
+  &\FullBinaryTreeStruct{V,E,r}\\[-2pt]
+  &\quad\coloneqq \BinaryTreeStruct{V,E,r}\land{}\\[-2pt]
+  &\qquad\forall x\in V\,\Bigl(\\[-2pt]
+  &\qquad\quad\TreeChildren{V}{E}{r}{x}=\varnothing\ \lor{}\\[-2pt]
+  &\qquad\quad\exists a,b\in\TreeChildren{V}{E}{r}{x}\,
+      \bigl(a\neq b\land
+        \TreeChildren{V}{E}{r}{x}=\{a,b\}\bigr)\Bigr).
+  \end{aligned}%
+}{FullBinaryTreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep a\dsep b}
+  \DeltaRow{Neue Struktur}{\FullBinaryTreeStruct{V,E,r}}
+}
+
+\FormulaThmDeltaK[Innere Knoten eines vollen Binärbaums haben zwei Kinder]{%
+  \begin{aligned}[t]
+  &\FullBinaryTreeStruct{V,E,r}\dsep
+    \TreeInnerPred{V}{E}{r}{x}\vdash{}\\[-2pt]
+  &\quad\exists a,b\in\TreeChildren{V}{E}{r}{x}\,
+    \bigl(a\neq b\land\TreeChildren{V}{E}{r}{x}=\{a,b\}\bigr)
+  \end{aligned}%
+}{FullBinaryInnerHasTwoChildren}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x\dsep a\dsep b}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{\FullBinaryTreeStruct{V,E,r}}{\rA}
+  \proofstepwidestarbreak[2]{\TreeInnerPred{V}{E}{r}{x}}{\rA}
+  \proofstepwidestarbreak[2]{x\in V}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{2}}
+  \proofstepwidestarbreak[2]{\TreeChildren{V}{E}{r}{x}\neq\varnothing}{%
+    \FormulaRefAuto{TreeLeafInnerDef}[def]{2}}
+  \proofstepwidestarbreak[1,3]{%
+    \TreeChildren{V}{E}{r}{x}=\varnothing\lor
+    \exists a,b\in\TreeChildren{V}{E}{r}{x}\,
+      \bigl(a\neq b\land\TreeChildren{V}{E}{r}{x}=\{a,b\}\bigr)}{%
+    \FormulaRefAuto{FullBinaryTreeDef}[def]{1,3}}
+  \proofstepwidestarbreak[6]{\TreeChildren{V}{E}{r}{x}=\varnothing}{\rA}
+  \proofstepwidestarbreak[2,6]{\bot}{\rBI{6,4}}
+  \proofstepwidestarbreak[8]{%
+    \exists a,b\in\TreeChildren{V}{E}{r}{x}\,
+      \bigl(a\neq b\land\TreeChildren{V}{E}{r}{x}=\{a,b\}\bigr)}{\rA}
+  \proofstepwidestarbreak[1,2]{%
+    \exists a,b\in\TreeChildren{V}{E}{r}{x}\,
+      \bigl(a\neq b\land\TreeChildren{V}{E}{r}{x}=\{a,b\}\bigr)}{%
+    \rOE{5,6,\FormulaRefAuto{\bot\vdash P}[thm]{7},8,8}}
+\end{tabproofwide}
+
+\section{Geordnete volle Binärbäume}
+
+\FormulaDefDeltaK[Geordneter voller Binärbaum]{%
+  \begin{aligned}
+  &\OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}\\[-2pt]
+  &\quad\coloneqq \FullBinaryTreeStruct{V,E,r}\land{}\\[-2pt]
+  &\qquad\lambda,\rho\colon\TreeInnerVertices{V}{E}{r}\to V\land{}\\[-2pt]
+  &\qquad\forall x\in\TreeInnerVertices{V}{E}{r}\,\Bigl(
+      \lambda(x)\neq\rho(x)\land
+      \TreeChildren{V}{E}{r}{x}=\{\lambda(x),\rho(x)\}\Bigr).
+  \end{aligned}%
+}{OrderedFullBinaryTreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x}
+  \DeltaRow{Funktionen}{\lambda\dsep\rho}
+  \DeltaRow{Neue Struktur}{%
+    \OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}}
+}
+
+Die Funktionen \(\lambda\) und \(\rho\) wählen nicht nachträglich zwei
+Kinder aus, sondern gehören zur Struktur. Sie heißen linker und rechter
+Kindoperator.
+
+\FormulaThmDeltaK[Zugriff auf linken und rechten Kindoperator]{%
+  \begin{aligned}[t]
+  &\OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}\dsep
+    x\in\TreeInnerVertices{V}{E}{r}\vdash{}\\[-2pt]
+  &\quad\lambda(x),\rho(x)\in\TreeChildren{V}{E}{r}{x}\dsep
+    \lambda(x)\neq\rho(x)
+  \end{aligned}%
+}{OrderedFullBinaryTreeAccess}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep x}
+  \DeltaRow{Funktionen}{\lambda\dsep\rho}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{%
+    \OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}}{\rA}
+  \proofstepwidestarbreak[2]{x\in\TreeInnerVertices{V}{E}{r}}{\rA}
+  \proofstepwidestarbreak[1]{%
+    \lambda,\rho\colon\TreeInnerVertices{V}{E}{r}\to V}{%
+    \FormulaRefAuto{OrderedFullBinaryTreeDef}[def]{1}}
+  \proofstepwidestarbreak[1,2]{\lambda(x)\neq\rho(x)\land
+    \TreeChildren{V}{E}{r}{x}=\{\lambda(x),\rho(x)\}}{%
+    \FormulaRefAuto{OrderedFullBinaryTreeDef}[def]{1,2}}
+  \proofstepwidestarbreak[]{\lambda(x)\in\{\lambda(x),\rho(x)\}}{%
+    \FormulaRefAuto{a\in\{a,b\}}[thm]}
+  \proofstepwidestarbreak[]{\rho(x)\in\{\lambda(x),\rho(x)\}}{%
+    \FormulaRefAuto{b\in\{a,b\}}[thm]}
+  \proofstepwidestarbreak[1,2]{\lambda(x)\in\TreeChildren{V}{E}{r}{x}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{4}},5}}
+  \proofstepwidestarbreak[1,2]{\rho(x)\in\TreeChildren{V}{E}{r}{x}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{4}},6}}
+  \proofstepwidestarbreak[1,2]{%
+    \lambda(x),\rho(x)\in\TreeChildren{V}{E}{r}{x}\dsep
+    \lambda(x)\neq\rho(x)}{%
+    \rAIStar{7,8,\rAEa{4}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Vergessen der Kinderordnung]{%
+  \begin{aligned}[t]
+  &\OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}\vdash{}\\[-2pt]
+  &\quad\FullBinaryTreeStruct{V,E,r}\land{}\\[-2pt]
+  &\quad\BinaryTreeStruct{V,E,r}\land\RootedTreeStruct{V,E,r}
+  \end{aligned}%
+}{OrderedFullBinaryTreeForgetfulChain}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r}
+  \DeltaRow{Funktionen}{\lambda\dsep\rho}
+}
+\begin{tabproofwide}
+  \proofstepwidestarbreak[1]{%
+    \OrderedFullBinaryTreeStruct{V,E,r,\lambda,\rho}}{\rA}
+  \proofstepwidestarbreak[1]{\FullBinaryTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{OrderedFullBinaryTreeDef}[def]{1}}
+  \proofstepwidestarbreak[1]{\BinaryTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{FullBinaryTreeDef}[def]{2}}
+  \proofstepwidestarbreak[1]{\RootedTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{BinaryTreeDef}[def]{3}}
+  \proofstepwidestarbreak[1]{%
+    \FullBinaryTreeStruct{V,E,r}\land
+    \BinaryTreeStruct{V,E,r}\land
+    \RootedTreeStruct{V,E,r}}{\rAIStar{2,3,4}}
+\end{tabproofwide}
+
+\chapter{Ausblick}
+
+Die axiomatische Baumstruktur dieses Bandes trennt die Form eines Baumes von
+seiner konkreten Codierung. Im folgenden Band wird daher nicht erneut eine
+zweite Baumtheorie aufgebaut. Stattdessen werden die dort aus Wörtern
+konstruierten Klammerungsbäume mit einem Knoten- und Kantenbestand versehen;
+anschließend wird nachgewiesen, dass sie die Axiome eines geordneten vollen
+Binärbaums erfüllen. Rekursion und Auswertung der Klammerungsbäume bleiben
+dabei die bereits bewiesenen worttheoretischen Konstruktionen.
+
+\end{document}

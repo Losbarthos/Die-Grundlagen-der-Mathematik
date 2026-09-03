@@ -1,0 +1,109 @@
+%============================================================
+%  Bd. 25 - Zusammenhängende Graphen
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B25}
+}{
+}
+
+\title{Bd. 25 - Zusammenhängende Graphen}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{25}
+
+\hypersetup{
+  pdftitle={Bd. 25 - Zusammenhängende Graphen},
+  pdfauthor={Martin Kunze}
+}
+
+\begin{document}
+
+\title{Bd. 25 - Zusammenhängende Graphen}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{25}
+\renewcommand{\FormulaBandID}{25}
+
+\chapter{Einleitung}
+
+Ein ungerichteter Graph heißt zusammenhängend, wenn je zwei seiner Knoten
+durch einen endlichen Walk verbunden sind. Der in Band~22 eingeführte
+Erreichbarkeitsbegriff enthält dabei auch den Fall der Länge null und erfasst
+somit den Fall gleicher Endpunkte ohne Sonderregel.
+
+Dieser Band isoliert den Zusammenhang als eigene Strukturstufe. Dadurch
+kann die folgende Baumtheorie die Zusammenhangseigenschaft unabhängig von
+der in Band~24 eingeführten Schleifenfreiheit verwenden.
+
+\chapter{Zusammenhängende Graphen}
+
+\section{Axiomatischer Begriff}
+
+\FormulaDefDeltaK[Begriff des zusammenhängenden Graphen]{%
+  \ConnectedGraphStruct{V,E}%
+}{ConnectedGraphDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Ungerichteter Graph}{\UndirectedGraphStruct{V,E}}
+    [\FormulaRefAuto{UndirectedGraphDef}[def]]
+  \DeltaRow{Erreichbarkeit}{%
+    u,v\in V\vdash u\mathrel{\GraphReach{E}}v}
+    [\FormulaRefAuto{DirectedReachabilityDef}[def]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Zusammenhängender Graph}{\ConnectedGraphStruct{V,E}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf den ungerichteten Grundgraphen]{%
+  \ConnectedGraphStruct{V,E}\vdash\UndirectedGraphStruct{V,E}%
+}{ConnectedGraphUnderlyingAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E}%
+}
+
+\FormulaAxiomDeltaK[Zugriff auf den Zusammenhang]{%
+  \ConnectedGraphStruct{V,E}\vdash
+  \forall u,v\in V\,\bigl(u\mathrel{\GraphReach{E}}v\bigr)%
+}{ConnectedGraphReachabilityAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v}%
+}
+
+\FormulaThmDeltaK[Strukturzugriff auf einen zusammenhängenden Graphen]{%
+  \ConnectedGraphStruct{V,E}\vdash
+  \UndirectedGraphStruct{V,E}\land\GraphStruct{V,E}%
+}{ConnectedGraphAccess}{%
+  \DeltaRow{Mengen}{V\dsep E}%
+}
+\begin{tabproof}
+  \proofstep{1}{\ConnectedGraphStruct{V,E}}{\rA}
+  \proofstep{1}{\UndirectedGraphStruct{V,E}}{%
+    \FormulaRefAuto{ConnectedGraphUnderlyingAxiom}[ax]{1}}
+  \proofstep{1}{\GraphStruct{V,E}}{%
+    \FormulaRefAuto{UndirectedGraphAccess}[thm]{2}}
+  \proofstep{1}{\UndirectedGraphStruct{V,E}\land\GraphStruct{V,E}}{\rAI{2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Je zwei Knoten eines zusammenhängenden Graphen sind erreichbar]{%
+  \ConnectedGraphStruct{V,E}\dsep u,v\in V\vdash
+  u\mathrel{\GraphReach{E}}v%
+}{ConnectedGraphVertexReachability}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v}%
+}
+\begin{tabproof}
+  \proofstep{1}{\ConnectedGraphStruct{V,E}}{\rA}
+  \proofstep{2}{u\in V}{\rA}
+  \proofstep{3}{v\in V}{\rA}
+  \proofstep{1}{%
+    \forall u,v\in V\,\bigl(u\mathrel{\GraphReach{E}}v\bigr)}{%
+    \FormulaRefAuto{ConnectedGraphReachabilityAxiom}[ax]{1}}
+  \proofstep{1,2,3}{u\mathrel{\GraphReach{E}}v}{%
+    \rRE{3,\rUE{\rRE{2,\rUE{4}}}}}
+\end{tabproof}
+
+\end{document}

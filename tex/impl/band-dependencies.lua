@@ -139,9 +139,9 @@ local function specification(tag)
   return spec
 end
 
-function M.emit_external_documents(tag)
+function M.emit_external_documents(tag, force_sibling_pdf_urls)
   local spec = specification(tag)
-  local dependency_pdf_is_sibling = tex.jobname == "_" .. tag
+  local dependency_pdf_is_sibling = force_sibling_pdf_urls or tex.jobname == "_" .. tag
   for _, predecessor in ipairs(spec.predecessors) do
     local predecessor_spec = specification(predecessor)
     local pdf_url
@@ -156,10 +156,13 @@ function M.emit_external_documents(tag)
   end
 end
 
-function M.load_predecessor_registries(tag)
+function M.load_predecessor_registries(tag, registry_directory)
   local spec = specification(tag)
   for _, predecessor in ipairs(spec.predecessors) do
     local registry = specification(predecessor).artifact_base .. ".registry.tsv"
+    if registry_directory then
+      registry = registry_directory .. "/_" .. predecessor .. ".registry.tsv"
+    end
     local file = io.open(registry, "r")
     if file then
       file:close()
@@ -198,11 +201,19 @@ end
 
 function M.start_band_in_main(tag)
   local spec = specification(tag)
-  thmlookup.registry_path = spec.artifact_base .. ".registry.tsv"
-  thmlookup.debug_path = spec.artifact_base .. ".debug.log"
+  -- A main build must not replace the standalone registries: their labels
+  -- belong to registry/_Bxx.aux and its external PDF destinations.
+  local directory = "registry/main"
+  local lfs = require("lfs")
+  lfs.mkdir("registry")
+  lfs.mkdir(directory)
+  thmlookup.registry_path = directory .. "/_" .. tag .. ".registry.tsv"
+  thmlookup.debug_path = directory .. "/_" .. tag .. ".debug.log"
   thmlookup.prepare_run()
-  M.load_predecessor_registries(tag)
+  M.load_predecessor_registries(tag, directory)
   texio.write_nl("thmlookup: main output -> " .. thmlookup.registry_path)
+  local title = spec.source:gsub("\\", "/"):match("([^/]+)%.tex$")
+  tex.sprint("\\part*{" .. title .. "}\\addcontentsline{toc}{part}{" .. title .. "}")
 end
 
 read_graph()

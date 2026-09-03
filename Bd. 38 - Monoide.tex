@@ -1,0 +1,1147 @@
+%============================================================
+%  Bd. 38 - Monoide
+%============================================================
+
+\documentclass[main.tex]{subfiles}
+
+\ifSubfilesClassLoaded{
+  \BandSetupStandalone{B38}
+}{
+}
+
+\title{Bd. 38 - Monoide}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{38}
+
+\hypersetup{
+  pdftitle={Bd. 38 - Monoide},
+  pdfauthor={Martin Kunze}
+}
+
+\begin{document}
+
+\title{Bd. 38 - Monoide}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{38}
+\renewcommand{\FormulaBandID}{38}
+
+\chapter{Einführung}
+
+Dieser Band entwickelt Monoide als Halbgruppen mit einem neutralen Element.
+Darauf aufbauend werden Einheiten, Teilbarkeit, Irreduzibilität,
+Primelemente und Morphismen von Monoiden untersucht.
+
+\chapter{Monoide}
+
+\section{Definition des Monoids}
+
+\FormulaDefDeltaK[Begriff des Monoids]{%
+  \MonoidAlg{A}{\star}{e}%
+}{MonoidDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Halbgruppe}{\SemigroupAlg{A}{\star}}
+  \DeltaRow{Neutrales Element im Träger}{e\in A}
+  \DeltaRow{Linksneutralität}{x\in A\vdash e\star x=x}
+  \DeltaRow{Rechtsneutralität}{x\in A\vdash x\star e=x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Monoid}{\MonoidAlg{A}{\star}{e}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Halbgruppe eines Monoids]{%
+  \MonoidAlg{A}{\star}{e}\vdash\SemigroupAlg{A}{\star}%
+}{MonoidBaseSemigroupAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf das neutrale Element]{%
+  \MonoidAlg{A}{\star}{e}\vdash e\in A%
+}{MonoidIdentityCarrierAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Linksneutralität]{%
+  \MonoidAlg{A}{\star}{e}\dsep x\in A
+  \vdash e\star x=x%
+}{MonoidLeftIdentityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Rechtsneutralität]{%
+  \MonoidAlg{A}{\star}{e}\dsep x\in A
+  \vdash x\star e=x%
+}{MonoidRightIdentityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x}
+}
+
+\section{Das neutrale Element}
+
+\FormulaThmDeltaK[Ein neutraler Kandidat stimmt mit dem neutralen Element überein]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{A}{\star}{e}\dsep e'\in A\dsep
+      \forall x\in A\,(e'\star x=x)\dsep
+      \forall x\in A\,(x\star e'=x)\vdash{}\\[-2pt]
+    &e=e'
+  \end{aligned}
+}{MonoidIdentityCandidateEqualsIdentity}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep e'\dsep x}
+}
+\begin{tabproofwide}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{e'\in A}{\rA}
+    \proofstepwidestar[3]{\forall x\in A\,(e'\star x=x)}{\rA}
+    \proofstepwidestar[4]{\forall x\in A\,(x\star e'=x)}{\rA}
+    \proofstepwidestar[1]{e\in A}{%
+      \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{1}}
+    \proofstepwidestar[1,3]{e'\star e=e}{\rRE{5,3}}
+    \proofstepwide[1,3]{e}{=}{e'\star e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{6}}
+    \proofstepwide[1,2]{}{=}{e'}{%
+      \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2,3]{e=e'}{\rChain{7,8}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Existenz und Eindeutigkeit des neutralen Elements]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{A}{\star}{e}\vdash{}\\[-2pt]
+    &\exists! e'\in A\,\Bigl(
+      \forall x\in A\,(e'\star x=x)\land
+      \forall x\in A\,(x\star e'=x)
+      \Bigr)
+  \end{aligned}
+}{MonoidIdentityUnique}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep e'\dsep x}
+}
+\begin{tabproofwide}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[1]{e\in A}{%
+      \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{1}}
+    \proofstepwidestar[3]{x\in A}{\rA}
+    \proofstepwidestar[1,3]{e\star x=x}{%
+      \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,3}}
+    \proofstepwidestar[1,3]{x\star e=x}{%
+      \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,3}}
+    \proofstepwidestar[1]{\forall x\in A\,(e\star x=x)}{%
+      \rUI{\rRI{3,4}}}
+    \proofstepwidestar[1]{\forall x\in A\,(x\star e=x)}{%
+      \rUI{\rRI{3,5}}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+        &e\in A\land\Bigl(
+          \forall x\in A\,(e\star x=x)\land{}\\[-2pt]
+        &\qquad \forall x\in A\,(x\star e=x)
+          \Bigr)
+      \end{aligned}}{%
+      \rAI{2,\rAI{6,7}}}
+    \proofstepwidestar[9]{%
+      \begin{aligned}[t]
+        &e'\in A\land\Bigl(
+          \forall x\in A\,(e'\star x=x)\land{}\\[-2pt]
+        &\qquad \forall x\in A\,(x\star e'=x)
+          \Bigr)
+      \end{aligned}}{\rA}
+    \proofstepwidestar[9]{e'\in A}{\rAEa{9}}
+    \proofstepwidestar[9]{\forall x\in A\,(e'\star x=x)}{%
+      \rAEa{\rAEb{9}}}
+    \proofstepwidestar[9]{\forall x\in A\,(x\star e'=x)}{%
+      \rAEb{\rAEb{9}}}
+    \proofstepwidestar[1,9]{e=e'}{%
+      \FormulaRefAuto{MonoidIdentityCandidateEqualsIdentity}[thm]{%
+        1,10,11,12}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+        &\exists! e'\in A\,\Bigl(
+          \forall x\in A\,(e'\star x=x)\land{}\\[-2pt]
+        &\qquad \forall x\in A\,(x\star e'=x)
+          \Bigr)
+      \end{aligned}}{\UEI{8,9,13}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Potenzhalbgruppe eines Monoids]{%
+  \MonoidAlg{A}{\star}{e}\vdash
+  \MonoidAlg{\PowNE{A}}{\star_{\mathcal P}}{\{e\}}%
+}{PowerSemigroupMonoid}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep X}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begin{proof}
+Die Potenzhalbgruppe ist nach
+\FormulaRefAuto{NonemptyPowerSemigroup}[thm] eine Halbgruppe.  Aus
+\(e\in A\) folgt \(\{e\}\in\PowNE A\), und für jedes
+\(X\in\PowNE A\) gilt
+\[
+  \{e\}\star_{\mathcal P}X
+  =\{e\star x\mid x\in X\}=X,
+  \qquad
+  X\star_{\mathcal P}\{e\}
+  =\{x\star e\mid x\in X\}=X.
+\]
+Damit ist \(\{e\}\) das neutrale Element der Potenzhalbgruppe.
+\end{proof}
+
+\FormulaThmDeltaK[Neutrale Elemente von Potenzhalbgruppen sind
+Einermengen]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep
+      \MonoidAlg{\PowNE{A}}{\star_{\mathcal P}}{E}\vdash{}\\[-2pt]
+    &\exists e\in A\,\bigl(E=\{e\}\land\MonoidAlg{A}{\star}{e}\bigr)
+  \end{aligned}%
+}{PowerSemigroupIdentityCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep E\dsep e\dsep u\dsep v\dsep x}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begin{proof}
+Da \(E\in\PowNE A\), ist \(E\) nichtleer.  Seien \(u,v\in E\).  Aus der
+Neutralität von \(E\) folgen
+\[
+  \{u\}\star_{\mathcal P}E=\{u\},
+  \qquad
+  E\star_{\mathcal P}\{u\}=\{u\},
+  \qquad
+  \{v\}\star_{\mathcal P}E=\{v\};
+\]
+also \(u\star v=u\), \(v\star u=u\) und \(v\star u=v\).  Somit ist
+\(u=v\).  Folglich ist
+\(E=\{e\}\) für ein \(e\in A\).  Für jedes \(x\in A\) liefern nun
+\[
+  \{x\}\star_{\mathcal P}\{e\}=\{x\}
+  \quad\text{und}\quad
+  \{e\}\star_{\mathcal P}\{x\}=\{x\}
+\]
+die Gleichungen \(x\star e=x=e\star x\).  Zusammen mit der vorausgesetzten
+Halbgruppenstruktur ist \((A,\star,e)\) daher ein Monoid.
+\end{proof}
+
+\section{Spezielle Definitionen}
+
+\subsection{Endliche Monoide}
+
+\FormulaDefDeltaK[Begriff des endlichen Monoids]{%
+  \FiniteMonoidAlg{A}{\star}{e}%
+}{FiniteMonoidDef}{%
+  \DeltaRow{Mengen}{A\dsep e}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Monoid}{\MonoidAlg{A}{\star}{e}}
+  \DeltaPrem{Endlichkeit}{\Finite{A}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Endliches Monoid}{\FiniteMonoidAlg{A}{\star}{e}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Monoidstruktur]{%
+  \FiniteMonoidAlg{A}{\star}{e}\vdash\MonoidAlg{A}{\star}{e}%
+}{FiniteMonoidBaseAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Endlichkeit]{%
+  \FiniteMonoidAlg{A}{\star}{e}\vdash\Finite{A}%
+}{FiniteMonoidFinitenessAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+}
+
+\subsection{Kommutative Monoide}
+
+\FormulaDefDeltaK[Begriff des kommutativen Monoids]{%
+  \CommutativeMonoidAlg{A}{\star}{e}%
+}{CommutativeMonoidDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Monoid}{\MonoidAlg{A}{\star}{e}}
+  \DeltaRow{Kommutativität}{x,y\in A\vdash x\star y=y\star x}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Kommutatives Monoid}{%
+    \CommutativeMonoidAlg{A}{\star}{e}}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf das Monoid]{%
+  \CommutativeMonoidAlg{A}{\star}{e}
+  \vdash\MonoidAlg{A}{\star}{e}%
+}{CommutativeMonoidBaseMonoidAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e}
+}
+
+\FormulaAxiomDeltaK[Zugriff auf die Kommutativität eines Monoids]{%
+  \CommutativeMonoidAlg{A}{\star}{e}\dsep x,y\in A
+  \vdash x\star y=y\star x%
+}{CommutativeMonoidCommutativityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+}
+
+\FormulaThmDeltaK[Kommutative Monoide sind kommutative Halbgruppen]{%
+  \CommutativeMonoidAlg{A}{\star}{e}
+  \vdash\CommutativeSemigroupAlg{A}{\star}%
+}{CommutativeMonoidIsCommutativeSemigroup}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y}
+}
+\begin{tabproof}
+  \proofstep{1}{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+  \proofstep{1}{\MonoidAlg{A}{\star}{e}}{%
+    \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{2}}
+  \proofstep{4}{x\in A}{\rA}
+  \proofstep{5}{y\in A}{\rA}
+  \proofstep{1,4,5}{x\star y=y\star x}{%
+    \FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,4,5}}
+  \proofstep{1}{\CommutativeSemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{CommutativeSemigroupDef}[def]{3,6}}
+\end{tabproof}
+
+\section{Einheiten, Teilbarkeit, Irreduzibilität und Primelemente}
+
+\FormulaDefDeltaK[Einheit eines Monoids]{%
+  \MonoidUnit{A,\star,e}{u}%
+}{MonoidUnitDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaPrem{Monoid}{\MonoidAlg{A}{\star}{e}}
+  \DeltaRow{Träger}{u\in A}
+  \DeltaRow{Inverses Element}{%
+    \exists v\in A\,(u\star v=e\land v\star u=e)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Einheit}{\MonoidUnit{A,\star,e}{u}}
+}
+
+\FormulaThmDeltaK[Einheiten einer Potenzhalbgruppe]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{A}{\star}{e}\dsep X\in\PowNE A\vdash{}\\[-2pt]
+    &\MonoidUnit{\PowNE A,\star_{\mathcal P},\{e\}}{X}
+      \leftrightarrow
+      \exists u\in A\,\bigl(
+        X=\{u\}\land\MonoidUnit{A,\star,e}{u}
+      \bigr)
+  \end{aligned}%
+}{PowerMonoidUnitCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep X\dsep Y\dsep u\dsep v\dsep
+    x\dsep x'\dsep y\dsep y'}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begin{proof}
+Sei zunächst \(X\) eine Einheit.  Nach
+\FormulaRefAuto{MonoidUnitDef}[def] gibt es ein \(Y\in\PowNE A\) mit
+\[
+  X\star_{\mathcal P}Y=\{e\}
+  =Y\star_{\mathcal P}X.
+\]
+Wähle \(x,x'\in X\) und \(y\in Y\).  Dann gilt
+\(x\star y=x'\star y=e\) sowie
+\(y\star x=y\star x'=e\).  Mit den Monoidgesetzen folgt
+\[
+  x'=x'\star e
+     =x'\star(y\star x)
+     =(x'\star y)\star x
+     =e\star x=x.
+\]
+Also ist \(X=\{u\}\) für ein \(u\in A\).  Für \(y,y'\in Y\) und
+\(x\in X\) gilt ebenso
+\[
+  y'=e\star y'
+     =(y\star x)\star y'
+     =y\star(x\star y')
+     =y\star e=y.
+\]
+Somit ist \(Y=\{v\}\) für ein \(v\in A\).  Die Produktgleichungen ergeben
+\(u\star v=e=v\star u\), also ist \(u\) eine Einheit von \(A\).
+
+Umgekehrt sei \(X=\{u\}\) und \(u\) eine Einheit von \(A\).  Für ein
+inverses Element \(v\in A\) gilt
+\[
+  \{u\}\star_{\mathcal P}\{v\}=\{e\}
+  =\{v\}\star_{\mathcal P}\{u\}.
+\]
+Nach \FormulaRefAuto{PowerSemigroupMonoid}[thm] ist
+\((\PowNE A,\star_{\mathcal P},\{e\})\) ein Monoid; die beiden
+Produktgleichungen erfüllen daher
+\FormulaRefAuto{MonoidUnitDef}[def].  Somit ist \(X\) eine Einheit der
+Potenzhalbgruppe.
+\end{proof}
+
+\FormulaThmDeltaK[Das neutrale Element ist eine Einheit]{%
+  \MonoidAlg{A}{\star}{e}
+  \vdash\MonoidUnit{A,\star,e}{e}%
+}{MonoidIdentityIsUnit}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep v}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproof}
+  \proofstep{1}{\MonoidAlg{A}{\star}{e}}{\rA}
+  \proofstep{1}{e\in A}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{1}}
+  \proofstep{1}{e\star e=e}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,2}}
+  \proofstep{1}{%
+    \exists v\in A\,(e\star v=e\land v\star e=e)}{%
+    \rEI{2,\rAIReuse{2}{3}}}
+  \proofstep{1}{\MonoidUnit{A,\star,e}{e}}{%
+    \FormulaRefAuto{MonoidUnitDef}[def]{1,2,4}}
+\end{tabproof}
+
+\paragraph{Beispiel.}
+Das neutrale Element muss nicht die einzige Einheit sein. Im additiven Monoid
+\((\mathbb Z,+,\IntZero)\) ist etwa \(\IntOne\) eine vom
+neutralen Element verschiedene Einheit. Ihr inverses Element ist
+\(-\IntOne\), denn nach \FormulaRefAuto{IntegerAddInverseAxiom}[ax] gilt
+\[
+  \IntOne+(-\IntOne)=\IntZero
+  \qquad\text{und}\qquad
+  (-\IntOne)+\IntOne=\IntZero.
+\]
+Dabei ist \(\IntOne\neq\IntZero\). Tatsächlich ist im additiven
+Monoid der ganzen Zahlen jede ganze Zahl eine Einheit.
+
+\FormulaDefDeltaK[Teilbarkeit in einem kommutativen Monoid]{%
+  \MonoidDivides{A,\star,e}{a}{b}%
+}{CommutativeMonoidDividesDef}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep e}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaPrem{Kommutatives Monoid}{%
+    \CommutativeMonoidAlg{A}{\star}{e}}
+  \DeltaRow{Elemente}{a,b\in A}
+  \DeltaRow{Quotient}{\exists c\in A\,(b=a\star c)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Teilbarkeit}{\MonoidDivides{A,\star,e}{a}{b}}
+}
+
+\FormulaThmDeltaK[Reflexivität der Teilbarkeit]{%
+  \CommutativeMonoidAlg{A}{\star}{e}\dsep a\in A
+  \vdash\MonoidDivides{A,\star,e}{a}{a}%
+}{CommutativeMonoidDividesReflexive}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep c\dsep e}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproof}
+  \proofstep{1}{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+  \proofstep{2}{a\in A}{\rA}
+  \proofstep{1}{\MonoidAlg{A}{\star}{e}}{%
+    \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{e\in A}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{3}}
+  \proofstep{1,2}{a\star e=a}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{3,2}}
+  \proofstep{1,2}{a=a\star e}{%
+    \FormulaRefAuto{a=b\vdash b=a}{5}}
+  \proofstep{1,2}{\exists c\in A\,(a=a\star c)}{%
+    \rEI{4,6}}
+  \proofstep{1,2}{\MonoidDivides{A,\star,e}{a}{a}}{%
+    \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{1,2,2,7}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Transitivität der Teilbarkeit]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidAlg{A}{\star}{e}\dsep a,b,c\in A\dsep
+      \MonoidDivides{A,\star,e}{a}{b}\dsep
+      \MonoidDivides{A,\star,e}{b}{c}\vdash{}\\[-2pt]
+    &\MonoidDivides{A,\star,e}{a}{c}
+  \end{aligned}
+}{CommutativeMonoidDividesTransitive}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep e\dsep r\dsep s}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Feste Teilbarkeitszeugen verknüpfen]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        a,b,c,r,s\in A\dsep b=a\star r\dsep c=b\star s\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{a}{c}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        a,b,c,r,s\in A\dsep b=a\star r\dsep c=b\star s\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{a}{c}
+    \end{aligned}
+  }[CommutativeMonoidDividesTransitiveFixedWitnesses]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{a\in A}{\rA}
+    \proofstepwidestar[3]{b\in A}{\rA}
+    \proofstepwidestar[4]{c\in A}{\rA}
+    \proofstepwidestar[5]{r\in A}{\rA}
+    \proofstepwidestar[6]{s\in A}{\rA}
+    \proofstepwidestar[7]{b=a\star r}{\rA}
+    \proofstepwidestar[8]{c=b\star s}{\rA}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{%
+      \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{9}}
+    \proofstepwidestar[1,5,6]{r\star s\in A}{%
+      \FormulaRefAuto{SemigroupClosureAxiom}[ax]{10,5,6}}
+    \proofstepwide[8]{c}{=}{b\star s}{\rA}
+    \proofstepwide[6,7]{}{=}{(a\star r)\star s}{\rIE{7}}
+    \proofstepwide[1,2,5,6]{}{=}{a\star(r\star s)}{%
+      \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{10,2,5,6}}
+    \proofstepwidestar[1,2,5,6,7,8]{c=a\star(r\star s)}{%
+      \rChain{12,14}}
+    \proofstepwidestar[1,2,5,6,7,8]{%
+      \exists r\in A\,(c=a\star r)}{\rEI{11,15}}
+    \proofstepwidestar[1,2,4,5,6,7,8]{%
+      \MonoidDivides{A,\star,e}{a}{c}}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{1,2,4,16}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Elimination der Teilbarkeitszeugen}
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{a\in A}{\rA}
+    \proofstepwidestar[3]{b\in A}{\rA}
+    \proofstepwidestar[4]{c\in A}{\rA}
+    \proofstepwidestar[5]{\MonoidDivides{A,\star,e}{a}{b}}{\rA}
+    \proofstepwidestar[6]{\MonoidDivides{A,\star,e}{b}{c}}{\rA}
+    \proofstepwidestar[5]{\exists r\in A\,(b=a\star r)}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{5}}
+    \proofstepwidestar[6]{\exists s\in A\,(c=b\star s)}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{6}}
+    \proofstepwidestar[9]{r\in A}{\rA}
+    \proofstepwidestar[10]{b=a\star r}{\rA}
+    \proofstepwidestar[11]{s\in A}{\rA}
+    \proofstepwidestar[12]{c=b\star s}{\rA}
+    \proofstepwidestar[1,2,3,4,9,10,11,12]{%
+      \MonoidDivides{A,\star,e}{a}{c}}{%
+      \FormulaRefAuto{CommutativeMonoidDividesTransitiveFixedWitnesses}[thm]{%
+        1,2,3,4,9,11,10,12}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \MonoidDivides{A,\star,e}{a}{c}}{%
+      \rEE{7,9,10,\rEE{8,11,12,13}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Einheiten sind genau die Teiler des neutralen Elements]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidAlg{A}{\star}{e}\dsep u\in A\vdash{}\\[-2pt]
+    &\MonoidUnit{A,\star,e}{u}
+      \leftrightarrow\MonoidDivides{A,\star,e}{u}{e}
+  \end{aligned}
+}{CommutativeMonoidUnitIffDividesIdentity}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v\dsep w}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Eine Einheit teilt das neutrale Element]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep u\in A\dsep
+        \MonoidUnit{A,\star,e}{u}\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{u}{e}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep u\in A\dsep
+        \MonoidUnit{A,\star,e}{u}\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{u}{e}
+    \end{aligned}
+  }[CommutativeMonoidUnitImpliesDividesIdentity]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{u\in A}{\rA}
+    \proofstepwidestar[3]{\MonoidUnit{A,\star,e}{u}}{\rA}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+    \proofstepwidestar[1]{e\in A}{%
+      \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{4}}
+    \proofstepwidestar[3]{%
+      \exists v\in A\,(u\star v=e\land v\star u=e)}{%
+      \FormulaRefAuto{MonoidUnitDef}[def]{3}}
+    \proofstepwidestar[7]{v\in A}{\rA}
+    \proofstepwidestar[8]{u\star v=e\land v\star u=e}{\rA}
+    \proofstepwidestar[8]{u\star v=e}{\rAEa{8}}
+    \proofstepwidestar[8]{e=u\star v}{%
+      \FormulaRefAuto{a=b\vdash b=a}{9}}
+    \proofstepwidestar[7,8]{\exists v\in A\,(e=u\star v)}{%
+      \rEI{7,10}}
+    \proofstepwidestar[1,2,7,8]{%
+      \MonoidDivides{A,\star,e}{u}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{1,2,5,11}}
+    \proofstepwidestar[1,2,3]{\MonoidDivides{A,\star,e}{u}{e}}{%
+      \rEE{6,7,8,12}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Ein Teiler des neutralen Elements ist eine Einheit]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep u\in A\dsep
+        \MonoidDivides{A,\star,e}{u}{e}\vdash{}\\[-2pt]
+      &\MonoidUnit{A,\star,e}{u}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep u\in A\dsep
+        \MonoidDivides{A,\star,e}{u}{e}\vdash{}\\[-2pt]
+      &\MonoidUnit{A,\star,e}{u}
+    \end{aligned}
+  }[CommutativeMonoidDividesIdentityImpliesUnit]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{u\in A}{\rA}
+    \proofstepwidestar[3]{\MonoidDivides{A,\star,e}{u}{e}}{\rA}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+    \proofstepwidestar[1]{e\in A}{%
+      \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{4}}
+    \proofstepwidestar[3]{\exists w\in A\,(e=u\star w)}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{3}}
+    \proofstepwidestar[7]{w\in A}{\rA}
+    \proofstepwidestar[8]{e=u\star w}{\rA}
+    \proofstepwidestar[8]{u\star w=e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
+    \proofstepwidestar[1,2,7]{w\star u=u\star w}{%
+      \FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,7,2}}
+    \proofstepwidestar[1,2,7,8]{w\star u=e}{\rChain{10,9}}
+    \proofstepwidestar[1,2,7,8]{%
+      \exists w\in A\,(u\star w=e\land w\star u=e)}{%
+      \rEI{7,\rAI{9,11}}}
+    \proofstepwidestar[1,2,7,8]{\MonoidUnit{A,\star,e}{u}}{%
+      \FormulaRefAuto{MonoidUnitDef}[def]{4,2,12}}
+    \proofstepwidestar[1,2,3]{\MonoidUnit{A,\star,e}{u}}{%
+      \rEE{6,7,8,13}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Zusammenführung der Richtungen}
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{u\in A}{\rA}
+    \proofstepwidestar[3]{\MonoidUnit{A,\star,e}{u}}{\rA}
+    \proofstepwidestar[1,2,3]{\MonoidDivides{A,\star,e}{u}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidUnitImpliesDividesIdentity}[thm]{1,2,3}}
+    \proofstepwidestar[1,2]{%
+      \MonoidUnit{A,\star,e}{u}\rightarrow
+      \MonoidDivides{A,\star,e}{u}{e}}{\rRI{3,4}}
+    \proofstepwidestar[6]{\MonoidDivides{A,\star,e}{u}{e}}{\rA}
+    \proofstepwidestar[1,2,6]{\MonoidUnit{A,\star,e}{u}}{%
+      \FormulaRefAuto{CommutativeMonoidDividesIdentityImpliesUnit}[thm]{1,2,6}}
+    \proofstepwidestar[1,2]{%
+      \MonoidDivides{A,\star,e}{u}{e}\rightarrow
+      \MonoidUnit{A,\star,e}{u}}{\rRI{6,7}}
+    \proofstepwidestar[1,2]{%
+      \MonoidUnit{A,\star,e}{u}
+      \leftrightarrow\MonoidDivides{A,\star,e}{u}{e}}{%
+      \rLRI{5,8}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaDefDeltaK[Irreduzibles Element eines kommutativen Monoids]{%
+  \MonoidIrreducible{A,\star,e}{p}%
+}{CommutativeMonoidIrreducibleDef}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep e\dsep p}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaPrem{Kommutatives Monoid}{%
+    \CommutativeMonoidAlg{A}{\star}{e}}
+  \DeltaRow{Element}{p\in A}
+  \DeltaRow{Keine Einheit}{\neg\MonoidUnit{A,\star,e}{p}}
+  \DeltaRow{Irreduzibilität}{%
+    \begin{aligned}[t]
+      &a,b\in A\dsep p=a\star b\vdash{}\\[-2pt]
+      &\MonoidUnit{A,\star,e}{a}\lor
+       \MonoidUnit{A,\star,e}{b}
+    \end{aligned}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Irreduzibles Element}{%
+    \MonoidIrreducible{A,\star,e}{p}}
+}
+
+\FormulaDefDeltaK[Primelement eines kommutativen Monoids]{%
+  \MonoidPrime{A,\star,e}{p}%
+}{CommutativeMonoidPrimeDef}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep e\dsep p}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaPrem{Kommutatives Monoid}{%
+    \CommutativeMonoidAlg{A}{\star}{e}}
+  \DeltaRow{Element}{p\in A}
+  \DeltaRow{Keine Einheit}{\neg\MonoidUnit{A,\star,e}{p}}
+  \DeltaRow{Primeigenschaft}{%
+    \begin{aligned}[t]
+      &a,b\in A\dsep
+        \MonoidDivides{A,\star,e}{p}{a\star b}\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{p}{a}\lor
+       \MonoidDivides{A,\star,e}{p}{b}
+    \end{aligned}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Primelement}{\MonoidPrime{A,\star,e}{p}}
+}
+
+\FormulaThmDeltaK[Ein geteilter Faktor erzwingt eine Einheit]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+      \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+      p,a,b\in A\dsep p=a\star b\dsep{}\\[-2pt]
+    &\MonoidDivides{A,\star,e}{p}{a}
+      \vdash\MonoidUnit{A,\star,e}{b}
+  \end{aligned}
+}{CommutativeCancellativeMonoidFactorDivisorUnit}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep e\dsep p}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Herstellung der Kürzungsgleichung]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        p,a,b,c\in A\dsep p=a\star b\dsep a=p\star c\vdash{}\\[-2pt]
+      &p\star e=p\star(c\star b)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        p,a,b,c\in A\dsep p=a\star b\dsep a=p\star c\vdash{}\\[-2pt]
+      &p\star e=p\star(c\star b)
+    \end{aligned}
+  }[CommutativeMonoidFactorDivisorCancellationEquation]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{p\in A}{\rA}
+    \proofstepwidestar[3]{a\in A}{\rA}
+    \proofstepwidestar[4]{b\in A}{\rA}
+    \proofstepwidestar[5]{c\in A}{\rA}
+    \proofstepwidestar[6]{p=a\star b}{\rA}
+    \proofstepwidestar[7]{a=p\star c}{\rA}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{%
+      \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{8}}
+    \proofstepwide[1,2]{p\star e}{=}{p}{%
+      \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{8,2}}
+    \proofstepwide[6]{}{=}{a\star b}{\rA}
+    \proofstepwide[4,7]{}{=}{(p\star c)\star b}{\rIE{7}}
+    \proofstepwide[1,2,4,5]{}{=}{p\star(c\star b)}{%
+      \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{9,2,5,4}}
+    \proofstepwidestar[1,2,4,5,6,7]{%
+      p\star e=p\star(c\star b)}{\rChain{10,13}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Kürzung und Gewinnung des Inversen]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+        p,b,c\in A\dsep{}\\[-2pt]
+      &p\star e=p\star(c\star b)
+        \vdash\MonoidUnit{A,\star,e}{b}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+        p,b,c\in A\dsep{}\\[-2pt]
+      &p\star e=p\star(c\star b)
+        \vdash\MonoidUnit{A,\star,e}{b}
+    \end{aligned}
+  }[CommutativeCancellativeMonoidCancellationEquationImpliesUnit]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}\!\left(A,\star\right)}{\rA}
+    \proofstepwidestar[3]{p\in A}{\rA}
+    \proofstepwidestar[4]{b\in A}{\rA}
+    \proofstepwidestar[5]{c\in A}{\rA}
+    \proofstepwidestar[6]{p\star e=p\star(c\star b)}{\rA}
+    \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+      \FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{%
+      \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{7}}
+    \proofstepwidestar[1]{e\in A}{%
+      \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{7}}
+    \proofstepwidestar[2]{\mathsf{LK\ddot{u}rz}\!\left(A,\star\right)}{%
+      \FormulaRefAuto{CancellativeLeftAxiom}[ax]{2}}
+    \proofstepwidestar[1,4,5]{c\star b\in A}{%
+      \FormulaRefAuto{SemigroupClosureAxiom}[ax]{8,5,4}}
+    \proofstepwidestar[1,2,3,4,5,6]{e=c\star b}{%
+      \FormulaRefAuto{LeftCancellationAxiom}[ax]{10,3,9,11,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{c\star b=e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{12}}
+    \proofstepwide[1,4,5]{b\star c}{=}{c\star b}{%
+      \FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,4,5}}
+    \proofstepwidestar[1,2,3,4,5,6]{b\star c=e}{%
+      \rChain{14,13}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      \exists c\in A\,(b\star c=e\land c\star b=e)}{%
+      \rEI{5,\rAI{15,13}}}
+    \proofstepwidestar[1,2,3,4,5,6]{\MonoidUnit{A,\star,e}{b}}{%
+      \FormulaRefAuto{MonoidUnitDef}[def]{7,4,16}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Elimination des Teilbarkeitszeugen}
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}\!\left(A,\star\right)}{\rA}
+    \proofstepwidestar[3]{p\in A}{\rA}
+    \proofstepwidestar[4]{a\in A}{\rA}
+    \proofstepwidestar[5]{b\in A}{\rA}
+    \proofstepwidestar[6]{p=a\star b}{\rA}
+    \proofstepwidestar[7]{\MonoidDivides{A,\star,e}{p}{a}}{\rA}
+    \proofstepwidestar[7]{\exists c\in A\,(a=p\star c)}{%
+      \FormulaRefAuto{CommutativeMonoidDividesDef}[def]{7}}
+    \proofstepwidestar[9]{c\in A}{\rA}
+    \proofstepwidestar[10]{a=p\star c}{\rA}
+    \proofstepwidestar[1,3,4,5,6,9,10]{p\star e=p\star(c\star b)}{%
+      \FormulaRefAuto{CommutativeMonoidFactorDivisorCancellationEquation}[thm]{%
+        1,3,4,5,9,6,10}}
+    \proofstepwidestar[1,2,3,4,5,6,9,10]{\MonoidUnit{A,\star,e}{b}}{%
+      \FormulaRefAuto{CommutativeCancellativeMonoidCancellationEquationImpliesUnit}[thm]{%
+        1,2,3,5,9,11}}
+    \proofstepwidestar[1,2,3,4,5,6,7]{\MonoidUnit{A,\star,e}{b}}{%
+      \rEE{8,9,10,12}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Primelemente in kommutativen kürzbaren Monoiden sind irreduzibel]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+      \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+      \MonoidPrime{A,\star,e}{p}\vdash{}\\[-2pt]
+    &\MonoidIrreducible{A,\star,e}{p}
+  \end{aligned}
+}{CommutativeCancellativeMonoidPrimeIsIrreducible}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep e\dsep p}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Teilerdisjunktion der Faktorisierung]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \MonoidPrime{A,\star,e}{p}\dsep{}\\[-2pt]
+      &a,b\in A\dsep p=a\star b\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{p}{a}\lor
+       \MonoidDivides{A,\star,e}{p}{b}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \MonoidPrime{A,\star,e}{p}\dsep{}\\[-2pt]
+      &a,b\in A\dsep p=a\star b\vdash{}\\[-2pt]
+      &\MonoidDivides{A,\star,e}{p}{a}\lor
+       \MonoidDivides{A,\star,e}{p}{b}
+    \end{aligned}
+  }[CommutativeMonoidPrimeFactorDivisorDisjunction]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{\MonoidPrime{A,\star,e}{p}}{\rA}
+    \proofstepwidestar[3]{a\in A}{\rA}
+    \proofstepwidestar[4]{b\in A}{\rA}
+    \proofstepwidestar[5]{p=a\star b}{\rA}
+    \proofstepwidestar[2]{p\in A}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeDef}[def]{2}}
+    \proofstepwidestar[1,2]{\MonoidDivides{A,\star,e}{p}{p}}{%
+      \FormulaRefAuto{CommutativeMonoidDividesReflexive}[thm]{1,6}}
+    \proofstepwidestar[1,2,5]{%
+      \MonoidDivides{A,\star,e}{p}{a\star b}}{\rIE{5}}
+    \proofstepwidestar[1,2,3,4,5]{%
+      \MonoidDivides{A,\star,e}{p}{a}\lor
+      \MonoidDivides{A,\star,e}{p}{b}}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeDef}[def]{2,3,4,8}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Von der Teilerdisjunktion zur Einheitendisjunktion]{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+        \MonoidPrime{A,\star,e}{p}\dsep a,b\in A\dsep{}\\[-2pt]
+      &p=a\star b\dsep
+        \bigl(\MonoidDivides{A,\star,e}{p}{a}\lor
+        \MonoidDivides{A,\star,e}{p}{b}\bigr)\vdash{}\\[-2pt]
+      &\MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\CommutativeMonoidAlg{A}{\star}{e}\dsep
+        \mathsf{K\ddot{u}rz}\!\left(A,\star\right)\dsep
+        \MonoidPrime{A,\star,e}{p}\dsep a,b\in A\dsep{}\\[-2pt]
+      &p=a\star b\dsep
+        \bigl(\MonoidDivides{A,\star,e}{p}{a}\lor
+        \MonoidDivides{A,\star,e}{p}{b}\bigr)\vdash{}\\[-2pt]
+      &\MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}
+    \end{aligned}
+  }[CommutativeCancellativeMonoidPrimeFactorUnitDisjunction]
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}\!\left(A,\star\right)}{\rA}
+    \proofstepwidestar[3]{\MonoidPrime{A,\star,e}{p}}{\rA}
+    \proofstepwidestar[4]{a\in A}{\rA}
+    \proofstepwidestar[5]{b\in A}{\rA}
+    \proofstepwidestar[6]{p=a\star b}{\rA}
+    \proofstepwidestar[7]{%
+      \MonoidDivides{A,\star,e}{p}{a}\lor
+      \MonoidDivides{A,\star,e}{p}{b}}{\rA}
+    \proofstepwidestar[3]{p\in A}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeDef}[def]{3}}
+    \proofstepwidestar[9]{\MonoidDivides{A,\star,e}{p}{a}}{\rA}
+    \proofstepwidestar[1,2,3,4,5,6,9]{\MonoidUnit{A,\star,e}{b}}{%
+      \FormulaRefAuto{CommutativeCancellativeMonoidFactorDivisorUnit}[thm]{%
+        1,2,8,4,5,6,9}}
+    \proofstepwidestar[1,2,3,4,5,6,9]{%
+      \MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}}{%
+      \rOIb{10}}
+    \proofstepwidestar[12]{\MonoidDivides{A,\star,e}{p}{b}}{\rA}
+    \proofstepwidestar[1,4,5]{a\star b=b\star a}{%
+      \FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,4,5}}
+    \proofstepwidestar[1,4,5,6]{p=b\star a}{\rChain{6,13}}
+    \proofstepwidestar[1,2,3,4,5,6,12]{\MonoidUnit{A,\star,e}{a}}{%
+      \FormulaRefAuto{CommutativeCancellativeMonoidFactorDivisorUnit}[thm]{%
+        1,2,8,5,4,14,12}}
+    \proofstepwidestar[1,2,3,4,5,6,12]{%
+      \MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}}{%
+      \rOIa{15}}
+    \proofstepwidestar[1,2,3,4,5,6,7]{%
+      \MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}}{%
+      \rOE{7,9,11,12,16}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Nachweis der Irreduzibilität}
+    \proofstepwidestar[1]{\CommutativeMonoidAlg{A}{\star}{e}}{\rA}
+    \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}\!\left(A,\star\right)}{\rA}
+    \proofstepwidestar[3]{\MonoidPrime{A,\star,e}{p}}{\rA}
+    \proofstepwidestar[3]{p\in A}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeDef}[def]{3}}
+    \proofstepwidestar[3]{\neg\MonoidUnit{A,\star,e}{p}}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeDef}[def]{3}}
+    \proofstepwidestar[6]{a\in A}{\rA}
+    \proofstepwidestar[7]{b\in A}{\rA}
+    \proofstepwidestar[8]{p=a\star b}{\rA}
+    \proofstepwidestar[1,3,6,7,8]{%
+      \MonoidDivides{A,\star,e}{p}{a}\lor
+      \MonoidDivides{A,\star,e}{p}{b}}{%
+      \FormulaRefAuto{CommutativeMonoidPrimeFactorDivisorDisjunction}[thm]{%
+        1,3,6,7,8}}
+    \proofstepwidestar[1,2,3,6,7,8]{%
+      \MonoidUnit{A,\star,e}{a}\lor\MonoidUnit{A,\star,e}{b}}{%
+      \FormulaRefAuto{CommutativeCancellativeMonoidPrimeFactorUnitDisjunction}[thm]{%
+        1,2,3,6,7,8,9}}
+    \proofstepwidestar[1,2,3]{\MonoidIrreducible{A,\star,e}{p}}{%
+      \FormulaRefAuto{CommutativeMonoidIrreducibleDef}[def]{%
+        1,4,5,6,7,8,10}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\section{Morphismen von Monoiden}
+
+\FormulaDefDeltaK[Begriff des Monoidhomomorphismus]{%
+  \MonoidHom{f}{A,\star,e}{B,\diamond,u}%
+}{MonoidHomDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Quellmonoid}{\MonoidAlg{A}{\star}{e}}
+  \DeltaPrem{Zielmonoid}{\MonoidAlg{B}{\diamond}{u}}
+  \DeltaPrem{Halbgruppenhomomorphismus}{%
+    \SemigroupHom{f}{A,\star}{B,\diamond}}
+  \DeltaRow{Erhaltung des neutralen Elements}{f(e)=u}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Monoidhomomorphismus}{%
+    \MonoidHom{f}{A,\star,e}{B,\diamond,u}}
+}
+
+\FormulaAxiomDeltaK[Operationserhaltung eines Monoidhomomorphismus]{%
+  \MonoidHom{f}{A,\star,e}{B,\diamond,u}\dsep x,y\in A
+  \vdash f(x\star y)=f(x)\diamond f(y)%
+}{MonoidHomOperationAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaAxiomDeltaK[Erhaltung des neutralen Elements]{%
+  \MonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash f(e)=u%
+}{MonoidHomIdentityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaDefDeltaK[Begriff des Monoidisomorphismus]{%
+  \MonoidIso{f}{A,\star,e}{B,\diamond,u}%
+}{MonoidIsoDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Monoidhomomorphismus}{%
+    \MonoidHom{f}{A,\star,e}{B,\diamond,u}}
+  \DeltaPrem{Bijektivität}{f\colon A\bij B}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Monoidisomorphismus}{%
+    \MonoidIso{f}{A,\star,e}{B,\diamond,u}}
+}
+
+\subsection{Grundlegende Eigenschaften}
+
+\FormulaThmDeltaK[Komposition von Monoidhomomorphismen]{%
+  \begin{aligned}[t]
+    &\MonoidHom{f}{A,\star,e}{B,\diamond,u}\dsep
+      \MonoidHom{g}{B,\diamond,u}{C,\bullet,v}\\
+    &\vdash\MonoidHom{g\circ f}{A,\star,e}{C,\bullet,v}
+  \end{aligned}
+}{MonoidHomComposition}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{f\dsep g\dsep\star\dsep\diamond\dsep\bullet}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\MonoidHom{f}{A,\star,e}{B,\diamond,u}}{\rA}
+  \proofstepwidestar[2]{\MonoidHom{g}{B,\diamond,u}{C,\bullet,v}}{\rA}
+  \proofstepwidestar[1]{\SemigroupHom{f}{A,\star}{B,\diamond}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{1}}
+  \proofstepwidestar[2]{\SemigroupHom{g}{B,\diamond}{C,\bullet}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \SemigroupHom{g\circ f}{A,\star}{C,\bullet}}{%
+    \FormulaRefAuto{SemigroupHomComposition}[thm]{3,4}}
+  \proofstepwidestar[1]{f(e)=u}{%
+    \FormulaRefAuto{MonoidHomIdentityAxiom}[ax]{1}}
+  \proofstepwidestar[2]{g(u)=v}{%
+    \FormulaRefAuto{MonoidHomIdentityAxiom}[ax]{2}}
+  \proofstepwidestar[1]{\MonoidAlg{A}{\star}{e}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{1}}
+  \proofstepwidestar[1]{e\in A}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{8}}
+  \proofstepwidestar[1]{f\colon A\to B}{%
+    \FormulaRefAuto{SemigroupHomFunctionAxiom}[ax]{3}}
+  \proofstepwidestar[2]{g\colon B\to C}{%
+    \FormulaRefAuto{SemigroupHomFunctionAxiom}[ax]{4}}
+  \proofstepwide[1,2]{(g\circ f)(e)}{=}{g(f(e))}{%
+    \FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}{%
+      10,11,9}}
+  \proofstepwide[1,2]{}{=}{g(u)}{\rIE{6}}
+  \proofstepwide[1,2]{}{=}{v}{\rIE{7}}
+  \proofstepwidestar[1,2]{(g\circ f)(e)=v}{\rChain{12,14}}
+  \proofstepwidestar[2]{\MonoidAlg{C}{\bullet}{v}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{2}}
+  \proofstepwidestar[1,2]{%
+    \MonoidHom{g\circ f}{A,\star,e}{C,\bullet,v}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{8,16,5,15}}
+\end{tabproofwide}
+
+\subsection{Kommutative Homomorphismen und Isomorphismen}
+
+\FormulaDefDeltaK[Homomorphismen kommutativer Monoide]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}\\[-2pt]
+    &\quad\coloneqq
+      \CommutativeMonoidAlg{A}{\star}{e}\land
+      \CommutativeMonoidAlg{B}{\diamond}{u}\\[-2pt]
+    &\qquad\land\MonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \end{aligned}
+}{CommutativeMonoidHomDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+  \DeltaRow{Operationserhaltung}{f(x\star y)=f(x)\diamond f(y)}
+  \DeltaRow{Erhaltung des Neutralen}{f(e)=u}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Symbol}{\mathsf{KMonHom}}
+}
+
+\FormulaAxiomDeltaK[Quellstruktur eines Homomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidAlg{A}{\star}{e}%
+}{CommutativeMonoidHomSourceAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaAxiomDeltaK[Zielstruktur eines Homomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidAlg{B}{\diamond}{u}%
+}{CommutativeMonoidHomTargetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaAxiomDeltaK[Monoidhomomorphismus eines kommutativen Homomorphismus]{%
+  \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+  \vdash\MonoidHom{f}{A,\star,e}{B,\diamond,u}%
+}{CommutativeMonoidHomBaseHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaDefDeltaK[Isomorphismen kommutativer Monoide]{%
+  \begin{aligned}[t]
+    &\CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}\\[-2pt]
+    &\quad\coloneqq
+      \CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}
+      \land f\colon A\bij B
+  \end{aligned}
+}{CommutativeMonoidIsoDef}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Isomorphismus kommutativer Monoide}{\mathsf{KMonIso}}
+}
+
+\FormulaAxiomDeltaK[Homomorphismus eines Isomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}
+  \vdash\CommutativeMonoidHom{f}{A,\star,e}{B,\diamond,u}%
+}{CommutativeMonoidIsoHomAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\FormulaAxiomDeltaK[Bijektivität eines Isomorphismus kommutativer Monoide]{%
+  \CommutativeMonoidIso{f}{A,\star,e}{B,\diamond,u}
+  \vdash f\colon A\bij B%
+}{CommutativeMonoidIsoBijectiveAxiom}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep\diamond}
+}
+
+\chapter{Beispiele von Monoiden}
+
+\section{Die natürlichen Zahlen}
+
+\FormulaThmDeltaK[Die Addition bildet ein Monoid]{%
+  \MonoidAlg{\mathbb{N}}{+}{0}%
+}{NaturalAdditionMonoid}{%
+  \DeltaRow{Mengen}{\mathbb{N}\dsep 0\dsep a}
+}
+\begin{tabproof}
+  \proofstep{}{\SemigroupAlg{\mathbb{N}}{+}}{%
+    \FormulaRefAuto{NaturalAdditionSemigroup}[thm]}
+  \proofstep{}{0\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoZero}[ax]}
+  \proofstep{3}{a\in\mathbb{N}}{\rA}
+  \proofstep{3}{0+a=a}{%
+    \FormulaRefAuto{PeanoAddLeftZero}[thm]{3}}
+  \proofstep{3}{a+0=a}{%
+    \FormulaRefAuto{PeanoAddRightZero}[thm]{3}}
+  \proofstep{}{\MonoidAlg{\mathbb{N}}{+}{0}}{%
+    \FormulaRefAuto{MonoidDef}[def]{1,2,4,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Addition bildet ein kommutatives Monoid]{%
+  \CommutativeMonoidAlg{\mathbb{N}}{+}{0}%
+}{NaturalAdditiveCommutativeMonoid}{%
+  \DeltaRow{Mengen}{\mathbb{N}\dsep 0\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{}{\MonoidAlg{\mathbb{N}}{+}{0}}{%
+    \FormulaRefAuto{NaturalAdditionMonoid}[thm]}
+  \proofstep{2}{a\in\mathbb{N}}{\rA}
+  \proofstep{3}{b\in\mathbb{N}}{\rA}
+  \proofstep{2,3}{a+b=b+a}{%
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{2,3}}
+  \proofstep{}{\CommutativeMonoidAlg{\mathbb{N}}{+}{0}}{%
+    \FormulaRefAuto{CommutativeMonoidDef}[def]{1,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Multiplikation bildet ein Monoid]{%
+  \MonoidAlg{\mathbb{N}}{\cdot}{1}%
+}{NaturalMultiplicationMonoid}{%
+  \DeltaRow{Mengen}{\mathbb{N}\dsep 1\dsep a}
+}
+\begin{tabproof}
+  \proofstep{}{\SemigroupAlg{\mathbb{N}}{\cdot}}{%
+    \FormulaRefAuto{NaturalMultiplicationSemigroup}[thm]}
+  \proofstep{}{1\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{3}{a\in\mathbb{N}}{\rA}
+  \proofstep{3}{1\cdot a=a}{%
+    \FormulaRefAuto{PeanoMulLeftOne}[thm]{3}}
+  \proofstep{3}{a\cdot1=a}{%
+    \FormulaRefAuto{PeanoMulRightOne}[thm]{3}}
+  \proofstep{}{\MonoidAlg{\mathbb{N}}{\cdot}{1}}{%
+    \FormulaRefAuto{MonoidDef}[def]{1,2,4,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Multiplikation bildet ein kommutatives Monoid]{%
+  \CommutativeMonoidAlg{\mathbb{N}}{\cdot}{1}%
+}{NaturalMultiplicativeCommutativeMonoid}{%
+  \DeltaRow{Mengen}{\mathbb{N}\dsep 1\dsep a\dsep b}
+}
+\begin{tabproof}
+  \proofstep{}{\MonoidAlg{\mathbb{N}}{\cdot}{1}}{%
+    \FormulaRefAuto{NaturalMultiplicationMonoid}[thm]}
+  \proofstep{2}{a\in\mathbb{N}}{\rA}
+  \proofstep{3}{b\in\mathbb{N}}{\rA}
+  \proofstep{2,3}{a\cdot b=b\cdot a}{%
+    \FormulaRefAuto{PeanoMulCommutative}[thm]{2,3}}
+  \proofstep{}{\CommutativeMonoidAlg{\mathbb{N}}{\cdot}{1}}{%
+    \FormulaRefAuto{CommutativeMonoidDef}[def]{1,4}}
+\end{tabproof}
+
+\end{document}

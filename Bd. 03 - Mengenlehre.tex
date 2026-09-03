@@ -2237,6 +2237,22 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
 
 \section{Grundlegende Eigenschaften}
 
+\FormulaThmDeltaK[Drei Elemente einer Zweiermenge]{%
+  a,b,c\in\{x,y\}\vdash a=b\lor a=c\lor b=c%
+}{ThreeElementsInPair}{%
+  \DeltaRow{Mengen}{a\dsep b\dsep c\dsep x\dsep y}
+}
+\begin{proof}
+Nach \FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}[thm]
+ist jedes der drei Elemente gleich \(x\) oder gleich \(y\).
+Falls \(a=b\) oder \(a=c\), gilt die Behauptung bereits.
+Andernfalls sind \(b\) und \(c\) beide von \(a\) verschieden.
+Ist \(a=x\), so können weder \(b\) noch \(c\) gleich \(x\) sein;
+das Elementkriterium liefert \(b=y=c\), also \(b=c\).
+Ist \(a=y\), liefert dasselbe Argument \(b=x=c\) und wiederum \(b=c\).
+Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
+\end{proof}
+
 \FormulaThmDeltaK[Nichtzugehörigkeit zu einer Zweiermenge]{%
   x\notin\{a,b\}\eqvdash x\neq a\land x\neq b%
 }{NotInPairSet}{%
@@ -5549,6 +5565,70 @@ liefern sie daher die kanonische Bijektion
       \proofstep{1,2}{(a,b)\in A\times B}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{3}}
 \end{tabproof}
 
+\FormulaThmDeltaK[Monotonie des kartesischen Produkts in der ersten Komponente]{%
+  A\subseteq A'\vdash A\times B\subseteq A'\times B%
+}{CartesianProductMonotoneLeft}{%
+  \DeltaRow{Mengen}{A\dsep A'\dsep B\dsep a\dsep b\dsep z}%
+}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq A'}{\rA}
+  \proofstep{2}{z\in A\times B}{\rA}
+  \proofstep{2}{\exists a\in A\,\exists b\in B\,(z=(a,b))}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash
+      \exists a\in A\,\exists b\in B\,x=(a,b)}[thm]{2}}
+  \proofstep{4}{a\in A\land b\in B\land z=(a,b)}{\rA}
+  \proofstep{4}{a\in A}{\rAEa{4}}
+  \proofstep{4}{b\in B}{%
+    \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{4}}
+  \proofstep{4}{z=(a,b)}{%
+    \FormulaRefAuto{P\land Q\land R\vdash R}[thm]{4}}
+  \proofstep{1,4}{a\in A'}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,5}}
+  \proofstep{1,4}{(a,b)\in A'\times B}{%
+    \FormulaRefAuto{a\in A\dsep b\in B
+      \vdash(a,b)\in A\times B}[thm]{8,6}}
+  \proofstep{1,4}{z\in A'\times B}{\rIE{7,9}}
+  \proofstep{1,2}{z\in A'\times B}{\rEE{3,4,10}}
+  \proofstep{1}{%
+    \forall z\,(z\in A\times B\rightarrow z\in A'\times B)}{%
+    \rUI{\rRI{2,11}}}
+  \proofstep{1}{A\times B\subseteq A'\times B}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{12}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Monotonie des kartesischen Produkts in der zweiten Komponente]{%
+  B\subseteq B'\vdash A\times B\subseteq A\times B'%
+}{CartesianProductMonotoneRight}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep B'\dsep a\dsep b\dsep z}%
+}
+\begin{tabproof}
+  \proofstep{1}{B\subseteq B'}{\rA}
+  \proofstep{2}{z\in A\times B}{\rA}
+  \proofstep{2}{\exists a\in A\,\exists b\in B\,(z=(a,b))}{%
+    \FormulaRefAuto{x\in A\times B\eqvdash
+      \exists a\in A\,\exists b\in B\,x=(a,b)}[thm]{2}}
+  \proofstep{4}{a\in A\land b\in B\land z=(a,b)}{\rA}
+  \proofstep{4}{a\in A}{\rAEa{4}}
+  \proofstep{4}{b\in B}{%
+    \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{4}}
+  \proofstep{4}{z=(a,b)}{%
+    \FormulaRefAuto{P\land Q\land R\vdash R}[thm]{4}}
+  \proofstep{1,4}{b\in B'}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,6}}
+  \proofstep{1,4}{(a,b)\in A\times B'}{%
+    \FormulaRefAuto{a\in A\dsep b\in B
+      \vdash(a,b)\in A\times B}[thm]{5,8}}
+  \proofstep{1,4}{z\in A\times B'}{\rIE{7,9}}
+  \proofstep{1,2}{z\in A\times B'}{\rEE{3,4,10}}
+  \proofstep{1}{%
+    \forall z\,(z\in A\times B\rightarrow z\in A\times B')}{%
+    \rUI{\rRI{2,11}}}
+  \proofstep{1}{A\times B\subseteq A\times B'}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{12}}
+\end{tabproof}
+
 \subsubsection{Getaggte Familien}
 
 Sollen mehrere indizierte Familien gleichzeitig verwendet werden, müssen
@@ -5917,6 +5997,22 @@ erforderlich.
 \DeltaRow{Mengen}{A\dsep B\dsep F}
 }
 
+Ein Graph wird zunächst nur als Trägermenge zusammen mit einer binären
+Relation auf diesem Träger erfasst.  Die Relation verwendet geordnete Paare;
+Schleifen sind erlaubt, Mehrfachkanten werden durch die Mengendarstellung
+ausgeschlossen.  Orientierung, Symmetrie und weitere Strukturaxiome werden
+in den späteren graphentheoretischen Bänden getrennt eingeführt.
+
+\FormulaDefDeltaK[Graph]{%
+  \GraphStruct{V,E}\coloneqq E\subseteq V\times V%
+}{GraphDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep u\dsep v}
+  \DeltaRow{\textbf{Axiom}}{}
+  \DeltaRow{Kantenrelation}{E\subseteq V\times V}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+}
+
 \section{Binäre Operatoren}
 
 Ein binärer Operator auf einem Träger \(A\) ordnet je zwei Elementen von
@@ -5978,6 +6074,46 @@ sagt, dass die Formel jedem \(x\in A\) genau ein \(y\) zuordnet; seine
 Konklusion sammelt genau diese \(y\) in einer Menge. Das Wort
 „Funktionswert“ ist dafür weder nötig noch an dieser Stelle bereits
 definiert.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutige Existenz einer durch Terme beschriebenen Bildmenge]{%
+  \exists!X\,\forall x\,\Bigl(
+    x\in X\leftrightarrow
+    \exists j\,(j\in J\land x=t(j))\Bigr)%
+}{TermImageSetUniqueExists}{%
+  \DeltaRow{Mengen}{J\dsep X\dsep j\dsep x\dsep y}
+  \DeltaRow{Mengenterm}{t(j)}
+}
+\end{minipage}\par
+Hier steht \(t(j)\) für einen Mengenterm mit beliebigen festen
+Mengenparametern; \(X,x,y\) kommen darin nicht frei vor. Die Schreibweise
+bezeichnet ein Termschema und setzt keinen Funktionsgraphen voraus.
+\begin{tabproofwide}
+  \proofstepwidestar[1]{j\in J}{\rA}
+  \proofstepwidestar[]{t(j)=t(j)}{\rII}
+  \proofstepwidestar[]{\exists x\,(x=t(j))}{\rEI{2}}
+  \proofstepwidestar[4]{x=t(j)}{\rA}
+  \proofstepwidestar[5]{y=t(j)}{\rA}
+  \proofstepwidestar[4,5]{x=y}{%
+    \FormulaRefAuto{a = b,\, c = b\vdash a = c}[thm]{4,5}}
+  \proofstepwidestar[1]{\exists!x\,(x=t(j))}{\UEI{3,4,5,6}}
+  \proofstepwidestar[]{\forall j\in J\,\exists!x\,(x=t(j))}{%
+    \rUI{\rRI{1,7}}}
+  \proofstepwidestar[]{%
+    \exists X\,\forall x\,\Bigl(
+      x\in X\leftrightarrow
+      \exists j\,(j\in J\land x=t(j))\Bigr)}{%
+    \FormulaRefAuto{ReplacementSchema}[ax]{8}}
+  \proofstepwidestar[]{%
+    \exists!X\,\forall x\,\Bigl(
+      x\in X\leftrightarrow
+      \exists j\,(j\in J\land x=t(j))\Bigr)}{%
+    \FormulaRefAuto{%
+      \exists A\bigl(\forall x\,(x\in A\leftrightarrow P(x))\bigr)
+      \vdash
+      \exists! A\bigl(\forall x\,(x\in A\leftrightarrow P(x))\bigr)%
+    }[thm]{9}}
+\end{tabproofwide}
 
 \section{Auswahlaxiom}
 

@@ -31,14 +31,50 @@ The generated root-level `main.pdf` and normal LaTeX auxiliary files are local
 build products and are ignored by Git. Curated per-volume PDF snapshots under
 `output/pdf/` are intentionally versioned for readers.
 
+## Rebuild every PDF / Alle PDFs neu bauen
+
+For all 43 standalone volumes, the reMarkable edition, and the complete
+manuscript, run:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-all.ps1
+```
+
+This builds the volumes in dependency order, audits their result registries,
+and publishes the PDFs under `output/pdf/`. Python with `pypdf` is required
+for publication; pass `-Python /path/to/python` to select its interpreter.
+The publication step updates external PDF links to the visible neighbouring
+filenames and verifies that every linked result destination exists.
+
+Der Gesamtlauf baut alle Einzelbände, die reMarkable-Ausgabe und den Gesamtband.
+Jeder Band wird nach seinem Build geprüft. Der Gesamtband verwendet eigene
+Registries unter `registry/main/`; dadurch überschreibt er keine
+Einzelbandindizes. Die Resultatnummern müssen in beiden Ausgaben übereinstimmen.
+
+A stopped standalone build can resume at the first unfinished volume, for
+example with `-From B21`. If an earlier source changes, resume at that earlier
+volume so all subsequent references are rebuilt. To build only a range before
+the full publication step, use:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-all.ps1 -From B03 -To B20 -SkipMain -SkipRemarkable -SkipPublish
+```
+
+Existing build products can also be audited without recompiling:
+
+```powershell
+pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain -IncludeRemarkable
+python ./scripts/publish-pdfs.py --audit-only
+```
+
 ## Standalone volumes / Einzelbände
 
 The root-level `latexmkrc` reads the dependency graph from
 [`band-dependencies.tsv`](band-dependencies.tsv). For example, with
-`Bd. 37 - Frankls Vermutung.tex` selected as the main file, run:
+`Bd. 42 - Frankls Vermutung.tex` selected as the main file, run:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 37 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 42 - Frankls Vermutung.tex"
 ```
 
 The configuration builds the required predecessors topologically into
@@ -48,17 +84,17 @@ given at least one LuaLaTeX run even when artifacts already exist.
 
 The explicit source-to-registry mapping is intentional. Visible filenames
 follow the document titles, while internal identifiers remain `B01` through
-`B38`.
+`B43`.
 
 ### Audited PowerShell build
 
 For a clean standalone build with the full reference audit, use:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B37
+pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B42
 ```
 
-Valid targets are `B01` through `B38`; omitting `-Target` keeps `B03` as the
+Valid targets are `B01` through `B43`; omitting `-Target` keeps `B03` as the
 default. On Windows PowerShell 5.1, replace `pwsh` with `powershell` and add
 `-ExecutionPolicy Bypass` if required.
 
@@ -90,7 +126,7 @@ for transitive predecessor order and the mapping from visible TeX filenames to
 registry job names. It is read by TeX/Lua, `latexmkrc`, and the PowerShell build
 script.
 
-Most volumes follow the main chain. Volume B38 deliberately opens an analytic
+Most volumes follow the main chain. Volume B43 deliberately opens an analytic
 branch and depends only on B01 through B21. Later specialist volumes may use
 examples of structures introduced earlier, while general constructions remain
 in the earliest volume that can define them without a dependency cycle.
@@ -139,8 +175,8 @@ rather than using stale predecessor artifacts.
 
 Each active volume sets `pdftitle` and `pdfauthor` in its standalone preamble.
 This lets document managers use the PDF title even when the generated filename
-changes. For a new public snapshot, rebuild the relevant volume before copying
-its PDF to `output/pdf/`.
+changes. For a new public snapshot, rebuild the relevant volumes and use
+`scripts/publish-pdfs.py` to publish them with updated external PDF targets.
 
 ## Generated files
 
