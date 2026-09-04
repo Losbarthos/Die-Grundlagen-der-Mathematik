@@ -77,8 +77,55 @@ einem späteren Band ohne begrifflichen Zirkel eingeführt werden.
 \section{Schnittprädikat und Trägermenge}
 
 \FormulaDefDeltaK[Dedekindscher Schnitt der rationalen Zahlen]{%
+  \RealCut{A}%
+}{DedekindCutPredicate}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+  \DeltaRow{Relationsoperatoren}{<}
+  \DeltaPrem{Geordneter rationaler Körper}{\mathbb Q}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Rationale Teilmenge}{A\subseteq\mathbb Q}
+  \DeltaPrem{Nichtleerheit}{A\neq\varnothing}
+  \DeltaPrem{Echtheit}{A\neq\mathbb Q}
+  \DeltaRow{Nach unten abgeschlossen}{%
+    p\in A\dsep q\in\mathbb Q\dsep q<p\vdash q\in A}
+  \DeltaRow{Kein größtes Element}{p\in A\vdash\exists r\in A\,(p<r)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Schnittprädikat}{\RealCut{A}}
+}
+
+\FormulaAxiomDeltaK[Rationale Trägermenge]{%
+  \RealCut{A}\vdash A\subseteq\mathbb Q%
+}{DedekindCutSubsetAxiom}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+}
+
+\FormulaAxiomDeltaK[Nichtleerheit]{%
+  \RealCut{A}\vdash A\neq\varnothing%
+}{DedekindCutNonemptyAxiom}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+}
+
+\FormulaAxiomDeltaK[Echter Schnitt]{%
+  \RealCut{A}\vdash A\neq\mathbb Q%
+}{DedekindCutProperAxiom}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+}
+
+\FormulaAxiomDeltaK[Abwärtsabgeschlossenheit]{%
+  \RealCut{A}\vdash \forall p\in A\,\forall q\in\mathbb Q\,(q<p\rightarrow q\in A)%
+}{DedekindCutDownwardAxiom}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+}
+
+\FormulaAxiomDeltaK[Kein größtes Element]{%
+  \RealCut{A}\vdash \forall p\in A\,\exists r\in A\,(p<r)%
+}{DedekindCutNoMaximumAxiom}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+}
+
+\FormulaThmDeltaK[Schnittkriterium]{%
   \begin{aligned}[t]
-  \RealCut{A}\coloneqq{}&
+  \RealCut{A}\eqvdash{}&
     A\subseteq\mathbb Q\land A\neq\varnothing\land A\neq\mathbb Q
     \land{}\\[-2pt]
   &\forall p\in A\,\forall q\in\mathbb Q\,
@@ -86,21 +133,49 @@ einem späteren Band ohne begrifflichen Zirkel eingeführt werden.
     \land{}\\[-2pt]
   &\forall p\in A\,\exists r\in A\,(p<r).
   \end{aligned}%
-}{DedekindCutPredicate}{%
-  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}%
-  \DeltaRow{Relationsoperatoren}{<}%
-  \DeltaPrem{Geordneter rationaler Körper}{\mathbb Q}%
-  \DeltaRow{\textbf{Bedingungen}}{}%
-  \DeltaRow{Nichtleer und echt}{A\neq\varnothing\dsep A\neq\mathbb Q}%
-  \DeltaRow{Nach unten abgeschlossen}
-    {p\in A\dsep q\in\mathbb Q\dsep q<p\vdash q\in A}%
-  \DeltaRow{Kein größtes Element}
-    {p\in A\vdash\exists r\in A\,(p<r)}%
-  \DeltaRow{\textbf{Neues Symbol}}{}%
-  \DeltaRow{Schnittprädikat}{\RealCut{\,\cdot\,}}%
+}{DedekindCutCharacterization}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep q\dsep r}
+  \DeltaRow{Relationsoperatoren}{<}
 }
+\begin{tabproofsplitwide}
+  \proofpartwide{Hinrichtung}
+    \proofstepwidestar[1]{\RealCut{A}}{\rA}
+    \proofstepwidestar[1]{A\subseteq\mathbb Q}{%
+      \FormulaRefAuto{DedekindCutSubsetAxiom}[ax]{1}}
+    \proofstepwidestar[1]{A\neq\varnothing}{%
+      \FormulaRefAuto{DedekindCutNonemptyAxiom}[ax]{1}}
+    \proofstepwidestar[1]{A\neq\mathbb Q}{%
+      \FormulaRefAuto{DedekindCutProperAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\forall p\in A\,\forall q\in\mathbb Q\,(q<p\rightarrow q\in A)}{%
+      \FormulaRefAuto{DedekindCutDownwardAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\forall p\in A\,\exists r\in A\,(p<r)}{%
+      \FormulaRefAuto{DedekindCutNoMaximumAxiom}[ax]{1}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+      &A\subseteq\mathbb Q\land A\neq\varnothing\land A\neq\mathbb Q\land{}\\[-2pt]
+      &\forall p\in A\,\forall q\in\mathbb Q\,(q<p\rightarrow q\in A)\land{}\\[-2pt]
+      &\forall p\in A\,\exists r\in A\,(p<r)
+    \end{aligned}}{\rAIStar{2,3,4,5,6}}
+  \closeproofpartwide
 
-Die vier Bedingungen sind unabhängig voneinander wichtig. Die
+  \proofpartwide{Rückrichtung}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+      &A\subseteq\mathbb Q\land A\neq\varnothing\land A\neq\mathbb Q\land{}\\[-2pt]
+      &\forall p\in A\,\forall q\in\mathbb Q\,(q<p\rightarrow q\in A)\land{}\\[-2pt]
+      &\forall p\in A\,\exists r\in A\,(p<r)
+    \end{aligned}}{\rA}
+    \proofstepwidestar[1]{A\subseteq\mathbb Q}{\rAEa{1}}
+    \proofstepwidestar[1]{A\neq\varnothing}{\rAEa{\rAEb{1}}}
+    \proofstepwidestar[1]{A\neq\mathbb Q}{\rAEa{\rAEb{\rAEb{1}}}}
+    \proofstepwidestar[1]{\forall p\in A\,\forall q\in\mathbb Q\,(q<p\rightarrow q\in A)}{\rAEa{\rAEb{\rAEb{\rAEb{1}}}}}
+    \proofstepwidestar[1]{\forall p\in A\,\exists r\in A\,(p<r)}{\rAEb{\rAEb{\rAEb{\rAEb{1}}}}}
+    \proofstepwidestar[1]{\RealCut{A}}{%
+      \FormulaRefAuto{DedekindCutPredicate}[def]{2,3,4,5,6}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Neben der rationalen Typisierung sind die vier Schnittbedingungen wesentlich. Die
 Abwärtsabgeschlossenheit macht einen Schnitt zu einem rationalen
 Anfangsabschnitt; die letzte Bedingung entfernt die ansonsten mögliche
 Mehrdeutigkeit am Rand eines rationalen Anfangsabschnitts.
@@ -135,7 +210,7 @@ Mehrdeutigkeit am Rand eines rationalen Anfangsabschnitts.
   \proofpartwide{Rückrichtung}
     \proofstepwidestar[1]{\RealCut A}{\rA}
     \proofstepwidestar[1]{A\subseteq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{1}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{1}}
     \proofstepwidestar[1]{A\in\powerset(\mathbb Q)}{%
       \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}{2}}
     \proofstepwidestar[1]{%
@@ -290,7 +365,7 @@ identifizieren.
       \forall p\in\RealHat q\,\exists r\in\RealHat q\,(p<r)}{%
       \FormulaRefAuto{RealPrincipalCutNoMaximum}[thm]{1}}
     \proofstepwidestar[1]{\RealCut{\RealHat q}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2,3,4,5}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2,3,4,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -398,14 +473,14 @@ identifizieren.
       \FormulaRefAuto{RationalOrderTotal}[thm]{1,5,6}}
     \proofstepwidestar[8]{a<b}{\rA}
     \proofstepwidestar[1,2,3,8]{a\in B}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{4,6,8}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{4,6,8}}
     \proofstepwidestar[1,2,3,8]{\bot}{\rBI{5,9}}
     \proofstepwidestar[11]{a=b}{\rA}
     \proofstepwidestar[1,2,3,11]{a\in B}{\rIE{11,6}}
     \proofstepwidestar[1,2,3,11]{\bot}{\rBI{5,12}}
     \proofstepwidestar[14]{b<a}{\rA}
     \proofstepwidestar[1,2,3,14]{b\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{4,5,14}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{4,5,14}}
     \proofstepwidestar[1,2,3,14]{\bot}{\rBI{6,15}}
     \proofstepwidestar[1,2,3]{\bot}{\rOE{7,8,10,11,13,14,16}}
   \closeproofpartwideindR
@@ -879,7 +954,7 @@ Damit entsteht innerhalb von \(\mathbb R\) eine wörtliche Inklusionskette.
     \proofstepwidestarbreakkeep[1,5]{\RealCut{A_0}}{%
       \FormulaRefAuto{RealCutMembership}[thm]{6}}
     \proofstepwidestarbreakkeep[1,5]{\exists a_0\in A_0}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{7}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{7}}
     \proofstepwidestarbreakkeep[1,5]{a_0\in A_0}{\rA}
     \proofstepwidestarbreakkeep[1,5]{a_0\in\bigcup\mathcal A}{%
       \FormulaRefAuto{FamilyMemberSubsetUnion}[thm]{5,9}}
@@ -919,11 +994,11 @@ Damit entsteht innerhalb von \(\mathbb R\) eine wörtliche Inklusionskette.
     \proofstepwidestarbreakkeep[2]{\RealCut U}{%
       \FormulaRefAuto{RealCutMembership}[thm]{2}}
     \proofstepwidestarbreakkeep[2]{U\neq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{30}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{30}}
     \proofstepwidestarbreakkeep[32]{\bigcup\mathcal A=\mathbb Q}{\rA}
     \proofstepwidestarbreakkeep[2,3,32]{\mathbb Q\subseteq U}{\rIE{32,29}}
     \proofstepwidestarbreakkeep[2]{U\subseteq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{30}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{30}}
     \proofstepwidestarbreakkeep[2,3,32]{U=\mathbb Q}{%
       \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}{34,33}}
     \proofstepwidestarbreakkeep[2,3,32]{\bot}{\rBI{31,35}}
@@ -958,7 +1033,7 @@ Damit entsteht innerhalb von \(\mathbb R\) eine wörtliche Inklusionskette.
     \proofstepwidestar[1,2]{\RealCut A}{%
       \FormulaRefAuto{RealCutMembership}[thm]{7}}
     \proofstepwidestar[1,2,3,4]{q\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{8,6,3,4}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{8,6,3,4}}
     \proofstepwidestar[1,2,3,4]{q\in\bigcup\mathcal A}{%
       \FormulaRefAuto{FamilyMemberSubsetUnion}[thm]{6,9}}
     \proofstepwidestar[1,2,3,4]{q\in\bigcup\mathcal A}{%
@@ -982,7 +1057,7 @@ Damit entsteht innerhalb von \(\mathbb R\) eine wörtliche Inklusionskette.
     \proofstepwidestar[1,2]{\RealCut A}{%
       \FormulaRefAuto{RealCutMembership}[thm]{5}}
     \proofstepwidestar[1,2]{\exists r\in A\,(p<r)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{6,4}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{6,4}}
     \proofstepwidestar[1,2]{r\in A\land p<r}{\rA}
     \proofstepwidestar[1,2]{r\in\bigcup\mathcal A}{%
       \FormulaRefAuto{FamilyMemberSubsetUnion}[thm]{4,8}}
@@ -1012,7 +1087,7 @@ Damit entsteht innerhalb von \(\mathbb R\) eine wörtliche Inklusionskette.
       \exists r\in\bigcup\mathcal A\,(p<r)}{%
       \FormulaRefAuto{RealCutUnionNoMaximum}[thm]{1}}
     \proofstepwidestar[1,2,3]{\RealCut{\bigcup\mathcal A}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{4,5,6}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{4,5,6}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1493,7 +1568,7 @@ eingeführt.
     \proofstepwidestar[1]{\RealCut A\land\RealCut B}{%
       \FormulaRefAuto{RealCutMembership}[thm]{1}}
     \proofstepwidestarbreakkeep[1]{\exists a_0\in A\land\exists b_0\in B}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2}}
     \proofstepwidestar[1]{a_0\in A\land b_0\in B}{\rA}
     \proofstepwidestarbreakkeep[1]{%
       a_0+b_0-\RatOne\in\mathbb Q\land
@@ -1508,14 +1583,14 @@ eingeführt.
     \proofstepwidestarbreakkeep[1]{%
       \exists\alpha\in\mathbb Q\setminus A\land
       \exists\beta\in\mathbb Q\setminus B}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2}}
     \proofstepwidestarbreakkeep[1]{%
       \alpha\in\mathbb Q\setminus A\land
       \beta\in\mathbb Q\setminus B}{\rA}
     \proofstepwidestarbreakkeep[1]{%
       \forall a\in A\,(a\leq\alpha)\land
       \forall b\in B\,(b\leq\beta)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2,10}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2,10}}
     \proofstepwidestarbreakkeep[1]{\alpha+\beta\notin A\RealAdd B}{%
       \FormulaRefAuto{RationalOrderTranslation}[thm]{%
         \FormulaRefAuto{RealCutAddition}[def]{10,11}}}
@@ -1561,7 +1636,7 @@ eingeführt.
     \proofstepwidestarbreakkeep[1]{A\RealAdd B\subseteq\mathbb Q}{%
       \FormulaRefAuto{RealCutAddition}[def]{1}}
     \proofstepwidestarbreakkeep[1]{\RealCut{A\RealAdd B}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{32,8,13,21,31}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{32,8,13,21,31}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Negation eines Schnittes]{%
@@ -1573,7 +1648,7 @@ eingeführt.
     \proofstepwidestar[1]{\RealCut A}{%
       \FormulaRefAuto{RealCutMembership}[thm]{1}}
     \proofstepwidestar[1]{\exists r_0\in\mathbb Q\setminus A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2}}
     \proofstepwidestar[1]{r_0\in\mathbb Q\land r_0\notin A}{\rA}
     \proofstepwidestar[1]{-r_0-\RatOne<-r_0}{%
       \FormulaRefAuto{RationalOrderedFieldAxioms}[def]{4}}
@@ -1583,7 +1658,7 @@ eingeführt.
       \FormulaRefAuto{x\in A\vdash A\neq\varnothing}{6}}
     \proofstepwidestar[1]{\RealNeg A\neq\varnothing}{\rEE{3,4,7}}
     \proofstepwidestarbreakkeep[1]{\exists a_0\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{2}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{2}}
     \proofstepwidestar[1]{a_0\in A}{\rA}
     \proofstepwidestar[1]{-a_0\notin\RealNeg A}{%
       \FormulaRefAuto{RealCutNegation}[def]{2,10}}
@@ -1626,7 +1701,7 @@ eingeführt.
     \proofstepwidestar[1]{\RealNeg A\subseteq\mathbb Q}{%
       \FormulaRefAuto{RealCutNegation}[def]{1}}
     \proofstepwidestar[1]{\RealCut{\RealNeg A}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{32,8,13,21,31}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{32,8,13,21,31}}
   \closeproofpartwideindR
 
   \proofpartwide{Nullschnitt und Zusammenfassung}
@@ -1680,7 +1755,7 @@ eingeführt.
     \proofstepwidestarbreakkeep[4]{p\in A}{\rA}
     \proofstepwidestarbreakkeep[5]{u\in\mathbb Q\setminus A}{\rA}
     \proofstepwidestarbreakkeep[1,4]{p\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},4}}
     \proofstepwidestarbreakkeep[2,3]{%
       \frac h2\in\mathbb Q\land\RatZero<\frac h2}{%
@@ -1741,7 +1816,7 @@ eingeführt.
       M\coloneqq\left\{n\in\mathbb N\mid
         p+\RatEmbed(\IntEmbed(n))\frac h2\notin A\right\}}{\rII}
     \proofstepwidestarbreakkeep[1,2,3,4,5]{M\neq\varnothing}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{5,6,7}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{5,6,7}}
     \proofstepwidestarbreakkeep[1,2,3,4,5]{%
       \exists m_0\in M\,\forall n\in M\,(m_0\leq n)}{%
       \FormulaRefAuto{NaturalWellOrderingPrinciple}[thm]{7,8}}
@@ -1782,10 +1857,10 @@ eingeführt.
     \proofstepwidestarbreakkeep[2]{h\in\mathbb Q}{\rA}
     \proofstepwidestarbreakkeep[3]{\RatZero<h}{\rA}
     \proofstepwidestarbreakkeep[1]{\exists p\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1}}}
     \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\setminus A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1}}}
     \proofstepwidestarbreakkeep[1]{p\in A}{\rA}
     \proofstepwidestarbreakkeep[1]{u\in\mathbb Q\setminus A}{\rA}
@@ -1934,14 +2009,14 @@ eingeführt.
     \proofstepwidestar[1,2]{q<a}{%
       \FormulaRefAuto{RationalOrderTranslation}[thm]{3}}
     \proofstepwidestar[1,2]{q\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},3,4}}
     \proofstepwidestar[1]{A\RealAdd\RealZero\subseteq A}{%
       \FormulaRefAuto{A\subseteq B\coloneq\forall x(x\in A\rightarrow x\in B)}{%
         \rUI{\rRI{2,5}}}}
     \proofstepwidestar[7]{q\in A}{\rA}
     \proofstepwidestar[1,7]{\exists a\in A\,(q<a)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},7}}
     \proofstepwidestar[1,7]{a\in A\land q<a}{\rA}
     \proofstepwidestar[1,7]{q-a<\RatZero}{%
@@ -1980,7 +2055,7 @@ eingeführt.
       \exists a\in A\,\exists r\notin A\,(q<a-r)}{%
       \FormulaRefAuto{RealCutNegation}[def]{3}}
     \proofstepwidestarbreakkeep[1,2]{q<\RatZero}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},4}}
     \proofstepwidestarbreakkeep[1,2]{q\in\RealZero}{%
       \FormulaRefAuto{RealCutZero}[def]{%
@@ -2324,10 +2399,10 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestar[1]{\RealCut A}{%
       \FormulaRefAuto{RealCutMembership}[thm]{1}}
     \proofstepwidestar[1,2]{a\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{5,2}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{5,2}}
     \proofstepwidestar[7]{r<a}{\rA}
     \proofstepwidestar[1,2,3,7]{r\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{5,2,3,7}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{5,2,3,7}}
     \proofstepwidestar[1,2,3,4,7]{\bot}{\rBI{4,8}}
     \proofstepwidestar[1,2,3,4]{\neg(r<a)}{\rCI{7,9}}
     \proofstepwidestar[1,2,3,4]{a\leq r}{%
@@ -2362,7 +2437,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{x\in A\setminus B\eqvdash
         x\in A\land x\notin B}{7}}
     \proofstepwidestarbreakkeep[1,2]{x\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{3,\rAEa{8}}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{3,\rAEa{8}}}
     \proofstepwidestarbreakkeep[1,2]{\neg(x<\RatZero)}{%
       \FormulaRefAuto{RealCutZero}[def]{%
         \FormulaRefAuto{RealPrincipalCut}[def]{9,\rAEb{8}}}}
@@ -2370,10 +2445,10 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RationalOrderTotal}[thm]{%
         \FormulaRefAuto{RationalZeroOneCarrier}[thm],9,10}}
     \proofstepwidestarbreakkeep[1,2]{\exists a\in A\,(x<a)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{3,\rAEa{8}}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{3,\rAEa{8}}}
     \proofstepwidestar[1,2]{a\in A\land x<a}{\rA}
     \proofstepwidestarbreakkeep[1,2]{a\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{3,\rAEa{13}}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{3,\rAEa{13}}}
     \proofstepwidestarbreakkeep[1,2]{\RatZero<a}{%
       \FormulaRefAuto{RationalOrderTotal}[thm]{11,\rAEb{13}}}
     \proofstepwidestarbreakkeep[1,2]{\exists a\in A\,(\RatZero<a)}{%
@@ -2437,10 +2512,10 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       a\in A\land b\in B\land\RatZero<a\land\RatZero<b\land
       \alpha\beta<ab}{\rA}
     \proofstepwidestarbreakkeep[1,16]{a\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}},17}}
     \proofstepwidestarbreakkeep[1,16]{b\in\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEb{1}},17}}
     \proofstepwidestarbreakkeep[1,4,6,16]{a<\alpha}{%
       \FormulaRefAuto{RealCutMemberBelowExterior}[thm]{%
@@ -2489,11 +2564,11 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RealCutMembership}[thm]{4}}
     \proofstepwidestarbreakkeep[]{%
       \RealZero\neq\varnothing\land\RealZero\neq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{5}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{5}}
     \proofstepwidestarbreakkeep[1,2,3]{\RealZero\subseteq A\RealPosMul B}{%
       \FormulaRefAuto{RealCutPositiveProduct}[def]{1,2,3}}
     \proofstepwidestarbreakkeep[]{\exists z\in\RealZero}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{5}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{5}}
     \proofstepwidestarbreakkeep[]{z\in\RealZero}{\rA}
     \proofstepwidestarbreakkeep[1,2,3]{z\in A\RealPosMul B}{%
       \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,9}}
@@ -2528,7 +2603,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestarbreakkeep[1,2,3,20]{%
       a\in A\land\RatZero<a}{\rA}
     \proofstepwidestarbreakkeep[1]{A\subseteq\mathbb Q\land A\neq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}}}}
     \proofstepwidestarbreakkeep[1,2,3,20]{%
       \exists\alpha\in\mathbb Q\setminus A}{%
@@ -2551,7 +2626,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestarbreakkeep[1,2,3,20]{%
       b\in B\land\RatZero<b}{\rA}
     \proofstepwidestarbreakkeep[1]{B\subseteq\mathbb Q\land B\neq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEb{1}}}}
     \proofstepwidestarbreakkeep[1,2,3,20]{%
       \exists\beta\in\mathbb Q\setminus B}{%
@@ -2654,7 +2729,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,58}}
     \proofstepwidestarbreakkeep[1,66]{a,b\in\mathbb Q}{%
       \rAIRepeat{2}{%
-        \FormulaRefAuto{DedekindCutPredicate}[def]\circ
+        \FormulaRefAuto{DedekindCutCharacterization}[thm]\circ
         \FormulaRefAuto{RealCutMembership}[thm]}{%
         \rAEa{1},67\mid\rAEb{1},67}}
     \proofstepwidestarbreakkeep[1,66]{ab\in\mathbb Q}{%
@@ -2684,7 +2759,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestarbreakkeep[1,2,3]{A\RealPosMul B\subseteq\mathbb Q}{%
       \FormulaRefAuto{RealCutPositiveProduct}[def]{1,2,3}}
     \proofstepwidestarbreakkeep[1,2,3]{\RealCut{A\RealPosMul B}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{79,12,44,57,78}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{79,12,44,57,78}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Positives Reziprokes ist ein Schnitt]{%
@@ -2703,11 +2778,11 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RealCutMembership}[thm]{3}}
     \proofstepwidestarbreakkeep[]{%
       \RealZero\neq\varnothing\land\RealZero\neq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{4}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{4}}
     \proofstepwidestarbreakkeep[1,2]{\RealZero\subseteq\RealPosInv A}{%
       \FormulaRefAuto{RealCutPositiveReciprocal}[def]{1,2}}
     \proofstepwidestarbreakkeep[]{\exists z\in\RealZero}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{4}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{4}}
     \proofstepwidestarbreakkeep[]{z\in\RealZero}{\rA}
     \proofstepwidestarbreakkeep[1,2]{z\in\RealPosInv A}{%
       \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,8}}
@@ -2720,7 +2795,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RealCutPositiveMember}[thm]{1,2}}
     \proofstepwidestarbreakkeep[1,2]{a\in A\land\RatZero<a}{\rA}
     \proofstepwidestarbreakkeep[1]{A\subseteq\mathbb Q}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1}}}
     \proofstepwidestarbreakkeep[1,2]{a\in\mathbb Q}{%
       \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{14,13}}
@@ -2754,7 +2829,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RationalPositiveReciprocalOrderReversal}[thm]{%
         15,\rAEb{13},24}}
     \proofstepwidestarbreakkeep[1,2,23]{r\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},13,24,25}}
     \proofstepwidestarbreakkeep[1,2,23]{\bot}{%
       \rBI{\rAEa{\rAEb{\rAEb{24}}},26}}
@@ -2859,7 +2934,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestarbreakkeep[1,2]{\RealPosInv A\subseteq\mathbb Q}{%
       \FormulaRefAuto{RealCutPositiveReciprocal}[def]{1,2}}
     \proofstepwidestarbreakkeep[1,2]{\RealCut{\RealPosInv A}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{68,11,33,46,67}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{68,11,33,46,67}}
   \closeproofpartwideindR
 
   \proofpartwide{Fallzerlegung und Zusammenfassung}
@@ -2969,7 +3044,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \FormulaRefAuto{RealCutOrderCharacterization}[thm]{1,2}}
     \proofstepwidestarbreakkeep[1,2]{p\in A\land\RatZero<p}{\rA}
     \proofstepwidestarbreakkeep[1]{\exists u\in\mathbb Q\setminus A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1}}}
     \proofstepwidestarbreakkeep[1]{u\in\mathbb Q\setminus A}{\rA}
     \proofstepwidestarbreakkeep[1,2,3,4]{%
@@ -3095,7 +3170,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
         a=\RatZero\text{ sofort,}\\[-2pt]
       &\text{bei }\RatZero<a\text{ durch Abwärtsabschluss jeweils }
         \RatZero\in A.\\[-2pt]
-      &\FormulaRefAuto{DedekindCutPredicate}[def]{%
+      &\FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}}},
         \FormulaRefAuto{RationalOrderTotal}[thm]
       \end{aligned}}
@@ -3104,7 +3179,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \begin{aligned}[t]
       &b\in\mathbb Q.\text{ Aus }\RatZero\leq b\text{ folgte wie in }13\\[-2pt]
       &\text{durch Gleichheit oder Abwärtsabschluss }\RatZero\in B.\\[-2pt]
-      &\FormulaRefAuto{DedekindCutPredicate}[def]{%
+      &\FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEb{1}}},
         \FormulaRefAuto{RationalOrderTotal}[thm]
       \end{aligned}}
@@ -3123,7 +3198,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestar[17]{\RatZero\in A}{\rA}
     \proofstepwidestarbreakkeep[1,17]{%
       \exists a\in A\,(\RatZero<a)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}},17}}
     \proofstepwidestar[17]{a\in A\land\RatZero<a}{\rA}
     \proofstepwidestarbreakkeep[17]{%
@@ -3194,7 +3269,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       &\text{Für die positiven Zeugen }a,b\text{ liegt }0<a\text{ bzw. }0<b;\\[-2pt]
       &\text{der Abwärtsabschluss von }A\text{ und }B\text{ liefert daher
         jeweils den Nullpunkt.}\\[-2pt]
-      &\FormulaRefAuto{DedekindCutPredicate}[def]{%
+      &\FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},5}
       \end{aligned}}
     \proofstepwidestarbreakkeep[1,2]{%
@@ -3204,7 +3279,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
     \proofstepwidestarbreakkeep[1,8]{%
       \exists a\in A\,(\RatZero<a)\land
       \exists b\in B\,(\RatZero<b)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1},8}}
     \proofstepwidestar[8]{%
       a\in A\land\RatZero<a\land b\in B\land\RatZero<b}{\rA}
@@ -3344,7 +3419,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
         &\FormulaRefAuto{RealCutPositiveProduct}[def]{1,2},
          \FormulaRefAuto{RealCutOne}[def],\\[-2pt]
         &\FormulaRefAuto{RationalMulOne}[thm],
-         \FormulaRefAuto{DedekindCutPredicate}[def]{%
+         \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
            \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}}}
       \end{aligned}}
     \proofstepwidestarbreakkeep[1,2]{%
@@ -3352,7 +3427,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       \begin{aligned}[t]
         &\text{Wähle }a\in A\text{ mit }q<a\text{ und dann rational }
           b\text{ mit }qa^{-1}<b<\RatOne;\text{ daraus folgt }q<ab.\\[-2pt]
-        &\FormulaRefAuto{DedekindCutPredicate}[def]{%
+        &\FormulaRefAuto{DedekindCutCharacterization}[thm]{%
            \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{1}}},
          \FormulaRefAuto{RationalOrderDense}[thm],\\[-2pt]
         &\FormulaRefAuto{RealCutOne}[def],
@@ -3477,7 +3552,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
         &\text{Dann folgt }q<ab+a'c<a''(b'+c')<a''d.\\[-2pt]
         &\FormulaRefAuto{RealCutPositiveProduct}[def]{1,2},
          \FormulaRefAuto{RealCutAddition}[def]{1},
-         \FormulaRefAuto{DedekindCutPredicate}[def],\\[-2pt]
+         \FormulaRefAuto{DedekindCutCharacterization}[thm],\\[-2pt]
         &\FormulaRefAuto{RationalDistributive}[thm],
          \FormulaRefAuto{RationalOrderDense}[thm],
          \FormulaRefAuto{RationalPositiveMulStrictOrder}[thm]
@@ -3654,7 +3729,7 @@ gehört genau dann zum positiven Produkt, wenn er zu beiden Faktoren gehört.
       (\RatZero<a<r)}{%
       \begin{aligned}[t]
       &\FormulaRefAuto{RealCutPositiveMember}[thm]{1,2},
-        \FormulaRefAuto{DedekindCutPredicate}[def]{%
+        \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
           \FormulaRefAuto{RealCutMembership}[thm]{1}},\\[-2pt]
       &\FormulaRefAuto{RealCutMemberBelowExterior}[thm]{1}
       \end{aligned}}
@@ -4769,7 +4844,7 @@ Bänden~17 und~18 sichtbar.
   \proofstepwidestar[1]{\RealCut x}{%
     \FormulaRefAuto{RealCutMembership}[thm]{1}}
   \proofstepwidestar[1]{\exists q\in\mathbb Q\setminus x}{%
-    \FormulaRefAuto{DedekindCutPredicate}[def]{2}}
+    \FormulaRefAuto{DedekindCutCharacterization}[thm]{2}}
   \proofstepwidestar[1]{q\in\mathbb Q\land q\notin x}{\rA}
   \proofstepwidestar[1]{%
     \exists n\in\mathbb N\,
@@ -4779,7 +4854,7 @@ Bänden~17 und~18 sichtbar.
     n\in\mathbb N\land q<\RatEmbed(\IntEmbed(n))}{\rA}
   \proofstepwidestar[1]{%
     x\subseteq\RealHat{\RatEmbed(\IntEmbed(n))}}{%
-    \FormulaRefAuto{DedekindCutPredicate}[def]{2,4,6}}
+    \FormulaRefAuto{DedekindCutCharacterization}[thm]{2,4,6}}
   \proofstepwidestar[1]{%
     q\in\RealHat{\RatEmbed(\IntEmbed(n))}\setminus x}{%
     \FormulaRefAuto{RealPrincipalCut}[def]{4,6}}
@@ -4923,18 +4998,18 @@ Bänden~17 und~18 sichtbar.
     \FormulaRefAuto{A\subset B\vdash\exists x\in B\setminus A}{3}}
   \proofstepwidestar[1,2]{b\in y\land b\notin x}{\rA}
   \proofstepwidestar[1,2]{\exists q\in y\,(b<q)}{%
-    \FormulaRefAuto{DedekindCutPredicate}[def]{%
+    \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
       \FormulaRefAuto{RealCutMembership}[thm]{1},5}}
   \proofstepwidestar[1,2]{q\in y\land b<q}{\rA}
   \proofstepwidestar[1,2]{x\subseteq\RealHat q}{%
-    \FormulaRefAuto{DedekindCutPredicate}[def]{%
+    \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
       \FormulaRefAuto{RealCutMembership}[thm]{1},5,7}}
   \proofstepwidestar[1,2]{b\in\RealHat q\setminus x}{%
     \FormulaRefAuto{RealPrincipalCut}[def]{5,7}}
   \proofstepwidestar[1,2]{x\subsetneq\RealHat q}{%
     \FormulaRefAuto{A\subset B\coloneq A\subseteq B\land A\neq B}{8,9}}
   \proofstepwidestar[1,2]{\RealHat q\subseteq y}{%
-    \FormulaRefAuto{DedekindCutPredicate}[def]{%
+    \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
       \FormulaRefAuto{RealCutMembership}[thm]{1},7}}
   \proofstepwidestar[1,2]{q\in y\setminus\RealHat q}{%
     \FormulaRefAuto{RealPrincipalCut}[def]{7}}
@@ -5665,63 +5740,94 @@ eindeutig bestimmte Funktion.
     \proofstepwidestarbreakkeep[4]{%
       \forall n\in\mathbb N\,
       \eta_K(\Succ(n))=\eta_K(n)\boxplus1_K}{\rA}
+    \proofstepwidestarbreakkeep[4]{%
+      \forall n\in\mathbb N\,
+      \eta_K(n+1)=\eta_K(n)\boxplus1_K}{%
+      \rUI{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{
+        \FormulaRefAuto{PeanoAddOneSucc}[thm]},\rUE{4}}}}
     \proofstepwidestarbreakkeep[1,2,3,4]{\eta_K(1)=1_K}{%
-      \rIE{\FormulaRefAuto{PeanoOne}[def],4,3,
-        \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}}
-    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm],5,3,
+      \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
       \forall m\in\mathbb N\,
       \eta_K(m+0)=\eta_K(m)\boxplus\eta_K(0)}{%
       \FormulaRefAuto{PeanoAddRightZero}[thm],3,
       \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
-    \proofstepwidestarbreakkeep[1,2,3,4]{%
+    \proofstepwidestarbreakkeep[1,2,4]{%
       \begin{aligned}[t]
-        &\eta_K(m+n)=\eta_K(m)\boxplus\eta_K(n)\vdash{}\\[-2pt]
-        &\eta_K(m+\Succ(n))
-          =\eta_K(m)\boxplus\eta_K(\Succ(n))
+        &\forall n\in\mathbb N\,\Bigl(
+          \forall m\in\mathbb N\,
+            (\eta_K(m+n)=\eta_K(m)\boxplus\eta_K(n))\\[-2pt]
+        &\quad\rightarrow\forall m\in\mathbb N\,
+          (\eta_K(m+(n+1))
+            =\eta_K(m)\boxplus\eta_K(n+1))\Bigr)
       \end{aligned}}{%
-      \FormulaRefAuto{PeanoAddSuccRight}[thm],4,
+      \FormulaRefAuto{PeanoAddAddOneRight}[thm],5,
       \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
     \proofstepwidestarbreakkeep[1,2,3,4]{%
       \forall m,n\in\mathbb N\,
       \eta_K(m+n)=\eta_K(m)\boxplus\eta_K(n)}{%
-      \FormulaRefAuto{PeanoInductionAxiom}[ax]{6,7}}
-    \proofstepwidestarbreakkeep[1,2,3,4]{%
+      \FormulaRefAuto{PeanoInductionAddOne}[thm]{7,8}}
+    \proofstepwidestarbreakkeep[1,2,3]{%
       \forall m\in\mathbb N\,
       \eta_K(m\cdot0)=\eta_K(m)\boxtimes\eta_K(0)}{%
       \FormulaRefAuto{PeanoMulRightZero}[thm],3,
       \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
-    \proofstepwidestarbreakkeep[1,2,3,4,8]{%
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
       \begin{aligned}[t]
-        &\eta_K(mn)=\eta_K(m)\boxtimes\eta_K(n)\vdash{}\\[-2pt]
-        &\eta_K(m\cdot\Succ(n))
-          =\eta_K(m)\boxtimes\eta_K(\Succ(n))
+        &\forall n\in\mathbb N\,\Bigl(
+          \forall m\in\mathbb N\,
+            (\eta_K(mn)=\eta_K(m)\boxtimes\eta_K(n))\\[-2pt]
+        &\quad\rightarrow\forall m\in\mathbb N\,
+          (\eta_K(m\cdot(n+1))
+            =\eta_K(m)\boxtimes\eta_K(n+1))\Bigr)
       \end{aligned}}{%
-      \FormulaRefAuto{PeanoMulSuccRight}[thm],4,8,
+      \FormulaRefAuto{PeanoMulAddOneRight}[thm],5,9,6,
       \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
-    \proofstepwidestarbreakkeep[1,2,3,4,8]{%
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
       \forall m,n\in\mathbb N\,
       \eta_K(mn)=\eta_K(m)\boxtimes\eta_K(n)}{%
-      \FormulaRefAuto{PeanoInductionAxiom}[ax]{9,10}}
-    \proofstepwidestarbreakkeep[1,2,4,5]{%
+      \FormulaRefAuto{PeanoInductionAddOne}[thm]{10,11}}
+    \proofstepwidestarbreakkeep[1,2,4]{%
       \forall n\in\mathbb N\,
-      (\eta_K(n)\preccurlyeq\eta_K(\Succ(n))\land
-       \eta_K(n)\neq\eta_K(\Succ(n)))}{%
-      \FormulaRefAuto{CompleteOrderedFieldStrictTranslation}[thm]{1},
-      \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1,5}}
-    \proofstepwidestarbreakkeep[1,2,4,12]{%
-      \forall m,n\in\mathbb N\,
-      (m<n\rightarrow
-       (\eta_K(m)\preccurlyeq\eta_K(n)\land
-        \eta_K(m)\neq\eta_K(n)))}{%
-      \FormulaRefAuto{PeanoOrderComparison}[thm],
-      \FormulaRefAuto{PeanoInductionAxiom}[ax]{12}}
-    \proofstepwidestarbreakkeep[1,2,13]{%
-      \forall m,n\in\mathbb N\,
-      ((\eta_K(m)\preccurlyeq\eta_K(n)\land
-        \eta_K(m)\neq\eta_K(n))\rightarrow m<n)}{%
-      \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{13},
+      (\eta_K(n)\preccurlyeq\eta_K(n+1)\land
+       \eta_K(n)\neq\eta_K(n+1))}{%
+      \FormulaRefAuto{CompleteOrderedFieldStrictTranslation}[thm]{1},5,
+      \FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{1}}
+    \proofstepwidestarbreakkeep[]{%
+      \forall m\in\mathbb N\,
+      \bigl(m<0\rightarrow
+       (\eta_K(m)\preccurlyeq\eta_K(0)\land
+        \eta_K(m)\neq\eta_K(0))\bigr)}{%
+      \FormulaRefAuto{PeanoNoLtZero}[thm],
+      \FormulaRefAuto{\bot\vdash P}[thm]}
+    \proofstepwidestarbreakkeep[1,2,4]{%
+      \begin{aligned}[t]
+        &\forall n\in\mathbb N\,\Bigl(
+          \forall m\in\mathbb N\,
+          \bigl(m<n\rightarrow
+            (\eta_K(m)\preccurlyeq\eta_K(n)\land
+             \eta_K(m)\neq\eta_K(n))\bigr)\\[-2pt]
+        &\quad\rightarrow\forall m\in\mathbb N\,
+          \bigl(m<n+1\rightarrow
+            (\eta_K(m)\preccurlyeq\eta_K(n+1)\land
+             \eta_K(m)\neq\eta_K(n+1))\bigr)\Bigr)
+      \end{aligned}}{%
+      \FormulaRefAuto{PeanoStrictAddOneSplit}[thm],13,
       \FormulaRefAuto{Totale Ordnung}[def]{1}}
-    \proofstepwidestarbreakkeep[1,8,11,13,14]{%
+    \proofstepwidestarbreakkeep[1,2,4]{%
+      \forall m,n\in\mathbb N\,
+      \bigl(m<n\rightarrow
+       (\eta_K(m)\preccurlyeq\eta_K(n)\land
+        \eta_K(m)\neq\eta_K(n))\bigr)}{%
+      \FormulaRefAuto{PeanoInductionAddOne}[thm]{14,15}}
+    \proofstepwidestarbreakkeep[1,2,4]{%
+      \forall m,n\in\mathbb N\,
+      \bigl((\eta_K(m)\preccurlyeq\eta_K(n)\land
+        \eta_K(m)\neq\eta_K(n))\rightarrow m<n\bigr)}{%
+      \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{16},
+      \FormulaRefAuto{Totale Ordnung}[def]{1}}
+    \proofstepwidestarbreakkeep[1,2,3,4]{%
       \begin{aligned}[t]
       &\forall m,n\in\mathbb N\,\bigl(
         \eta_K(m+n)=\eta_K(m)\boxplus\eta_K(n)\land{}\\[-2pt]
@@ -5729,7 +5835,7 @@ eindeutig bestimmte Funktion.
         (m<n\leftrightarrow
         (\eta_K(m)\preccurlyeq\eta_K(n)\land
          \eta_K(m)\neq\eta_K(n)))\bigr)
-      \end{aligned}}{\rAI{8,\rAI{11,\rBI{13,14}}}}
+      \end{aligned}}{\rAI{9,\rAI{12,\rLRI{16,17}}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Fortsetzung auf die ganzen Zahlen]{%
@@ -6183,7 +6289,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
     \proofstepwidestar[1]{\eta_{\mathbb Q}\colon\mathbb Q\inj K}{%
       \FormulaRefAuto{CompleteOrderedFieldRationalPrimeEmbedding}[thm]{1}}
     \proofstepwidestar[2]{\exists a\in A\land\exists r\in\mathbb Q\setminus A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{2}}}
     \proofstepwidestar[1,2]{\eta_{\mathbb Q}[A]\neq\varnothing}{%
       \FormulaRefAuto{NonemptyDirectImage}[thm]{3,4}}
@@ -6298,7 +6404,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
       \exists q\in B\setminus A\,\exists r\in B\,(q<r)}{%
       \FormulaRefAuto{A\subseteq B\dsep A\neq B\vdash
         \exists x\in B\setminus A}[thm]{3},
-      \FormulaRefAuto{DedekindCutPredicate}[def]{3}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{3}}
     \proofstepwidestarbreakkeep[4]{q\in B\setminus A\land r\in B\land q<r}{\rA}
     \proofstepwidestarbreakkeep[3,5]{%
       \forall a\in A\,(a<q)}{%
@@ -6365,7 +6471,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
         1,12,15},
       \FormulaRefAuto{CompleteOrderedFieldRationalPrimeEmbedding}[thm]{1}}
     \proofstepwidestarbreakkeep[1,12,14]{\RealCut{A_y}}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{15,16,17,18}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{15,16,17,18}}
     \proofstepwidestarbreakkeep[12,15]{%
       y\in\UB_{K,\preccurlyeq}(\eta_{\mathbb Q}[A_y])}{%
       \FormulaRefAuto{UpperBoundSetIntro}[thm]{15}}
@@ -6418,7 +6524,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
     \proofstepwidestarbreakkeep[3]{q\in A}{\rA}
     \proofstepwidestarbreakkeep[2,3]{%
       \exists r\in A\,(q<r)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{\rAEa{2}},3}}
     \proofstepwidestarbreakkeep[4]{r\in A\land q<r}{\rA}
     \proofstepwidestarbreakkeep[2,5]{%
@@ -7081,7 +7187,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
   }[RealCutPrincipalFamilySupremum]
     \proofstepwidestarbreakkeep[1]{A\in\mathbb R}{\rA}
     \proofstepwidestarbreakkeep[1]{\exists q\in A}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{%
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{%
         \FormulaRefAuto{RealCutMembership}[thm]{1}}}
     \proofstepwidestarbreakkeep[1]{%
       \varnothing\neq\RealEmb[A]\subseteq\mathbb R}{%
@@ -7091,7 +7197,7 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
       \forall q\in A\,(\RealEmb(q)\RealLe A)}{%
       \FormulaRefAuto{RealCutOrderCharacterization}[thm]{%
         \FormulaRefAuto{RealPrincipalCut}[def],
-        \FormulaRefAuto{DedekindCutPredicate}[def]{1}}}
+        \FormulaRefAuto{DedekindCutCharacterization}[thm]{1}}}
     \proofstepwidestarbreakkeep[1]{%
       A\in\UB_{\mathbb R,\RealLe}(\RealEmb[A])\land
       \UB_{\mathbb R,\RealLe}(\RealEmb[A])\neq\varnothing}{%
@@ -7104,14 +7210,14 @@ die jeweils benötigten Regeln durch eine Formelreferenz ausdrücklich ein.
     \proofstepwidestarbreakkeep[7]{q\in A\land x\in\RealEmb(q)}{\rA}
     \proofstepwidestarbreakkeep[1,6,8]{x\in A}{%
       \FormulaRefAuto{RealPrincipalCut}[def]{8},
-      \FormulaRefAuto{DedekindCutPredicate}[def]{1,8}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{1,8}}
     \proofstepwidestarbreakkeep[1]{\bigcup\RealEmb[A]\subseteq A}{%
       \FormulaRefAuto{A\subseteq B\coloneq\forall x(x\in A\rightarrow x\in B)}{%
         \rUI{\rRI{6,\rEE{7,8,9}}}}}
     \proofstepwidestarbreakkeep[11]{x\in A}{\rA}
     \proofstepwidestarbreakkeep[1,11]{%
       \exists q\in A\,(x<q)}{%
-      \FormulaRefAuto{DedekindCutPredicate}[def]{1,11}}
+      \FormulaRefAuto{DedekindCutCharacterization}[thm]{1,11}}
     \proofstepwidestarbreakkeep[12]{q\in A\land x<q}{\rA}
     \proofstepwidestarbreakkeep[1,11,13]{%
       x\in\RealEmb(q)\land\RealEmb(q)\in\RealEmb[A]}{%

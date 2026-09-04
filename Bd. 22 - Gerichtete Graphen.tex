@@ -489,19 +489,93 @@ genau \(E\subseteq V\times V\).
 \section{Walks und Pfade}
 
 \FormulaDefDeltaK[Endlicher gerichteter Walk]{%
+  \DirectedWalk{V}{E}{p}{n}%
+}{DirectedWalkDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Natürliche Kantenlänge}{%
+    n\in\mathbb N}
+  \DeltaRow{Knotenfolge}{%
+    p\colon\NatSeg{n+1}\to V}
+  \DeltaRow{Kantenschritt}{%
+    \forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Struktur}{\DirectedWalk{V}{E}{p}{n}}
+}
+
+\FormulaAxiomDeltaK[Natürliche Kantenlänge]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedWalk{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &n\in\mathbb N
+  \end{aligned}%
+}{DirectedWalkLengthAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}
+}
+
+\FormulaAxiomDeltaK[Knotenfolge]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedWalk{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &p\colon\NatSeg{n+1}\to V
+  \end{aligned}%
+}{DirectedWalkSequenceAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}
+}
+
+\FormulaAxiomDeltaK[Aufeinanderfolgende Kanten]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedWalk{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)
+  \end{aligned}%
+}{DirectedWalkEdgesAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}
+}
+
+\FormulaThmDeltaK[Charakterisierung durch die Axiome]{%
   \GraphStruct{V,E}\vdash
   \begin{aligned}[t]
-    \DirectedWalk{V}{E}{p}{n}\coloneqq{}&
+    \DirectedWalk{V}{E}{p}{n}\eqvdash{}&
       n\in\mathbb N\land
       p\colon\NatSeg{n+1}\to V\land{}\\[-2pt]
       &\forall i\in\NatSeg n\,
         \bigl((p(i),p(i+1))\in E\bigr)
   \end{aligned}%
-}{DirectedWalkDef}{%
+}{DirectedWalkCharacterization}{%
   \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}
-  \DeltaRow{\textbf{Neues Symbol}}{}
-  \DeltaPrem{Gerichteter Walk}{\DirectedWalk{V}{E}{p}{n}}
 }
+\begin{tabproofsplitwide}
+  \proofpartwide{Hinrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{\DirectedWalk{V}{E}{p}{n}}{\rA}
+    \proofstepwidestar[1,2]{n\in\mathbb N}{%
+      \FormulaRefAuto{DirectedWalkLengthAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{p\colon\NatSeg{n+1}\to V}{%
+      \FormulaRefAuto{DirectedWalkSequenceAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}{%
+      \FormulaRefAuto{DirectedWalkEdgesAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+      &n\in\mathbb N\land{}\\[-2pt]
+      &p\colon\NatSeg{n+1}\to V\land{}\\[-2pt]
+      &\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)
+    \end{aligned}}{\rAIStar{3,4,5}}
+  \closeproofpartwide
+
+  \proofpartwide{Rückrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{%
+      \begin{aligned}[t]
+      &n\in\mathbb N\land{}\\[-2pt]
+      &p\colon\NatSeg{n+1}\to V\land{}\\[-2pt]
+      &\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)
+    \end{aligned}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb N}{\rAEa{2}}
+    \proofstepwidestar[2]{p\colon\NatSeg{n+1}\to V}{\rAEa{\rAEb{2}}}
+    \proofstepwidestar[2]{\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)}{\rAEb{\rAEb{2}}}
+    \proofstepwidestar[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedWalkDef}[def]{1,3,4,5}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 Die Zahl \(n\) ist die Kantenlänge des Walks; seine Knotenfolge besitzt
 den Bereich \(\NatSeg{n+1}\) und damit \(n+1\) Glieder.
@@ -519,7 +593,7 @@ den Bereich \(\NatSeg{n+1}\) und damit \(n+1\) Glieder.
     \begin{aligned}[t]
       &n\in\mathbb N\land p\colon\NatSeg{n+1}\to V\land{}\\[-2pt]
       &\forall i\in\NatSeg n\,((p(i),p(i+1))\in E)
-    \end{aligned}}{\FormulaRefAuto{DirectedWalkDef}[def]{1,2}}
+    \end{aligned}}{\FormulaRefAuto{DirectedWalkCharacterization}[thm]{1,2}}
   \proofstepwidestar[1,2]{n\in\mathbb N}{\rAEa{3}}
   \proofstepwidestar[1,2]{p\colon\NatSeg{n+1}\to V}{%
     \FormulaRefAuto{P\land Q\land R\vdash Q}[thm]{3}}
@@ -559,7 +633,7 @@ den Bereich \(\NatSeg{n+1}\) und damit \(n+1\) Glieder.
     \begin{aligned}[t]
       &n\in\mathbb N\land p\colon\NatSeg{n+1}\to V\land{}\\[-2pt]
       &\forall j\in\NatSeg n\,((p(j),p(j+1))\in E)
-    \end{aligned}}{\FormulaRefAuto{DirectedWalkDef}[def]{1,2}}
+    \end{aligned}}{\FormulaRefAuto{DirectedWalkCharacterization}[thm]{1,2}}
   \proofstepwidestar[1,2]{%
     \forall j\in\NatSeg n\,((p(j),p(j+1))\in E)}{%
     \FormulaRefAuto{P\land Q\land R\vdash R}[thm]{4}}
@@ -568,58 +642,275 @@ den Bereich \(\NatSeg{n+1}\) und damit \(n+1\) Glieder.
 \end{tabproofwide}
 
 \FormulaDefDeltaK[Endlicher gerichteter Pfad]{%
-  \GraphStruct{V,E}\vdash
-  \DirectedPath{V}{E}{p}{n}\coloneqq
-  \DirectedWalk{V}{E}{p}{n}\land
-  p\colon\NatSeg{n+1}\inj V%
+  \DirectedPath{V}{E}{p}{n}%
 }{DirectedPathDef}{%
   \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
-  \DeltaRow{Funktionen}{p}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Walkstruktur}{%
+    \DirectedWalk{V}{E}{p}{n}}
+  \DeltaRow{Injektive Knotenfolge}{%
+    p\colon\NatSeg{n+1}\inj V}
   \DeltaRow{\textbf{Neues Symbol}}{}
-  \DeltaPrem{Gerichteter Pfad}{\DirectedPath{V}{E}{p}{n}}
+  \DeltaPrem{Struktur}{\DirectedPath{V}{E}{p}{n}}
 }
 
-\FormulaThmDeltaK[Jeder gerichtete Pfad ist ein Walk]{%
+\FormulaAxiomDeltaK[Walkstruktur]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedPath{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &\DirectedWalk{V}{E}{p}{n}
+  \end{aligned}%
+}{DirectedPathWalkAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+
+\FormulaAxiomDeltaK[Injektive Knotenfolge]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedPath{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &p\colon\NatSeg{n+1}\inj V
+  \end{aligned}%
+}{DirectedPathInjectiveAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+
+\FormulaThmDeltaK[Charakterisierung durch die Axiome]{%
+  \GraphStruct{V,E}\vdash
+  \DirectedPath{V}{E}{p}{n}\eqvdash
+  \DirectedWalk{V}{E}{p}{n}\land
+  p\colon\NatSeg{n+1}\inj V%
+}{DirectedPathCharacterization}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+\begin{tabproofsplitwide}
+  \proofpartwide{Hinrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+    \proofstepwidestar[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedPathWalkAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{p\colon\NatSeg{n+1}\inj V}{%
+      \FormulaRefAuto{DirectedPathInjectiveAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+      &\DirectedWalk{V}{E}{p}{n}\land{}\\[-2pt]
+      &p\colon\NatSeg{n+1}\inj V
+    \end{aligned}}{\rAIStar{3,4}}
+  \closeproofpartwide
+
+  \proofpartwide{Rückrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{%
+      \begin{aligned}[t]
+      &\DirectedWalk{V}{E}{p}{n}\land{}\\[-2pt]
+      &p\colon\NatSeg{n+1}\inj V
+    \end{aligned}}{\rA}
+    \proofstepwidestar[2]{\DirectedWalk{V}{E}{p}{n}}{\rAEa{2}}
+    \proofstepwidestar[2]{p\colon\NatSeg{n+1}\inj V}{\rAEb{2}}
+    \proofstepwidestar[1,2]{\DirectedPath{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedPathDef}[def]{1,3,4}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Funktionscharakter eines Pfads]{%
   \GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\vdash
-  \DirectedWalk{V}{E}{p}{n}%
-}{DirectedPathIsWalk}{%
-  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}%
+  p\colon\NatSeg{n+1}\to V%
+}{DirectedPathFunction}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
 }
 \begin{tabproof}
   \proofstep{1}{\GraphStruct{V,E}}{\rA}
   \proofstep{2}{\DirectedPath{V}{E}{p}{n}}{\rA}
-  \proofstep{1,2}{%
-    \DirectedWalk{V}{E}{p}{n}\land
-    p\colon\NatSeg{n+1}\inj V}{%
-    \FormulaRefAuto{DirectedPathDef}[def]{1,2}}
-  \proofstep{1,2}{\DirectedWalk{V}{E}{p}{n}}{\rAEa{3}}
+  \proofstep{1,2}{p\colon\NatSeg{n+1}\inj V}{%
+    \FormulaRefAuto{DirectedPathInjectiveAxiom}[ax]{1,2}}
+  \proofstep{1,2}{p\colon\NatSeg{n+1}\to V}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{3}}
 \end{tabproof}
 
 \FormulaDefDeltaK[Gerichteter Kreis]{%
+  \DirectedCycle{V}{E}{p}{n}%
+}{DirectedCycleDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+  \DeltaPrem{Graph}{\GraphStruct{V,E}}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Natürliche Kantenlänge}{%
+    n\in\mathbb N}
+  \DeltaRow{Positive Kantenlänge}{%
+    n\neq0}
+  \DeltaRow{Walkstruktur}{%
+    \DirectedWalk{V}{E}{p}{n}}
+  \DeltaRow{Geschlossenheit}{%
+    p(0)=p(n)}
+  \DeltaRow{Verschiedene innere Knoten}{%
+    \forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Struktur}{\DirectedCycle{V}{E}{p}{n}}
+}
+
+\FormulaAxiomDeltaK[Natürliche Kantenlänge]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedCycle{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &n\in\mathbb N
+  \end{aligned}%
+}{DirectedCycleLengthAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+}
+
+\FormulaAxiomDeltaK[Positive Kantenlänge]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedCycle{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &n\neq0
+  \end{aligned}%
+}{DirectedCycleNonzeroAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+}
+
+\FormulaAxiomDeltaK[Walkstruktur]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedCycle{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &\DirectedWalk{V}{E}{p}{n}
+  \end{aligned}%
+}{DirectedCycleWalkAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+}
+
+\FormulaAxiomDeltaK[Geschlossenheit]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedCycle{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &p(0)=p(n)
+  \end{aligned}%
+}{DirectedCycleClosedAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+}
+
+\FormulaAxiomDeltaK[Verschiedene innere Knoten]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep \DirectedCycle{V}{E}{p}{n}\vdash{}\\[-2pt]
+    &\forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)
+  \end{aligned}%
+}{DirectedCycleDistinctAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
+}
+
+\FormulaThmDeltaK[Charakterisierung durch die Axiome]{%
   \GraphStruct{V,E}\vdash
   \begin{aligned}[t]
     &\DirectedCycle{V}{E}{p}{n}\\[-2pt]
-    &\quad\coloneqq n\in\mathbb N\land n\neq0\land
+    &\quad\eqvdash n\in\mathbb N\land n\neq0\land
       \DirectedWalk{V}{E}{p}{n}\land p(0)=p(n)\land{}\\[-2pt]
     &\qquad\forall i,j\in\NatSeg n\,
         \bigl(p(i)=p(j)\rightarrow i=j\bigr)
   \end{aligned}%
-}{DirectedCycleDef}{%
+}{DirectedCycleCharacterization}{%
   \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i\dsep j}
-  \DeltaRow{\textbf{Neues Symbol}}{}
-  \DeltaPrem{Gerichteter Kreis}{\DirectedCycle{V}{E}{p}{n}}
 }
+\begin{tabproofsplitwide}
+  \proofpartwide{Hinrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{\DirectedCycle{V}{E}{p}{n}}{\rA}
+    \proofstepwidestar[1,2]{n\in\mathbb N}{%
+      \FormulaRefAuto{DirectedCycleLengthAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{n\neq0}{%
+      \FormulaRefAuto{DirectedCycleNonzeroAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{\DirectedWalk{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedCycleWalkAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{p(0)=p(n)}{%
+      \FormulaRefAuto{DirectedCycleClosedAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{\forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)}{%
+      \FormulaRefAuto{DirectedCycleDistinctAxiom}[ax]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+      &n\in\mathbb N\land{}\\[-2pt]
+      &n\neq0\land{}\\[-2pt]
+      &\DirectedWalk{V}{E}{p}{n}\land{}\\[-2pt]
+      &p(0)=p(n)\land{}\\[-2pt]
+      &\forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)
+    \end{aligned}}{\rAIStar{3,4,5,6,7}}
+  \closeproofpartwide
+
+  \proofpartwide{Rückrichtung}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+    \proofstepwidestar[2]{%
+      \begin{aligned}[t]
+      &n\in\mathbb N\land{}\\[-2pt]
+      &n\neq0\land{}\\[-2pt]
+      &\DirectedWalk{V}{E}{p}{n}\land{}\\[-2pt]
+      &p(0)=p(n)\land{}\\[-2pt]
+      &\forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)
+    \end{aligned}}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb N}{\rAEa{2}}
+    \proofstepwidestar[2]{n\neq0}{\rAEa{\rAEb{2}}}
+    \proofstepwidestar[2]{\DirectedWalk{V}{E}{p}{n}}{\rAEa{\rAEb{\rAEb{2}}}}
+    \proofstepwidestar[2]{p(0)=p(n)}{\rAEa{\rAEb{\rAEb{\rAEb{2}}}}}
+    \proofstepwidestar[2]{\forall i,j\in\NatSeg n\,(p(i)=p(j)\rightarrow i=j)}{\rAEb{\rAEb{\rAEb{\rAEb{2}}}}}
+    \proofstepwidestar[1,2]{\DirectedCycle{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedCycleDef}[def]{1,3,4,5,6,7}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Azyklischer gerichteter Graph]{%
-  \AcyclicGraphStruct{V,E}\coloneqq
+  \AcyclicGraphStruct{V,E}%
+}{DirectedAcyclicGraphDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Graphstruktur}{%
+    \GraphStruct{V,E}}
+  \DeltaRow{Kreisfreiheit}{%
+    \neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Struktur}{\AcyclicGraphStruct{V,E}}
+}
+
+\FormulaAxiomDeltaK[Graphstruktur]{%
+  \begin{aligned}[t]
+    &\AcyclicGraphStruct{V,E}\vdash{}\\[-2pt]
+    &\GraphStruct{V,E}
+  \end{aligned}%
+}{DirectedAcyclicGraphGraphAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+
+\FormulaAxiomDeltaK[Kreisfreiheit]{%
+  \begin{aligned}[t]
+    &\AcyclicGraphStruct{V,E}\vdash{}\\[-2pt]
+    &\neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}
+  \end{aligned}%
+}{DirectedAcyclicGraphNoCycleAxiom}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
+}
+
+\FormulaThmDeltaK[Charakterisierung durch die Axiome]{%
+  \AcyclicGraphStruct{V,E}\eqvdash
   \GraphStruct{V,E}\land
   \neg\exists n\in\mathbb N\,\exists p\,
     \DirectedCycle{V}{E}{p}{n}%
-}{DirectedAcyclicGraphDef}{%
+}{DirectedAcyclicGraphCharacterization}{%
   \DeltaRow{Mengen}{V\dsep E\dsep p\dsep n}
-  \DeltaRow{\textbf{Neues Symbol}}{}
-  \DeltaPrem{Azyklischer Graph}{\AcyclicGraphStruct{V,E}}
 }
+\begin{tabproofsplitwide}
+  \proofpartwide{Hinrichtung}
+    \proofstepwidestar[1]{\AcyclicGraphStruct{V,E}}{\rA}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{%
+      \FormulaRefAuto{DirectedAcyclicGraphGraphAxiom}[ax]{1}}
+    \proofstepwidestar[1]{\neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}}{%
+      \FormulaRefAuto{DirectedAcyclicGraphNoCycleAxiom}[ax]{1}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+      &\GraphStruct{V,E}\land{}\\[-2pt]
+      &\neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}
+    \end{aligned}}{\rAIStar{2,3}}
+  \closeproofpartwide
+
+  \proofpartwide{Rückrichtung}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+      &\GraphStruct{V,E}\land{}\\[-2pt]
+      &\neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}
+    \end{aligned}}{\rA}
+    \proofstepwidestar[1]{\GraphStruct{V,E}}{\rAEa{1}}
+    \proofstepwidestar[1]{\neg\exists n\in\mathbb N\,\exists p\,\DirectedCycle{V}{E}{p}{n}}{\rAEb{1}}
+    \proofstepwidestar[1]{\AcyclicGraphStruct{V,E}}{%
+      \FormulaRefAuto{DirectedAcyclicGraphDef}[def]{2,3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
 
 \section{Erreichbarkeit}
 
