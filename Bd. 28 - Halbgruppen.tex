@@ -1398,16 +1398,15 @@ Abbildung und nicht lediglich eine informelle Rekursionsvorschrift.
 \subsection{Positive Potenzen}
 
 Ist \(n\in\mathbb N\) und \(n\neq0\), so ist
-\(n=\Succ(\Pred(n))\). Der Vorgänger dient daher nur dazu, die bei \(0\)
-beginnende Potenzfolge mit den bei \(1\) beginnenden Exponenten zu
-synchronisieren.
+\((n-1)+1=n\). Der Index \(n-1\) stimmt daher die bei \(0\)
+beginnende Potenzfolge auf die bei \(1\) beginnenden Exponenten ab.
 
 \FormulaDefDeltaK[Positive Potenz eines Halbgruppenelements]{%
   \begin{aligned}[t]
     &\SemigroupAlg{A}{\star}\dsep a\in A\dsep
       n\in\mathbb N\dsep n\neq0\vdash{}\\[-2pt]
     &a^n\coloneqq
-      \operatorname{pow}_{A,\star}(a)(\Pred(n))
+      \operatorname{pow}_{A,\star}(a)(n-1)
   \end{aligned}
 }{SemigroupPositivePowerDef}{%
   \DeltaRow{Mengen}{A\dsep a\dsep n}
@@ -1415,10 +1414,6 @@ synchronisieren.
   \DeltaRow{\textbf{Neues Symbol}}{}
   \DeltaPrem{Positive Potenz}{a^n}
 }
-
-Wegen \(n+1=\Succ(n)\) formulieren wir die Nachfolgeraussagen im Folgenden
-mit der Addition auf den natürlichen Zahlen.  Diese Schreibweise passt
-unmittelbar zu den anschließenden Potenzgesetzen.
 
 \FormulaThmDeltaK[Nachfolgerindex der Potenzfolge]{%
   \SemigroupAlg{A}{\star}\dsep a\in A\dsep n\in\mathbb N\vdash
@@ -1431,23 +1426,17 @@ unmittelbar zu den anschließenden Potenzgesetzen.
   \proofstepwidestar[1]{\SemigroupAlg{A}{\star}}{\rA}
   \proofstepwidestar[2]{a\in A}{\rA}
   \proofstepwidestar[3]{n\in\mathbb N}{\rA}
-  \proofstepwidestar[3]{n+1=\Succ(n)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}[thm]{3}}
   \proofstepwidestar[3]{n+1\in\mathbb N}{%
-    \rIE{4,\FormulaRefAuto{PeanoSuccClosure}[ax]{3}}}
+    \FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}
   \proofstepwidestar[3]{n+1\neq0}{%
-    \rIE{4,\FormulaRefAuto{PeanoSuccNonzero}[ax]{3}}}
+    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{3}}
   \proofstepwidestar[1,2,3]{%
-    a^{n+1}=\operatorname{pow}_{A,\star}(a)(\Pred(n+1))}{%
-    \FormulaRefAuto{SemigroupPositivePowerDef}[def]{1,2,5,6}}
-  \proofstepwidestar[3]{\Pred(n+1)=n}{%
-    \rIE{4,\FormulaRefAuto{PeanoPredSucc}[thm]{3}}}
-  \proofstepwidestarbreakkeep[1,2,3]{%
-    \operatorname{pow}_{A,\star}(a)(\Pred(n+1))=
-    \operatorname{pow}_{A,\star}(a)(n)}{\rIE{8}}
+    a^{n+1}=\operatorname{pow}_{A,\star}(a)((n+1)-1)}{%
+    \FormulaRefAuto{SemigroupPositivePowerDef}[def]{1,2,4,5}}
+  \proofstepwidestar[3]{(n+1)-1=n}{%
+    \FormulaRefAuto{PeanoAddOneMinusOne}[thm]{3}}
   \proofstepwidestar[1,2,3]{%
-    a^{n+1}=\operatorname{pow}_{A,\star}(a)(n)}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}[thm]{7,9}}
+    a^{n+1}=\operatorname{pow}_{A,\star}(a)(n)}{\rIE{7,6}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Erste positive Potenz]{%
@@ -1508,28 +1497,26 @@ unmittelbar zu den anschließenden Potenzgesetzen.
   \proofstepwidestarbreak[1,2,3,4]{%
     \RecFun{a}{\rho_{A,\star,a}}(n)=
     \rho_{A,\star,a}
-      (\RecFun{a}{\rho_{A,\star,a}}(\Pred(n)))}{%
-    \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
-      n\in\mathbb{N}\dsep n\neq0\vdash
-      \RecFun{m_0}{f}(n)=f(\RecFun{m_0}{f}(\Pred(n)))}[thm]{2,6,3,4}}
-  \proofstepwidestarbreak[1,2,3]{%
-    \RecFun{a}{\rho_{A,\star,a}}(\Pred(n))\in A}{%
+      (\RecFun{a}{\rho_{A,\star,a}}(n-1))}{%
+    \FormulaRefAuto{PeanoRecursionMinusOne}[thm]{2,6,3,4}}
+  \proofstepwidestarbreak[1,2,3,4]{%
+    \RecFun{a}{\rho_{A,\star,a}}(n-1)\in A}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep k\in\mathbb{N}
       \vdash\RecFun{m_0}{f}(k)\in M}[thm]{%
-      2,6,\FormulaRefAuto{PeanoPredNatural}[thm]{3,4}}}
-  \proofstepwidestarbreak[1,2,3]{%
+      2,6,\FormulaRefAuto{PeanoMinusOneNatural}[thm]{3,4}}}
+  \proofstepwidestarbreak[1,2,3,4]{%
     \rho_{A,\star,a}
-      (\RecFun{a}{\rho_{A,\star,a}}(\Pred(n)))
-    =\RecFun{a}{\rho_{A,\star,a}}(\Pred(n))\star a}{%
+      (\RecFun{a}{\rho_{A,\star,a}}(n-1))
+    =\RecFun{a}{\rho_{A,\star,a}}(n-1)\star a}{%
     \FormulaRefAuto{SemigroupRightTranslationEvaluation}[thm]{1,2,9}}
   \proofstepwidestarbreak[1,2,3,4]{%
-    a^n=\operatorname{pow}_{A,\star}(a)(\Pred(n))}{%
+    a^n=\operatorname{pow}_{A,\star}(a)(n-1)}{%
     \FormulaRefAuto{SemigroupPositivePowerDef}[def]{1,2,3,4}}
   \proofstepwidestarbreak[1,2,3,4]{%
-    a^n=\RecFun{a}{\rho_{A,\star,a}}(\Pred(n))}{%
+    a^n=\RecFun{a}{\rho_{A,\star,a}}(n-1)}{%
     \rIE{\FormulaRefAuto{SemigroupPowerSequenceDef}[def]{1,2},11}}
   \proofstepwidestarbreak[1,2,3,4]{%
-    \RecFun{a}{\rho_{A,\star,a}}(\Pred(n))\star a=a^n\star a}{%
+    \RecFun{a}{\rho_{A,\star,a}}(n-1)\star a=a^n\star a}{%
     \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{12}}}
   \proofstepwidestarbreak[1,2,3,4]{a^{n+1}=a^n\star a}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}[thm]{%
@@ -1553,13 +1540,13 @@ unmittelbar zu den anschließenden Potenzgesetzen.
   \proofstepwidestar[1,2]{%
     \operatorname{pow}_{A,\star}(a)\colon\mathbb N\to A}{%
     \FormulaRefAuto{SemigroupPowerSequenceFunction}[thm]{1,2}}
-  \proofstepwidestar[3,4]{\Pred(n)\in\mathbb N}{%
-    \FormulaRefAuto{PeanoPredNatural}[thm]{3,4}}
-  \proofstepwidestar[1,2,3]{%
-    \operatorname{pow}_{A,\star}(a)(\Pred(n))\in A}{%
+  \proofstepwidestar[3,4]{(n-1)\in\mathbb N}{%
+    \FormulaRefAuto{PeanoMinusOneNatural}[thm]{3,4}}
+  \proofstepwidestar[1,2,3,4]{%
+    \operatorname{pow}_{A,\star}(a)(n-1)\in A}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{5,6}}
   \proofstepwidestar[1,2,3,4]{%
-    a^n=\operatorname{pow}_{A,\star}(a)(\Pred(n))}{%
+    a^n=\operatorname{pow}_{A,\star}(a)(n-1)}{%
     \FormulaRefAuto{SemigroupPositivePowerDef}[def]{1,2,3,4}}
   \proofstepwidestar[1,2,3,4]{a^n\in A}{\rIE{8,7}}
 \end{tabproofwide}
@@ -6499,6 +6486,616 @@ für ein \(a\in A\). Somit ist \(\eta_A\) bijektiv. Mit
     \FormulaRefAuto{SemigroupIsoDef}[def]{13,8}}
 \end{tabproofwide}
 
+\subsection{Produktquadrate und ihre Isomorphieinvarianz}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Nichtleerheit des Potenzträgers]{%
+  A\neq\varnothing\vdash\PowNE{A}\neq\varnothing%
+}{NonemptyPowerCarrierNonempty}{%
+  \DeltaRow{Mengen}{A}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[1]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 1}}}
+  \proofstepwidestarbreakkeep[1]{\PowNE{A}\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{2}}
+\end{tabproofwide}
+
+In dieser Untersektion bezeichnet \(A^2\) das \emph{Produktquadrat}
+einer nichtleeren Halbgruppe, also die Menge ihrer Produktwerte.  Es ist
+nicht das kartesische Quadrat \(A\times A\).  Die jeweilige Operation
+ergibt sich aus der angegebenen Halbgruppe; insbesondere verwendet
+\(\PowNE{A}^{\,2}\) die Operation \(\star_{\mathcal P}\).
+Auf einem Unterträger \(U\) bezeichnet \(\star\) stets die Einschränkung
+der ursprünglichen Operation auf \(U\times U\). Entsprechend ist bei
+\(\SemigroupAlg{A^2}{\star}\) die eingeschränkte Operation gemeint.
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Produktquadrat einer nichtleeren Halbgruppe]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing\vdash
+  A^2\coloneqq A\star_{\mathcal P}A%
+}{SemigroupSquareDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+  \DeltaRow{Lokale Schreibweise}{A^2}
+}
+\end{minipage}\par
+Die Definition ist zulässig: Aus \(A\subseteq A\) und
+\(A\neq\varnothing\) folgt nach
+\FormulaRefAuto{NonemptyPowersetMembership}[thm], dass
+\(A\in\PowNE{A}\).
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Elementkriterium des Produktquadrats]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep A\neq\varnothing\vdash{}\\[-2pt]
+    &z\in A^2\leftrightarrow
+      \bigl(z\in A\land\exists a\in A\,\exists b\in A\,
+        (z=a\star b)\bigr)
+  \end{aligned}%
+}{SemigroupSquareMembership}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep z}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[1,2]{A^2=A\star_{\mathcal P}A}{%
+    \FormulaRefAuto{SemigroupSquareDef}[def]{1,\allowbreak 2}}
+  \proofstepwidestarbreakkeep[1,2]{%
+    z\in A^2\leftrightarrow
+    \bigl(z\in A\land\exists a\in A\,\exists b\in A\,
+      (z=a\star b)\bigr)}{%
+    \rIE{4,\allowbreak \FormulaRefAuto{PowerSemigroupProductMembership}[thm]{1,\allowbreak 3,\allowbreak 3}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Produktzeugen im Quadrat]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing\dsep z\in A^2
+  \vdash\exists a\in A\,\exists b\in A\,(z=a\star b)%
+}{SemigroupSquareWitnesses}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep z}
+  \DeltaRow{Funktionen}{\star}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{z\in A^2}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{%
+    \exists a\in A\,\exists b\in A\,(z=a\star b)}{%
+    \rAEb{\FormulaRefAuto{SemigroupSquareMembership}[thm]{1,\allowbreak 2,\allowbreak 3}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Produktwerte liegen im Quadrat]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing\dsep a,b\in A
+  \vdash a\star b\in A^2%
+}{SemigroupSquareProductMember}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\star}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{a,b\in A}{\rA}
+  \proofstepwidestarbreakkeep[1,3]{a\star b\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,\allowbreak 3}}
+  \proofstepwidestarbreakkeep[3]{%
+    \exists x\in A\,\exists y\in A\,(a\star b=x\star y)}{%
+    \rEIStar{3,\allowbreak \rII}}
+  \proofstepwidestarbreakkeep[1,2,3]{a\star b\in A^2}{%
+    \FormulaRefAuto{SemigroupSquareMembership}[thm]{1,\allowbreak 2,\allowbreak \rAI{4,\allowbreak 5}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Das Produktquadrat liegt im Träger]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing\vdash A^2\subseteq A%
+}{SemigroupSquareSubset}{%
+  \DeltaRow{Mengen}{A\dsep z}
+  \DeltaRow{Funktionen}{\star}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{z\in A^2}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{z\in A}{%
+    \rAEa{\FormulaRefAuto{SemigroupSquareMembership}[thm]{1,\allowbreak 2,\allowbreak 3}}}
+  \proofstepwidestarbreakkeep[1,2]{A^2\subseteq A}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{3,\allowbreak 4}}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Das Produktquadrat ist eine Unterhalbgruppe]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing
+  \vdash\mathsf{UHGr}(A^2;A,\star)%
+}{SemigroupSquareIsSubsemigroup}{%
+  \DeltaRow{Mengen}{A\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\end{minipage}\par
+Die Beweisidee ist unmittelbar: Zwei Elemente des Quadrats liegen schon
+im ursprünglichen Träger, und ihr Produkt gehört deshalb wieder zum Quadrat.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{A^2\subseteq A}{%
+    \FormulaRefAuto{SemigroupSquareSubset}[thm]{1,\allowbreak 2}}
+  \proofstepwidestarbreakkeep[2]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[1,2]{A^2\neq\varnothing}{%
+    \rIE{\FormulaRefAuto{SemigroupSquareDef}[def]{1,\allowbreak 2},\allowbreak %
+      \FormulaRefAuto{PowerSemigroupProductNonempty}[thm]{1,\allowbreak 4,\allowbreak 4}}}
+  \proofstepwidestarbreakkeep[6]{x,y\in A^2}{\rA}
+  \proofstepwidestarbreakkeep[1,2,6]{x,y\in A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{3,\allowbreak 6}}
+  \proofstepwidestarbreakkeep[1,2,6]{x\star y\in A^2}{%
+    \FormulaRefAuto{SemigroupSquareProductMember}[thm]{1,\allowbreak 2,\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1,2]{\mathsf{UHGr}(A^2;A,\star)}{%
+    \FormulaRefAuto{SemigroupSubsemigroupDef}[def]{1,\allowbreak 3,\allowbreak 5,\allowbreak 8}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Das Potenzquadrat liegt über dem Grundquadrat]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing
+  \vdash\PowNE{A}^{\,2}\subseteq\PowNE{A^2}%
+}{PowerSemigroupSquareSubset}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep Y\dsep Z\dsep z\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\end{minipage}\par
+Ein Element des Potenzquadrats ist ein Mengenprodukt. Jeder seiner
+Einträge ist daher ein Produkt zweier Grundelemente.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{\PowNE{A}}{\star_{\mathcal P}}}{%
+    \FormulaRefAuto{NonemptyPowerSemigroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[2]{\PowNE{A}\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{4}}
+  \proofstepwidestarbreakkeep[6]{Z\in\PowNE{A}^{\,2}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,6]{%
+    \exists X\in\PowNE{A}\,\exists Y\in\PowNE{A}\,
+      (Z=X\star_{\mathcal P}Y)}{%
+    \FormulaRefAuto{SemigroupSquareWitnesses}[thm]{3,\allowbreak 5,\allowbreak 6}}
+  \proofstepwidestarbreakkeep[8]{X,Y\in\PowNE{A}\land Z=X\star_{\mathcal P}Y}{\rA}
+  \proofstepwidestarbreakkeep[9]{z\in Z}{\rA}
+  \proofstepwidestarbreakkeep[1,8,9]{%
+    \exists a\in X\,\exists b\in Y\,(z=a\star b)}{%
+    \FormulaRefAuto{PowerSemigroupProductWitnesses}[thm]{1,\allowbreak 8,\allowbreak \rIE{8,\allowbreak 9}}}
+  \proofstepwidestarbreakkeep[11]{a\in X\land b\in Y\land z=a\star b}{\rA}
+  \proofstepwidestarbreakkeep[8,11]{a,b\in A}{%
+    \FormulaRefAuto{PowerSemigroupCarrierElement}[thm]{8,\allowbreak 11}}
+  \proofstepwidestarbreakkeep[1,2,8,11]{z\in A^2}{%
+    \rIE{11,\allowbreak \FormulaRefAuto{SemigroupSquareProductMember}[thm]{1,\allowbreak 2,\allowbreak 12}}}
+  \proofstepwidestarbreakkeep[1,2,8,9]{z\in A^2}{\rEEStar{10,\allowbreak 11\text{--}13}}
+  \proofstepwidestarbreakkeep[1,2,8]{Z\subseteq A^2}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{9,\allowbreak 14}}}}
+  \proofstepwidestarbreakkeep[1,8]{Z\neq\varnothing}{%
+    \rIE{8,\allowbreak \FormulaRefAuto{PowerSemigroupProductNonempty}[thm]{1,\allowbreak 8}}}
+  \proofstepwidestarbreakkeep[1,2,8]{Z\in\PowNE{A^2}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAI{15,\allowbreak 16}}}
+  \proofstepwidestarbreakkeep[1,2,6]{Z\in\PowNE{A^2}}{\rEEStar{7,\allowbreak 8\text{--}17}}
+  \proofstepwidestarbreakkeep[1,2]{\PowNE{A}^{\,2}\subseteq\PowNE{A^2}}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{6,\allowbreak 18}}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Einermengen im Potenzquadrat]{%
+  \SemigroupAlg{A}{\star}\dsep A\neq\varnothing\dsep a\in A\vdash
+  \bigl(\{a\}\in\PowNE{A}^{\,2}\leftrightarrow a\in A^2\bigr)%
+}{PowerSemigroupSquareSingletonCriterion}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}\dsep\eta_A}
+}
+\end{minipage}\par
+Für die Rückrichtung wird eine Produktdarstellung von \(a\) durch die
+Einermengenabbildung in eine Produktdarstellung von \(\{a\}\) überführt.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{a\in A}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{\PowNE{A}}{\star_{\mathcal P}}}{%
+    \FormulaRefAuto{NonemptyPowerSemigroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[2]{\PowNE{A}\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{5}}
+  \proofstepwidestarbreakkeep[7]{\{a\}\in\PowNE{A}^{\,2}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,7]{\{a\}\in\PowNE{A^2}}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+      \FormulaRefAuto{PowerSemigroupSquareSubset}[thm]{1,\allowbreak 2},\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1,2,7]{a\in A^2}{%
+    \FormulaRefAuto{PowerSemigroupCarrierElement}[thm]{8,\allowbreak \FormulaRefAuto{a\in\{a\}}[thm]}}
+  \proofstepwidestarbreakkeep[1,2]{\{a\}\in\PowNE{A}^{\,2}\rightarrow a\in A^2}{\rRI{7,\allowbreak 9}}
+  \proofstepwidestarbreakkeep[11]{a\in A^2}{\rA}
+  \proofstepwidestarbreakkeep[1,2,11]{\exists x\in A\,\exists y\in A\,(a=x\star y)}{%
+    \FormulaRefAuto{SemigroupSquareWitnesses}[thm]{1,\allowbreak 2,\allowbreak 11}}
+  \proofstepwidestarbreakkeep[13]{x,y\in A\land a=x\star y}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupHom{\eta_A}{A,\star}{\operatorname{Sing}(A),\star_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupSingletonCopyIsomorphism}[thm]{1}}}
+  \proofstepwidestarbreakkeep[1,13]{\{a\}=\{x\}\star_{\mathcal P}\{y\}}{%
+    \rIE{13,\allowbreak \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1},\allowbreak %
+      \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{14,\allowbreak 13}}}
+  \proofstepwidestarbreakkeep[13]{\{x\},\{y\}\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{13},\allowbreak %
+      \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{%
+        \FormulaRefAuto{a\in\{a\}}[thm]}}}
+  \proofstepwidestarbreakkeep[1,2,13]{\{a\}\in\PowNE{A}^{\,2}}{%
+    \rIE{15,\allowbreak \FormulaRefAuto{SemigroupSquareProductMember}[thm]{4,\allowbreak 6,\allowbreak 16}}}
+  \proofstepwidestarbreakkeep[1,2,11]{\{a\}\in\PowNE{A}^{\,2}}{\rEEStar{12,\allowbreak 13\text{--}17}}
+  \proofstepwidestarbreakkeep[1,2]{a\in A^2\rightarrow\{a\}\in\PowNE{A}^{\,2}}{\rRI{11,\allowbreak 18}}
+  \proofstepwidestarbreakkeep[1,2,3]{\{a\}\in\PowNE{A}^{\,2}\leftrightarrow a\in A^2}{\rLRI{10,\allowbreak 19}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Isomorphismen erhalten das Produktquadrat]{%
+  \SemigroupIso{F}{A,\star}{B,\diamond}\dsep
+  A\neq\varnothing\dsep B\neq\varnothing\vdash F[A^2]=B^2%
+}{SemigroupIsoSquareImage}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep\star\dsep\diamond}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupIso{F}{A,\star}{B,\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{B\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupHom{F}{A,\star}{B,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}\land\SemigroupAlg{B}{\diamond}}{%
+    \rAI{\FormulaRefAuto{SemigroupHomSourceAxiom}[ax]{4},\allowbreak %
+      \FormulaRefAuto{SemigroupHomTargetAxiom}[ax]{4}}}
+  \proofstepwidestarbreakkeep[1]{F[A]=B}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F[A]=B}[thm]{%
+      \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{1}}}
+  \proofstepwidestarbreakkeep[2]{A\in\PowNE{A}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{%
+      \rAI{\FormulaRefAuto{A\subseteq A}[thm],\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[1,2,3]{F[A^2]=F[A\star_{\mathcal P}A]}{%
+    \rIE{\FormulaRefAuto{SemigroupSquareDef}[def]{5,\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\phantom{F[A^2]}=F[A]\diamond_{\mathcal P}F[A]}{%
+    \FormulaRefAuto{SemigroupHomPreservesPowerProduct}[thm]{4,\allowbreak 7,\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1,2,3]{\phantom{F[A^2]}=B\diamond_{\mathcal P}B}{\rIE{6}}
+  \proofstepwidestarbreakkeep[1,2,3]{\phantom{F[A^2]}=B^2}{%
+    \FormulaRefAuto{SemigroupSquareDef}[def]{5,\allowbreak 3}}
+  \proofstepwidestarbreakkeep[1,2,3]{F[A^2]=B^2}{\rChain{8,\allowbreak 11}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Einschränkung eines Isomorphismus auf Halbgruppen]{%
+  \begin{aligned}[t]
+    &\SemigroupIso{F}{A,\star}{B,\diamond}\dsep
+      \SemigroupAlg{U}{\star}\dsep\SemigroupAlg{V}{\diamond}\dsep{}\\[-2pt]
+    &U\subseteq A\dsep V\subseteq B\dsep F[U]=V\vdash
+      \SemigroupIso{F\restriction_U}{U,\star}{V,\diamond}
+  \end{aligned}%
+}{SemigroupIsoRestrictionToImage}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep U\dsep V\dsep x\dsep y}
+  \DeltaRow{Funktionen}{F\dsep\star\dsep\diamond}
+}
+\end{minipage}\par
+Die Einschränkung ist bijektiv auf ihr Bild und übernimmt die
+Operationserhaltung. Eine Nichtleerheitsannahme wird hier nicht benötigt.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupIso{F}{A,\star}{B,\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[2]{\SemigroupAlg{U}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupAlg{V}{\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[4]{U\subseteq A}{\rA}
+  \proofstepwidestarbreakkeep[5]{V\subseteq B}{\rA}
+  \proofstepwidestarbreakkeep[6]{F[U]=V}{\rA}
+  \proofstepwidestarbreakkeep[1]{F\colon A\inj B\land F\colon A\to B}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{%
+      \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{1}}}
+  \proofstepwidestarbreakkeep[1,4]{F\restriction_U\colon U\inj B}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep C\subseteq A \vdash F\restriction_C\colon C\inj B}[thm]{7,\allowbreak 4}}
+  \proofstepwidestarbreakkeep[1,4]{F\restriction_U\colon U\bij(F\restriction_U)[U]}{%
+    \FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}[thm]{8}}
+  \proofstepwidestarbreakkeep[1,4]{(F\restriction_U)[U]=F[U]}{%
+    \FormulaRefAuto{C\subseteq A \dsep F\colon A\to B \vdash (F\restriction_C)[C]=F[C]}[thm]{4,\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1,4,6]{F\restriction_U\colon U\bij V}{\rIE{6,\allowbreak 10,\allowbreak 9}}
+  \proofstepwidestarbreakkeep[12]{x,y\in U}{\rA}
+  \proofstepwidestarbreakkeep[4,12]{x,y\in A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[2,12]{x\star y\in U}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{2,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,2,4,12]{(F\restriction_U)(x\star y)=F(x\star y)}{%
+    \FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}[thm]{7,\allowbreak 4,\allowbreak 14}}
+  \proofstepwidestarbreakkeep[1,2,4,12]{\phantom{(F\restriction_U)(x\star y)}=F(x)\diamond F(y)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1},\allowbreak 13}}
+  \proofstepwidestarbreakkeep[1,2,4,12]{\phantom{(F\restriction_U)(x\star y)}=(F\restriction_U)(x)\diamond(F\restriction_U)(y)}{%
+    \rIE{\FormulaRefAuto{C\subseteq A \dsep x\in C \vdash F\restriction_C(x)=F(x)}[thm]{7,\allowbreak 4,\allowbreak 12}}}
+  \proofstepwidestarbreakkeep[1,2,4,12]{%
+    (F\restriction_U)(x\star y)=(F\restriction_U)(x)\diamond(F\restriction_U)(y)}{\rChain{15,\allowbreak 17}}
+  \proofstepwidestarbreakkeep[1,2,3,4,6]{\SemigroupHom{F\restriction_U}{U,\star}{V,\diamond}}{%
+    \FormulaRefAuto{SemigroupHomDef}[def]{2,\allowbreak 3,\allowbreak %
+      \FormulaRefAuto{Bijektive Funktion}[def]{11},\allowbreak 18}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5,6]{\SemigroupIso{F\restriction_U}{U,\star}{V,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{19,\allowbreak 11}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Isomorphe Einschränkung auf die Produktquadrate]{%
+  \begin{aligned}[t]
+    &\SemigroupIso{F}{A,\star}{B,\diamond}\dsep
+      A\neq\varnothing\dsep B\neq\varnothing\vdash{}\\[-2pt]
+    &\SemigroupIso{F\restriction_{A^2}}{A^2,\star}{B^2,\diamond}
+  \end{aligned}%
+}{SemigroupIsoSquareRestriction}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep\star\dsep\diamond}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupIso{F}{A,\star}{B,\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[2]{A\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[3]{B\neq\varnothing}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}\land\SemigroupAlg{B}{\diamond}}{%
+    \rAI{\FormulaRefAuto{SemigroupHomSourceAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}},\allowbreak %
+      \FormulaRefAuto{SemigroupHomTargetAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}}}}
+  \proofstepwidestarbreakkeep[1,2]{\SemigroupAlg{A^2}{\star}}{%
+    \FormulaRefAuto{SubsemigroupFormsSemigroup}[thm]{4,\allowbreak %
+      \FormulaRefAuto{SemigroupSquareIsSubsemigroup}[thm]{4,\allowbreak 2}}}
+  \proofstepwidestarbreakkeep[1,3]{\SemigroupAlg{B^2}{\diamond}}{%
+    \FormulaRefAuto{SubsemigroupFormsSemigroup}[thm]{4,\allowbreak %
+      \FormulaRefAuto{SemigroupSquareIsSubsemigroup}[thm]{4,\allowbreak 3}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\SemigroupIso{F\restriction_{A^2}}{A^2,\star}{B^2,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoRestrictionToImage}[thm]{1,\allowbreak 5,\allowbreak 6,\allowbreak %
+      \FormulaRefAuto{SemigroupSquareSubset}[thm]{4,\allowbreak 2},\allowbreak %
+      \FormulaRefAuto{SemigroupSquareSubset}[thm]{4,\allowbreak 3},\allowbreak %
+      \FormulaRefAuto{SemigroupIsoSquareImage}[thm]{1,\allowbreak 2,\allowbreak 3}}}
+\end{tabproofwide}
+
+\subsection{Transport von Lösungsmengen}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Linke Lösungsmengen einer Halbgruppe]{%
+  \SemigroupAlg{A}{\star}\dsep a,b\in A\vdash
+  L_A(a,b)\coloneqq\{x\in A\mid a\star x=b\}%
+}{SemigroupLeftEquationFiberDef}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep x}
+  \DeltaRow{Funktionen}{\star}
+  \DeltaRow{Lokale Schreibweise}{L_A(a,b)}
+}
+\end{minipage}\par
+Die Operation in \(L_A(a,b)\) ergibt sich aus der angegebenen
+Halbgruppe. Ein Isomorphismus erhält die Gleichung \(a\star x=b\)
+in beiden Richtungen. Das punktweise Kriterium aus Band~08 liefert
+deshalb eine Bijektion zwischen den Lösungsmengen.
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Isomorphismen transportieren linke Lösungsmengen]{%
+  \begin{aligned}[t]
+    &\SemigroupIso{F}{A,\star}{B,\diamond}\dsep a,b\in A\vdash{}\\[-2pt]
+    &F\restriction_{L_A(a,b)}\colon L_A(a,b)\bij L_B(F(a),F(b))
+  \end{aligned}%
+}{SemigroupLeftEquationFiberTransport}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep a\dsep b\dsep x}
+  \DeltaRow{Funktionen}{F\dsep\star\dsep\diamond}
+  \DeltaRow{Lösungsmengen}{L_A(a,b)\dsep L_B(F(a),F(b))}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupIso{F}{A,\star}{B,\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[2]{a,b\in A}{\rA}
+  \proofstepwidestarbreakkeep[1]{F\colon A\bij B}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}\land\SemigroupAlg{B}{\diamond}}{%
+    \rAI{\FormulaRefAuto{SemigroupHomSourceAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}},\allowbreak %
+      \FormulaRefAuto{SemigroupHomTargetAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1}}}}
+  \proofstepwidestarbreakkeep[1,2]{F(a),F(b)\in B}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{3,\allowbreak 2}}
+  \proofstepwidestarbreakkeep[6]{x\in A}{\rA}
+  \proofstepwidestarbreakkeep[1,2,6]{F(a\star x)=F(a)\diamond F(x)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{1},\allowbreak 2,\allowbreak 6}}
+  \proofstepwidestarbreakkeep[1,2,6]{a\star x\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,\allowbreak 2,\allowbreak 6}}
+  \proofstepwidestarbreakkeep[9]{a\star x=b}{\rA}
+  \proofstepwidestarbreakkeep[1,2,6,9]{F(a)\diamond F(x)=F(b)}{\rIE{9,\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1,2,6]{a\star x=b\rightarrow F(a)\diamond F(x)=F(b)}{\rRI{9,\allowbreak 10}}
+  \proofstepwidestarbreakkeep[12]{F(a)\diamond F(x)=F(b)}{\rA}
+  \proofstepwidestarbreakkeep[1,2,6,12]{F(a\star x)=F(b)}{\rChain{7,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,2,6,12]{a\star x=b}{%
+    \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
+      F(x)=F(y)\vdash x=y}[ax]{%
+      \FormulaRefAuto{F\colon A\bij B\vdash F\colon A\inj B}[thm]{3},\allowbreak 8,\allowbreak 2,\allowbreak 13}}
+  \proofstepwidestarbreakkeep[1,2,6]{F(a)\diamond F(x)=F(b)\rightarrow a\star x=b}{\rRI{12,\allowbreak 14}}
+  \proofstepwidestarbreakkeep[1,2,6]{a\star x=b\leftrightarrow F(a)\diamond F(x)=F(b)}{\rLRI{11,\allowbreak 15}}
+  \proofstepwidestarbreakkeep[1,6]{F(x)\in B}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{3,\allowbreak 6}}
+  \proofstepwidestarbreakkeep[1,2,6]{x\in L_A(a,b)\leftrightarrow a\star x=b}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{%
+      \FormulaRefAuto{SemigroupLeftEquationFiberDef}[def]{4,\allowbreak 2},\allowbreak 6}}
+  \proofstepwidestarbreakkeep[1,2,6]{F(x)\in L_B(F(a),F(b))
+    \leftrightarrow F(a)\diamond F(x)=F(b)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{%
+      \FormulaRefAuto{SemigroupLeftEquationFiberDef}[def]{4,\allowbreak 5},\allowbreak 17}}
+  \proofstepwidestarbreakkeep[1,2]{\forall x\in A\,
+    (x\in L_A(a,b)\leftrightarrow F(x)\in L_B(F(a),F(b)))}{%
+    \rUI{\rRI{6,\allowbreak \rChain{18,\allowbreak 16,\allowbreak 19}}}}
+  \proofstepwidestarbreakkeep[1,2]{L_A(a,b)\subseteq A\land
+    L_B(F(a),F(b))\subseteq B}{%
+    \rAI{\FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]{%
+      \FormulaRefAuto{SemigroupLeftEquationFiberDef}[def]{4,\allowbreak 2}},\allowbreak %
+      \FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]{%
+      \FormulaRefAuto{SemigroupLeftEquationFiberDef}[def]{4,\allowbreak 5}}}}
+  \proofstepwidestarbreakkeep[1,2]{F\restriction_{L_A(a,b)}\colon
+    L_A(a,b)\bij L_B(F(a),F(b))}{%
+    \FormulaRefAuto{BijectiveRestrictionIffPointwiseCompatibility}[thm]{3,\allowbreak 21,\allowbreak 20}}
+\end{tabproofwide}
+
+\subsection{Rekonstruktion mit festgelegten Einermengenbildern}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Die Einermengenkopie liegt in der Potenzhalbgruppe]{%
+  \SemigroupAlg{A}{\star}\vdash
+  \operatorname{Sing}(A)\subseteq\PowNE{A}%
+}{SemigroupSingletonCopySubset}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a}
+  \DeltaRow{Funktionen}{\star}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{X\in\operatorname{Sing}(A)}{\rA}
+  \proofstepwidestarbreakkeep[1,2]{\exists a\in A\,(X=\{a\})}{%
+    \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1,\allowbreak 2}}
+  \proofstepwidestarbreakkeep[4]{a\in A\land X=\{a\}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\{a\}\subseteq A}{%
+    \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{4}}
+  \proofstepwidestarbreakkeep[]{\{a\}\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{%
+      \FormulaRefAuto{a\in\{a\}}[thm]}}
+  \proofstepwidestarbreakkeep[4]{X\in\PowNE{A}}{%
+    \rIE{4,\allowbreak \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAI{5,\allowbreak 6}}}}
+  \proofstepwidestarbreakkeep[1,2]{X\in\PowNE{A}}{\rEE{3,\allowbreak 4,\allowbreak 7}}
+  \proofstepwidestarbreakkeep[1]{\operatorname{Sing}(A)\subseteq\PowNE{A}}{%
+    \FormulaRefAuto{A\subseteq B\coloneq
+      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{2,\allowbreak 8}}}}
+\end{tabproofwide}
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Rekonstruktion mit vorgeschriebenen Einermengenbildern]{%
+  \begin{aligned}[t]
+    &\SemigroupAlg{A}{\star}\dsep\SemigroupAlg{B}{\diamond}\dsep{}\\[-2pt]
+    &\SemigroupIso{F}{\PowNE{A},\star_{\mathcal P}}
+      {\PowNE{B},\diamond_{\mathcal P}}\dsep
+      F[\operatorname{Sing}(A)]=\operatorname{Sing}(B)\vdash{}\\[-2pt]
+    &\exists f\,\Bigl(\SemigroupIso{f}{A,\star}{B,\diamond}
+      \land\forall a\in A\,\bigl(F(\{a\})=\{f(a)\}\bigr)\Bigr)
+  \end{aligned}%
+}{PowerSemigroupSingletonLayerReconstructionWitness}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep F\dsep R\dsep f
+    \dsep\eta_A\dsep\eta_B}
+}
+\end{minipage}\par
+Die Einschränkung von \(F\) auf die Einermengenkopie wird mit den beiden
+Einermengenabbildungen zurück auf die Grundträger transportiert. Setze
+für den folgenden Beweis
+\[
+ R\coloneqq F\restriction_{\operatorname{Sing}(A)},\qquad
+ f\coloneqq\eta_B^{-1}\circ(R\circ\eta_A).
+\]
+Die punktweise Gleichung wird mitgeführt, damit spätere
+Rekonstruktionsschritte genau diesen Isomorphismus verwenden können.
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{\rA}
+  \proofstepwidestarbreakkeep[2]{\SemigroupAlg{B}{\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{\PowNE{A},\star_{\mathcal P}}
+    {\PowNE{B},\diamond_{\mathcal P}}}{\rA}
+  \proofstepwidestarbreakkeep[4]{F[\operatorname{Sing}(A)]=\operatorname{Sing}(B)}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupIso{\eta_A}{A,\star}
+    {\operatorname{Sing}(A),\star_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupSingletonCopyIsomorphism}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{\SemigroupIso{\eta_B}{B,\diamond}
+    {\operatorname{Sing}(B),\diamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupSingletonCopyIsomorphism}[thm]{2}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\SemigroupIso{R}
+    {\operatorname{Sing}(A),\star_{\mathcal P}}
+    {\operatorname{Sing}(B),\diamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoRestrictionToImage}[thm]{3,\allowbreak %
+      \FormulaRefAuto{SemigroupHomTargetAxiom}[ax]{%
+        \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{5}},\allowbreak %
+      \FormulaRefAuto{SemigroupHomTargetAxiom}[ax]{%
+        \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{6}},\allowbreak %
+      \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{1},\allowbreak %
+      \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{2},\allowbreak 4}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{R\circ\eta_A\colon A\bij\operatorname{Sing}(B)}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoComposition}[thm]{5,\allowbreak 7}}}
+  \proofstepwidestarbreakkeep[2]{\eta_B\colon B\bij\operatorname{Sing}(B)}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{6}}
+  \proofstepwidestarbreakkeep[2]{\eta_B^{-1}\colon\operatorname{Sing}(B)\bij B}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}[thm]{9}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{f\colon A\bij B}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep G\colon B\bij C\vdash
+      G\circ F\colon A\bij C}[thm]{8,\allowbreak 10}}
+  \proofstepwidestarbreakkeep[12]{a\in A}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{f(a)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{11},\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,12]{\{a\}\in\operatorname{Sing}(A)}{%
+    \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{F(\{a\})\in\operatorname{Sing}(B)}{%
+    \rIE{4,\allowbreak \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep
+      x\in C\vdash F(x)\in F[C]}[thm]{%
+      \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{1},\allowbreak %
+      \FormulaRefAuto{Bijektive Funktion}[def]{%
+        \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}},\allowbreak 14}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{f(a)=\eta_B^{-1}(F(\{a\}))}{%
+    \FormulaRefAuto{x\in A\vdash(F\circ G)(x)=F(G(x))}[thm]{8,\allowbreak 10,\allowbreak 12},\allowbreak %
+    \FormulaRefAuto{RestrictionDef}[def]{14},\allowbreak %
+    \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{\{f(a)\}=\eta_B(f(a))}{%
+    \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{2,\allowbreak 13}}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{\phantom{\{f(a)\}}=\eta_B(\eta_B^{-1}(F(\{a\})))}{\rIE{16}}
+  \proofstepwidestarbreakkeep[1,2,3,4,12]{\phantom{\{f(a)\}}=F(\{a\})}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep y\in B\vdash F(F^{-1}(y))=y}[thm]{9,\allowbreak 15}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\forall a\in A\,(F(\{a\})=\{f(a)\})}{%
+    \rUI{\rRI{12,\allowbreak \FormulaRefAuto{a=b\vdash b=a}[thm]{\rChain{17,\allowbreak 19}}}}}
+  \proofstepwidestarbreakkeep[21]{a,b\in A}{\rA}
+  \proofstepwidestarbreakkeep[1,21]{a\star b\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,\allowbreak 21}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{f(a),f(b)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{11},\allowbreak 21}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{\{f(a\star b)\}=F(\{a\star b\})}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{\rRE{22,\allowbreak \rUE{20}}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{\phantom{\{f(a\star b)\}}=F(\{a\}\star_{\mathcal P}\{b\})}{%
+    \rIE{\FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1},\allowbreak %
+      \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+        \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{5},\allowbreak 21}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{\phantom{\{f(a\star b)\}}=F(\{a\})\diamond_{\mathcal P}F(\{b\})}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3},\allowbreak %
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
+        \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{1},\allowbreak %
+        \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{1,\allowbreak 21}}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{\phantom{\{f(a\star b)\}}=\{f(a)\}\diamond_{\mathcal P}\{f(b)\}}{%
+    \rIE{\rRE{21,\allowbreak \rUE{20}}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{\phantom{\{f(a\star b)\}}=\{f(a)\diamond f(b)\}}{%
+    \rIE{\FormulaRefAuto{SemigroupSingletonCopyDef}[def]{2},\allowbreak %
+      \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+        \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{6},\allowbreak 23}}}
+  \proofstepwidestarbreakkeep[1,2,3,4,21]{f(a\star b)=f(a)\diamond f(b)}{%
+    \FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}[thm]{\rChain{24,\allowbreak 28}}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\SemigroupIso{f}{A,\star}{B,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{%
+      \FormulaRefAuto{SemigroupHomDef}[def]{1,\allowbreak 2,\allowbreak %
+        \FormulaRefAuto{Bijektive Funktion}[def]{11},\allowbreak 29},\allowbreak 11}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\exists f\,\Bigl(
+    \begin{aligned}[t]
+      &\SemigroupIso{f}{A,\star}{B,\diamond}\land{}\\[-2pt]
+      &\forall a\in A\,(F(\{a\})=\{f(a)\})
+    \end{aligned}\Bigr)}{\rEI{\rAI{30,\allowbreak 20}}}
+\end{tabproofwide}
+
 \section{Das Isomorphieproblem für Potenzhalbgruppen}
 
 Zwei Halbgruppen heißen \emph{global isomorph}, wenn ihre
@@ -6560,6 +7157,84 @@ Multiplikation der Erweiterung hängt nur von diesen Rückzugswerten ab.
   \DeltaPrem{Inflation}{%
     \mathsf{Infl}_{r}\bigl((A,\star),(B,\diamond)\bigr)}
 }
+
+\paragraph{Isomorphismen aus passenden Inflationsfasern.}
+Die Multiplikation einer Inflation hängt nur von den Rückzugswerten ab.
+Deshalb genügt es, passende Faserbijektionen zu verkleben und dabei den
+gegebenen Isomorphismus auf der Grundhalbgruppe beizubehalten.
+Die mengentheoretische Verklebung ist in Band~09 bereits bewiesen.
+
+\par\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Rekonstruktion aus passenden Inflationsfasern]{%
+  \begin{aligned}[t]
+    &\mathsf{Infl}_{r}((G,\star),(S,\star))\dsep
+      \mathsf{Infl}_{s}((H,\diamond),(T,\diamond))\dsep{}\\[-2pt]
+    &\SemigroupIso{\varphi}{G,\star}{H,\diamond}\dsep{}\\[-2pt]
+    &\forall g\in G\,\exists u\,
+      \bigl(u\colon r^{-1}[\{g\}]\bij s^{-1}[\{\varphi(g)\}]\bigr)\vdash{}\\[-2pt]
+    &\exists f\,\SemigroupIso{f}{S,\star}{T,\diamond}
+  \end{aligned}%
+}{InflationFiberIsomorphism}{%
+  \DeltaRow{Mengen}{S\dsep T\dsep G\dsep H\dsep x\dsep y\dsep g}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep r\dsep s\dsep\varphi\dsep f\dsep u}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\mathsf{Infl}_{r}((G,\star),(S,\star))}{\rA}
+  \proofstepwidestarbreakkeep[2]{\mathsf{Infl}_{s}((H,\diamond),(T,\diamond))}{\rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{\varphi}{G,\star}{H,\diamond}}{\rA}
+  \proofstepwidestarbreakkeep[4]{\forall g\in G\,\exists u\,
+    \bigl(u\colon r^{-1}[\{g\}]\bij s^{-1}[\{\varphi(g)\}]\bigr)}{\rA}
+  \proofstepwidestarbreakkeep[1]{G\subseteq S\land r\colon S\to G\land
+    \forall g\in G\,(r(g)=g)}{\FormulaRefAuto{SemigroupInflationDef}[def]{1}}
+  \proofstepwidestarbreakkeep[2]{H\subseteq T\land s\colon T\to H\land
+    \forall h\in H\,(s(h)=h)}{\FormulaRefAuto{SemigroupInflationDef}[def]{2}}
+  \proofstepwidestarbreakkeep[3]{\varphi\colon G\bij H}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\exists f\,\Bigl(
+    \begin{aligned}[t]
+      &f\colon S\bij T\land{}\\[-2pt]
+      &\forall x\in S\,(s(f(x))=\varphi(r(x)))\land{}\\[-2pt]
+      &\forall g\in G\,(f(g)=\varphi(g))
+    \end{aligned}\Bigr)}{%
+    \FormulaRefAuto{RetractionFiberBijection}[thm]{5,\allowbreak 6,\allowbreak 7,\allowbreak 4}}
+  \proofstepwidestarbreakkeep[9]{\begin{aligned}[t]
+    &f\colon S\bij T\land{}\\[-2pt]
+    &\forall x\in S\,(s(f(x))=\varphi(r(x)))\land{}\\[-2pt]
+    &\forall g\in G\,(f(g)=\varphi(g))
+  \end{aligned}}{\rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{G}{\star}\land\SemigroupAlg{S}{\star}}{%
+    \FormulaRefAuto{SemigroupInflationDef}[def]{1}}
+  \proofstepwidestarbreakkeep[2]{\SemigroupAlg{H}{\diamond}\land\SemigroupAlg{T}{\diamond}}{%
+    \FormulaRefAuto{SemigroupInflationDef}[def]{2}}
+  \proofstepwidestarbreakkeep[12]{x,y\in S}{\rA}
+  \proofstepwidestarbreakkeep[1,12]{r(x),r(y)\in G}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{5,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[9,12]{f(x),f(y)\in T}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{\rAEa{9},\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,12]{x\star y=r(x)\star r(y)}{%
+    \FormulaRefAuto{SemigroupInflationDef}[def]{1,\allowbreak 12}}
+  \proofstepwidestarbreakkeep[1,12]{r(x)\star r(y)\in G}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{10,\allowbreak 13}}
+  \proofstepwidestarbreakkeep[9]{\forall g\in G\,(f(g)=\varphi(g))}{\rAEb{\rAEb{9}}}
+  \proofstepwidestarbreakkeep[9]{\forall x\in S\,(s(f(x))=\varphi(r(x)))}{\rAEa{\rAEb{9}}}
+  \proofstepwidestarbreakkeep[1,9,12]{f(x\star y)=f(r(x)\star r(y))}{\rIE{15}}
+  \proofstepwidestarbreakkeep[1,9,12]{\phantom{f(x\star y)}=\varphi(r(x)\star r(y))}{\rRE{16,\allowbreak \rUE{17}}}
+  \proofstepwidestarbreakkeep[1,3,9,12]{\phantom{f(x\star y)}=\varphi(r(x))\diamond\varphi(r(y))}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{%
+      \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3},\allowbreak 13}}
+  \proofstepwidestarbreakkeep[1,3,9,12]{\phantom{f(x\star y)}=s(f(x))\diamond s(f(y))}{\rIE{\rRE{12,\allowbreak \rUE{18}}}}
+  \proofstepwidestarbreakkeep[1,2,3,9,12]{\phantom{f(x\star y)}=f(x)\diamond f(y)}{%
+    \FormulaRefAuto{SemigroupInflationDef}[def]{2,\allowbreak 14}}
+  \proofstepwidestarbreakkeep[1,2,3,9,12]{f(x\star y)=f(x)\diamond f(y)}{\rChain{19,\allowbreak 23}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{\SemigroupHom{f}{S,\star}{T,\diamond}}{%
+    \FormulaRefAuto{SemigroupHomDef}[def]{10,\allowbreak 11,\allowbreak %
+      \FormulaRefAuto{Bijektive Funktion}[def]{\rAEa{9}},\allowbreak 24}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{\SemigroupIso{f}{S,\star}{T,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoDef}[def]{25,\allowbreak \rAEa{9}}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{\exists f\,\SemigroupIso{f}{S,\star}{T,\diamond}}{\rEI{26}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\exists f\,\SemigroupIso{f}{S,\star}{T,\diamond}}{\rEE{8,\allowbreak 9,\allowbreak 27}}
+\end{tabproofwide}
 
 Für die nachfolgende Anwendung ist nicht die Gleichheit zweier Elemente
 entscheidend, sondern die Gleichheit ihrer Links- und Rechtstranslationen.
@@ -7296,7 +7971,7 @@ Bijektionen
 \[
   \begin{gathered}
     c_0=b_{00},\qquad c_1=b_{11},\qquad c_2=b_{10},\\
-    U=\{b_{\Succ(\Succ(n)),j}\mid n,j\in\mathbb N\},\qquad
+    U=\{b_{(n+1)+1,j}\mid n,j\in\mathbb N\},\qquad
     V=U\cup\{c_2\},\\
     P=\{c_0,c_1\},\qquad D'=P\cup V,\\
     \sigma\colon U\bij V,\qquad

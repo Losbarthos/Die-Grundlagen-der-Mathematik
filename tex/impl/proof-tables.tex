@@ -235,6 +235,49 @@
    \begin{longtable}{@{}G r >{$}l<{$} >{$}l<{$}@{}}}
   {\end{longtable}\par}
 
+% Feste Nachbarspalten: Die Begründung beginnt stets auf der Grundlinie
+% der zugehörigen Aussage. Mehrzeilige Formeln werden mit aligned[t]
+% gesetzt; Begründungen dürfen innerhalb ihrer eigenen Spalte umbrechen.
+% Opt-in, damit die Tabellen der bisherigen Bände unverändert bleiben.
+\newcolumntype{J}{%
+  @{}>{\scriptsize\raggedleft\arraybackslash}p{.10\linewidth}%
+  @{\hspace{.01\linewidth}}>{\raggedleft\arraybackslash}p{.03\linewidth}%
+  @{\hspace{.01\linewidth}}>{\raggedright\arraybackslash}p{.55\linewidth}%
+  @{\hspace{.01\linewidth}}>{\scriptsize\raggedright\arraybackslash}p{.29\linewidth}@{}}
+
+\ExplSyntaxOn
+\cs_new_protected:Npn \mxProofPairedDependencies #1
+  {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \tl_replace_all:Nnn \l_tmpa_tl {,} {,\allowbreak}
+    \tl_use:N \l_tmpa_tl
+  }
+\ExplSyntaxOff
+
+\NewDocumentEnvironment{tabproofpaired}{}{%
+  \par\small
+  \setcounter{proofstepnr}{0}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{J}%
+}{\end{longtable}\par}
+
+\NewDocumentCommand{\proofsteppaired}{O{} +m +m}{%
+  \stepcounter{proofstepnr}%
+  \mxProofPairedDependencies{#1} & \theproofstepnr
+    & \ensuremath{#2} & #3\\[.15ex]%
+}
+
+\NewDocumentCommand{\proofpartpaired}{m}{%
+  \par\medskip\noindent #1:\par
+  \begin{tabproofpaired}%
+}
+\newcommand{\closeproofpartpaired}{\end{tabproofpaired}}
+
+\NewDocumentCommand{\proofpartpairedindR}{o +m m o}{%
+  \mxProofPartOpen{J}[#1]{#2}[#3][#4]%
+}
+\newcommand{\closeproofpartpairedindR}{\mxProofPartClose}
+
 
 % ------------------------------------------------------------
 % Split-Variante wie in der alten main.tex:

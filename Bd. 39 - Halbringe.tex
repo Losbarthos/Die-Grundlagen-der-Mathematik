@@ -551,7 +551,7 @@ Eigenschaft behandelt.
   \DeltaRow{Schrittfunktion}{}[%
     \FormulaRefAuto{SemiringSuccessorFunction}[thm]]
   \DeltaRow{Rekursionssatz}{}[%
-    \FormulaRefAuto{DedekindRecursionTheorem}[thm]]
+    \FormulaRefAuto{DedekindRecursionTheoremAddOne}[thm]]
   \DeltaRow{\textbf{Neues Symbol}}{}
   \DeltaPrem{Symbol}{\eta}
 }
@@ -619,15 +619,15 @@ Eigenschaft behandelt.
     \rIE{5,4}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Nachfolgerwert der kanonischen Abbildung]{%
+\FormulaThmDeltaK[Additionsschritt der kanonischen Abbildung]{%
   \begin{aligned}[t]
     &\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep n\in\mathbb N\\
     &\vdash
-      \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(n))
+      \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n+1)
       =
       \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(n)\oplus1_R
   \end{aligned}
-}{NaturalSemiringMapSuccessor}{%
+}{NaturalSemiringMapAddOne}{%
   \DeltaRow{Mengen}{R\dsep0_R\dsep1_R\dsep n}
   \DeltaRow{Funktionen}{\oplus\dsep\odot}
 }
@@ -659,19 +659,17 @@ Eigenschaft behandelt.
     \forall x\in R\,s_R(x)=x\oplus1_R}{%
     \FormulaRefAuto{SemiringSuccessorDef}[def]{1}}
 
-  \proofstepwide[1,2]{\eta_R(\Succ(n))}{=}{%
-    \RecFun{0_R}{s_R}(\Succ(n))}{\rIE{5}}
+  \proofstepwide[1,2]{\eta_R(n+1)}{=}{%
+    \RecFun{0_R}{s_R}(n+1)}{\quad\rIE{5}}
   \proofstepwide[1,2]{}{=}{%
     s_R\!\left(\RecFun{0_R}{s_R}(n)\right)}{%
-    \FormulaRefAuto{%
-      m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-      \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}{3,4,2}}
+    \quad\FormulaRefAuto{PeanoRecursionAddOne}{3,4,2}}
   \proofstepwide[1,2]{}{=}{s_R\!\left(\eta_R(n)\right)}{\rIE{8}}
   \proofstepwide[1,2]{}{=}{\eta_R(n)\oplus1_R}{%
     \rRE{\rUE{9},7}}
   \proofstepwidestar[1,2]{%
-    \eta_R(\Succ(n))=\eta_R(n)\oplus1_R}{%
-    \rChain{10,13}}
+    \eta_R(n+1)=\eta_R(n)\oplus1_R}{%
+    \rChain{10,11,12,13}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Einserhaltung der kanonischen Abbildung]{%
@@ -685,8 +683,11 @@ Eigenschaft behandelt.
 \begin{tabproofwide}
   \proofstepwidestar[1]{%
     \SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
-  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
-  \proofstepwidestar[]{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
+  \proofstepwidestar[]{0,1\in\mathbb N}{%
+    \rAI{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstepwidestar[]{1=0+1}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm]{\rAEb{2}}}}
   \proofstepwidestar[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)=0_R}{%
     \FormulaRefAuto{NaturalSemiringMapZero}[thm]{1}}
@@ -701,16 +702,16 @@ Eigenschaft behandelt.
 
   \proofstepwide[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)}{=}{%
-    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(\Succ(0))}{\rIE{3}}
+    \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0+1)}{\rIE{3}}
   \proofstepwide[1]{}{=}{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(0)\oplus1_R}{%
-    \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]{1,2}}
+    \quad\FormulaRefAuto{NaturalSemiringMapAddOne}[thm]{1,\rAEa{2}}}
   \proofstepwide[1]{}{=}{0_R\oplus1_R}{\rIE{4}}
   \proofstepwide[1]{}{=}{1_R}{%
     \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{6,8}}
   \proofstepwidestar[1]{%
     \NaturalSemiringMap{R,\oplus,\odot,0_R,1_R}(1)=1_R}{%
-    \rChain{9,12}}
+    \rChain{9,10,11,12}}
 \end{tabproofwide}
 
 \begin{notation*}
@@ -720,25 +721,7 @@ Eigenschaft behandelt.
   \]
 \end{notation*}
 
-\FormulaThmDeltaK[Additionsschritt der Einbettung]{%
-  \begin{aligned}[t]
-    &\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}\dsep n\in\mathbb N\vdash{}\\[-2pt]
-    &\eta_R(n+1)=\eta_R(n)\oplus1_R
-  \end{aligned}%
-}{NaturalSemiringMapAddOne}{%
-  \DeltaRow{Mengen}{R\dsep0_R\dsep1_R\dsep n}
-  \DeltaRow{Funktionen}{\oplus\dsep\odot\dsep\eta_R}
-}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\SemiringAlg{R}{\oplus}{\odot}{0_R}{1_R}}{\rA}
-  \proofstepwidestar[2]{n\in\mathbb N}{\rA}
-  \proofstepwidestar[2]{n+1=\Succ(n)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}[thm]{2}}
-  \proofstepwide[2]{\eta_R(n+1)}{=}{\eta_R(\Succ(n))}{\rIE{3}}
-  \proofstepwide[1,2]{}{=}{\eta_R(n)\oplus1_R}{%
-    \FormulaRefAuto{NaturalSemiringMapSuccessor}[thm]{1,2}}
-  \proofstepwidestar[1,2]{\eta_R(n+1)=\eta_R(n)\oplus1_R}{\rChain{4,5}}
-\end{tabproofwide}
+
 
 \FormulaThmDeltaK[Nullfall der Additionserhaltung]{%
   \begin{aligned}[t]
@@ -1947,21 +1930,16 @@ Eigenschaft behandelt.
 
 \section{Fehlen additiver Inverser}
 
-\FormulaThmDeltaK[Darstellung als Nachfolger]{%
-  n\in\mathbb{N}\vdash1+n=\Succ(n)%
-}{NaturalOnePlusAsSuccessor}{%
+\FormulaThmDeltaK[Vertauschen der Eins]{%
+  n\in\mathbb{N}\vdash1+n=(n+1)%
+}{NaturalOnePlusCommutative}{%
   \DeltaRow{Mengen}{\mathbb{N}\dsep n}
 }
 \begin{tabproofwide}
-  \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
-  \proofstepwidestar[]{1\in\mathbb{N}}{%
-    \FormulaRefAuto{PeanoOneInN}[thm]}
-  \proofstepwide[1]{1+n}{=}{n+1}{%
-    \FormulaRefAuto{PeanoAddCommutative}[thm]{2,1}}
-  \proofstepwide[1]{}{=}{\Succ(n)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}[thm]{1}}
-  \proofstepwidestar[1]{1+n=\Succ(n)}{%
-    \rChain{3,4}}
+  \proofstepwidestar[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[]{1\in\mathbb N}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestar[1]{1+n=n+1}{%
+    \quad\FormulaRefAuto{PeanoAddCommutative}[thm]{2,1}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Widerspruch zum Nullaxiom]{%
@@ -1974,15 +1952,15 @@ Eigenschaft behandelt.
     \exists n\in\mathbb{N}\,(1+n=0)}{\rA}
   \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
   \proofstepwidestar[3]{1+n=0}{\rA}
-  \proofstepwidestar[2]{1+n=\Succ(n)}{%
-    \FormulaRefAuto{NaturalOnePlusAsSuccessor}{2}}
-  \proofstepwide[2]{\Succ(n)}{=}{1+n}{%
+  \proofstepwidestar[2]{1+n=(n+1)}{%
+    \FormulaRefAuto{NaturalOnePlusCommutative}{2}}
+  \proofstepwide[2]{n+1}{=}{1+n}{%
     \FormulaRefAuto{a=b\vdash b=a}{4}}
   \proofstepwide[2,3]{}{=}{0}{\rIE{3}}
-  \proofstepwidestar[2,3]{\Succ(n)=0}{\rChain{5,6}}
-  \proofstepwidestar[2]{\Succ(n)\neq0}{%
-    \FormulaRefAuto{PeanoSuccNonzero}[ax]{2}}
-  \proofstepwidestar[2,3]{\bot}{\rCE{8,7}}
+  \proofstepwidestar[2,3]{(n+1)=0}{\rChain{5,6}}
+  \proofstepwidestar[2]{(n+1)\neq0}{%
+    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{2}}
+  \proofstepwidestar[2,3]{\bot}{\rBI{8,7}}
   \proofstepwidestar[1]{\bot}{\rEE{1,2,3,9}}
 \end{tabproofwide}
 

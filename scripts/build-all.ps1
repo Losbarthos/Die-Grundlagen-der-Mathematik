@@ -1,9 +1,8 @@
 [CmdletBinding()]
 param(
     [ValidatePattern('^B[0-9]{2}$')][string]$From = 'B01',
-    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B43',
+    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B44',
     [switch]$SkipMain,
-    [switch]$SkipRemarkable,
     [switch]$SkipPublish,
     [string]$Python = 'python'
 )
@@ -52,10 +51,6 @@ try {
         Assert-BuildStageArtifacts -Stage $stage
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($band)
     }
-    if (-not $SkipRemarkable) {
-        Invoke-LoggedBuild -Source 'Bd. 37 - Endliche Halbgruppen - reMarkable.tex' -JobName '_B37-remarkable'
-        & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B37') -IncludeRemarkable
-    }
     if (-not $SkipMain) {
         Invoke-LoggedBuild -Source 'main.tex' -JobName 'main' -OutDir '.'
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands $bands -IncludeMain
@@ -63,7 +58,6 @@ try {
     if (-not $SkipPublish) {
         $publishArguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'))
         if ($SkipMain) { $publishArguments += '--skip-main' }
-        if ($SkipRemarkable) { $publishArguments += '--skip-remarkable' }
         & $Python @publishArguments
         if ($LASTEXITCODE -ne 0) { throw 'PDF publication or link audit failed.' }
     }

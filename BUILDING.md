@@ -29,24 +29,25 @@ latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error main.
 
 The generated root-level `main.pdf` and normal LaTeX auxiliary files are local
 build products and are ignored by Git. Curated per-volume PDF snapshots under
-`output/pdf/` are intentionally versioned for readers.
+`output/` are intentionally versioned for readers.
 
 ## Rebuild every PDF / Alle PDFs neu bauen
 
-For all 43 standalone volumes, the reMarkable edition, and the complete
-manuscript, run:
+For all 44 standalone volumes and the complete manuscript, run:
 
 ```powershell
 pwsh -NoProfile -File ./scripts/build-all.ps1
 ```
 
 This builds the volumes in dependency order, audits their result registries,
-and publishes the PDFs under `output/pdf/`. Python with `pypdf` is required
+and publishes the PDFs under `output/`. Python with `pypdf` is required
 for publication; pass `-Python /path/to/python` to select its interpreter.
 The publication step updates external PDF links to the visible neighbouring
 filenames and verifies that every linked result destination exists.
+Each current PDF is stored directly in `output/` once. Build logs and
+temporary files belong in `tmp/`, outside the publication directory.
 
-Der Gesamtlauf baut alle Einzelbände, die reMarkable-Ausgabe und den Gesamtband.
+Der Gesamtlauf baut alle 44 Einzelbände und den Gesamtband.
 Jeder Band wird nach seinem Build geprüft. Der Gesamtband verwendet eigene
 Registries unter `registry/main/`; dadurch überschreibt er keine
 Einzelbandindizes. Die Resultatnummern müssen in beiden Ausgaben übereinstimmen.
@@ -57,13 +58,13 @@ volume so all subsequent references are rebuilt. To build only a range before
 the full publication step, use:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/build-all.ps1 -From B03 -To B20 -SkipMain -SkipRemarkable -SkipPublish
+pwsh -NoProfile -File ./scripts/build-all.ps1 -From B03 -To B20 -SkipMain -SkipPublish
 ```
 
 Existing build products can also be audited without recompiling:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain -IncludeRemarkable
+pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain
 python ./scripts/publish-pdfs.py --audit-only
 ```
 
@@ -71,10 +72,10 @@ python ./scripts/publish-pdfs.py --audit-only
 
 The root-level `latexmkrc` reads the dependency graph from
 [`band-dependencies.tsv`](band-dependencies.tsv). For example, with
-`Bd. 42 - Frankls Vermutung.tex` selected as the main file, run:
+`Bd. 43 - Frankls Vermutung.tex` selected as the main file, run:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 42 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 43 - Frankls Vermutung.tex"
 ```
 
 The configuration builds the required predecessors topologically into
@@ -84,24 +85,24 @@ given at least one LuaLaTeX run even when artifacts already exist.
 
 The explicit source-to-registry mapping is intentional. Visible filenames
 follow the document titles, while internal identifiers remain `B01` through
-`B43`.
+`B44`.
 
 ### Audited PowerShell build
 
 For a clean standalone build with the full reference audit, use:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B42
+pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B43
 ```
 
-Valid targets are `B01` through `B43`; omitting `-Target` keeps `B03` as the
+Valid targets are `B01` through `B44`; omitting `-Target` keeps `B03` as the
 default. On Windows PowerShell 5.1, replace `pwsh` with `powershell` and add
 `-ExecutionPolicy Bypass` if required.
 
 For the selected dependency graph, the script removes known generated build
 artifacts, rebuilds the predecessors under fixed job names, builds the target,
 and then audits the result. Source files and the curated files under
-`output/pdf/` are not build-cleanup targets.
+`output/` are not build-cleanup targets.
 
 ## What the audit checks / Umfang des Audits
 
@@ -126,7 +127,7 @@ for transitive predecessor order and the mapping from visible TeX filenames to
 registry job names. It is read by TeX/Lua, `latexmkrc`, and the PowerShell build
 script.
 
-Most volumes follow the main chain. Volume B43 deliberately opens an analytic
+Most volumes follow the main chain. Volume B44 deliberately opens an analytic
 branch and depends only on B01 through B21. Later specialist volumes may use
 examples of structures introduced earlier, while general constructions remain
 in the earliest volume that can define them without a dependency cycle.
@@ -182,7 +183,7 @@ changes. For a new public snapshot, rebuild the relevant volumes and use
 
 Ignored local artifacts include root-level PDFs, ordinary LaTeX auxiliaries,
 the generated `registry/` contents, cache staging directories, audit logs, and
-the local `tmp/` workspace. Reader-facing snapshots in `output/pdf/` are an
+the local `tmp/` workspace. Reader-facing snapshots in `output/` are an
 explicit exception and remain under version control.
 
 [Back to the README / Zurück zur README](README.md)

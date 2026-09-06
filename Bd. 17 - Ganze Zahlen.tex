@@ -1435,6 +1435,49 @@ folgende Klassenregel bezeichnet dieses eindeutig bestimmte Ergebnis.
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
+\FormulaDefDeltaK[Subtraktion ganzer Zahlen]{%
+  z,w\in\mathbb Z\vdash z-w\coloneqq z+(-w)%
+}{IntegerSubtractionDef}{%
+  \DeltaRow{Mengen}{z\dsep w}%
+  \DeltaRow{Neue Schreibweise}{z-w}%
+}
+
+Die Subtraktion ist die Addition des additiven Inversen. Insbesondere ist
+\(z-\IntOne\) für jede ganze Zahl \(z\) definiert, auch für
+\(z=\IntZero\).
+
+\FormulaThmDeltaK[Abgeschlossenheit der Ganzzahlsubtraktion]{%
+  z,w\in\mathbb Z\vdash z-w\in\mathbb Z%
+}{IntegerSubtractionClosure}{%
+  \DeltaRow{Mengen}{z\dsep w}%
+}
+\begin{tabproof}
+  \proofstep{1}{z,w\in\mathbb Z}{\rA}
+  \proofstep{1}{-w\in\mathbb Z}{\FormulaRefAuto{IntNegClosure}[thm]{1}}
+  \proofstep{1}{z+(-w)\in\mathbb Z}{\FormulaRefAuto{IntAddClosure}[thm]{1,2}}
+  \proofstep{1}{z-w=z+(-w)}{\FormulaRefAuto{IntegerSubtractionDef}[def]{1}}
+  \proofstep{1}{z-w\in\mathbb Z}{\rIE{4,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Addieren der Ganzzahleins erhält den Träger]{%
+  z\in\mathbb Z\vdash z+\IntOne\in\mathbb Z%
+}{IntegerAddOneClosure}{\DeltaRow{Mengen}{z}}
+\begin{tabproof}
+  \proofstep{1}{z\in\mathbb Z}{\rA}
+  \proofstep{}{\IntOne\in\mathbb Z}{\FormulaRefAuto{IntOneCarrier}[thm]}
+  \proofstep{1}{z+\IntOne\in\mathbb Z}{\FormulaRefAuto{IntAddClosure}[thm]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Subtrahieren der Ganzzahleins erhält den Träger]{%
+  z\in\mathbb Z\vdash z-\IntOne\in\mathbb Z%
+}{IntegerMinusOneClosure}{\DeltaRow{Mengen}{z}}
+\begin{tabproof}
+  \proofstep{1}{z\in\mathbb Z}{\rA}
+  \proofstep{}{\IntOne\in\mathbb Z}{\FormulaRefAuto{IntOneCarrier}[thm]}
+  \proofstep{1}{z-\IntOne\in\mathbb Z}{%
+    \FormulaRefAuto{IntegerSubtractionClosure}[thm]{1,2}}
+\end{tabproof}
+
 \FormulaThmDeltaK[Assoziativität der Addition ganzer Zahlen]{%
   z,w,u\in\mathbb Z\vdash(z+w)+u=z+(w+u)%
 }{IntAddAssociative}{%
@@ -3297,380 +3340,276 @@ Ring mit Eins; der abstrakte Ringbegriff wird dafür nicht vorausgesetzt.
     (-x)\cdot(-y)=x\cdot y}{\rChain{13,14,15}}
 \end{tabproofwide}
 
-\chapter{Nachfolger, Vorgänger und Normalformen}
+\chapter{Schritte um eins und Normalformen}
 
-\section{Nachfolger und Vorgänger}
+\section{Addieren und Subtrahieren der Eins}
 
-\FormulaDefDeltaK[Nachfolger einer ganzen Zahl]{%
+Die Schritte auf \(\mathbb Z\) werden durch \(+\IntOne\) und
+\(-\IntOne\) geschrieben. Wo die zugehörige Funktion selbst benötigt wird,
+bezeichnen \((x\mapsto x+\IntOne)\) und \((x\mapsto x-\IntOne)\)
+die eindeutigen Abbildungen mit den folgenden Grundgleichungen.
+Ihre Existenz folgt aus \FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]
+und dem jeweils angegebenen Abschlussbeweis.
+
+\FormulaDefDeltaK[Abbildung zum Addieren der Ganzzahleins]{%
   \begin{aligned}[t]
-    &\IntSucc\colon\mathbb Z\to\mathbb Z,\\[-2pt]
+    &(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z,\\[-2pt]
     &\forall z\in\mathbb Z\,
-      \bigl(\IntSucc(z)\coloneqq z+\IntOne\bigr)
+      \bigl((x\mapsto x+\IntOne)(z)\coloneqq z+\IntOne\bigr)
   \end{aligned}%
 }{IntegerSuccessorDef}{%
   \DeltaRow{Mengen}{z}%
-  \DeltaRow{Funktionensymbol}{\IntSucc}%
-  \DeltaRow{Neue Symbole}{\IntSucc}%
+  \DeltaRow{Neue Abbildungsschreibweise}{(x\mapsto x+\IntOne)}%
 }
 \begin{tabproof}
   \proofstep{1}{z\in\mathbb Z}{\rA}
-  \proofstep{}{\IntOne\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
-  \proofstep{1}{z+\IntOne\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerAddClosureAxiom}[ax]{1,2}}
-  \proofstep{}{\forall z\in\mathbb Z\,\bigl(z+\IntOne\in\mathbb Z\bigr)}{%
-    \rUI{\rRI{1,3}}}
+  \proofstep{1}{z+\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerAddOneClosure}[thm]{1}}
+  \proofstep{}{\forall z\in\mathbb Z\,(z+\IntOne\in\mathbb Z)}{\rUI{\rRI{1,2}}}
 \end{tabproof}
 
-\FormulaDefDeltaK[Vorgänger einer ganzen Zahl]{%
+\FormulaDefDeltaK[Abbildung zum Subtrahieren der Ganzzahleins]{%
   \begin{aligned}[t]
-    &\IntPred\colon\mathbb Z\to\mathbb Z,\\[-2pt]
+    &(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z,\\[-2pt]
     &\forall z\in\mathbb Z\,
-      \bigl(\IntPred(z)\coloneqq z+(-\IntOne)\bigr)
+      \bigl((x\mapsto x-\IntOne)(z)\coloneqq z-\IntOne\bigr)
   \end{aligned}%
 }{IntegerPredecessorDef}{%
   \DeltaRow{Mengen}{z}%
-  \DeltaRow{Funktionensymbol}{\IntPred}%
-  \DeltaRow{Neue Symbole}{\IntPred}%
+  \DeltaRow{Neue Abbildungsschreibweise}{(x\mapsto x-\IntOne)}%
 }
 \begin{tabproof}
   \proofstep{1}{z\in\mathbb Z}{\rA}
-  \proofstep{}{\IntOne\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
-  \proofstep{}{-\IntOne\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
-  \proofstep{1}{z+(-\IntOne)\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerAddClosureAxiom}[ax]{1,3}}
-  \proofstep{}{%
-    \forall z\in\mathbb Z\,\bigl(z+(-\IntOne)\in\mathbb Z\bigr)}{%
-    \rUI{\rRI{1,4}}}
+  \proofstep{1}{z-\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerMinusOneClosure}[thm]{1}}
+  \proofstep{}{\forall z\in\mathbb Z\,(z-\IntOne\in\mathbb Z)}{\rUI{\rRI{1,2}}}
 \end{tabproof}
 
-\FormulaThmDeltaK[Nachfolgerfunktion auf den ganzen Zahlen]{%
-  \IntSucc\colon\mathbb Z\to\mathbb Z%
+\FormulaThmDeltaK[Addieren der Ganzzahleins als Funktion]{%
+  (x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z%
 }{IntegerSuccessorFunction}{%
-  \DeltaRow{Funktion}{\IntSucc}%
+  \DeltaRow{Abbildung}{(x\mapsto x+\IntOne)}%
 }
-\begin{tabproof}
-  \proofstep{}{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
-    \FormulaRefAuto{IntegerSuccessorDef}[def]}
-\end{tabproof}
+\begin{tabproofwide}
+  \proofstepwidestar[]{(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z}{%
+    \quad\FormulaRefAuto{IntegerSuccessorDef}[def]}
+\end{tabproofwide}
 
-\FormulaThmDeltaK[Vorgängerfunktion auf den ganzen Zahlen]{%
-  \IntPred\colon\mathbb Z\to\mathbb Z%
+\FormulaThmDeltaK[Subtrahieren der Ganzzahleins als Funktion]{%
+  (x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z%
 }{IntegerPredecessorFunction}{%
-  \DeltaRow{Funktion}{\IntPred}%
-}
-\begin{tabproof}
-  \proofstep{}{\IntPred\colon\mathbb Z\to\mathbb Z}{%
-    \FormulaRefAuto{IntegerPredecessorDef}[def]}
-\end{tabproof}
-
-\FormulaThmDeltaK[Grundgleichung des ganzzahligen Nachfolgers]{%
-  z\in\mathbb Z\vdash \IntSucc(z)=z+\IntOne%
-}{IntegerSuccessorValue}{%
-  \DeltaRow{Mengen}{z}%
-  \DeltaRow{Funktion}{\IntSucc}%
-}
-\begin{tabproof}
-  \proofstep{1}{z\in\mathbb Z}{\rA}
-  \proofstep{}{%
-    \forall u\in\mathbb Z\,
-      \bigl(\IntSucc(u)=u+\IntOne\bigr)}{%
-    \FormulaRefAuto{IntegerSuccessorDef}[def]}
-  \proofstep{1}{\IntSucc(z)=z+\IntOne}{%
-    \rRE{\rUE{2},1}}
-\end{tabproof}
-
-\FormulaThmDeltaK[Grundgleichung des ganzzahligen Vorgängers]{%
-  z\in\mathbb Z\vdash \IntPred(z)=z+(-\IntOne)%
-}{IntegerPredecessorValue}{%
-  \DeltaRow{Mengen}{z}%
-  \DeltaRow{Funktion}{\IntPred}%
-}
-\begin{tabproof}
-  \proofstep{1}{z\in\mathbb Z}{\rA}
-  \proofstep{}{%
-    \forall u\in\mathbb Z\,
-      \bigl(\IntPred(u)=u+(-\IntOne)\bigr)}{%
-    \FormulaRefAuto{IntegerPredecessorDef}[def]}
-  \proofstep{1}{\IntPred(z)=z+(-\IntOne)}{%
-    \rRE{\rUE{2},1}}
-\end{tabproof}
-
-\FormulaThmDeltaK[Nachfolger auf Klassen]{%
-  a,b\in\mathbb N\vdash
-  \IntSucc(\IntClass{a}{b})=\IntClass{\Succ(a)}{b}%
-}{IntegerSuccessorClassValue}{%
-  \DeltaRow{Mengen}{a\dsep b}%
+  \DeltaRow{Abbildung}{(x\mapsto x-\IntOne)}%
 }
 \begin{tabproofwide}
+  \proofstepwidestar[]{(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z}{%
+    \quad\FormulaRefAuto{IntegerPredecessorDef}[def]}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Auswertung der Abbildung zum Addieren der Eins]{%
+  z\in\mathbb Z\vdash (x\mapsto x+\IntOne)(z)=z+\IntOne%
+}{IntegerSuccessorValue}{\DeltaRow{Mengen}{z}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[]{\forall u\in\mathbb Z\,
+    ((x\mapsto x+\IntOne)(u)=u+\IntOne)}{%
+    \quad\FormulaRefAuto{IntegerSuccessorDef}[def]}
+  \proofstepwidestar[1]{(x\mapsto x+\IntOne)(z)=z+\IntOne}{\rRE{\rUE{2},1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Auswertung der Abbildung zum Subtrahieren der Eins]{%
+  z\in\mathbb Z\vdash (x\mapsto x-\IntOne)(z)=z-\IntOne%
+}{IntegerPredecessorValue}{\DeltaRow{Mengen}{z}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
+  \proofstepwidestarbreakkeep[]{\forall u\in\mathbb Z\,
+    ((x\mapsto x-\IntOne)(u)=u-\IntOne)}{%
+    \quad\FormulaRefAuto{IntegerPredecessorDef}[def]}
+  \proofstepwidestar[1]{(x\mapsto x-\IntOne)(z)=z-\IntOne}{\rRE{\rUE{2},1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Addieren der Eins auf Klassen]{%
+  a,b\in\mathbb N\vdash
+  \IntClass{a}{b}+\IntOne=\IntClass{a+1}{b}%
+}{IntegerSuccessorClassValue}{\DeltaRow{Mengen}{a\dsep b}}
+\begin{tabproofwide}
   \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
-  \proofstepwidestar[1]{\IntClass{a}{b}\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerClassInZ}{1}}
-  \proofstepwidestar[]{%
-    \forall z\in\mathbb Z\,\bigl(\IntSucc(z)=z+\IntOne\bigr)}{%
-    \FormulaRefAuto{IntegerSuccessorDef}[def]}
+  \proofstepwidestar[]{0,1\in\mathbb N}{%
+    \rAI{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]}}
   \proofstepwidestar[]{\IntOne=\IntClass{1}{0}}{%
-    \FormulaRefAuto{IntegerOneDef}{%
-      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
-        \FormulaRefAuto{PeanoOneInN}}}}
-  \proofstepwidestar[1]{a+1=\Succ(a)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstepwidestar[1]{b+0=b}{\FormulaRefAuto{PeanoAddRightZero}{1}}
-  \proofstepwide[1]{\IntSucc(\IntClass{a}{b})}{=}{%
-    \IntClass{a}{b}+\IntOne}{\rRE{\rUE{3},2}}
-  \proofstepwide[1]{}{=}{\IntClass{a+1}{b+0}}{%
-    \FormulaRefAuto{IntegerAdditionDef}{1,4}}
-  \proofstepwide[1]{}{=}{\IntClass{\Succ(a)}{b}}{\rIE{5,6}}
-  \proofstepwidestar[1]{\IntSucc(\IntClass{a}{b})=
-    \IntClass{\Succ(a)}{b}}{\rChain{7,8,9}}
+    \rChain{\FormulaRefAuto{IntegerOneDef}[def],%
+      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}}
+  \proofstepwidestar[1]{b+0=b}{\FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+  \proofstepwide[1]{\IntClass{a}{b}+\IntOne}{=}{\IntClass{a+1}{b+0}}{%
+    \rIE{3,\FormulaRefAuto{IntegerAdditionDef}[def]{1,2}}}
+  \proofstepwide[1]{}{=}{\IntClass{a+1}{b}}{\rIE{4}}
+  \proofstepwidestar[1]{\IntClass{a}{b}+\IntOne=\IntClass{a+1}{b}}{\rChain{5,6}}
 \end{tabproofwide}
 
-\FormulaThmDeltaK[Vorgänger auf Klassen]{%
+\FormulaThmDeltaK[Subtrahieren der Eins auf Klassen]{%
   a,b\in\mathbb N\vdash
-  \IntPred(\IntClass{a}{b})=\IntClass{a}{\Succ(b)}%
-}{IntegerPredecessorClassValue}{%
-  \DeltaRow{Mengen}{a\dsep b}%
-}
+  \IntClass{a}{b}-\IntOne=\IntClass{a}{b+1}%
+}{IntegerPredecessorClassValue}{\DeltaRow{Mengen}{a\dsep b}}
 \begin{tabproofwide}
   \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
-  \proofstepwidestar[1]{\IntClass{a}{b}\in\mathbb Z}{%
-    \FormulaRefAuto{IntegerClassInZ}{1}}
-  \proofstepwidestar[]{%
-    \forall z\in\mathbb Z\,\bigl(\IntPred(z)=z+(-\IntOne)\bigr)}{%
-    \FormulaRefAuto{IntegerPredecessorDef}[def]}
+  \proofstepwidestar[]{0,1\in\mathbb N}{%
+    \rAI{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstepwidestar[]{\IntOne=\IntClass{1}{0}}{%
+    \rChain{\FormulaRefAuto{IntegerOneDef}[def],%
+      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{2}}}
   \proofstepwidestar[]{-\IntOne=\IntClass{0}{1}}{%
-    \FormulaRefAuto{IntegerNegationDef}{%
-      \FormulaRefAuto{IntegerOneDef},%
-      \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]}}
-  \proofstepwidestar[1]{a+0=a}{\FormulaRefAuto{PeanoAddRightZero}{1}}
-  \proofstepwidestar[1]{b+1=\Succ(b)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstepwide[1]{\IntPred(\IntClass{a}{b})}{=}{%
-    \IntClass{a}{b}+(-\IntOne)}{\rRE{\rUE{3},2}}
+    \rIE{3,\FormulaRefAuto{IntegerNegationDef}[def]{2}}}
+  \proofstepwidestar[1]{a+0=a}{\FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+  \proofstepwide[1]{\IntClass{a}{b}-\IntOne}{=}{\IntClass{a}{b}+(-\IntOne)}{%
+    \FormulaRefAuto{IntegerSubtractionDef}[def]{%
+      \FormulaRefAuto{IntegerClassInZ}[thm]{1},\FormulaRefAuto{IntOneCarrier}[thm]}}
   \proofstepwide[1]{}{=}{\IntClass{a+0}{b+1}}{%
-    \FormulaRefAuto{IntegerAdditionDef}{1,4}}
-  \proofstepwide[1]{}{=}{\IntClass{a}{\Succ(b)}}{\rIE{5,6}}
-  \proofstepwidestar[1]{\IntPred(\IntClass{a}{b})=
-    \IntClass{a}{\Succ(b)}}{\rChain{7,8,9}}
+    \rIE{4,\FormulaRefAuto{IntegerAdditionDef}[def]{1,2}}}
+  \proofstepwide[1]{}{=}{\IntClass{a}{b+1}}{\rIE{5}}
+  \proofstepwidestar[1]{\IntClass{a}{b}-\IntOne=\IntClass{a}{b+1}}{\rChain{6,7,8}}
 \end{tabproofwide}
 
-\FormulaThmDeltaK[Vorgänger nach Nachfolger]{%
-  z\in\mathbb Z\vdash
-  \IntPred(\IntSucc(z))=z%
-}{IntegerPredAfterSucc}{%
-  \DeltaRow{Mengen}{z}%
-}
+\FormulaThmDeltaK[Subtrahieren nach Addieren der Eins]{%
+  z\in\mathbb Z\vdash (z+\IntOne)-\IntOne=z%
+}{IntegerPredAfterSucc}{\DeltaRow{Mengen}{z}}
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Auflösen der Definitionen]{%
-    z\in\mathbb Z\vdash
-    \IntPred(\IntSucc(z))=(z+\IntOne)+(-\IntOne)%
+  \proofpartwideindR[Auflösen der Subtraktion]{%
+    z\in\mathbb Z\vdash (z+\IntOne)-\IntOne=(z+\IntOne)+(-\IntOne)
   }{%
-    z\in\mathbb Z\vdash
-    \IntPred(\IntSucc(z))=(z+\IntOne)+(-\IntOne)%
+    z\in\mathbb Z\vdash (z+\IntOne)-\IntOne=(z+\IntOne)+(-\IntOne)
   }[IntegerPredAfterSuccExpansion]
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[1]{\IntSucc(z)=z+\IntOne}{%
-      \FormulaRefAuto{IntegerSuccessorValue}[thm]{1}}
-    \proofstepwidestar[1]{\IntSucc(z)\in\mathbb Z}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{IntegerSuccessorFunction},1}}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(z))=
-      \IntSucc(z)+(-\IntOne)}{%
-      \FormulaRefAuto{IntegerPredecessorValue}[thm]{3}}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(z))=
-      (z+\IntOne)+(-\IntOne)}{\rIE{2,4}}
+    \proofstepwidestar[1]{z+\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerAddOneClosure}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{(z+\IntOne)-\IntOne=(z+\IntOne)+(-\IntOne)}{%
+      \FormulaRefAuto{IntegerSubtractionDef}[def]{2,\FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}}
   \closeproofpartwideindR
-
-  \proofpartwide{Schluss}
+  \proofpartwide{Assoziativität und Inverses}
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[]{\IntOne\in\mathbb Z}{%
-      \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+    \proofstepwidestar[]{\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+    \proofstepwidestar[]{-\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
     \proofstepwidestar[]{\IntOne+(-\IntOne)=\IntZero}{%
       \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
-    \proofstepwide[1]{\IntPred(\IntSucc(z))}{=}{%
-      (z+\IntOne)+(-\IntOne)}{%
-      \FormulaRefAuto{IntegerPredAfterSuccExpansion}{1}}
+    \proofstepwide[1]{(z+\IntOne)-\IntOne}{=}{(z+\IntOne)+(-\IntOne)}{%
+      \FormulaRefAuto{IntegerPredAfterSuccExpansion}[thm]{1}}
     \proofstepwide[1]{}{=}{z+(\IntOne+(-\IntOne))}{%
-      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,2,%
-        \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}}
-    \proofstepwide[1]{}{=}{z+\IntZero}{\rIE{3}}
-    \proofstepwide[1]{}{=}{z}{%
-      \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(z))=z}{%
-      \rChain{4,5,6,7}}
+      \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,2,3}}
+    \proofstepwide[1]{}{=}{z+\IntZero}{\rIE{4}}
+    \proofstepwide[1]{}{=}{z}{\rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
+    \proofstepwidestar[1]{(z+\IntOne)-\IntOne=z}{\rChain{5,6,7,8}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Nachfolger nach Vorgänger]{%
-  z\in\mathbb Z\vdash
-  \IntSucc(\IntPred(z))=z%
-}{IntegerSuccAfterPred}{%
-  \DeltaRow{Mengen}{z}%
-}
+\FormulaThmDeltaK[Addieren nach Subtrahieren der Eins]{%
+  z\in\mathbb Z\vdash (z-\IntOne)+\IntOne=z%
+}{IntegerSuccAfterPred}{\DeltaRow{Mengen}{z}}
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Auflösen der Definitionen]{%
-    z\in\mathbb Z\vdash
-    \IntSucc(\IntPred(z))=(z+(-\IntOne))+\IntOne%
+  \proofpartwideindR[Auflösen der Subtraktion]{%
+    z\in\mathbb Z\vdash (z-\IntOne)+\IntOne=(z+(-\IntOne))+\IntOne
   }{%
-    z\in\mathbb Z\vdash
-    \IntSucc(\IntPred(z))=(z+(-\IntOne))+\IntOne%
+    z\in\mathbb Z\vdash (z-\IntOne)+\IntOne=(z+(-\IntOne))+\IntOne
   }[IntegerSuccAfterPredExpansion]
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[1]{\IntPred(z)=z+(-\IntOne)}{%
-      \FormulaRefAuto{IntegerPredecessorValue}[thm]{1}}
-    \proofstepwidestar[1]{\IntPred(z)\in\mathbb Z}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{IntegerPredecessorFunction},1}}
-    \proofstepwidestar[1]{%
-      \IntSucc(\IntPred(z))=\IntPred(z)+\IntOne}{%
-      \FormulaRefAuto{IntegerSuccessorValue}[thm]{3}}
-    \proofstepwidestar[1]{%
-      \IntSucc(\IntPred(z))=(z+(-\IntOne))+\IntOne}{%
-      \rIE{2,4}}
+    \proofstepwidestar[1]{z-\IntOne=z+(-\IntOne)}{%
+      \FormulaRefAuto{IntegerSubtractionDef}[def]{1,\FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}}
+    \proofstepwidestarbreakkeep[1]{(z-\IntOne)+\IntOne=(z+(-\IntOne))+\IntOne}{\rIE{2}}
   \closeproofpartwideindR
-
   \proofpartwideindR[Assoziativität und Inverses]{%
-    z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z%
+    z\in\mathbb Z\vdash (z-\IntOne)+\IntOne=z
   }{%
-    z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z%
+    z\in\mathbb Z\vdash (z-\IntOne)+\IntOne=z
   }[IntegerSuccAfterPredConclusion]
     \proofstepwidestar[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestar[]{\IntOne\in\mathbb Z}{%
-      \FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
-    \proofstepwidestar[]{-\IntOne\in\mathbb Z}{%
-      \FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
-    \proofstepwidestar[]{%
-      (-\IntOne)+\IntOne=\IntZero}{%
+    \proofstepwidestar[]{\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerOneCarrierAxiom}[ax]}
+    \proofstepwidestar[]{-\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerNegClosureAxiom}[ax]{2}}
+    \proofstepwidestar[]{(-\IntOne)+\IntOne=\IntZero}{%
       \rAEb{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{2}}}
-    \proofstepwide[1]{\IntSucc(\IntPred(z))}{=}{%
-      (z+(-\IntOne))+\IntOne}{%
-      \FormulaRefAuto{IntegerSuccAfterPredExpansion}{1}}
+    \proofstepwide[1]{(z-\IntOne)+\IntOne}{=}{(z+(-\IntOne))+\IntOne}{%
+      \FormulaRefAuto{IntegerSuccAfterPredExpansion}[thm]{1}}
     \proofstepwide[1]{}{=}{z+((-\IntOne)+\IntOne)}{%
       \FormulaRefAuto{IntegerAddAssociativeAxiom}[ax]{1,3,2}}
     \proofstepwide[1]{}{=}{z+\IntZero}{\rIE{4}}
-    \proofstepwide[1]{}{=}{z}{%
-      \rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
-    \proofstepwidestar[1]{\IntSucc(\IntPred(z))=z}{%
-      \rChain{5,6,7,8}}
+    \proofstepwide[1]{}{=}{z}{\rAEa{\FormulaRefAuto{IntegerAddZeroAxiom}[ax]{1}}}
+    \proofstepwidestar[1]{(z-\IntOne)+\IntOne=z}{\rChain{5,6,7,8}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Bijektivität des Ganzzahlnachfolgers]{%
-  \IntSucc\colon\mathbb Z\bij\mathbb Z%
+\FormulaThmDeltaK[Bijektivität des Addierens der Ganzzahleins]{%
+  (x\mapsto x+\IntOne)\colon\mathbb Z\bij\mathbb Z%
 }{IntegerSuccessorBijective}{%
-  \DeltaRow{Funktionen}{\IntSucc\dsep\IntPred}%
+  \DeltaRow{Abkürzung im Beweis}{F\coloneqq(x\mapsto x+\IntOne)}%
+  \DeltaRow{Mengen}{x\dsep y}%
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Injektivität]{%
-    x,y\in\mathbb Z\dsep
-    \IntSucc(x)=\IntSucc(y)\vdash x=y%
+    x,y\in\mathbb Z\dsep F(x)=F(y)\vdash x=y
   }{%
-    x,y\in\mathbb Z\dsep
-    \IntSucc(x)=\IntSucc(y)\vdash x=y%
+    x,y\in\mathbb Z\dsep F(x)=F(y)\vdash x=y
   }[IntegerSuccessorInjective]
     \proofstepwidestar[1]{x,y\in\mathbb Z}{\rA}
-    \proofstepwidestar[2]{\IntSucc(x)=\IntSucc(y)}{\rA}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(x))=x}{%
-      \FormulaRefAuto{IntegerPredAfterSucc}{1}}
-    \proofstepwidestar[1]{\IntPred(\IntSucc(y))=y}{%
-      \FormulaRefAuto{IntegerPredAfterSucc}{1}}
-    \proofstepwide[1]{x}{=}{\IntPred(\IntSucc(x))}{%
-      \FormulaRefAuto{a=b\vdash b=a}{3}}
-    \proofstepwide[1,2]{}{=}{\IntPred(\IntSucc(y))}{\rIE{2}}
-    \proofstepwide[1]{}{=}{y}{%
-      \FormulaRefAuto{IntegerPredAfterSucc}{1}}
-    \proofstepwidestar[1,2]{x=y}{\rChain{5,6,7}}
+    \proofstepwidestar[2]{F(x)=F(y)}{\rA}
+    \proofstepwidestar[1]{F(x)=x+\IntOne}{\FormulaRefAuto{IntegerSuccessorValue}[thm]{1}}
+    \proofstepwidestar[1]{F(y)=y+\IntOne}{\FormulaRefAuto{IntegerSuccessorValue}[thm]{1}}
+    \proofstepwidestar[1,2]{x+\IntOne=y+\IntOne}{\rIE{2,3,4}}
+    \proofstepwide[1]{x}{=}{(x+\IntOne)-\IntOne}{%
+      \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{IntegerPredAfterSucc}[thm]{1}}}
+    \proofstepwide[1,2]{}{=}{(y+\IntOne)-\IntOne}{\rIE{5}}
+    \proofstepwide[1]{}{=}{y}{\FormulaRefAuto{IntegerPredAfterSucc}[thm]{1}}
+    \proofstepwidestar[1,2]{x=y}{\rChain{6,7,8}}
   \closeproofpartwideindR
-
   \proofpartwideindR[Surjektivität]{%
-    y\in\mathbb Z\vdash
-    \exists x\in\mathbb Z\,\IntSucc(x)=y%
+    y\in\mathbb Z\vdash\exists x\in\mathbb Z\,F(x)=y
   }{%
-    y\in\mathbb Z\vdash
-    \exists x\in\mathbb Z\,\IntSucc(x)=y%
+    y\in\mathbb Z\vdash\exists x\in\mathbb Z\,F(x)=y
   }[IntegerSuccessorSurjective]
     \proofstepwidestar[1]{y\in\mathbb Z}{\rA}
-    \proofstepwidestar[1]{\IntPred(y)\in\mathbb Z}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{IntegerPredecessorFunction},1}}
-    \proofstepwidestar[1]{\IntSucc(\IntPred(y))=y}{%
-      \FormulaRefAuto{IntegerSuccAfterPred}{1}}
-    \proofstepwidestar[1]{\exists x\in\mathbb Z\,\IntSucc(x)=y}{%
-      \rEI{\rAI{2,3}}}
+    \proofstepwidestar[1]{y-\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerMinusOneClosure}[thm]{1}}
+    \proofstepwidestar[1]{F(y-\IntOne)=(y-\IntOne)+\IntOne}{\FormulaRefAuto{IntegerSuccessorValue}[thm]{2}}
+    \proofstepwidestar[1]{(y-\IntOne)+\IntOne=y}{\FormulaRefAuto{IntegerSuccAfterPred}[thm]{1}}
+    \proofstepwidestar[1]{F(y-\IntOne)=y}{\rChain{3,4}}
+    \proofstepwidestar[1]{\exists x\in\mathbb Z\,F(x)=y}{\rEI{\rAI{2,5}}}
   \closeproofpartwideindR
-
   \proofpartwide{Schluss}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
-      \FormulaRefAuto{IntegerSuccessorFunction}}
-    \proofstepwidestar[]{%
-      \forall x,y\in\mathbb Z\,
-      (\IntSucc(x)=\IntSucc(y)\rightarrow x=y)}{%
-      \FormulaRefAuto{IntegerSuccessorInjective}}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\inj\mathbb Z}{%
-      \FormulaRefAuto{Injektive Funktion}{1,2}}
-    \proofstepwidestar[]{%
-      \forall y\in\mathbb Z\,\exists x\in\mathbb Z\,
-      \IntSucc(x)=y}{\FormulaRefAuto{IntegerSuccessorSurjective}}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\sur\mathbb Z}{%
-      \FormulaRefAuto{Surjektive Funktion}{1,4}}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\bij\mathbb Z}{%
-      \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
-        \vdash F\colon A\bij B}{3,5}}
+    \proofstepwidestar[]{F\colon\mathbb Z\to\mathbb Z}{\FormulaRefAuto{IntegerSuccessorFunction}[thm]}
+    \proofstepwidestar[]{\forall x,y\in\mathbb Z\,(F(x)=F(y)\rightarrow x=y)}{%
+      \FormulaRefAuto{IntegerSuccessorInjective}[thm]}
+    \proofstepwidestar[]{F\colon\mathbb Z\inj\mathbb Z}{\FormulaRefAuto{Injektive Funktion}[def]{1,2}}
+    \proofstepwidestar[]{\forall y\in\mathbb Z\,\exists x\in\mathbb Z\,F(x)=y}{%
+      \FormulaRefAuto{IntegerSuccessorSurjective}[thm]}
+    \proofstepwidestar[]{F\colon\mathbb Z\sur\mathbb Z}{\FormulaRefAuto{Surjektive Funktion}[def]{1,4}}
+    \proofstepwidestar[]{F\colon\mathbb Z\bij\mathbb Z}{%
+      \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B\vdash F\colon A\bij B}{3,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \section{Normalformen}
 
-\FormulaThmDeltaK[Positiver Strahl und Nachfolger]{%
-  n\in\mathbb N\vdash
-  \IntSucc(\IntEmbed(n))=\IntEmbed(\Succ(n))%
-}{IntegerSuccessorOnEmbedding}{%
-  \DeltaRow{Mengen}{n}%
-}
-\begin{tabproofwide}
-  \proofstepwidestarbreakkeep[1]{n\in\mathbb N}{\rA}
-  \proofstepwidestarbreakkeep[]{\IntOne=\IntEmbed(1)}{\FormulaRefAuto{IntegerOneDef}}
-  \proofstepwidestarbreakkeep[1]{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}{1}}
-  \proofstepwide[1]{\IntSucc(\IntEmbed(n))}{=}{%
-    \IntEmbed(n)+\IntOne}{%
-    \FormulaRefAuto{IntegerSuccessorValue}[thm]{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{NaturalIntegerEmbeddingFunction},1}}}
-  \proofstepwide[1]{}{=}{\IntEmbed(n)+\IntEmbed(1)}{\rIE{2}}
-  \proofstepwide[1]{}{=}{\IntEmbed(n+1)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{%
-      \FormulaRefAuto{NaturalIntegerEmbeddingAdditive}{1,%
-        \FormulaRefAuto{PeanoOneInN}}}}
-  \proofstepwide[1]{}{=}{\IntEmbed(\Succ(n))}{\rIE{3}}
-  \proofstepwidestarbreakkeep[1]{%
-    \IntSucc(\IntEmbed(n))=\IntEmbed(\Succ(n))}{\rChain{4,5,6,7}}
-\end{tabproofwide}
-
-\FormulaThmDeltaK[Negativer Strahl und Vorgänger]{%
-  n\in\mathbb N\vdash
-  \IntPred(-\IntEmbed(n))=-\IntEmbed(\Succ(n))%
-}{IntegerPredecessorOnNegativeEmbedding}{%
-  \DeltaRow{Mengen}{n}%
-}
+\FormulaThmDeltaK[Addieren der Eins auf dem positiven Strahl]{%
+  n\in\mathbb N\vdash \IntEmbed(n)+\IntOne=\IntEmbed(n+1)%
+}{IntegerSuccessorOnEmbedding}{\DeltaRow{Mengen}{n}}
 \begin{tabproofwide}
   \proofstepwidestar[1]{n\in\mathbb N}{\rA}
-  \proofstepwidestar[1]{\IntEmbed(n)=\IntClass{n}{0}}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
+  \proofstepwidestar[]{1\in\mathbb N}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestar[]{\IntOne=\IntEmbed(1)}{\FormulaRefAuto{IntegerOneDef}[def]}
+  \proofstepwide[1]{\IntEmbed(n)+\IntOne}{=}{\IntEmbed(n)+\IntEmbed(1)}{\rIE{3}}
+  \proofstepwide[1]{}{=}{\IntEmbed(n+1)}{%
+    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{NaturalIntegerEmbeddingAdditive}[thm]{1,2}}}
+  \proofstepwidestar[1]{\IntEmbed(n)+\IntOne=\IntEmbed(n+1)}{\rChain{4,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Subtrahieren der Eins auf dem negativen Strahl]{%
+  n\in\mathbb N\vdash -\IntEmbed(n)-\IntOne=-\IntEmbed(n+1)%
+}{IntegerPredecessorOnNegativeEmbedding}{\DeltaRow{Mengen}{n}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1]{n+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
+  \proofstepwidestar[1]{\IntEmbed(n)=\IntClass{n}{0}}{\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
   \proofstepwidestar[1]{-\IntEmbed(n)=\IntClass{0}{n}}{%
-    \FormulaRefAuto{IntegerNegationDef}{1,2}}
-  \proofstepwidestar[1]{\IntEmbed(\Succ(n))=\IntClass{\Succ(n)}{0}}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{%
-      \FormulaRefAuto{PeanoSuccClosure}{1}}}
-  \proofstepwidestar[1]{-\IntEmbed(\Succ(n))=\IntClass{0}{\Succ(n)}}{%
-    \FormulaRefAuto{IntegerNegationDef}{1,4}}
-  \proofstepwide[1]{\IntPred(-\IntEmbed(n))}{=}{%
-    \IntClass{0}{\Succ(n)}}{%
-    \FormulaRefAuto{IntegerPredecessorClassValue}{1,3}}
-  \proofstepwide[1]{}{=}{-\IntEmbed(\Succ(n))}{%
-    \FormulaRefAuto{a=b\vdash b=a}{5}}
-  \proofstepwidestar[1]{%
-    \IntPred(-\IntEmbed(n))=-\IntEmbed(\Succ(n))}{\rChain{6,7}}
+    \rIE{4,\FormulaRefAuto{IntegerNegationDef}[def]{1,2}}}
+  \proofstepwidestar[1]{\IntEmbed(n+1)=\IntClass{n+1}{0}}{\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{3}}
+  \proofstepwidestar[1]{-\IntEmbed(n+1)=\IntClass{0}{n+1}}{%
+    \rIE{6,\FormulaRefAuto{IntegerNegationDef}[def]{2,3}}}
+  \proofstepwide[1]{-\IntEmbed(n)-\IntOne}{=}{\IntClass{0}{n+1}}{%
+    \rIE{5,\FormulaRefAuto{IntegerPredecessorClassValue}[thm]{2,1}}}
+  \proofstepwide[1]{}{=}{-\IntEmbed(n+1)}{\FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstepwidestar[1]{-\IntEmbed(n)-\IntOne=-\IntEmbed(n+1)}{\rChain{8,9}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Normalform ganzer Zahlen]{%
@@ -4561,66 +4500,60 @@ die Hinrichtung von
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\FormulaThmDeltaK[Die natürliche Einbettung erhält die Ordnung]{%
+  a,b\in\mathbb N\dsep a\leq b\vdash\IntEmbed(a)\leq\IntEmbed(b)%
+}{NaturalIntegerEmbeddingOrderPreserving}{\DeltaRow{Mengen}{a\dsep b}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{a\leq b}{\rA}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1]{a+0=a}{\FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+  \proofstepwidestar[1]{b+0=b}{\FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
+  \proofstepwidestar[1,2]{a+0\leq b+0}{\rIE{4,5,2}}
+  \proofstepwidestar[1,2]{\IntClass{a}{0}\leq\IntClass{b}{0}}{%
+    \FormulaRefAuto{IntegerOrderClassChar}[thm]{1,3,6}}
+  \proofstepwidestar[1]{\IntEmbed(a)=\IntClass{a}{0}}{\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
+  \proofstepwidestar[1]{\IntEmbed(b)=\IntClass{b}{0}}{\FormulaRefAuto{NaturalIntegerEmbeddingValue}[thm]{1}}
+  \proofstepwidestar[1,2]{\IntEmbed(a)\leq\IntEmbed(b)}{\rIE{8,9,7}}
+\end{tabproofwide}
+
 \FormulaThmDeltaK[Positive natürliche Bilder sind positive ganze Zahlen]{%
   k\in\mathbb N\dsep k\neq0\vdash\IntZero<\IntEmbed(k)%
-}{NaturalIntegerEmbeddingPositiveModel}{%
-  \DeltaRow{Mengen}{k\dsep h}%
-}
+}{NaturalIntegerEmbeddingPositiveModel}{\DeltaRow{Mengen}{k}}
 \begin{tabproofwide}
-  \proofstepwidestarbreakkeep[1]{k\in\mathbb N}{\rA}
-  \proofstepwidestarbreakkeep[2]{k\neq0}{\rA}
-  \proofstepwidestarbreakkeep[1,2]{\exists h\in\mathbb N\,(k=\Succ(h))}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{1,2}}
-  \proofstepwidestarbreakkeep[4]{h\in\mathbb N\land k=\Succ(h)}{\rA}
-  \proofstepwidestarbreakkeep[4]{0+\Succ(h)=k}{%
-    \rIE{\FormulaRefAuto{PeanoAddLeftZero}[thm]{%
-      \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{4}}},\rAEb{4}}}
-  \proofstepwidestarbreakkeep[1,4]{0<k}{%
-    \FormulaRefAuto{NaturalStrictOrderAdditiveCharacterization}[thm]{%
-      \FormulaRefAuto{PeanoZero}[ax],1,\rEI{\rAI{\rAEa{4},5}}}}
-  \proofstepwidestarbreakkeep[1,4]{\IntEmbed(0)<\IntEmbed(k)}{%
+  \proofstepwidestar[1]{k\in\mathbb N}{\rA}
+  \proofstepwidestar[2]{k\neq0}{\rA}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1]{0\leq k}{\FormulaRefAuto{PeanoZeroLeq}[thm]{1}}
+  \proofstepwidestar[1]{\IntEmbed(0)\leq\IntEmbed(k)}{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingOrderPreserving}[thm]{3,1,4}}
+  \proofstepwidestar[]{\IntZero=\IntEmbed(0)}{\FormulaRefAuto{IntegerZeroDef}[def]}
+  \proofstepwidestar[1]{\IntZero\leq\IntEmbed(k)}{\rIE{6,5}}
+  \proofstepwidestar[8]{\IntZero=\IntEmbed(k)}{\rA}
+  \proofstepwidestar[8]{\IntEmbed(k)=\IntEmbed(0)}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{8,6}}
+  \proofstepwidestar[1,8]{k=0}{\FormulaRefAuto{NaturalIntegerEmbeddingReflectsEquality}[thm]{1,3,9}}
+  \proofstepwidestar[1,2,8]{\bot}{\rBI{2,10}}
+  \proofstepwidestar[1,2]{\IntZero\neq\IntEmbed(k)}{\rCI{8,11}}
+  \proofstepwidestar[1]{\IntEmbed(k)\in\mathbb Z}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm],1}}
+  \proofstepwidestar[1,2]{\IntZero<\IntEmbed(k)}{%
     \FormulaRefAuto{IntegerStrictOrderDef}[def]{%
-      \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
-        \FormulaRefAuto{PeanoZero}[ax],1,6},%
-      \FormulaRefAuto{NaturalIntegerEmbeddingInjective}[thm]{%
-        \FormulaRefAuto{PeanoZero}[ax],1,2}}}
-  \proofstepwidestarbreakkeep[1,4]{\IntZero<\IntEmbed(k)}{%
-    \rIE{7,\FormulaRefAuto{IntegerZeroDef}[def]}}
-  \proofstepwidestarbreakkeep[1,2]{\IntZero<\IntEmbed(k)}{\rEE{3,4,8}}
+      \FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],13,\rAI{7,12}}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Produkt von null verschiedener natürlicher Zahlen]{%
   m,n\in\mathbb N\dsep m\neq0\dsep n\neq0
   \vdash m\cdot n\neq0%
-}{NaturalNonzeroProductForIntegerModel}{%
-  \DeltaRow{Mengen}{m\dsep n\dsep i\dsep j}%
-}
-\begin{tabproofwide}
-  \proofstepwidestarbreakkeep[1]{m,n\in\mathbb N}{\rA}
-  \proofstepwidestarbreakkeep[2]{m\neq0}{\rA}
-  \proofstepwidestarbreakkeep[3]{n\neq0}{\rA}
-  \proofstepwidestarbreakkeep[1,2]{\exists i\in\mathbb N\,(m=\Succ(i))}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{\rAEa{1},2}}
-  \proofstepwidestarbreakkeep[1,3]{\exists j\in\mathbb N\,(n=\Succ(j))}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{\rAEb{1},3}}
-  \proofstepwidestarbreakkeep[6]{i\in\mathbb N\land m=\Succ(i)}{\rA}
-  \proofstepwidestarbreakkeep[7]{j\in\mathbb N\land n=\Succ(j)}{\rA}
-  \proofstepwidestarbreakkeep[6,7]{m\cdot n=m\cdot j+m}{%
-    \rIE{\rAEb{7},\FormulaRefAuto{PeanoMulSuccRight}[thm]{%
-      \rAEa{1},\rAEa{7}}}}
-  \proofstepwidestarbreakkeep[1,6,7]{m\cdot j+m=\Succ(m\cdot j+i)}{%
-    \rIE{\rAEb{6},\FormulaRefAuto{PeanoAddSuccRight}[thm]{%
-      \FormulaRefAuto{PeanoMulClosure}[thm]{\rAEa{1},\rAEa{7}},%
-      \rAEa{6}}}}
-  \proofstepwidestarbreakkeep[1,6,7]{\Succ(m\cdot j+i)\neq0}{%
-    \FormulaRefAuto{PeanoSuccNonzero}[ax]{%
-      \FormulaRefAuto{PeanoAddClosure}[thm]{%
-        \FormulaRefAuto{PeanoMulClosure}[thm]{\rAEa{1},\rAEa{7}},%
-        \rAEa{6}}}}
-  \proofstepwidestarbreakkeep[1,6,7]{m\cdot n\neq0}{\rIE{8,9,10}}
-  \proofstepwidestarbreakkeep[1,2,3]{m\cdot n\neq0}{%
-    \rEE{4,6,\rEE{5,7,11}}}
-\end{tabproofwide}
+}{NaturalNonzeroProductForIntegerModel}{\DeltaRow{Mengen}{m\dsep n}}
+\begin{tabproof}
+  \proofstep{1}{m,n\in\mathbb N}{\rA}
+  \proofstep{2}{m\neq0}{\rA}
+  \proofstep{3}{n\neq0}{\rA}
+  \proofstep{1,2,3}{m\cdot n\neq0}{%
+    \FormulaRefAuto{PeanoMulNonzero}[thm]{\rAEa{1},\rAEb{1},2,3}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Produkt positiver ganzer Zahlen im Quotientenmodell]{%
   z,w\in\mathbb Z\dsep\IntZero<z\dsep\IntZero<w
@@ -4695,29 +4628,29 @@ die Hinrichtung von
   \proofstepwidestarbreakkeep[2]{k\neq0}{\rA}
   \proofstepwidestarbreakkeep[3]{a<c}{\rA}
   \proofstepwidestarbreakkeep[1,3]{\exists h\in\mathbb N\,
-    (a+\Succ(h)=c)}{%
-    \FormulaRefAuto{NaturalStrictOrderAdditiveCharacterization}[thm]{%
+    (a+(h+1)=c)}{%
+    \FormulaRefAuto{PeanoStrictAddOneDistance}[thm]{%
       \rAEa{1},\rAEa{\rAEb{1}},3}}
-  \proofstepwidestarbreakkeep[5]{h\in\mathbb N\land a+\Succ(h)=c}{\rA}
-  \proofstepwidestarbreakkeep[1,2,5]{\Succ(h)\cdot k\neq0}{%
+  \proofstepwidestarbreakkeep[5]{h\in\mathbb N\land a+(h+1)=c}{\rA}
+  \proofstepwidestarbreakkeep[1,2,5]{(h+1)\cdot k\neq0}{%
     \FormulaRefAuto{NaturalNonzeroProductForIntegerModel}[thm]{%
-      \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{5}},%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{5}},%
       \rAEb{\rAEb{1}},%
-      \FormulaRefAuto{PeanoSuccNonzero}[ax]{\rAEa{5}},2}}
+      \FormulaRefAuto{PeanoAddOneNonzero}[thm]{\rAEa{5}},2}}
   \proofstepwidestarbreakkeep[1,2,5]{\exists t\in\mathbb N\,
-    (\Succ(h)\cdot k=\Succ(t))}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{%
+    ((h+1)\cdot k=t+1)}{%
+    \FormulaRefAuto{PeanoNonzeroIsAddOne}[thm]{%
       \FormulaRefAuto{PeanoMulClosure}[thm]{%
-        \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{5}},%
+        \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{5}},%
         \rAEb{\rAEb{1}}},6}}
   \proofstepwidestarbreakkeep[8]{t\in\mathbb N\land
-    \Succ(h)\cdot k=\Succ(t)}{\rA}
-  \proofstepwidestarbreakkeep[1,5]{(a+\Succ(h))\cdot k
-    =a\cdot k+\Succ(h)\cdot k}{%
+    (h+1)\cdot k=t+1}{\rA}
+  \proofstepwidestarbreakkeep[1,5]{(a+(h+1))\cdot k
+    =a\cdot k+(h+1)\cdot k}{%
     \FormulaRefAuto{PeanoMulRightDistributive}[thm]{%
-      \rAEa{1},\FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{5}},%
+      \rAEa{1},\FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{5}},%
       \rAEb{\rAEb{1}}}}
-  \proofstepwidestarbreakkeep[1,5,8]{a\cdot k+\Succ(t)=c\cdot k}{%
+  \proofstepwidestarbreakkeep[1,5,8]{a\cdot k+(t+1)=c\cdot k}{%
     \rIE{\rAEb{5},\rAEb{8},9}}
   \proofstepwidestarbreakkeep[1]{a\cdot k\in\mathbb N}{%
     \FormulaRefAuto{PeanoMulClosure}[thm]{%
@@ -4726,10 +4659,10 @@ die Hinrichtung von
     \FormulaRefAuto{PeanoMulClosure}[thm]{%
       \rAEa{\rAEb{1}},\rAEb{\rAEb{1}}}}
   \proofstepwidestarbreakkeep[1,5,8]{%
-    \exists t\in\mathbb N\,(a\cdot k+\Succ(t)=c\cdot k)}{%
+    \exists t\in\mathbb N\,(a\cdot k+(t+1)=c\cdot k)}{%
     \rEI{\rAI{\rAEa{8},10}}}
   \proofstepwidestarbreakkeep[1,5,8]{a\cdot k<c\cdot k}{%
-    \FormulaRefAuto{NaturalStrictOrderAdditiveCharacterization}[thm]{%
+    \FormulaRefAuto{PeanoStrictAddOneDistance}[thm]{%
       11,12,13}}
   \proofstepwidestarbreakkeep[1,2,3]{a\cdot k<c\cdot k}{%
     \rEE{4,5,\rEE{7,8,14}}}
@@ -5206,41 +5139,24 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{b\in\PositiveIntegers}{\rA}
-  \proofstepwidestar[1]{b\in\mathbb Z\land\IntZero<b}{%
-    \FormulaRefAuto{PositiveIntegersDef}[def]{1}}
-  \proofstepwidestar[1]{%
-    \exists k\in\mathbb N\,(k\neq0\land b=\IntEmbed(k))}{%
-    \FormulaRefAuto{IntegerPositiveEmbeddingRepresentativeModel}[thm]{%
-      \rAEa{2},\rAEb{2}}}
-  \proofstepwidestar[4]{%
-    k\in\mathbb N\land k\neq0\land b=\IntEmbed(k)}{\rA}
-  \proofstepwidestar[4]{\exists h\in\mathbb N\,(k=\Succ(h))}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{\rAEa{4},\rAEa{\rAEb{4}}}}
-  \proofstepwidestar[6]{h\in\mathbb N\land k=\Succ(h)}{\rA}
-  \proofstepwidestar[6]{h+1=\Succ(h)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}[thm]{\rAEa{6}}}
-  \proofstepwidestar[6]{1+h=h+1}{%
-    \FormulaRefAuto{PeanoAddCommutative}[thm]{%
-      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{6}}}
-  \proofstepwidestar[6]{1+h=\Succ(h)}{\rChain{8,7}}
-  \proofstepwidestar[4,6]{1+h=k}{\rIE{9,\rAEb{6}}}
-  \proofstepwidestar[4,6]{h\in\mathbb N\land 1+h=k}{%
-    \rAI{\rAEa{6},10}}
-  \proofstepwidestar[4,6]{\exists h\in\mathbb N\,(1+h=k)}{\rEI{11}}
-  \proofstepwidestar[4,6]{1\leq k}{%
-    \FormulaRefAuto{NaturalOrderAdditiveCharacterization}[thm]{%
-      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{4},%
-      12}}
+  \proofstepwidestar[1]{b\in\mathbb Z\land\IntZero<b}{\FormulaRefAuto{PositiveIntegersDef}[def]{1}}
+  \proofstepwidestar[1]{\exists k\in\mathbb N\,(k\neq0\land b=\IntEmbed(k))}{%
+    \FormulaRefAuto{IntegerPositiveEmbeddingRepresentativeModel}[thm]{\rAEa{2},\rAEb{2}}}
+  \proofstepwidestar[4]{k\in\mathbb N\land k\neq0\land b=\IntEmbed(k)}{\rA}
+  \proofstepwidestar[4]{\exists h\in\mathbb N\,(k=h+1)}{%
+    \FormulaRefAuto{PeanoNonzeroIsAddOne}[thm]{\rAEa{4},\rAEa{\rAEb{4}}}}
+  \proofstepwidestar[6]{h\in\mathbb N\land k=h+1}{\rA}
+  \proofstepwidestar[]{1\in\mathbb N}{\FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstepwidestar[6]{1+h=h+1}{\FormulaRefAuto{PeanoAddCommutative}[thm]{7,\rAEa{6}}}
+  \proofstepwidestar[6]{1+h=k}{\rIE{\rAEb{6},8}}
+  \proofstepwidestar[6]{\exists h\in\mathbb N\,(1+h=k)}{\rEI{\rAI{\rAEa{6},9}}}
+  \proofstepwidestar[4,6]{1\leq k}{\FormulaRefAuto{NaturalOrderAdditiveCharacterization}[thm]{7,\rAEa{4},10}}
   \proofstepwidestar[4,6]{\IntEmbed(1)\leq\IntEmbed(k)}{%
-    \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
-      \FormulaRefAuto{PeanoOneInN}[thm],\rAEa{4},13}}
-  \proofstepwidestar[]{\IntOne=\IntEmbed(1)}{%
-    \FormulaRefAuto{IntegerOneDef}[def]}
-  \proofstepwidestar[4]{b=\IntEmbed(k)}{\rAEb{\rAEb{4}}}
-  \proofstepwidestar[4,6]{\IntOne\leq b}{%
-    \rIE{15,14,16}}
-  \proofstepwidestar[4]{\IntOne\leq b}{\rEE{5,6,17}}
-  \proofstepwidestar[1]{\IntOne\leq b}{\rEE{3,4,18}}
+    \FormulaRefAuto{NaturalIntegerEmbeddingOrderPreserving}[thm]{7,\rAEa{4},11}}
+  \proofstepwidestar[]{\IntOne=\IntEmbed(1)}{\FormulaRefAuto{IntegerOneDef}[def]}
+  \proofstepwidestar[4,6]{\IntOne\leq b}{\rIE{13,\rAEb{\rAEb{4}},12}}
+  \proofstepwidestar[4]{\IntOne\leq b}{\rEE{5,6,14}}
+  \proofstepwidestar[1]{\IntOne\leq b}{\rEE{3,4,15}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Abgeschlossenheit positiver ganzer Zahlen unter Multiplikation]{%
@@ -5310,7 +5226,8 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
   \proofstepwidestar[2]{n\neq0}{\rA}
   \proofstepwidestar[3]{b\in\PositiveIntegers}{\rA}
   \proofstepwidestar[1]{\IntEmbed(n)\in\mathbb Z}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{1}}
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm],1}}
   \proofstepwidestar[1,2]{\IntZero<\IntEmbed(n)}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingPositiveModel}[thm]{1,2}}
   \proofstepwidestar[3]{\IntOne\leq b}{%
@@ -5333,85 +5250,72 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
 \end{tabproofwide}
 
 
-\section{Nachfolger und Diskretheit der Ganzzahlordnung}
+\section{Schritte um eins und Diskretheit der Ganzzahlordnung}
 
-\FormulaThmDeltaK[Jede ganze Zahl ist kleiner als ihr Nachfolger]{%
-  z\in\mathbb Z\vdash z<\IntSucc(z)%
-}{IntegerSuccessorPositive}{%
-  \DeltaRow{Mengen}{z\dsep a\dsep b}%
-}
+\FormulaThmDeltaK[Jede ganze Zahl ist kleiner als die um eins erhöhte Zahl]{%
+  z\in\mathbb Z\vdash z<z+\IntOne%
+}{IntegerSuccessorPositive}{\DeltaRow{Mengen}{z\dsep a\dsep b}}
 \begin{tabproofsplitwide}
   \proofpartwideindR[Ordnungsteil]{%
-    z\in\mathbb Z\vdash z\leq\IntSucc(z)%
+    z\in\mathbb Z\vdash z\leq z+\IntOne
   }{%
-    z\in\mathbb Z\vdash z\leq\IntSucc(z)%
+    z\in\mathbb Z\vdash z\leq z+\IntOne
   }[IntegerSuccessorLeq]
     \proofstepwidestarbreakkeep[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[1]{\exists a,b\in\mathbb N\,
-      z=\IntClass{a}{b}}{\FormulaRefAuto{IntegerPairRepresentative}{1}}
+    \proofstepwidestarbreakkeep[1]{\exists a,b\in\mathbb N\,z=\IntClass{a}{b}}{\FormulaRefAuto{IntegerPairRepresentative}[thm]{1}}
     \proofstepwidestarbreakkeep[3]{a,b\in\mathbb N\land z=\IntClass{a}{b}}{\rA}
-    \proofstepwidestarbreakkeep[3]{\IntSucc(z)=\IntClass{\Succ(a)}{b}}{%
-      \FormulaRefAuto{IntegerSuccessorClassValue}{3}}
-    \proofstepwidestarbreakkeep[3]{a\leq\Succ(a)}{%
-      \FormulaRefAuto{PeanoLeqAddOne}{3}}
-    \proofstepwidestarbreakkeep[3]{a+b\leq\Succ(a)+b}{%
-      \FormulaRefAuto{NaturalOrderTranslationForward}{3,5}}
-    \proofstepwidestarbreakkeep[3]{z\leq\IntSucc(z)}{%
-      \FormulaRefAuto{IntegerOrderClassChar}{3,4,6}}
-    \proofstepwidestarbreakkeep[1]{z\leq\IntSucc(z)}{\rEE{2,3,7}}
+    \proofstepwidestarbreakkeep[3]{a+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}
+    \proofstepwidestarbreakkeep[3]{z+\IntOne=\IntClass{a+1}{b}}{%
+      \rIE{3,\FormulaRefAuto{IntegerSuccessorClassValue}[thm]{3}}}
+    \proofstepwidestarbreakkeep[3]{a\leq a+1}{\FormulaRefAuto{PeanoLeqAddOne}[thm]{3}}
+    \proofstepwidestarbreakkeep[3]{a+b\leq(a+1)+b}{\FormulaRefAuto{NaturalOrderTranslationForward}[thm]{3,4,6}}
+    \proofstepwidestarbreakkeep[3]{\IntClass{a}{b}\leq\IntClass{a+1}{b}}{\FormulaRefAuto{IntegerOrderClassChar}[thm]{3,4,7}}
+    \proofstepwidestarbreakkeep[3]{z\leq z+\IntOne}{\rIE{3,5,8}}
+    \proofstepwidestarbreakkeep[1]{z\leq z+\IntOne}{\rEE{2,3,9}}
   \closeproofpartwideindR
-
   \proofpartwideindR[Ungleichheitsteil]{%
-    z\in\mathbb Z\vdash z\neq\IntSucc(z)%
+    z\in\mathbb Z\vdash z\neq z+\IntOne
   }{%
-    z\in\mathbb Z\vdash z\neq\IntSucc(z)%
+    z\in\mathbb Z\vdash z\neq z+\IntOne
   }[IntegerSuccessorDistinct]
     \proofstepwidestarbreakkeep[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[2]{z=\IntSucc(z)}{\rA}
-    \proofstepwidestarbreakkeep[1]{\exists a,b\in\mathbb N\,
-      z=\IntClass{a}{b}}{\FormulaRefAuto{IntegerPairRepresentative}{1}}
+    \proofstepwidestarbreakkeep[2]{z=z+\IntOne}{\rA}
+    \proofstepwidestarbreakkeep[1]{\exists a,b\in\mathbb N\,z=\IntClass{a}{b}}{\FormulaRefAuto{IntegerPairRepresentative}[thm]{1}}
     \proofstepwidestarbreakkeep[4]{a,b\in\mathbb N\land z=\IntClass{a}{b}}{\rA}
-    \proofstepwidestarbreakkeep[4]{\IntSucc(z)=\IntClass{\Succ(a)}{b}}{%
-      \FormulaRefAuto{IntegerSuccessorClassValue}{4}}
-    \proofstepwidestarbreakkeep[2,4]{\IntClass{a}{b}=\IntClass{\Succ(a)}{b}}{\rIE{4,5,2}}
-    \proofstepwidestarbreakkeep[2,4]{a+b=b+\Succ(a)}{%
-      \FormulaRefAuto{IntegerClassEquality}{4,6}}
-    \proofstepwidestarbreakkeep[4]{b+\Succ(a)=\Succ(a)+b}{%
-      \FormulaRefAuto{PeanoAddCommutative}{4}}
-    \proofstepwidestarbreakkeep[2,4]{a+b=\Succ(a)+b}{\rIE{7,8}}
-    \proofstepwidestarbreakkeep[2,4]{a=\Succ(a)}{%
-      \FormulaRefAuto{PeanoAddRightCancellation}{4,9}}
-    \proofstepwidestarbreakkeep[4]{a<\Succ(a)}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash n<\Succ(n)}{4}}
-    \proofstepwidestarbreakkeep[2,4]{\bot}{%
-      \FormulaRefAuto{PeanoStrictEqualityImpossible}{4,11,10}}
-    \proofstepwidestarbreakkeep[1,2]{\bot}{\rEE{3,4,12}}
-    \proofstepwidestarbreakkeep[1]{z\neq\IntSucc(z)}{\rCI{2,13}}
+    \proofstepwidestarbreakkeep[4]{a+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{4}}
+    \proofstepwidestarbreakkeep[4]{z+\IntOne=\IntClass{a+1}{b}}{%
+      \rIE{4,\FormulaRefAuto{IntegerSuccessorClassValue}[thm]{4}}}
+    \proofstepwidestarbreakkeep[2,4]{\IntClass{a}{b}=\IntClass{a+1}{b}}{\rIE{4,6,2}}
+    \proofstepwidestarbreakkeep[2,4]{a+b=b+(a+1)}{\FormulaRefAuto{IntegerClassEquality}[thm]{4,5,7}}
+    \proofstepwidestarbreakkeep[4]{b+(a+1)=(a+1)+b}{\FormulaRefAuto{PeanoAddCommutative}[thm]{4,5}}
+    \proofstepwidestarbreakkeep[2,4]{a+b=(a+1)+b}{\rIE{8,9}}
+    \proofstepwidestarbreakkeep[2,4]{a=a+1}{\FormulaRefAuto{PeanoAddRightCancellation}[thm]{4,5,10}}
+    \proofstepwidestarbreakkeep[4]{a<a+1}{\FormulaRefAuto{PeanoLtAddOne}[thm]{4}}
+    \proofstepwidestarbreakkeep[2,4]{\bot}{\FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{4,5,12,11}}
+    \proofstepwidestarbreakkeep[1,2]{\bot}{\rEE{3,4,13}}
+    \proofstepwidestarbreakkeep[1]{z\neq z+\IntOne}{\rCI{2,14}}
   \closeproofpartwideindR
-
   \proofpartwide{Schluss}
     \proofstepwidestarbreakkeep[1]{z\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[1]{z\leq\IntSucc(z)}{%
-      \FormulaRefAuto{IntegerSuccessorLeq}{1}}
-    \proofstepwidestarbreakkeep[1]{z\neq\IntSucc(z)}{%
-      \FormulaRefAuto{IntegerSuccessorDistinct}{1}}
-    \proofstepwidestarbreakkeep[1]{z<\IntSucc(z)}{%
-      \FormulaRefAuto{IntegerStrictOrderDef}{1,\rAI{2,3}}}
+    \proofstepwidestarbreakkeep[1]{z\leq z+\IntOne}{\FormulaRefAuto{IntegerSuccessorLeq}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{z\neq z+\IntOne}{\FormulaRefAuto{IntegerSuccessorDistinct}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{z+\IntOne\in\mathbb Z}{\FormulaRefAuto{IntegerAddOneClosure}[thm]{1}}
+    \proofstepwidestarbreakkeep[1]{z<z+\IntOne}{\FormulaRefAuto{IntegerStrictOrderDef}[def]{1,4,\rAI{2,3}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaAxiomAutoR[Diskrete Nachfolgerorientierung]{%
-  z\in\mathbb Z\vdash z<\IntSucc(z)%
+\FormulaAxiomAutoR[Diskrete Orientierung des Schritts um eins]{%
+  z\in\mathbb Z\vdash z<z+\IntOne%
 }{IntegerSuccessorPositiveAxiom}
 \par\noindent\emph{Herkunft aus der Quotientenkonstruktion:}
 \FormulaRefAuto{IntegerSuccessorPositive}[thm].\par
 
 \subsection{Ganzzahlschranken mit positiven Faktoren}
 
-\FormulaThmDeltaK[Die Nachfolgerhöhe einer Normalform ist eine strikte Schranke]{%
+\FormulaThmDeltaK[Die um eins erhöhte Normalformhöhe ist eine strikte Schranke]{%
   a\in\mathbb Z\dsep m\in\mathbb N\dsep
   \bigl(a=\IntEmbed(m)\lor a=-\IntEmbed(m)\bigr)
-  \vdash a<\IntEmbed(\Succ(m))%
+  \vdash a<\IntEmbed(m+1)%
 }{IntegerNormalFormSuccessorBound}{%
   \DeltaRow{Mengen}{a\dsep m}%
   \DeltaRow{Funktion}{\IntEmbed}%
@@ -5421,20 +5325,21 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
   \proofstepwidestar[2]{m\in\mathbb N}{\rA}
   \proofstepwidestar[3]{a=\IntEmbed(m)\lor a=-\IntEmbed(m)}{\rA}
   \proofstepwidestar[2]{\IntEmbed(m)\in\mathbb Z}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{2}}
-  \proofstepwidestar[2]{\IntEmbed(m)<\IntSucc(\IntEmbed(m))}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm],2}}
+  \proofstepwidestar[2]{\IntEmbed(m)<\IntEmbed(m)+\IntOne}{%
     \FormulaRefAuto{IntegerSuccessorPositiveAxiom}[ax]{4}}
-  \proofstepwidestar[2]{\IntSucc(\IntEmbed(m))
-    =\IntEmbed(\Succ(m))}{%
+  \proofstepwidestar[2]{\IntEmbed(m)+\IntOne
+    =\IntEmbed(m+1)}{%
     \FormulaRefAuto{IntegerSuccessorOnEmbedding}[thm]{2}}
-  \proofstepwidestar[2]{\IntEmbed(m)<\IntEmbed(\Succ(m))}{\rIE{5,6}}
+  \proofstepwidestar[2]{\IntEmbed(m)<\IntEmbed(m+1)}{\rIE{5,6}}
   \proofstepwidestar[8]{a=\IntEmbed(m)}{\rA}
-  \proofstepwidestar[2,8]{a<\IntEmbed(\Succ(m))}{\rIE{8,7}}
+  \proofstepwidestar[2,8]{a<\IntEmbed(m+1)}{\rIE{8,7}}
   \proofstepwidestar[10]{a=-\IntEmbed(m)}{\rA}
   \proofstepwidestar[2]{0\leq m}{%
     \FormulaRefAuto{PeanoZeroLeq}[thm]{2}}
   \proofstepwidestar[2]{\IntEmbed(0)\leq\IntEmbed(m)}{%
-    \FormulaRefAuto{IntegerOrderClassChar}[thm]{%
+    \FormulaRefAuto{NaturalIntegerEmbeddingOrderPreserving}[thm]{%
       \FormulaRefAuto{PeanoZero}[ax],2,11}}
   \proofstepwidestar[]{\IntZero=\IntEmbed(0)}{%
     \FormulaRefAuto{IntegerZeroDef}[def]}
@@ -5451,19 +5356,20 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
   \proofstepwidestar[2]{\IntEmbed(m)+(-\IntEmbed(m))=\IntZero}{%
     \rAEa{\FormulaRefAuto{IntegerAddInverseAxiom}[ax]{4}}}
   \proofstepwidestar[2]{-\IntEmbed(m)\leq\IntZero}{\rIE{16,17,18}}
-  \proofstepwidestar[2]{\Succ(m)\in\mathbb N}{%
-    \FormulaRefAuto{PeanoSuccClosure}[ax]{2}}
-  \proofstepwidestar[2]{\IntEmbed(\Succ(m))\in\mathbb Z}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{20}}
-  \proofstepwidestar[2]{\Succ(m)\neq0}{%
-    \FormulaRefAuto{PeanoSuccNonzero}[ax]{2}}
-  \proofstepwidestar[2]{\IntZero<\IntEmbed(\Succ(m))}{%
+  \proofstepwidestar[2]{m+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddOneClosure}[thm]{2}}
+  \proofstepwidestar[2]{\IntEmbed(m+1)\in\mathbb Z}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm],20}}
+  \proofstepwidestar[2]{m+1\neq0}{%
+    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{2}}
+  \proofstepwidestar[2]{\IntZero<\IntEmbed(m+1)}{%
     \FormulaRefAuto{NaturalIntegerEmbeddingPositiveModel}[thm]{20,22}}
-  \proofstepwidestar[2]{-\IntEmbed(m)<\IntEmbed(\Succ(m))}{%
+  \proofstepwidestar[2]{-\IntEmbed(m)<\IntEmbed(m+1)}{%
     \FormulaRefAuto{IntegerLeqStrictTransitiveFromAxioms}[thm]{%
       15,\FormulaRefAuto{IntegerZeroCarrierAxiom}[ax],21,19,23}}
-  \proofstepwidestar[2,10]{a<\IntEmbed(\Succ(m))}{\rIE{10,24}}
-  \proofstepwidestar[1,2,3]{a<\IntEmbed(\Succ(m))}{%
+  \proofstepwidestar[2,10]{a<\IntEmbed(m+1)}{\rIE{10,24}}
+  \proofstepwidestar[1,2,3]{a<\IntEmbed(m+1)}{%
     \rOE{3,8,9,10,25}}
 \end{tabproofwide}
 
@@ -5483,22 +5389,23 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
     \FormulaRefAuto{IntegerSignedNormalForm}[thm]{1}}
   \proofstepwidestar[4]{m\in\mathbb N\land
     (a=\IntEmbed(m)\lor a=-\IntEmbed(m))}{\rA}
-  \proofstepwidestar[4]{\Succ(m)\in\mathbb N}{%
-    \FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{4}}}
-  \proofstepwidestar[1,4]{a<\IntEmbed(\Succ(m))}{%
+  \proofstepwidestar[4]{m+1\in\mathbb N}{%
+    \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{4}}}
+  \proofstepwidestar[1,4]{a<\IntEmbed(m+1)}{%
     \FormulaRefAuto{IntegerNormalFormSuccessorBound}[thm]{1,4}}
-  \proofstepwidestar[4]{\Succ(m)\neq0}{%
-    \FormulaRefAuto{PeanoSuccNonzero}[ax]{\rAEa{4}}}
-  \proofstepwidestar[2,4]{\IntEmbed(\Succ(m))
-    \leq\IntEmbed(\Succ(m))\cdot b}{%
+  \proofstepwidestar[4]{m+1\neq0}{%
+    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{\rAEa{4}}}
+  \proofstepwidestar[2,4]{\IntEmbed(m+1)
+    \leq\IntEmbed(m+1)\cdot b}{%
     \FormulaRefAuto{PositiveIntegerEmbeddingFactorLowerBound}[thm]{5,7,2}}
-  \proofstepwidestar[4]{\IntEmbed(\Succ(m))\in\mathbb Z}{%
-    \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm]{5}}
+  \proofstepwidestar[4]{\IntEmbed(m+1)\in\mathbb Z}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{%
+      \FormulaRefAuto{NaturalIntegerEmbeddingFunction}[thm],5}}
   \proofstepwidestar[2]{b\in\mathbb Z\land\IntZero<b}{%
     \FormulaRefAuto{PositiveIntegersDef}[def]{2}}
-  \proofstepwidestar[2,4]{\IntEmbed(\Succ(m))\cdot b\in\mathbb Z}{%
+  \proofstepwidestar[2,4]{\IntEmbed(m+1)\cdot b\in\mathbb Z}{%
     \FormulaRefAuto{IntegerMulClosureAxiom}[ax]{9,\rAEa{10}}}
-  \proofstepwidestar[1,2,4]{a<\IntEmbed(\Succ(m))\cdot b}{%
+  \proofstepwidestar[1,2,4]{a<\IntEmbed(m+1)\cdot b}{%
     \FormulaRefAuto{IntegerStrictLeqTransitiveFromAxioms}[thm]{%
       1,9,11,6,8}}
   \proofstepwidestar[1,2,4]{\exists n\in\mathbb N\,
@@ -5515,9 +5422,9 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
   \begin{aligned}[t]
     &P(\IntZero)\dsep
     \forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntSucc(z)))\dsep{}\\
+      (P(z)\rightarrow P(z+\IntOne))\dsep{}\\
     &\forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntPred(z)))
+      (P(z)\rightarrow P(z-\IntOne))
     \vdash \forall z\in\mathbb Z\,P(z)
   \end{aligned}%
 }{IntegerTwoSidedInductionModel}{%
@@ -5529,18 +5436,18 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
     \begin{aligned}[t]
       &P(\IntZero)\dsep
       \forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntSucc(z)))\vdash{}\\
+      (P(z)\rightarrow P(z+\IntOne))\vdash{}\\
       &\forall n\in\mathbb N\,P(\IntEmbed(n))
     \end{aligned}
   }{%
     P(\IntZero)\dsep
     \forall z\in\mathbb Z\,
-    (P(z)\rightarrow P(\IntSucc(z)))
+    (P(z)\rightarrow P(z+\IntOne))
     \vdash\forall n\in\mathbb N\,P(\IntEmbed(n))
   }[IntegerTwoSidedInductionPositiveRay]
     \proofstepwidestarbreakkeep[1]{P(\IntZero)}{\rA}
     \proofstepwidestarbreakkeep[2]{\forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntSucc(z)))}{\rA}
+      (P(z)\rightarrow P(z+\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[]{\IntZero=\IntEmbed(0)}{%
       \FormulaRefAuto{IntegerZeroDef}}
     \proofstepwidestarbreakkeep[1]{P(\IntEmbed(0))}{\rIE{3,1}}
@@ -5552,13 +5459,11 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
         \FormulaRefAuto{NaturalIntegerEmbeddingFunction},5}}
     \proofstepwidestarbreakkeep[2,5]{%
       P(\IntEmbed(n))\rightarrow
-      P(\IntSucc(\IntEmbed(n)))}{\rRE{\rUE{2},7}}
-    \proofstepwidestarbreakkeep[2,5,6]{P(\IntSucc(\IntEmbed(n)))}{\rRE{8,6}}
+      P(\IntEmbed(n)+\IntOne)}{\rRE{\rUE{2},7}}
+    \proofstepwidestarbreakkeep[2,5,6]{P(\IntEmbed(n)+\IntOne)}{\rRE{8,6}}
     \proofstepwidestarbreakkeep[5]{%
-      \IntSucc(\IntEmbed(n))=\IntEmbed(n+1)}{%
-      \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{
-        \FormulaRefAuto{PeanoAddOneSucc}[thm]{5}},
-        \FormulaRefAuto{IntegerSuccessorOnEmbedding}{5}}}
+      \IntEmbed(n)+\IntOne=\IntEmbed(n+1)}{%
+      \FormulaRefAuto{IntegerSuccessorOnEmbedding}[thm]{5}}
     \proofstepwidestarbreakkeep[2,5,6]{P(\IntEmbed(n+1))}{\rIE{10,9}}
     \proofstepwidestarbreakkeep[2,5]{%
       P(\IntEmbed(n))\rightarrow P(\IntEmbed(n+1))}{\rRI{6,11}}
@@ -5574,18 +5479,18 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
     \begin{aligned}[t]
       &P(\IntZero)\dsep
       \forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntPred(z)))\vdash{}\\
+      (P(z)\rightarrow P(z-\IntOne))\vdash{}\\
       &\forall n\in\mathbb N\,P(-\IntEmbed(n))
     \end{aligned}
   }{%
     P(\IntZero)\dsep
     \forall z\in\mathbb Z\,
-    (P(z)\rightarrow P(\IntPred(z)))
+    (P(z)\rightarrow P(z-\IntOne))
     \vdash\forall n\in\mathbb N\,P(-\IntEmbed(n))
   }[IntegerTwoSidedInductionNegativeRay]
     \proofstepwidestarbreakkeep[1]{P(\IntZero)}{\rA}
     \proofstepwidestarbreakkeep[2]{\forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntPred(z)))}{\rA}
+      (P(z)\rightarrow P(z-\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[]{\IntEmbed(0)=\IntZero}{%
       \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{IntegerZeroDef}}}
     \proofstepwidestarbreakkeep[]{-\IntZero=\IntZero}{%
@@ -5600,13 +5505,11 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
           \FormulaRefAuto{NaturalIntegerEmbeddingFunction},6}}}
     \proofstepwidestarbreakkeep[2,6]{%
       P(-\IntEmbed(n))\rightarrow
-      P(\IntPred(-\IntEmbed(n)))}{\rRE{\rUE{2},8}}
-    \proofstepwidestarbreakkeep[2,6,7]{P(\IntPred(-\IntEmbed(n)))}{\rRE{9,7}}
+      P(-\IntEmbed(n)-\IntOne)}{\rRE{\rUE{2},8}}
+    \proofstepwidestarbreakkeep[2,6,7]{P(-\IntEmbed(n)-\IntOne)}{\rRE{9,7}}
     \proofstepwidestarbreakkeep[6]{%
-      \IntPred(-\IntEmbed(n))=-\IntEmbed(n+1)}{%
-      \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{
-        \FormulaRefAuto{PeanoAddOneSucc}[thm]{6}},
-        \FormulaRefAuto{IntegerPredecessorOnNegativeEmbedding}{6}}}
+      -\IntEmbed(n)-\IntOne=-\IntEmbed(n+1)}{%
+      \FormulaRefAuto{IntegerPredecessorOnNegativeEmbedding}[thm]{6}}
     \proofstepwidestarbreakkeep[2,6,7]{P(-\IntEmbed(n+1))}{\rIE{11,10}}
     \proofstepwidestarbreakkeep[2,6]{%
       P(-\IntEmbed(n))\rightarrow P(-\IntEmbed(n+1))}{\rRI{7,12}}
@@ -5621,9 +5524,9 @@ die vollständige Axiomatik zur alleinigen Grundlage gemacht.
   \proofpartwide{Schluss mittels Normalform}
     \proofstepwidestarbreakkeep[1]{P(\IntZero)}{\rA}
     \proofstepwidestarbreakkeep[2]{\forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntSucc(z)))}{\rA}
+      (P(z)\rightarrow P(z+\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[3]{\forall z\in\mathbb Z\,
-      (P(z)\rightarrow P(\IntPred(z)))}{\rA}
+      (P(z)\rightarrow P(z-\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[1,2]{\forall n\in\mathbb N\,
       P(\IntEmbed(n))}{%
       \FormulaRefAuto{IntegerTwoSidedInductionPositiveRay}{1,2}}
@@ -5662,95 +5565,97 @@ Satz dieses Bandes, in dem der konstruierte Träger selbst auftritt.
     &\mathbb Z=\QuotientSet{D_{\mathbb Z}}{\IntPairRel}\ \land{}\\
     &\IntegerPeano{%
       \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
-      \IntSucc,\IntPred,\leq_{\mathbb Z}}
+      \leq_{\mathbb Z}}
   \end{aligned}%
 }{IntQuotientModelsIntegerPeano}{%
   \DeltaRow{Mengen}{z\dsep D_{\mathbb Z}}%
-  \DeltaRow{Funktionen}{\IntSucc\dsep\IntPred}%
+  \DeltaRow{Funktionen}{(x\mapsto x+\IntOne)\dsep(x\mapsto x-\IntOne)}%
   \DeltaRow{Relationsoperatoren}{\IntPairRel\dsep\leq_{\mathbb Z}}%
 }
 \begin{tabproofsplitwide}
   \proofpartwideindR[Träger und Abbildungen]{%
     \begin{aligned}[t]
-      &\IntZero\in\mathbb Z\ \land\
-      \IntSucc\colon\mathbb Z\to\mathbb Z\ \land{}\\
-      &\IntPred\colon\mathbb Z\to\mathbb Z
+      &\IntZero\in\mathbb Z\ \land{}\\
+      &(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z\ \land{}\\
+      &(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z
     \end{aligned}
   }{%
     \IntZero\in\mathbb Z\land
-    \IntSucc\colon\mathbb Z\to\mathbb Z\land
-    \IntPred\colon\mathbb Z\to\mathbb Z
+    (x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z\land
+    (x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z
   }[IntegerPeanoModelCarrierMaps]
     \proofstepwidestar[]{\IntZero\in\mathbb Z}{%
       \FormulaRefAuto{IntZeroCarrier}}
-    \proofstepwidestar[]{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestar[]{(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z}{%
       \FormulaRefAuto{IntegerSuccessorFunction}}
-    \proofstepwidestar[]{\IntPred\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestar[]{(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z}{%
       \FormulaRefAuto{IntegerPredecessorFunction}}
-    \proofstepwidestar[]{\IntZero\in\mathbb Z\land
-      \IntSucc\colon\mathbb Z\to\mathbb Z\land
-      \IntPred\colon\mathbb Z\to\mathbb Z}{\rAI{1,\rAI{2,3}}}
+    \proofstepwidestarbreakkeep[]{\begin{aligned}[t]
+      &\IntZero\in\mathbb Z\ \land{}\\
+      &(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z\ \land{}\\
+      &(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z
+    \end{aligned}}{\rAI{1,\rAI{2,3}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Gegenseitige Inversen]{%
     \begin{aligned}[t]
       &\forall z\in\mathbb Z\,
-        \IntPred(\IntSucc(z))=z\ \land{}\\
+        (z+\IntOne)-\IntOne=z\ \land{}\\
       &\forall z\in\mathbb Z\,
-        \IntSucc(\IntPred(z))=z
+        (z-\IntOne)+\IntOne=z
     \end{aligned}
   }{%
-    \forall z\in\mathbb Z\,\IntPred(\IntSucc(z))=z
+    \forall z\in\mathbb Z\,(z+\IntOne)-\IntOne=z
     \land
-    \forall z\in\mathbb Z\,\IntSucc(\IntPred(z))=z
+    \forall z\in\mathbb Z\,(z-\IntOne)+\IntOne=z
   }[IntegerPeanoModelInverses]
     \proofstepwidestar[]{\forall z\in\mathbb Z\,
-      \IntPred(\IntSucc(z))=z}{%
+      (z+\IntOne)-\IntOne=z}{%
       \FormulaRefAuto{IntegerPredAfterSucc}}
     \proofstepwidestar[]{\forall z\in\mathbb Z\,
-      \IntSucc(\IntPred(z))=z}{%
+      (z-\IntOne)+\IntOne=z}{%
       \FormulaRefAuto{IntegerSuccAfterPred}}
-    \proofstepwidestar[]{%
-      \forall z\in\mathbb Z\,\IntPred(\IntSucc(z))=z
-      \land
-      \forall z\in\mathbb Z\,\IntSucc(\IntPred(z))=z}{\rAI{1,2}}
+    \proofstepwidestarbreakkeep[]{\begin{aligned}[t]
+      &\forall z\in\mathbb Z\,((z+\IntOne)-\IntOne=z)\ \land{}\\
+      &\forall z\in\mathbb Z\,((z-\IntOne)+\IntOne=z)
+    \end{aligned}}{\rAI{1,2}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Geordnete Nachfolgerstruktur]{%
+  \proofpartwideindR[Geordnete Schritte um eins]{%
     \TotOrd{\mathbb Z,\leq_{\mathbb Z}}
-    \land\forall z\in\mathbb Z\,(z<\IntSucc(z))%
+    \land\forall z\in\mathbb Z\,(z<z+\IntOne)%
   }{%
     \TotOrd{\mathbb Z,\leq_{\mathbb Z}}
-    \land\forall z\in\mathbb Z\,(z<\IntSucc(z))%
+    \land\forall z\in\mathbb Z\,(z<z+\IntOne)%
   }[IntegerPeanoModelOrder]
     \proofstepwidestar[]{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}{%
       \FormulaRefAuto{IntegerOrderTotal}}
     \proofstepwidestar[]{\forall z\in\mathbb Z\,
-      (z<\IntSucc(z))}{\FormulaRefAuto{IntegerSuccessorPositive}}
+      (z<z+\IntOne)}{\FormulaRefAuto{IntegerSuccessorPositive}}
     \proofstepwidestar[]{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}
-      \land\forall z\in\mathbb Z\,(z<\IntSucc(z))}{\rAI{1,2}}
+      \land\forall z\in\mathbb Z\,(z<z+\IntOne)}{\rAI{1,2}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschema]{%
     \begin{aligned}[t]
       &P(\IntZero)\dsep
       \forall z\in\mathbb Z\,
-      (P(z)\to P(\IntSucc(z)))\dsep{}\\
+      (P(z)\to P(z+\IntOne))\dsep{}\\
       &\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntPred(z)))
+      (P(z)\to P(z-\IntOne))
       \vdash\forall z\in\mathbb Z\,P(z)
     \end{aligned}
   }{%
     P(\IntZero)\dsep
-    \forall z\in\mathbb Z\,(P(z)\to P(\IntSucc(z)))\dsep
-    \forall z\in\mathbb Z\,(P(z)\to P(\IntPred(z)))
+    \forall z\in\mathbb Z\,(P(z)\to P(z+\IntOne))\dsep
+    \forall z\in\mathbb Z\,(P(z)\to P(z-\IntOne))
     \vdash\forall z\in\mathbb Z\,P(z)
   }[IntegerPeanoModelInduction]
     \proofstepwidestar[1]{P(\IntZero)}{\rA}
     \proofstepwidestar[2]{\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntSucc(z)))}{\rA}
+      (P(z)\to P(z+\IntOne))}{\rA}
     \proofstepwidestar[3]{\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntPred(z)))}{\rA}
+      (P(z)\to P(z-\IntOne))}{\rA}
     \proofstepwidestar[1,2,3]{\forall z\in\mathbb Z\,P(z)}{%
       \FormulaRefAuto{IntegerTwoSidedInductionModel}{1,2,3}}
   \closeproofpartwideindR
@@ -5765,37 +5670,37 @@ Satz dieses Bandes, in dem der konstruierte Träger selbst auftritt.
       \FormulaRefAuto{IntegerOrderedArithmeticAxioms}}
     \proofstepwidestarbreakkeep[]{\IntZero\in\mathbb Z}{%
       \rAEa{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}
-    \proofstepwidestarbreakkeep[]{\IntSucc\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestarbreakkeep[]{(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z}{%
       \rAEa{\rAEb{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}}
-    \proofstepwidestarbreakkeep[]{\IntPred\colon\mathbb Z\to\mathbb Z}{%
+    \proofstepwidestarbreakkeep[]{(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z}{%
       \rAEb{\rAEb{\FormulaRefAuto{IntegerPeanoModelCarrierMaps}}}}
     \proofstepwidestarbreakkeep[6]{z\in\mathbb Z}{\rA}
-    \proofstepwidestarbreakkeep[6]{\IntPred(\IntSucc(z))=z}{%
+    \proofstepwidestarbreakkeep[6]{(z+\IntOne)-\IntOne=z}{%
       \rRE{6,\rAEa{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
-    \proofstepwidestarbreakkeep[6]{\IntSucc(\IntPred(z))=z}{%
+    \proofstepwidestarbreakkeep[6]{(z-\IntOne)+\IntOne=z}{%
       \rRE{6,\rAEb{\FormulaRefAuto{IntegerPeanoModelInverses}}}}
     \proofstepwidestarbreakkeep[]{\TotOrd{\mathbb Z,\leq_{\mathbb Z}}}{%
       \rAEa{\FormulaRefAuto{IntegerPeanoModelOrder}}}
-    \proofstepwidestarbreakkeep[6]{z<\IntSucc(z)}{%
+    \proofstepwidestarbreakkeep[6]{z<z+\IntOne}{%
       \rRE{6,\rAEb{\FormulaRefAuto{IntegerPeanoModelOrder}}}}
     \proofstepwidestarbreakkeep[11]{P(\IntZero)}{\rA}
     \proofstepwidestarbreakkeep[12]{%
-      \forall z\in\mathbb Z(P(z)\to P(\IntSucc(z)))}{\rA}
+      \forall z\in\mathbb Z(P(z)\to P(z+\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[13]{%
-      \forall z\in\mathbb Z(P(z)\to P(\IntPred(z)))}{\rA}
+      \forall z\in\mathbb Z(P(z)\to P(z-\IntOne))}{\rA}
     \proofstepwidestarbreakkeep[11,12,13]{\forall z\in\mathbb Z\,P(z)}{%
       \FormulaRefAuto{IntegerPeanoModelInduction}[thm]{11,12,13}}
     \proofstepwidestarbreakkeep[]{%
       \IntegerPeano{%
         \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
-        \IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
+        \leq_{\mathbb Z}}}{%
       \FormulaRefAuto{IntegerPeanoAxioms}{2,3,4,5,7,8,10,14}}
     \proofstepwidestarbreakkeep[]{%
       \mathbb Z=\QuotientSet{D_{\mathbb Z}}{\IntPairRel}
       \land
       \IntegerPeano{%
         \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
-        \IntSucc,\IntPred,\leq_{\mathbb Z}}}{%
+        \leq_{\mathbb Z}}}{%
       \rAI{1,15}}
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -5805,18 +5710,19 @@ Satz dieses Bandes, in dem der konstruierte Träger selbst auftritt.
 \section{Abstraktionsschnitt}
 
 Der Modellnachweis ist abgeschlossen. Ab hier bezeichnet \(\mathbb Z\) eine
-Struktur mit den unten aufgeführten Konstanten, Operationen, Schrittoperatoren
-und der Ordnung. Ihre Eigenschaften werden ausschließlich durch die
+Struktur mit den unten aufgeführten Konstanten, Operationen und der
+Ordnung. Ihre Eigenschaften werden ausschließlich durch die
 registrierten Axiome und die daraus abgeleiteten Sätze bestimmt. Die konkrete
 Realisierung hat von diesem Punkt an nur noch die Rolle eines
 Existenznachweises und ist kein Bestandteil der weiteren Sprache.
 
-Die Definitionen
-\(\IntSucc(z)=z+\IntOne\) und
-\(\IntPred(z)=z+(-\IntOne)\) verbinden die Schrittstruktur mit der
-Arithmetik. Zusammen mit der geordneten Ringstruktur und der zweiseitigen
-Induktion bildet dies die vollständige Schnittstelle für alle späteren
-Verwendungen der ganzen Zahlen.
+Die Schritte sind die arithmetischen Terme \(z+\IntOne\) und
+\(z-\IntOne\), wobei \(z-w=z+(-w)\) weiterhin die Subtraktionsnotation
+bezeichnet. Die Abbildungsschreibweisen \((x\mapsto x+\IntOne)\) und
+\((x\mapsto x-\IntOne)\) stehen für die dadurch eindeutig bestimmten
+Funktionen; sie sind keine zusätzlichen Grundoperationen. Zusammen mit der
+geordneten Ringstruktur und der zweiseitigen Induktion bildet dies die
+vollständige Schnittstelle für alle späteren Verwendungen der ganzen Zahlen.
 
 \section{Axiome der Schrittstruktur}
 
@@ -5826,26 +5732,26 @@ Verwendungen der ganzen Zahlen.
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntZeroCarrier}[thm].\par
 
-\FormulaAxiomAutoR[Nachfolgerfunktion der ganzen Zahlen]{%
-  \IntSucc\colon\mathbb Z\to\mathbb Z%
+\FormulaAxiomAutoR[Abbildung zum Addieren der Eins]{%
+  (x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z%
 }{IntegerPeanoSuccFunction}
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccessorFunction}[thm].\par
 
-\FormulaAxiomAutoR[Vorgängerfunktion der ganzen Zahlen]{%
-  \IntPred\colon\mathbb Z\to\mathbb Z%
+\FormulaAxiomAutoR[Abbildung zum Subtrahieren der Eins]{%
+  (x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z%
 }{IntegerPeanoPredFunction}
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerPredecessorFunction}[thm].\par
 
-\FormulaAxiomAutoR[Vorgänger nach Nachfolger]{%
-  z\in\mathbb Z\vdash\IntPred(\IntSucc(z))=z%
+\FormulaAxiomAutoR[Subtrahieren nach Addieren der Eins]{%
+  z\in\mathbb Z\vdash(z+\IntOne)-\IntOne=z%
 }{IntegerPeanoPredSucc}
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerPredAfterSucc}[thm].\par
 
-\FormulaAxiomAutoR[Nachfolger nach Vorgänger]{%
-  z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z%
+\FormulaAxiomAutoR[Addieren nach Subtrahieren der Eins]{%
+  z\in\mathbb Z\vdash(z-\IntOne)+\IntOne=z%
 }{IntegerPeanoSuccPred}
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccAfterPred}[thm].\par
@@ -5856,8 +5762,8 @@ Verwendungen der ganzen Zahlen.
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerOrderTotal}[thm].\par
 
-\FormulaAxiomAutoR[Strikte Nachfolgerorientierung]{%
-  z\in\mathbb Z\vdash z<\IntSucc(z)%
+\FormulaAxiomAutoR[Strikte Orientierung des Schritts um eins]{%
+  z\in\mathbb Z\vdash z<z+\IntOne%
 }{IntegerPeanoSuccPositive}
 \par\noindent\emph{Modellnachweis vor dem Abstraktionsschnitt:}
 \FormulaRefAuto{IntegerSuccessorPositive}[thm].\par
@@ -5866,9 +5772,9 @@ Verwendungen der ganzen Zahlen.
   \begin{aligned}[t]
     &P(\IntZero)\dsep
     \forall z\in\mathbb Z\,
-      (P(z)\to P(\IntSucc(z)))\dsep{}\\
+      (P(z)\to P(z+\IntOne))\dsep{}\\
     &\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntPred(z)))
+      (P(z)\to P(z-\IntOne))
     \vdash\forall z\in\mathbb Z\,P(z)
   \end{aligned}%
 }{IntegerTwoSidedInductionAxiom}
@@ -5879,9 +5785,9 @@ Verwendungen der ganzen Zahlen.
   \begin{aligned}[t]
     &P(\IntZero)\dsep
     \forall z\in\mathbb Z\,
-      (P(z)\to P(\IntSucc(z)))\dsep{}\\
+      (P(z)\to P(z+\IntOne))\dsep{}\\
     &\forall z\in\mathbb Z\,
-      (P(z)\to P(\IntPred(z)))
+      (P(z)\to P(z-\IntOne))
     \vdash\forall z\in\mathbb Z\,P(z)
   \end{aligned}%
 }{IntegerPeanoInduction}
@@ -5891,8 +5797,8 @@ Verwendungen der ganzen Zahlen.
 \section{Vollständige Axiomatik}
 
 Die vollständige Schnittstelle verbindet die bereits registrierte geordnete
-Ringarithmetik mit der Schrittstruktur. Anders als auf \(\mathbb N\) ist der
-Nachfolger auf \(\mathbb Z\) bijektiv. Die totale Ordnung und die strikte
+Ringarithmetik mit den Schritten um eins. Anders als auf \(\mathbb N\) ist
+die Abbildung \(x\mapsto x+\IntOne\) auf \(\mathbb Z\) bijektiv. Die totale Ordnung und die strikte
 Nachfolgerorientierung verhindern zyklische Nachfolgermodelle; die
 zweiseitige Induktion verbindet den positiven und den negativen Strahl.
 
@@ -5900,12 +5806,12 @@ Metalogisch ist dabei zwischen zwei Lesarten zu unterscheiden: Als
 erststufiges Axiomenschema ist die Beschreibung nicht kategorisch und
 besitzt nichtstandardmäßige Modelle. Unter voller zweitstufiger Lesart der
 Induktion beschreibt sie dagegen die intendierte zweiseitige, von
-\(\IntZero\) durch Nachfolger und Vorgänger erzeugte Kette.
+\(\IntZero\) durch Addieren und Subtrahieren von eins erzeugte Kette.
 
 \FormulaDefDeltaK[Erweiterte Peano-Axiome der ganzen Zahlen]{%
   \IntegerPeano{%
     \mathbb Z,\IntZero,\IntOne,-,+,\cdot,
-    \IntSucc,\IntPred,\leq_{\mathbb Z}}%
+    \leq_{\mathbb Z}}%
 }{IntegerPeanoAxioms}{%
   \DeltaRow{\textbf{Ring und Ordnung}}{}%
   \DeltaRow{Arithmetik}{%
@@ -5915,25 +5821,25 @@ Induktion beschreibt sie dagegen die intendierte zweiseitige, von
   \DeltaRow{\textbf{Schrittstruktur}}{}%
   \DeltaRow{Null}{\IntZero\in\mathbb Z}
     [\FormulaRefAuto{IntegerPeanoZero}]%
-  \DeltaRow{Nachfolger}{\IntSucc\colon\mathbb Z\to\mathbb Z}
+  \DeltaRow{Addieren von eins}{(x\mapsto x+\IntOne)\colon\mathbb Z\to\mathbb Z}
     [\FormulaRefAuto{IntegerPeanoSuccFunction}]%
-  \DeltaRow{Vorgänger}{\IntPred\colon\mathbb Z\to\mathbb Z}
+  \DeltaRow{Subtrahieren von eins}{(x\mapsto x-\IntOne)\colon\mathbb Z\to\mathbb Z}
     [\FormulaRefAuto{IntegerPeanoPredFunction}]%
   \DeltaRow{Links invers}
-    {z\in\mathbb Z\vdash\IntPred(\IntSucc(z))=z}
+    {z\in\mathbb Z\vdash(z+\IntOne)-\IntOne=z}
     [\FormulaRefAuto{IntegerPeanoPredSucc}]%
   \DeltaRow{Rechts invers}
-    {z\in\mathbb Z\vdash\IntSucc(\IntPred(z))=z}
+    {z\in\mathbb Z\vdash(z-\IntOne)+\IntOne=z}
     [\FormulaRefAuto{IntegerPeanoSuccPred}]%
   \DeltaRow{Orientierung}
-    {z\in\mathbb Z\vdash z<\IntSucc(z)}
+    {z\in\mathbb Z\vdash z<z+\IntOne}
     [\FormulaRefAuto{IntegerSuccessorPositiveAxiom}]%
   \DeltaRow{\textbf{Induktionsschema}}{}%
   \DeltaRow{Induktion}{%
     \begin{aligned}[t]
       &P(\IntZero)\dsep{}\\[-2pt]
-      &\forall z\in\mathbb Z\,(P(z)\to P(\IntSucc(z)))\dsep{}\\[-2pt]
-      &\forall z\in\mathbb Z\,(P(z)\to P(\IntPred(z)))\dsep{}\\[-2pt]
+      &\forall z\in\mathbb Z\,(P(z)\to P(z+\IntOne))\dsep{}\\[-2pt]
+      &\forall z\in\mathbb Z\,(P(z)\to P(z-\IntOne))\dsep{}\\[-2pt]
       &\vdash\forall z\in\mathbb Z\,P(z)
     \end{aligned}}
     [\FormulaRefAuto{IntegerTwoSidedInductionAxiom}]%
@@ -5941,7 +5847,11 @@ Induktion beschreibt sie dagegen die intendierte zweiseitige, von
   \DeltaRow{Ganze Zahlen}{\mathbb Z}%
   \DeltaRow{Konstanten}{\IntZero\dsep\IntOne}%
   \DeltaRow{Operationen}{-\dsep+\dsep\cdot}%
-  \DeltaRow{Schrittoperatoren}{\IntSucc\dsep\IntPred}%
+  \DeltaRow{\makecell[l]{Definierte\\Abbildungen}}{%
+    \begin{aligned}[t]
+      &(x\mapsto x+\IntOne)\dsep{}\\
+      &(x\mapsto x-\IntOne)
+    \end{aligned}}%
   \DeltaRow{Ordnung}{\leq_{\mathbb Z}}%
 }
 

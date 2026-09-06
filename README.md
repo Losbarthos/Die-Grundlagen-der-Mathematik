@@ -1,10 +1,10 @@
 # Die Grundlagen der Mathematik
 
-**A German-language, 43-volume LaTeX manuscript that develops mathematics from
+**A German-language, 44-volume LaTeX manuscript that develops mathematics from
 logic and set theory using explicit natural-deduction proof tables in the style
 of E. J. Lemmon.**
 
-**Ein deutschsprachiges LaTeX-Manuskript in 43 Bänden, das Mathematik aus Logik
+**Ein deutschsprachiges LaTeX-Manuskript in 44 Bänden, das Mathematik aus Logik
 und Mengenlehre mithilfe expliziter Beweistabellen im Stil von E. J. Lemmon
 aufbaut.**
 
@@ -45,22 +45,22 @@ they do **not** certify mathematical correctness.
 
 ### Where to start
 
-- [Volume 01: Foundations of Logic](<output/pdf/Bd. 01 - Grundlagen der Logik.pdf>)
+- [Volume 01: Foundations of Logic](<output/Bd. 01 - Grundlagen der Logik.pdf>)
   introduces the formal language and explains how to read the proof tables.
-- [Volume 03: Set Theory](<output/pdf/Bd. 03 - Mengenlehre.pdf>) shows the
+- [Volume 03: Set Theory](<output/Bd. 03 - Mengenlehre.pdf>) shows the
   foundational method on a substantial body of mathematics.
-- [Volume 26: Trees](<output/pdf/Bd. 26 - Bäume.pdf>) develops the axiomatic
+- [Volume 26: Trees](<output/Bd. 26 - Bäume.pdf>) develops the axiomatic
   tree language used by the subsequent construction of bracketing trees.
-- [Volume 42: Frankl's Conjecture](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>)
+- [Volume 43: Frankl's Conjecture](<output/Bd. 43 - Frankls Vermutung.pdf>)
   is a research-oriented application collecting set-theoretic, quotient, and
   semilattice formulations and proved special cases.
-- [Volume 43: Metric Spaces and Completeness](<output/pdf/Bd. 43 - Metrische Räume und Vollständigkeit.pdf>)
+- [Volume 44: Metric Spaces and Completeness](<output/Bd. 44 - Metrische Räume und Vollständigkeit.pdf>)
   is a comparatively compact entry into the analytic branch.
 - The [complete bilingual volume catalogue](VOLUMES.md) links all current PDFs.
 
-[![A page with Lemmon-style proof tables from Volume 42](docs/assets/lemmon-proof-example.png)](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>)
+[![A page with Lemmon-style proof tables from Volume 43](docs/assets/lemmon-proof-example.png)](<output/Bd. 43 - Frankls Vermutung.pdf>)
 
-*Example: explicit proof tables in Volume 42. Click the image to open the
+*Example: explicit proof tables in Volume 43. Click the image to open the
 volume.*
 
 ### Intended audience
@@ -135,17 +135,17 @@ Korrektheit.
 
 ### Empfohlene Einstiege
 
-- [Band 01: Grundlagen der Logik](<output/pdf/Bd. 01 - Grundlagen der Logik.pdf>)
+- [Band 01: Grundlagen der Logik](<output/Bd. 01 - Grundlagen der Logik.pdf>)
   führt die formale Sprache ein und erklärt die Beweistabellen.
-- [Band 03: Mengenlehre](<output/pdf/Bd. 03 - Mengenlehre.pdf>) zeigt die
+- [Band 03: Mengenlehre](<output/Bd. 03 - Mengenlehre.pdf>) zeigt die
   Methode an einem umfangreichen mathematischen Gebiet.
-- [Band 26: Bäume](<output/pdf/Bd. 26 - Bäume.pdf>) entwickelt die
+- [Band 26: Bäume](<output/Bd. 26 - Bäume.pdf>) entwickelt die
   axiomatische Baumsprache für die anschließende Konstruktion der
   Klammerungsbäume.
-- [Band 42: Frankls Vermutung](<output/pdf/Bd. 42 - Frankls Vermutung.pdf>) ist
+- [Band 43: Frankls Vermutung](<output/Bd. 43 - Frankls Vermutung.pdf>) ist
   eine forschungsnahe Anwendung mit Mengen-, Quotienten- und
   Halbverbandsfassungen sowie bewiesenen Spezialfällen.
-- [Band 43: Metrische Räume und Vollständigkeit](<output/pdf/Bd. 43 - Metrische Räume und Vollständigkeit.pdf>)
+- [Band 44: Metrische Räume und Vollständigkeit](<output/Bd. 44 - Metrische Räume und Vollständigkeit.pdf>)
   bietet einen vergleichsweise kompakten Einstieg in den analytischen Zweig.
 - Das [vollständige zweisprachige Bandverzeichnis](VOLUMES.md) verlinkt alle
   aktuellen PDFs.

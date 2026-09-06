@@ -17,7 +17,7 @@ content by Martin Kunze is licensed under the **Creative Commons Attribution
 
 - the volume sources `Bd. *.tex` and the combined source `main.tex`;
 - the manuscript history in `Archive/`;
-- the rendered publications in `output/pdf/`;
+- the rendered publications in `output/`;
 - `README.md`, `VOLUMES.md`, `BUILDING.md`, `CONTRIBUTING.md`,
   `CITATION.cff`, and original material in `docs/`.
 

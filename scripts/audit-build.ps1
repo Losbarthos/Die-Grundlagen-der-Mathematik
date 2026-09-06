@@ -1,8 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidatePattern('^B[0-9]{2}$')][string[]]$Bands = @(),
-    [switch]$IncludeMain,
-    [switch]$IncludeRemarkable
+    [switch]$IncludeMain
 )
 
 Set-StrictMode -Version Latest
@@ -23,19 +22,6 @@ foreach ($band in $Bands) {
     $allowedExternalPdfs = @($graph[$band].Predecessors | ForEach-Object { "$($graph[$_].ArtifactBase).pdf" })
     Assert-ExternalPdfTargets -RelativePath $stage.Pdf -PdfAsciiCache $pdfAsciiCache -AllowedExternalPdfs $allowedExternalPdfs
     Write-Host "Reference audit passed: $band"
-}
-
-if ($IncludeRemarkable) {
-    $base = 'registry/_B37-remarkable'
-    foreach ($extension in @('aux', 'log', 'pdf', 'registry.tsv')) {
-        Assert-Artifact -RelativePath "$base.$extension" -NotBefore ([datetime]::MinValue)
-    }
-    Assert-RegistryLabelsInAux -RegistryPath "$base.registry.tsv" -AuxPath "$base.aux"
-    Assert-CleanLog -RelativePath "$base.log"
-    Assert-CleanDebugLog -RelativePath "$base.debug.log"
-    Assert-CleanPdfText -RelativePath "$base.pdf"
-    Assert-ExternalPdfTargets -RelativePath "$base.pdf" -PdfAsciiCache $pdfAsciiCache
-    Write-Host 'Reference audit passed: B37 reMarkable'
 }
 
 if ($IncludeMain) {

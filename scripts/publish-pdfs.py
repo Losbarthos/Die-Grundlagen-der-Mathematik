@@ -17,7 +17,7 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.generic import DictionaryObject, NameObject, TextStringObject
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "output" / "pdf"
+OUTPUT = ROOT / "output"
 
 
 def remote_actions(reader):
@@ -68,7 +68,7 @@ def audit(paths):
         for action in remote_actions(reader):
             target = (path.parent / file_name(action)).resolve()
             if not target.is_relative_to(OUTPUT.resolve()):
-                raise ValueError(f"{path.name}: link outside output/pdf: {target}")
+                raise ValueError(f"{path.name}: link outside output: {target}")
             if not target.is_file():
                 raise ValueError(f"{path.name}: missing linked PDF: {target.name}")
             if target not in cache:
@@ -92,14 +92,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--audit-only", action="store_true")
     parser.add_argument("--skip-main", action="store_true")
-    parser.add_argument("--skip-remarkable", action="store_true")
     args = parser.parse_args()
     with (ROOT / "band-dependencies.tsv").open(encoding="utf-8-sig", newline="") as file:
         graph = list(csv.DictReader(file, delimiter="\t"))
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     publications = [(ROOT / (row["artifact_base"] + ".pdf"), OUTPUT / names[f"_{row['band']}.pdf"]) for row in graph]
-    if not args.skip_remarkable:
-        publications.append((ROOT / "registry/_B37-remarkable.pdf", OUTPUT / "Bd. 37 - Endliche Halbgruppen - reMarkable.pdf"))
     if not args.skip_main:
         publications.append((ROOT / "main.pdf", OUTPUT / "Die Grundlagen der Mathematik - Gesamtband.pdf"))
 
