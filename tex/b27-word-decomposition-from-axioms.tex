@@ -1,0 +1,88 @@
+Die eindeutige Endzerlegung folgt nun aus dem abstrakten
+Zerlegungssatz und W2. Die zuvor für den Modellnachweis verwendete
+Restriktion eines Vorkommensgraphen wird dafür nicht erneut benötigt.
+
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Existenz]{%
+    w\in\NonemptyWords A\vdash
+    \exists u\in\FiniteWords A\,\exists a\in A\;
+      w=\WordConcat u{\LetterWord a}
+  }{%
+    w\in\NonemptyWords A\vdash
+    \exists u\in\FiniteWords A\,\exists a\in A\;
+      w=\WordConcat u{\LetterWord a}
+  }[NonemptyWordRightDecompositionExistence]
+    \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+    \proofstepwidestar[1]{w\in\FiniteWords A\setminus\{\EmptyWord A\}}{\FormulaRefAuto{NonemptyWordSetDef}[def]{1}}
+    \proofstepwidestar[1]{w\in\FiniteWords A\land w\notin\{\EmptyWord A\}}{\FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{2}}
+    \proofstepwidestar[1]{w\ne\EmptyWord A}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}[thm]{\rAEb{3}}}
+    \proofstepwidestar[]{\mathsf{WortStr}_A(\FiniteWords A,\EmptyWord A,\sigma_A)}{\FormulaRefAuto{WordStructureConcreteModel}[thm]}
+    \proofstepwidestar[1]{w=\EmptyWord A\lor\exists!p\in\FiniteWords A\times A\;w=\sigma_A(p)}{\FormulaRefAuto{WordStructureDecomposition}[thm]{5,\rAEa{3}}}
+    \proofstepwidestar[1]{\exists!p\in\FiniteWords A\times A\;w=\sigma_A(p)}{\FormulaRefAuto{P\lor Q,\neg P\vdash Q}[thm]{6,4}}
+    \proofstepwidestar[1]{\exists p\in\FiniteWords A\times A\;w=\sigma_A(p)}{\FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{7}}
+    \proofstepwidestar[9]{p\in\FiniteWords A\times A\land w=\sigma_A(p)}{\rA}
+    \proofstepwidestar[9]{\exists u\in\FiniteWords A\,\exists a\in A\;p=(u,a)}{\FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm]{\rAEa{9}}}
+    \proofstepwidestar[11]{u\in\FiniteWords A\land\exists a\in A\;p=(u,a)}{\rA}
+    \proofstepwidestar[12]{a\in A\land p=(u,a)}{\rA}
+    \proofstepwidestar[9,12]{w=\sigma_A(u,a)}{\rIE{\rAEb{12},\rAEb{9}}}
+    \proofstepwidestar[11,12]{\sigma_A(u,a)=\WordConcat u{\LetterWord a}}{\FormulaRefAuto{WordModelSuccessorConcatenation}[thm]{\rAEa{11},\rAEa{12}}}
+    \proofstepwidestar[9,11,12]{w=\WordConcat u{\LetterWord a}}{\rIE{14,13}}
+    \proofstepwidestar[9,11,12]{\exists a\in A\;w=\WordConcat u{\LetterWord a}}{\rEI{\rAI{\rAEa{12},15}}}
+    \proofstepwidestar[9,11]{\exists a\in A\;w=\WordConcat u{\LetterWord a}}{\rEE{\rAEb{11},12,16}}
+    \proofstepwidestar[9,11]{\exists u\in\FiniteWords A\,\exists a\in A\;w=\WordConcat u{\LetterWord a}}{\rEI{\rAI{\rAEa{11},17}}}
+    \proofstepwidestar[9]{\exists u\in\FiniteWords A\,\exists a\in A\;w=\WordConcat u{\LetterWord a}}{\rEE{10,11,18}}
+    \proofstepwidestar[1]{\exists u\in\FiniteWords A\,\exists a\in A\;w=\WordConcat u{\LetterWord a}}{\rEE{8,9,19}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Eindeutigkeit]{%
+    \begin{aligned}[t]
+      w\in\NonemptyWords A\vdash
+      &\forall u,v\in\FiniteWords A\,\forall a,b\in A\\[-2pt]
+      &\quad\bigl((w=\WordConcat u{\LetterWord a}\land
+        w=\WordConcat v{\LetterWord b})\\[-2pt]
+      &\qquad\rightarrow u=v\land a=b\bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      w\in\NonemptyWords A\vdash
+      &\forall u,v\in\FiniteWords A\,\forall a,b\in A\\[-2pt]
+      &\quad\bigl((w=\WordConcat u{\LetterWord a}\land
+        w=\WordConcat v{\LetterWord b})\\[-2pt]
+      &\qquad\rightarrow u=v\land a=b\bigr)
+    \end{aligned}
+  }[NonemptyWordRightDecompositionJointUniqueness]
+    \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+    \proofstepwidestar[2]{u\in\FiniteWords A}{\rA}
+    \proofstepwidestar[3]{v\in\FiniteWords A}{\rA}
+    \proofstepwidestar[4]{a\in A}{\rA}
+    \proofstepwidestar[5]{b\in A}{\rA}
+    \proofstepwidestar[6]{w=\WordConcat u{\LetterWord a}\land w=\WordConcat v{\LetterWord b}}{\rA}
+    \proofstepwidestar[2,4]{\sigma_A(u,a)=\WordConcat u{\LetterWord a}}{\FormulaRefAuto{WordModelSuccessorConcatenation}[thm]{2,4}}
+    \proofstepwidestar[3,5]{\sigma_A(v,b)=\WordConcat v{\LetterWord b}}{\FormulaRefAuto{WordModelSuccessorConcatenation}[thm]{3,5}}
+    \proofstepwidestar[2,4,6]{w=\sigma_A(u,a)}{\rIE{7,\rAEa{6}}}
+    \proofstepwidestar[3,5,6]{w=\sigma_A(v,b)}{\rIE{8,\rAEb{6}}}
+    \proofstepwidestar[2,3,4,5,6]{\sigma_A(u,a)=\sigma_A(v,b)}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{9,10}}
+    \proofstepwidestar[]{\mathsf{WortStr}_A(\FiniteWords A,\EmptyWord A,\sigma_A)}{\FormulaRefAuto{WordStructureConcreteModel}[thm]}
+    \proofstepwidestar[2,3,4,5,6]{u=v\land a=b}{\FormulaRefAuto{WordStructureInjectivityAxiom}[ax]{12,\rAI{2,3},\rAI{4,5},11}}
+    \proofstepwidestar[]{\begin{aligned}[t]
+      &\forall u,v\in\FiniteWords A\,\forall a,b\in A\\[-2pt]
+      &\quad((w=\WordConcat u{\LetterWord a}\land w=\WordConcat v{\LetterWord b})\\[-2pt]
+      &\qquad\rightarrow u=v\land a=b)
+    \end{aligned}}{\rUI{\rRI{2,\rUI{\rRI{3,\rUI{\rRI{4,\rUI{\rRI{5,\rRI{6,13}}}}}}}}}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Eindeutige Wahl des Rumpfs und des Endbuchstabens}
+    \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+    \proofstepwidestar[1]{\exists u\in\FiniteWords A\,\exists a\in A\;
+      w=\WordConcat u{\LetterWord a}}{%
+      \FormulaRefAuto{NonemptyWordRightDecompositionExistence}[thm]{1}}
+    \proofstepwidestar[1]{\begin{aligned}[t]
+      &\forall u,v\in\FiniteWords A\,\forall a,b\in A\\[-2pt]
+      &\quad\bigl((w=\WordConcat u{\LetterWord a}\land
+        w=\WordConcat v{\LetterWord b})\\[-2pt]
+      &\qquad\rightarrow u=v\land a=b\bigr)
+    \end{aligned}}{\FormulaRefAuto{NonemptyWordRightDecompositionJointUniqueness}[thm]{1}}
+    \proofstepwidestar[1]{\exists!u\in\FiniteWords A\,\exists!a\in A\;
+      w=\WordConcat u{\LetterWord a}}{\FormulaRefAuto{NestedUniqueExistenceFromJointUniqueness}[thm]{2,3}}
+  \closeproofpartwide
+\end{tabproofsplitwide}

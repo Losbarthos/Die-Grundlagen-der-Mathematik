@@ -2,21 +2,21 @@
 \RequirePackage{xparse}
 \RequirePackage{array}
 \RequirePackage{longtable}
+\RequirePackage{needspace}
 \RequirePackage{amsthm} % für proof-Umgebung / qed
 
 \providecommand{\axstrut}{\rule{0pt}{1.25\baselineskip}}
 \providecommand{\axsep}{1pt}
 
-% Spaltentyp für Abhängigkeitslisten; bewusst kleiner als die eigentliche
-% Schritt-Nummer, damit beide Zahlenspalten optisch unterscheidbar bleiben.
-\newcolumntype{G}{>{\scriptsize}r}
+% Gemeinsame Breite der Abhängigkeiten; lange Listen dürfen umbrechen.
+\newcolumntype{G}{>{\scriptsize\raggedleft\arraybackslash}p{.09\linewidth}}
 
 
 \newcounter{proofstepnr}
 
 % ------------------------------------------------------------
 % Induktions-Teile mit Referenz (thmlookup)
-% Nummerierung: <aktuelles Theorem>(i), (ii), ...
+% Sichtbare Nummerierung: <aktuelles Theorem>(H1), (H2), ...
 % ------------------------------------------------------------
 
 \newcounter{proofpartnr}
@@ -27,7 +27,10 @@
   \def\mxProofPartParent{#1}%
 }
 
-\renewcommand{\theproofpartnr}{\mxProofPartParent(\roman{proofpartnr})}
+% H marks a registered auxiliary proof statement; plain (i), (ii), ...
+% remain available for the parent theorem's conclusions. Counter values,
+% structural keys, IDs, labels and Hyperref anchors remain unchanged.
+\renewcommand{\theproofpartnr}{\mxProofPartParent(H\arabic{proofpartnr})}
 % Hyperref's default anchor only contains the resettable part counter.  Include
 % the parent theorem so every registered proof part has a unique PDF target.
 \providecommand{\theHproofpartnr}{}
@@ -155,13 +158,13 @@
 
 % \proofpartindDelta[<Titel>]{<Formel>}{<DeltaRows>}[<Keyformel>][<ID>]
 \NewDocumentCommand{\proofpartindDelta}{o m +G{} o o}{%
-  \mxProofPartOpenDelta{@{}G r >{$}l<{$} >{$}l<{$}@{}}[#1]{#2}{#3}[#4][#5]%
+  \mxProofPartOpenDelta{J}[#1]{#2}{#3}[#4][#5]%
 }
 \newcommand{\closeproofpartindDelta}{\mxProofPartClose}
 
 % \proofpartwideindDelta[<Titel>]{<Formel>}{<DeltaRows>}[<Keyformel>][<ID>]
 \NewDocumentCommand{\proofpartwideindDelta}{o m +G{} o o}{%
-  \mxProofPartOpenDelta{@{}G r >{$}r<{$} >{$}c<{$} >{$}l<{$} @{\hfill} l@{}}[#1]{#2}{#3}[#4][#5]%
+  \mxProofPartOpenDelta{W}[#1]{#2}{#3}[#4][#5]%
 }
 \newcommand{\closeproofpartwideindDelta}{\mxProofPartClose}
 
@@ -183,13 +186,13 @@
 
 % \proofpartind[<Titel>]{<Formel>}[<Keyformel>][<ID>]
 \NewDocumentCommand{\proofpartind}{o m o o}{%
-  \mxProofPartOpen{@{}G r >{$}l<{$} >{$}l<{$}@{}}[#1]{#2}[#3][#4]%
+  \mxProofPartOpen{J}[#1]{#2}[#3][#4]%
 }
 \newcommand{\closeproofpartind}{\mxProofPartClose}
 
 % \proofpartwideind[<Titel>]{<Formel>}[<Keyformel>][<ID>]
 \NewDocumentCommand{\proofpartwideind}{o m o o}{%
-  \mxProofPartOpen{@{}G r >{$}r<{$} >{$}c<{$} >{$}l<{$} @{\hfill} l@{}}[#1]{#2}[#3][#4]%
+  \mxProofPartOpen{W}[#1]{#2}[#3][#4]%
 }
 \newcommand{\closeproofpartwideind}{\mxProofPartClose}
 
@@ -199,13 +202,13 @@
 
 % \proofpartind[<Titel>]{<Anzeigeformel>}[<Keyformel>][<ID>]
 \RenewDocumentCommand{\proofpartind}{o +m o o}{%
-  \mxProofPartOpen{@{}G r >{$}l<{$} >{$}l<{$}@{}}[#1]{#2}[#3][#4]%
+  \mxProofPartOpen{J}[#1]{#2}[#3][#4]%
 }
 \renewcommand{\closeproofpartind}{\mxProofPartClose}
 
 % \proofpartwideind[<Titel>]{<Anzeigeformel>}[<Keyformel>][<ID>]
 \RenewDocumentCommand{\proofpartwideind}{o +m o o}{%
-  \mxProofPartOpen{@{}G r >{$}r<{$} >{$}c<{$} >{$}l<{$} @{\hfill} l@{}}[#1]{#2}[#3][#4]%
+  \mxProofPartOpen{W}[#1]{#2}[#3][#4]%
 }
 \renewcommand{\closeproofpartwideind}{\mxProofPartClose}
 
@@ -232,25 +235,35 @@
    \setcounter{proofstepnr}{0}%
    \setlength{\tabcolsep}{2pt}%
    \renewcommand{\arraystretch}{1.15}%
-   \begin{longtable}{@{}G r >{$}l<{$} >{$}l<{$}@{}}}
+   \begin{longtable}{J}}
   {\end{longtable}\par}
 
 % Feste Nachbarspalten: Die Begründung beginnt stets auf der Grundlinie
 % der zugehörigen Aussage. Mehrzeilige Formeln werden mit aligned[t]
 % gesetzt; Begründungen dürfen innerhalb ihrer eigenen Spalte umbrechen.
-% Opt-in, damit die Tabellen der bisherigen Bände unverändert bleiben.
+% Die vier Spalten werden in allen normalen Beweistabellen verwendet.
 \newcolumntype{J}{%
-  @{}>{\scriptsize\raggedleft\arraybackslash}p{.10\linewidth}%
-  @{\hspace{.01\linewidth}}>{\raggedleft\arraybackslash}p{.03\linewidth}%
-  @{\hspace{.01\linewidth}}>{\raggedright\arraybackslash}p{.55\linewidth}%
-  @{\hspace{.01\linewidth}}>{\scriptsize\raggedright\arraybackslash}p{.29\linewidth}@{}}
+  @{}>{\scriptsize\raggedleft\arraybackslash}p{.09\linewidth}%
+  @{\hspace{.01\linewidth}}>{\raggedleft\arraybackslash}p{.04\linewidth}%
+  @{\hspace{.01\linewidth}}>{\raggedright\arraybackslash}p{.59\linewidth}%
+  @{\hspace{.01\linewidth}}>{\footnotesize\raggedright\arraybackslash}p{.23\linewidth}@{}}
+
+% In Gleichungsketten bleiben die drei mathematischen Spalten erhalten.
+% Vollständige Aussagen überspannen genau diesen Formelbereich; die letzte
+% Spalte ist stets ausschließlich der zugehörigen Begründung vorbehalten.
+\newcolumntype{W}{@{}G
+  @{\hspace{.01\linewidth}}>{\raggedleft\arraybackslash}p{.04\linewidth}
+  @{\hspace{.01\linewidth}}>{$}r<{$} >{$}c<{$} >{$}l<{$}
+  @{\hspace{.01\linewidth}}>{\footnotesize\raggedright\arraybackslash}p{.23\linewidth}@{}}
 
 \ExplSyntaxOn
 \cs_new_protected:Npn \mxProofPairedDependencies #1
   {
+    \group_begin:
     \tl_set:Nn \l_tmpa_tl {#1}
     \tl_replace_all:Nnn \l_tmpa_tl {,} {,\allowbreak}
     \tl_use:N \l_tmpa_tl
+    \group_end:
   }
 \ExplSyntaxOff
 
@@ -264,7 +277,7 @@
 \NewDocumentCommand{\proofsteppaired}{O{} +m +m}{%
   \stepcounter{proofstepnr}%
   \mxProofPairedDependencies{#1} & \theproofstepnr
-    & \ensuremath{#2} & #3\\[.15ex]%
+    & \ensuremath{#2} & \ensuremath{#3}\\[.15ex]%
 }
 
 \NewDocumentCommand{\proofpartpaired}{m}{%
@@ -300,7 +313,7 @@
   \setcounter{proofstepnr}{0}%
   \setlength{\tabcolsep}{2pt}%
   \renewcommand{\arraystretch}{1.15}%
-  \begin{longtable}{@{}G r >{$}l<{$} >{$}l<{$}@{}}
+  \begin{longtable}{J}
 }
 
 \newcommand{\closeproofpart}{%
@@ -324,7 +337,7 @@
   \setcounter{proofstepnr}{0}%
   \setlength{\tabcolsep}{2pt}%
   \renewcommand{\arraystretch}{1.15}%
-  \begin{longtable}{@{}G r >{$}r<{$} >{$}c<{$} >{$}l<{$} @{\hfill} l@{}}
+  \begin{longtable}{W}
 
 
 }
@@ -350,7 +363,7 @@
   \setcounter{proofstepnr}{0}%
   \setlength{\tabcolsep}{2pt}%
   \renewcommand{\arraystretch}{1.15}%
-  \begin{longtable}{@{}G r >{$}r<{$} >{$}c<{$} >{$}l<{$} @{\hfill} l@{}}
+  \begin{longtable}{W}
 
 }{%
   \end{longtable}\par
@@ -360,9 +373,9 @@
 % Sternform: keine neue Schritt-Nr. (Fortsetzungszeile)
 \NewDocumentCommand{\proofstepwide}{s O{} m m m m}{%
   \IfBooleanTF{#1}
-    {#2 &  & #3 & #4 & #5 & #6\\}%
+    {\mxProofPairedDependencies{#2} &  & #3 & #4 & #5 & \ensuremath{#6}\\}%
     {\stepcounter{proofstepnr}%
-     #2 & \theproofstepnr & #3 & #4 & #5 & #6\\}%
+     \mxProofPairedDependencies{#2} & \theproofstepnr & #3 & #4 & #5 & \ensuremath{#6}\\}%
 }
 
 % Zeile nur "Formel + Begründung" (wie bei dir: \proofstepwidestar[1]{A\subseteq C}{\rA})
@@ -378,184 +391,72 @@
      & #3\\%
 }
 
-% Formel und Begründung in einer gemeinsamen, durchgehenden Zelle. Diese
-% Variante hält auch lange Paare auf derselben Grundlinie, ohne die getrennten
-% Formel- und Begründungsspalten der übrigen Beweiszeilen zu verbreitern.
-\NewDocumentCommand{\proofstepwidestarinline}{O{} m m}{%
+% Alle vollständigen Aussagen nutzen dieselben beiden Absatzspalten.
+% Historische Inline-/Break-Namen bleiben als kompatible Aufrufe erhalten.
+% Es gibt weder eine gemeinsame Formel-/Begründungszelle noch versetzte
+% Begründungszeilen; die beiden Inhalte dürfen unabhängig umbrechen.
+\newcommand{\mxProofStatementRow}[3]{%
+  \mxProofPairedDependencies{#1} & \theproofstepnr
+    & \multicolumn{3}{@{}>{\raggedright\arraybackslash}p{.59\linewidth}@{}}{%
+        \ensuremath{#2}}%
+    & \ensuremath{#3}\\[.15ex]%
+}
+\NewDocumentCommand{\mxProofStatementStep}{O{} +m +m}{%
   \stepcounter{proofstepnr}%
-  #1 & \theproofstepnr
-     & \multicolumn{4}{@{}l@{}}{%
-         \ensuremath{#2}\hspace*{1em}#3}\\%
+  \mxProofStatementRow{#1}{#2}{#3}%
 }
-
-% Breite Formeln und Begründungen
-% ----------------------------------
-% Die frühere Break-Implementierung legte die Begründung in eine nullbreite
-% Überlagerungsbox. Dadurch konnte sie links aus dem Satzspiegel laufen, ohne
-% dass TeX eine Overfull-Warnung erzeugte.  Außerdem wurden auch kurze Zeilen
-% stets auf zwei Tabellenzeilen verteilt.
-%
-% Die bestehenden Break-Aufrufe wählen deshalb nun automatisch:
-% - kurze Formel/Begründung-Kombinationen bleiben in einer Zeile;
-% - lange Kombinationen erhalten eine echte, auf \linewidth begrenzte
-%   Fortsetzungszelle.
-%
-% Die getrennten Obergrenzen für Formel und Begründung sind absichtlich
-% konservativ.  So können nicht die breiteste Formel einer Tabellenzeile und
-% die breiteste Begründung einer anderen Zeile als unabhängige Spaltenmaxima
-% die longtable künstlich verbreitern.  Die Summengrenze lässt zugleich Platz
-% für Abhängigkeitsliste, Schrittnummer und Spaltenabstände.
-\newsavebox{\mxProofWideFormulaMeasureBox}
-\newsavebox{\mxProofWideReasonMeasureBox}
-\newlength{\mxProofWideCombinedMeasure}
-
-% Standardmäßig bleiben ausgelagerte Begründungen wie bisher am rechten
-% Satzspiegel. In dicht gesetzten Beweisfolgen kann lokal auf eine
-% formelnahe Fortsetzungszeile umgeschaltet werden. Der Modus wird bewusst
-% explizit wieder ausgeschaltet, damit bestehende Bände unverändert bleiben.
-\newif\ifmxProofWideReasonsNearFormula
-\mxProofWideReasonsNearFormulafalse
-\newcommand{\ProofWideReasonsNearFormula}{%
-  \mxProofWideReasonsNearFormulatrue}
-\newcommand{\ProofWideReasonsAtRight}{%
-  \mxProofWideReasonsNearFormulafalse}
-
-\newcommand{\mxProofStepWideSetMeasureBoxes}[2]{%
-  % Die Boxen werden global gesetzt, weil eine Alignment-Zelle ihre lokale
-  % Gruppe am folgenden & beendet.  Beim Einsetzen beziehungsweise Auflösen
-  % wird ihr Inhalt sofort in die jeweilige Tabellenzeile kopiert; die nächste
-  % Beweiszeile darf die Register daher gefahrlos wiederverwenden.
-  \global\setbox\mxProofWideFormulaMeasureBox=\hbox{\ensuremath{#1}}%
-  \global\setbox\mxProofWideReasonMeasureBox=\hbox{\ensuremath{#2}}%
+\RenewDocumentCommand{\proofstepwidestar}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-\newcommand{\mxProofStepWideInlineRow}[1]{%
-  #1 & \theproofstepnr
-     & \multicolumn{3}{@{}l@{}}{%
-         \usebox{\mxProofWideFormulaMeasureBox}}
-     & \ifmxProofWideReasonsNearFormula\hspace*{1em}\fi
-       \usebox{\mxProofWideReasonMeasureBox}\\%
+\NewDocumentCommand{\proofstepwidestarinline}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-% #1 = Stern für \\* nach der Formelzeile, #2 = Abhängigkeiten. Formel und
-% Begründung liegen bereits in den Messboxen. Beide langen Inhalte
-% überspannen ihre jeweiligen Gesamtbereiche; dadurch beeinflussen sie nicht
-% die Maxima der einzelnen Formel-/Begründungsspalten.
-\NewDocumentCommand{\mxProofStepWideForcedBreakRows}{s m}{%
-  #2 & \theproofstepnr
-     & \multicolumn{4}{@{}l@{}}{%
-         \usebox{\mxProofWideFormulaMeasureBox}}%
-  \IfBooleanTF{#1}{\\*[-.2ex]}{\\[-.2ex]}%
-  \ifmxProofWideReasonsNearFormula
-    % Zwei leere Vorspalten richten die Begründung am Beginn des
-    % Formelbereichs aus. Die feste Restbreite verhindert zugleich, dass
-    % lange Referenzen den Satzspiegel verbreitern.
-    & & \multicolumn{4}{@{}>{\raggedright\arraybackslash}p{.80\linewidth}@{}}{%
-      \unhcopy\mxProofWideReasonMeasureBox}\\%
-  \else
-    \multicolumn{6}{@{}>{\raggedleft\arraybackslash}p{\linewidth}@{}}{%
-      % Das Auflösen der Messbox stellt die in ihrem Inhalt vorhandenen
-      % mathematischen Umbruchstellen im Absatz wieder her. Nicht trennbare
-      % Einzelstücke bleiben echte Boxen und erzeugen bei Überbreite eine
-      % reguläre TeX-Warnung.
-      \unhcopy\mxProofWideReasonMeasureBox}\\%
-  \fi
+\NewDocumentCommand{\proofstepwidestarbreak}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-% Automatische Auswahl.  Das Messen geschieht vor dem ersten Alignment-&;
-% die eigentliche Zeile wird erst nach den abgeschlossenen Vergleichen
-% expandiert.  Damit bleiben die Bedingungen sicher innerhalb einer
-% longtable-Zelle.
-\NewDocumentCommand{\mxProofStepWideAutoRows}{s m m m}{%
-  \mxProofStepWideSetMeasureBoxes{#3}{#4}%
-  \setlength{\mxProofWideCombinedMeasure}{%
-    \wd\mxProofWideFormulaMeasureBox}%
-  \addtolength{\mxProofWideCombinedMeasure}{%
-    \wd\mxProofWideReasonMeasureBox}%
-  % Der kleine Zwischenraum entspricht dem optischen Mindestabstand, den
-  % sonst das dehnbare Material vor der Begründung herstellt.
-  \addtolength{\mxProofWideCombinedMeasure}{1em}%
-  \def\mxProofStepWideNext{\mxProofStepWideInlineRow}%
-  \ifdim\wd\mxProofWideFormulaMeasureBox>.55\linewidth
-    \IfBooleanTF{#1}
-      {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows*}}
-      {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows}}%
-  \else
-    \ifdim\wd\mxProofWideReasonMeasureBox>.20\linewidth
-      \IfBooleanTF{#1}
-        {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows*}}
-        {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows}}%
-    \else
-      \ifdim\mxProofWideCombinedMeasure>.72\linewidth
-        \IfBooleanTF{#1}
-          {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows*}}
-          {\def\mxProofStepWideNext{\mxProofStepWideForcedBreakRows}}%
-      \fi
-    \fi
-  \fi
-  \mxProofStepWideNext{#2}%
+\NewDocumentCommand{\proofstepwidestarbreakkeep}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-% Kompatible automatische Varianten: Signatur und Schrittzählung bleiben
-% gegenüber den bisherigen Aufrufen unverändert.
-\NewDocumentCommand{\proofstepwidestarbreak}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  \mxProofStepWideAutoRows{#1}{#2}{#3}%
+\NewDocumentCommand{\proofstepwidestarforcebreak}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-% Wie \proofstepwidestarbreak, jedoch ohne zulässigen Seitenumbruch zwischen
-% einer ausgelagerten Formel- und Begründungszeile.
-\NewDocumentCommand{\proofstepwidestarbreakkeep}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  \mxProofStepWideAutoRows*{#1}{#2}{#3}%
+\NewDocumentCommand{\proofstepwidestarforcebreakkeep}{O{} +m +m}{%
+  \mxProofStatementStep[#1]{#2}{#3}%
 }
-
-% Ausdrücklich erzwungene Break-Varianten für Stellen, an denen ein Umbruch
-% semantisch oder typografisch gewünscht ist, obwohl beide Inhalte kurz sind.
-\NewDocumentCommand{\proofstepwidestarforcebreak}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  \mxProofStepWideSetMeasureBoxes{#2}{#3}%
-  \mxProofStepWideForcedBreakRows{#1}%
-}
-
-\NewDocumentCommand{\proofstepwidestarforcebreakkeep}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  \mxProofStepWideSetMeasureBoxes{#2}{#3}%
-  \mxProofStepWideForcedBreakRows*{#1}%
-}
-
-
-
+% Alte lokale Umschaltungen sind wirkungslos: Die Begründungsspalte bleibt
+% über alle Zeilen desselben Tabellenbeweises hinweg erhalten.
+\newcommand{\ProofWideReasonsNearFormula}{}
+\newcommand{\ProofWideReasonsAtRight}{}
 
 % Proofzeilen
 \NewDocumentCommand{\proofstep}{m m m}{%
   \stepcounter{proofstepnr}%
-  #1 & \theproofstepnr & #2 & \ensuremath{#3}\\%
+  \mxProofPairedDependencies{#1} & \theproofstepnr & \ensuremath{#2} & \ensuremath{#3}\\%
 }
 
 
 
 % wie \proofstep, aber ohne Schritt-Nummer (für Folgezeilen, Umbrüche, etc.)
 \ProvideDocumentCommand{\proofstepstar}{m m m}{%
-  #1 &  & #2 & #3\\%
+  \mxProofPairedDependencies{#1} &  & \ensuremath{#2} & \ensuremath{#3}\\%
 }
 \ProvideDocumentCommand{\proofstepstarwide}{m m m}{%
-  #1 &  & #2 & #3\\%
+  \mxProofPairedDependencies{#1} &  & \ensuremath{#2} & \ensuremath{#3}\\%
 }
 
 
 % Axiom-/Theorem-Referenzzeilen (nutzt FormulaRefAuto)
 \NewDocumentCommand{\proofaxline}{m m o}{%
   \stepcounter{proofstepnr}%
-  #1 & \theproofstepnr & #2 &
+  \mxProofPairedDependencies{#1} & \theproofstepnr & \ensuremath{#2} &
   \axstrut \FormulaRefAuto{#2}[ax]%
   \IfNoValueF{#3}{\axstrut \textnormal{\scriptsize(#3)}}\\[\axsep]
 }
 
 \newcommand{\proofcase}[2][]{%
-  & & \text{\bfseries Fall\if\relax#1\relax\else~#1\fi: } #2 & \\[-.35ex]%
+  & & \ensuremath{\text{\bfseries Fall\if\relax#1\relax\else~#1\fi: } #2} & \\[-.35ex]%
 }
 \newcommand{\proofcasesummary}[2][]{%
-  & & \text{\bfseries Schluss\if\relax#1\relax\else~ Fall~#1\fi: } #2 & \\[-.35ex]%
+  & & \ensuremath{\text{\bfseries Schluss\if\relax#1\relax\else~ Fall~#1\fi: } #2} & \\[-.35ex]%
 }
 \newcommand{\proofcaserule}{\cline{3-4}\noalign{\vspace{-0.3ex}}}

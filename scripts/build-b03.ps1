@@ -610,7 +610,8 @@ function Assert-BuildStageArtifacts {
     Assert-Artifact -RelativePath $Stage.Aux -NotBefore $Stage.Started
     Assert-Artifact -RelativePath $Stage.Log -NotBefore $Stage.Started
     Assert-Artifact -RelativePath $Stage.Pdf -NotBefore $Stage.Started
-    Assert-Artifact -RelativePath $Stage.Registry -NotBefore $Stage.Started
+    # The overview cites existing results without declaring additional ones.
+    Assert-Artifact -RelativePath $Stage.Registry -NotBefore $Stage.Started -AllowEmpty:($Stage.Band -eq 'B00')
     Assert-Artifact -RelativePath $Stage.Debug -NotBefore $Stage.Started -AllowEmpty
     Assert-RegistryLabelsInAux -RegistryPath $Stage.Registry -AuxPath $Stage.Aux
 }

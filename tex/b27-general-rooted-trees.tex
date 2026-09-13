@@ -1,0 +1,98 @@
+% Anwendungen des allgemeinen Elternsystem-Kriteriums aus Band 26.
+\providecommand{\BXXVIIFiniteRooted}[3]{%
+  \mathsf{EndWBaum}(#1,#2,#3)}
+\providecommand{\BXXVIIParentSystem}[4]{%
+  \mathsf{ElterSys}(#1,#2,#3,#4)}
+\providecommand{\BXXVIISymmetricEdges}[2]{%
+  \operatorname{sym}_{#1}(#2)}
+\providecommand{\BXXVIIForwardEdges}[1]{%
+  \operatorname{vor}(#1)}
+
+
+\section{Die gerichtete Darstellung der Positionsbäume}
+
+Beim Positionsbaum ist die Höhenmarke bereits vorhanden: Es ist die
+Wortlänge der Adresse. Das Anhängen eines Bits ist eine gerichtete
+Elternkante; erst durch das Vergessen ihrer Richtung erhält man die
+bisher verwendete symmetrische Adressrelation.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Vorwärtskanten einer Positionsmenge]{%
+  \BXXVIIForwardEdges P\coloneqq
+  \{(p,q)\in P\times P\mid
+      \exists i\in\{0,1\}\,q=\WordConcat p{\LetterWord i}\}
+}{B27ForwardAddressEdgesDef}{%
+  \DeltaRow{Mengen}{P\dsep p\dsep q\dsep i}
+  \DeltaPrem{Positionsmenge}{\GoodAddressSet P}
+  \DeltaRow{Neue Menge}{\BXXVIIForwardEdges P}
+}
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Gerichtete und ungerichtete Positionskanten]{%
+  \begin{aligned}[t]
+    \GoodAddressSet P\vdash{}&
+      \BXXVIISymmetricEdges P{\BXXVIIForwardEdges P}=\AddressEdges P
+  \end{aligned}
+}{B27ForwardAddressSymmetrization}{%
+  \DeltaRow{Mengen}{P\dsep p\dsep q\dsep i}
+}
+\end{minipage}\par
+\noindent\textit{Beweis.}
+Für \(p,q\in P\) bedeutet die Mitgliedschaft links, dass entweder
+\(q=p\frown\LetterWord i\) für ein Bit \(i\) gilt oder
+\(p=q\frown\LetterWord i\) für ein Bit \(i\) gilt.
+Durch Fallunterscheidung ist dies gleichbedeutend mit der Existenz
+eines Bits, für das eine dieser beiden Gleichungen gilt. Nach
+\FormulaRefAuto{B27AddressEdgeCriterion}[thm] ist dies genau die
+Mitgliedschaft in \(\AddressEdges P\). Außerhalb von \(P\times P\)
+enthält keine der beiden Relationen ein Paar. Die Mengenextensionalität
+liefert die Gleichheit.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Positionsmengen erfüllen das allgemeine Elternsystem]{%
+  \begin{aligned}[t]
+    &\GoodAddressSet P\dsep h\colon P\to\mathbb N\dsep
+      \forall p\in P\,(h(p)=\WordLength p)\vdash\\[-2pt]
+    &\BXXVIIParentSystem P{\BXXVIIForwardEdges P}
+      {\EmptyWord{\{0,1\}}}h
+  \end{aligned}
+}{B27AddressRankedParentSystem}{%
+  \DeltaRow{Mengen}{P\dsep h\dsep p\dsep q\dsep i}
+}
+\end{minipage}\par
+\noindent\textit{Beweis.}
+\FormulaRefAuto{GoodBinaryAddressSetCriterion}[thm] liefert die
+Endlichkeit von \(P\), die Wurzel und die Existenz eines unmittelbaren
+Präfixes jeder Nichtwurzeladresse. Die Vorwärtskanten liegen nach ihrer
+Definition in \(P\times P\). Aus
+\FormulaRefAuto{EmptyWordLengthZero}[thm] folgt die Höhenmarke null
+an der Wurzel. Jeder Vorgänger einer Nichtwurzeladresse \(q\) ist
+\(\WordRumpf{\{0,1\}}q\), denn
+\FormulaRefAuto{WordRumpfAppend}[thm] entfernt das angehängte Bit.
+Der Vorgänger ist somit eindeutig. Schließlich liefert
+\FormulaRefAuto{WordAppendLetterLength}[thm] für jede Vorwärtskante
+\(h(q)=h(p)+1\), also das verlangte strenge Wachstum. Dies sind
+sämtliche Bedingungen von
+\FormulaRefAuto{B27RankedParentSystemDef}[def].
+
+Eine solche Funktion \(h\) existiert: Jedem \(p\in P\) wird die
+eindeutig bestimmte natürliche Zahl \(\WordLength p\) zugeordnet;
+\FormulaRefAuto{B27AddressWordTyping}[thm] und
+\FormulaRefAuto{FiniteWordLengthNatural}[thm] rechtfertigen die
+Typisierung. Das Funktionsdefinitionsprinzip bildet daraus ihren Graphen.
+Damit ist das allgemeine Einführungskriterium auf jede der zuvor
+konstruierten Positionsmengen anwendbar.
+
+Die volle binäre Verzweigung ist eine zusätzliche Bedingung. Im
+allgemeinen Elternsystem sind beliebig viele Kinder möglich. Bei
+\(\GoodAddressSet P\) kommen als Kinder einer Adresse nur ihre beiden
+Erweiterungen um \(0\) und \(1\) infrage. Der Vollheitsabschluss
+fordert, dass beide vorhanden sind oder beide fehlen. Die Funktionen
+\(\AddressLeft P\) und \(\AddressRight P\) unterscheiden diese Kinder.
+Genau dies hat
+\FormulaRefAuto{GoodBinaryAddressSetOrderedFullBinaryTree}[thm] als
+Struktur aus Band~26 nachgewiesen. Eine spätere Syntax darf daher
+den allgemeinen endlichen Wurzelbaum verwenden und ihre jeweiligen
+Konstruktoren durch zusätzliche Beschriftungs- und Verzweigungsregeln
+kennzeichnen.

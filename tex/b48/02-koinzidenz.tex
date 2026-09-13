@@ -1,0 +1,507 @@
+% Freie Variablen werden aus der vorhandenen Baumrekursion gewonnen.
+\subsection{Freie Variablen und Koinzidenz}
+
+In diesem Abschnitt sind \(M=(D,E)\) eine Mengenstruktur und
+\(s,t\in A_D\). Variablen sind ihre Codes in \(\mathbb N\).
+Alle Aussagen ueber Erfuellung gehoeren zur untersuchenden Theorie.
+Insbesondere wird keine Eigenschaft der syntaktischen Beweisbarkeit
+vorausgesetzt.
+
+\FormulaDefDeltaK[Operatoren fuer freie Variablen]
+{\begin{aligned}
+ I(p)&\coloneq\{i\in\mathbb N\mid p=\mathsf q_i\},\\
+ L((k,(i,j)))&\coloneq
+   \BXLVIIIIf{k=t_{\rm e}\lor k=t_{\rm m}}{\{i,j\}}{\varnothing},\\
+ Y&\coloneq\mathcal T\times\powerset(\mathbb N),\\
+ f(c)&\coloneq(\mathsf l(c),L(c)),\\
+ g((p,U),(q,V))&\coloneq
+   (\mathsf n(p,q),U\cup(V\setminus I(p))).
+\end{aligned}}
+{B48FVOperators}{
+ \DeltaRow{Bereiche}{c\in\Sigma,\quad p,q\in\mathcal T}
+ \DeltaRow{Wertemengen}{U,V\subseteq\mathbb N}
+}
+Hier und bei den folgenden rekursiven Konstruktionen bezeichnet eine
+Funktionsgleichung \(f(c)\coloneq u(c)\) den beschraenkten Graphen
+\(\{(c,z)\in\Sigma\times Y\mid z=u(c)\}\).
+Seine Funktionseigenschaft folgt aus
+\FormulaRefAuto{TypedTermGraphFunction}[thm], sobald die Werte typisiert
+sind; seine Werte liefert \FormulaRefAuto{TypedTermGraphValues}[thm].
+Die Hilfsbaeume \(\mathsf n_0,\mathsf c_0,\mathsf q_i\) tragen keine
+freien Variablen.
+
+\FormulaThmDeltaK[Konstruktion der Freivariablenfunktion]
+{\begin{gathered}
+ \exists!V\colon\mathcal T\to\powerset(\mathbb N)\quad
+ V(\mathsf l(c))=L(c),\\
+ V(\mathsf n(p,q))=V(p)\cup(V(q)\setminus I(p))
+\end{gathered}}
+{B48FVExists}{
+ \DeltaRow{Universell in den Gleichungen}{c\in\Sigma,\quad p,q\in\mathcal T}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Typisierung und Rekursion}
+ \proofstepwidestar[]{L(c)\subseteq\mathbb N}
+  {\FormulaRefAuto{B48FVOperators}[def]}
+ \proofstepwidestar[]{U\cup(V\setminus I(p))\subseteq\mathbb N}
+  {\FormulaRefAuto{B48FVOperators}[def]}
+ \proofstepwidestar[]{f\colon\Sigma\to Y}
+  {\FormulaRefAuto{TypedTermGraphFunction}[thm]{1},
+   \FormulaRefAuto{B48LeafType}[thm]}
+ \proofstepwidestar[]{g\colon Y\times Y\to Y}
+  {\FormulaRefAuto{TypedTermGraphFunction}[thm]{2},
+   \FormulaRefAuto{B48NodeType}[thm]}
+ \proofstepwidestar[]{\begin{gathered}
+  \exists!e\colon\mathcal T\to Y\quad
+  e(\mathsf l(c))=f(c),\\
+  e(\mathsf n(p,q))=g(e(p),e(q))
+ \end{gathered}}
+  {\FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]{3,4}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+Fixiere die eindeutig bestimmte Auswertung \(e\).
+Die erste Komponente ist der ausgewertete Baum selbst. Dies wird
+ausdruecklich durch Strukturinduktion gezeigt. Im folgenden Teilbeweis
+steht \(H(p)\) fuer \(\exists U\subseteq\mathbb N\;(e(p)=(p,U))\).
+\begin{tabproofsplitwide}
+ \proofpartwide{Erhaltung des Baumcodes}
+ \proofstepwidestar[]{e(\mathsf l(c))=(\mathsf l(c),L(c))}
+  {\FormulaRefAuto{B48FVOperators}[def],
+   \FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]}
+ \proofstepwidestar[]{H(\mathsf l(c))}{\rEI{1}}
+ \proofstepwidestar[3]{H(p)\land H(q)}{\rA}
+ \proofstepwidestar[4]{e(p)=(p,U)\land e(q)=(q,V)}{\rA}
+ \proofstepwidestar[4]{\begin{aligned}
+ e(\mathsf n(p,q))={}&
+ (\mathsf n(p,q),U\cup(V\setminus I(p)))
+ \end{aligned}}
+  {\FormulaRefAuto{B48FVOperators}[def]{4},
+   \FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]}
+ \proofstepwidestar[4]{H(\mathsf n(p,q))}{\rEI{5}}
+ \proofstepwidestar[3]{H(\mathsf n(p,q))}{\rEEStar{3,4:6}}
+ \proofstepwidestar[]{H(p)\land H(q)\to H(\mathsf n(p,q))}
+  {\rRI{3,7}}
+ \proofstepwidestar[]{\forall p\in\mathcal T\;H(p)}
+  {\FormulaRefAuto{FullPlanarBinaryTreeStructuralInduction}[thm]
+   {\rUI{2},\rUI{8}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+In den Zeugenzeilen sind \(U,V\subseteq\mathbb N\) die durch \(H\)
+beschraenkten Zeugen. Zwei solche Werte sind gleich, denn aus
+\((p,U)=(p,V)\) folgt \(U=V\) durch
+\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm].
+Daher ist
+\[
+ V=\{(p,U)\in\mathcal T\times\powerset(\mathbb N)\mid e(p)=(p,U)\}
+\]
+nach \FormulaRefAuto{UniqueValuedGraphFunction}[thm] eine Funktion.
+Einsetzen von \(e(p)=(p,V(p))\) und \(e(q)=(q,V(q))\) in die beiden
+Rekursionsgleichungen liefert die behaupteten Gleichungen.
+Eindeutigkeit folgt ebenfalls durch Bauminduktion: Zwei Kandidaten
+stimmen an jedem Blatt durch \(L(c)\), und am Knoten nach Einsetzen
+der beiden Induktionsgleichheiten ueberein. Funktionsextensionalitaet
+\FormulaRefAuto{FunctionExtensionality}[thm] liefert ihre Gleichheit.
+Damit ist die folgende Kennzeichnung gerechtfertigt.
+
+\FormulaDefDeltaK[Freie Variablen eines Formelcodes]
+{\operatorname{FV}(p)\coloneq V(p)}
+{B48FreeVariables}{
+ \DeltaRow{Funktion}{V\text{ aus }\FormulaRefAuto{B48FVExists}[thm]}
+ \DeltaRow{Baumcode}{p\in\mathcal T}
+}
+Die Einschraenkung auf \(\mathcal F\) ist die Freivariablenfunktion
+der Objektformeln. Die Auswertung auf Hilfsbaeumen bleibt lediglich
+ein Hilfsmittel der Konstruktion.
+
+\FormulaThmDeltaK[Rekursionsklauseln fuer freie Variablen]
+{\begin{aligned}
+ \operatorname{FV}(\mathsf e(i,j))&=\{i,j\},&
+ \operatorname{FV}(\mathsf m(i,j))&=\{i,j\},\\
+ \operatorname{FV}(\mathsf b)&=\varnothing,&
+ \operatorname{FV}(\mathsf{neg}(p))&=\operatorname{FV}(p),\\
+ \operatorname{FV}(\mathsf{and}(p,q))
+  &=\operatorname{FV}(p)\cup\operatorname{FV}(q),\\
+ \operatorname{FV}(\mathsf{ex}_i(p))
+  &=\operatorname{FV}(p)\setminus\{i\}.
+\end{aligned}}
+{B48FVClauses}{
+ \DeltaRow{Formelcodes}{p,q\in\mathcal F}
+ \DeltaRow{Indizes}{i,j\in\mathbb N}
+}
+\begin{tabproof}
+ \proofstep{}{\operatorname{FV}(\mathsf e(i,j))=\{i,j\}}
+  {\FormulaRefAuto{B48FVExists}[thm],
+   \FormulaRefAuto{B48FVOperators}[def]}
+ \proofstep{}{\operatorname{FV}(\mathsf m(i,j))=\{i,j\}}
+  {\FormulaRefAuto{B48FVExists}[thm],
+   \FormulaRefAuto{B48FVOperators}[def]}
+ \proofstep{}{\operatorname{FV}(\mathsf b)=\varnothing}
+  {\FormulaRefAuto{B48FVExists}[thm],
+   \FormulaRefAuto{B48TagNe05}[thm],
+   \FormulaRefAuto{B48TagNe15}[thm]}
+ \proofstep{}{\begin{gathered}
+  \operatorname{FV}(\mathsf n_0)=
+  \operatorname{FV}(\mathsf c_0)=
+  \operatorname{FV}(\mathsf q_i)=\varnothing
+ \end{gathered}}
+  {\FormulaRefAuto{B48FVOperators}[def],
+   \FormulaRefAuto{B48FVExists}[thm]}
+ \proofstep{}{I(\mathsf n_0)=I(\mathsf c_0)=\varnothing}
+  {\FormulaRefAuto{B48QNeNeg}[thm],
+   \FormulaRefAuto{B48QNeAnd}[thm]}
+ \proofstep{}{I(\mathsf n(\mathsf c_0,p))=\varnothing}
+  {\FormulaRefAuto{B48LeafNotNode}[thm]}
+ \proofstep{}{I(\mathsf q_i)=\{i\}}
+  {\FormulaRefAuto{B48QuantifierRootInjective}[thm],\rII}
+ \proofstep{}{\operatorname{FV}(\mathsf{neg}(p))=\operatorname{FV}(p)}
+  {\FormulaRefAuto{B48FVExists}[thm]{4,5}}
+ \proofstep{}{\operatorname{FV}(\mathsf n(\mathsf c_0,p))
+                  =\operatorname{FV}(p)}
+  {\FormulaRefAuto{B48FVExists}[thm]{4,5}}
+ \proofstep{}{\operatorname{FV}(\mathsf{and}(p,q))
+                  =\operatorname{FV}(p)\cup\operatorname{FV}(q)}
+  {\FormulaRefAuto{B48FVExists}[thm]{9,6}}
+ \proofstep{}{\operatorname{FV}(\mathsf{ex}_i(p))
+                  =\operatorname{FV}(p)\setminus\{i\}}
+  {\FormulaRefAuto{B48FVExists}[thm]{4,7}}
+\end{tabproof}
+
+
+\FormulaThmDeltaK[Gleichheit der Quantorenmarken]
+{\mathsf q_i=\mathsf q_j\leftrightarrow i=j}
+{B48QuantifierRootEquality}{\DeltaRow{Indizes}{i,j\in\mathbb N}}
+\begin{tabproof}
+ \proofstep{1}{\mathsf q_i=\mathsf q_j}{\rA}
+ \proofstep{1}{i=j}{\FormulaRefAuto{B48QuantifierRootInjective}[thm]{1}}
+ \proofstep{}{(\mathsf q_i=\mathsf q_j)\to i=j}{\rRI{1,2}}
+ \proofstep{4}{i=j}{\rA}
+ \proofstep{}{\mathsf q_i=\mathsf q_i}{\rII}
+ \proofstep{4}{\mathsf q_i=\mathsf q_j}{\rIE{4,5}}
+ \proofstep{}{i=j\to\mathsf q_i=\mathsf q_j}{\rRI{4,6}}
+ \proofstep{}{\mathsf q_i=\mathsf q_j\leftrightarrow i=j}{\rLRI{3,7}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Saetze der Mengensprache]
+{\operatorname{Sent}(\mathcal L_\in)\coloneq
+ \{p\in\mathcal F\mid\operatorname{FV}(p)=\varnothing\}}
+{B48SentenceCodes}{\DeltaRow{Formelmenge}{\mathcal F}}
+
+\FormulaThmDeltaK[Mitgliedschaft nach Entfernen eines anderen Elements]
+{j\in U,\quad j\neq i\ \vdash\ j\in U\setminus\{i\}}
+{B48MemberDifferenceSingleton}{\DeltaRow{Mengen}{U,i,j}}
+\begin{tabproof}
+ \proofstep{1}{j\in U}{\rA}
+ \proofstep{2}{j\neq i}{\rA}
+ \proofstep{}{j\in\{i\}\leftrightarrow j=i}
+  {\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]}
+ \proofstep{2}{j\notin\{i\}}{\rLRS{3,2}}
+ \proofstep{1,2}{j\in U\land j\notin\{i\}}{\rAI{1,4}}
+ \proofstep{1,2}{j\in U\setminus\{i\}}
+  {\FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}[thm]{5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Fehlen ausserhalb des entfernten Elements]
+{x\notin U\setminus\{i\},\quad x\neq i\ \vdash\ x\notin U}
+{B48MissingFromDifference}{\DeltaRow{Mengen}{U,i,x}}
+\begin{tabproof}
+ \proofstep{1}{x\notin U\setminus\{i\}}{\rA}
+ \proofstep{2}{x\neq i}{\rA}
+ \proofstep{3}{x\in U}{\rA}
+ \proofstep{2,3}{x\in U\setminus\{i\}}
+  {\FormulaRefAuto{B48MemberDifferenceSingleton}[thm]{3,2}}
+ \proofstep{1,2,3}{\bot}{\rBI{4,1}}
+ \proofstep{1,2}{x\notin U}{\rCI{3,5}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Uebereinstimmung auf einem Variablenbereich]
+{s\equiv_U t\coloneq\forall j\in U\;(s(j)=t(j))}
+{B48Agreement}{
+ \DeltaRow{Belegungen}{s,t\in A_D}
+ \DeltaRow{Variablenbereich}{U\subseteq\mathbb N}
+}
+
+\FormulaThmDeltaK[Punktweise Werte eines Belegungswechsels]
+{\begin{aligned}
+ s[i\mapsto a](i)&=a,\\
+ j\neq i&\ \vdash\ s[i\mapsto a](j)=s(j)
+\end{aligned}}
+{B48UpdateValues}{
+ \DeltaRow{Belegung}{s\in A_D}
+ \DeltaRow{Indizes und Wert}{i,j\in\mathbb N,\quad a\in D}
+}
+\begin{tabproof}
+ \proofstep{}{\forall k\in\mathbb N\;
+   \BXLVIIIIf{k=i}{a}{s(k)}\in D}
+  {\FormulaRefAuto{B48IfTyped}[thm],
+   \FormulaRefAuto{F\colon A\to B,\ x\in A\vdash F(x)\in B}[thm]}
+ \proofstep{}{\forall k\in\mathbb N\;
+   s[i\mapsto a](k)=\BXLVIIIIf{k=i}{a}{s(k)}}
+  {\FormulaRefAuto{TypedTermGraphValues}[thm]{1},
+   \FormulaRefAuto{B48Assignments}[def]}
+ \proofstep{}{i=i}{\rII}
+ \proofstep{}{\BXLVIIIIf{i=i}{a}{s(i)}=a}
+  {\FormulaRefAuto{B48IfTrue}[thm]{3}}
+ \proofstep{}{s[i\mapsto a](i)=a}{\rIE{4,\rUE{2}}}
+ \proofstep{6}{j\neq i}{\rA}
+ \proofstep{6}{\BXLVIIIIf{j=i}{a}{s(j)}=s(j)}
+  {\FormulaRefAuto{B48IfFalse}[thm]{6}}
+ \proofstep{6}{s[i\mapsto a](j)=s(j)}{\rIE{7,\rUE{2}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Uebereinstimmung nach gleichem Belegungswechsel]
+{s\equiv_{U\setminus\{i\}}t\ \vdash\
+ s[i\mapsto a]\equiv_U t[i\mapsto a]}
+{B48AgreementUpdate}{
+ \DeltaRow{Belegungen}{s,t\in A_D}
+ \DeltaRow{Bereich, Index und Wert}{U\subseteq\mathbb N,\quad i\in\mathbb N,\quad a\in D}
+}
+\begin{tabproof}
+ \proofstep{1}{s\equiv_{U\setminus\{i\}}t}{\rA}
+ \proofstep{2}{j\in U}{\rA}
+ \proofstep{}{j=i\lor j\neq i}{\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstep{4}{j=i}{\rA}
+ \proofstep{4}{s[i\mapsto a](j)=a}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{4}}
+ \proofstep{4}{t[i\mapsto a](j)=a}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{4}}
+ \proofstep{4}{s[i\mapsto a](j)=t[i\mapsto a](j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{5,6}}
+ \proofstep{8}{j\neq i}{\rA}
+ \proofstep{2,8}{j\in U\setminus\{i\}}
+  {\FormulaRefAuto{B48MemberDifferenceSingleton}[thm]{2,8}}
+ \proofstep{1,2,8}{s(j)=t(j)}
+  {\FormulaRefAuto{B48Agreement}[def]{1,9}}
+ \proofstep{8}{s[i\mapsto a](j)=s(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{8}}
+ \proofstep{8}{t[i\mapsto a](j)=t(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{8}}
+ \proofstep{1,2,8}{s[i\mapsto a](j)=t[i\mapsto a](j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rIE{10,11},12}}
+ \proofstep{1,2}{s[i\mapsto a](j)=t[i\mapsto a](j)}
+  {\rOE{3,4:7,8:13}}
+ \proofstep{1}{\forall j\in U\;
+                 s[i\mapsto a](j)=t[i\mapsto a](j)}
+  {\rUI{\rRI{2,14}}}
+ \proofstep{1}{s[i\mapsto a]\equiv_U t[i\mapsto a]}
+  {\FormulaRefAuto{B48Agreement}[def]{15}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Induktionsbehauptung des Koinzidenzlemmas]
+{\begin{aligned}
+ C(p)\coloneq\forall s,t\in A_D\;\bigl(
+ s\equiv_{\operatorname{FV}(p)}t\ \to{}\\
+ ((M,s\models p)\leftrightarrow(M,t\models p))\bigr)
+\end{aligned}}
+{B48CoincidenceProperty}{
+ \DeltaRow{Struktur und Formelcode}{\mathsf{Str}(M),\quad p\in\mathcal F}
+}
+
+\FormulaThmDeltaK[Koinzidenzlemma]
+{s\equiv_{\operatorname{FV}(p)}t\ \vdash\
+ ((M,s\models p)\leftrightarrow(M,t\models p))}
+{B48Coincidence}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Formel und Belegungen}{p\in\mathcal F,\quad s,t\in A_D}
+}
+\begin{tabproofsplitwide}
+ \proofpartwideindR[Atomare Formeln]{C(\mathsf e(i,j))\land
+   C(\mathsf m(i,j))\land C(\mathsf b)}
+  {C(\mathsf e(i,j))\land C(\mathsf m(i,j))\land C(\mathsf b)}
+  [B48CoincidenceAtoms]
+ \proofstepwidestar[1]{s\equiv_{\{i,j\}}t}{\rA}
+ \proofstepwidestar[1]{s(i)=t(i)}
+  {\FormulaRefAuto{B48Agreement}[def]{1}}
+ \proofstepwidestar[1]{s(j)=t(j)}
+  {\FormulaRefAuto{B48Agreement}[def]{1}}
+ \proofstepwidestar[]{(s(i)=s(j))\leftrightarrow(s(i)=s(j))}
+  {\FormulaRefAuto{P\leftrightarrow P}[thm]}
+ \proofstepwidestar[1]{(s(i)=s(j))\leftrightarrow(t(i)=t(j))}
+  {\rIE{2,3,4}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models\mathsf e(i,j))\leftrightarrow
+ (M,t\models\mathsf e(i,j))
+ \end{aligned}}
+  {\FormulaRefAuto{B48Satisfaction}[def]{5}}
+ \proofstepwidestar[]{((s(i),s(j))\in E)\leftrightarrow
+                        ((s(i),s(j))\in E)}
+  {\FormulaRefAuto{P\leftrightarrow P}[thm]}
+ \proofstepwidestar[1]{((s(i),s(j))\in E)\leftrightarrow
+                        ((t(i),t(j))\in E)}
+  {\rIE{2,3,7}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models\mathsf m(i,j))\leftrightarrow
+ (M,t\models\mathsf m(i,j))
+ \end{aligned}}
+  {\FormulaRefAuto{B48Satisfaction}[def]{8}}
+ \proofstepwidestar[]{C(\mathsf e(i,j))}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]
+   {\rUI{\rRI{1,6}}},\FormulaRefAuto{B48FVClauses}[thm]}
+ \proofstepwidestar[]{C(\mathsf m(i,j))}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]
+   {\rUI{\rRI{1,9}}},\FormulaRefAuto{B48FVClauses}[thm]}
+ \proofstepwidestar[]{(M,s\models\mathsf b)\leftrightarrow
+                        (M,t\models\mathsf b)}
+  {\FormulaRefAuto{B48Satisfaction}[def],
+   \FormulaRefAuto{P\leftrightarrow P}[thm]}
+ \proofstepwidestar[]{C(\mathsf b)}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{\rUI{12}}}
+ \proofstepwidestar[]{C(\mathsf e(i,j))\land
+                      C(\mathsf m(i,j))\land C(\mathsf b)}
+  {\rAI{10,\rAI{11,13}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Negation]{C(p)\vdash C(\mathsf{neg}(p))}
+  {C(p)\vdash C(\mathsf{neg}(p))}[B48CoincidenceNeg]
+ \proofstepwidestar[1]{C(p)}{\rA}
+ \proofstepwidestar[2]{s\equiv_{\operatorname{FV}(\mathsf{neg}(p))}t}{\rA}
+ \proofstepwidestar[2]{s\equiv_{\operatorname{FV}(p)}t}
+  {\FormulaRefAuto{B48FVClauses}[thm]{2}}
+ \proofstepwidestar[1,2]{(M,s\models p)\leftrightarrow(M,t\models p)}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{1,3}}
+ \proofstepwidestar[1,2]{\neg(M,s\models p)\leftrightarrow
+                       \neg(M,t\models p)}
+  {\rLRS{4,\FormulaRefAuto{P\leftrightarrow P}[thm]}}
+ \proofstepwidestar[1,2]{(M,s\models\neg p)\leftrightarrow
+                       (M,t\models\neg p)}
+  {\FormulaRefAuto{B48Satisfaction}[def]{5}}
+ \proofstepwidestar[1]{C(\mathsf{neg}(p))}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{\rUI{\rRI{2,6}}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Konjunktion]{C(p),C(q)\vdash C(\mathsf{and}(p,q))}
+  {C(p),C(q)\vdash C(\mathsf{and}(p,q))}[B48CoincidenceAnd]
+ \proofstepwidestar[1]{C(p)}{\rA}
+ \proofstepwidestar[2]{C(q)}{\rA}
+ \proofstepwidestar[3]{s\equiv_{\operatorname{FV}(\mathsf{and}(p,q))}t}{\rA}
+ \proofstepwidestar[3]{s\equiv_{\operatorname{FV}(p)}t}
+  {\FormulaRefAuto{B48Agreement}[def]{3},
+   \FormulaRefAuto{B48FVClauses}[thm]}
+ \proofstepwidestar[3]{s\equiv_{\operatorname{FV}(q)}t}
+  {\FormulaRefAuto{B48Agreement}[def]{3},
+   \FormulaRefAuto{B48FVClauses}[thm]}
+ \proofstepwidestar[1,3]{(M,s\models p)\leftrightarrow(M,t\models p)}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{1,4}}
+ \proofstepwidestar[2,3]{(M,s\models q)\leftrightarrow(M,t\models q)}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{2,5}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}
+ ((M,s\models p)\land(M,s\models q))\leftrightarrow{}\\
+ ((M,t\models p)\land(M,t\models q))
+ \end{aligned}}
+  {\rLRS{6,\rLRS{7,\FormulaRefAuto{P\leftrightarrow P}[thm]}}}
+ \proofstepwidestar[1,2,3]{(M,s\models p\land q)\leftrightarrow
+                          (M,t\models p\land q)}
+  {\FormulaRefAuto{B48Satisfaction}[def]{8}}
+ \proofstepwidestar[1,2]{C(\mathsf{and}(p,q))}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{\rUI{\rRI{3,9}}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Existenzquantor]{C(p)\vdash C(\mathsf{ex}_i(p))}
+  {C(p)\vdash C(\mathsf{ex}_i(p))}[B48CoincidenceExists]
+ \proofstepwidestar[1]{C(p)}{\rA}
+ \proofstepwidestar[2]{s\equiv_{\operatorname{FV}(\mathsf{ex}_i(p))}t}{\rA}
+ \proofstepwidestar[2]{s\equiv_{\operatorname{FV}(p)\setminus\{i\}}t}
+  {\FormulaRefAuto{B48FVClauses}[thm]{2}}
+ \proofstepwidestar[4]{a\in D}{\rA}
+ \proofstepwidestar[4]{s[i\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]{4}}
+ \proofstepwidestar[4]{t[i\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]{4}}
+ \proofstepwidestar[2,4]{s[i\mapsto a]\equiv_{\operatorname{FV}(p)}
+                                  t[i\mapsto a]}
+  {\FormulaRefAuto{B48AgreementUpdate}[thm]{3,4}}
+ \proofstepwidestar[1,2,4]{\begin{aligned}
+ (M,s[i\mapsto a]\models p)\leftrightarrow
+ (M,t[i\mapsto a]\models p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{1,5,6,7}}
+ \proofstepwidestar[1,2]{\begin{aligned}
+ \forall a\in D\;((M,s[i\mapsto a]\models p)\leftrightarrow{}\\
+ (M,t[i\mapsto a]\models p))
+ \end{aligned}}
+  {\rUI{\rRI{4,8}}}
+ \proofstepwidestar[1,2]{\begin{aligned}
+ (\exists a\in D\;(M,s[i\mapsto a]\models p))\leftrightarrow{}\\
+ (\exists a\in D\;(M,t[i\mapsto a]\models p))
+ \end{aligned}}
+  {\FormulaRefAuto{B48ExistsIff}[thm]{9}}
+ \proofstepwidestar[1,2]{(M,s\models\exists v_i\,p)\leftrightarrow
+                        (M,t\models\exists v_i\,p)}
+  {\FormulaRefAuto{B48Satisfaction}[def]{10}}
+ \proofstepwidestar[1]{C(\mathsf{ex}_i(p))}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{\rUI{\rRI{2,11}}}}
+ \closeproofpartwideindR
+
+ \proofpartwide{Abschluss der Formelinduktion}
+ \proofstepwidestar[]{\{p\in\mathcal F\mid C(p)\}\subseteq\mathcal T}
+  {\FormulaRefAuto{B48FormulaInTree}[thm]}
+ \proofstepwidestar[]{\forall c\in\Sigma_{\rm at}\;
+    \mathsf l(c)\in\{p\in\mathcal F\mid C(p)\}}
+  {\FormulaRefAuto{B48CoincidenceAtoms}[thm],
+   \FormulaRefAuto{B48FormulaAtom}[thm]}
+ \proofstepwidestar[]{\forall p\in\mathcal F\;
+     (C(p)\to C(\mathsf{neg}(p)))}
+  {\FormulaRefAuto{B48CoincidenceNeg}[thm]}
+ \proofstepwidestar[]{\forall p,q\in\mathcal F\;
+     (C(p)\land C(q)\to C(\mathsf{and}(p,q)))}
+  {\FormulaRefAuto{B48CoincidenceAnd}[thm]}
+ \proofstepwidestar[]{\forall i\in\mathbb N\,\forall p\in\mathcal F\;
+     (C(p)\to C(\mathsf{ex}_i(p)))}
+  {\FormulaRefAuto{B48CoincidenceExists}[thm]}
+ \proofstepwidestar[]{\mathsf{Cl}(\{p\in\mathcal F\mid C(p)\})}
+  {\FormulaRefAuto{B48FormulaClosure}[def]{1,2,3,4,5},
+   \FormulaRefAuto{B48FormulaNeg}[thm],
+   \FormulaRefAuto{B48FormulaAnd}[thm],
+   \FormulaRefAuto{B48FormulaExists}[thm]}
+ \proofstepwidestar[]{\forall p\in\mathcal F\;C(p)}
+  {\FormulaRefAuto{B48FormulaInduction}[thm]{6}}
+ \proofstepwidestar[8]{s\equiv_{\operatorname{FV}(p)}t}{\rA}
+ \proofstepwidestar[8]{(M,s\models p)\leftrightarrow(M,t\models p)}
+  {\FormulaRefAuto{B48CoincidenceProperty}[def]{7,8}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+Die Induktionsbehauptung quantifiziert ueber \emph{alle} Belegungen.
+Daher darf sie im Quantorenschritt auf die beiden geaenderten
+Belegungen angewendet werden.
+
+\FormulaThmDeltaK[Eine nicht freie Variable darf neu belegt werden]
+{i\notin\operatorname{FV}(p)\ \vdash\
+ ((M,s\models p)\leftrightarrow(M,s[i\mapsto a]\models p))}
+{B48FreshUpdate}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Formel, Index und Wert}{p\in\mathcal F,\quad i\in\mathbb N,\quad a\in D}
+}
+\begin{tabproof}
+ \proofstep{1}{i\notin\operatorname{FV}(p)}{\rA}
+ \proofstep{2}{j\in\operatorname{FV}(p)}{\rA}
+ \proofstep{3}{j=i}{\rA}
+ \proofstep{2,3}{i\in\operatorname{FV}(p)}{\rIE{3,2}}
+ \proofstep{1,2,3}{\bot}{\rBI{4,1}}
+ \proofstep{1,2}{j\neq i}{\rCI{3,5}}
+ \proofstep{1,2}{s[i\mapsto a](j)=s(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{6}}
+ \proofstep{1,2}{s(j)=s[i\mapsto a](j)}
+  {\FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+ \proofstep{1}{s\equiv_{\operatorname{FV}(p)}s[i\mapsto a]}
+  {\FormulaRefAuto{B48Agreement}[def]{\rUI{\rRI{2,8}}}}
+ \proofstep{}{s[i\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]}
+ \proofstep{1}{(M,s\models p)\leftrightarrow
+              (M,s[i\mapsto a]\models p)}
+  {\FormulaRefAuto{B48Coincidence}[thm]{9,10}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Saetze sind unabhaengig von der Belegung]
+{\operatorname{FV}(p)=\varnothing\ \vdash\
+ ((M,s\models p)\leftrightarrow(M,t\models p))}
+{B48SentenceCoincidence}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Formel und Belegungen}{p\in\mathcal F,\quad s,t\in A_D}
+}
+\begin{tabproof}
+ \proofstep{1}{\operatorname{FV}(p)=\varnothing}{\rA}
+ \proofstep{}{s\equiv_\varnothing t}{\FormulaRefAuto{B48Agreement}[def]}
+ \proofstep{1}{s\equiv_{\operatorname{FV}(p)}t}{\rIE{1,2}}
+ \proofstep{1}{(M,s\models p)\leftrightarrow(M,t\models p)}
+  {\FormulaRefAuto{B48Coincidence}[thm]{3}}
+\end{tabproof}
+

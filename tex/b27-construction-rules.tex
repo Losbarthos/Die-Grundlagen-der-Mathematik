@@ -1,0 +1,247 @@
+% Definierte Konstruktionsnotation auf Grundlage der Blattwortabbildung.
+% Einbindung nach TreeLeafWordEquations und vor den Klammerungsmengen.
+
+\subsection{Ein Baum klammert ein Wort}
+
+Die Schreibweise \(\TreeBrackets{A}{T}{w}\) wird als
+\glqq\(T\) klammert \(w\)\grqq\ gelesen. Sie bezeichnet die Zugehörigkeit
+zum bereits konstruierten Funktionsgraphen des Blattwortes. Die folgenden
+Sätze stellen dessen Typisierung und Konstruktionsgesetze für kurze
+formale Ableitungen bereit.
+
+\FormulaDefDeltaK[Ein Baum klammert ein Wort]{%
+  \TreeBrackets{A}{T}{w}\coloneqq
+    (T,w)\in\operatorname{wort}_A%
+}{TreeBracketingRelationDef}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep w}
+  \DeltaRow{Funktionen}{\operatorname{wort}_A}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Klammerungsrelation}{\TreeBrackets{A}{T}{w}}
+}
+
+\FormulaThmDeltaK[Baumtypisierung der Klammerungsrelation]{%
+  \TreeBrackets{A}{T}{w}\vdash T\in\BracketTreeSet{A}%
+}{TreeBracketingRelationTreeTyping}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep w}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\TreeBrackets{A}{T}{w}}{\rA}
+  \proofstepwidestar[1]{(T,w)\in\operatorname{wort}_A}{%
+    \FormulaRefAuto{TreeBracketingRelationDef}[def]{1}}
+  \proofstepwidestar[]{%
+    \operatorname{wort}_A\colon
+      \BracketTreeSet{A}\to\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeLeafWordTyping}[thm]}
+  \proofstepwidestar[1]{T\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep (x,y)\in F\vdash
+      x\in A}[thm]{3,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Worttypisierung der Klammerungsrelation]{%
+  \TreeBrackets{A}{T}{w}\vdash w\in\NonemptyWords{A}%
+}{TreeBracketingRelationWordTyping}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep w}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\TreeBrackets{A}{T}{w}}{\rA}
+  \proofstepwidestar[1]{(T,w)\in\operatorname{wort}_A}{%
+    \FormulaRefAuto{TreeBracketingRelationDef}[def]{1}}
+  \proofstepwidestar[]{%
+    \operatorname{wort}_A\colon
+      \BracketTreeSet{A}\to\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeLeafWordTyping}[thm]}
+  \proofstepwidestar[1]{w\in\NonemptyWords{A}}{%
+    \FormulaRefAuto{F\colon A\to B\dsep (x,y)\in F\vdash
+      y\in B}[thm]{3,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Auswertung der Klammerungsrelation]{%
+  \TreeBrackets{A}{T}{w}\vdash\TreeLeafWord{A}{T}=w%
+}{TreeBracketingRelationElimination}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep w}
+  \DeltaRow{Funktionen}{\operatorname{wort}_A}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\TreeBrackets{A}{T}{w}}{\rA}
+  \proofstepwidestar[1]{(T,w)\in\operatorname{wort}_A}{%
+    \FormulaRefAuto{TreeBracketingRelationDef}[def]{1}}
+  \proofstepwidestar[]{%
+    \operatorname{wort}_A\colon
+      \BracketTreeSet{A}\to\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeLeafWordTyping}[thm]}
+  \proofstepwidestar[1]{\TreeLeafWord{A}{T}=w}{%
+    \FormulaRefAuto{F\colon A\to B\dsep (x,y)\in F\vdash
+      F(x)=y}[thm]{3,2}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Einführung der Klammerungsrelation]{%
+  T\in\BracketTreeSet{A}\dsep\TreeLeafWord{A}{T}=w\vdash
+    \TreeBrackets{A}{T}{w}%
+}{TreeBracketingRelationIntroduction}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep w}
+  \DeltaRow{Funktionen}{\operatorname{wort}_A}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\in\BracketTreeSet{A}}{\rA}
+  \proofstepwidestar[2]{\TreeLeafWord{A}{T}=w}{\rA}
+  \proofstepwidestar[]{%
+    \operatorname{wort}_A\colon
+      \BracketTreeSet{A}\to\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeLeafWordTyping}[thm]}
+  \proofstepwidestar[1,2]{(T,w)\in\operatorname{wort}_A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\dsep
+      F(x)=y\vdash (x,y)\in F}[thm]{3,1,2}}
+  \proofstepwidestar[1,2]{\TreeBrackets{A}{T}{w}}{%
+    \FormulaRefAuto{TreeBracketingRelationDef}[def]{4}}
+\end{tabproofwide}
+
+\subsection{Blattregel und Knotenregel}
+
+Ein Blatt klammert das zugehörige Buchstabenwort. Ein Knoten klammert
+die Konkatenation der Wörter seiner beiden Teilbäume. Die Regeln
+enthalten damit zugleich die benötigten Aussagen über den Baum und
+sein Blattwort.
+
+\FormulaThmDeltaK[Blattregel der Klammerungsrelation]{%
+  a\in A\vdash
+    \TreeBrackets{A}{\LeafTree{A}{a}}{\LetterWord{a}}%
+}{TreeBracketingLeafIntroduction}{%
+  \DeltaRow{Mengen}{A\dsep a}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in A}{\rA}
+  \proofstepwidestar[1]{\LeafTree{A}{a}\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeLeafClosure}[thm]{1}}
+  \proofstepwidestar[1]{%
+    \TreeLeafWord{A}{\LeafTree{A}{a}}=\LetterWord{a}}{%
+    \FormulaRefAuto{TreeLeafWordLeafEquation}[thm]{1}}
+  \proofstepwidestar[1]{%
+    \TreeBrackets{A}{\LeafTree{A}{a}}{\LetterWord{a}}}{%
+    \FormulaRefAuto{TreeBracketingRelationIntroduction}[thm]{2,3}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Knotenregel der Klammerungsrelation]{%
+  \begin{aligned}[t]
+    &\TreeBrackets{A}{S}{u}\dsep\TreeBrackets{A}{T}{v}\vdash{}\\[-2pt]
+    &\TreeBrackets{A}{\NodeTree{A}{S}{T}}{\WordConcat{u}{v}}
+  \end{aligned}%
+}{TreeBracketingNodeIntroduction}{%
+  \DeltaRow{Mengen}{A\dsep S\dsep T\dsep u\dsep v}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\TreeBrackets{A}{S}{u}}{\rA}
+  \proofstepwidestar[2]{\TreeBrackets{A}{T}{v}}{\rA}
+  \proofstepwidestar[1]{S\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeBracketingRelationTreeTyping}[thm]{1}}
+  \proofstepwidestar[2]{T\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeBracketingRelationTreeTyping}[thm]{2}}
+  \proofstepwidestar[1]{u\in\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeBracketingRelationWordTyping}[thm]{1}}
+  \proofstepwidestar[2]{v\in\NonemptyWords{A}}{%
+    \FormulaRefAuto{TreeBracketingRelationWordTyping}[thm]{2}}
+  \proofstepwidestar[1]{u\in\FiniteWords{A}}{%
+    \FormulaRefAuto{NonemptyWordFinite}[thm]{5}}
+  \proofstepwidestar[2]{v\in\FiniteWords{A}}{%
+    \FormulaRefAuto{NonemptyWordFinite}[thm]{6}}
+  \proofstepwidestar[1]{\TreeLeafWord{A}{S}=u}{%
+    \FormulaRefAuto{TreeBracketingRelationElimination}[thm]{1}}
+  \proofstepwidestar[2]{\TreeLeafWord{A}{T}=v}{%
+    \FormulaRefAuto{TreeBracketingRelationElimination}[thm]{2}}
+  \proofstepwidestar[1,2]{S,T\in\BracketTreeSet{A}}{\rAI{3,4}}
+  \proofstepwidestar[1,2]{%
+    \NodeTree{A}{S}{T}\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeNodeClosure}[thm]{11}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\TreeLeafWord{A}{\NodeTree{A}{S}{T}}\\[-2pt]
+      &\quad=\WordConcat{\TreeLeafWord{A}{S}}{\TreeLeafWord{A}{T}}
+    \end{aligned}}{%
+    \FormulaRefAuto{TreeLeafWordNodeEquation}[thm]{11}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\TreeLeafWord{A}{\NodeTree{A}{S}{T}}\\[-2pt]
+      &\quad=\WordConcat{u}{\TreeLeafWord{A}{T}}
+    \end{aligned}}{\rIE{9,13}}
+  \proofstepwidestar[1,2]{%
+    \TreeLeafWord{A}{\NodeTree{A}{S}{T}}=\WordConcat{u}{v}}{%
+    \rIE{10,14}}
+  \proofstepwidestar[1,2]{%
+    \TreeBrackets{A}{\NodeTree{A}{S}{T}}{\WordConcat{u}{v}}}{%
+    \FormulaRefAuto{TreeBracketingRelationIntroduction}[thm]{12,15}}
+\end{tabproofwide}
+
+\subsection{Ein Blatt rechts anfügen}
+
+Der folgende Operator bildet einen neuen Knoten mit dem bisherigen Baum
+als linkem Teilbaum und einem neuen Blatt als rechtem Teilbaum. In der
+Anfügeregel werden Baum und Wort dadurch in derselben Richtung erweitert.
+
+\FormulaDefDeltaK[Rechtsanfügen eines Blattes]{%
+  \begin{aligned}[t]
+    &T\in\BracketTreeSet{A}\dsep a\in A\vdash{}\\[-2pt]
+    &\TreeAppendLeaf{A}{T}{a}\coloneqq
+      \NodeTree{A}{T}{\LeafTree{A}{a}}
+  \end{aligned}%
+}{TreeAppendLeafDef}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep a}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Blattanfügung}{\TreeAppendLeaf{A}{T}{a}}
+}
+
+\FormulaThmDeltaK[Die Blattanfügung ist ein Klammerungsbaum]{%
+  T\in\BracketTreeSet{A}\dsep a\in A\vdash
+    \TreeAppendLeaf{A}{T}{a}\in\BracketTreeSet{A}%
+}{TreeAppendLeafTyping}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep a}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{T\in\BracketTreeSet{A}}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[2]{\LeafTree{A}{a}\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeLeafClosure}[thm]{2}}
+  \proofstepwidestar[1,2]{T,\LeafTree{A}{a}\in\BracketTreeSet{A}}{%
+    \rAI{1,3}}
+  \proofstepwidestar[1,2]{%
+    \NodeTree{A}{T}{\LeafTree{A}{a}}\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeNodeClosure}[thm]{4}}
+  \proofstepwidestar[1,2]{%
+    \TreeAppendLeaf{A}{T}{a}=\NodeTree{A}{T}{\LeafTree{A}{a}}}{%
+    \FormulaRefAuto{TreeAppendLeafDef}[def]{1,2}}
+  \proofstepwidestar[1,2]{%
+    \NodeTree{A}{T}{\LeafTree{A}{a}}=\TreeAppendLeaf{A}{T}{a}}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{6}}
+  \proofstepwidestar[1,2]{%
+    \TreeAppendLeaf{A}{T}{a}\in\BracketTreeSet{A}}{\rIE{7,5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Anfügeregel der Klammerungsrelation]{%
+  \begin{aligned}[t]
+    &\TreeBrackets{A}{T}{u}\dsep a\in A\vdash{}\\[-2pt]
+    &\TreeBrackets{A}{\TreeAppendLeaf{A}{T}{a}}
+      {\WordConcat{u}{\LetterWord{a}}}
+  \end{aligned}%
+}{TreeBracketingAppendLeafIntroduction}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep u\dsep a}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\TreeBrackets{A}{T}{u}}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{T\in\BracketTreeSet{A}}{%
+    \FormulaRefAuto{TreeBracketingRelationTreeTyping}[thm]{1}}
+  \proofstepwidestar[2]{%
+    \TreeBrackets{A}{\LeafTree{A}{a}}{\LetterWord{a}}}{%
+    \FormulaRefAuto{TreeBracketingLeafIntroduction}[thm]{2}}
+  \proofstepwidestar[1,2]{%
+    \TreeBrackets{A}{\NodeTree{A}{T}{\LeafTree{A}{a}}}
+      {\WordConcat{u}{\LetterWord{a}}}}{%
+    \FormulaRefAuto{TreeBracketingNodeIntroduction}[thm]{1,4}}
+  \proofstepwidestar[1,2]{%
+    \TreeAppendLeaf{A}{T}{a}=\NodeTree{A}{T}{\LeafTree{A}{a}}}{%
+    \FormulaRefAuto{TreeAppendLeafDef}[def]{3,2}}
+  \proofstepwidestar[1,2]{%
+    \NodeTree{A}{T}{\LeafTree{A}{a}}=\TreeAppendLeaf{A}{T}{a}}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{6}}
+  \proofstepwidestar[1,2]{%
+    \TreeBrackets{A}{\TreeAppendLeaf{A}{T}{a}}
+      {\WordConcat{u}{\LetterWord{a}}}}{\rIE{7,5}}
+\end{tabproofwide}

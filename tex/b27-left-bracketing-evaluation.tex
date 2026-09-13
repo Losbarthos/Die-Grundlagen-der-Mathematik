@@ -1,0 +1,200 @@
+% Einbindung nach TreeEvaluationEquations.
+
+\subsection{Auswertung des Linksbaums}
+
+Beim Rechtsanfügen eines Blattes wird der bisherige Wert mit dessen
+Buchstaben verknüpft. Deshalb stimmt die Auswertung des Linksbaums mit
+der bereits definierten Linksfaltung überein. Die Aussage setzt nur
+einen binären Operator voraus.
+
+\FormulaThmDeltaK[Auswertung einer Blattanfügung]{%
+  \begin{aligned}[t]
+    &\mathsf{BinOp}(A,\star)\dsep T\in\BracketTreeSet A\dsep a\in A
+      \vdash{}\\[-2pt]
+    &\TreeEvaluation\star{\TreeAppendLeaf A T a}
+      =\TreeEvaluation\star T\star a
+  \end{aligned}
+}{TreeAppendLeafEvaluation}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep a}
+  \DeltaRow{Funktionen}{\star\dsep\operatorname{ev}_\star}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+  \proofstepwidestar[2]{T\in\BracketTreeSet A}{\rA}
+  \proofstepwidestar[3]{a\in A}{\rA}
+  \proofstepwidestar[1]{\operatorname{ev}_\star\colon\BracketTreeSet A\to A}{%
+    \FormulaRefAuto{TreeEvaluationTyping}[thm]{1}}
+  \proofstepwidestar[1,2]{\TreeEvaluation\star T\in A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,2}}
+  \proofstepwidestar[3]{\LeafTree A a\in\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeLeafClosure}[thm]{3}}
+  \proofstepwidestar[2,3]{T,\LeafTree A a\in\BracketTreeSet A}{\rAI{2,6}}
+  \proofstepwidestar[1,2,3]{%
+    \TreeEvaluation\star{\NodeTree A T{\LeafTree A a}}
+      =\TreeEvaluation\star T\star\TreeEvaluation\star{\LeafTree A a}}{%
+    \FormulaRefAuto{TreeEvaluationNodeEquation}[thm]{1,7}}
+  \proofstepwidestar[1,3]{\TreeEvaluation\star{\LeafTree A a}=a}{%
+    \FormulaRefAuto{TreeEvaluationLeafEquation}[thm]{1,3}}
+  \proofstepwidestar[1,2,3]{%
+    \TreeEvaluation\star{\NodeTree A T{\LeafTree A a}}
+      =\TreeEvaluation\star T\star a}{\rIE{9,8}}
+  \proofstepwidestar[2,3]{%
+    \TreeAppendLeaf A T a=\NodeTree A T{\LeafTree A a}}{%
+    \FormulaRefAuto{TreeAppendLeafDef}[def]{2,3}}
+  \proofstepwidestar[2,3]{%
+    \NodeTree A T{\LeafTree A a}=\TreeAppendLeaf A T a}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{11}}
+  \proofstepwidestar[1,2,3]{%
+    \TreeEvaluation\star{\TreeAppendLeaf A T a}
+      =\TreeEvaluation\star T\star a}{\rIE{12,10}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Auswertung des Linksbaums ist die Linksfaltung]{%
+  \mathsf{BinOp}(A,\star)\dsep w\in\NonemptyWords A\vdash
+    \TreeEvaluation\star{\LeftBracketing A w}=\WordFold\star w
+}{LeftBracketingEvaluation}{%
+  \DeltaRow{Mengen}{A\dsep w\dsep u\dsep a}
+  \DeltaRow{Funktionen}{\star\dsep\operatorname{ev}_\star\dsep
+    \Pi_\star\dsep\LeftBracketingMap A}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Blatt und Buchstabenwort haben denselben Wert]{%
+    \mathsf{BinOp}(A,\star)\vdash
+      \forall a\in A\,
+        \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}
+          =\WordFold\star{\LetterWord a}
+  }{%
+    \mathsf{BinOp}(A,\star)\vdash
+      \forall a\in A\,
+        \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}
+          =\WordFold\star{\LetterWord a}
+  }[LeftBracketingEvaluationBase]
+    \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+    \proofstepwidestar[2]{a\in A}{\rA}
+    \proofstepwidestar[2]{\LetterWord a\in\NonemptyWords A}{%
+      \FormulaRefAuto{LetterWordNonempty}[thm]{2}}
+    \proofstepwidestar[2]{%
+      \LeftBracketing A{\LetterWord a}\in\BracketTreeSet A}{%
+      \FormulaRefAuto{LeftBracketingValueTyping}[thm]{3}}
+    \proofstepwidestar[2]{\LeftBracketing A{\LetterWord a}=\LeafTree A a}{%
+      \FormulaRefAuto{LeftBracketingLetterEquation}[thm]{2}}
+    \proofstepwidestar[2]{\LeafTree A a=\LeftBracketing A{\LetterWord a}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{5}}
+    \proofstepwidestar[1,2]{\TreeEvaluation\star{\LeafTree A a}=a}{%
+      \FormulaRefAuto{TreeEvaluationLeafEquation}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}=a}{\rIE{6,7}}
+    \proofstepwidestar[1,2]{\WordFold\star{\LetterWord a}=a}{%
+      \FormulaRefAuto{LeftWordFoldLetter}[thm]{1,2}}
+    \proofstepwidestar[1,2]{a=\WordFold\star{\LetterWord a}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{9}}
+    \proofstepwidestar[1,2]{%
+      \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}
+        =\WordFold\star{\LetterWord a}}{\rChain{8,10}}
+    \proofstepwidestar[1]{%
+      \forall a\in A\,
+        \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}
+          =\WordFold\star{\LetterWord a}}{\rUI{\rRI{2,11}}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Denselben Buchstaben verknüpfen]{%
+    \begin{aligned}[t]
+      &\mathsf{BinOp}(A,\star)\vdash{}\\[-2pt]
+      &\forall u\in\NonemptyWords A\,\forall a\in A\,\Bigl(\\[-2pt]
+      &\quad\TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u
+        \rightarrow{}\\[-2pt]
+      &\quad\TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+        =\WordFold\star{\WordConcat u{\LetterWord a}}\Bigr)
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\mathsf{BinOp}(A,\star)\vdash{}\\[-2pt]
+      &\forall u\in\NonemptyWords A\,\forall a\in A\,\Bigl(\\[-2pt]
+      &\quad\TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u
+        \rightarrow{}\\[-2pt]
+      &\quad\TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+        =\WordFold\star{\WordConcat u{\LetterWord a}}\Bigr)
+    \end{aligned}
+  }[LeftBracketingEvaluationStep]
+    \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+    \proofstepwidestar[2]{u\in\NonemptyWords A}{\rA}
+    \proofstepwidestar[3]{a\in A}{\rA}
+    \proofstepwidestar[4]{%
+      \TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u}{\rA}
+    \proofstepwidestar[2]{\LeftBracketing A u\in\BracketTreeSet A}{%
+      \FormulaRefAuto{LeftBracketingValueTyping}[thm]{2}}
+    \proofstepwidestar[1]{\Pi_\star\colon\NonemptyWords A\to A}{%
+      \FormulaRefAuto{LeftWordFoldFunction}[thm]{1}}
+    \proofstepwidestar[1,2]{\WordFold\star u\in A}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{6,2}}
+    \proofstepwidestar[1,2,3]{%
+      \TreeEvaluation\star{\TreeAppendLeaf A{\LeftBracketing A u}a}
+        =\TreeEvaluation\star{\LeftBracketing A u}\star a}{%
+      \FormulaRefAuto{TreeAppendLeafEvaluation}[thm]{1,5,3}}
+    \proofstepwidestar[1,2,3,4]{%
+      \TreeEvaluation\star{\TreeAppendLeaf A{\LeftBracketing A u}a}
+        =\WordFold\star u\star a}{\rIE{4,8}}
+    \proofstepwidestar[2,3]{%
+      \LeftBracketing A{\WordConcat u{\LetterWord a}}
+        =\TreeAppendLeaf A{\LeftBracketing A u}a}{%
+      \FormulaRefAuto{LeftBracketingAppendEquation}[thm]{2,3}}
+    \proofstepwidestar[2,3]{%
+      \TreeAppendLeaf A{\LeftBracketing A u}a
+        =\LeftBracketing A{\WordConcat u{\LetterWord a}}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{10}}
+    \proofstepwidestar[1,2,3,4]{%
+      \TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+        =\WordFold\star u\star a}{\rIE{11,9}}
+    \proofstepwidestar[1,2,3]{%
+      \WordFold\star{\WordConcat u{\LetterWord a}}=\WordFold\star u\star a}{%
+      \FormulaRefAuto{LeftWordFoldStep}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{%
+      \WordFold\star u\star a=\WordFold\star{\WordConcat u{\LetterWord a}}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{13}}
+    \proofstepwidestar[1,2,3,4]{%
+      \TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+        =\WordFold\star{\WordConcat u{\LetterWord a}}}{\rChain{12,14}}
+    \proofstepwidestar[1,2,3]{%
+      \begin{aligned}[t]
+        &\TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u
+          \rightarrow{}\\[-2pt]
+        &\TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+          =\WordFold\star{\WordConcat u{\LetterWord a}}
+      \end{aligned}}{\rRI{4,15}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+        &\forall u\in\NonemptyWords A\,\forall a\in A\,\Bigl(\\[-2pt]
+        &\quad\TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u
+          \rightarrow{}\\[-2pt]
+        &\quad\TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+          =\WordFold\star{\WordConcat u{\LetterWord a}}\Bigr)
+      \end{aligned}}{\rUI{\rRI{2,\rUI{\rRI{3,16}}}}}
+  \closeproofpartwideindR
+
+  \Needspace{6\baselineskip}
+  \proofpartwide{Wortinduktion}
+    \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+    \proofstepwidestar[2]{w\in\NonemptyWords A}{\rA}
+    \proofstepwidestar[1]{%
+      \forall a\in A\,
+        \TreeEvaluation\star{\LeftBracketing A{\LetterWord a}}
+          =\WordFold\star{\LetterWord a}}{%
+      \FormulaRefAuto{LeftBracketingEvaluationBase}[thm]{1}}
+    \proofstepwidestar[1]{%
+      \begin{aligned}[t]
+        &\forall u\in\NonemptyWords A\,\forall a\in A\,\Bigl(\\[-2pt]
+        &\quad\TreeEvaluation\star{\LeftBracketing A u}=\WordFold\star u
+          \rightarrow{}\\[-2pt]
+        &\quad\TreeEvaluation\star{\LeftBracketing A{\WordConcat u{\LetterWord a}}}
+          =\WordFold\star{\WordConcat u{\LetterWord a}}\Bigr)
+      \end{aligned}}{%
+      \FormulaRefAuto{LeftBracketingEvaluationStep}[thm]{1}}
+    \proofstepwidestar[1]{%
+      \forall w\in\NonemptyWords A\,
+        \TreeEvaluation\star{\LeftBracketing A w}=\WordFold\star w}{%
+      \FormulaRefAuto{NonemptyWordInduction}[thm]{3,4}}
+    \proofstepwidestar[1,2]{%
+      \TreeEvaluation\star{\LeftBracketing A w}=\WordFold\star w}{%
+      \rRE{2,\rUE{5}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}

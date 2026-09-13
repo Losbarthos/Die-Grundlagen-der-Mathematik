@@ -113,8 +113,9 @@ Eine Menge ist induktiv, sobald sie \(\varnothing\) enth\"alt und unter
 \FormulaThmDelta{\Induktiv(A),\, \Induktiv(B)\vdash \Induktiv(A\cap B)}{
 \DeltaDecl{Mengen}{A\dsep B}
 }
-\begin{tabproof}
-  \proofstep{1}{\Induktiv(A)}{\rA}
+\begin{tabproofsplit}
+\proofpart{Nullaufnahme}
+\proofstep{1}{\Induktiv(A)}{\rA}
   \proofstep{2}{\Induktiv(B)}{\rA}
 
   % Null in A∩B
@@ -123,20 +124,32 @@ Eine Menge ist induktiv, sobald sie \(\varnothing\) enth\"alt und unter
   \proofstep{1,2}{\,\varnothing\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{3,4}}
 
   % Abschluss unter Nachfolger-Operation für A∩B
-  \proofstep{1}{\forall x\in A\,(x\cup\{x\}\in A)}{\FormulaRefAuto{InductiveSetSuccessorAxiom}[ax]{1}}
+
+\closeproofpart
+
+\proofpart{Nachfolgerabschluss}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\forall x\in A\,(x\cup\{x\}\in A)}{\FormulaRefAuto{InductiveSetSuccessorAxiom}[ax]{1}}
   \proofstep{2}{\forall x\in B\,(x\cup\{x\}\in B)}{\FormulaRefAuto{InductiveSetSuccessorAxiom}[ax]{2}}
   \proofstep{8}{x\in A\cap B}{\rA}
-  \proofstep{8}{x\in A}{\FormulaRefAuto{x\in A\cap B \vdash x\in A}{9}}
-  \proofstep{8}{x\in B}{\FormulaRefAuto{x\in A\cap B \vdash x\in B}{9}}
+  \proofstep{8}{x\in A}{\FormulaRefAuto{x\in A\cap B \vdash x\in A}{8}}
+  \proofstep{8}{x\in B}{\FormulaRefAuto{x\in A\cap B \vdash x\in B}{8}}
   \proofstep{1,8}{x\cup\{x\}\in A}{\rRE{\rUE{6},9}}
   \proofstep{2,8}{x\cup\{x\}\in B}{\rRE{\rUE{7},10}}
   \proofstep{1,2,8}{x\cup\{x\}\in A\cap B}{\FormulaRefAuto{x\in A,\, x\in B \vdash x\in A\cap B}{11,12}}
   \proofstep{1,2}{\,\forall x\in A\cap B\,(x\cup\{x\}\in A\cap B)}{\rUI{\rRI{8,13}}}
 
   % Schluss: Induktivität von A∩B
-  \proofstep{1,2}{\,\Induktiv(A\cap B)}{%
+
+\closeproofpart
+
+\proofpart{Induktivität}
+  \setcounter{proofstepnr}{14}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\,\Induktiv(A\cap B)}{%
     \FormulaRefAuto{InductiveSetDef}[def]{5,14}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \subsection{Die Nachfolger-Funktion}
 
@@ -261,7 +274,7 @@ Eine Menge ist induktiv, sobald sie \(\varnothing\) enth\"alt und unter
 
   % Schritt 2: Einzigartige Existenz des Schnitts aller induktiven Mengen
   \proofstepwide{}{}{\exists! C\; \forall B(\Induktiv(B)\rightarrow }%
-    {\multirow{2}{*}{\FormulaRefAuto{P(D)\vdash \exists! C\forall B(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \})}{1}}}
+    {\FormulaRefAuto{P(D)\vdash \exists! C\forall B(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \})}{1}}
   \proofstepwide{}{}%
     {C=\{x\in B \mid \forall A (\Induktiv(A)\rightarrow x\in A)\})}%
     {}
@@ -276,8 +289,10 @@ Eine Menge ist induktiv, sobald sie \(\varnothing\) enth\"alt und unter
 
 \FormulaThmAuto{x\in\mathbb{N}\eqvdash \forall \Induktiv(N)(x\in N)}
 \begin{tabproofwide}
-    \proofstepwide[]{x\in \mathbb{N}}{\leftrightarrow}{x\in \bigcap \{ A \mid \Induktiv(A) \}}{\FormulaRefAuto{\mathbb{N} \coloneq \bigcap \{ A \mid \Induktiv(A) \}}}
-    \proofstepwide[]{}{\leftrightarrow}{\forall \Induktiv(N)(x\in N)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{\FormulaRefAuto{\exists A(\Induktiv(A))}}}
+    \proofstepwidestar[]{x\in \mathbb{N}\leftrightarrow x\in \bigcap \{ A \mid \Induktiv(A) \}}{\FormulaRefAuto{\mathbb{N} \coloneq \bigcap \{ A \mid \Induktiv(A) \}}}
+    \proofstepwidestar[]{\exists A\,(\Induktiv(A))}{%
+      \FormulaRefAuto{\exists A(\Induktiv(A))}}
+    \proofstepwidestar[]{x\in \bigcap \{ A \mid \Induktiv(A) \}\leftrightarrow\forall \Induktiv(N)(x\in N)}{\FormulaRefAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{2}}
 \end{tabproofwide}
 
 \section{Eigenschaften der Menge der natürlichen Zahlen}
@@ -454,9 +469,8 @@ Im Folgenden werden wir einige grundlegende Eigenschaften der so konstruierten M
   \proofstep{3,4,11}{x\in n}{\rCE{12}}
 
   \proofstep{1,2,3,4}{x\in n}{\rOE{8,10,10,11,13}}
-  \proofstep{1,2,3}{\forall x\,\bigl(x\in B \rightarrow x\in n\bigr)}{\rUI{\rRI{4,14}}}
   \proofstep{1,2,3}{B\subseteq n}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{15}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 14}}
 \end{tabproof}
 
 
@@ -494,9 +508,8 @@ Im Folgenden werden wir einige grundlegende Eigenschaften der so konstruierten M
     \proofstepwidestar[12]{x\in (B\cap n)\cup\{n\}}{\FormulaRefAuto{z\in B\vdash z\in A\cup B}{12}}
 
     \proofstepwidestar[1,2,4]{x\in (B\cap n)\cup\{n\}}{\rOE{8,9,11,12,13}}
-    \proofstepwidestar[1,2,3]{\forall x\,\bigl(x\in B \rightarrow x\in (B\cap n)\cup\{n\}\bigr)}{\rUI{\rRI{4,14}}}
     \proofstepwidestar[1,2,3]{B\subseteq (B\cap n)\cup\{n\}}{%
-      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{15}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 14}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rückrichtung]{%
@@ -522,9 +535,8 @@ Im Folgenden werden wir einige grundlegende Eigenschaften der so konstruierten M
     \proofstepwidestar[3,9]{x\in B}{\rIE{9,3}}
 
     \proofstepwidestar[1,2,3,4]{x\in B}{\rOE{5,6,7,8,10}}
-    \proofstepwidestar[1,2,3]{\forall x\,\bigl(x\in (B\cap n)\cup\{n\} \rightarrow x\in B\bigr)}{\rUI{\rRI{4,11}}}
     \proofstepwidestar[1,2,3]{(B\cap n)\cup\{n\}\subseteq B}{%
-      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{12}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 11}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -898,7 +910,7 @@ Aus \FormulaRefAuto{\varnothing\in\mathbb{N}} folgt, dass die Null in den natür
 
   \proofstep{3}{x\in\mathbb{N}}{\rA}
   \proofstep{4}{P(x)}{\rA}
-  \proofstep{3,4}{P(\Succ(x))}{[x\in\mathbb{N},P(x)]\vdots P(\Succ(x))(3,4)}
+  \proofstep{3,4}{P(\Succ(x))}{\begin{aligned}[t]&[x\in\mathbb{N},P(x)]\\&\vdots P(\Succ(x))(3,4)\end{aligned}}
   \proofstep{3}{P(x)\rightarrow P(\Succ(x))}{\rRI{4,5}}
   \proofstep{}{x\in\mathbb{N}\rightarrow \bigl(P(x)\rightarrow P(\Succ(x))\bigr)}{\rRI{3,6}}
   \proofstep{}{ \forall x\in\mathbb{N}\,\bigl(P(x)\rightarrow P(\Succ(x))\bigr) }{\rUI{7}}
@@ -1325,9 +1337,11 @@ nicht vorweggenommen.
   \proofstep{1}{H\colon \mathbb{N}\to M}{\rA}
   \proofstep{}{0\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoZero}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1}{H(0)\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,2}}
+      3,1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Folgenglieder bleiben im Bild einer Funktion von \(\mathbb{N}\)]{%
@@ -1342,9 +1356,11 @@ nicht vorweggenommen.
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1,2}{H(\Succ(n))\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,3}}
+      4,1,3}}
 \end{tabproof}
 
 \subsection{Injektive Funktionen von \(\mathbb{N}\)}
@@ -1359,9 +1375,11 @@ nicht vorweggenommen.
   \proofstep{1}{H\colon \mathbb{N}\inj M}{\rA}
   \proofstep{}{0\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoZero}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1}{H(0)\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,2}}
+      3,1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Folgenglieder bleiben im Bild]{%
@@ -1376,9 +1394,11 @@ nicht vorweggenommen.
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1,2}{H(\Succ(n))\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,3}}
+      4,1,3}}
 \end{tabproof}
 
 \FormulaThmDelta[Typisierung des inversen Index]{%
@@ -1391,10 +1411,14 @@ nicht vorweggenommen.
 \begin{tabproof}
   \proofstep{1}{H\colon \mathbb{N}\inj M}{\rA}
   \proofstep{2}{x\in H[\mathbb{N}]}{\rA}
+  \proofstep{1}{H \colon \mathbb N \bij H [ \mathbb N ]}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}{1}}
+  \proofstep{1}{H ^ { - 1 } \colon H [ \mathbb N ] \to \mathbb N}{%
+      \FormulaRefAuto{InverseFunctionType}{%
+        3}}
   \proofstep{1,2}{H^{-1}(x)\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-      \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\to A}{%
-        \FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}{1}},
+      4,
       2}}
 \end{tabproof}
 
@@ -1433,9 +1457,11 @@ nicht vorweggenommen.
   \proofstep{1}{H\colon \mathbb{N}\sur M}{\rA}
   \proofstep{}{0\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoZero}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1}{H(0)\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\sur B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,2}}
+      3,1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Folgenglieder bleiben im Bild einer surjektiven Funktion von \(\mathbb{N}\)]{%
@@ -1450,9 +1476,11 @@ nicht vorweggenommen.
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1,2}{H(\Succ(n))\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\sur B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,3}}
+      4,1,3}}
 \end{tabproof}
 
 \subsection{Bijektive Funktionen von \(\mathbb{N}\)}
@@ -1467,9 +1495,11 @@ nicht vorweggenommen.
   \proofstep{1}{H\colon \mathbb{N}\bij M}{\rA}
   \proofstep{}{0\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoZero}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1}{H(0)\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\bij B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,2}}
+      3,1,2}}
 \end{tabproof}
 
 \FormulaThmDelta[Folgenglieder bleiben im Bild einer bijektiven Funktion von \(\mathbb{N}\)]{%
@@ -1484,9 +1514,11 @@ nicht vorweggenommen.
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{\Succ(n)\in\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccClosure}{2}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1,2}{H(\Succ(n))\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\bij B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,3}}
+      4,1,3}}
 \end{tabproof}
 
 \iffalse
@@ -1536,10 +1568,14 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\varnothing\subseteq\mathbb N}{%
+      \FormulaRefAuto{\varnothing \subseteq \mathbb{N}}}
+    \proofstepwidestar[]{\forall n\in\mathbb N\,\bigl((n\subseteq\mathbb N)\rightarrow(\Succ(n)\subseteq\mathbb N)\bigr)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep n\subseteq\mathbb{N}\vdash \Succ(n)\subseteq\mathbb{N}}}
     \proofstepwidestar[1]{n\subseteq\mathbb{N}}{%
       \FormulaRefAuto{PeanoInductionRule}{%
-        \FormulaRefAuto{\varnothing \subseteq \mathbb{N}},%
-        \FormulaRefAuto{n\in\mathbb{N}\dsep n\subseteq\mathbb{N}\vdash \Succ(n)\subseteq\mathbb{N}},%
+        2,%
+        3,%
         1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -1557,51 +1593,40 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 \begin{tabproofsplitwide}
   \proofpartwideind[Induktionsanfang]{\bigcup 0 \subseteq 0}
     \proofstepwidestar{\bigcup 0 = 0}{\FormulaRefAuto{\bigcup \varnothing = \varnothing}}
-    \proofstepwidestar{\bigcup 0 \subseteq 0}{\FormulaRefAuto{A=B\vdash A\subseteq B}}
+    \proofstepwidestar{\bigcup 0 \subseteq 0}{\FormulaRefAuto{A=B\vdash A\subseteq B}{1}}
   \closeproofpartwideind
 
   \proofpartwideind[Induktionsschritt]{n\in\mathbb{N}\dsep \bigcup n\subseteq n\vdash \bigcup \Succ(n)\subseteq \Succ(n)}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{\bigcup n\subseteq n}{\rA}
-    \proofstepwidestar[1]{\Succ(n)=n\cup\{n\}}{%
-      \FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n) = n\cup\{n\}}{1}}
-
-    \proofstepwidestar[3]{x\in\bigcup\Succ(n)}{\rA}
-    \proofstepwidestar[3]{\exists B\in\Succ(n)\,(x\in B)}{%
-      \FormulaRefAuto{x \in \bigcup A \eqvdash \exists B\in A\,(x \in B)}{2}}
-
-    \proofstepwidestar[4]{B\in\Succ(n)\land x\in B}{\rA}
-    \proofstepwidestar[4]{B\in\Succ(n)}{\rAEa{4}}
-    \proofstepwidestar[4]{x\in B}{\rAEb{4}}
-
-    \proofstepwidestar[1,4]{B\in n\lor B=n}{%
-      \FormulaRefAuto{n\in\mathbb{N}\dsep x\in\Succ(n)\vdash x\in n\lor x=n}{1,5}}
-
-    \proofstepwidestar[5]{B\in n}{\rA}
-    \proofstepwidestar[4,5]{x\in\bigcup n}{%
-      \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{5,8}}
-    \proofstepwidestar[2,4,5]{x\in n}{%
-      \FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{2,11}}
-    \proofstepwidestar[2,4,5]{x\in n\cup\{n\}}{%
-      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{13}}
-    \proofstepwidestar[1,2,4,5]{x\in\Succ(n)}{\rIE{3,14}}
-
-    \proofstepwidestar[6]{B=n}{\rA}
-    \proofstepwidestar[4,6]{x\in n}{\rIE{6,8}}
-    \proofstepwidestar[4,6]{x\in n\cup\{n\}}{%
-      \FormulaRefAuto{z \in A \vdash z \in A \cup B}{16}}
-    \proofstepwidestar[1,4,6]{x\in\Succ(n)}{\rIE{3,17}}
-
-    \proofstepwidestar[1,2,4]{x\in\Succ(n)}{\rOE{9,10,15,16,18}}
-    \proofstepwidestar[1,2,3]{x\in\Succ(n)}{\rEE{5,6,19}}
-
-    \proofstepwidestar[1,2]{\bigcup\Succ(n)\subseteq \Succ(n)}{%
-      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{4,20}}}}
+    \proofstepwidestar[1]{\Succ(n)=n\cup\{n\}}{\FormulaRefAuto{n\in\mathbb{N}\vdash \Succ(n) = n\cup\{n\}}{1}}
+    \proofstepwidestar[4]{x\in\bigcup\Succ(n)}{\rA}
+    \proofstepwidestar[4]{\exists B\in\Succ(n)\,(x\in B)}{\FormulaRefAuto{x \in \bigcup A \eqvdash \exists B\in A\,(x \in B)}{4}}
+    \proofstepwidestar[6]{B\in\Succ(n)\land x\in B}{\rA}
+    \proofstepwidestar[6]{B\in\Succ(n)}{\rAEa{6}}
+    \proofstepwidestar[6]{x\in B}{\rAEb{6}}
+    \proofstepwidestar[1,6]{B\in n\lor B=n}{\FormulaRefAuto{n\in\mathbb{N}\dsep x\in\Succ(n)\vdash x\in n\lor x=n}{1,7}}
+    \proofstepwidestar[10]{B\in n}{\rA}
+    \proofstepwidestar[6,10]{x\in\bigcup n}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{10,8}}
+    \proofstepwidestar[2,6,10]{x\in n}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{2,11}}
+    \proofstepwidestar[2,6,10]{x\in n\cup\{n\}}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{12}}
+    \proofstepwidestar[1,2,6,10]{x\in\Succ(n)}{\rIE{3,13}}
+    \proofstepwidestar[15]{B=n}{\rA}
+    \proofstepwidestar[6,15]{x\in n}{\rIE{15,8}}
+    \proofstepwidestar[6,15]{x\in n\cup\{n\}}{\FormulaRefAuto{z \in A \vdash z \in A \cup B}{16}}
+    \proofstepwidestar[1,6,15]{x\in\Succ(n)}{\rIE{3,17}}
+    \proofstepwidestar[1,2,6]{x\in\Succ(n)}{\rOE{9,10,14,15,18}}
+    \proofstepwidestar[1,2,4]{x\in\Succ(n)}{\rEE{5,6,19}}
+    \proofstepwidestar[1,2]{\bigcup\Succ(n)\subseteq \Succ(n)}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{4,20}}}}
   \closeproofpartwideind
  \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\bigcup\varnothing\subseteq\varnothing}{%
+      \FormulaRefAuto{\bigcup \varnothing \subseteq \varnothing}}
+    \proofstepwidestar[]{\forall n\in\mathbb N\,\bigl((\bigcup n\subseteq n)\rightarrow(\bigcup\Succ(n)\subseteq\Succ(n))\bigr)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep \bigcup n\subseteq n\vdash \bigcup \Succ(n)\subseteq \Succ(n)}}
     \proofstepwidestar[1]{\bigcup n\subseteq n}{%
-      \FormulaRefAuto{PeanoInductionRule}{\FormulaRefAuto{\bigcup \varnothing \subseteq \varnothing},\FormulaRefAuto{n\in\mathbb{N}\dsep \bigcup n\subseteq n\vdash \bigcup \Succ(n)\subseteq \Succ(n)},1}
+      \FormulaRefAuto{PeanoInductionRule}{2,3,1}
     }
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -1655,7 +1680,7 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
     \proofstepwidestar[11,20]{y\in n}{\rIE{21,13}}
 
     \proofstepwidestar[1,11]{y\in n}{\rOE{15,16,19,20,22}}
-    \proofstepwidestar[1,9]{y\in n}{\rEE{10,11,24}}
+    \proofstepwidestar[1,9]{y\in n}{\rEE{10,11,23}}
 
     \proofstepwidestar[1]{\bigcup\Succ(n)\subseteq n}{%
       \FormulaRefAuto{A \subseteq B \coloneq \forall y\,(y \in A \rightarrow y \in B)}{\rUI{\rRI{9,24}}}}
@@ -1868,17 +1893,19 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
   \proofstep{1}{\Pred(n)\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{7,1}}
 
+  \proofstep{}{\Succ \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{\Succ\colon \mathbb{N}\to\mathbb{N}}}
   \proofstep{1,4,5}{\Succ(y)=\Succ(\Pred(n))}{%
     \FormulaRefAuto{%
       F\colon A\to B\dsep x\in A\dsep y\in A\dsep x=y
       \vdash F(x)=F(y)%
-    }{\FormulaRefAuto{\Succ\colon \mathbb{N}\to\mathbb{N}},4,12,11}}
+    }{13,4,12,11}}
 
   \proofstep{1,4,5}{n=\Succ(\Pred(n))}{%
-    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{5,13}}
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{5,14}}
 
   \proofstep{1,2}{n=\Succ(\Pred(n))}{%
-    \rEE{3,4,5,14}}
+    \rEE{3,4,5,15}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -1899,14 +1926,16 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 
   \proofstep{1,3}{n\in\mathbb{N}}{\rIE{3,5}}
 
+  \proofstep{}{\Succ \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{\Succ\colon \mathbb{N}\to\mathbb{N}}}
   \proofstep{1,3}{\Succ(\Pred(k))=\Succ(n)}{%
     \FormulaRefAuto{%
       F\colon A\to B\dsep x\in A\dsep y\in A\dsep x=y
       \vdash F(x)=F(y)%
-    }{\FormulaRefAuto{\Succ\colon \mathbb{N}\to\mathbb{N}},5,6,3}}
+    }{7,5,6,3}}
 
   \proofstep{1,2,3}{k=\Succ(n)}{%
-    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{4,7}}
+    \FormulaRefAuto{a=b,\,b=c\vdash a=c}{4,8}}
 \end{tabproof}
 
 \subsection{Keine Selbstmitgliedschaft in den natürlichen Zahlen}
@@ -1964,10 +1993,14 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 
   \proofpartwide{Anwendung des Induktionsprinzips}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\varnothing\notin\varnothing}{%
+      \FormulaRefAuto{\varnothing \notin \varnothing}}
+    \proofstepwidestar[]{\forall n\in\mathbb N\,\bigl((n\notin n)\rightarrow(\Succ(n)\notin\Succ(n))\bigr)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep n\notin n\vdash \Succ(n)\notin\Succ(n)}}
     \proofstepwidestar[1]{n\notin n}{%
       \FormulaRefAuto{PeanoInductionRule}{%
-        \FormulaRefAuto{\varnothing \notin \varnothing},%
-        \FormulaRefAuto{n\in\mathbb{N}\dsep n\notin n\vdash \Succ(n)\notin\Succ(n)},%
+        2,%
+        3,%
         1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -2014,10 +2047,14 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\varnothing=\varnothing\lor\varnothing\in\varnothing}{%
+      \FormulaRefAuto{\varnothing = \varnothing \lor \varnothing \in \varnothing}}
+    \proofstepwidestar[]{\forall n\in\mathbb N\,\bigl((\varnothing=n\lor\varnothing\in n)\rightarrow(\varnothing=\Succ(n)\lor\varnothing\in\Succ(n))\bigr)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep \varnothing = n \lor \varnothing \in n \vdash \varnothing = \Succ(n) \lor \varnothing \in \Succ(n)}}
     \proofstepwidestar[1]{0 = n \lor 0 \in n}{%
       \FormulaRefAuto{PeanoInductionRule}{%
-        \FormulaRefAuto{\varnothing = \varnothing \lor \varnothing \in \varnothing},%
-        \FormulaRefAuto{n\in\mathbb{N}\dsep \varnothing = n \lor \varnothing \in n \vdash \varnothing = \Succ(n) \lor \varnothing \in \Succ(n)},%
+        2,%
+        3,%
         1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -2114,10 +2151,12 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
   \proofstep{5}{\Succ(m)=n}{\rA}
   \proofstep{5}{\Succ(m)\subseteq n}{\FormulaRefAuto{A=B\vdash A\subseteq B}{5}}
   \proofstep{7}{\Succ(m)\in n}{\rA}
+  \proofstep{1}{\Succ ( m ) \in \mathbb N}{%
+      \FormulaRefAuto{m\in\mathbb{N}\vdash \Succ(m)\in\mathbb{N}}{1}}
   \proofstep{1,2,7}{\Succ(m)\subseteq n}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subseteq n}{%
-      \FormulaRefAuto{m\in\mathbb{N}\vdash \Succ(m)\in\mathbb{N}}{1},2,7}}
-  \proofstep{1,2,3}{\Succ(m)\subseteq n}{\rOE{4,5,6,7,8}}
+      8,2,7}}
+  \proofstep{1,2,3}{\Succ(m)\subseteq n}{\rOE{4,5,6,7,9}}
 \end{tabproof}
 
 
@@ -2408,8 +2447,9 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
 }{%
   \DeltaDecl{Mengen}{m\dsep n}%
 }
-\begin{tabproof}
-  \proofstep{1}{m\in\mathbb{N}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
 
   \proofstep{3}{m\in n}{\rA}
@@ -2417,13 +2457,25 @@ Null ist historisch und gehört nicht zur aktiven Definition von \(\Pred\).
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\in n \vdash m\subset n}{1,2,3}}
   \proofstep{1,2}{m\in n \rightarrow m\subset n}{\rRI{3,4}}
 
-  \proofstep{6}{m\subset n}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{m\subset n}{\rA}
   \proofstep{1,2,6}{m\in n}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\subset n \vdash m\in n}{1,2,6}}
   \proofstep{1,2}{m\subset n \rightarrow m\in n}{\rRI{6,7}}
 
-  \proofstep{1,2}{m\in n \leftrightarrow m\subset n}{\rLRI{5,8}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{m\in n \leftrightarrow m\subset n}{\rLRI{5,8}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \section{Von-Neumann-Vergleich der natürlichen Zahlen}
@@ -2634,8 +2686,9 @@ kann.
   \DeltaRow{Mengen}{x\dsep n}%
   \DeltaRow{Relationsoperatoren}{\leq_{\mathbb{N}}\dsep <_{\mathbb{N}}}%
 }
-\begin{tabproof}
-  \proofstep{1}{x\in\mathbb{N}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{x\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
 
   \proofstep{3}{x\in\Succ(n)}{\rA}
@@ -2653,7 +2706,12 @@ kann.
   \proofstep{1,2,3}{x\leq n}{\rOE{4,5,7,8,10}}
   \proofstep{1,2}{x\in\Succ(n)\rightarrow x\leq n}{\rRI{3,11}}
 
-  \proofstep{13}{x\leq n}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstep{13}{x\leq n}{\rA}
   \proofstep{1,2,13}{x\subseteq n}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n \leftrightarrow m\subseteq n}{1,2,13}}
   \proofstep{1,2,13}{x\in n\lor x=n}{%
@@ -2671,8 +2729,15 @@ kann.
   \proofstep{1,2,13}{x\in\Succ(n)}{\rOE{15,17,18,19,21}}
   \proofstep{1,2}{x\leq n\rightarrow x\in\Succ(n)}{\rRI{13,22}}
 
-  \proofstep{1,2}{x\in\Succ(n)\leftrightarrow x\leq n}{\rLRI{12,23}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{23}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{x\in\Succ(n)\leftrightarrow x\leq n}{\rLRI{12,23}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDelta[Natürliche Ordnung schliesst spätere Mitgliedschaft aus]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\leq n\vdash n\notin m%
@@ -4288,10 +4353,14 @@ Fallterm eingeführt; ein separates Vorschriftssymbol ist nicht erforderlich.
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
+    \proofstepwidestar[]{\neg\exists F\colon\mathbb N\inj\varnothing}{%
+      \FormulaRefAuto{\neg\exists F\colon \mathbb{N}\inj \varnothing}}
+    \proofstepwidestar[]{\forall n\in\mathbb N\,\bigl((\neg\exists F\colon\mathbb N\inj n)\rightarrow(\neg\exists F\colon\mathbb N\inj\Succ(n))\bigr)}{%
+      \FormulaRefAuto{n\in\mathbb{N}\dsep \neg\exists F\colon \mathbb{N}\inj n\vdash \neg\exists F\colon \mathbb{N}\inj \Succ(n)}}
     \proofstepwidestar[1]{\neg\exists F\colon \mathbb{N}\inj n}{%
       \FormulaRefAuto{P(0)\dsep [x\in\mathbb{N},P(x)]\vdots P(\Succ(x))\dsep n\in\mathbb{N}\vdash P(n)}{%
-        \FormulaRefAuto{\neg\exists F\colon \mathbb{N}\inj \varnothing},%
-        \FormulaRefAuto{n\in\mathbb{N}\dsep \neg\exists F\colon \mathbb{N}\inj n\vdash \neg\exists F\colon \mathbb{N}\inj \Succ(n)},%
+        2,%
+        3,%
         1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
@@ -4337,15 +4406,21 @@ Fallterm eingeführt; ein separates Vorschriftssymbol ist nicht erforderlich.
 }{PeanoUniquePredecessor}{%
   \DeltaRow{Mengen}{n\dsep y\dsep z}%
 }
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb{N}\setminus\{0\}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{n\in\mathbb{N}\setminus\{0\}}{\rA}
   \proofstep{1}{n\in\mathbb{N}\land n\neq0}{%
     \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}
   \proofstep{1}{n\in\mathbb{N}}{\rAEa{2}}
   \proofstep{1}{n\neq0}{\rAEb{2}}
   \proofstep{1}{\exists y\in\mathbb{N}\,\bigl(n=\Succ(y)\bigr)}{%
     \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{3,4}}
-  \proofstep{6}{y\in\mathbb{N}}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{y\in\mathbb{N}}{\rA}
   \proofstep{7}{z\in\mathbb{N}}{\rA}
   \proofstep{8}{n=\Succ(y)}{\rA}
   \proofstep{9}{n=\Succ(z)}{\rA}
@@ -4353,9 +4428,16 @@ Fallterm eingeführt; ein separates Vorschriftssymbol ist nicht erforderlich.
     \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{8,9}}
   \proofstep{6,7,8,9}{y=z}{%
     \FormulaRefAuto{PeanoSuccInjective}[ax]{6,7,10}}
-  \proofstep{1}{\exists! y\in\mathbb{N}\,\bigl(n=\Succ(y)\bigr)}{%
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{11}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\exists! y\in\mathbb{N}\,\bigl(n=\Succ(y)\bigr)}{%
     \UEI{5,6,7,8,9,11}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Eindeutiger Vorgänger einer getrennt typisierten Nichtnullzahl]{%
   n\in\mathbb N\dsep n\neq0\vdash
@@ -4378,58 +4460,73 @@ Fallterm eingeführt; ein separates Vorschriftssymbol ist nicht erforderlich.
   \DeltaRow{Mengen}{n\dsep x\dsep y}%
   \DeltaRow{Funktionen}{\Succ}%
 }
-\begin{tabproofwide}
-  \proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}}{%
+\begin{tabproofsplitwide}
+\proofpartwide{Injektivität auf dem Nichtnullträger}
+\proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}}{%
     \FormulaRefAuto{PeanoSuccFunction}[ax]}
+  \proofstepwidestar[]{\forall m,n\in\mathbb N\,(\Succ(m)=\Succ(n)\rightarrow m=n)}{%
+      \FormulaRefAuto{PeanoSuccInjective}[ax]}
   \proofstepwidestar[]{\Succ\colon\mathbb{N}\inj\mathbb{N}}{%
     \FormulaRefAuto{Injektive Funktion}[def]{%
-      1,\FormulaRefAuto{PeanoSuccInjective}[ax]}}
+      1,2}}
 
-  \proofstepwidestar[3]{n\in\mathbb{N}}{\rA}
-  \proofstepwidestar[3]{\Succ(n)\in\mathbb{N}}{%
-    \FormulaRefAuto{PeanoSuccClosure}[ax]{3}}
-  \proofstepwidestar[3]{\Succ(n)\neq0}{%
-    \FormulaRefAuto{PeanoSuccNonzero}[ax]{3}}
-  \proofstepwidestar[3]{\Succ(n)\notin\{0\}}{%
-    \FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}[thm]{5}}
-  \proofstepwidestar[3]{\Succ(n)\in\mathbb{N}\setminus\{0\}}{%
+  \proofstepwidestar[4]{n\in\mathbb{N}}{\rA}
+  \proofstepwidestar[4]{\Succ(n)\in\mathbb{N}}{%
+    \FormulaRefAuto{PeanoSuccClosure}[ax]{4}}
+  \proofstepwidestar[4]{\Succ(n)\neq0}{%
+    \FormulaRefAuto{PeanoSuccNonzero}[ax]{4}}
+  \proofstepwidestar[4]{\Succ(n)\notin\{0\}}{%
+    \FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}[thm]{6}}
+  \proofstepwidestar[4]{\Succ(n)\in\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{x \in A\dsep x\notin B\vdash
-      x \in A\setminus B}[thm]{4,6}}
+      x \in A\setminus B}[thm]{5,7}}
   \proofstepwidestar[]{%
     \forall n\in\mathbb{N}\,\Succ(n)\in\mathbb{N}\setminus\{0\}}{%
-    \rUI{\rRI{3,7}}}
+    \rUI{\rRI{4,8}}}
   \proofstepwidestar[]{\Succ\colon\mathbb{N}\inj\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{F\colon A\inj B\dsep
-      \forall x\in A\,F(x)\in C\vdash F\colon A\inj C}[thm]{2,8}}
-  \proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}\setminus\{0\}}{%
-    \FormulaRefAuto{Injektive Funktion}[def]{9}}
+      \forall x\in A\,F(x)\in C\vdash F\colon A\inj C}[thm]{3,9}}
 
-  \proofstepwidestar[11]{y\in\mathbb{N}\setminus\{0\}}{\rA}
-  \proofstepwidestar[11]{y\in\mathbb{N}\land y\neq0}{%
-    \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{11}}
-  \proofstepwidestar[11]{y\in\mathbb{N}}{\rAEa{12}}
-  \proofstepwidestar[11]{y\neq0}{\rAEb{12}}
-  \proofstepwidestar[11]{\exists x\in\mathbb{N}\,\bigl(y=\Succ(x)\bigr)}{%
-    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{13,14}}
-  \proofstepwidestar[16]{x\in\mathbb{N}\land y=\Succ(x)}{\rA}
-  \proofstepwidestar[16]{x\in\mathbb{N}}{\rAEa{16}}
-  \proofstepwidestar[16]{y=\Succ(x)}{\rAEb{16}}
-  \proofstepwidestar[16]{\Succ(x)=y}{%
-    \FormulaRefAuto{a=b\vdash b=a}[thm]{18}}
-  \proofstepwidestar[16]{\exists x\in\mathbb{N}\,\Succ(x)=y}{%
-    \rEI{\rAI{17,19}}}
-  \proofstepwidestar[11]{\exists x\in\mathbb{N}\,\Succ(x)=y}{%
-    \rEE{15,16,20}}
+\closeproofpartwide
+
+\proofpartwide{Surjektivität auf dem Nichtnullträger}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[]{\Succ\colon\mathbb{N}\to\mathbb{N}\setminus\{0\}}{%
+    \FormulaRefAuto{Injektive Funktion}[def]{10}}
+
+  \proofstepwidestar[12]{y\in\mathbb{N}\setminus\{0\}}{\rA}
+  \proofstepwidestar[12]{y\in\mathbb{N}\land y\neq0}{%
+    \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{12}}
+  \proofstepwidestar[12]{y\in\mathbb{N}}{\rAEa{13}}
+  \proofstepwidestar[12]{y\neq0}{\rAEb{13}}
+  \proofstepwidestar[12]{\exists x\in\mathbb{N}\,\bigl(y=\Succ(x)\bigr)}{%
+    \FormulaRefAuto{PeanoNonzeroIsSucc}[ax]{14,15}}
+  \proofstepwidestar[17]{x\in\mathbb{N}\land y=\Succ(x)}{\rA}
+  \proofstepwidestar[17]{x\in\mathbb{N}}{\rAEa{17}}
+  \proofstepwidestar[17]{y=\Succ(x)}{\rAEb{17}}
+  \proofstepwidestar[17]{\Succ(x)=y}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{19}}
+  \proofstepwidestar[17]{\exists x\in\mathbb{N}\,\Succ(x)=y}{%
+    \rEI{\rAI{18,20}}}
+  \proofstepwidestar[12]{\exists x\in\mathbb{N}\,\Succ(x)=y}{%
+    \rEE{16,17,21}}
   \proofstepwidestar[]{%
     \forall y\in\mathbb{N}\setminus\{0\}\,
       \exists x\in\mathbb{N}\,\Succ(x)=y}{%
-    \rUI{\rRI{11,21}}}
+    \rUI{\rRI{12,22}}}
   \proofstepwidestar[]{\Succ\colon\mathbb{N}\sur\mathbb{N}\setminus\{0\}}{%
-    \FormulaRefAuto{Surjektive Funktion}[def]{10,22}}
-  \proofstepwidestar[]{\Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{11,23}}
+
+\closeproofpartwide
+
+\proofpartwide{Bijektivität}
+  \setcounter{proofstepnr}{24}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[]{\Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
-      \vdash F\colon A\bij B}[thm]{9,23}}
-\end{tabproofwide}
+      \vdash F\colon A\bij B}[thm]{10,24}}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 Damit ist der Nachfolger eine Bijektion von \(\mathbb N\) auf die
 Nichtnullzahlen. Die Vorgaengerfunktion ist ihre Umkehrfunktion; insbesondere
@@ -4450,7 +4547,7 @@ wird kein künstlicher Wert bei \(0\) festgelegt.
   \proofstep{}{\Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{PeanoSuccNonzeroBijection}[thm]}
   \proofstep{}{\Succ^{-1}\colon\mathbb{N}\setminus\{0\}\to\mathbb{N}}{%
-    \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\to A}[thm]{1}}
+    \FormulaRefAuto{InverseFunctionType}[thm]{1}}
   \proofstep{}{\Pred=\Succ^{-1}}{\FormulaRefAuto{PeanoPred}[def]}
   \proofstep{}{\Succ^{-1}=\Pred}{%
     \FormulaRefAuto{a=b\vdash b=a}[thm]{3}}
@@ -4498,10 +4595,12 @@ wird kein künstlicher Wert bei \(0\) festgelegt.
   \proofstep{}{\Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{PeanoSuccNonzeroBijection}[thm]}
   \proofstep{1}{\Succ^{-1}(\Succ(n))=n}{%
-    \FormulaRefAuto{x\in A \vdash F^{-1}(F(x)) = x}[thm]{2,1}}
+    \FormulaRefAuto{InverseFunctionLeftInverse}[thm]{2,1}}
+  \proofstep{}{\Pred = \Succ ^ { - 1 }}{%
+      \FormulaRefAuto{PeanoPred}[def]}
   \proofstep{}{\Succ^{-1}=\Pred}{%
-    \FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{PeanoPred}[def]}}
-  \proofstep{1}{\Pred(\Succ(n))=n}{\rIE{4,3}}
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{4}}
+  \proofstep{1}{\Pred(\Succ(n))=n}{\rIE{5,3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Nachfolger eines Vorgaengers]{%
@@ -4514,11 +4613,12 @@ wird kein künstlicher Wert bei \(0\) festgelegt.
   \proofstep{}{\Succ\colon\mathbb{N}\bij\mathbb{N}\setminus\{0\}}{%
     \FormulaRefAuto{PeanoSuccNonzeroBijection}[thm]}
   \proofstep{1}{\Succ(\Succ^{-1}(n))=n}{%
-    \FormulaRefAuto{F\colon A\bij B \dsep y\in B
-      \vdash F(F^{-1}(y)) = y}[thm]{2,1}}
+    \FormulaRefAuto{InverseFunctionRightInverse}[thm]{2,1}}
+  \proofstep{}{\Pred = \Succ ^ { - 1 }}{%
+      \FormulaRefAuto{PeanoPred}[def]}
   \proofstep{}{\Succ^{-1}=\Pred}{%
-    \FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{PeanoPred}[def]}}
-  \proofstep{1}{\Succ(\Pred(n))=n}{\rIE{4,3}}
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{4}}
+  \proofstep{1}{\Succ(\Pred(n))=n}{\rIE{5,3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Nichtnullzahlen werden durch ihren Vorgaenger erzeugt]{%
@@ -4788,15 +4888,13 @@ Nachfolgerstufe aus dem Rekursionskern auszuschließen.
     \proofstepwidestar[1]{m_0\in M}{\rA}
     \proofstepwidestar[2]{f\colon M\to M}{\rA}
 
-    \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\mathbb{N}\times M)}{%
-      \makecell[l]{%
-        \FormulaRefAuto{\AdmRec{m_0}{f}(H)}(%
-        \\ \quad \FormulaRefAuto{\mathbb{N}\times M \subseteq \mathbb{N}\times M},%
-        \\ \quad \FormulaRefAuto{m_0\in M \vdash (0,m_0)\in \mathbb{N}\times M}{1},%
-        \\ \quad \FormulaRefAuto{f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep (n,a)\in \mathbb{N}\times M \vdash (\Succ(n),f(a))\in \mathbb{N}\times M}{2}%
-        \\ )%
-      }%
-    }
+    \proofstepwidestar[]{\mathbb{N}\times M \subseteq \mathbb{N}\times M}{%
+      \FormulaRefAuto{\mathbb{N}\times M \subseteq \mathbb{N}\times M}}
+    \proofstepwidestar[1]{(0,m_0)\in \mathbb{N}\times M}{%
+      \FormulaRefAuto{m_0\in M \vdash (0,m_0)\in \mathbb{N}\times M}{1}}
+    \proofstepwidestar[2]{\forall n\in\mathbb N\,\forall a\in M\,\bigl((n,a)\in \mathbb{N}\times M\rightarrow (\Succ(n),f(a))\in \mathbb{N}\times M\bigr)}{%
+      \FormulaRefAuto{f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep (n,a)\in \mathbb{N}\times M \vdash (\Succ(n),f(a))\in \mathbb{N}\times M}{2}}
+    \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\mathbb{N}\times M)}{\FormulaRefAuto{\AdmRec{m_0}{f}(H)}{3,4,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -4904,15 +5002,13 @@ Nachfolgerstufe aus dem Rekursionskern auszuschließen.
     \proofstepwidestar[1]{m_0\in M}{\rA}
     \proofstepwidestar[2]{f\colon M\to M}{\rA}
 
-    \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\ZeroFix{m_0})}{%
-      \makecell[l]{%
-        \FormulaRefAuto{\AdmRec{m_0}{f}(H)}(%
-        \\ \quad \FormulaRefAuto{m_0\in M \vdash \ZeroFix{m_0}\subseteq \mathbb{N}\times M}{1},%
-        \\ \quad \FormulaRefAuto{m_0\in M \vdash (0,m_0)\in \ZeroFix{m_0}}{1},%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep (n,a)\in \ZeroFix{m_0} \vdash (\Succ(n),f(a))\in \ZeroFix{m_0}}{1,2}%
-        \\ )%
-      }%
-    }
+    \proofstepwidestar[1]{(0,m_0)\in \ZeroFix{m_0}}{%
+      \FormulaRefAuto{m_0\in M \vdash (0,m_0)\in \ZeroFix{m_0}}{1}}
+    \proofstepwidestar[1]{\ZeroFix{m_0}\subseteq \mathbb{N}\times M}{%
+      \FormulaRefAuto{m_0\in M \vdash \ZeroFix{m_0}\subseteq \mathbb{N}\times M}{1}}
+    \proofstepwidestar[1,2]{\forall n\in\mathbb N\,\forall a\in M\,\bigl((n,a)\in \ZeroFix{m_0}\rightarrow (\Succ(n),f(a))\in \ZeroFix{m_0}\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep (n,a)\in \ZeroFix{m_0} \vdash (\Succ(n),f(a))\in \ZeroFix{m_0}}{1,2}}
+    \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\ZeroFix{m_0})}{\FormulaRefAuto{\AdmRec{m_0}{f}(H)}{4,3,5}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -4964,9 +5060,11 @@ rekursionsadmissiblen Teilmenge liegt.
       \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash \AdmRec{m_0}{f}(\mathbb{N}\times M)}{1,2}}
     \proofstepwidestar[1,2]{\exists H\,\AdmRec{m_0}{f}(H)}{\rEI{4}}
 
+    \proofstepwidestar[1,2]{\RecCore{m_0}{f}=\bigcap_{\AdmRec{m_0}{f}(H)}H}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
+        \RecCore{m_0}{f}\coloneq \bigcap_{\AdmRec{m_0}{f}(H)} H}{1,2}}
     \proofstepwidestar[1,2,3]{(n,a)\in \bigcap_{\AdmRec{m_0}{f}(H)} H}{%
-      \rIE{\FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
-        \RecCore{m_0}{f}\coloneq \bigcap_{\AdmRec{m_0}{f}(H)} H}{1,2},3}}
+      \rIE{6,3}}
 
     \proofstepwidestar[1,2,3]{%
       \forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow (n,a)\in H\bigr)
@@ -4975,14 +5073,14 @@ rekursionsadmissiblen Teilmenge liegt.
         \exists A(P(A)) \vdash
         x \in \bigcap_{P(B)} B \leftrightarrow
         \forall C\, (P(C) \rightarrow x \in C)
-      }{5,6}}
+      }{5,7}}
 
     \proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &(n,a)\in \RecCore{m_0}{f}\rightarrow{}\\
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow (n,a)\in H\bigr)
     \end{aligned}
-    }{\rRI{3,7}}
+    }{\rRI{3,8}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rückrichtung]{%
@@ -5013,16 +5111,18 @@ rekursionsadmissiblen Teilmenge liegt.
         \forall C\, (P(C) \rightarrow x \in C)
       }{5,3}}
 
+    \proofstepwidestar[1,2]{\RecCore{m_0}{f}=\bigcap_{\AdmRec{m_0}{f}(H)}H}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
+        \RecCore{m_0}{f}\coloneq \bigcap_{\AdmRec{m_0}{f}(H)} H}{1,2}}
     \proofstepwidestar[1,2,3]{(n,a)\in \RecCore{m_0}{f}}{%
-      \rIE{\FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
-        \RecCore{m_0}{f}\coloneq \bigcap_{\AdmRec{m_0}{f}(H)} H}{1,2},6}}
+      \rIE{7,6}}
 
     \proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow (n,a)\in H\bigr)\rightarrow{}\\
       &(n,a)\in \RecCore{m_0}{f}
     \end{aligned}
-    }{\rRI{3,7}}
+    }{\rRI{3,8}}
   \closeproofpartwideindR
 
 \proofpartwide{Schluss}
@@ -5074,12 +5174,14 @@ rekursionsadmissiblen Teilmenge liegt.
   \proofstep{3}{\AdmRec{m_0}{f}(H)}{\rA}
   \proofstep{3}{\bigcap_{\AdmRec{m_0}{f}(X)} X \subseteq H}{%
     \FormulaRefAuto{P(C)\vdash \bigcap_{P(A)} A \subseteq C}{3}}
-  \proofstep{1,2,3}{\RecCore{m_0}{f}\subseteq H}{%
-    \rIE{\FormulaRefAuto{%
+  \proofstep{1,2}{\RecCore{m_0}{f}=\bigcap_{\AdmRec{m_0}{f}(H)}H}{%
+      \FormulaRefAuto{%
       m_0\in M \dsep f\colon M\to M \vdash
       \RecCore{m_0}{f}\coloneq
       \bigcap_{\AdmRec{m_0}{f}(X)} X
-    }{1,2},4}}
+    }{1,2}}
+  \proofstep{1,2,3}{\RecCore{m_0}{f}\subseteq H}{%
+    \rIE{5,4}}
 \end{tabproof}
 
 \FormulaThmDelta[Der Rekursionskern liegt im Produktraum]{%
@@ -5146,7 +5248,7 @@ rekursionsadmissiblen Teilmenge liegt.
   \proofstep{5}{(n,a)\in \RecCore{m_0}{f}}{\rA}
 
   \proofstep{1,2}{%
-    \begin{aligned}
+    \begin{aligned}[t]
       &(n,a)\in \RecCore{m_0}{f}\leftrightarrow{}\\
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow (n,a)\in H\bigr)
     \end{aligned}
@@ -5158,7 +5260,7 @@ rekursionsadmissiblen Teilmenge liegt.
     }{1,2}}
 
   \proofstep{1,2,5}{%
-    \begin{aligned}
+    \begin{aligned}[t]
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow{}\\
       &\qquad (n,a)\in H\bigr)
     \end{aligned}
@@ -5172,14 +5274,14 @@ rekursionsadmissiblen Teilmenge liegt.
     \FormulaRefAuto{f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep (n,a)\in H \vdash (\Succ(n),f(a))\in H}[ax]{2,3,4,9}}
 
   \proofstep{1,2,3,4,5}{%
-    \begin{aligned}
+    \begin{aligned}[t]
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow{}\\
       &\qquad (\Succ(n),f(a))\in H\bigr)
     \end{aligned}
   }{\rUI{\rRI{8,10}}}
 
   \proofstep{1,2}{%
-    \begin{aligned}
+    \begin{aligned}[t]
       &(\Succ(n),f(a))\in \RecCore{m_0}{f}\leftrightarrow{}\\
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow (\Succ(n),f(a))\in H\bigr)
     \end{aligned}
@@ -5204,19 +5306,17 @@ rekursionsadmissiblen Teilmenge liegt.
   \proofstepwidestar[1]{m_0\in M}{\rA}
   \proofstepwidestar[2]{f\colon M\to M}{\rA}
 
-  \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\RecCore{m_0}{f})}{%
-    \makecell[l]{%
-      \FormulaRefAuto{\AdmRec{m_0}{f}(H)}(%
-      \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2},%
-      \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash (0,m_0)\in \RecCore{m_0}{f}}{1,2},%
-      \\ \quad \FormulaRefAuto{%
+  \proofstepwidestar[1,2]{(0,m_0)\in \RecCore{m_0}{f}}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash (0,m_0)\in \RecCore{m_0}{f}}{1,2}}
+  \proofstepwidestar[1,2]{\RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2}}
+  \proofstepwidestar[1,2]{\forall n\in\mathbb N\,\forall a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\rightarrow (\Succ(n),f(a))\in \RecCore{m_0}{f}\bigr)}{%
+      \FormulaRefAuto{%
         m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep
         a\in M\dsep (n,a)\in \RecCore{m_0}{f}
         \vdash (\Succ(n),f(a))\in \RecCore{m_0}{f}
-      }{1,2}%
-      \\ )%
-    }%
-  }
+      }{1,2}}
+  \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\RecCore{m_0}{f})}{\FormulaRefAuto{\AdmRec{m_0}{f}(H)}{4,3,5}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Rekursionskern ist kleinster rekursionsadmissibler Graphkandidat]{%
@@ -5232,27 +5332,48 @@ rekursionsadmissiblen Teilmenge liegt.
   \DeltaDecl{Mengen}{H\dsep M\dsep m_0}%
   \DeltaDecl{Funktionen}{f}%
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{m_0\in M}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Trägerinklusion}
+\proofstepwidestar[1]{m_0\in M}{\rA}
   \proofstepwidestar[2]{f\colon M\to M}{\rA}
 
   \proofstepwidestar[1,2]{\RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\subseteq \mathbb{N}\times M}{1,2}}
-  \proofstepwidestar[1,2]{(0,m_0)\in \RecCore{m_0}{f}}{%
+
+\closeproofpartwide
+
+\proofpartwide{Startpaar}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{(0,m_0)\in \RecCore{m_0}{f}}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash (0,m_0)\in \RecCore{m_0}{f}}{1,2}}
-  \proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\RecCore{m_0}{f})}{%
+
+\closeproofpartwide
+
+\proofpartwide{Rekursionsabschluss}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{\AdmRec{m_0}{f}(\RecCore{m_0}{f})}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \AdmRec{m_0}{f}(\RecCore{m_0}{f})}{1,2}}
 
-  \proofstepwidestar[5]{\AdmRec{m_0}{f}(H)}{\rA}
-  \proofstepwidestar[1,2,5]{\RecCore{m_0}{f}\subseteq H}{%
+
+\closeproofpartwide
+
+\proofpartwide{Minimalität}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[6]{\AdmRec{m_0}{f}(H)}{\rA}
+  \proofstepwidestar[1,2,6]{\RecCore{m_0}{f}\subseteq H}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep \AdmRec{m_0}{f}(H)
-    \vdash \RecCore{m_0}{f}\subseteq H}{1,2,5}}
+      \vdash \RecCore{m_0}{f}\subseteq H}{1,2,6}}
   \proofstepwidestar[1,2]{%
     \forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow
     \RecCore{m_0}{f}\subseteq H\bigr)
-  }{\rUI{\rRI{5,6}}}
+  }{\rUI{\rRI{6,7}}}
 
-  \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M\land{}\\
       &(0,m_0)\in \RecCore{m_0}{f}
@@ -5264,7 +5385,7 @@ rekursionsadmissiblen Teilmenge liegt.
       &(0,m_0)\in \RecCore{m_0}{f}\land{}\\
       &\AdmRec{m_0}{f}(\RecCore{m_0}{f})
     \end{aligned}
-  }{\rAI{8,5}}
+  }{\rAI{9,5}}
   \proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &\RecCore{m_0}{f}\subseteq \mathbb{N}\times M\land{}\\
@@ -5273,8 +5394,10 @@ rekursionsadmissiblen Teilmenge liegt.
       &\forall H\,\bigl(\AdmRec{m_0}{f}(H)\rightarrow
         \RecCore{m_0}{f}\subseteq H\bigr)
     \end{aligned}
-  }{\rAI{9,7}}
-\end{tabproofwide}
+  }{\rAI{10,8}}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \subparagraph{Fixierung der Nullstufe des Kerns}
 
@@ -5603,15 +5726,13 @@ rekursionsadmissiblen Teilmenge liegt.
         \bigr)
       \end{aligned}
     }{\rA}
-    \proofstepwidestar[1,2,3,4,5,6]{\AdmRec{m_0}{f}(\Phi_{x,u})}{%
-      \makecell[l]{%
-        \FormulaRefAuto{\AdmRec{m_0}{f}(H)}(%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M \vdash \Phi_{x,u}\subseteq \mathbb{N}\times M}{1,2,3,4},%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M \vdash (0,m_0)\in \Phi_{x,u}}{1,2,3,4},%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M\dsep \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)\dsep y\in\mathbb{N}\dsep d\in M\dsep (y,d)\in \Phi_{x,u}\vdash (\Succ(y),f(d))\in \Phi_{x,u}}{1,2,3,4,6}%
-        \\ )%
-      }%
-    }
+    \proofstepwidestar[1,2,3,4]{(0,m_0)\in \Phi_{x,u}}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M \vdash (0,m_0)\in \Phi_{x,u}}{1,2,3,4}}
+    \proofstepwidestar[1,2,3,4]{\Phi_{x,u}\subseteq \mathbb{N}\times M}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M \vdash \Phi_{x,u}\subseteq \mathbb{N}\times M}{1,2,3,4}}
+    \proofstepwidestar[1,2,3,4,6]{\forall y\in\mathbb N\,\forall d\in M\,\bigl((y,d)\in \Phi_{x,u}\rightarrow (\Succ(y),f(d))\in \Phi_{x,u}\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep u\in M\dsep \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)\dsep y\in\mathbb{N}\dsep d\in M\dsep (y,d)\in \Phi_{x,u}\vdash (\Succ(y),f(d))\in \Phi_{x,u}}{1,2,3,4,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{\AdmRec{m_0}{f}(\Phi_{x,u})}{\FormulaRefAuto{\AdmRec{m_0}{f}(H)}{8,7,9}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -5692,8 +5813,9 @@ rekursionsadmissiblen Teilmenge liegt.
   \DeltaDecl{Mengen}{M\dsep x\dsep u\dsep a\dsep b\dsep c\dsep m_0}%
   \DeltaDecl{Funktionen}{f}%
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{m_0\in M}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Fixierung der Nullstufe}
+\proofstepwidestar[1]{m_0\in M}{\rA}
   \proofstepwidestar[2]{f\colon M\to M}{\rA}
   \proofstepwidestar[3]{x\in\mathbb{N}}{\rA}
   \proofstepwidestar[4]{u\in M}{\rA}
@@ -5709,7 +5831,12 @@ rekursionsadmissiblen Teilmenge liegt.
   \proofstepwidestar[1,2]{(0,a)\in \RecCore{m_0}{f}\rightarrow a=m_0}{%
     \rRI{7,8}}
 
-  \proofstepwidestar[10]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
+
+\closeproofpartwide
+
+\proofpartwide{Fixierung der Nachfolgerstufe}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[10]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
   \proofstepwidestar[1,2,3,4,5,6,10]{b=f(u)}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
     (n,a)\in \RecCore{m_0}{f}\dsep
@@ -5719,11 +5846,18 @@ rekursionsadmissiblen Teilmenge liegt.
     (\Succ(x),b)\in \RecCore{m_0}{f}\rightarrow b=f(u)
   }{\rRI{10,11}}
 
-  \proofstepwidestar[1,2,3,4,5,6]{%
+
+\closeproofpartwide
+
+\proofpartwide{Zusammenführung}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2,3,4,5,6]{%
     \bigl((0,a)\in \RecCore{m_0}{f}\rightarrow a=m_0\bigr)\land
     \bigl((\Succ(x),b)\in \RecCore{m_0}{f}\rightarrow b=f(u)\bigr)
   }{\rAI{9,12}}
-\end{tabproofwide}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \subsubsection{Das Stufenlemma}
 
@@ -5802,38 +5936,40 @@ induktiv argumentiert.
       \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
       (n,a)\in \RecCore{m_0}{f}
       \vdash (\Succ(n),f(a))\in \RecCore{m_0}{f}}{1,2,3,5,6}}
+    \proofstepwidestar[2,5]{f ( u ) \in M}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,5}}
     \proofstepwidestar[1,2,3,5,6]{%
       \exists b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
     }{\rEI{\rAI{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,5},7}}}
+      8,7}}}
 
     \proofstepwidestar[4,5,6]{%
       \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow c=u\bigr)
     }{\UEE{4,5,6}}
 
-    \proofstepwidestar[10]{b\in M}{\rA}
-    \proofstepwidestar[11]{c\in M}{\rA}
-    \proofstepwidestar[12]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
-    \proofstepwidestar[13]{(\Succ(x),c)\in \RecCore{m_0}{f}}{\rA}
-    \proofstepwidestar[1,2,3,5,6,9,12]{b=f(u)}{%
+    \proofstepwidestar[11]{b\in M}{\rA}
+    \proofstepwidestar[12]{c\in M}{\rA}
+    \proofstepwidestar[13]{(\Succ(x),b)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[14]{(\Succ(x),c)\in \RecCore{m_0}{f}}{\rA}
+    \proofstepwidestar[1,2,3,5,6,10,13]{b=f(u)}{%
       \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
       (n,a)\in \RecCore{m_0}{f}\dsep
       \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow c=a\bigr)\dsep
-      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,9,12}}
-    \proofstepwidestar[1,2,3,5,6,9,13]{c=f(u)}{%
+      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,10,13}}
+    \proofstepwidestar[1,2,3,5,6,10,14]{c=f(u)}{%
       \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep
       (n,a)\in \RecCore{m_0}{f}\dsep
       \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow c=a\bigr)\dsep
-      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,9,13}}
-    \proofstepwidestar[1,2,3,5,6,9,12,13]{b=c}{%
-      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{14,15}}
+      (\Succ(n),b)\in \RecCore{m_0}{f}\vdash b=f(a)}{1,2,3,5,6,10,14}}
+    \proofstepwidestar[1,2,3,5,6,10,13,14]{b=c}{%
+      \FormulaRefAuto{a = b,\, c = b \vdash a = c}{15,16}}
 
     \proofstepwidestar[1,2,3,4,5,6]{%
       \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
-    }{\UEI{8,10,11,12,13,16}}
+    }{\UEI{9,11,12,13,14,17}}
     \proofstepwidestar[1,2,3,4]{%
       \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)
-    }{\UEE{4,5,6,17}}
+    }{\UEE{4,5,6,18}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -5841,21 +5977,17 @@ induktiv argumentiert.
     \proofstepwidestar[2]{f\colon M\to M}{\rA}
     \proofstepwidestar[3]{n\in\mathbb{N}}{\rA}
 
-    \proofstepwidestar[1,2,3]{%
-      \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
-    }{%
-      \makecell[l]{%
-        \FormulaRefAuto{PeanoInductionRule}(
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M
-          \vdash \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2},
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
+    \proofstepwidestar[1,2]{\exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M
+          \vdash \exists! a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2}}
+    \proofstepwidestar[1,2]{\forall x\in\mathbb N\,\bigl((\exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr))\rightarrow(\exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr))\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
           \exists! a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)
           \vdash
-          \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)}{1,2},
-        \\ \quad 3
-        \\ )
-      }%
-    }
+          \exists! b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)}{1,2}}
+    \proofstepwidestar[1,2,3]{%
+      \exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+    }{\FormulaRefAuto{PeanoInductionRule}{4,5,3}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -5935,20 +6067,16 @@ induktiv argumentiert.
     \proofstepwidestar[2]{f\colon M\to M}{\rA}
     \proofstepwidestar[3]{n\in\mathbb{N}}{\rA}
 
-    \proofstepwidestar[1,2,3]{%
-      \exists a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
-    }{%
-      \makecell[l]{%
-        \FormulaRefAuto{PeanoInductionRule}(%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \exists a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2},%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
+    \proofstepwidestar[1,2]{\exists a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \exists a\in M\,\bigl((0,a)\in \RecCore{m_0}{f}\bigr)}{1,2}}
+    \proofstepwidestar[1,2]{\forall x\in\mathbb N\,\bigl((\exists a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr))\rightarrow(\exists b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr))\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep
       x\in\mathbb{N}\dsep
       \exists a\in M\,\bigl((x,a)\in \RecCore{m_0}{f}\bigr)\vdash
-      \exists b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)}{1,2},%
-        \\ \quad 3%
-        \\ )%
-      }%
-    }
+      \exists b\in M\,\bigl((\Succ(x),b)\in \RecCore{m_0}{f}\bigr)}{1,2}}
+    \proofstepwidestar[1,2,3]{%
+      \exists a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)
+    }{\FormulaRefAuto{PeanoInductionRule}{4,5,3}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -6216,24 +6344,20 @@ induktiv argumentiert.
     \proofstepwidestar[6]{(n,a)\in \RecCore{m_0}{f}}{\rA}
     \proofstepwidestar[7]{(n,b)\in \RecCore{m_0}{f}}{\rA}
 
+    \proofstepwidestar[1,2]{\forall u\in M\,\bigl((0,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((0,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \forall u\in M\,\bigl((0,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((0,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)}{1,2}}
+    \proofstepwidestar[1,2]{\forall x\in\mathbb N\,\bigl((\forall u\in M\,\bigl((x,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr))\rightarrow(\forall a\in M\,\bigl((\Succ(x),a)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((\Succ(x),c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)\bigr))\bigr)}{%
+      \FormulaRefAuto{  m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
+  \forall u\in M\,\bigl((x,u)\in \RecCore{m_0}{f}\rightarrow
+  \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)\vdash
+  \forall a\in M\,\bigl((\Succ(x),a)\in \RecCore{m_0}{f}\rightarrow
+  \forall c\in M\,\bigl((\Succ(x),c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)\bigr)}{1,2}}
     \proofstepwidestar[1,2,3]{%
       \begin{aligned}[t]
         &\forall a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\rightarrow{}\\
         &\qquad \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)\bigr)
       \end{aligned}
-    }{%
-      \makecell[l]{%
-        \FormulaRefAuto{PeanoInductionRule}(%
-        \\ \quad \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \forall u\in M\,\bigl((0,u)\in \RecCore{m_0}{f}\rightarrow \forall c\in M\,\bigl((0,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)}{1,2},%
-        \\ \quad \FormulaRefAuto{  m_0\in M\dsep f\colon M\to M\dsep x\in\mathbb{N}\dsep
-  \forall u\in M\,\bigl((x,u)\in \RecCore{m_0}{f}\rightarrow
-  \forall c\in M\,\bigl((x,c)\in \RecCore{m_0}{f}\rightarrow u=c\bigr)\bigr)\vdash
-  \forall a\in M\,\bigl((\Succ(x),a)\in \RecCore{m_0}{f}\rightarrow
-  \forall c\in M\,\bigl((\Succ(x),c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)\bigr)}{1,2},%
-        \\ \quad 3%
-        \\ )%
-      }%
-    }
+    }{\FormulaRefAuto{PeanoInductionRule}{8,9,3}}
 
     \proofstepwidestar[1,2,3,4]{%
       \begin{aligned}[t]
@@ -6241,20 +6365,20 @@ induktiv argumentiert.
         &\forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)
       \end{aligned}
     }{%
-      \rRE{\rUE{8},4}}
+      \rRE{\rUE{10},4}}
 
     \proofstepwidestar[1,2,3,4,6]{%
       \forall c\in M\,\bigl((n,c)\in \RecCore{m_0}{f}\rightarrow a=c\bigr)
     }{%
-      \rRE{6,9}}
+      \rRE{6,11}}
 
     \proofstepwidestar[1,2,3,4,5]{%
       (n,b)\in \RecCore{m_0}{f}\rightarrow a=b
     }{%
-      \rRE{\rUE{10},5}}
+      \rRE{\rUE{12},5}}
 
     \proofstepwidestar[1,2,3,4,5,6,7]{a=b}{%
-      \rRE{7,11}}
+      \rRE{7,13}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -6267,21 +6391,34 @@ induktiv argumentiert.
   \DeltaDecl{Mengen}{M\dsep n\dsep a\dsep b\dsep m_0}%
   \DeltaDecl{Funktionen}{f}%
 }
-\begin{tabproof}
-  \proofstep{1}{m_0\in M}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{m_0\in M}{\rA}
   \proofstep{2}{f\colon M\to M}{\rA}
   \proofstep{3}{n\in\mathbb{N}}{\rA}
   \proofstep{1,2,3}{\exists a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash \exists a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)}{1,2,3}}
-  \proofstep{5}{a\in M}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{a\in M}{\rA}
   \proofstep{6}{b\in M}{\rA}
   \proofstep{7}{(n,a)\in \RecCore{m_0}{f}}{\rA}
   \proofstep{8}{(n,b)\in \RecCore{m_0}{f}}{\rA}
   \proofstep{1,2,3,5,6,7,8}{a=b}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\dsep a\in M\dsep b\in M\dsep (n,a)\in \RecCore{m_0}{f}\dsep (n,b)\in \RecCore{m_0}{f}\vdash a=b}{1,2,3,5,6,7,8}}
-  \proofstep{1,2,3}{\exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)}{%
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\exists! a\in M\,\bigl((n,a)\in \RecCore{m_0}{f}\bigr)}{%
     \UEI{4,5,6,7,8,9}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \fi
 
@@ -6484,33 +6621,29 @@ Rekursionsgleichung stimmt punktweise mit jeder anderen solchen Abbildung
 
     \proofstepwidestar[7]{n\in\mathbb{N}}{\rA}
 
-    \proofstepwidestar[1,2,3,4,5,6,7]{G(n)=H(n)}{%
-      \makecell[l]{%
-        \FormulaRefAuto{PeanoInductionRule}(%
-        \\ \quad \FormulaRefAuto{%
+    \proofstepwidestar[1,2,3,4,5,6]{G(0)=H(0)}{%
+      \FormulaRefAuto{%
           G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
           G(0)=m_0\dsep H(0)=m_0\dsep
           \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
           \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))
           \vdash G(0)=H(0)
-        }{1,2,3,4,5,6},%
-        \\ \quad \FormulaRefAuto{%
+        }{1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{\forall x\in\mathbb N\,\bigl((G(x)=H(x))\rightarrow(G(\Succ(x))=H(\Succ(x)))\bigr)}{%
+      \FormulaRefAuto{%
           G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep
           G(0)=m_0\dsep H(0)=m_0\dsep
           \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
           \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\dsep
           x\in\mathbb{N}\dsep G(x)=H(x)\vdash G(\Succ(x))=H(\Succ(x))
-        }{1,2,3,4,5,6},%
-        \\ \quad 7%
-        \\ )%
-      }%
-    }
+        }{1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6,7]{G(n)=H(n)}{\FormulaRefAuto{PeanoInductionRule}{8,9,7}}
 
     \proofstepwidestar[1,2,3,4,5,6]{\forall n\in\mathbb{N}\,\bigl(G(n)=H(n)\bigr)}{%
-      \rUI{\rRI{7,8}}}
+      \rUI{\rRI{7,10}}}
 
     \proofstepwidestar[1,2,3,4,5,6]{G=H}{%
-      \FormulaRefAuto{FunctionExtensionality}[thm]{1,2,9}}
+      \FormulaRefAuto{FunctionExtensionality}[thm]{1,2,11}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -6535,17 +6668,28 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
   \DeltaDecl{Mengen}{M\dsep n\dsep m_0}%
   \DeltaDecl{Funktionen}{f\dsep G}%
 }
-\begin{tabproof}
-  \proofstep{1}{m_0\in M}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{m_0\in M}{\rA}
   \proofstep{2}{f\colon M\to M}{\rA}
 
   \proofstep{1,2}{\RecCore{m_0}{f}\colon \mathbb{N}\to M}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}\colon \mathbb{N}\to M}{1,2}}
 
-  \proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
+
+\closeproofpart
+
+\proofpart{Anfangswert}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\RecCore{m_0}{f}(0)=m_0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M \vdash \RecCore{m_0}{f}(0)=m_0}{1,2}}
 
-  \proofstep{5}{n\in\mathbb{N}}{\rA}
+
+\closeproofpart
+
+\proofpart{Rekursionsgleichung}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{n\in\mathbb{N}}{\rA}
 
   \proofstep{1,2,5}{%
     \begin{aligned}[t]
@@ -6564,7 +6708,12 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
   }{%
     \rUI{\rRI{5,6}}}
 
-  \proofstep{1,2}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung und Existenz}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{%
     \begin{aligned}[t]
       &\RecCore{m_0}{f}(0)=m_0 \land{}\\
       &\forall n\in\mathbb{N}\,\bigl({}\\
@@ -6582,7 +6731,9 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
     \end{aligned}
   }{%
     \rEI{\rAI{3,8}}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 
@@ -6599,8 +6750,9 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
   \DeltaDecl{Mengen}{M\dsep m_0}%
   \DeltaDecl{Funktionen}{f\dsep G\dsep H}%
 }
-\begin{tabproof}
-  \proofstep{1}{m_0\in M}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{m_0\in M}{\rA}
   \proofstep{2}{f\colon M\to M}{\rA}
 
   \proofstep{1,2}{%
@@ -6613,7 +6765,12 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
   }{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash \exists G\colon \mathbb{N}\to M\,\Bigl(G(0)=m_0 \land \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\Bigr)}{1,2}}
 
-  \proofstep{4}{G\colon \mathbb{N}\to M}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{G\colon \mathbb{N}\to M}{\rA}
 
   \proofstep{5}{%
     \begin{aligned}[t]
@@ -6654,7 +6811,12 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
   \proofstep{4,5,6,7}{G=H}{%
     \FormulaRefAuto{G\colon \mathbb{N}\to M\dsep H\colon \mathbb{N}\to M\dsep G(0)=m_0\dsep H(0)=m_0\dsep \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\vdash G=H}{4,6,8,10,9,11}}
 
-  \proofstep{1,2}{%
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{%
     \begin{aligned}[t]
       &\exists! G\colon \mathbb{N}\to M\,\Bigl({}\\
       &\qquad G(0)=m_0 \land{}\\
@@ -6663,7 +6825,9 @@ von der punktweisen Induktion über rekursiv definierte Abbildungen.
     \end{aligned}
   }{%
     \UEI{3,4,5,6,7,12}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \subsubsection{Die Rekursionsabbildung als benanntes Objekt}
 
@@ -7014,10 +7178,7 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
   \proofstepwidestar[1,2,3,4,5,9]{y\in A}{%
     \rEE{10,11,12,14}}
   \proofstepwidestar[1,2,3,4,5]{M\subseteq A}{%
-    \FormulaRefAuto{%
-      A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{%
-      \rUI{\rRI{9,15}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[9]\vdots 15}}
   \proofstepwidestar[1,2,3,4,5]{A=M}{%
     \FormulaRefAuto{%
       A\subseteq B, B\subseteq A\vdash A=B}[thm]{8,16}}
@@ -7141,8 +7302,8 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
   \proofstepwidestar[1,2,3]{%
     \begin{aligned}[t]
       &\Bigl(
-        m_0\in\RecFun{m_0}{f}[\mathbb N]\land
-        \forall x\in\RecFun{m_0}{f}[\mathbb N]\,
+        m_0\in\RecFun{m_0}{f}[\mathbb N]\land{}\\
+      &\qquad\forall x\in\RecFun{m_0}{f}[\mathbb N]\,
         \bigl(f(x)\in\RecFun{m_0}{f}[\mathbb N]\bigr)
       \Bigr)\\
       &\rightarrow \RecFun{m_0}{f}[\mathbb N]=M
@@ -7175,8 +7336,9 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
   \DeltaRow{Mengen}{M\dsep A\dsep m_0\dsep x}
   \DeltaRow{Funktionen}{f}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{m_0\in M}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Hinrichtung}
+\proofstepwidestar[1]{m_0\in M}{\rA}
   \proofstepwidestar[2]{f\colon M\to M}{\rA}
   \proofstepwidestar[3]{%
     \RecFun{m_0}{f}\colon\mathbb N\sur M}{\rA}
@@ -7193,15 +7355,20 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
     \begin{aligned}[t]
       &\RecFun{m_0}{f}\colon\mathbb N\sur M
       \rightarrow{}\\[-2pt]
-      &\forall A\in\powerset(M)\,
-      \Bigl(
+      &\forall A\in\powerset(M)\,{}\\[-2pt]
+      &\quad\Bigl(
         \bigl(m_0\in A\land
         \forall x\in A\,(f(x)\in A)\bigr)
         \rightarrow A=M
       \Bigr)
     \end{aligned}
   }{\rRI{3,4}}
-  \proofstepwidestar[6]{%
+
+\closeproofpartwide
+
+\proofpartwide{Rückrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[6]{%
     \forall A\in\powerset(M)\,
     \Bigl(
       \bigl(m_0\in A\land
@@ -7214,8 +7381,8 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
       RecFunInductionPrincipleImpliesSurjective}[thm]{1,2,6}}
   \proofstepwidestar[1,2]{%
     \begin{aligned}[t]
-      &\forall A\in\powerset(M)\,
-      \Bigl(
+      &\forall A\in\powerset(M)\,{}\\[-2pt]
+      &\quad\Bigl(
         \bigl(m_0\in A\land
         \forall x\in A\,(f(x)\in A)\bigr)
         \rightarrow A=M
@@ -7224,19 +7391,26 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
       \RecFun{m_0}{f}\colon\mathbb N\sur M
     \end{aligned}
   }{\rRI{6,7}}
-  \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
     \begin{aligned}[t]
       &\RecFun{m_0}{f}\colon\mathbb N\sur M
       \leftrightarrow{}\\[-2pt]
-      &\forall A\in\powerset(M)\,
-      \Bigl(
+      &\forall A\in\powerset(M)\,{}\\[-2pt]
+      &\quad\Bigl(
         \bigl(m_0\in A\land
         \forall x\in A\,(f(x)\in A)\bigr)
         \rightarrow A=M
       \Bigr)
     \end{aligned}
   }{\rLRI{5,8}}
-\end{tabproofwide}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \paragraph{Hilfssätze zur Injektivität der Rekursionsabbildung}
 
@@ -7274,23 +7448,25 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
 
   \proofstepwidestar[10]{k=0}{\rA}
 
-  \proofstepwide[1,2,5]{f(\RecFun{m_0}{f}(u))}{=}{\RecFun{m_0}{f}(\Succ(u))}{%
-    \FormulaRefAuto{a=b\vdash b=a}{%
+  \proofstepwidestar[1,2,5]{\RecFun { m _ 0 } f ( \Succ ( u ) ) = f ( \RecFun { m _ 0 } f ( u ) )}{%
       \FormulaRefAuto{%
         m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
         \RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))
-      }{1,3,5}}}
+      }{1,3,5}}
+  \proofstepwide[1,2,5]{f(\RecFun{m_0}{f}(u))}{=}{\RecFun{m_0}{f}(\Succ(u))}{%
+    \FormulaRefAuto{a=b\vdash b=a}{%
+      11}}
   \proofstepwide[7]{}{=}{\RecFun{m_0}{f}(k)}{%
     \FormulaRefAuto{a=b\vdash b=a}{7}}
   \proofstepwide[10]{}{=}{\RecFun{m_0}{f}(0)}{\rIE{10}}
   \proofstepwide[1,2]{}{=}{m_0}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
       \RecFun{m_0}{f}(0)=m_0}{1,3}}
-  \proofstepwide[1,2,5,7,10]{f(\RecFun{m_0}{f}(u))}{=}{m_0}{\rChain{11,12,13,14}}
+  \proofstepwide[1,2,5,7,10]{f(\RecFun{m_0}{f}(u))}{=}{m_0}{\rChain{12,13,14,15}}
 
-  \proofstepwidestar[1,2,4,5,7,10]{\bot}{\rBI{9,15}}
+  \proofstepwidestar[1,2,4,5,7,10]{\bot}{\rBI{9,16}}
 
-  \proofstepwidestar[1,2,4,5,7]{k\neq0}{\rCI{10,16}}
+  \proofstepwidestar[1,2,4,5,7]{k\neq0}{\rCI{10,17}}
 \end{tabproofwide}
 
 
@@ -7412,15 +7588,19 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
     }{1,3,5}}
   \proofstepwide[1,2,4,5,7,8]{f(\RecFun{m_0}{f}(\Pred(k)))}{=}{f(\RecFun{m_0}{f}(u))}{\rChain{11,12,13}}
 
+  \proofstepwidestar[1,2,5]{\RecFun { m _ 0 } f ( u ) \in M}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+        \RecFun{m_0}{f}(n)\in M}{1,3,5}}
+  \proofstepwidestar[1,2,7,9]{\RecFun { m _ 0 } f ( \Pred ( k ) ) \in M}{%
+      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
+        \RecFun{m_0}{f}(n)\in M}{1,3,10}}
   \proofstepwidestar[1,2,4,5,7,8]{%
     \RecFun{m_0}{f}(\Pred(k))=\RecFun{m_0}{f}(u)
   }{%
     \FormulaRefAuto{Injektive Funktion}{%
       2,
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-        \RecFun{m_0}{f}(n)\in M}{1,3,10},
-      \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash
-        \RecFun{m_0}{f}(n)\in M}{1,3,5},14}}
+      16,
+      15,14}}
 
     \proofstepwidestar[6,10]{%
       \begin{aligned}[t]
@@ -7429,10 +7609,10 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
       \end{aligned}
     }{\rRE{\rUE{6},10}}
 
-  \proofstepwidestar[1,2,4,5,6,7,8]{\Pred(k)=u}{\rRE{15,16}}
+  \proofstepwidestar[1,2,4,5,6,7,8]{\Pred(k)=u}{\rRE{17,18}}
 
   \proofstepwidestar[1,2,4,5,6,7,8]{k=\Succ(u)}{%
-    \FormulaRefAuto{PeanoPredRecoverSucc}{7,9,17}}
+    \FormulaRefAuto{PeanoPredRecoverSucc}{7,9,19}}
 \end{tabproofwide}
 
 
@@ -7579,25 +7759,17 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
   \proofstepwidestar[5]{k\in\mathbb{N}}{\rA}
   \proofstepwidestar[6]{\RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(n)}{\rA}
 
-  \proofstepwidestar[1,2,3,4]{%
-    \begin{aligned}[t]
-      &\forall k\in\mathbb{N}\,\Bigl(
-        \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(n)\\
-      &\rightarrow k=n
-      \Bigr)
-    \end{aligned}
-  }{%
-    \makecell[l]{%
-      \FormulaRefAuto{PeanoInductionRule}(%
-      \\ \quad \FormulaRefAuto{%
+  \proofstepwidestar[1,2,3]{\forall k\in\mathbb{N}\,\Bigl( \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(0)\rightarrow k=0 \Bigr)}{%
+      \FormulaRefAuto{%
         m_0\in M\dsep f\colon M\inj M\dsep
         \forall x\in M\,\bigl(f(x)\neq m_0\bigr)\vdash
         \forall k\in\mathbb{N}\,\Bigl(
           \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(0)\rightarrow
           k=0
         \Bigr)
-      }{1,2,3},%
-      \\ \quad \FormulaRefAuto{%
+      }{1,2,3}}
+  \proofstepwidestar[1,2,3]{\forall u\in\mathbb N\,\bigl((\forall x\in\mathbb{N}\,\Bigl( \RecFun{m_0}{f}(x)=\RecFun{m_0}{f}(u)\rightarrow x=u \Bigr))\rightarrow(\forall k\in\mathbb{N}\,\Bigl( \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(\Succ(u))\rightarrow k=\Succ(u) \Bigr))\bigr)}{%
+      \FormulaRefAuto{%
         m_0\in M\dsep f\colon M\inj M\dsep
         \forall x\in M\,\bigl(f(x)\neq m_0\bigr)\dsep
         u\in\mathbb{N}\dsep
@@ -7608,20 +7780,24 @@ deshalb schon hier für beliebige Rekursionsdaten bewiesen.
           \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(\Succ(u))\rightarrow
           k=\Succ(u)
         \Bigr)
-      }{1,2,3},%
-      \\ \quad 4%
-      \\ )%
-    }%
-  }
+      }{1,2,3}}
+  \proofstepwidestar[1,2,3,4]{%
+    \begin{aligned}[t]
+      &\forall k\in\mathbb{N}\,\Bigl(
+        \RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(n)\\
+      &\rightarrow k=n
+      \Bigr)
+    \end{aligned}
+  }{\FormulaRefAuto{PeanoInductionRule}{7,8,4}}
 
   \proofstepwidestar[1,2,3,4,5]{%
     \begin{aligned}[t]
       &\RecFun{m_0}{f}(k)=\RecFun{m_0}{f}(n)\\
       &\rightarrow k=n
     \end{aligned}
-  }{\rRE{\rUE{7},5}}
+  }{\rRE{\rUE{9},5}}
 
-  \proofstepwidestar[1,2,3,4,5,6]{k=n}{\rRE{6,8}}
+  \proofstepwidestar[1,2,3,4,5,6]{k=n}{\rRE{6,10}}
 \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -7712,7 +7888,7 @@ als typisierte Funktion mit ihrer punktweisen Grundgleichung eingeführt.
   \proofstep{1}{H\colon\mathbb N\bij H[\mathbb N]}{%
     \FormulaRefAuto{F\colon A\inj B\vdash F\colon A\bij F[A]}[thm]{1}}
   \proofstep{1,4}{H^{-1}(x)\in\mathbb N}{%
-    \FormulaRefAuto{y\in B\vdash F^{-1}(y)\in A}[thm]{5,4}}
+    \FormulaRefAuto{InverseFunctionValueType}[thm]{5,4}}
   \proofstep{1,4}{\Succ(H^{-1}(x))\in\mathbb N}{%
     \FormulaRefAuto{PeanoSuccClosure}[ax]{6}}
   \proofstep{1}{H\colon\mathbb N\to M}{%
@@ -7780,8 +7956,8 @@ als typisierte Funktion mit ihrer punktweisen Grundgleichung eingeführt.
       \end{aligned}}[def]{1}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
-      \SuccShift{H}(x)
-      &=\IfThenElse{x\in H[\mathbb{N}]}
+      &\SuccShift{H}(x)={}\\[-2pt]
+      &\IfThenElse{x\in H[\mathbb{N}]}
         {H\bigl(\Succ(H^{-1}(x))\bigr)}{x}
     \end{aligned}
   }{\rRE{\rUE{4},2}}
@@ -7813,22 +7989,26 @@ als typisierte Funktion mit ihrer punktweisen Grundgleichung eingeführt.
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{1,2}{H(n)\in M}{%
     \FormulaRefAuto{F\colon A\inj B\dsep x\in A\vdash F(x)\in B}{1,2}}
+  \proofstep{}{\mathbb N \subseteq \mathbb N}{%
+      \FormulaRefAuto{A\subseteq A}}
   \proofstep{1,2}{H(n)\in H[\mathbb{N}]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\inj B\dsep x\in C\vdash F(x)\in F[C]}{%
-      \FormulaRefAuto{A\subseteq A},1,2}}
+      4,1,2}}
   \proofstep{1,2}{%
     \SuccShift{H}(H(n))=H\bigl(\Succ(H^{-1}(H(n)))\bigr)
   }{%
     \FormulaRefAuto{%
       H\colon \mathbb{N}\inj M\dsep x\in M\dsep x\in H[\mathbb{N}]
-      \vdash \SuccShift{H}(x)=H\bigl(\Succ(H^{-1}(x))\bigr)}{1,3,4}}
+      \vdash \SuccShift{H}(x)=H\bigl(\Succ(H^{-1}(x))\bigr)}{1,3,5}}
+  \proofstep{1}{H \colon \mathbb N \bij H [ \mathbb N ]}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}{1}}
   \proofstep{1,2}{H^{-1}(H(n))=n}{%
-    \FormulaRefAuto{x\in A \vdash F^{-1}(F(x)) = x}{%
-      \FormulaRefAuto{F\colon A\inj B \vdash F\colon A\bij F[A]}{1},2}}
+    \FormulaRefAuto{InverseFunctionLeftInverse}{%
+      7,2}}
   \proofstep{1,2}{H\bigl(\Succ(H^{-1}(H(n)))\bigr)=H(\Succ(n))}{%
-    \rIE{6,\rII}}
+    \rIE{8,\rII}}
   \proofstep{1,2}{\SuccShift{H}(H(n))=H(\Succ(n))}{%
-    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,7}}
+    \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,9}}
 \end{tabproof}
 
 \FormulaThmDelta[Funktionsvorschrift der Folgenverschiebung im Nicht-Bildfall]{%
@@ -8157,7 +8337,7 @@ als typisierte Funktion mit ihrer punktweisen Grundgleichung eingeführt.
     \proofstepwidestar[3]{y\in M}{\rA}
     \proofstepwidestar[4]{x\notin H[\mathbb{N}]}{\rA}
     \proofstepwidestar[5]{y\notin H[\mathbb{N}]}{\rA}
-    \proofstepwidestar[6]{\SuccShift{H}(x)=\SuccShift{H}(y)}{\hspace{0.8em}\rA}
+    \proofstepwidestar[6]{\SuccShift{H}(x)=\SuccShift{H}(y)}{\rA}
     \proofstepwidestar[1,2,4]{\SuccShift{H}(x)=x}{%
       \FormulaRefAuto{%
         H\colon \mathbb{N}\inj M\dsep x\in M\dsep x\notin H[\mathbb{N}]
@@ -8325,7 +8505,7 @@ als typisierte Funktion mit ihrer punktweisen Grundgleichung eingeführt.
     \proofstepwidestar[1]{H\colon \mathbb{N}\inj M}{\rA}
     \proofstepwidestar[2]{x\in M}{\rA}
     \proofstepwidestar[3]{x\notin H[\mathbb{N}]}{\rA}
-    \proofstepwidestar[4]{\SuccShift{H}(x)=H(0)}{\hspace{0.8em}\rA}
+    \proofstepwidestar[4]{\SuccShift{H}(x)=H(0)}{\rA}
     \proofstepwidestar[1,2,3]{\SuccShift{H}(x)=x}{%
       \FormulaRefAuto{%
         H\colon \mathbb{N}\inj M\dsep x\in M\dsep x\notin H[\mathbb{N}]
@@ -8447,7 +8627,7 @@ Zielmenge]{%
   \proofstep{1,2}{\SuccShift{H}(x)\notin\{H(0)\}}{%
     \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{5}}
   \proofstep{1,2}{\SuccShift{H}(x)\in M\setminus\{H(0)\}}{%
-    \hspace{0.8em}\FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}{%
+    \FormulaRefAuto{x\in A\setminus B\eqvdash x\in A\land x\notin B}{%
       \rAI{4,6}}}
 \end{tabproof}
 
@@ -8485,37 +8665,41 @@ Zielmenge]{%
     \proofstepwidestar[6]{n\in\mathbb{N}\land y=H(n)}{\rA}
     \proofstepwidestar[6]{n\in\mathbb{N}}{\rAEa{6}}
     \proofstepwidestar[6]{y=H(n)}{\rAEb{6}}
+    \proofstepwidestar[2]{y\in H[\mathbb N]\land y\notin\{H(0)\}}{%
+      \FormulaRefAuto{x\in A\setminus B
+        \eqvdash x\in A\land x\notin B}{2}}
     \proofstepwidestar[2]{y\notin\{H(0)\}}{%
-      \rAEb{\FormulaRefAuto{x\in A\setminus B
-        \eqvdash x\in A\land x\notin B}{2}}}
+      \rAEb{9}}
     \proofstepwidestar[2]{y\neq H(0)}{%
-      \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{9}}
-    \proofstepwidestar[11]{n=0}{\rA}
-    \proofstepwidestar[6,11]{y=H(0)}{\rIE{11,8}}
-    \proofstepwidestar[2,6,11]{\bot}{\rBI{10,12}}
-    \proofstepwidestar[2,6]{n\neq0}{\rCI{11,13}}
+      \FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}{10}}
+    \proofstepwidestar[12]{n=0}{\rA}
+    \proofstepwidestar[6,12]{y=H(0)}{\rIE{12,8}}
+    \proofstepwidestar[2,6,12]{\bot}{\rBI{11,13}}
+    \proofstepwidestar[2,6]{n\neq0}{\rCI{12,14}}
     \proofstepwidestar[2,6]{\Pred(n)\in\mathbb{N}}{%
-      \FormulaRefAuto{PeanoPredNatural}[thm]{7,14}}
+      \FormulaRefAuto{PeanoPredNatural}[thm]{7,15}}
     \proofstepwidestar[1,6]{H(\Pred(n))\in M}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{4,15}}
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{4,16}}
     \proofstepwidestarbreakkeep[1,6]{%
       \SuccShift{H}(H(\Pred(n)))=H(\Succ(\Pred(n)))}{%
       \FormulaRefAuto{H\colon\mathbb{N}\inj M\dsep n\in\mathbb{N}
-        \vdash\SuccShift{H}(H(n))=H(\Succ(n))}{1,15}}
+        \vdash\SuccShift{H}(H(n))=H(\Succ(n))}{1,16}}
     \proofstepwidestar[2,6]{n=\Succ(\Pred(n))}{%
-      \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{7,14}}
+      \FormulaRefAuto{PeanoPredNonzeroValue}[thm]{7,15}}
     \proofstepwidestar[1,2,6]{%
-      \SuccShift{H}(H(\Pred(n)))=H(n)}{\rIE{18,17}}
+      \SuccShift{H}(H(\Pred(n)))=H(n)}{\rIE{19,18}}
+    \proofstepwidestar[6]{y = H ( n )}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
     \proofstepwidestar[1,2,6]{%
       \SuccShift{H}(H(\Pred(n)))=y}{%
       \FormulaRefAuto{a=b\dsep c=b\vdash a=c}{%
-        19,\FormulaRefAuto{a=b\vdash b=a}{8}}}
+        20,21}}
     \proofstepwidestar[1,2,6]{%
       \exists x\in M\,\SuccShift{H}(x)=y}{%
-      \rEI{\rAI{16,20}}}
+      \rEI{\rAI{17,22}}}
     \proofstepwidestarbreakkeep[1,2,3]{%
       \exists x\in M\,\SuccShift{H}(x)=y}{%
-      \rEE{5,6,21}}
+      \rEE{5,6,23}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Außenfall]{%
@@ -8539,7 +8723,7 @@ Zielmenge]{%
         x\notin H[\mathbb{N}]\vdash\SuccShift{H}(x)=x}{1,4,3}}
     \proofstepwidestar[1,2,3]{%
       \exists x\in M\,\SuccShift{H}(x)=y}{%
-      \hspace{0.8em}\rEI{\rAI{4,5}}}
+      \rEI{\rAI{4,5}}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -8569,8 +8753,9 @@ Zielmenge]{%
   \DeltaRow{Mengen}{M\dsep x\dsep y}
   \DeltaRow{Funktionen}{H\dsep\SuccShift{H}}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Injektivität auf der verkleinerten Zielmenge}
+\proofstepwidestar[1]{H\colon\mathbb{N}\inj M}{\rA}
   \proofstepwidestar[1]{\SuccShift{H}\colon M\inj M}{%
     \FormulaRefAuto{H\colon\mathbb{N}\inj M
       \vdash\SuccShift{H}\colon M\inj M}{1}}
@@ -8586,11 +8771,16 @@ Zielmenge]{%
       \SuccShift{H}(x)\in M\setminus\{H(0)\}}{\rUI{5}}
   \proofstepwidestar[1]{%
     \SuccShift{H}\colon M\inj M\setminus\{H(0)\}}{%
-    \quad\FormulaRefAuto{F\colon A\inj B\dsep\forall x\in A\,F(x)\in C
+    \FormulaRefAuto{F\colon A\inj B\dsep\forall x\in A\,F(x)\in C
       \vdash F\colon A\inj C}{2,6}}
-  \proofstepwidestar[1]{%
+
+\closeproofpartwide
+
+\proofpartwide{Surjektivität auf der verkleinerten Zielmenge}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1]{%
     \SuccShift{H}\colon M\to M\setminus\{H(0)\}}{%
-    \quad\FormulaRefAuto{Injektive Funktion}[def]{7}}
+    \FormulaRefAuto{Injektive Funktion}[def]{7}}
   \proofstepwidestar[9]{y\in M\setminus\{H(0)\}}{\rA}
   \proofstepwidestar[1,9]{%
     \exists x\in M\,\SuccShift{H}(x)=y}{%
@@ -8603,12 +8793,19 @@ Zielmenge]{%
       \exists x\in M\,\SuccShift{H}(x)=y}{\rUI{11}}
   \proofstepwidestar[1]{%
     \SuccShift{H}\colon M\sur M\setminus\{H(0)\}}{%
-    \quad\FormulaRefAuto{Surjektive Funktion}[def]{8,12}}
-  \proofstepwidestar[1]{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{8,12}}
+
+\closeproofpartwide
+
+\proofpartwide{Bijektivität}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1]{%
     \SuccShift{H}\colon M\bij M\setminus\{H(0)\}}{%
-    \quad\FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
+    \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
       \vdash F\colon A\bij B}{7,13}}
-\end{tabproofwide}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \section{Addition}
 
@@ -8875,20 +9072,33 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
   n\in\mathbb N\dsep n\neq0\vdash
   \exists!k\in\mathbb N\,(n=k+1)
 }{PeanoNonzeroUniqueAddOne}{\DeltaRow{Mengen}{j\dsep k\dsep n}}
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb N}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{n\in\mathbb N}{\rA}
   \proofstep{2}{n\neq0}{\rA}
   \proofstep{1,2}{\exists k\in\mathbb N\,(n=k+1)}{%
     \FormulaRefAuto{PeanoNonzeroIsAddOne}[thm]{1,2}}
-  \proofstep{4}{k\in\mathbb N}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{k\in\mathbb N}{\rA}
   \proofstep{5}{n=k+1}{\rA}
   \proofstep{6}{j\in\mathbb N}{\rA}
   \proofstep{7}{n=j+1}{\rA}
   \proofstep{5,7}{k+1=j+1}{%
     \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{5,7}}
   \proofstep{4,5,6,7}{k=j}{\FormulaRefAuto{PeanoAddOneInjective}[thm]{4,6,8}}
-  \proofstep{1,2}{\exists!k\in\mathbb N\,(n=k+1)}{\UEI{3,4,5,6,7,9}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\exists!k\in\mathbb N\,(n=k+1)}{\UEI{3,4,5,6,7,9}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Schrittregel der Addition mit \(+1\)]{%
   a\in\mathbb N\dsep b\in\mathbb N\vdash a+(b+1)=(a+b)+1
@@ -8968,30 +9178,32 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
   \proofstepwidestarbreak[1]{P(1)}{\rA}
   \proofstepwidestarbreak[2]{\forall x\in\mathbb N\,
     (x\neq0\rightarrow(P(x)\rightarrow P(x+1)))}{\rA}
+  \proofstepwidestar[]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
   \proofstepwidestarbreak[]{0+1=\Succ(0)}{%
-    \FormulaRefAuto{PeanoAddOneSucc}[thm]{\FormulaRefAuto{PeanoZero}[ax]}}
+    \FormulaRefAuto{PeanoAddOneSucc}[thm]{3}}
   \proofstepwidestarbreak[]{1=\Succ(0)}{\FormulaRefAuto{PeanoOne}[def]}
-  \proofstepwidestarbreak[1]{P(0+1)}{\rIE{3,\rIE{4,1}}}
-  \proofstepwidestarbreak[6]{k\in\mathbb N}{\rA}
-  \proofstepwidestarbreak[7]{P(k+1)}{\rA}
-  \proofstepwidestarbreak[6]{k+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{6}}
-  \proofstepwidestarbreak[6]{k+1\neq0}{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{6}}
-  \proofstepwidestarbreak[2,6]{P(k+1)\rightarrow P((k+1)+1)}{\rRE{\rRE{\rUE{2},8},9}}
-  \proofstepwidestarbreak[2,6,7]{P((k+1)+1)}{\rRE{10,7}}
+  \proofstepwidestarbreak[1]{P(0+1)}{\rIE{4,\rIE{5,1}}}
+  \proofstepwidestarbreak[7]{k\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[8]{P(k+1)}{\rA}
+  \proofstepwidestarbreak[7]{k+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{7}}
+  \proofstepwidestarbreak[7]{k+1\neq0}{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{7}}
+  \proofstepwidestarbreak[2,7]{P(k+1)\rightarrow P((k+1)+1)}{\rRE{\rRE{\rUE{2},9},10}}
+  \proofstepwidestarbreak[2,7,8]{P((k+1)+1)}{\rRE{11,8}}
   \proofstepwidestarbreak[2]{\forall k\in\mathbb N\,
-    (P(k+1)\rightarrow P((k+1)+1))}{\rUI{\rRI{6,\rRI{7,11}}}}
+    (P(k+1)\rightarrow P((k+1)+1))}{\rUI{\rRI{7,\rRI{8,12}}}}
   \proofstepwidestarbreak[1,2]{\forall k\in\mathbb N\,P(k+1)}{%
-    \FormulaRefAuto{PeanoInductionAddOne}[thm]{5,12}}
-  \proofstepwidestarbreak[14]{n\in\mathbb N}{\rA}
-  \proofstepwidestarbreak[15]{n\neq0}{\rA}
-  \proofstepwidestarbreak[14,15]{\exists k\in\mathbb N\,(n=k+1)}{%
-    \FormulaRefAuto{PeanoNonzeroIsAddOne}[thm]{14,15}}
-  \proofstepwidestarbreak[17]{k\in\mathbb N\land n=k+1}{\rA}
-  \proofstepwidestarbreak[1,2,17]{P(k+1)}{\rRE{\rUE{13},\rAEa{17}}}
-  \proofstepwidestarbreak[1,2,17]{P(n)}{\rIE{\rAEb{17},18}}
-  \proofstepwidestarbreak[1,2,14,15]{P(n)}{\rEE{16,17,19}}
+    \FormulaRefAuto{PeanoInductionAddOne}[thm]{6,13}}
+  \proofstepwidestarbreak[15]{n\in\mathbb N}{\rA}
+  \proofstepwidestarbreak[16]{n\neq0}{\rA}
+  \proofstepwidestarbreak[15,16]{\exists k\in\mathbb N\,(n=k+1)}{%
+    \FormulaRefAuto{PeanoNonzeroIsAddOne}[thm]{15,16}}
+  \proofstepwidestarbreak[18]{k\in\mathbb N\land n=k+1}{\rA}
+  \proofstepwidestarbreak[1,2,18]{P(k+1)}{\rRE{\rUE{14},\rAEa{18}}}
+  \proofstepwidestarbreak[1,2,18]{P(n)}{\rIE{\rAEb{18},19}}
+  \proofstepwidestarbreak[1,2,15,16]{P(n)}{\rEE{17,18,20}}
   \proofstepwidestarbreak[1,2]{\forall n\in\mathbb N\,(n\neq0\rightarrow P(n))}{%
-    \rUI{\rRI{14,\rRI{15,20}}}}
+    \rUI{\rRI{15,\rRI{16,21}}}}
 \end{tabproofwide}
 \endgroup
 
@@ -9050,23 +9262,36 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
   \DeltaRow{Mengen}{n}
   \DeltaRow{Funktionensymbole}{f\dsep G}
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\forall n\in\mathbb N\,G(\Succ(n))=f(G(n))}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Hinrichtung}
+\proofstepwidestar[1]{\forall n\in\mathbb N\,G(\Succ(n))=f(G(n))}{\rA}
   \proofstepwidestar[2]{n\in\mathbb N}{\rA}
   \proofstepwidestar[2]{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}[thm]{2}}
   \proofstepwidestar[1,2]{G(n+1)=f(G(n))}{\rIE{3,\rRE{\rUE{1},2}}}
   \proofstepwidestar[1]{\forall n\in\mathbb N\,G(n+1)=f(G(n))}{\rUI{\rRI{2,4}}}
-  \proofstepwidestar[6]{\forall n\in\mathbb N\,G(n+1)=f(G(n))}{\rA}
+
+\closeproofpartwide
+
+\proofpartwide{Rückrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[6]{\forall n\in\mathbb N\,G(n+1)=f(G(n))}{\rA}
   \proofstepwidestar[7]{n\in\mathbb N}{\rA}
   \proofstepwidestar[7]{n+1=\Succ(n)}{\FormulaRefAuto{PeanoAddOneSucc}[thm]{7}}
   \proofstepwidestar[6,7]{G(\Succ(n))=f(G(n))}{\rIE{8,\rRE{\rUE{6},7}}}
   \proofstepwidestar[6]{\forall n\in\mathbb N\,G(\Succ(n))=f(G(n))}{\rUI{\rRI{7,9}}}
-  \proofstepwidestar[]{%
-    \begin{aligned}
+
+\closeproofpartwide
+
+\proofpartwide{Zusammenführung}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[]{%
+    \begin{aligned}[t]
       &\forall n\in\mathbb N\,G(\Succ(n))=f(G(n))\\
       &\leftrightarrow\forall n\in\mathbb N\,G(n+1)=f(G(n))
     \end{aligned}}{\rLRI{\rRI{1,5},\rRI{6,10}}}
-\end{tabproofwide}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \par\noindent\begin{minipage}{\linewidth}
 \FormulaThmDeltaK[Rekursionssatz mit \(n+1\)]{%
@@ -9082,8 +9307,9 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
 \end{minipage}\par
 \begingroup
 \ProofWideReasonsNearFormula
-\begin{tabproofwide}
-  \proofstepwidestarbreak[1]{m_0\in M}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz}
+\proofstepwidestarbreak[1]{m_0\in M}{\rA}
   \proofstepwidestarbreak[2]{f\colon M\to M}{\rA}
   \proofstepwidestarbreak[1,2]{\RecFun{m_0}{f}\colon\mathbb N\to M}{%
     \FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash
@@ -9099,7 +9325,12 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
   \proofstepwidestarbreak[1,2]{\begin{aligned}[t]&\exists G\colon\mathbb N\to M\,\Bigl(G(0)=m_0\land{}\\
       &\qquad\forall n\in\mathbb N\,G(n+1)=f(G(n))\Bigr)\end{aligned}}{%
     \rEI{\rAI{3,\rAI{4,7}}}}
-  \proofstepwidestarbreak[9]{G\colon\mathbb N\to M}{\rA}
+
+\closeproofpartwide
+
+\proofpartwide{Eindeutigkeit}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestarbreak[9]{G\colon\mathbb N\to M}{\rA}
   \proofstepwidestarbreak[10]{\begin{aligned}[t]&G(0)=m_0\land{}\\
       &\forall n\in\mathbb N\,G(n+1)=f(G(n))\end{aligned}}{\rA}
   \proofstepwidestarbreak[11]{H\colon\mathbb N\to M}{\rA}
@@ -9115,10 +9346,17 @@ bei \(0\) an und führen von \(n\) zu \(n+1\).
       \forall n\in\mathbb{N}\,G(\Succ(n))=f(G(n))\dsep
       \forall n\in\mathbb{N}\,H(\Succ(n))=f(H(n))\vdash G=H}[thm]{%
         9,11,\rAEa{10},\rAEa{12},13,14}}
-  \proofstepwidestarbreak[1,2]{\begin{aligned}[t]&\exists!G\colon\mathbb N\to M\,\Bigl(G(0)=m_0\land{}\\
+
+\closeproofpartwide
+
+\proofpartwide{Eindeutige Existenz}
+  \setcounter{proofstepnr}{15}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestarbreak[1,2]{\begin{aligned}[t]&\exists!G\colon\mathbb N\to M\,\Bigl(G(0)=m_0\land{}\\
       &\qquad\forall n\in\mathbb N\,G(n+1)=f(G(n))\Bigr)\end{aligned}}{%
     \UEI{8,9,10,11,12,15}}
-\end{tabproofwide}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 \endgroup
 
 \subsection{Arithmetische Fassungen der Nachfolgerwerkzeuge}
@@ -9321,7 +9559,7 @@ Danach werden diese Fassungen unmittelbar verwendet.
     \proofstepwidestar[]{0\in\mathbb{N}}{%
       \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[]{0+0=0}{%
-      \hspace{0.8em}\FormulaRefAuto{a\in\mathbb{N}\vdash a+0=a}{1}}
+      \FormulaRefAuto{a\in\mathbb{N}\vdash a+0=a}{1}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -9334,7 +9572,7 @@ Danach werden diese Fassungen unmittelbar verwendet.
     \proofstepwidestar[]{0\in\mathbb{N}}{%
       \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{0+(n+1)=((0+n)+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{PeanoAddAddOneRight}{3,1}}
+      \FormulaRefAuto{PeanoAddAddOneRight}{3,1}}
     \proofstepwidestar[2]{((0+n)+1)=(n+1)}{\rIE{2}}
     \proofstepwidestar[1,2]{0+(n+1)=(n+1)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
@@ -9343,7 +9581,7 @@ Danach werden diese Fassungen unmittelbar verwendet.
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[1]{0+n=n}{%
-      \hspace{0.8em}\FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,1}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -9370,7 +9608,7 @@ Danach werden diese Fassungen unmittelbar verwendet.
     \proofstepwidestar[1]{(a+1)=(a+0+1)}{%
       \FormulaRefAuto{a=b\vdash b=a}{5}}
     \proofstepwidestar[1]{(a+1)+0=(a+0+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,6}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,6}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -9388,24 +9626,24 @@ Danach werden diese Fassungen unmittelbar verwendet.
     \proofstepwidestar[1]{(a+1)\in\mathbb{N}}{%
       \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
     \proofstepwidestar[1,2]{(a+1)+(b+1)=((a+1)+b+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{PeanoAddAddOneRight}[thm]{4,2}}
-    \proofstepwidestar[3]{((a+1)+b+1)=((a+b+1)+1)}{\hspace{0.8em}\rIE{3}}
+      \FormulaRefAuto{PeanoAddAddOneRight}[thm]{4,2}}
+    \proofstepwidestar[3]{((a+1)+b+1)=((a+b+1)+1)}{\rIE{3}}
     \proofstepwidestar[1,2,3]{(a+1)+(b+1)=((a+b+1)+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
     \proofstepwidestar[1,2]{a+(b+1)=(a+b+1)}{%
       \FormulaRefAuto{PeanoAddAddOneRight}[thm]{1,2}}
-    \proofstepwidestar[1,2]{(a+(b+1)+1)=((a+b+1)+1)}{\hspace{0.8em}\rIE{8}}
+    \proofstepwidestar[1,2]{(a+(b+1)+1)=((a+b+1)+1)}{\rIE{8}}
     \proofstepwidestar[1,2]{((a+b+1)+1)=(a+(b+1)+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{a=b\vdash b=a}{9}}
+      \FormulaRefAuto{a=b\vdash b=a}{9}}
     \proofstepwidestar[1,2,3]{(a+1)+(b+1)=(a+(b+1)+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,10}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,10}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{a\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
     \proofstepwidestar[1,2]{(a+1)+b=(a+b+1)}{%
-      \hspace{0.8em}\FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,2,1}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,2,1}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -9517,9 +9755,11 @@ Danach werden diese Fassungen unmittelbar verwendet.
       \FormulaRefAuto{PeanoAddOneAddLeft}{2,1}}
     \proofstepwidestar[1,2]{((b+a)+1)=(b+1)+a}{%
       \FormulaRefAuto{a=b\vdash b=a}{6}}
+    \proofstepwidestar[1,2,3]{a + ( b + 1 ) = ( ( b + a ) + 1 )}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
     \proofstepwidestar[1,2,3]{a+(b+1)=(b+1)+a}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5},7}}
+        8,7}}
     \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -9549,9 +9789,11 @@ Danach werden diese Fassungen unmittelbar verwendet.
     \FormulaRefAuto{PeanoAddAssociative}{1,3,2}}
   \proofstepwidestar[1,2,3]{a+(c+b)=(a+c)+b}{%
     \FormulaRefAuto{a=b\vdash b=a}{7}}
+  \proofstepwidestar[1,2,3]{( a + b ) + c = a + ( c + b )}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,6}}
   \proofstepwidestar[1,2,3]{(a+b)+c=(a+c)+b}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,6},8}}
+      9,8}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Viergliedriges Vertauschungsgesetz der Addition]{%
@@ -9566,19 +9808,27 @@ Danach werden diese Fassungen unmittelbar verwendet.
   \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
   \proofstepwidestar[3]{c\in\mathbb{N}}{\rA}
   \proofstepwidestar[4]{d\in\mathbb{N}}{\rA}
+  \proofstepwidestar[1,2]{a + b \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{1,2}}
+  \proofstepwidestar[1,2,3,4]{( ( a + b ) + c ) + d = ( a + b ) + ( c + d )}{%
+      \FormulaRefAuto{PeanoAddAssociative}{%
+        5,3,4}}
   \proofstepwidestarbreak[1,2,3,4]{(a+b)+(c+d)=((a+b)+c)+d}{%
     \FormulaRefAuto{a=b\vdash b=a}{%
-      \FormulaRefAuto{PeanoAddAssociative}{%
-        \FormulaRefAuto{PeanoAddClosure}{1,2},3,4}}}
+      6}}
   \proofstepwidestarbreak[1,2,3]{(a+b)+c=(a+c)+b}{%
     \FormulaRefAuto{PeanoAddThreeTermSwap}{1,2,3}}
-  \proofstepwidestarbreak[1,2,3,4]{((a+b)+c)+d=((a+c)+b)+d}{\rIE{6}}
+  \proofstepwidestarbreak[1,2,3,4]{((a+b)+c)+d=((a+c)+b)+d}{\rIE{8}}
+  \proofstepwidestar[1,3]{a + c \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}{1,3}}
   \proofstepwidestarbreak[1,2,3,4]{((a+c)+b)+d=(a+c)+(b+d)}{%
     \FormulaRefAuto{PeanoAddAssociative}{%
-      \FormulaRefAuto{PeanoAddClosure}{1,3},2,4}}
+      10,2,4}}
+  \proofstepwidestar[1,2,3,4]{( a + b ) + ( c + d ) = ( ( a + c ) + b ) + d}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{7,9}}
   \proofstepwidestarbreak[1,2,3,4]{(a+b)+(c+d)=(a+c)+(b+d)}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,7},8}}
+      12,11}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Nichtnullsummand auf der linken Seite]{%
@@ -9871,7 +10121,7 @@ kurzen Infixschreibweisen \(m<n\) und \(m\leq n\).
     \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[3]{m\in n}{\rA}
     \proofstepwidestar[1,2]{m\in n\rightarrow m\subseteq n}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,2,1)}}
     \proofstepwidestar[1,2,3]{m\subseteq n}{\rRE{4,3}}
@@ -9950,7 +10200,7 @@ kurzen Infixschreibweisen \(m<n\) und \(m\leq n\).
     \proofstepwidestar[1]{a\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{b\in\mathbb{N}}{\rA}
     \proofstepwidestar[1,2]{a\subseteq a+b}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,2,1)}}
   \closeproofpartwide
@@ -10067,78 +10317,80 @@ kurzen Infixschreibweisen \(m<n\) und \(m\leq n\).
       \FormulaRefAuto{PeanoAddRightZero}[thm]{1}}
     \proofstepwidestar[1,2,5,8]{m+0=(n+1)}{%
       \FormulaRefAuto{a=b\dsep b=c\vdash a=c}[thm]{15,14}}
+    \proofstepwidestar[]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1,2,5,8]{%
       0\in\mathbb{N}\land m+0=(n+1)}{\rAI{%
-        \FormulaRefAuto{PeanoZero}[ax],16}}
+        17,16}}
     \proofstepwidestar[1,2,5,8]{%
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEI{17}}
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEI{18}}
 
-    \proofstepwidestar[19]{n\notin m}{\rA}
-    \proofstepwidestar[1,2,5,19]{m\subseteq n}{%
-      \FormulaRefAuto{PeanoAddOneSubsetWithoutEndpoint}[thm]{2,6,19}}
-    \proofstepwidestar[1,2,5,19]{m\leq_{\mathbb{N}}n}{%
-      \FormulaRefAuto{NaturalOrderOperator}[def]{1,2,20}}
-    \proofstepwidestar[1,2,3,5,19]{%
+    \proofstepwidestar[20]{n\notin m}{\rA}
+    \proofstepwidestar[1,2,5,20]{m\subseteq n}{%
+      \FormulaRefAuto{PeanoAddOneSubsetWithoutEndpoint}[thm]{2,6,20}}
+    \proofstepwidestar[1,2,5,20]{m\leq_{\mathbb{N}}n}{%
+      \FormulaRefAuto{NaturalOrderOperator}[def]{1,2,21}}
+    \proofstepwidestar[1,2,3,5,20]{%
       \exists k\in\mathbb{N}\,(m+k=n)}{%
-      \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{3,21}}
-    \proofstepwidestar[23]{k\in\mathbb{N}\land m+k=n}{\rA}
-    \proofstepwidestar[23]{k\in\mathbb{N}}{\rAEa{23}}
-    \proofstepwidestar[23]{m+k=n}{\rAEb{23}}
-    \proofstepwidestar[23]{(k+1)\in\mathbb{N}}{%
-      \FormulaRefAuto{PeanoAddOneClosure}[thm]{24}}
-    \proofstepwidestar[1,23]{m+(k+1)=(m+k+1)}{%
-      \FormulaRefAuto{PeanoAddAddOneRight}[thm]{1,24}}
-    \proofstepwidestar[23]{(m+k+1)=(n+1)}{\rIE{25}}
-    \proofstepwidestar[1,23]{m+(k+1)=(n+1)}{%
-      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}[thm]{27,28}}
-    \proofstepwidestar[1,23]{%
-      (k+1)\in\mathbb{N}\land m+(k+1)=(n+1)}{\rAI{26,29}}
-    \proofstepwidestar[1,23]{%
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEI{30}}
-    \proofstepwidestar[1,2,3,5,19]{%
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEE{22,23,31}}
+      \FormulaRefAuto{P\leftrightarrow Q\dsep P\vdash Q}[thm]{3,22}}
+    \proofstepwidestar[24]{k\in\mathbb{N}\land m+k=n}{\rA}
+    \proofstepwidestar[24]{k\in\mathbb{N}}{\rAEa{24}}
+    \proofstepwidestar[24]{m+k=n}{\rAEb{24}}
+    \proofstepwidestar[24]{(k+1)\in\mathbb{N}}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{25}}
+    \proofstepwidestar[1,24]{m+(k+1)=(m+k+1)}{%
+      \FormulaRefAuto{PeanoAddAddOneRight}[thm]{1,25}}
+    \proofstepwidestar[24]{(m+k+1)=(n+1)}{\rIE{26}}
+    \proofstepwidestar[1,24]{m+(k+1)=(n+1)}{%
+      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}[thm]{28,29}}
+    \proofstepwidestar[1,24]{%
+      (k+1)\in\mathbb{N}\land m+(k+1)=(n+1)}{\rAI{27,30}}
+    \proofstepwidestar[1,24]{%
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEI{31}}
+    \proofstepwidestar[1,2,3,5,20]{%
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rEE{23,24,32}}
     \proofstepwidestar[1,2,3,5]{%
       \exists k\in\mathbb{N}\,(m+k=(n+1))}{%
-      \rOE{7,8,18,19,32}}
+      \rOE{7,8,19,20,33}}
     \proofstepwidestar[1,2,3]{%
       m\leq_{\mathbb{N}}(n+1)\rightarrow
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rRI{5,33}}
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rRI{5,34}}
 
-    \proofstepwidestar[35]{%
+    \proofstepwidestar[36]{%
       \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rA}
-    \proofstepwidestar[36]{k\in\mathbb{N}\land m+k=(n+1)}{\rA}
-    \proofstepwidestar[36]{k\in\mathbb{N}}{\rAEa{36}}
-    \proofstepwidestar[36]{m+k=(n+1)}{\rAEb{36}}
-    \proofstepwidestar[1,36]{m\subseteq m+k}{%
-      \FormulaRefAuto{PeanoAddLeftSubset}[thm]{1,37}}
-    \proofstepwidestar[1,36]{m\subseteq(n+1)}{\rIE{38,39}}
+    \proofstepwidestar[37]{k\in\mathbb{N}\land m+k=(n+1)}{\rA}
+    \proofstepwidestar[37]{k\in\mathbb{N}}{\rAEa{37}}
+    \proofstepwidestar[37]{m+k=(n+1)}{\rAEb{37}}
+    \proofstepwidestar[1,37]{m\subseteq m+k}{%
+      \FormulaRefAuto{PeanoAddLeftSubset}[thm]{1,38}}
+    \proofstepwidestar[1,37]{m\subseteq(n+1)}{\rIE{39,40}}
+    \proofstepwidestar[1,2,37]{m\leq_{\mathbb{N}}(n+1)}{%
+      \FormulaRefAuto{NaturalOrderOperator}[def]{1,4,41}}
     \proofstepwidestar[1,2,36]{m\leq_{\mathbb{N}}(n+1)}{%
-      \FormulaRefAuto{NaturalOrderOperator}[def]{1,4,40}}
-    \proofstepwidestar[1,2,35]{m\leq_{\mathbb{N}}(n+1)}{%
-      \rEE{35,36,41}}
+      \rEE{36,37,42}}
     \proofstepwidestar[1,2,3]{%
       \exists k\in\mathbb{N}\,(m+k=(n+1))
-      \rightarrow m\leq_{\mathbb{N}}(n+1)}{\rRI{35,42}}
+      \rightarrow m\leq_{\mathbb{N}}(n+1)}{\rRI{36,43}}
     \proofstepwidestar[1,2,3]{%
       m\leq_{\mathbb{N}}(n+1)\leftrightarrow
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rLRI{34,43}}
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rLRI{35,44}}
     \proofstepwidestar[2]{n+1=(n+1)}{%
     \rII}
   \proofstepwidestar[1,2,3]{%
       m\leq_{\mathbb{N}}(n+1)\leftrightarrow
-      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rIE{45,44}}
+      \exists k\in\mathbb{N}\,(m+k=(n+1))}{\rIE{46,45}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[1,2]{%
-      \begin{aligned}
+      \begin{aligned}[t]
         m\leq_{\mathbb{N}}n
         &\leftrightarrow{}\\[-2pt]
         &\exists k\in\mathbb{N}\,(m+k=n)
       \end{aligned}}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,2,1)}}
   \closeproofpartwide
@@ -10345,15 +10597,13 @@ Ordnungscharakterisierung erfasst damit genau alle \(n\geq m\).
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[1,2]{%
-      m<_{\mathbb{N}}n\rightarrow
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rRI{3,4}}
-    \proofstepwidestar[1,2]{%
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)
-      \rightarrow m<_{\mathbb{N}}n}{\rRI{5,6}}
-    \proofstepwidestar[1,2]{%
-      m<_{\mathbb{N}}n\leftrightarrow
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rLRI{7,8}}
+    \proofstepwidestar[3]{m<_{\mathbb{N}}n}{\rA}
+    \proofstepwidestar[1,2,3]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\FormulaRefAuto{m,n\in\mathbb{N}\dsep m<_{\mathbb{N}}n\vdash \exists k\in\mathbb{N}\,(m+(k+1)=n)}[thm]{1,2,3}}
+    \proofstepwidestar[1,2]{m<_{\mathbb{N}}n\rightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rRI{3,4}}
+    \proofstepwidestar[6]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rA}
+    \proofstepwidestar[1,2,6]{m<_{\mathbb{N}}n}{\FormulaRefAuto{m,n\in\mathbb{N}\dsep \exists k\in\mathbb{N}\,(m+(k+1)=n)\vdash m<_{\mathbb{N}}n}[thm]{1,2,6}}
+    \proofstepwidestar[1,2]{\exists k\in\mathbb{N}\,(m+(k+1)=n)\rightarrow m<_{\mathbb{N}}n}{\rRI{6,7}}
+    \proofstepwidestar[1,2]{m<_{\mathbb{N}}n\leftrightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rLRI{5,8}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -10533,15 +10783,13 @@ Ordnungscharakterisierung erfasst damit genau alle \(n\geq m\).
   \proofpartwide{Schluss}
     \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
-    \proofstepwidestar[1,2]{%
-      (m+1)\leq n \rightarrow
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rRI{3,4}}
-    \proofstepwidestar[1,2]{%
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)
-      \rightarrow (m+1)\leq n}{\rRI{5,6}}
-    \proofstepwidestar[1,2]{%
-      (m+1)\leq n \leftrightarrow
-      \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rLRI{7,8}}
+    \proofstepwidestar[3]{(m+1)\leq n}{\rA}
+    \proofstepwidestar[1,2,3]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep (m+1)\leq n\vdash \exists k\in\mathbb{N}\,(m+(k+1)=n)}[thm]{1,2,3}}
+    \proofstepwidestar[1,2]{(m+1)\leq n\rightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rRI{3,4}}
+    \proofstepwidestar[6]{\exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rA}
+    \proofstepwidestar[1,2,6]{(m+1)\leq n}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep \exists k\in\mathbb{N}\,(m+(k+1)=n)\vdash (m+1)\leq n}[thm]{1,2,6}}
+    \proofstepwidestar[1,2]{\exists k\in\mathbb{N}\,(m+(k+1)=n)\rightarrow (m+1)\leq n}{\rRI{6,7}}
+    \proofstepwidestar[1,2]{(m+1)\leq n\leftrightarrow \exists k\in\mathbb{N}\,(m+(k+1)=n)}{\rLRI{5,8}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -10599,10 +10847,12 @@ Ordnungscharakterisierung erfasst damit genau alle \(n\geq m\).
     \proofstepwidestar[2]{k\in\mathbb{N}}{\rA}
     \proofstepwidestar[3]{m+k=n}{\rA}
     \proofstepwidestar[4]{k=0}{\rA}
+    \proofstepwidestar[1]{m + 0 = m}{%
+      \FormulaRefAuto{a\in\mathbb{N}\vdash a+0=a}{1}}
     \proofstepwidestar[1,4]{m+k=m}{%
-      \rIE{4,\FormulaRefAuto{a\in\mathbb{N}\vdash a+0=a}{1}}}
+      \rIE{4,5}}
     \proofstepwidestar[1,3,4]{m=n}{%
-      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{5,3}}
+      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{6,3}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Positiver Abstand]{%
@@ -10691,20 +10941,26 @@ Ordnungscharakterisierung erfasst damit genau alle \(n\geq m\).
     \proofstepwidestar[4]{(m+1)+(k+1)=(m+1)}{\rA}
     \proofstepwidestarbreak[1]{(m+1)\in\mathbb{N}}{%
       \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
+    \proofstepwidestar[2]{k + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{2}}
     \proofstepwidestarbreak[1,2]{(m+1)+(k+1)=(m+(k+1)+1)}{%
       \FormulaRefAuto{PeanoAddOneAddLeft}[thm]{1,%
-        \FormulaRefAuto{PeanoAddOneClosure}[thm]{2}}}
+        6}}
     \proofstepwidestarbreak[1,2,4]{(m+(k+1)+1)=(m+1)}{%
-      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{6,4}}
+      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{7,4}}
+    \proofstepwidestar[2]{k + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{2}}
+    \proofstepwidestar[1,2]{m + ( k + 1 ) \in \mathbb N}{%
+      \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{1,%
+          9}}
     \proofstepwidestarbreak[1,2,4]{m+(k+1)=m}{%
       \FormulaRefAuto{PeanoAddOneInjective}[thm]{%
-        \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{1,%
-          \FormulaRefAuto{PeanoAddOneClosure}[thm]{2}},1,7}}
-    \proofstepwidestarbreak[1,2,3,4]{\bot}{\rBI{8,3}}
-    \proofstepwidestarbreak[1,2,3]{(m+1)+(k+1)\neq (m+1)}{\rCI{4,9}}
+        10,1,8}}
+    \proofstepwidestarbreak[1,2,3,4]{\bot}{\rBI{11,3}}
+    \proofstepwidestarbreak[1,2,3]{(m+1)+(k+1)\neq (m+1)}{\rCI{4,12}}
     \proofstepwidestarbreak[1]{m+1=(m+1)}{%
     \rII}
-  \proofstepwidestarbreak[1,2,3]{(m+1)+(k+1)\neq (m+1)}{\rIE{11,10}}
+  \proofstepwidestarbreak[1,2,3]{(m+1)+(k+1)\neq (m+1)}{\rIE{14,13}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -10921,7 +11177,7 @@ Ordnungscharakterisierung erfasst damit genau alle \(n\geq m\).
     \proofstepwidestar[1]{m\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[1,2]{m\leq n\lor n\leq m}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,2,1)}}
   \closeproofpartwide
@@ -11211,22 +11467,24 @@ wird hier ausschließlich aus der additiven Ordnung hergeleitet.
   \proofstep{6}{k\in\mathbb{N}}{\rAEa{6}}
   \proofstep{6}{b+(k+1)=c}{\rAEb{6}}
   \proofstep{6}{(k+1)\in\mathbb{N}}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{7}}
+  \proofstep{1,2,6}{( a + b ) + ( k + 1 ) = a + ( b + ( k + 1 ) )}{%
+      \FormulaRefAuto{PeanoAddAssociative}{1,2,9}}
   \proofstep{1,2,6}{a+(b+(k+1))=(a+b)+(k+1)}{%
     \FormulaRefAuto{a=b\vdash b=a}{%
-      \FormulaRefAuto{PeanoAddAssociative}{1,2,9}}}
+      10}}
   \proofstep{1,6}{a+(b+(k+1))=a+c}{\rIE{8,\rII}}
   \proofstep{1,2,6}{(a+b)+(k+1)=a+c}{%
-    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{10,11}}
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}{11,12}}
   \proofstep{1,2,6}{a+b\in\mathbb{N}}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{1,2}}
   \proofstep{1,3,6}{a+c\in\mathbb{N}}{%
     \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}\vdash a+b\in\mathbb{N}}{1,3}}
   \proofstep{1,2,6}{\exists j\in\mathbb{N}\,((a+b)+(j+1)=a+c)}{%
-    \rEI{\rAI{7,12}}}
+    \rEI{\rAI{7,13}}}
   \proofstep{1,2,3,6}{a+b<a+c}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
-      m<n\leftrightarrow\exists k\in\mathbb{N}\,(m+(k+1)=n)}{13,14,15}}
-  \proofstep{1,2,3,4}{a+b<a+c}{\rEE{5,6,16}}
+      m<n\leftrightarrow\exists k\in\mathbb{N}\,(m+(k+1)=n)}{14,15,16}}
+  \proofstep{1,2,3,4}{a+b<a+c}{\rEE{5,6,17}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Strikte Ordnung schließt Gleichheit aus]{%
@@ -11539,8 +11797,9 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \DeltaRow{Mengen}{i\dsep n}%
   \DeltaRow{Relationsoperatoren}{<_{\mathbb{N}}}%
 }
-\begin{tabproof}
-  \proofstep{1}{n\in\mathbb{N}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{n\in\mathbb{N}}{\rA}
   \proofstep{2}{i\in\mathbb{N}}{\rA}
   \proofstep{3}{i<(n+1)}{\rA}
   \proofstep{1,2,3}{i\leq n}{%
@@ -11548,7 +11807,12 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1,2,3}{i<n\lor i=n}{%
     \FormulaRefAuto{PeanoLeqSplit}{2,1,4}}
   \proofstep{1,2}{i<(n+1)\rightarrow i<n\lor i=n}{\rRI{3,5}}
-  \proofstep{7}{i<n\lor i=n}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{7}{i<n\lor i=n}{\rA}
   \proofstep{8}{i<n}{\rA}
   \proofstep{1,2,8}{i\leq n}{%
     \FormulaRefAuto{PeanoStrictImpliesLeq}{2,1,8}}
@@ -11561,8 +11825,15 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \FormulaRefAuto{PeanoLeqAddOneStrict}[thm]{2,1,13}}
   \proofstep{1,2,7}{i<(n+1)}{\rOE{7,8,10,11,14}}
   \proofstep{1,2}{(i<n\lor i=n)\rightarrow i<(n+1)}{\rRI{7,15}}
-  \proofstep{1,2}{i<(n+1)\leftrightarrow i<n\lor i=n}{\rLRI{6,16}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{16}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{i<(n+1)\leftrightarrow i<n\lor i=n}{\rLRI{6,16}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Nachfolger-Anfangsabschnitt]{%
   n\in\mathbb{N}\vdash
@@ -11614,9 +11885,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
       \rOE{10,11,14,15,17}}
     \proofstepwidestar[1]{%
       \NatSeg{(n+1)}\subseteq\NatSeg{n}\cup\{n\}}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{%
-        \rUI{\rRI{5,18}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[5]\vdots 18}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rückrichtung]{%
@@ -11670,9 +11939,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
       \rOE{6,7,15,16,22}}
     \proofstepwidestar[1]{%
       \NatSeg{n}\cup\{n\}\subseteq\NatSeg{(n+1)}}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{%
-        \rUI{\rRI{5,23}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[5]\vdots 23}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -11725,15 +11992,21 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
 }{PeanoNatSegAddOneMembershipIff}{%
   \DeltaRow{Mengen}{r\dsep x}%
 }
-\begin{tabproof}
-  \proofstep{1}{r\in\mathbb{N}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{r\in\mathbb{N}}{\rA}
   \proofstep{2}{x\in\NatSeg{(r+1)}}{\rA}
   \proofstep{1,2}{x\in\NatSeg{r}\lor x=r}{%
     \FormulaRefAuto{PeanoNatSegAddOneElim}[thm]{1,2}}
   \proofstep{1}{%
     x\in\NatSeg{(r+1)}\rightarrow
     \bigl(x\in\NatSeg{r}\lor x=r\bigr)}{\rRI{2,3}}
-  \proofstep{5}{x\in\NatSeg{r}\lor x=r}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{x\in\NatSeg{r}\lor x=r}{\rA}
   \proofstep{6}{x\in\NatSeg{r}}{\rA}
   \proofstep{1}{\NatSeg{r}\subseteq\NatSeg{(r+1)}}{%
     \FormulaRefAuto{PeanoNatSegSubsetAddOne}[thm]{1}}
@@ -11752,10 +12025,17 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1}{%
     \bigl(x\in\NatSeg{r}\lor x=r\bigr)\rightarrow
     x\in\NatSeg{(r+1)}}{\rRI{5,15}}
-  \proofstep{1}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{16}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{%
     x\in\NatSeg{(r+1)}\leftrightarrow
     \bigl(x\in\NatSeg{r}\lor x=r\bigr)}{\rLRI{4,16}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Strikte Ordnung als Mitgliedschaft im Peano-Anfangsabschnitt]{%
   m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash
@@ -11960,7 +12240,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \proofstepwidestar[2]{r\in\mathbb{N}}{\rA}
     \proofstepwidestar[1,2]{%
       n\in\NatSeg{r}\lor\exists m\in\mathbb{N}\,(n=m+r)}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,2,1)}}
   \closeproofpartwide
@@ -12107,8 +12387,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{1,2,3,4}{x\in\NatSeg{n}}{%
     \FormulaRefAuto{PeanoNatSegStrictMembership}{6,2,11}}
   \proofstep{1,2,3}{\NatSeg{m}\subseteq\NatSeg{n}}{%
-    \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}{%
-      \rUI{\rRI{4,12}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 12}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Anfangsabschnittsinklusion liefert Ordnung]{%
@@ -12170,19 +12449,32 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \DeltaRow{Mengen}{m\dsep n}%
   \DeltaRow{Relationsoperatoren}{\leq_{\mathbb{N}}}%
 }
-\begin{tabproof}
-  \proofstep{1}{m\in\mathbb{N}}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{m\in\mathbb{N}}{\rA}
   \proofstep{2}{n\in\mathbb{N}}{\rA}
   \proofstep{3}{m\leq n}{\rA}
   \proofstep{1,2,3}{\NatSeg{m}\subseteq\NatSeg{n}}{%
     \FormulaRefAuto{PeanoNatSegLeqSubsetForward}{1,2,3}}
   \proofstep{1,2}{m\leq n\rightarrow\NatSeg{m}\subseteq\NatSeg{n}}{\rRI{3,4}}
-  \proofstep{6}{\NatSeg{m}\subseteq\NatSeg{n}}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{\NatSeg{m}\subseteq\NatSeg{n}}{\rA}
   \proofstep{1,2,6}{m\leq n}{%
     \FormulaRefAuto{PeanoNatSegSubsetLeqBackward}{1,2,6}}
   \proofstep{1,2}{\NatSeg{m}\subseteq\NatSeg{n}\rightarrow m\leq n}{\rRI{6,7}}
-  \proofstep{1,2}{m\leq n\leftrightarrow\NatSeg{m}\subseteq\NatSeg{n}}{\rLRI{5,8}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{m\leq n\leftrightarrow\NatSeg{m}\subseteq\NatSeg{n}}{\rLRI{5,8}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Eindeutiger Endpunkt]{%
   m,n\in\mathbb N\dsep\NatSeg m=\NatSeg n\vdash m=n%
@@ -12244,7 +12536,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
   \proofstep{3,4,8}{x\in\NatSeg{n}}{\rCE{9}}
   \proofstep{1,2,3,4}{x\in\NatSeg{n}}{\rOE{6,7,7,8,10}}
   \proofstep{1,2,3}{B\subseteq\NatSeg{n}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{4,11}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 11}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Teilmengen eines Nachfolger-Anfangsabschnitts mit Endpunkt]{%
@@ -12282,8 +12574,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \proofstepwidestar[1,2,4]{x\in(B\cap\NatSeg{n})\cup\{n\}}{%
       \rOE{6,7,9,10,12}}
     \proofstepwidestar[1,2,3]{B\subseteq(B\cap\NatSeg{n})\cup\{n\}}{%
-      \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}{%
-        \rUI{\rRI{4,13}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 13}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rückrichtung]{%
@@ -12306,8 +12597,7 @@ Zahlen als Mengen identifiziert. Fuer eine natuerliche Zahl \(n\) bezeichnet
     \proofstepwidestar[3,8]{x\in B}{\rIE{9,3}}
     \proofstepwidestar[3,4]{x\in B}{\rOE{5,6,7,8,10}}
     \proofstepwidestar[1,2,3]{(B\cap\NatSeg{n})\cup\{n\}\subseteq B}{%
-      \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}{%
-        \rUI{\rRI{4,11}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 11}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -12604,7 +12894,7 @@ $x_0$ aus.
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[1]{\neg\exists F\colon\mathbb{N}\inj\NatSeg{n}}{%
-      \makecell[l]{%
+      \makecell[tl]{%
         \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]\\[-2pt]
         \quad(IA,IS,1)}}
   \closeproofpartwide
@@ -12893,10 +13183,14 @@ Stellen vor und nach einem solchen Versatz.
         \{r+j\mid j\in\NatSeg s\}}{\rA}
     \proofstepwidestarbreakkeep[1,2]{r+s\in\mathbb N}{%
       \FormulaRefAuto{PeanoAddClosure}[thm]{1,2}}
+    \proofstepwidestar[]{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[1,2]{( r + s ) + 1 = r + ( s + 1 )}{%
+      \FormulaRefAuto{PeanoAddAssociative}[thm]{%
+          1,2,5}}
     \proofstepwidestarbreakkeep[1,2]{r+(s+1)=(r+s)+1}{%
       \FormulaRefAuto{a=b\vdash b=a}[thm]{%
-        \FormulaRefAuto{PeanoAddAssociative}[thm]{%
-          1,2,\FormulaRefAuto{PeanoOneInN}[thm]}}}
+        6}}
     \proofstepwidestarbreakkeep[1,2]{%
       \NatSeg{(r+s)+1}=\NatSeg{r+s}\cup\{r+s\}}{%
       \FormulaRefAuto{PeanoNatSegAddOne}[thm]{4}}
@@ -12920,19 +13214,19 @@ Stellen vor und nach einem solchen Versatz.
         j\in\NatSeg{s+1}
         \leftrightarrow
         j\in\NatSeg s\lor j\in\{s\}\Bigr)}{%
-      \FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{7}}
+      \FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{9}}
     \proofstepwidestarbreakkeep[2]{%
       \forall j\,\Bigl(
         j\in\NatSeg{s+1}
         \leftrightarrow
         j\in\NatSeg s\lor j=s\Bigr)}{%
-      \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{10}}
+      \FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{12}}
     \proofstepwidestarbreakkeep[1,2]{%
       \forall x\,\Bigl(
         x\in\{r+j\mid j\in\NatSeg{s+1}\}
         \leftrightarrow
         x\in\{r+j\mid j\in\NatSeg s\}\lor x=r+s\Bigr)}{%
-      \rLRS{8,9,11}}
+      \rLRS{10,11,13}}
     \proofstepwidestarbreakkeep[1,2]{%
       \forall x\,\Bigl(
         x\in\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}
@@ -12947,18 +13241,18 @@ Stellen vor und nach einem solchen Versatz.
         x\in\{r+j\mid j\in\NatSeg{s+1}\}
         \leftrightarrow
         x\in\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}\Bigr)}{%
-      \rLRS{12,13,14}}
+      \rLRS{14,15,16}}
     \proofstepwidestarbreakkeep[1,2]{%
       \{r+j\mid j\in\NatSeg{s+1}\}
       =\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}}{%
       \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)
-        \vdash A=B}[ax]{15}}
+        \vdash A=B}[ax]{17}}
     \proofstepwidestarbreakkeep[1,2]{%
-      \NatSeg{r+(s+1)}=\NatSeg{(r+s)+1}}{\rIE{5}}
+      \NatSeg{r+(s+1)}=\NatSeg{(r+s)+1}}{\rIE{7}}
     \proofstepwidestarbreakkeep[1,2,3]{%
       \NatSeg{(r+s)+1}
       =\bigl(\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}\bigr)
-        \cup\{r+s\}}{\rIE{3,6}}
+        \cup\{r+s\}}{\rIE{3,8}}
     \proofstepwidestarbreakkeep[1,2,3]{%
       \bigl(\NatSeg r\cup\{r+j\mid j\in\NatSeg s\}\bigr)
         \cup\{r+s\}
@@ -12969,11 +13263,11 @@ Stellen vor und nach einem solchen Versatz.
       \NatSeg r\cup
         \bigl(\{r+j\mid j\in\NatSeg s\}\cup\{r+s\}\bigr)
       =\NatSeg r\cup\{r+j\mid j\in\NatSeg{s+1}\}}{%
-      \FormulaRefAuto{a=b\vdash b=a}[thm]{16}}
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{18}}
     \proofstepwidestarbreakkeep[1,2,3]{%
       \NatSeg{r+(s+1)}=\NatSeg r\cup
         \{r+j\mid j\in\NatSeg{s+1}\}}{%
-      \rChain{17,18,19,20}}
+      \rChain{19,20,21,22}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -13204,9 +13498,11 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
       \FormulaRefAuto{PeanoMulAddOneRight}{3,1}}
     \proofstepwidestar[2]{0\cdot a+0=0+0}{\rIE{2}}
     \proofstepwidestar[]{0+0=0}{\FormulaRefAuto{PeanoAddRightZero}{3}}
+    \proofstepwidestar[1,2]{0 \cdot ( a + 1 ) = 0 + 0}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
     \proofstepwidestar[1,2]{0\cdot(a+1)=0}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5},6}}
+        7,6}}
     \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -13254,13 +13550,17 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \proofstepwidestar[1]{a\cdot0=0}{%
       \FormulaRefAuto{PeanoMulRightZero}{1}}
     \proofstepwidestar[1]{a\cdot0+0=0+0}{\rIE{4}}
+    \proofstepwidestar[]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[]{0+0=0}{\FormulaRefAuto{PeanoAddRightZero}{%
-      \FormulaRefAuto{PeanoZero}[ax]}}
+      6}}
+    \proofstepwidestar[1]{a \cdot 0 + 0 = 0}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,7}}
     \proofstepwidestar[1]{0=a\cdot0+0}{%
       \FormulaRefAuto{a=b\vdash b=a}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}}
+        8}}
     \proofstepwidestar[1]{(a+1)\cdot0=a\cdot0+0}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,7}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{3,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -13335,9 +13635,11 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
       \FormulaRefAuto{PeanoMulAddOneLeft}{2,1}}
     \proofstepwidestar[1,2]{b\cdot a+a=(b+1)\cdot a}{%
       \FormulaRefAuto{a=b\vdash b=a}{6}}
+    \proofstepwidestar[1,2,3]{a \cdot ( b + 1 ) = b \cdot a + a}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5}}
     \proofstepwidestar[1,2,3]{a\cdot(b+1)=(b+1)\cdot a}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,5},7}}
+        8,7}}
     \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -13389,11 +13691,13 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \proofstepwidestar[1,2]{a\cdot b+0=a\cdot b}{%
       \FormulaRefAuto{PeanoAddRightZero}{6}}
     \proofstepwidestar[1,2]{a\cdot b+a\cdot0=a\cdot b+0}{\rIE{5}}
+    \proofstepwidestar[1,2]{a \cdot b + a \cdot 0 = a \cdot b}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,7}}
     \proofstepwidestar[1,2]{a\cdot b=a\cdot b+a\cdot0}{%
       \FormulaRefAuto{a=b\vdash b=a}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{8,7}}}
+        9}}
     \proofstepwidestar[1,2]{a\cdot(b+0)=a\cdot b+a\cdot0}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,9}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,10}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -13420,21 +13724,31 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
       \FormulaRefAuto{PeanoMulAddOneRight}{1,7}}
     \proofstepwidestarbreak[4]{%
       a\cdot(b+c)+a=(a\cdot b+a\cdot c)+a}{\rIE{4}}
+    \proofstepwidestar[1,2]{a \cdot b \in \mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}{1,2}}
+    \proofstepwidestar[1,3]{a \cdot c \in \mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}{1,3}}
     \proofstepwidestarbreak[1,2,3,4]{%
       (a\cdot b+a\cdot c)+a=a\cdot b+(a\cdot c+a)}{%
       \FormulaRefAuto{PeanoAddAssociative}{%
-        \FormulaRefAuto{PeanoMulClosure}{1,2},
-        \FormulaRefAuto{PeanoMulClosure}{1,3},1}}
+        10,
+        11,1}}
     \proofstepwidestarbreak[1,3]{a\cdot(c+1)=a\cdot c+a}{%
       \FormulaRefAuto{PeanoMulAddOneRight}{1,3}}
     \proofstepwidestarbreak[1,2,3]{%
-      a\cdot b+(a\cdot c+a)=a\cdot b+a\cdot(c+1)}{\rIE{11}}
+      a\cdot b+(a\cdot c+a)=a\cdot b+a\cdot(c+1)}{\rIE{13}}
+    \proofstepwidestar[1,2,3]{a \cdot ( b + ( c + 1 ) ) = a \cdot ( b + c ) + a}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,8}}
+    \proofstepwidestar[1,2,3,4]{( a \cdot b + a \cdot c ) + a = a \cdot b + a \cdot ( c + 1 )}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{12,14}}
+    \proofstepwidestar[1,2,3,4]{a \cdot ( b + ( c + 1 ) ) = ( a \cdot b + a \cdot c ) + a}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
+          15,9}}
     \proofstepwidestarbreak[1,2,3,4]{%
       a\cdot(b+(c+1))=a\cdot b+a\cdot(c+1)}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-          \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,8},9},%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,12}}}
+        17,%
+        16}}
     \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -13468,9 +13782,11 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \FormulaRefAuto{PeanoMulCommutative}{3,2}}
   \proofstepwidestar[1,2,3]{c\cdot a+c\cdot b=a\cdot c+b\cdot c}{%
     \rIE{7,8}}
+  \proofstepwidestar[1,2,3]{( a + b ) \cdot c = c \cdot a + c \cdot b}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6}}
   \proofstepwidestar[1,2,3]{(a+b)\cdot c=a\cdot c+b\cdot c}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{5,6},9}}
+      10,9}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Assoziativität der Multiplikation]{%
@@ -13498,11 +13814,13 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
     \proofstepwidestar[1,2]{a\cdot(b\cdot0)=a\cdot0}{\rIE{5}}
     \proofstepwidestar[1]{a\cdot0=0}{%
       \FormulaRefAuto{PeanoMulRightZero}{1}}
+    \proofstepwidestar[1,2]{a \cdot ( b \cdot 0 ) = 0}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7}}
     \proofstepwidestar[1,2]{0=a\cdot(b\cdot0)}{%
       \FormulaRefAuto{a=b\vdash b=a}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7}}}
+        8}}
     \proofstepwidestar[1,2]{(a\cdot b)\cdot0=a\cdot(b\cdot0)}{%
-      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,8}}
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{4,9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -13525,22 +13843,28 @@ festes \(a\in\mathbb{N}\) benutzen wir als Schrittabbildung die Addition von
       \FormulaRefAuto{PeanoMulAddOneRight}{5,3}}
     \proofstepwidestarbreak[4]{%
       (a\cdot b)\cdot c+a\cdot b=a\cdot(b\cdot c)+a\cdot b}{\rIE{4}}
+    \proofstepwidestar[2,3]{b \cdot c \in \mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}{2,3}}
     \proofstepwidestarbreak[1,2,3]{%
       a\cdot(b\cdot c+b)=a\cdot(b\cdot c)+a\cdot b}{%
       \FormulaRefAuto{PeanoMulLeftDistributive}{%
-        1,\FormulaRefAuto{PeanoMulClosure}{2,3},2}}
+        1,8,2}}
     \proofstepwidestarbreak[1,2,3]{%
       a\cdot(b\cdot c)+a\cdot b=a\cdot(b\cdot c+b)}{%
-      \FormulaRefAuto{a=b\vdash b=a}{8}}
+      \FormulaRefAuto{a=b\vdash b=a}{9}}
     \proofstepwidestarbreak[2,3]{b\cdot(c+1)=b\cdot c+b}{%
       \FormulaRefAuto{PeanoMulAddOneRight}{2,3}}
     \proofstepwidestarbreak[1,2,3]{%
-      a\cdot(b\cdot c+b)=a\cdot(b\cdot(c+1))}{\rIE{10}}
+      a\cdot(b\cdot c+b)=a\cdot(b\cdot(c+1))}{\rIE{11}}
+    \proofstepwidestar[1,2,3,4]{( a \cdot b ) \cdot ( c + 1 ) = a \cdot ( b \cdot c ) + a \cdot b}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7}}
+    \proofstepwidestar[1,2,3,4]{( a \cdot b ) \cdot ( c + 1 ) = a \cdot ( b \cdot c + b )}{%
+      \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
+          13,10}}
     \proofstepwidestarbreak[1,2,3,4]{%
       (a\cdot b)\cdot(c+1)=a\cdot(b\cdot(c+1))}{%
       \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-        \FormulaRefAuto{a = b,\, b = c \vdash a = c}{%
-          \FormulaRefAuto{a = b,\, b = c \vdash a = c}{6,7},9},11}}
+        14,12}}
     \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -13645,15 +13969,17 @@ Summen in einem Schritt mit einem gemeinsamen Faktor zu multiplizieren.
   \proofstepwidestar[1]{a,b,c,d,e,f,g,h\in\mathbb N}{\rA}
   \proofstepwidestar[2]{a+b=c+d}{\rA}
   \proofstepwidestar[3]{e+f=g+h}{\rA}
+  \proofstepwidestar[1]{( a + b ) + ( e + f ) = ( a + e ) + ( b + f )}{%
+      \FormulaRefAuto{PeanoAddInterchange}{1}}
   \proofstepwidestar[1]{(a+e)+(b+f)=(a+b)+(e+f)}{%
     \FormulaRefAuto{a=b\vdash b=a}{%
-      \FormulaRefAuto{PeanoAddInterchange}{1}}}
+      4}}
   \proofstepwidestar[1,2,3]{(a+b)+(e+f)=(c+d)+(g+h)}{%
     \rIE{2,3}}
   \proofstepwidestar[1]{(c+d)+(g+h)=(c+g)+(d+h)}{%
     \FormulaRefAuto{PeanoAddInterchange}{1}}
   \proofstepwidestar[1,2,3]{%
-    (a+e)+(b+f)=(c+g)+(d+h)}{\rChain{4,5,6}}
+    (a+e)+(b+f)=(c+g)+(d+h)}{\rChain{5,6,7}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Bilineares Vertauschungsgesetz]{%
@@ -14984,11 +15310,15 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
       \FormulaRefAuto{PeanoAddOneFunction}[thm]}
     \proofstepwidestar[]{0!=\prod_{i<0}(i+1)}{%
       \FormulaRefAuto{FactorialFunction}[def]{1}}
+    \proofstepwidestar[]{\forall i\in\mathbb N\,(\AddStep{1}(i)=i+1)}{%
+      \FormulaRefAuto{PeanoAddOneFunctionValue}[thm]}
+    \proofstepwidestar[]{\prod_{i<0}\AddStep{1}(i)=1}{%
+      \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
+        \prod_{i<0}u(i)=1}[thm]{2}}
     \proofstepwidestar[]{\prod_{i<0}(i+1)=1}{%
-      \rIE{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\vdash
-        \prod_{i<0}u(i)=1}[thm]{2},%
-        \FormulaRefAuto{PeanoAddOneFunctionValue}[thm]}}
-    \proofstepwidestar[]{0!=1}{\rChain{3,4}}
+      \rIE{5,%
+        4}}
+    \proofstepwidestar[]{0!=1}{\rChain{3,6}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Nachfolgerfall]{%
@@ -15003,20 +15333,24 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
       \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
     \proofstepwidestar[1]{(n+1)!=\prod_{i<n+1}(i+1)}{%
       \FormulaRefAuto{FactorialFunction}[def]{3}}
+    \proofstepwidestar[]{\forall i\in\mathbb N\,(\AddStep{1}(i)=i+1)}{%
+      \FormulaRefAuto{PeanoAddOneFunctionValue}[thm]}
+    \proofstepwidestar[1]{\prod_{i<n+1}\AddStep{1}(i)=(\prod_{i<n}\AddStep{1}(i))\cdot\AddStep{1}(n)}{%
+      \FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}
+        \vdash \prod_{i<n+1}u(i)=
+        \left(\prod_{i<n}u(i)\right)\cdot u(n)}[thm]{2,1}}
     \proofstepwidestar[1]{%
       \prod_{i<n+1}(i+1)
       =\left(\prod_{i<n}(i+1)\right)\cdot (n+1)}{%
-      \rIE{\FormulaRefAuto{u\colon\mathbb{N}\to\mathbb{N}\dsep n\in\mathbb{N}
-        \vdash \prod_{i<n+1}u(i)=
-        \left(\prod_{i<n}u(i)\right)\cdot u(n)}[thm]{2,1},%
-        \FormulaRefAuto{PeanoAddOneFunctionValue}[thm]}}
+      \rIE{6,%
+        5}}
     \proofstepwidestar[1]{n!=\prod_{i<n}(i+1)}{%
       \FormulaRefAuto{FactorialFunction}[def]{1}}
     \proofstepwidestar[1]{%
       \left(\prod_{i<n}(i+1)\right)\cdot (n+1)
-      =n!\cdot (n+1)}{\rIE{6}}
+      =n!\cdot (n+1)}{\rIE{8}}
     \proofstepwidestar[1]{(n+1)!=n!\cdot (n+1)}{%
-      \rChain{4,5,7}}
+      \rChain{4,7,9}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
@@ -15062,20 +15396,28 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
   \proofsteppaired[8]{a=r+1}{\rAEb{8}}
   \proofsteppaired[1,7]{a\cdot (k+1)=a\cdot k+a}{%
     \FormulaRefAuto{PeanoMulAddOneRight}[thm]{1,9}}
+  \proofsteppaired[1,7]{a \cdot k \in \mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{1,9}}
+  \proofsteppaired[1,7,8]{a \cdot k + ( r + 1 ) = ( a \cdot k + r ) + 1}{%
+      \FormulaRefAuto{PeanoAddAddOneRight}[thm]{%
+      14,11}}
   \proofsteppaired[1,7,8]{a\cdot k+a=(a\cdot k+r)+1}{%
-    \rIE{12,\FormulaRefAuto{PeanoAddAddOneRight}[thm]{%
-      \FormulaRefAuto{PeanoMulClosure}[thm]{1,9},11}}}
+    \rIE{12,15}}
   \proofsteppaired[1,7,8]{a\cdot (k+1)=(a\cdot k+r)+1}{%
-    \rChain{13,14}}
-  \proofsteppaired[1,7,8]{(a\cdot k+r)+1\neq0}{%
-    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{%
+    \rChain{13,16}}
+  \proofsteppaired[1,7]{a \cdot k \in \mathbb N}{%
+      \FormulaRefAuto{PeanoMulClosure}[thm]{1,9}}
+  \proofsteppaired[1,7,8]{a \cdot k + r \in \mathbb N}{%
       \FormulaRefAuto{a\in\mathbb{N}\dsep b\in\mathbb{N}
         \vdash a+b\in\mathbb{N}}{%
-        \FormulaRefAuto{PeanoMulClosure}[thm]{1,9},11}}}
-  \proofsteppaired[1,7,8]{a\cdot (k+1)\neq0}{\rIE{15,16}}
-  \proofsteppaired[1,7,8]{a\cdot b\neq0}{\rIE{10,17}}
-  \proofsteppaired[1,3,7]{a\cdot b\neq0}{\rEE{6,8,18}}
-  \proofsteppaired[1,2,3,4]{a\cdot b\neq0}{\rEE{5,7,19}}
+        18,11}}
+  \proofsteppaired[1,7,8]{(a\cdot k+r)+1\neq0}{%
+    \FormulaRefAuto{PeanoAddOneNonzero}[thm]{%
+      19}}
+  \proofsteppaired[1,7,8]{a\cdot (k+1)\neq0}{\rIE{17,20}}
+  \proofsteppaired[1,7,8]{a\cdot b\neq0}{\rIE{10,21}}
+  \proofsteppaired[1,3,7]{a\cdot b\neq0}{\rEE{6,8,22}}
+  \proofsteppaired[1,2,3,4]{a\cdot b\neq0}{\rEE{5,7,23}}
 \end{longtable}
 \par
 \endgroup
@@ -15102,18 +15444,20 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
   }
     \proofstepwidestar[1]{n\in\mathbb{N}}{\rA}
     \proofstepwidestar[2]{n!\neq0}{\rA}
+    \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
     \proofstepwidestar[1]{n!\in\mathbb{N}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{FactorialClosure}[thm],1}}
+        3,1}}
     \proofstepwidestar[1]{n+1\in\mathbb{N}}{%
       \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
     \proofstepwidestar[1]{n+1\neq0}{%
       \FormulaRefAuto{PeanoAddOneNonzero}[thm]{1}}
     \proofstepwidestar[1,2]{n!\cdot (n+1)\neq0}{%
-      \FormulaRefAuto{PeanoMulNonzero}[thm]{3,4,2,5}}
+      \FormulaRefAuto{PeanoMulNonzero}[thm]{4,5,2,6}}
     \proofstepwidestar[1]{(n+1)!=n!\cdot (n+1)}{%
       \FormulaRefAuto{FactorialRecursion}[thm]{1}}
-    \proofstepwidestar[1,2]{(n+1)!\neq0}{\rIE{7,6}}
+    \proofstepwidestar[1,2]{(n+1)!\neq0}{\rIE{8,7}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
@@ -15136,31 +15480,37 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
     \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}
   \proofstepwidestar[1]{n\in\mathbb{N}}{\rAEa{2}}
   \proofstepwidestar[1]{n\neq0}{\rAEb{2}}
+  \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
   \proofstepwidestar[1]{n!\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-      \FormulaRefAuto{FactorialClosure}[thm],3}}
+      5,3}}
   \proofstepwidestar[1]{n!\neq0}{%
     \FormulaRefAuto{FactorialNonzero}[thm]{3}}
   \proofstepwidestar[1]{n!\cdot n\in\mathbb{N}}{%
-    \FormulaRefAuto{PeanoMulClosure}[thm]{5,3}}
+    \FormulaRefAuto{PeanoMulClosure}[thm]{6,3}}
   \proofstepwidestar[1]{n!\cdot n\neq0}{%
-    \FormulaRefAuto{PeanoMulNonzero}[thm]{5,3,6,4}}
+    \FormulaRefAuto{PeanoMulNonzero}[thm]{6,3,7,4}}
   \proofstepwidestar[1]{(n+1)!=n!\cdot (n+1)}{%
     \FormulaRefAuto{FactorialRecursion}[thm]{3}}
   \proofstepwidestar[1]{n!\cdot (n+1)=n!\cdot n+n!}{%
-    \FormulaRefAuto{PeanoMulAddOneRight}[thm]{5,3}}
+    \FormulaRefAuto{PeanoMulAddOneRight}[thm]{6,3}}
   \proofstepwidestar[1]{n!\cdot n+n!=n!+n!\cdot n}{%
-    \FormulaRefAuto{PeanoAddCommutative}[thm]{7,5}}
+    \FormulaRefAuto{PeanoAddCommutative}[thm]{8,6}}
   \proofstepwidestar[1]{n!+n!\cdot n=(n+1)!}{%
-    \FormulaRefAuto{a=b\vdash b=a}{\rChain{9,10,11}}}
+    \FormulaRefAuto{a=b\vdash b=a}{\rChain{10,11,12}}}
+  \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
+  \proofstepwidestar[1]{n + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}
   \proofstepwidestar[1]{(n+1)!\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-      \FormulaRefAuto{FactorialClosure}[thm],
-      \FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}}
+      14,
+      15}}
   \proofstepwidestar[1]{n!<(n+1)!}{%
     \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep
       k\in\mathbb{N}\dsep m+k=n\dsep k\neq0\vdash m<n}{%
-      5,13,7,12,8}}
+      6,16,8,13,9}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Obere Zahl einer strikten Ungleichung ist nicht null]{%
@@ -15253,9 +15603,11 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
   \proofstepwidestar[3]{r<s}{\rA}
   \proofstepwidestar[1,3]{s\neq0}{%
     \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{\rAEa{1},\rAEb{1},3}}
-  \proofstepwidestarbreak[1,2,3]{r-1,s-1\in\mathbb N}{%
-    \rAIRepeat{2}{\FormulaRefAuto{PeanoMinusOneNatural}[thm]}{%
-      \rAEa{1},2\mid\rAEb{1},4}}
+  \proofstepwidestar[1,2]{r-1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMinusOneNatural}[thm]{\rAEa{1},2}}
+  \proofstepwidestar[1,3]{s-1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoMinusOneNatural}[thm]{\rAEb{1},4}}
+  \proofstepwidestarbreak[1,2,3]{r-1,s-1\in\mathbb N}{\rAI{5,6}}
   \proofstepwidestar[1,2]{r=(r-1)+1}{%
     \FormulaRefAuto{PeanoMinusOneRecoverValue}[thm]{\rAEa{1},2}}
   \proofstepwidestar[1,3]{s=(s-1)+1}{%
@@ -15263,21 +15615,29 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
   \proofstepwidestarbreak[1,3]{%
     \exists u\in\mathbb N\,(r+(u+1)=s)}{%
     \FormulaRefAuto{PeanoStrictAddOneDistance}[thm]{\rAEa{1},\rAEb{1},3}}
-  \proofstepwidestar[9]{u\in\mathbb N\land r+(u+1)=s}{\rA}
-  \proofstepwidestarbreak[1,2,3,9]{%
-    (r-1+(u+1))+1=(s-1)+1}{%
-    \rIE{6,7,\rAEb{9},
+  \proofstepwidestar[11]{u\in\mathbb N\land r+(u+1)=s}{\rA}
+  \proofstepwidestar[11]{u + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{11}}}
+  \proofstepwidestar[1,2,3,11]{(r-1+1)+(u+1)=(r-1+(u+1))+1}{%
       \FormulaRefAuto{PeanoAddOneAddLeft}[thm]{%
-        \rAEa{5},\FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{9}}}}}
-  \proofstepwidestarbreak[1,2,3,9]{r-1+(u+1)=s-1}{%
-    \FormulaRefAuto{PeanoAddOneInjective}[thm]{%
+        \rAEa{7},12}}
+  \proofstepwidestarbreak[1,2,3,11]{%
+    (r-1+(u+1))+1=(s-1)+1}{%
+    \rIE{8,9,\rAEb{11},
+      13}}
+  \proofstepwidestar[11]{u + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{11}}}
+  \proofstepwidestar[1,2,3,11]{r - 1 + ( u + 1 ) \in \mathbb N}{%
       \FormulaRefAuto{PeanoAddClosure}[thm]{%
-        \rAEa{5},\FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{9}}},
-      \rAEb{5},10}}
-  \proofstepwidestarbreak[1,2,3,9]{r-1<s-1}{%
+        \rAEa{7},15}}
+  \proofstepwidestarbreak[1,2,3,11]{r-1+(u+1)=s-1}{%
+    \FormulaRefAuto{PeanoAddOneInjective}[thm]{%
+      16,
+      \rAEb{7},14}}
+  \proofstepwidestarbreak[1,2,3,11]{r-1<s-1}{%
     \FormulaRefAuto{PeanoStrictAddOneDistance}[thm]{%
-      \rAEa{5},\rAEb{5},\rEI{\rAI{\rAEa{9},11}}}}
-  \proofstepwidestar[1,2,3]{r-1<s-1}{\rEE{8,9,12}}
+      \rAEa{7},\rAEb{7},\rEI{\rAI{\rAEa{11},17}}}}
+  \proofstepwidestar[1,2,3]{r-1<s-1}{\rEE{10,11,18}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Abziehen von \(1\) vor einem Endpunkt \(j+1\)]{%
@@ -15319,16 +15679,18 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
   }[PositiveFactorialStrictBase]
     \proofstepwidestar[1]{m\in\mathbb{N}\setminus\{0\}}{\rA}
     \proofstepwidestar[2]{m<0}{\rA}
+    \proofstepwidestar[1]{m\in\mathbb N\land m\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}
     \proofstepwidestar[1]{m\in\mathbb{N}}{%
-      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}}
+      \rAEa{3}}
     \proofstepwidestar[1]{\neg(m<0)}{%
-      \FormulaRefAuto{PeanoNoLtZero}[thm]{3}}
+      \FormulaRefAuto{PeanoNoLtZero}[thm]{4}}
     \proofstepwidestar[1,2]{m!<0!}{%
-      \FormulaRefAuto{P\dsep\neg P\vdash Q}{2,4}}
-    \proofstepwidestar[1]{m<0\rightarrow m!<0!}{\rRI{2,5}}
+      \FormulaRefAuto{P\dsep\neg P\vdash Q}{2,5}}
+    \proofstepwidestar[1]{m<0\rightarrow m!<0!}{\rRI{2,6}}
     \proofstepwidestar[]{%
       \forall m\in\mathbb{N}\setminus\{0\}\,(m<0\rightarrow m!<0!)}{%
-      \rUI{\rRI{1,6}}}
+      \rUI{\rRI{1,7}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Induktionsschritt]{%
@@ -15351,55 +15713,67 @@ ohne eine weitere Rekursionskonstruktion eingeführt werden.
       \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)}{\rA}
     \proofstepwidestar[3]{m\in\mathbb{N}\setminus\{0\}}{\rA}
     \proofstepwidestar[4]{m<n+1}{\rA}
+    \proofstepwidestar[3]{m\in\mathbb N\land m\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}
     \proofstepwidestarbreak[3]{m\in\mathbb{N}}{%
-      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}}
+      \rAEa{5}}
+    \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
     \proofstepwidestarbreak[3]{m!\in\mathbb{N}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{FactorialClosure}[thm],5}}
+        7,6}}
+    \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
     \proofstepwidestarbreak[1]{n!\in\mathbb{N}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{FactorialClosure}[thm],1}}
+        9,1}}
+    \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
+    \proofstepwidestar[1]{n + 1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}
     \proofstepwidestarbreak[1]{(n+1)!\in\mathbb{N}}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-        \FormulaRefAuto{FactorialClosure}[thm],%
-        \FormulaRefAuto{PeanoAddOneClosure}[thm]{1}}}
+        11,%
+        12}}
     \proofstepwidestarbreak[1,3,4]{m<n\lor m=n}{%
-      \FormulaRefAuto{PeanoStrictAddOneSplit}[thm]{1,5,4}}
-    \proofstepwidestar[10]{m<n}{\rA}
-    \proofstepwidestarbreak[2,3,10]{m!<n!}{\rRE{10,\rRE{3,\rUE{2}}}}
-    \proofstepwidestarbreak[1,3,10]{n\neq0}{%
-      \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{5,1,10}}
-    \proofstepwidestarbreak[1,3,10]{n\in\mathbb{N}\setminus\{0\}}{%
-      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{\rAI{1,12}}}
-    \proofstepwidestarbreak[1,3,10]{n!<(n+1)!}{%
-      \FormulaRefAuto{FactorialAddOneStrict}[thm]{13}}
-    \proofstepwidestarbreak[1,2,3,10]{m!<(n+1)!}{%
-      \FormulaRefAuto{PeanoLtTransitive}[thm]{6,7,8,11,14}}
-    \proofstepwidestar[16]{m=n}{\rA}
+      \FormulaRefAuto{PeanoStrictAddOneSplit}[thm]{1,6,4}}
+    \proofstepwidestar[15]{m<n}{\rA}
+    \proofstepwidestarbreak[2,3,15]{m!<n!}{\rRE{15,\rRE{3,\rUE{2}}}}
+    \proofstepwidestarbreak[1,3,15]{n\neq0}{%
+      \FormulaRefAuto{PeanoStrictUpperNonzero}[thm]{6,1,15}}
+    \proofstepwidestarbreak[1,3,15]{n\in\mathbb{N}\setminus\{0\}}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{\rAI{1,17}}}
+    \proofstepwidestarbreak[1,3,15]{n!<(n+1)!}{%
+      \FormulaRefAuto{FactorialAddOneStrict}[thm]{18}}
+    \proofstepwidestarbreak[1,2,3,15]{m!<(n+1)!}{%
+      \FormulaRefAuto{PeanoLtTransitive}[thm]{8,10,13,16,19}}
+    \proofstepwidestar[21]{m=n}{\rA}
     \proofstepwidestarbreak[3]{m!<(m+1)!}{%
       \FormulaRefAuto{FactorialAddOneStrict}[thm]{3}}
-    \proofstepwidestarbreak[3,16]{m!<(n+1)!}{\rIE{16,17}}
+    \proofstepwidestarbreak[3,21]{m!<(n+1)!}{\rIE{21,22}}
     \proofstepwidestarbreak[1,2,3,4]{m!<(n+1)!}{%
-      \rOE{9,10,15,16,18}}
+      \rOE{14,15,20,21,23}}
     \proofstepwidestarbreak[1,2,3]{%
-      m<n+1\rightarrow m!<(n+1)!}{\rRI{4,19}}
+      m<n+1\rightarrow m!<(n+1)!}{\rRI{4,24}}
     \proofstepwidestarbreak[1,2]{%
       \forall m\in\mathbb{N}\setminus\{0\}\,
-        (m<n+1\rightarrow m!<(n+1)!)}{\rUI{\rRI{3,20}}}
+        (m<n+1\rightarrow m!<(n+1)!)}{\rUI{\rRI{3,25}}}
   \closeproofpartwideindR
 
   \proofpartwide{Induktionsschluss}
     \proofstepwidestar[1]{m\in\mathbb{N}\setminus\{0\}}{\rA}
     \proofstepwidestar[2]{n\in\mathbb{N}\setminus\{0\}}{\rA}
     \proofstepwidestar[3]{m<n}{\rA}
+    \proofstepwidestar[2]{n\in\mathbb N\land n\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}
     \proofstepwidestar[2]{n\in\mathbb{N}}{%
-      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}}
-    \proofstepwidestar[4]{%
+      \rAEa{4}}
+    \proofstepwidestar[5]{%
       \forall m\in\mathbb{N}\setminus\{0\}\,(m<n\rightarrow m!<n!)}{%
-      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,4}}
-    \proofstepwidestar[1,4]{m<n\rightarrow m!<n!}{%
-      \rRE{1,\rUE{5}}}
-    \proofstepwidestar[1,2,3]{m!<n!}{\rRE{6,3}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{IA,IS,5}}
+    \proofstepwidestar[1,5]{m<n\rightarrow m!<n!}{%
+      \rRE{1,\rUE{6}}}
+    \proofstepwidestar[1,2,3]{m!<n!}{\rRE{7,3}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -15439,11 +15813,13 @@ die positiven Argumente und als Ziel genau die auftretenden Fakultätswerte.
     \operatorname{fac}_{+}(n)
     =(\operatorname{fac}\upharpoonright(\mathbb{N}\setminus\{0\}))(n)}{%
     \FormulaRefAuto{PositiveFactorialFunction}[def]}
+  \proofstepwidestar[1]{n\in\mathbb N\land n\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}
   \proofstepwidestar[1]{\operatorname{fac}(n)=n!}{%
     \FormulaRefAuto{FactorialFunction}[def]{%
-      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{1}}}}
+      \rAEa{5}}}
   \proofstepwidestar[1]{\operatorname{fac}_{+}(n)=n!}{%
-    \rChain{4,3,5}}
+    \rChain{4,3,6}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Bijektivität der positiven Fakultätsfunktion]{%
@@ -15456,8 +15832,9 @@ die positiven Argumente und als Ziel genau die auftretenden Fakultätswerte.
   \DeltaRow{Mengen}{m\dsep n}%
   \DeltaRow{Funktionensymbole}{\operatorname{fac}\dsep\operatorname{fac}_{+}}%
 }
-\begin{tabproofwide}
-  \proofstepwidestarbreak[]{%
+\begin{tabproofsplitwide}
+\proofpartwide{Injektivität}
+\proofstepwidestarbreak[]{%
     \operatorname{fac}_{+}\colon
     \mathbb{N}\setminus\{0\}\to
     \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
@@ -15469,81 +15846,113 @@ die positiven Argumente und als Ziel genau die auftretenden Fakultätswerte.
     \FormulaRefAuto{PositiveFactorialValue}[thm]{2}}
   \proofstepwidestarbreak[3]{\operatorname{fac}_{+}(n)=n!}{%
     \FormulaRefAuto{PositiveFactorialValue}[thm]{3}}
+  \proofstepwidestar[2]{m ! = \operatorname{fac} _ { + } ( m )}{%
+      \FormulaRefAuto{a=b\vdash b=a}{5}}
   \proofstepwidestarbreak[2,3,4]{m!=n!}{%
-    \rChain{\FormulaRefAuto{a=b\vdash b=a}{5},4,6}}
+    \rChain{7,4,6}}
+  \proofstepwidestar[2]{m\in\mathbb N\land m\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}
   \proofstepwidestarbreak[2]{m\in\mathbb{N}}{%
-    \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{2}}}
+    \rAEa{9}}
+  \proofstepwidestar[3]{n\in\mathbb N\land n\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}
   \proofstepwidestarbreak[3]{n\in\mathbb{N}}{%
-    \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{3}}}
+    \rAEa{11}}
+  \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
   \proofstepwidestarbreak[2]{m!\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-      \FormulaRefAuto{FactorialClosure}[thm],8}}
+      13,10}}
+  \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
   \proofstepwidestarbreak[3]{n!\in\mathbb{N}}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{%
-      \FormulaRefAuto{FactorialClosure}[thm],9}}
+      15,12}}
   \proofstepwidestarbreak[2,3]{m<n\lor n<m\lor m=n}{%
-    \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{8,9}}
-  \proofstepwidestar[13]{m<n}{\rA}
-  \proofstepwidestarbreak[2,3,13]{m!<n!}{%
-    \FormulaRefAuto{PositiveFactorialStrict}[thm]{2,3,13}}
-  \proofstepwidestarbreak[2,3,4,13]{\bot}{%
-    \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{10,11,14,7}}
-  \proofstepwidestarbreak[2,3,4,13]{m=n}{\rCE{15}}
-  \proofstepwidestar[17]{n<m}{\rA}
-  \proofstepwidestarbreak[2,3,17]{n!<m!}{%
-    \FormulaRefAuto{PositiveFactorialStrict}[thm]{3,2,17}}
-  \proofstepwidestarbreak[2,3,4,17]{\bot}{%
+    \FormulaRefAuto{PeanoOrderTrichotomy}[thm]{10,12}}
+  \proofstepwidestar[18]{m<n}{\rA}
+  \proofstepwidestarbreak[2,3,18]{m!<n!}{%
+    \FormulaRefAuto{PositiveFactorialStrict}[thm]{2,3,18}}
+  \proofstepwidestarbreak[2,3,4,18]{\bot}{%
+    \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{14,16,19,8}}
+  \proofstepwidestarbreak[2,3,4,18]{m=n}{\rCE{20}}
+  \proofstepwidestar[22]{n<m}{\rA}
+  \proofstepwidestarbreak[2,3,22]{n!<m!}{%
+    \FormulaRefAuto{PositiveFactorialStrict}[thm]{3,2,22}}
+  \proofstepwidestar[2,3,4]{n ! = m !}{%
+      \FormulaRefAuto{a=b\vdash b=a}{8}}
+  \proofstepwidestarbreak[2,3,4,22]{\bot}{%
     \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{%
-      11,10,18,\FormulaRefAuto{a=b\vdash b=a}{7}}}
-  \proofstepwidestarbreak[2,3,4,17]{m=n}{\rCE{19}}
-  \proofstepwidestar[21]{m=n}{\rA}
+      16,14,23,24}}
+  \proofstepwidestarbreak[2,3,4,22]{m=n}{\rCE{25}}
+  \proofstepwidestar[27]{m=n}{\rA}
   \proofstepwidestarbreak[2,3,4]{m=n}{%
     \FormulaRefAuto{P_1\lor P_2\lor P_3\dsep
       [P_1]\vdots R\dsep[P_2]\vdots R\dsep[P_3]\vdots R\vdash R}{%
-      12,13,16,17,20,21,21}}
+      17,18,21,22,26,27,27}}
   \proofstepwidestarbreak[]{%
     \operatorname{fac}_{+}\colon
     \mathbb{N}\setminus\{0\}\inj
     \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
     \FormulaRefAuto{Injektive Funktion}[def]{%
-      1,\rUI{\rRI{2,\rUI{\rRI{3,\rRI{4,22}}}}}}}
-  \proofstepwidestar[24]{%
+      1,\rUI{\rRI{2,\rUI{\rRI{3,\rRI{4,28}}}}}}}
+
+\closeproofpartwide
+
+\proofpartwide{Surjektivität}
+  \setcounter{proofstepnr}{29}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[30]{%
     y\in\operatorname{fac}[\mathbb{N}\setminus\{0\}]}{\rA}
-  \proofstepwidestarbreak[24]{%
+  \proofstepwidestar[]{\operatorname{fac} \colon \mathbb N \to \mathbb N}{%
+      \FormulaRefAuto{FactorialClosure}[thm]}
+  \proofstepwidestarbreak[30]{%
     \exists x\in\mathbb{N}\setminus\{0\}\,
       y=\operatorname{fac}(x)}{%
     \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash
-      \exists x\in A\,y=F(x)}{\FormulaRefAuto{FactorialClosure}[thm],24}}
-  \proofstepwidestar[26]{%
+      \exists x\in A\,y=F(x)}{31,30}}
+  \proofstepwidestar[33]{%
     x\in\mathbb{N}\setminus\{0\}\land y=\operatorname{fac}(x)}{\rA}
-  \proofstepwidestarbreak[26]{x\in\mathbb{N}\setminus\{0\}}{\rAEa{26}}
-  \proofstepwidestarbreak[26]{y=\operatorname{fac}(x)}{\rAEb{26}}
-  \proofstepwidestarbreak[26]{\operatorname{fac}_{+}(x)=x!}{%
-    \FormulaRefAuto{PositiveFactorialValue}[thm]{27}}
-  \proofstepwidestarbreak[26]{\operatorname{fac}(x)=x!}{%
+  \proofstepwidestarbreak[33]{x\in\mathbb{N}\setminus\{0\}}{\rAEa{33}}
+  \proofstepwidestarbreak[33]{y=\operatorname{fac}(x)}{\rAEb{33}}
+  \proofstepwidestarbreak[33]{\operatorname{fac}_{+}(x)=x!}{%
+    \FormulaRefAuto{PositiveFactorialValue}[thm]{34}}
+  \proofstepwidestar[33]{x\in\mathbb N\land x\neq0}{%
+      \FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{34}}
+  \proofstepwidestarbreak[33]{\operatorname{fac}(x)=x!}{%
     \FormulaRefAuto{FactorialFunction}[def]{%
-      \rAEa{\FormulaRefAuto{PeanoNonzeroCarrierMembership}[thm]{27}}}}
-  \proofstepwidestarbreak[26]{y=\operatorname{fac}_{+}(x)}{%
-    \rChain{28,30,\FormulaRefAuto{a=b\vdash b=a}{29}}}
-  \proofstepwidestarbreak[26]{%
+      \rAEa{37}}}
+  \proofstepwidestar[33]{x ! = \operatorname{fac} _ { + } ( x )}{%
+      \FormulaRefAuto{a=b\vdash b=a}{36}}
+  \proofstepwidestarbreak[33]{y=\operatorname{fac}_{+}(x)}{%
+    \rChain{35,38,39}}
+  \proofstepwidestarbreak[33]{%
     \exists x\in\mathbb{N}\setminus\{0\}\,
-      y=\operatorname{fac}_{+}(x)}{\rEI{\rAI{27,31}}}
-  \proofstepwidestarbreak[24]{%
+      y=\operatorname{fac}_{+}(x)}{\rEI{\rAI{34,40}}}
+  \proofstepwidestarbreak[30]{%
     \exists x\in\mathbb{N}\setminus\{0\}\,
-      y=\operatorname{fac}_{+}(x)}{\rEE{25,26,32}}
+      y=\operatorname{fac}_{+}(x)}{\rEE{32,33,41}}
   \proofstepwidestarbreak[]{%
     \operatorname{fac}_{+}\colon
     \mathbb{N}\setminus\{0\}\sur
     \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
     \FormulaRefAuto{Surjektive Funktion}[def]{%
-      1,\rUI{\rRI{24,33}}}}
-  \proofstepwidestarbreak[]{%
+      1,\rUI{\rRI{30,42}}}}
+
+\closeproofpartwide
+
+\proofpartwide{Bijektivität}
+  \setcounter{proofstepnr}{43}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestarbreak[]{%
     \operatorname{fac}_{+}\colon
     \mathbb{N}\setminus\{0\}\bij
     \operatorname{fac}[\mathbb{N}\setminus\{0\}]}{%
     \FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B
-      \vdash F\colon A\bij B}[thm]{23,34}}
-\end{tabproofwide}
+      \vdash F\colon A\bij B}[thm]{29,43}}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+\input{tex/b10-migrated-tree-index-rules}
 
 \chapter{\(b\)-adische Stellenwertsysteme für natürliche Zahlen}
 
@@ -15690,7 +16099,13 @@ das Zahlzeichen \(2\) nun als natürliche Zahl registriert ist.
 }
 
 \noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Strenge Monotonie und Injektivität der Zweierpotenzfunktion]{%
+\FormulaThmDeltaKR[Strenge Monotonie und Injektivität der Zweierpotenzfunktion]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad m,n\in\mathbb N\dsep m<n
+      \vdash \operatorname{pow}_2(m)<\operatorname{pow}_2(n),\\[-2pt]
+    &\text{(ii)}\quad\operatorname{pow}_2\colon\mathbb N\inj\mathbb N.
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
     &m,n\in\mathbb N\dsep m<n
       \vdash \operatorname{pow}_2(m)<\operatorname{pow}_2(n),\\[-2pt]
@@ -15823,9 +16238,11 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
   \proofstep{}{2\in\mathbb N}{\FormulaRefAuto{PeanoTwoInN}[thm]}
   \proofstep{}{0\neq2}{\FormulaRefAuto{PeanoZeroNeTwo}[thm]}
   \proofstep{}{0+1\neq2+1}{\FormulaRefAuto{PeanoAddOnePreservesNe}[thm]{1,2,3}}
-  \proofstep{}{0+1=1}{\FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstep{}{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{0+1=1}{\FormulaRefAuto{PeanoAddLeftZero}[thm]{5}}
   \proofstep{}{3=2+1}{\FormulaRefAuto{Natürliche Zahlzeichen von zwei bis zehn}[def]}
-  \proofstep{}{1\neq3}{\rIE{4,5,6}}
+  \proofstep{}{1\neq3}{\rIE{4,6,7}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Zwei und drei sind verschieden]{%
@@ -15860,10 +16277,12 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
   \proofstep{}{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
   \proofstep{}{\NatSeg{0+1}=\NatSeg{0}\cup\{0\}}{%
     \FormulaRefAuto{PeanoNatSegAddOne}[thm]{1}}
-  \proofstep{}{0+1=1}{\FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstep{}{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+  \proofstep{}{0+1=1}{\FormulaRefAuto{PeanoAddLeftZero}[thm]{3}}
   \proofstep{}{\NatSeg{0}=\varnothing}{\FormulaRefAuto{PeanoNatSegZero}[thm]}
   \proofstep{}{\varnothing\cup\{0\}=\{0\}}{\FormulaRefAuto{\varnothing\cup A=A}[thm]}
-  \proofstep{}{\NatSeg{1}=\{0\}}{\rIE{2,3,4,5}}
+  \proofstep{}{\NatSeg{1}=\{0\}}{\rIE{2,4,5,6}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Elemente des Eins-Anfangsabschnitts]{%
@@ -16144,11 +16563,9 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
       &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
       &n=3\lor\exists m\in\mathbb{N}\,(n=m+4)
     \end{aligned}}{%
-    \makecell[l]{%
-      \FormulaRefAuto{P_1\lor P_2\lor P_3\lor P_4\dsep
+    \FormulaRefAuto{P_1\lor P_2\lor P_3\lor P_4\dsep
         [P_1]\vdots R\dsep [P_2]\vdots R\dsep [P_3]\vdots R\dsep
-        [P_4]\vdots R\vdash R}[thm]\\[-2pt]
-      \quad(6,7,8,9,10,11,12,13,14)}}
+        [P_4]\vdots R\vdash R}[thm]{6,7,8,9,10,11,12,13,14}}
   \proofstepwidestar[16]{\exists m\in\mathbb{N}\,(n=m+4)}{\rA}
   \proofstepwidestar[16]{%
     \begin{aligned}[t]
@@ -16229,9 +16646,7 @@ Typisierung aus \FormulaRefAuto{PeanoPowerTwoFunction}[def] erfüllt
       &n=0\lor n=1\lor n=2\lor{}\\[-2pt]
       &n=3\lor n=4\lor\exists m\in\mathbb{N}\,(n=m+5)
     \end{aligned}}{%
-    \makecell[l]{%
-      \FormulaRefAuto{DisjunctionEliminationFive}[thm]\\[-2pt]
-      \quad(6,7,8,9,10,11,12,13,14,15,16)}}
+    \FormulaRefAuto{DisjunctionEliminationFive}[thm]{6,7,8,9,10,11,12,13,14,15,16}}
   \proofstepwidestar[18]{\exists m\in\mathbb{N}\,(n=m+5)}{\rA}
   \proofstepwidestar[18]{%
     \begin{aligned}[t]

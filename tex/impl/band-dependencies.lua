@@ -210,7 +210,24 @@ function M.start_band_in_main(tag)
   thmlookup.registry_path = directory .. "/_" .. tag .. ".registry.tsv"
   thmlookup.debug_path = directory .. "/_" .. tag .. ".debug.log"
   thmlookup.prepare_run()
-  M.load_predecessor_registries(tag, directory)
+  if tag == "B00" then
+    -- Forward references in the opening overview use a previous complete pass.
+    -- A first clean pass may use standalone indices, or defer missing indices.
+    for _, predecessor in ipairs(spec.predecessors) do
+      local registry = directory .. "/_" .. predecessor .. ".registry.tsv"
+      local file = io.open(registry, "r")
+      if not file then
+        registry = specification(predecessor).artifact_base .. ".registry.tsv"
+        file = io.open(registry, "r")
+      end
+      if file then
+        file:close()
+        thmlookup.load_registry_file(registry)
+      end
+    end
+  else
+    M.load_predecessor_registries(tag, directory)
+  end
   texio.write_nl("thmlookup: main output -> " .. thmlookup.registry_path)
   local title = spec.source:gsub("\\", "/"):match("([^/]+)%.tex$")
   tex.sprint("\\part*{" .. title .. "}\\addcontentsline{toc}{part}{" .. title .. "}")

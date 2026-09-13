@@ -1,0 +1,172 @@
+% Lokale semantische Schlussformen. Keine neuen Mengenaxiome.
+\subsection*{Einzeln referenzierte semantische Schlussformen}
+
+In diesem Abschnitt wird die durch
+\FormulaRefAuto{B48SatisfactionExists}[thm] konstruierte und eindeutig
+bestimmte Erfuellungsrelation verwendet. Die definierenden Klauseln
+aus \FormulaRefAuto{B48Satisfaction}[def] sind durch die dortigen
+Proofparts gerechtfertigt. Die folgenden Saetze zeigen, welche
+lokalen Schluesse aus diesen Klauseln folgen.
+Alle Zeilen sind Aussagen der untersuchenden Mengenlehre.
+Insbesondere sind \(M,s\models\neg\varphi\) und
+\(\neg(M,s\models\varphi)\) verschiedene Schreibweisen, deren
+Zusammenhang jeweils durch die angegebene Definition begruendet wird.
+
+\FormulaThmDeltaK[Keine Belegung erfuellt die Widerspruchsformel]
+{\neg(M,s\models\bot)}
+{B48SatNotBottom}{
+ \DeltaRow{Struktur und Belegung}{M=(D,E),\quad s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models\bot}{\rA}
+ \proofstep{1}{\bot}{\FormulaRefAuto{B48Satisfaction}{1}}
+ \proofstep{}{\neg(M,s\models\bot)}{\rCI{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Semantische Konjunktionseinfuehrung]
+{M,s\models\varphi,\ M,s\models\psi
+ \ \vdash\ M,s\models(\varphi\land\psi)}
+{B48SatAndIntro}{
+ \DeltaRow{Formeln}{\varphi,\psi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models\varphi}{\rA}
+ \proofstep{2}{M,s\models\psi}{\rA}
+ \proofstep{1,2}{(M,s\models\varphi)\land(M,s\models\psi)}
+ {\rAI{1,2}}
+ \proofstep{1,2}{M,s\models(\varphi\land\psi)}
+ {\FormulaRefAuto{B48Satisfaction}{3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Erste semantische Konjunktionsbeseitigung]
+{M,s\models(\varphi\land\psi)\ \vdash\ M,s\models\varphi}
+{B48SatAndLeft}{
+ \DeltaRow{Formeln}{\varphi,\psi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models(\varphi\land\psi)}{\rA}
+ \proofstep{1}{(M,s\models\varphi)\land(M,s\models\psi)}
+ {\FormulaRefAuto{B48Satisfaction}{1}}
+ \proofstep{1}{M,s\models\varphi}{\rAEa{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zweite semantische Konjunktionsbeseitigung]
+{M,s\models(\varphi\land\psi)\ \vdash\ M,s\models\psi}
+{B48SatAndRight}{
+ \DeltaRow{Formeln}{\varphi,\psi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models(\varphi\land\psi)}{\rA}
+ \proofstep{1}{(M,s\models\varphi)\land(M,s\models\psi)}
+ {\FormulaRefAuto{B48Satisfaction}{1}}
+ \proofstep{1}{M,s\models\psi}{\rAEb{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Unvertraeglichkeit einer Formel mit ihrer Negation]
+{M,s\models\varphi,\ M,s\models\neg\varphi\ \vdash\ \bot}
+{B48SatContradiction}{
+ \DeltaRow{Formel}{\varphi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models\varphi}{\rA}
+ \proofstep{2}{M,s\models\neg\varphi}{\rA}
+ \proofstep{2}{\neg(M,s\models\varphi)}
+ {\FormulaRefAuto{B48Satisfaction}{2}}
+ \proofstep{1,2}{\bot}{\rBI{1,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Semantischer Negationsschluss]
+{\bigl((M,s\models\varphi)\to\bot\bigr)
+ \ \vdash\ M,s\models\neg\varphi}
+{B48SatNegationIntro}{
+ \DeltaRow{Formel}{\varphi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{(M,s\models\varphi)\to\bot}{\rA}
+ \proofstep{2}{M,s\models\varphi}{\rA}
+ \proofstep{1,2}{\bot}{\rRE{1,2}}
+ \proofstep{1}{\neg(M,s\models\varphi)}{\rCI{2,3}}
+ \proofstep{1}{M,s\models\neg\varphi}
+ {\FormulaRefAuto{B48Satisfaction}{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Semantischer klassischer Widerspruchsschluss]
+{\bigl((M,s\models\neg\varphi)\to\bot\bigr)
+ \ \vdash\ M,s\models\varphi}
+{B48SatClassical}{
+ \DeltaRow{Formel}{\varphi}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{(M,s\models\neg\varphi)\to\bot}{\rA}
+ \proofstep{2}{\neg(M,s\models\varphi)}{\rA}
+ \proofstep{2}{M,s\models\neg\varphi}
+ {\FormulaRefAuto{B48Satisfaction}{2}}
+ \proofstep{1,2}{\bot}{\rRE{1,3}}
+ \proofstep{1}{M,s\models\varphi}{\rCE{2,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Semantische Existenzeinfuehrung mit bestimmtem Zeugen]
+{a\in D,\ M,s[x\mapsto a]\models\varphi
+ \ \vdash\ M,s\models\exists x\,\varphi}
+{B48SatExistsIntro}{
+ \DeltaRow{Formel und Variable}{\varphi,\quad x\in\operatorname{Var}}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+}
+\begin{tabproof}
+ \proofstep{1}{a\in D}{\rA}
+ \proofstep{2}{M,s[x\mapsto a]\models\varphi}{\rA}
+ \proofstep{1,2}{a\in D\land(M,s[x\mapsto a]\models\varphi)}
+ {\rAI{1,2}}
+ \proofstep{1,2}{\exists b\,
+   (b\in D\land(M,s[x\mapsto b]\models\varphi))}
+ {\rEI{3}}
+ \proofstep{1,2}{M,s\models\exists x\,\varphi}
+ {\FormulaRefAuto{B48Satisfaction}{4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Semantische Existenzbeseitigung mit Zeugenentladung]
+{\begin{gathered}
+ M,s\models\exists x\,\varphi,\\
+ \forall a\,(a\in D\to
+       ((M,s[x\mapsto a]\models\varphi)\to Q))
+ \ \vdash\ Q
+ \end{gathered}}
+{B48SatExistsElim}{
+ \DeltaRow{Formel und Variable}{\varphi,\quad x\in\operatorname{Var}}
+ \DeltaRow{Belegung}{s:\operatorname{Var}\to D}
+ \DeltaRow{Aussage der untersuchenden Theorie}{Q}
+ \DeltaRow{Frischer Zeuge}{b}
+}
+Der Zeuge \(b\) kommt in \(Q,M,D,s,\varphi\) und in den ausserhalb
+des Zeugenbeweises offenen Voraussetzungen nicht frei vor.
+\begin{tabproof}
+ \proofstep{1}{M,s\models\exists x\,\varphi}{\rA}
+ \proofstep{2}{\forall a\,(a\in D\to
+      ((M,s[x\mapsto a]\models\varphi)\to Q))}{\rA}
+ \proofstep{1}{\exists a\,
+   (a\in D\land(M,s[x\mapsto a]\models\varphi))}
+ {\FormulaRefAuto{B48Satisfaction}{1}}
+ \proofstep{4}{b\in D\land(M,s[x\mapsto b]\models\varphi)}{\rA}
+ \proofstep{4}{b\in D}{\rAEa{4}}
+ \proofstep{4}{M,s[x\mapsto b]\models\varphi}{\rAEb{4}}
+ \proofstep{2}{b\in D\to
+      ((M,s[x\mapsto b]\models\varphi)\to Q)}{\rUE{2}}
+ \proofstep{2,4}{(M,s[x\mapsto b]\models\varphi)\to Q}
+ {\rRE{7,5}}
+ \proofstep{2,4}{Q}{\rRE{8,6}}
+ \proofstep{1,2}{Q}{\rEE{3,4:9}}
+\end{tabproof}
+
+\noindent
+Die letzten beiden Saetze benutzen ausdruecklich die veraenderte
+Belegung \(s[x\mapsto a]\). Daraus folgt noch nicht ohne Weiteres
+die Korrektheit der syntaktischen Einsetzung \(\varphi[t/x]\).
+Die folgenden Abschnitte beweisen dafuer das Koinzidenz- und
+Substitutionslemma. Erst danach werden diese lokalen Schlussformen
+auf syntaktische Herleitungen mit offenen Annahmen uebertragen.

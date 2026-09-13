@@ -1,0 +1,792 @@
+\chapter[Band 27: Endliche Wörter und Klammerungsbäume]{Band 27 auf einen Blick}
+\noindent\textbf{Endliche Wörter und Klammerungsbäume}\par\medskip
+
+% Dieselbe lokale Notation wie im Fachband, für die übernommene Übersicht.
+\begingroup
+% Abstand zur Tabellenlinie auch unter mehrzeiligen Formeln sichern.
+\setlength{\aboverulesep}{6pt}
+\newcommand{\BinaryAddresses}{\mathcal W_2}
+\newcommand{\AddressPrefixMap}[1]{\operatorname{vor}_{#1}}
+\newcommand{\AddressPrefix}[2]{\AddressPrefixMap{#1}(#2)}
+\newcommand{\AddressGraft}[2]{\Gamma(#1,#2)}
+\newcommand{\GoodAddressSet}[1]{\mathsf{VollPraef}(#1)}
+\newcommand{\TreePositions}[2]{\operatorname{Pos}_{#1}(#2)}
+\newcommand{\AddressEdges}[1]{E_{#1}^{\mathrm{adr}}}
+\newcommand{\AddressInner}[1]{I_{#1}^{\mathrm{adr}}}
+\newcommand{\AddressLeft}[1]{\lambda_{#1}^{\mathrm{adr}}}
+\newcommand{\AddressRight}[1]{\rho_{#1}^{\mathrm{adr}}}
+\newcommand{\TreePositionGraph}[2]{\mathcal G_{#1}^{\mathrm{adr}}(#2)}
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\setlength{\LTpre}{.5\baselineskip}
+\setlength{\LTpost}{0pt}
+\renewcommand{\arraystretch}{1.08}
+\newcommand{\BXXVIIBlickFormel}[1]{%
+  \par\smallskip\noindent\(\displaystyle #1\)\par}
+\newcommand{\BXXVIIBlickQuellen}[1]{%
+  \par\nobreak\smallskip{\footnotesize #1}\par}
+
+\noindent
+\emph{Lesart.}
+\(\NatSeg n=\{k\in\mathbb N\mid k<n\}\) ist der \(n\)-te Anfangsabschnitt.
+Links von \(\vdash\) stehen die Voraussetzungen, rechts die Folgerung;
+\(\eqvdash\) bezeichnet die entsprechende Äquivalenz.
+\(\mathsf{BinOp}(A,\star)\) bedeutet, dass \(\star\) eine binäre Operation
+auf \(A\) ist.
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.455\linewidth}%
+  @{\hspace{.012\linewidth}\vrule width .35pt\hspace{.012\linewidth}}%
+  >{\raggedright\arraybackslash}p{.51\linewidth}@{}}
+\toprule
+\textbf{Definitionen und Konstruktionen}&\textbf{Zentrale Resultate}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Definitionen und Konstruktionen}&
+  \textbf{Zentrale Resultate (Fortsetzung)}\\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{@{}r@{}}{%
+  \footnotesize\itshape Fortsetzung auf der nächsten Seite}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\multicolumn{2}{@{}l@{}}{\large\bfseries I. Endliche Wörter}\\*[.8ex]
+
+\textbf{Wörter als kleinste abgeschlossene Menge}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  \mathcal E_A&\coloneqq\FinSubsets{\mathbb N\times A},\\[-2pt]
+  J(w,a)&\coloneqq w\cup\{(\FiniteCard(w),a)\},\\[-2pt]
+  \mathfrak C_A&\coloneqq
+    \bigl\{C\in\powerset(\mathcal E_A)\bigm|{}\\[-2pt]
+    &\quad\varnothing\in C\ \land{}\\[-2pt]
+    &\quad\forall w\in C\,\forall a\in A:\\[-2pt]
+    &\qquad J(w,a)\in C\bigr\},\\[-2pt]
+  \FiniteWords A&\coloneqq\bigcap\mathfrak C_A.
+  \end{aligned}}
+Dabei sind \(w\in \mathcal E_A\) und \(a\in A\) die Voraussetzungen für
+\(J(w,a)\). Der Umgebungsbereich \(\mathcal E_A\) enthält alle endlichen
+Teilmengen; erst Anfang und Anfügung bestimmen die Wörter.
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{FiniteOccurrenceSetUniverseDef}[def];
+  \FormulaRefAuto{OccurrenceCardinalAdjunctionDef}[def];
+  \FormulaRefAuto{WordGenerationFamilyDef}[def];
+  \FormulaRefAuto{FiniteWordSetDef}[def]}
+&
+\textit{Bewiesener Anschluss an endliche Folgen}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  w\in\FiniteWords A\ \eqvdash\ {}&
+    w\in\powerset(\mathbb N\times A)\ \land{}\\[-2pt]
+  &\exists n\in\mathbb N\;(w\colon\NatSeg n\to A),\\[2pt]
+  w\in\FiniteWords A\ \vdash\ {}&
+    \exists!n\in\mathbb N\;(w\colon\NatSeg n\to A).
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{FiniteWordSetMembership}[thm];
+  \FormulaRefAuto{FiniteWordLengthUnique}[thm]}
+Anfang und Anfügungsschritt liefern die Wortinduktion. Die lokale Regel
+fasst beide Teilbeweise mit der Wortzugehörigkeit zusammen.
+\BXXVIIBlickQuellen{\FormulaRefAuto{GeneratedWordInductionRule}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Wortlänge}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  w\in\FiniteWords A\ \vdash\quad&\\[-7pt]
+  \WordLength w\coloneqq{}&\FiniteCard(w).
+  \end{aligned}}
+Die Länge zählt die aufeinanderfolgenden Positionen und damit die
+Anfügungsschritte. Grundlage ist die endliche Kardinalität aus Band~20.
+\BXXVIIBlickQuellen{\FormulaRefAuto{FiniteWordLengthDef}[def];
+  \FormulaRefAuto{FiniteWordLengthCardinality}[thm]}
+&
+\textit{Typisierung und Identifikation}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  w\in\FiniteWords A\ \vdash\quad
+    &\WordLength w\in\mathbb N,\\[-2pt]
+    &w\colon\NatSeg{\WordLength w}\to A,\\[2pt]
+  n\in\mathbb N\dsep w\colon\NatSeg n\to A\ \vdash\quad
+    &\WordLength w=n.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{FiniteWordTyping}[thm];
+  \FormulaRefAuto{FiniteWordLengthFromTyping}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Leerwort und Nichtleerwörter}
+\BXXVIIBlickFormel{%
+  \EmptyWord A\coloneqq\varnothing,
+  \qquad
+  \NonemptyWords A\coloneqq
+    \FiniteWords A\setminus\{\EmptyWord A\}.}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{EmptyWordDef}[def];
+  \FormulaRefAuto{NonemptyWordSetDef}[def]}
+&
+\textit{Länge und Elementkriterium}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\EmptyWord A\in\FiniteWords A,
+    \qquad \WordLength{\EmptyWord A}=0,\\[2pt]
+  &w\in\NonemptyWords A\ \eqvdash\quad
+    w\in\FiniteWords A\land\WordLength w\neq0.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{EmptyWordLength}[thm];
+  \FormulaRefAuto{NonemptyWordMembership}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Buchstabenwort}
+\BXXVIIBlickFormel{%
+  a\in A\ \vdash\quad
+  \LetterWord a\coloneqq\{(0,a)\}.}
+\BXXVIIBlickQuellen{\FormulaRefAuto{LetterWordDef}[def]}
+&
+\textit{Grunddaten}
+\BXXVIIBlickFormel{%
+  a\in A\ \vdash\quad
+  \begin{aligned}
+  &\LetterWord a\colon\NatSeg 1\to A,\\[-2pt]
+  &\LetterWord a\in\NonemptyWords A,\\[-2pt]
+  &\WordLength{\LetterWord a}=1,
+    \qquad \LetterWord a(0)=a.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{LetterWordFacts}[thm]}\\
+\midrule
+
+\textbf{Primitive Anfügung eines Buchstabens}
+\BXXVIIBlickFormel{%
+  \sigma_A(u,a)=u\cup\{(\WordLength u,a)\}.}
+Die Anfügung wird vor der allgemeinen Konkatenation eingeführt.
+\BXXVIIBlickQuellen{\FormulaRefAuto{WordModelSuccessorDef}[def]}
+&
+\textit{Das konkrete Modell erfüllt W0 bis W3}
+Die Minimalität folgt bereits aus der Konstruktion als kleinste
+abgeschlossene Menge. Der Anschluss an endliche Folgen liefert
+Typisierung, Trennung vom Leerwort und gemeinsame Injektivität.
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{EarlyWordModelMinimality}[thm];
+  \FormulaRefAuto{WordStructureConcreteModel}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Frühe Wortaxiome}
+\BXXVIIBlickFormel{%
+  e\in W,\qquad s\colon W\times A\to W.}
+W1: Der Anfang ist kein Nachfolger. W2: Die Anfügung ist gemeinsam
+injektiv. W3: Jede Teilmenge mit Anfang und Anfügungsabschluss ist
+der ganze Träger.
+\BXXVIIBlickQuellen{\FormulaRefAuto{WordStructureDef}[def]}
+&
+\textit{Zerlegung und Induktion aus den Axiomen}
+Jedes Wort ist der Anfang oder eindeutig ein Nachfolger.
+Eine Eigenschaft, die für den Anfang gilt und bei Anfügung erhalten
+bleibt, gilt für sämtliche Wörter der Struktur.
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordStructureDecomposition}[thm];
+  \FormulaRefAuto{WordStructureInduction}[thm];
+  \FormulaRefAuto{WordStructureInductionRule}[thm]}
+Die lokale Regel gilt in jeder Wortstruktur und damit auch im konkreten Modell.\\
+\addlinespace[.8ex]
+
+\textbf{Rekursionsdaten einer Wortstruktur}
+\BXXVIIBlickFormel{%
+  x_0\in X,\qquad r\colon X\times A\to X.}
+Die Rekursionsfunktion wird als kleinster abgeschlossener Graph
+unmittelbar aus W0 bis W3 gewonnen.
+&
+\textit{Axiomatische Rekursion und konkreter Modellfall}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\exists!F\colon W\to X:\\[-2pt]
+  &F(e)=x_0,\\[-2pt]
+  &F(s(u,a))=r(F(u),a).
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordStructureRecursion}[thm];
+  \FormulaRefAuto{FiniteWordRecursion}[thm]}\\
+\midrule
+
+\textbf{Konkatenation}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  u,v\in\FiniteWords A\ \vdash\quad&\\[-7pt]
+  \WordConcat uv&\coloneqq u\cup\\[-2pt]
+  &\quad\{(\WordLength u+j,v(j))\mid{}\\[-2pt]
+  &\qquad j\in\NatSeg{\WordLength v}\}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{WordConcatenationDef}[def]}
+&
+\textit{Typisierung und Koordinaten}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\WordConcat uv\colon
+    \NatSeg{\WordLength u+\WordLength v}\to A,\\[-2pt]
+  &i\in\NatSeg{\WordLength u}\ \vdash\quad
+    \WordConcat uv(i)=u(i),\\[-2pt]
+  &j\in\NatSeg{\WordLength v}\ \vdash\quad
+    \WordConcat uv(\WordLength u+j)=v(j).
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{WordConcatenationTyping}[thm]}\\
+\addlinespace[.8ex]
+
+\textit{Die zweite Wortkoordinate wird also um
+\(\WordLength u\) verschoben.}
+&
+\textit{Länge und Rechengesetze}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\WordLength{\WordConcat uv}=\WordLength u+\WordLength v,\\[-2pt]
+  &\WordConcat{\EmptyWord A}w=w=
+    \WordConcat w{\EmptyWord A},\\[-2pt]
+  &\WordConcat{\WordConcat uv}w=
+    \WordConcat u{\WordConcat vw}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordConcatenationLength}[thm];
+  \FormulaRefAuto{WordConcatenationIdentity}[thm];
+  \FormulaRefAuto{WordConcatenationAssociative}[thm]}
+Die Rechengesetze werden mit der aus W3 gewonnenen Wortinduktion
+bewiesen.\\
+\addlinespace[.8ex]
+
+\textit{Fester Schnitt}
+\BXXVIIBlickFormel{%
+  \WordLength u=\WordLength{u'}\dsep
+  \WordConcat uv=\WordConcat{u'}{v'}.}
+&
+\textit{Kürzung am festgelegten Schnitt}
+\BXXVIIBlickFormel{%
+  u=u',\qquad v=v'.}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordConcatenationFixedCutCancellation}[thm]}\\
+\midrule
+
+\textbf{Konstruktoren nichtleerer Wörter}
+\BXXVIIBlickFormel{%
+  a\longmapsto\LetterWord a,
+  \qquad
+  (u,a)\longmapsto\WordConcat u{\LetterWord a}.}
+&
+\textit{Eindeutige Rechtszerlegung}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  w\in\NonemptyWords A\ \vdash\quad
+  \exists!u\in\FiniteWords A\;
+  \exists!a\in A\;{}\\[-2pt]
+  w=\WordConcat u{\LetterWord a}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{NonemptyWordRightDecomposition}[thm]}
+\textit{Dabei darf der Präfix \(u\) das Leerwort sein.}\\
+\addlinespace[.8ex]
+
+\textbf{Rumpf und Endbuchstabe}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\WordRumpfMap A\colon\NonemptyWords A\to\FiniteWords A,\\[-2pt]
+  &\WordEndMap A\colon\NonemptyWords A\to A.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordRumpfDef}[def];
+  \FormulaRefAuto{WordEndDef}[def]}
+&
+\textit{Zerlegen und wieder zusammensetzen}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &w\in\NonemptyWords A\ \vdash\\[-2pt]
+  &\quad w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}},\\[2pt]
+  &u\in\FiniteWords A\dsep a\in A\ \vdash\\[-2pt]
+  &\quad\WordRumpf A{\WordConcat u{\LetterWord a}}=u,\\[-2pt]
+  &\quad\WordEnd A{\WordConcat u{\LetterWord a}}=a.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordRightDecompositionEquation}[thm];
+  \FormulaRefAuto{WordRumpfAppend}[thm];
+  \FormulaRefAuto{WordEndAppend}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Induktionsdaten}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\forall a\in A\;P(\LetterWord a),\\[-2pt]
+  &\forall u\in\NonemptyWords A\;\forall a\in A:\\[-2pt]
+  &\qquad P(u)\to P(\WordConcat u{\LetterWord a}).
+  \end{aligned}}
+&
+\textit{Induktion über nichtleere Wörter}
+\BXXVIIBlickFormel{%
+  \forall w\in\NonemptyWords A\;P(w).}
+\BXXVIIBlickQuellen{\FormulaRefAuto{NonemptyWordInduction}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Rekursionsdaten}
+\BXXVIIBlickFormel{%
+  f\colon A\to X,
+  \qquad s\colon X\times A\to X.}
+&
+\textit{Rekursion über nichtleere Wörter}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\exists!F\colon\NonemptyWords A\to X:\\[-2pt]
+  &F(\LetterWord a)=f(a),\\[-2pt]
+  &F(\WordConcat u{\LetterWord a})=s(F(u),a).
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{NonemptyWordRecursion}[thm]}
+Sie folgt aus der zuvor bewiesenen Rekursion für alle Wörter.\\
+\addlinespace[.8ex]
+
+\textbf{Linksfaltung}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\mathsf{BinOp}(A,\star)\ \vdash\\[-2pt]
+  &\Pi_\star\coloneqq
+    \iota F\colon\NonemptyWords A\to A,\\[-2pt]
+  &\forall a\in A\quad F(\LetterWord a)=a,\\[-2pt]
+  &\forall u\in\NonemptyWords A\;\forall a\in A:\\[-2pt]
+  &\qquad F(\WordConcat u{\LetterWord a})=F(u)\star a.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{LeftWordFoldDef}[def]}
+&
+\textit{Rekursionsgleichungen}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\WordFold\star{\LetterWord a}=a,\\[-2pt]
+  &\WordFold\star{\WordConcat u{\LetterWord a}}
+    =\WordFold\star u\star a.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{LeftWordFoldFunction}[thm];
+  \FormulaRefAuto{LeftWordFoldEquations}[thm]}
+\textit{Ohne ausgezeichnetes neutrales Element wird das Leerwort nicht
+gefaltet.}\\
+\midrule
+
+\multicolumn{2}{@{}l@{}}{%
+  \large\bfseries II. Wortcodes und ihre vollen planaren Positionsbäume}\\*[.8ex]
+
+\textbf{Baumalphabet und Blattcode}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  \TreeAlphabet A&\coloneqq
+    (\{0\}\times A)\cup\\[-2pt]
+    &\qquad(\{1\}\times\mathbb N),\\[-2pt]
+  a\in A\ \vdash\quad
+  \LeafTree A a&\coloneqq\LetterWord{(0,a)}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeTokenAlphabetDef}[def];
+  \FormulaRefAuto{TreeLeafCodeDef}[def]}
+&
+\textit{Blattinjektivität}
+\BXXVIIBlickFormel{%
+  a,b\in A\ \vdash\quad
+  \bigl(\LeafTree A a=\LeafTree A b\ \leftrightarrow\ a=b\bigr).}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeConstructorNoConfusion}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Knotencode}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &S,T\in\NonemptyWords{\TreeAlphabet A}\ \vdash\\[-2pt]
+  &\NodeTree A S T\coloneqq
+    \LetterWord{(1,\WordLength S)}\frown\\[-2pt]
+  &\hspace{7em}(\WordConcat ST).
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeNodeCodeDef}[def]}
+&
+\textit{Konstruktortrennung und Knoteninjektivität}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\LeafTree A a\neq\NodeTree A S T,\\[-2pt]
+  &\NodeTree A S T=\NodeTree A{S'}{T'}\ \vdash\\[-2pt]
+  &\qquad S=S',\quad T=T'.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeConstructorNoConfusion}[thm]}
+\textit{Die gespeicherte Länge \(\WordLength S\) legt den Schnitt des
+Knotencodes fest.}\\
+\midrule
+
+\textbf{Erzeugungsschritt}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\TreeClosure A X\coloneqq\\[-2pt]
+  &\quad\{\LeafTree A a\mid a\in A\}\cup\\[-2pt]
+  &\quad\{\NodeTree A S T\mid S,T\in X\}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeGenerationStepDef}[def]}
+&
+\textit{Abbildung und Monotonie}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\mathcal C_A\colon
+    \powerset(\NonemptyWords{\TreeAlphabet A})
+    \to\powerset(\NonemptyWords{\TreeAlphabet A}),\\[-2pt]
+  &X\subseteq Y\ \vdash\quad
+    \TreeClosure A X\subseteq\TreeClosure A Y.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeGenerationStepFunction}[thm];
+  \FormulaRefAuto{TreeGenerationStepMonotonicity}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Baumstufen}
+\BXXVIIBlickFormel{%
+  n\in\mathbb N\ \vdash\quad
+  \TreeStage A n\coloneqq
+  \RecFun{\varnothing}{\mathcal C_A}(n).}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeStageDef}[def]}
+&
+\textit{Stufengleichungen und Verschachtelung}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\TreeStage A0=\varnothing,\\[-2pt]
+  &n\in\mathbb N\ \vdash\quad
+    \TreeStage A{n+1}=\TreeClosure A{\TreeStage A n},\\[-2pt]
+  &m,n\in\mathbb N\dsep m\leq n\ \vdash\quad
+    \TreeStage A m\subseteq\TreeStage A n.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeStageZeroEquation}[thm];
+  \FormulaRefAuto{TreeStageSuccessorEquation}[thm];
+  \FormulaRefAuto{TreeStageNested}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Menge der Klammerungsbäume}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  \BracketTreeSet A\coloneqq
+  \{R\in\NonemptyWords{\TreeAlphabet A}\mid{}&
+    \exists n\in\mathbb N\;{}\\[-2pt]
+    &R\in\TreeStage A n\}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{FullPlanarBinaryTreeSetDef}[def]}
+&
+\textit{Das konkrete Modell erfüllt B0 bis B4}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\lambda_A\colon A\to\BracketTreeSet A,\\[-2pt]
+  &\kappa_A\colon\BracketTreeSet A\times\BracketTreeSet A
+      \to\BracketTreeSet A.
+  \end{aligned}}
+Die Konstruktoren sind injektiv und haben getrennte Bilder.
+Die Minimalität folgt durch natürliche Induktion über die Baumstufen.
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeCodeMinimality}[thm];
+  \FormulaRefAuto{BinaryTreeStructureConcreteModel}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Frühe Baumaxiome}
+\BXXVIIBlickFormel{%
+  \ell\colon A\to T,\qquad k\colon T\times T\to T.}
+B1 und B2: Beide Konstruktoren sind injektiv.
+B3: Ihre Bilder sind getrennt.
+B4: Jede Teilmenge mit allen Blättern und Knotenabschluss ist
+der ganze Träger.
+\BXXVIIBlickQuellen{\FormulaRefAuto{BinaryTreeStructureDef}[def]}
+&
+\textit{Zerlegung und Induktion aus den Axiomen}
+Jeder Baum ist eindeutig ein beschriftetes Blatt oder ein Knoten
+mit zwei geordneten Teilbäumen. Die Minimalität liefert die
+Strukturinduktion für jede solche Baumstruktur.
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{BinaryTreeStructureInduction}[thm];
+  \FormulaRefAuto{TreeConstructorDecomposition}[thm]}\\
+\midrule
+
+\textbf{Daten der Strukturinduktion}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\forall a\in A\;P(\LeafTree A a),\\[-2pt]
+  &\forall S,T\in\BracketTreeSet A:\\[-2pt]
+  &\qquad P(S)\land P(T)\to\\[-2pt]
+  &\qquad P(\NodeTree A S T).
+  \end{aligned}}
+&
+\textit{Strukturinduktion}
+\BXXVIIBlickFormel{%
+  \forall R\in\BracketTreeSet A\;P(R).}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{FullPlanarBinaryTreeStructuralInduction}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Daten der Strukturrekursion}
+\BXXVIIBlickFormel{%
+  f\colon A\to X,
+  \qquad g\colon X\times X\to X.}
+&
+\textit{Axiomatische Rekursion und konkreter Modellfall}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\exists!E\colon\BracketTreeSet A\to X:\\[-2pt]
+  &E(\LeafTree A a)=f(a),\\[-2pt]
+  &E(\NodeTree A S T)=g(E(S),E(T)).
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{BinaryTreeStructureRecursion}[thm];
+  \FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]}
+Der allgemeine Satz folgt direkt aus B0 bis B4 durch einen kleinsten
+abgeschlossenen Graphen; der angezeigte Satz ist seine Anwendung
+auf das konkrete Modell.\\
+\addlinespace[.8ex]
+
+\textbf{Der benannte Baumrekursor}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &f\colon A\to X,\quad g\colon X\times X\to X,\\[-2pt]
+  &R\coloneqq\TreeRecursor A X f g.
+  \end{aligned}}
+\textit{Blätter durch Werte ersetzen, Teilbaumwerte verknüpfen.}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeRecursorDef}[def]}
+&
+\textit{Einheitliche Rechen- und Vergleichsregeln}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &R\colon\BracketTreeSet A\to X,\\[-2pt]
+  &a\in A\ \vdash\ R(\LeafTree A a)=f(a),\\[-2pt]
+  &S,T\in\BracketTreeSet A\ \vdash\\[-2pt]
+  &\quad R(\NodeTree A S T)=g(R(S),R(T)).
+  \end{aligned}}
+\textit{Eine gleich typisierte Funktion mit denselben Blatt- und
+Knotenregeln ist gleich \(R\).}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeRecursorEquations}[thm];
+  \FormulaRefAuto{TreeRecursorIdentification}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Positionsgraph eines Baumcodes}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  \BinaryAddresses&\coloneqq\FiniteWords{\{0,1\}},\\[-2pt]
+  P_R&\coloneqq\TreePositions A R,\\[-2pt]
+  \TreePositionGraph A R&\coloneqq
+    \bigl(P_R,\AddressEdges{P_R},
+      \EmptyWord{\{0,1\}},\\[-2pt]
+  &\hspace{6em}\AddressLeft{P_R},\AddressRight{P_R}\bigr).
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreePositionGraphDef}[def]}
+&
+\textit{Der Wortcode trägt einen besonderen Baum}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  P_R&\coloneqq\TreePositions A R,\\[-2pt]
+  R\in\BracketTreeSet A\ \vdash\quad
+    &\Finite{P_R},\\[-2pt]
+    &\TreeStruct{P_R,\AddressEdges{P_R}}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{BracketCodePositionGraphIsFiniteOrderedFullBinaryTree}[thm]}
+\textit{Der Positionsgraph ist sogar ein geordneter voller Binärbaum.
+Seine Knoten sind Adressen; daher bleiben auch gleiche Teilbaumcodes an
+verschiedenen Positionen verschieden.}\\
+\midrule
+
+\multicolumn{2}{@{}l@{}}{%
+  \large\bfseries III. Blattwörter, Klammerungen und Auswertung}\\*[.8ex]
+
+\textbf{Einbuchstabenabbildung und Blattwort}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\operatorname{ein}_A\colon A\to\NonemptyWords A,
+    \qquad \operatorname{ein}_A(a)\coloneqq\LetterWord a,\\[2pt]
+  &\operatorname{wort}_A\coloneqq\\[-2pt]
+  &\quad\TreeRecursor A{\NonemptyWords A}{\operatorname{ein}_A}
+    {\BinaryOpFunction{\NonemptyWords A}{\frown}}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{LetterWordFunctionDef}[def];
+  \FormulaRefAuto{TreeLeafWordDef}[def]}
+&
+\textit{Rekursionsgleichungen des Blattwortes}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\operatorname{wort}_A\colon
+    \BracketTreeSet A\to\NonemptyWords A,\\[-2pt]
+  &\TreeLeafWord A{\LeafTree A a}=\LetterWord a,\\[-2pt]
+  &\TreeLeafWord A{\NodeTree A S T}=\\[-2pt]
+  &\qquad\WordConcat{\TreeLeafWord A S}{\TreeLeafWord A T}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeLeafWordEquations}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Ein Baum klammert ein Wort}
+\BXXVIIBlickFormel{%
+  \TreeBrackets A T w\coloneqq
+    (T,w)\in\operatorname{wort}_A.}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeBracketingRelationDef}[def]}
+\textit{Die Relation enthält zugleich die Baum- und Worttypisierung.}
+&
+\textit{Blattregel und Knotenregel}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &a\in A\ \vdash\\[-2pt]
+  &\quad\TreeBrackets A{\LeafTree A a}{\LetterWord a},\\[2pt]
+  &\TreeBrackets A S u\dsep\TreeBrackets A T v\ \vdash\\[-2pt]
+  &\quad\TreeBrackets A{\NodeTree A S T}{\WordConcat u v}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeBracketingLeafIntroduction}[thm];
+  \FormulaRefAuto{TreeBracketingNodeIntroduction}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Ein Blatt rechts anfügen}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &T\in\BracketTreeSet A\dsep a\in A\ \vdash\\[-2pt]
+  &\TreeAppendLeaf A T a\coloneqq\\[-2pt]
+  &\qquad\NodeTree A T{\LeafTree A a}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeAppendLeafDef}[def]}
+&
+\textit{Baum und Wort gemeinsam erweitern}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\TreeBrackets A T u\dsep a\in A\ \vdash\\[-2pt]
+  &\quad\TreeBrackets A{\TreeAppendLeaf A T a}
+    {\WordConcat u{\LetterWord a}},\\[2pt]
+  &w\in\NonemptyWords A\ \vdash
+    \exists T\,(\TreeBrackets A T w).
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{TreeBracketingAppendLeafIntroduction}[thm];
+  \FormulaRefAuto{TreeBracketingExistence}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Der Linksbaum eines Wortes}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\LeftBracketingMap A\colon\NonemptyWords A\to\BracketTreeSet A,\\[-2pt]
+  &a\in A\ \vdash\\[-2pt]
+  &\quad\LeftBracketing A{\LetterWord a}=\LeafTree A a,\\[-2pt]
+  &u\in\NonemptyWords A\dsep a\in A\ \vdash\\[-2pt]
+  &\quad\LeftBracketing A{\WordConcat u{\LetterWord a}}\\[-2pt]
+  &\qquad=\TreeAppendLeaf A{\LeftBracketing A u}a.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{LeftBracketingDef}[def];
+  \FormulaRefAuto{LeftBracketingLetterEquation}[thm];
+  \FormulaRefAuto{LeftBracketingAppendEquation}[thm]}
+&
+\textit{Eine konkrete Klammerung und ihre Auswertung}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &w\in\NonemptyWords A\ \vdash\\[-2pt]
+  &\quad\TreeBrackets A{\LeftBracketing A w}w,\\[2pt]
+  &\mathsf{BinOp}(A,\star)\dsep w\in\NonemptyWords A\ \vdash\\[-2pt]
+  &\quad\TreeEvaluation\star{\LeftBracketing A w}=\WordFold\star w.
+  \end{aligned}}
+\textit{Den Linksbaum auswerten ergibt die Linksfaltung.}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{LeftBracketingProperty}[thm];
+  \FormulaRefAuto{LeftBracketingEvaluation}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Klammerungsmenge eines Nichtleerwortes}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &w\in\NonemptyWords A\ \vdash\\[-2pt]
+  &\WordBracketings A w\coloneqq\\[-2pt]
+  &\quad\{T\in\BracketTreeSet A\mid
+    \TreeLeafWord A T=w\}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{WordBracketingSetDef}[def]}
+&
+\textit{Elementkriterium und Existenz}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &w\in\NonemptyWords A\ \vdash\\[-2pt]
+  &\bigl(T\in\WordBracketings A w\ \leftrightarrow\\[-2pt]
+  &\quad(T\in\BracketTreeSet A\ \land
+    \TreeLeafWord A T=w)\bigr),\\[2pt]
+  &w\in\NonemptyWords A\ \vdash
+    \WordBracketings A w\neq\varnothing.
+  \end{aligned}}
+\BXXVIIBlickQuellen{%
+  \FormulaRefAuto{WordBracketingMembership}[thm];
+  \FormulaRefAuto{WordBracketingExistence}[thm]}\\
+\addlinespace[.8ex]
+
+\textbf{Auswertung eines Klammerungsbaums}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\mathsf{BinOp}(A,\star)\ \vdash\\[-2pt]
+  &\operatorname{ev}_\star\coloneqq\\[-2pt]
+  &\quad\TreeRecursor A A{\Id_A}{\BinaryOpFunction A\star}.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeEvaluationDef}[def]}
+&
+\textit{Typisierung und Rekursionsgleichungen}
+\BXXVIIBlickFormel{%
+  \begin{aligned}
+  &\operatorname{ev}_\star\colon\BracketTreeSet A\to A,\\[-2pt]
+  &\TreeEvaluation\star{\LeafTree A a}=a,\\[-2pt]
+  &\TreeEvaluation\star{\NodeTree A S T}=
+    \TreeEvaluation\star S\star\TreeEvaluation\star T.
+  \end{aligned}}
+\BXXVIIBlickQuellen{\FormulaRefAuto{TreeEvaluationEquations}[thm]}
+\textit{Erst die Assoziativität in Band~28 macht die Auswertung von der
+gewählten Klammerung unabhängig.}\\
+
+\end{longtable}
+\endgroup
+
+\section*{Vom konkreten Modell zu frühen Strukturaxiomen}
+
+Das Anfügungsmodell beginnt im Bereich aller endlichen Teilmengen von
+\(\mathbb N\times A\). Die Wortmenge wird als Schnitt aller Teilmengen
+dieses Bereichs definiert, die \(\varnothing\) enthalten und unter
+\(u\mapsto u\cup\{(\FiniteCard(u),a)\}\) für \(a\in A\) abgeschlossen sind
+(\FormulaRefAuto{FiniteWordSetDef}[def]). Wie beim Aufbau der natürlichen
+Zahlen durch eine kleinste induktive Menge folgt die Minimalität
+unmittelbar aus dieser Konstruktion. Die endlichen Teilmengen und ihre
+Kardinalzahlen liefert Band~20; eine Wortmenge wird dabei noch nicht
+vorausgesetzt.
+
+Anschließend wird bewiesen, dass genau die nullbasierten endlichen Folgen
+aus Band~21 entstehen. Dieser Anschluss begründet die Positionsdarstellung
+und die eindeutige Zerlegung. Auf der Wortmenge wird der Erzeugungsschritt
+als Anfügungsfunktion \(\sigma_A\) gefasst, noch vor der Konkatenation.
+\FormulaRefAuto{WordStructureDef}[def] bündelt die so bewiesenen
+Eigenschaften als W0 bis W3 für beliebige Wortstrukturen.
+
+Beim Baumaufbau werden zunächst die Konstruktoren und die endlichen
+Erzeugungsstufen untersucht. Natürliche Induktion über diese Stufen
+beweist die Minimalität des konkreten Baumträgers
+(\FormulaRefAuto{TreeCodeMinimality}[thm]).
+Danach führt \FormulaRefAuto{BinaryTreeStructureDef}[def]
+die Bedingungen B0 bis B4 ein: typisierte, injektive Blatt- und
+Knotenkonstruktoren mit getrennten Bildern sowie Minimalität.
+Die beiden Axiomsysteme sind Bedingungen an Strukturen; ihre bereits
+konstruierten Modelle erfordern keine zusätzlichen Mengenexistenzaxiome.
+
+\widowpenalty=10000
+Aus den frühen Axiomen folgen eindeutige Zerlegung und Induktion.
+Die Rekursion wird unmittelbar durch den Schnitt aller unter den
+vorgegebenen Rekursionsregeln abgeschlossenen Relationsgraphen bewiesen;
+siehe \FormulaRefAuto{WordStructureRecursion}[thm] und
+\FormulaRefAuto{BinaryTreeStructureRecursion}[thm].
+Erst daraus folgen die konkreten Rekursionssätze und die Eindeutigkeit
+der Strukturen bis auf einen eindeutig bestimmten strukturtreuen
+Isomorphismus. Die späteren Wortzerlegungen, Induktionsbeweise,
+Konkatenationsgesetze und Auswertungen greifen auf diese Ergebnisse
+zurück. Die konkrete Darstellung kann deshalb gewechselt werden,
+ohne die Aufbauregeln zu verändern.
+
+Der Anschluss an allgemeine Bäume erfolgt über
+\FormulaRefAuto{B27RankedParentSystemTree}[thm]: Eine endliche
+Knotenmenge mit eindeutigen Eltern und geeigneten Höhenmarken trägt
+einen verwurzelten Baum. Die volle geordnete binäre Verzweigung ist
+eine zusätzliche Bedingung des Klammerungsmodells.
+Für die Syntax in Band~48 dienen Konstruktortrennung, Induktion und
+Rekursion als wiederverwendbares Beweismuster. Die dortigen
+Konstruktoren unterschiedlicher Stelligkeit benötigen jeweils ihre
+eigenen Aufbauregeln; eine binäre Codierung ersetzt diese Regeln nicht.
+\endgroup
+

@@ -1,0 +1,7 @@
+# Schlussprüfung der Gesamtausgabe
+
+Die publizierte Gesamtausgabe wurde an der Linksumkehrung visuell geprüft: physische Seite 593, Druckseite 592, Theorem 8.3.3.5, Zielanker `section*.1826`. Beide ausdrücklichen Voraussetzungen, alle neun Beweisschritte und der Axiomverweis 6.2.1.1 sind vollständig und gut lesbar. Die Bilddatei heißt `pdf-qa/main-linksumkehrung.png`; PDF-Hashes und Zielseiten stehen in `final-target-pages.json`.
+
+Der Vergleich der Layoutdiagnostik zeigt in allen zehn neu gebauten Einzelbänden keine zusätzliche Warnungsbreite. Im Gesamtband treten vier weitere Meldungen der bereits vorhandenen Klasse „4.9275pt too wide“ auf, weil vier Inhaltsverzeichniseinträge nach der Seitenverschiebung vierstellige Seitennummern haben. Sämtliche 387 Meldungen dieser Breite gehören zum bestehenden Seitennummernfeld des Inhaltsverzeichnisses. Die vier zusätzlichen Einträge auf physischer Seite 16 wurden eigens gerendert und angesehen: vollständig lesbar, ohne Überlagerung oder abgeschnittene Ziffern. Die Klassifikation steht in `main-toc-warning-classification.json`, das Bild in `pdf-qa/main-toc-four-digits.png`.
+
+Die Quellenprüfung und Registerprüfung bestanden. Die Publikation umfasst 46 PDFs mit 5019 Seiten; sämtliche 58080 lokalen und 33556 bandübergreifenden Links bestanden die Zielprüfung. Die Gesamt- und Einzelbandausgaben besitzen übereinstimmende Ergebnisnummern für alle 45 Bände. Die publizierten PDF-Kopien besitzen dieselben Seitenzahlen und benannten Ziele wie die jeweiligen kompilierten Fassungen.

@@ -1,0 +1,148 @@
+\subsection{Induktion und Zerlegung aus den Wortaxiomen}
+
+Die folgenden Hilfssätze machen die Typisierung und die Behandlung eines geordneten Paars als Funktionsargument ausdrücklich verfügbar.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Typisierung eines Anfügungsschritts]{%
+\mathsf{WortStr}_A(W,e,s)\dsep u\in W\dsep a\in A\vdash s(u,a)\in W
+}{WordStructureStepTyping}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a}\DeltaRow{Funktionen}{s}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{u\in W}{\rA}
+  \proofstepwidestar[3]{a\in A}{\rA}
+  \proofstepwidestar[1]{e\in W\land s\colon W\times A\to W}{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}
+  \proofstepwidestar[2,3]{(u,a)\in W\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{2,3}}}
+  \proofstepwidestar[1,2,3]{s(u,a)\in W}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{\rAEb{4},5}}
+\end{tabproofwide}
+
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Injektivität auf geordneten Paaren]{%
+\mathsf{WortStr}_A(W,e,s)\dsep p,q\in W\times A\dsep s(p)=s(q)\vdash p=q
+}{WordStructurePairInjective}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep p\dsep q}\DeltaRow{Funktionen}{s}\DeltaRow{Projektionen}{\pi_1\dsep\pi_2}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{p,q\in W\times A}{\rA}
+  \proofstepwidestar[3]{s(p)=s(q)}{\rA}
+  \proofstepwidestar[2]{\pi_1(p)\in W}{\FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{\pi_2(p)\in A}{\FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{\pi_1(q)\in W}{\FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2]{\pi_2(q)\in A}{\FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2]{p=(\pi_1(p),\pi_2(p))}{\FormulaRefAuto{z\in A\times B\vdash z=\bigl(\pi_1(z),\pi_2(z)\bigr)}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{q=(\pi_1(q),\pi_2(q))}{\FormulaRefAuto{z\in A\times B\vdash z=\bigl(\pi_1(z),\pi_2(z)\bigr)}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2,3]{s(\pi_1(p),\pi_2(p))=s(\pi_1(q),\pi_2(q))}{\rIE{8,9,3}}
+  \proofstepwidestar[1,2,3]{\pi_1(p)=\pi_1(q)\land\pi_2(p)=\pi_2(q)}{\FormulaRefAuto{WordStructureInjectivityAxiom}[ax]{1,4,6,5,7,10}}
+  \proofstepwidestar[1,2,3]{p=q}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{9},\rIE{\rAEa{11},\rAEb{11},8}}}
+\end{tabproofwide}
+
+
+
+
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Induktion in einer Wortstruktur]{%
+\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]&\forall u\in W\,\forall a\in A\,(P(u)\rightarrow P(s(u,a)))\vdash\forall w\in W\,P(w)\end{aligned}
+}{WordStructureInduction}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep w}\DeltaRow{Funktionen}{s}\DeltaRow{Prädikat}{P}\DeltaRow{Abkürzung}{U=\{w\in W\mid P(w)\}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{P(e)}{\rA}
+  \proofstepwidestar[3]{\forall u\in W\,\forall a\in A\,(P(u)\rightarrow P(s(u,a)))}{\rA}
+  \proofstepwidestar[]{U\subseteq W}{\FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}
+  \proofstepwidestar[1]{e\in W\land s\colon W\times A\to W}{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}
+  \proofstepwidestar[1,2]{e\in U}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{\rAI{\rAEa{5},2}}}
+  \proofstepwidestar[7]{u\in U}{\rA}
+  \proofstepwidestar[8]{a\in A}{\rA}
+  \proofstepwidestar[7]{u\in W\land P(u)}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{7}}
+  \proofstepwidestar[3,7,8]{P(u)\rightarrow P(s(u,a))}{\rRE{8,\rUE{\rRE{\rAEa{9},\rUE{3}}}}}
+  \proofstepwidestar[3,7,8]{P(s(u,a))}{\rRE{\rAEb{9},10}}
+  \proofstepwidestar[1,7,8]{s(u,a)\in W}{\FormulaRefAuto{WordStructureStepTyping}[thm]{1,\rAEa{9},8}}
+  \proofstepwidestar[1,3,7,8]{s(u,a)\in U}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{\rAI{12,11}}}
+  \proofstepwidestar[1,3]{\forall u\in U\,\forall a\in A\,s(u,a)\in U}{\rUI{\rRI{7,\rUI{\rRI{8,13}}}}}
+  \proofstepwidestar[1,2,3]{U=W}{\FormulaRefAuto{WordStructureMinimalityAxiom}[ax]{1,4,6,14}}
+  \proofstepwidestar[16]{w\in W}{\rA}
+  \proofstepwidestar[1,2,3,16]{w\in U}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{15},16}}
+  \proofstepwidestar[1,2,3,16]{w\in W\land P(w)}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{17}}
+  \proofstepwidestar[1,2,3]{\forall w\in W\,P(w)}{\rUI{\rRI{16,\rAEb{18}}}}
+\end{tabproofwide}
+
+
+Die Mengenform und die Prädikatsform der Induktion sind gleichwertig: In der Rückrichtung setzt man \(P(w)\coloneqq w\in U\) und benutzt die Teilmengendefinition.
+
+
+\Needspace{32\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Induktionsregel in einer Wortstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]
+    &[u\in W,a\in A,P(u)]\vdots P(s(u,a))\dsep{}\\[-2pt]
+    &v\in W\vdash P(v)
+  \end{aligned}
+}{WordStructureInductionRule}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep v}
+  \DeltaRow{Funktionen}{s}
+  \DeltaRow{Einstelliges Prädikat}{P}
+}
+\end{minipage}\par
+Diese Regel wird aus der durch W3 begründeten Induktion abgeleitet und
+gilt für jede Wortstruktur. Wie bei der konkreten Wortregel sind
+\(u,a\) beliebig und kommen in den übrigen offenen Annahmen nicht frei
+vor. Die Notation \([i,j,k]\vdots l\) in einem Regelverweis nennt die
+entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
+\Needspace{9\baselineskip}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{P(e)}{\rA}
+  \proofstepwidestar[3]{v\in W}{\rA}
+  \proofstepwidestar[4]{u\in W}{\rA}
+  \proofstepwidestar[5]{a\in A}{\rA}
+  \proofstepwidestar[6]{P(u)}{\rA}
+  \proofstepwidestar[4,5,6]{P(s(u,a))}{%
+    \begin{aligned}[t]
+      &\text{Schrittprämisse}\\[-2pt]
+      &(4,5,6)
+    \end{aligned}}
+  \proofstepwidestar[]{\forall u\in W\,\forall a\in A\,
+    (P(u)\rightarrow P(s(u,a)))}{%
+    \rUI{\rRI{4,\rUI{\rRI{5,\rRI{6,7}}}}}}
+  \proofstepwidestar[1,2,3]{P(v)}{%
+    \rRE{3,\rUE{\FormulaRefAuto{WordStructureInduction}[thm]{1,2,8}}}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutige Endzerlegung in einer Wortstruktur]{%
+\mathsf{WortStr}_A(W,e,s)\dsep w\in W\vdash w=e\lor\exists!p\in W\times A\;w=s(p)
+}{WordStructureDecomposition}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep w\dsep u\dsep a\dsep p\dsep q}\DeltaRow{Funktionen}{s}\DeltaRow{Abkürzung}{P(w)\coloneqq w=e\lor\exists p\in W\times A\;w=s(p)}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{w\in W}{\rA}
+  \proofstepwidestar[]{e=e}{\rII}
+  \proofstepwidestar[]{P(e)}{\rOIa{3}}
+  \proofstepwidestar[5]{u\in W}{\rA}
+  \proofstepwidestar[6]{a\in A}{\rA}
+  \proofstepwidestar[5,6]{(u,a)\in W\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{5,6}}}
+  \proofstepwidestar[]{s(u,a)=s(u,a)}{\rII}
+  \proofstepwidestar[5,6]{\exists p\in W\times A\;s(u,a)=s(p)}{\rEI{\rAI{7,8}}}
+  \proofstepwidestar[5,6]{P(s(u,a))}{\rOIb{9}}
+  \proofstepwidestar[1,2]{w=e\lor\exists p\in W\times A\;w=s(p)}{%
+    \FormulaRefAuto{WordStructureInductionRule}[thm]{1,4,[5,6]\vdots10,2}}
+  \proofstepwidestar[12]{w=e}{\rA}
+  \proofstepwidestar[12]{w=e\lor\exists!p\in W\times A\;w=s(p)}{\rOIa{12}}
+  \proofstepwidestar[14]{\exists p\in W\times A\;w=s(p)}{\rA}
+  \proofstepwidestar[15]{p\in W\times A\land w=s(p)}{\rA}
+  \proofstepwidestar[16]{q\in W\times A\land w=s(q)}{\rA}
+  \proofstepwidestar[15,16]{s(q)=s(p)}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{\rAEb{16},\rAEb{15}}}
+  \proofstepwidestar[1,15,16]{q=p}{\FormulaRefAuto{WordStructurePairInjective}[thm]{1,\rAI{\rAEa{16},\rAEa{15}},17}}
+  \proofstepwidestar[1,15]{\forall q\,((q\in W\times A\land w=s(q))\rightarrow q=p)}{\rUI{\rRI{16,18}}}
+  \proofstepwidestar[1,15]{\exists!p\in W\times A\;w=s(p)}{\FormulaRefAuto{WordUniqueExistenceFromWitness}[thm]{15,19}}
+  \proofstepwidestar[1,15]{w=e\lor\exists!p\in W\times A\;w=s(p)}{\rOIb{20}}
+  \proofstepwidestar[1,14]{w=e\lor\exists!p\in W\times A\;w=s(p)}{\rEE{14,15,21}}
+  \proofstepwidestar[1,2]{w=e\lor\exists!p\in W\times A\;w=s(p)}{\rOE{11,12,13,14,22}}
+\end{tabproofwide}
+
+
+Die beiden Fälle schließen einander nach \FormulaRefAuto{WordStructureZeroAxiom}[ax] aus. Für ein einelementiges Alphabet ist die Anfügung ein einzelner Nachfolger; die Bedingungen W0 bis W3 entsprechen damit Anfangselement, Nachfolgerabbildung, Injektivität und Induktion der Peano-Struktur.

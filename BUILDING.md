@@ -33,7 +33,7 @@ build products and are ignored by Git. Curated per-volume PDF snapshots under
 
 ## Rebuild every PDF / Alle PDFs neu bauen
 
-For all 44 standalone volumes and the complete manuscript, run:
+For the opening overview (B00), all 47 subject volumes, and the complete manuscript, run:
 
 ```powershell
 pwsh -NoProfile -File ./scripts/build-all.ps1
@@ -47,7 +47,9 @@ filenames and verifies that every linked result destination exists.
 Each current PDF is stored directly in `output/` once. Build logs and
 temporary files belong in `tmp/`, outside the publication directory.
 
-Der Gesamtlauf baut alle 44 Einzelbände und den Gesamtband.
+Der Gesamtlauf baut den Überblicksband B00, alle 47 Fachbände und den Gesamtband.
+B00 steht im Buch zuerst, wird wegen seiner Verweise aber nach B01 bis B47
+gebaut. Kein Fachband importiert B00; die vorhandene Nummerierung bleibt erhalten.
 Jeder Band wird nach seinem Build geprüft. Der Gesamtband verwendet eigene
 Registries unter `registry/main/`; dadurch überschreibt er keine
 Einzelbandindizes. Die Resultatnummern müssen in beiden Ausgaben übereinstimmen.
@@ -61,6 +63,17 @@ the full publication step, use:
 pwsh -NoProfile -File ./scripts/build-all.ps1 -From B03 -To B20 -SkipMain -SkipPublish
 ```
 
+A resumed build that publishes PDFs also rebuilds B00 after the selected
+subject volumes, so its printed result references stay current. Explicit
+`-SkipPublish` range builds do not add B00 automatically.
+
+To publish only selected revised volumes together with the complete manuscript,
+while checking links in every current PDF, use for example:
+
+```powershell
+python ./scripts/publish-pdfs.py --bands B00 B27
+```
+
 Existing build products can also be audited without recompiling:
 
 ```powershell
@@ -72,10 +85,10 @@ python ./scripts/publish-pdfs.py --audit-only
 
 The root-level `latexmkrc` reads the dependency graph from
 [`band-dependencies.tsv`](band-dependencies.tsv). For example, with
-`Bd. 43 - Frankls Vermutung.tex` selected as the main file, run:
+`Bd. 46 - Frankls Vermutung.tex` selected as the main file, run:
 
 ```powershell
-latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 43 - Frankls Vermutung.tex"
+latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error "Bd. 46 - Frankls Vermutung.tex"
 ```
 
 The configuration builds the required predecessors topologically into
@@ -84,18 +97,18 @@ files do not appear in the usual `.fls` dependency list, every predecessor is
 given at least one LuaLaTeX run even when artifacts already exist.
 
 The explicit source-to-registry mapping is intentional. Visible filenames
-follow the document titles, while internal identifiers remain `B01` through
-`B44`.
+follow the document titles. Internal identifiers are `B00` for the overview
+and `B01` through `B47` for the subject volumes.
 
 ### Audited PowerShell build
 
 For a clean standalone build with the full reference audit, use:
 
 ```powershell
-pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B43
+pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B46
 ```
 
-Valid targets are `B01` through `B44`; omitting `-Target` keeps `B03` as the
+Valid targets are `B01` through `B47`; omitting `-Target` keeps `B03` as the
 default. On Windows PowerShell 5.1, replace `pwsh` with `powershell` and add
 `-ExecutionPolicy Bypass` if required.
 
@@ -127,7 +140,7 @@ for transitive predecessor order and the mapping from visible TeX filenames to
 registry job names. It is read by TeX/Lua, `latexmkrc`, and the PowerShell build
 script.
 
-Most volumes follow the main chain. Volume B44 deliberately opens an analytic
+Most volumes follow the main chain. Volume B47 deliberately opens an analytic
 branch and depends only on B01 through B21. Later specialist volumes may use
 examples of structures introduced earlier, while general constructions remain
 in the earliest volume that can define them without a dependency cycle.

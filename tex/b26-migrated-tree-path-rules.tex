@@ -1,0 +1,212 @@
+% Allgemeine Regeln nach den elementaren Pfadoperationen aus Band 26.
+\subsection{Zugriff auf gespeicherte Wege und Erreichbarkeit}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Index- und Knotendaten eines Pfadschritts]{\begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep\DirectedPath{V}{E}{p}{n}\dsep i\in\NatSeg n\vdash\\[-2pt]
+    &{} i\in\mathbb N\land i\in\NatSeg{n+1}\land i+1\in\NatSeg{n+1}\\[-2pt]
+    &\land{} p(i)\in V\land p(i+1)\in V\\[-2pt]
+    &\land(p(i),p(i+1))\in E
+    \end{aligned}}{B27PathStepData}{\DeltaRow{Mengen}{V\dsep E\dsep p\dsep n\dsep i}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestar[2]{\DirectedPath{V}{E}{p}{n}}{\rA}
+  \proofstepwidestar[3]{i\in\NatSeg n}{\rA}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &n\in\mathbb N\land p\colon\NatSeg{n+1}\to V\\[-2pt]
+    &\land p\colon\NatSeg{n+1}\inj V
+    \end{aligned}}{\FormulaRefAuto{FinitePathTyping}[thm]{1,2}}
+  \proofstepwidestar[1,2]{n\in\mathbb N}{\rAEa{4}}
+  \proofstepwidestar[1,2]{p\colon\NatSeg{n+1}\to V}{\rAEa{\rAEb{4}}}
+  \proofstepwidestar[1,2,3]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{5,3}}
+  \proofstepwidestar[1,2]{\NatSeg n\subseteq\NatSeg{n+1}}{\FormulaRefAuto{PeanoNatSegSubsetAddOne}[thm]{5}}
+  \proofstepwidestar[1,2,3]{i\in\NatSeg{n+1}}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{8,3}}
+  \proofstepwidestar[1,2,3]{i+1\in\NatSeg{n+1}}{\FormulaRefAuto{FinitePathIndexShiftOne}[thm]{5,3}}
+  \proofstepwidestar[1,2,3]{p(i)\in V}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{6,9}}
+  \proofstepwidestar[1,2,3]{p(i+1)\in V}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{6,10}}
+  \proofstepwidestar[1,2]{\DirectedWalk{V}{E}{p}{n}}{\FormulaRefAuto{DirectedPathWalkAxiom}[ax]{1,2}}
+  \proofstepwidestar[1,2,3]{(p(i),p(i+1))\in E}{\FormulaRefAuto{DirectedWalkStepEdge}[thm]{1,13,3}}
+  \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+    &i\in\mathbb N\land i\in\NatSeg{n+1}\land i+1\in\NatSeg{n+1}\\[-2pt]
+    &\land{}p(i)\in V\land p(i+1)\in V\\[-2pt]
+    &\land(p(i),p(i+1))\in E
+    \end{aligned}}{\rAIStar{7,9,10,11,12,14}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Einführung eines gespeicherten Pfades]{%
+  \begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep n\in\mathbb N\dsep
+      p\in\powerset(\mathbb N\times V)\dsep{}\\[-2pt]
+    &\DirectedPath V E p n\dsep p(0)=u\dsep p(n)=v\vdash
+      (n,p)\in\GraphPathsBetween V E u v
+  \end{aligned}
+}{B27SimplePathFamilyPairIntroduction}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep p\dsep u\dsep v\dsep m\dsep s}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestar[2]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[3]{p\in\powerset(\mathbb N\times V)}{\rA}
+  \proofstepwidestar[4]{\DirectedPath V E p n}{\rA}
+  \proofstepwidestar[5]{p(0)=u}{\rA}
+  \proofstepwidestar[6]{p(n)=v}{\rA}
+  \proofstepwidestar[]{(n,p)=(n,p)}{\rII}
+  \proofstepwidestar[4,5,6]{\begin{aligned}[t]
+    &(n,p)=(n,p)\land\DirectedPath V E p n\\[-2pt]
+    &\land p(0)=u\land p(n)=v
+    \end{aligned}}{%
+    \rAI{7,\rAI{4,\rAI{5,6}}}}
+  \proofstepwidestar[2,3,4,5,6]{\begin{aligned}[t]
+    &\exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,\\[-2pt]
+    &\Bigl( \quad(n,p)=(m,s)\land\DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v\Bigr)
+    \end{aligned}}{\rEIStar{2,3,8}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &(n,p)\in\GraphPathsBetween V E u v\leftrightarrow\\[-2pt]
+    &{} \exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,\\[-2pt]
+    &\Bigl( \quad(n,p)=(m,s)\land\DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v\Bigr)
+    \end{aligned}}{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{1}}
+  \proofstepwidestar[1,2,3,4,5,6]{(n,p)\in\GraphPathsBetween V E u v}{%
+    \rRE{9,\rLREb{10}}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Die Bestandteile eines gespeicherten Pfades]{\begin{aligned}[t]
+    &\GraphStruct{V,E}\dsep(n,p)\in\GraphPathsBetween V E u v\vdash\\[-2pt]
+    &{} n\in\mathbb N\land p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land \DirectedPath V E p n\\[-2pt]
+    &\land p(0)=u\land p(n)=v
+    \end{aligned}}{B27SimplePathFamilyPairElimination}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep n\dsep p\dsep u\dsep v\dsep m\dsep s}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestar[2]{(n,p)\in\GraphPathsBetween V E u v}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &(n,p)\in\GraphPathsBetween V E u v\leftrightarrow\\[-2pt]
+    &{} \exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,\\[-2pt]
+    &\Bigl( \quad(n,p)=(m,s)\land\DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v\Bigr)
+    \end{aligned}}{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{1}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &\exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times V)\,\\[-2pt]
+    &\Bigl( \quad(n,p)=(m,s)\land\DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v\Bigr)
+    \end{aligned}}{\rRE{2,\rLREa{3}}}
+  \proofstepwidestar[5]{\begin{aligned}[t]
+    &m\in\mathbb N\land s\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land{} (n,p)=(m,s)\land\DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v
+    \end{aligned}}{\rA}
+  \proofstepwidestar[5]{(n,p)=(m,s)}{\rAEa{\rAEb{\rAEb{5}}}}
+  \proofstepwidestar[]{(n,p)=(m,s)\leftrightarrow(n=m\land p=s)}{%
+    \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]}
+  \proofstepwidestar[5]{n=m\land p=s}{\rRE{6,\rLREa{7}}}
+  \proofstepwidestar[5]{m=n}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{8}}}
+  \proofstepwidestar[5]{s=p}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{8}}}
+  \proofstepwidestar[5]{\begin{aligned}[t]
+    &m\in\mathbb N\land s\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land{} \DirectedPath V E s m\\[-2pt]
+    &\land s(0)=u\land s(m)=v
+    \end{aligned}}{%
+    \rAI{\rAEa{5},\rAI{\rAEa{\rAEb{5}},\rAEb{\rAEb{\rAEb{5}}}}}}
+  \proofstepwidestar[5]{\begin{aligned}[t]
+    &n\in\mathbb N\land p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land{} \DirectedPath V E p n\\[-2pt]
+    &\land p(0)=u\land p(n)=v
+    \end{aligned}}{\rIE{9,10,11}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &n\in\mathbb N\land p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land{} \DirectedPath V E p n\\[-2pt]
+    &\land p(0)=u\land p(n)=v
+    \end{aligned}}{\rEEStar{4,5,12}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Der Weg aus einem einzigen Knoten]{%
+  \GraphStruct{V,E}\dsep r\in V\vdash
+  \exists z\,(z\in\GraphPathsBetween V E r r)
+}{B27RootPathSingleton}{\DeltaRow{Mengen}{V\dsep E\dsep r\dsep i\dsep j\dsep z}
+\DeltaRow{Abkürzung}{p=\{(0,r)\}}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestar[2]{r\in V}{\rA}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[2]{p\colon\{0\}\to V}{\FormulaRefAuto{SingletonGraphFunction}[thm]{2}}
+  \proofstepwidestar[]{\NatSeg1=\{0\}}{\FormulaRefAuto{PeanoNatSegOneEquality}[thm]}
+  \proofstepwidestar[]{0+1=1}{\FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]}}
+  \proofstepwidestar[2]{p\colon\NatSeg{0+1}\to V}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{5},\FormulaRefAuto{a=b\vdash b=a}[thm]{6},4}}
+  \proofstepwidestar[8]{i\in\NatSeg{0+1}}{\rA}
+  \proofstepwidestar[9]{j\in\NatSeg{0+1}}{\rA}
+  \proofstepwidestar[8]{i=0}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rIE{6,5,8}}}
+  \proofstepwidestar[9]{j=0}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rIE{6,5,9}}}
+  \proofstepwidestar[8,9]{i=j}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{10,11}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall i\in\NatSeg{0+1}\,\forall j\in\NatSeg{0+1}\,\\[-2pt]
+    &(p(i)=p(j)\rightarrow i=j)
+    \end{aligned}}{\rUI{\rRI{8,\rUI{\rRI{9,\FormulaRefAuto{Q\vdash P\rightarrow Q}[thm]{12}}}}}}
+  \proofstepwidestar[2]{p\colon\NatSeg{0+1}\inj V}{\FormulaRefAuto{Injektive Funktion}[def]{7,13}}
+  \proofstepwidestar[15]{i\in\NatSeg0}{\rA}
+  \proofstepwidestar[15]{\bot}{\rBI{\rIE{\FormulaRefAuto{PeanoNatSegZero}[thm],15},\FormulaRefAuto{x\not\in\varnothing}[thm]}}
+  \proofstepwidestar[15]{(p(i),p(i+1))\in E}{\FormulaRefAuto{\bot\vdash P}[thm]{16}}
+  \proofstepwidestar[]{\forall i\in\NatSeg0\,(p(i),p(i+1))\in E}{\rUI{\rRI{15,17}}}
+  \proofstepwidestar[1,2]{\DirectedWalk V E p0}{\FormulaRefAuto{DirectedWalkDef}[def]{1,3,7,18}}
+  \proofstepwidestar[1,2]{\DirectedPath V E p0}{\FormulaRefAuto{DirectedPathDef}[def]{1,19,14}}
+  \proofstepwidestar[2]{p(0)=r}{\FormulaRefAuto{SingletonGraphValue}[thm]{2}}
+  \proofstepwidestar[1,2]{p\in\powerset(\mathbb N\times V)}{\FormulaRefAuto{FinitePathPowerSetTyping}[thm]{1,20}}
+  \proofstepwidestar[1,2]{(0,p)\in\GraphPathsBetween V E r r}{\FormulaRefAuto{B27SimplePathFamilyPairIntroduction}[thm]{1,3,22,20,21,21}}
+  \proofstepwidestar[1,2]{\exists z\,(z\in\GraphPathsBetween V E r r)}{\rEI{23}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Ein erreichter Knoten führt über eine Kante weiter]{%
+  \begin{aligned}[t]&\GraphStruct{V,E}\dsep
+  \exists z\,(z\in\GraphPathsBetween V E r u)\dsep(u,v)\in E\vdash{}\\[-2pt]
+  &\exists z\,(z\in\GraphPathsBetween V E r v)\end{aligned}
+}{B27RootPathExtendExistence}{\DeltaRow{Mengen}{V\dsep E\dsep r\dsep u\dsep v\dsep z\dsep n\dsep p\dsep m\dsep q}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GraphStruct{V,E}}{\rA}
+  \proofstepwidestar[2]{\exists z\,(z\in\GraphPathsBetween V E r u)}{\rA}
+  \proofstepwidestar[3]{(u,v)\in E}{\rA}
+  \proofstepwidestar[4]{z\in\GraphPathsBetween V E r u}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &z\in\GraphPathsBetween V E r u\leftrightarrow\\[-2pt]
+    &\exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\,(z=(n,p)\land\DirectedPath V E p n\\[-2pt]
+    &\land p(0)=r\land p(n)=u)
+    \end{aligned}}{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{1}}
+  \proofstepwidestar[1,4]{\begin{aligned}[t]
+    &\exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\,(z=(n,p)\land\DirectedPath V E p n\\[-2pt]
+    &\land p(0)=r\land p(n)=u)
+    \end{aligned}}{\rRE{4,\rLREa{5}}}
+  \proofstepwidestar[7]{\begin{aligned}[t]
+    &n\in\mathbb N\land p\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land z=(n,p)\land\DirectedPath V E p n\\[-2pt]
+    &\land p(0)=r\land p(n)=u
+    \end{aligned}}{\rA}
+  \proofstepwidestar[7]{\DirectedPath V E p n}{\rAEa{\rAEb{\rAEb{\rAEb{7}}}}}
+  \proofstepwidestar[7]{p(0)=r}{\rAEa{\rAEb{\rAEb{\rAEb{\rAEb{7}}}}}}
+  \proofstepwidestar[7]{p(n)=u}{\rAEb{\rAEb{\rAEb{\rAEb{\rAEb{7}}}}}}
+  \proofstepwidestar[7]{u=p(n)}{\FormulaRefAuto{a=b\vdash b=a}[thm]{10}}
+  \proofstepwidestar[3,7]{(p(n),v)\in E}{\rIE{11,3}}
+  \proofstepwidestar[1,3,7]{\begin{aligned}[t]
+    &\exists m\in\mathbb N\,\exists q\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\,(\DirectedPath V E q m\\[-2pt]
+    &\land q(0)=p(0)\land q(m)=v)
+    \end{aligned}}{\FormulaRefAuto{FinitePathEndpointStep}[thm]{1,8,12}}
+  \proofstepwidestar[14]{\begin{aligned}[t]
+    &m\in\mathbb N\land q\in\powerset(\mathbb N\times V)\\[-2pt]
+    &\land\DirectedPath V E q m\\[-2pt]
+    &\land q(0)=p(0)\land q(m)=v
+    \end{aligned}}{\rA}
+  \proofstepwidestar[7,14]{q(0)=r}{\rIE{9,\rAEa{\rAEb{\rAEb{\rAEb{14}}}}}}
+  \proofstepwidestar[1,7,14]{(m,q)\in\GraphPathsBetween V E r v}{\FormulaRefAuto{B27SimplePathFamilyPairIntroduction}[thm]{1,\rAEa{14},\rAEa{\rAEb{14}},\rAEa{\rAEb{\rAEb{14}}},15,\rAEb{\rAEb{\rAEb{\rAEb{14}}}}}}
+  \proofstepwidestar[1,7,14]{\exists z\,(z\in\GraphPathsBetween V E r v)}{\rEI{16}}
+  \proofstepwidestar[1,3,7]{\exists z\,(z\in\GraphPathsBetween V E r v)}{\rEEStar{13,14,17}}
+  \proofstepwidestar[1,3,4]{\exists z\,(z\in\GraphPathsBetween V E r v)}{\rEEStar{6,7,18}}
+  \proofstepwidestar[1,2,3]{\exists z\,(z\in\GraphPathsBetween V E r v)}{\rEE{2,4,19}}
+\end{tabproofwide}

@@ -1,0 +1,2200 @@
+%============================================================
+%  Bd. 40 - Gruppen
+%============================================================
+\documentclass[main.tex]{subfiles}
+\ifSubfilesClassLoaded{\BandSetupStandalone{B40}}{}
+\title{Bd. 40 - Gruppen}
+\author{Martin Kunze}
+\date{}
+\setcounter{file}{40}
+\hypersetup{pdftitle={Bd. 40 - Gruppen},pdfauthor={Martin Kunze}}
+\begin{document}
+\providecommand{\BandXXIXProofRefStack}[1]{%
+  \ensuremath{\begin{gathered}[t]#1\end{gathered}}}
+\title{Bd. 40 - Gruppen}
+\author{Martin Kunze}
+\date{}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\setcounter{tocdepth}{3}
+\tableofcontents
+\setcounter{file}{40}
+\renewcommand{\FormulaBandID}{40}
+
+\chapter{Einleitung}
+
+Dieser Band ergänzt die Monoide aus Band~38 um beidseitige Inverse.
+Er entwickelt die grundlegenden Gruppengesetze, die Eindeutigkeit der
+Inversen, Kürzung und Gruppenhomomorphismen. Den Abschluss bilden die
+Einheitengruppe eines Monoids und die Rekonstruktion einer Gruppe aus ihrer
+großen Potenzhalbgruppe. Abelsche Gruppen werden in Band~41, endliche
+Gruppen in Band~42 und Ringe in den Bänden~43--44 behandelt.
+Jede Strukturbezeichnung enthält weiterhin die Operation und ihr
+neutrales Element, etwa \(\GroupAlg{G}{\circ}{e}\).
+
+\chapter{Gruppen}
+
+\section{Gruppen als Monoide mit Inversen}
+
+\FormulaAxiomDeltaK[Existenz eines beidseitigen Inversen]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &\exists y\in G\,
+      \bigl(x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseExistenceLaw}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaDefDeltaK[Begriff der Gruppe]{%
+  \GroupAlg{G}{\circ}{e}%
+}{GroupDef}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaRow{Monoid}{\MonoidAlg{G}{\circ}{e}}
+    [\FormulaRefAuto{MonoidDef}[def]]
+  \DeltaRow{Beidseitige Inverse}{%
+    \begin{aligned}[t]
+      &x\in G\vdash{}\\[-2pt]
+      &\exists y\in G\,
+        \bigl(x\circ y=e\land y\circ x=e\bigr)
+    \end{aligned}}
+    [\FormulaRefAuto{GroupInverseExistenceLaw}[ax]]
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppe}{\GroupAlg{G}{\circ}{e}}
+}
+
+\FormulaAxiomDeltaK[Monoidanteil einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\vdash\MonoidAlg{G}{\circ}{e}%
+}{GroupBaseMonoidAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\FormulaAxiomDeltaK[Inverse in einer Gruppe]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &\exists y\in G\,
+      \bigl(x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseExistenceAxiom}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+
+\section{Grundlegende Gruppengesetze}
+
+\FormulaThmDeltaK[Halbgruppenanteil einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\vdash\SemigroupAlg{G}{\circ}%
+}{GroupBaseSemigroup}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Abgeschlossenheit der Gruppenoperation]{%
+  \GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash x\circ y\in G%
+}{GroupClosure}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{3}{y\in G}{\rA}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstep{1,2,3}{x\circ y\in G}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,2,3}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Assoziativität der Gruppenoperation]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\vdash{}\\
+    &(x\circ y)\circ z=x\circ(y\circ z)
+  \end{aligned}
+}{GroupAssociativity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstepwidestar[2]{x\in G}{\rA}
+  \proofstepwidestar[3]{y\in G}{\rA}
+  \proofstepwidestar[4]{z\in G}{\rA}
+  \proofstepwidestar[1]{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestar[1,2,3,4]{(x\circ y)\circ z=x\circ(y\circ z)}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{5,2,3,4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Neutrales Element liegt im Gruppenträger]{%
+  \GroupAlg{G}{\circ}{e}\vdash e\in G%
+}{GroupIdentityCarrier}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1}{e\in G}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Linksneutralität in einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash e\circ x=x%
+}{GroupLeftIdentity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1,2}{e\circ x=x}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{3,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechtsneutralität in einer Gruppe]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x\circ e=x%
+}{GroupRightIdentity}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1,2}{x\circ e=x}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{3,2}}
+\end{tabproof}
+
+\section{Eindeutigkeit des Inversen}
+
+\FormulaThmDeltaK[Eindeutigkeit aus Links- und Rechtsinverse]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+      y\circ x=e\dsep x\circ z=e\\
+    &\vdash y=z
+  \end{aligned}
+}{GroupInverseUnique}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Einsetzen der Rechtsinverse]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y=y\circ(x\circ z)
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y=y\circ(x\circ z)%
+  }[GroupInverseUniqueRightInverseSubstitution]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwidestar[1,3]{y\circ e=y}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{1,3}}
+    \proofstepwide[1,3]{y}{=}{y\circ e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        7}}
+    \proofstepwide[6]{y\circ e}{=}{y\circ(x\circ z)}{\rIE{6}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y=y\circ(x\circ z)}{\rChain{8,9}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion mit der Linksinversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y\circ(x\circ z)=z
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y\circ(x\circ z)=z%
+  }[GroupInverseUniqueLeftInverseReduction]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwidestar[1,2,3,4]{(y\circ x)\circ z=y\circ(x\circ z)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,3,2,4}}
+    \proofstepwide[1,2,3,4]{y\circ(x\circ z)}{=}{%
+      (y\circ x)\circ z}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        7}}
+    \proofstepwide[5]{(y\circ x)\circ z}{=}{e\circ z}{\rIE{5}}
+    \proofstepwide[1,4]{e\circ z}{=}{z}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y\circ(x\circ z)=z}{\rChain{8,9,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Verknüpfung beider Teilrechnungen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+        y\circ x=e\dsep x\circ z=e\\
+      &\vdash y=z
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y,z\in G\dsep
+    y\circ x=e\dsep x\circ z=e
+    \vdash y=z%
+  }[GroupInverseUniqueConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[4]{z\in G}{\rA}
+    \proofstepwidestar[5]{y\circ x=e}{\rA}
+    \proofstepwidestar[6]{x\circ z=e}{\rA}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y=y\circ(x\circ z)}{%
+      \FormulaRefAuto{GroupInverseUniqueRightInverseSubstitution}{%
+        1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{%
+      y\circ(x\circ z)=z}{%
+      \FormulaRefAuto{GroupInverseUniqueLeftInverseReduction}{%
+        1,2,3,4,5,6}}
+    \proofstepwidestar[1,2,3,4,5,6]{y=z}{\rChain{7,8}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaDefDeltaK[Inverses Element]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x\in G\vdash{}\\
+    &x^{-1}\coloneqq
+      \iota y\,
+      \bigl(y\in G\land x\circ y=e\land y\circ x=e\bigr)
+  \end{aligned}
+}{GroupInverseElement}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+  \DeltaRow{Träger}{x^{-1}\in G}
+  \DeltaRow{Rechtsinverse}{x\circ x^{-1}=e}
+  \DeltaRow{Linksinverse}{x^{-1}\circ x=e}
+  \DeltaRow{Eindeutigkeit}{\FormulaRefAuto{GroupInverseUnique}[thm]}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Inverses Element}{x^{-1}}
+}
+
+\FormulaThmDeltaK[Inverses Element liegt im Gruppenträger]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x^{-1}\in G%
+}{GroupInverseCarrier}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x^{-1}\in G}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Rechtsinverse Gleichung]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x\circ x^{-1}=e%
+}{GroupInverseRight}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x\circ x^{-1}=e}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Linksinverse Gleichung]{%
+  \GroupAlg{G}{\circ}{e}\dsep x\in G\vdash x^{-1}\circ x=e%
+}{GroupInverseLeft}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{2}{x\in G}{\rA}
+  \proofstep{1,2}{x^{-1}\circ x=e}{%
+    \FormulaRefAuto{GroupInverseElement}[def]{1,2}}
+\end{tabproof}
+
+\section{Kürzungsgesetze}
+
+\FormulaThmDeltaK[Linkskürzung in Gruppen]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+      a\circ b=a\circ c\\
+    &\vdash b=c
+  \end{aligned}
+}{GroupLeftCancellation}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Linksmultiplikation mit dem Inversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &(a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &(a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c
+    \end{aligned}
+  }[GroupLeftCancellationInverseMultiplication]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2]{a^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,2,5]{%
+      a^{-1}\circ(a\circ b)=a^{-1}\circ(a\circ c)}{\rIE{5}}
+    \proofstepwide[1,2,3]{%
+      (a^{-1}\circ a)\circ b}{=}{a^{-1}\circ(a\circ b)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,6,2,3}}
+    \proofstepwidestar[1,2,4]{(a^{-1}\circ a)\circ c=a^{-1}\circ(a\circ c)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,6,2,4}}
+    \proofstepwide[1,2,4]{%
+      a^{-1}\circ(a\circ c)}{=}{(a^{-1}\circ a)\circ c}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        9}}
+    \proofstepwidestar[1,2,3,4,5]{%
+      (a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c}{%
+      \rChain{8,7,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion auf das neutrale Element]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &e\circ b=e\circ c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash{}\\[-2pt]
+      &e\circ b=e\circ c
+    \end{aligned}
+  }[GroupLeftCancellationIdentityEquation]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{%
+      (a^{-1}\circ a)\circ b=(a^{-1}\circ a)\circ c}{%
+      \FormulaRefAuto{GroupLeftCancellationInverseMultiplication}[thm]{%
+        1,2,3,4,5}}
+    \proofstepwidestar[1,2]{a^{-1}\circ a=e}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,2}}
+    \proofstepwidestar[1,2]{e=a^{-1}\circ a}{%
+      \FormulaRefAuto{a=b\vdash b=a}{7}}
+    \proofstepwide[1,2,3]{e\circ b}{=}{(a^{-1}\circ a)\circ b}{\rIE{8}}
+    \proofstepwide[1,2,4]{(a^{-1}\circ a)\circ c}{=}{e\circ c}{\rIE{7}}
+    \proofstepwidestar[1,2,3,4,5]{e\circ b=e\circ c}{%
+      \rChain{9,6,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Entfernen des neutralen Elements]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash b=c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        a\circ b=a\circ c\vdash b=c
+    \end{aligned}
+  }[GroupLeftCancellationConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{a\circ b=a\circ c}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{e\circ b=e\circ c}{%
+      \FormulaRefAuto{GroupLeftCancellationIdentityEquation}[thm]{1,2,3,4,5}}
+    \proofstepwidestar[1,3]{e\circ b=b}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,3}}
+    \proofstepwide[1,3]{b}{=}{e\circ b}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        7}}
+    \proofstepwide[1,4]{e\circ c}{=}{c}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5]{b=c}{\rChain{8,6,9}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Rechtskürzung in Gruppen]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+      b\circ a=c\circ a\\
+    &\vdash b=c
+  \end{aligned}
+}{GroupRightCancellation}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep a\dsep b\dsep c}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsmultiplikation mit dem Inversen]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})
+    \end{aligned}
+  }[GroupRightCancellationInverseMultiplication]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2]{a^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,2,5]{%
+      (b\circ a)\circ a^{-1}=(c\circ a)\circ a^{-1}}{\rIE{5}}
+    \proofstepwidestar[1,2,3]{(b\circ a)\circ a^{-1}=b\circ(a\circ a^{-1})}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,3,2,6}}
+    \proofstepwide[1,2,3]{%
+      b\circ(a\circ a^{-1})}{=}{(b\circ a)\circ a^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        8}}
+    \proofstepwide[1,2,4]{%
+      (c\circ a)\circ a^{-1}}{=}{c\circ(a\circ a^{-1})}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,4,2,6}}
+    \proofstepwidestar[1,2,3,4,5]{%
+      b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})}{%
+      \rChain{9,7,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Reduktion auf das neutrale Element]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ e=c\circ e
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash{}\\[-2pt]
+      &b\circ e=c\circ e
+    \end{aligned}
+  }[GroupRightCancellationIdentityEquation]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{%
+      b\circ(a\circ a^{-1})=c\circ(a\circ a^{-1})}{%
+      \FormulaRefAuto{GroupRightCancellationInverseMultiplication}[thm]{%
+        1,2,3,4,5}}
+    \proofstepwidestar[1,2]{a\circ a^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,2}}
+    \proofstepwidestar[1,2]{e=a\circ a^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{7}}
+    \proofstepwide[1,2,3]{b\circ e}{=}{b\circ(a\circ a^{-1})}{\rIE{8}}
+    \proofstepwide[1,2,4]{c\circ(a\circ a^{-1})}{=}{c\circ e}{\rIE{7}}
+    \proofstepwidestar[1,2,3,4,5]{b\circ e=c\circ e}{%
+      \rChain{9,6,10}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Entfernen des neutralen Elements]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash b=c
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep a,b,c\in G\dsep
+        b\circ a=c\circ a\vdash b=c
+    \end{aligned}
+  }[GroupRightCancellationConclusion]
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{a\in G}{\rA}
+    \proofstepwidestar[3]{b\in G}{\rA}
+    \proofstepwidestar[4]{c\in G}{\rA}
+    \proofstepwidestar[5]{b\circ a=c\circ a}{\rA}
+    \proofstepwidestar[1,2,3,4,5]{b\circ e=c\circ e}{%
+      \FormulaRefAuto{GroupRightCancellationIdentityEquation}[thm]{1,2,3,4,5}}
+    \proofstepwidestar[1,3]{b\circ e=b}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{1,3}}
+    \proofstepwide[1,3]{b}{=}{b\circ e}{%
+      \FormulaRefAuto{a=b\vdash b=a}{%
+        7}}
+    \proofstepwide[1,4]{c\circ e}{=}{c}{%
+      \FormulaRefAuto{GroupRightIdentity}[thm]{1,4}}
+    \proofstepwidestar[1,2,3,4,5]{b=c}{\rChain{8,6,9}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Nichtleere endliche kürzbare Halbgruppen sind Gruppen]{%
+  \begin{aligned}[t]
+    &\CancellativeSemigroupAlg{A}{\star}\dsep
+      \Finite A\dsep A\neq\varnothing\vdash{}\\[-2pt]
+    &\exists e\in A\,\GroupAlg{A}{\star}{e}
+  \end{aligned}%
+}{FiniteCancellativeSemigroupIsGroup}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep b\dsep c\dsep d\dsep e\dsep f
+    \dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep L_a\dsep R_a}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\CancellativeSemigroupAlg{A}{\star}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\Finite A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{A\neq\varnothing}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{CancellativeSemigroupBaseAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2]{\FiniteSemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{FiniteSemigroupDef}[def]{4,2}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists e\in A\,\GroupAlg{A}{\star}{e}}{%
+    \FormulaRefAuto{FiniteCancellativeSemigroupGroupExistence}[thm]{5,1,3}}
+\end{tabproofwide}
+\endgroup
+
+
+\section{Inverse eines Produkts}
+
+\FormulaThmDeltaK[Inverse eines Produkts]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+    &(x\circ y)^{-1}=y^{-1}\circ x^{-1}
+  \end{aligned}
+}{GroupProductInverse}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Rechtsinverse des Produkts]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+      &(x\circ y)\circ(y^{-1}\circ x^{-1})=e
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y\in G
+    \vdash (x\circ y)\circ(y^{-1}\circ x^{-1})=e%
+  }[GroupProductInverseRightCandidate]
+    \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\circ}{e}}{%
+      \rA}
+    \proofstepwidestarbreakkeep[2]{x\in G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[3]{y\in G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestarbreakkeep[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{y^{-1}\circ x^{-1}\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,5,4}}
+    \proofstepwidestarbreakkeep[1,2,3]{(x\circ y)\circ(y^{-1}\circ x^{-1})=x\circ(y\circ(y^{-1}\circ x^{-1}))}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,2,3,6}}
+    \proofstepwidestarbreakkeep[1,2,3]{(y\circ y^{-1})\circ x^{-1}=y\circ(y^{-1}\circ x^{-1})}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,3,5,4}}
+    \proofstepwidestarbreakkeep[1,3]{y\circ y^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,3}}
+    \proofstepwidestarbreakkeep[1,2]{e\circ x^{-1}=x^{-1}}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,4}}
+    \proofstepwidestarbreakkeep[1,2,3]{y\circ(y^{-1}\circ x^{-1})=x^{-1}}{%
+      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{8,\rIE{9,10}}}
+    \proofstepwidestarbreakkeep[1,2,3]{x\circ(y\circ(y^{-1}\circ x^{-1}))=x\circ x^{-1}}{%
+      \rIE{11}}
+    \proofstepwidestarbreakkeep[1,2]{x\circ x^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,2}}
+    \proofstepwidestarbreakkeep[1,2,3]{(x\circ y)\circ(y^{-1}\circ x^{-1})=e}{%
+      \rChain{7,12,13}}
+  \closeproofpartwideindR
+
+  \proofpartwideindR[Linksinverse des Produkts]{%
+    \begin{aligned}[t]
+      &\GroupAlg{G}{\circ}{e}\dsep x,y\in G\vdash{}\\
+      &(y^{-1}\circ x^{-1})\circ(x\circ y)=e
+    \end{aligned}
+  }{%
+    \GroupAlg{G}{\circ}{e}\dsep x,y\in G
+    \vdash (y^{-1}\circ x^{-1})\circ(x\circ y)=e%
+  }[GroupProductInverseLeftCandidate]
+    \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\circ}{e}}{%
+      \rA}
+    \proofstepwidestarbreakkeep[2]{x\in G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[3]{y\in G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestarbreakkeep[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{x\circ y\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,2,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{(y^{-1}\circ x^{-1})\circ(x\circ y)=y^{-1}\circ(x^{-1}\circ(x\circ y))}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,5,4,6}}
+    \proofstepwidestarbreakkeep[1,2,3]{(x^{-1}\circ x)\circ y=x^{-1}\circ(x\circ y)}{%
+      \FormulaRefAuto{GroupAssociativity}[thm]{1,4,2,3}}
+    \proofstepwidestarbreakkeep[1,2]{x^{-1}\circ x=e}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,2}}
+    \proofstepwidestarbreakkeep[1,3]{e\circ y=y}{%
+      \FormulaRefAuto{GroupLeftIdentity}[thm]{1,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{x^{-1}\circ(x\circ y)=y}{%
+      \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{8,\rIE{9,10}}}
+    \proofstepwidestarbreakkeep[1,2,3]{y^{-1}\circ(x^{-1}\circ(x\circ y))=y^{-1}\circ y}{%
+      \rIE{11}}
+    \proofstepwidestarbreakkeep[1,3]{y^{-1}\circ y=e}{%
+      \FormulaRefAuto{GroupInverseLeft}[thm]{1,3}}
+    \proofstepwidestarbreakkeep[1,2,3]{(y^{-1}\circ x^{-1})\circ(x\circ y)=e}{%
+      \rChain{7,12,13}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Eindeutigkeit}
+    \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{\rA}
+    \proofstepwidestar[2]{x\in G}{\rA}
+    \proofstepwidestar[3]{y\in G}{\rA}
+    \proofstepwidestar[1,2]{x^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,2}}
+    \proofstepwidestar[1,3]{y^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,3}}
+    \proofstepwidestar[1,2,3]{x\circ y\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{y^{-1}\circ x^{-1}\in G}{%
+      \FormulaRefAuto{GroupClosure}[thm]{1,5,4}}
+    \proofstepwidestar[1,2,3]{(x\circ y)^{-1}\in G}{%
+      \FormulaRefAuto{GroupInverseCarrier}[thm]{1,6}}
+    \proofstepwidestar[1,2,3]{%
+      (y^{-1}\circ x^{-1})\circ(x\circ y)=e}{%
+      \FormulaRefAuto{GroupProductInverseLeftCandidate}[thm]{1,2,3}}
+    \proofstepwidestar[1,2,3]{%
+      (x\circ y)\circ(x\circ y)^{-1}=e}{%
+      \FormulaRefAuto{GroupInverseRight}[thm]{1,6}}
+    \proofstepwidestar[1,2,3]{%
+      y^{-1}\circ x^{-1}=(x\circ y)^{-1}}{%
+      \FormulaRefAuto{GroupInverseUnique}[thm]{1,6,7,8,9,10}}
+    \proofstepwidestar[1,2,3]{%
+      (x\circ y)^{-1}=y^{-1}\circ x^{-1}}{%
+      \FormulaRefAuto{a=b\vdash b=a}{11}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\chapter{Homomorphismen von Gruppen}
+
+\section{Gruppenhomomorphismen}
+
+Bei Gruppen genügt die Erhaltung der Gruppenoperation. Anders als bei
+beliebigen Monoiden folgen die Erhaltung des neutralen Elements und der
+Inversen aus der Existenz von Inversen im Ziel.
+
+\FormulaDefDeltaK[Begriff des Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupHomDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Quellgruppe}{\GroupAlg{G}{\circ}{e}}
+  \DeltaPrem{Zielgruppe}{\GroupAlg{H}{\diamond}{u}}
+  \DeltaPrem{Halbgruppenhomomorphismus}{%
+    \SemigroupHom{f}{G,\circ}{H,\diamond}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppenhomomorphismus}{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}
+}
+
+\FormulaAxiomDeltaK[Trägerabbildung eines Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash f\colon G\to H%
+}{GroupHomFunctionAxiom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\par\smallskip
+
+\FormulaAxiomDeltaK[Operationserhaltung eines Gruppenhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep x,y\in G
+  \vdash f(x\circ y)=f(x)\diamond f(y)%
+}{GroupHomOperationAxiom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x\dsep y}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+
+\FormulaThmDeltaK[Gruppenhomomorphismen erhalten das neutrale Element]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash f(e)=u%
+}{GroupHomIdentityPreservation}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstepwidestar[1]{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestar[1]{f\colon G\to H}{%
+    \FormulaRefAuto{GroupHomFunctionAxiom}[ax]{1}}
+  \proofstepwidestar[1]{e\in G}{%
+    \FormulaRefAuto{GroupIdentityCarrier}[thm]{2}}
+  \proofstepwidestar[1]{f(e)\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}{4,5}}
+  \proofstepwidestar[1]{e\circ e=e}{%
+    \FormulaRefAuto{GroupLeftIdentity}[thm]{2,5}}
+  \proofstepwidestar[1]{f(e\circ e)=f(e)}{\rIE{7}}
+  \proofstepwidestar[1]{f(e\circ e)=f(e)\diamond f(e)}{%
+    \FormulaRefAuto{GroupHomOperationAxiom}[ax]{1,5,5}}
+  \proofstepwidestar[1]{f(e)\diamond f(e)=f(e)}{\rIE{9,8}}
+  \proofstepwidestar[1]{f(e)\diamond u=f(e)}{%
+    \FormulaRefAuto{GroupRightIdentity}[thm]{3,6}}
+  \proofstepwidestar[1]{%
+    f(e)\diamond u=f(e)\diamond f(e)}{\rIE{11,%
+      \FormulaRefAuto{a=b\vdash b=a}{10}}}
+  \proofstepwidestar[1]{u\in H}{%
+      \FormulaRefAuto{GroupIdentityCarrier}[thm]{3}}
+  \proofstepwidestar[1]{u=f(e)}{%
+    \FormulaRefAuto{GroupLeftCancellation}[thm]{3,6,
+      13,6,12}}
+  \proofstepwidestar[1]{f(e)=u}{%
+    \FormulaRefAuto{a=b\vdash b=a}{14}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gruppenhomomorphismen erhalten Inverse]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep x\in G
+  \vdash f(x^{-1})=f(x)^{-1}%
+}{GroupHomInversePreservation}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep x}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Träger der Bilder}
+  \proofstepwidestarbreakkeep[1]{\GroupHom{f}{G,\circ,e}{H,\diamond,u}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{x\in G}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstepwidestarbreakkeep[1]{f\colon G\to H}{%
+    \FormulaRefAuto{GroupHomFunctionAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2]{x^{-1}\in G}{%
+    \FormulaRefAuto{GroupInverseCarrier}[thm]{3,2}}
+  \proofstepwidestarbreakkeep[1,2]{f(x)\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}[thm]{5,2}}
+  \proofstepwidestarbreakkeep[1,2]{f(x^{-1})\in H}{%
+    \FormulaRefAuto{F\colon A\to B\dsep a\in A\vdash F(a)\in B}[thm]{5,6}}
+  \closeproofpartwide
+
+  \proofpartwide{Linksinverse und Eindeutigkeit}
+  \setcounter{proofstepnr}{8}
+  \proofstepwidestarbreakkeep[1]{f(e)=u}{%
+    \FormulaRefAuto{GroupHomIdentityPreservation}[thm]{1}}
+  \proofstepwidestarbreakkeep[1,2]{x^{-1}\circ x=e}{%
+    \FormulaRefAuto{GroupInverseLeft}[thm]{3,2}}
+  \proofstepwidestarbreakkeep[1,2]{f(x^{-1}\circ x)=f(x^{-1})\diamond f(x)}{%
+    \FormulaRefAuto{GroupHomOperationAxiom}[ax]{1,6,2}}
+  \proofstepwidestarbreakkeep[1,2]{f(x^{-1}\circ x)=u}{%
+    \rIE{10,9}}
+  \proofstepwidestarbreakkeep[1,2]{f(x^{-1})\diamond f(x)=u}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{11,12}}
+  \proofstepwidestarbreakkeep[1,2]{f(x)^{-1}\in H}{%
+    \FormulaRefAuto{GroupInverseCarrier}[thm]{4,7}}
+  \proofstepwidestarbreakkeep[1,2]{f(x)\diamond f(x)^{-1}=u}{%
+    \FormulaRefAuto{GroupInverseRight}[thm]{4,7}}
+  \proofstepwidestarbreakkeep[1,2]{f(x^{-1})=f(x)^{-1}}{%
+    \FormulaRefAuto{GroupInverseUnique}[thm]{4,7,8,14,13,15}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Ein Gruppenhomomorphismus ist ein Monoidhomomorphismus]{%
+  \GroupHom{f}{G,\circ,e}{H,\diamond,u}
+  \vdash\MonoidHom{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupHomIsMonoidHom}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{\GroupAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{\MonoidAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{2}}
+  \proofstep{1}{\MonoidAlg{H}{\diamond}{u}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{3}}
+  \proofstep{1}{\SemigroupHom{f}{G,\circ}{H,\diamond}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{1}{f(e)=u}{%
+    \FormulaRefAuto{GroupHomIdentityPreservation}[thm]{1}}
+  \proofstep{1}{\MonoidHom{f}{G,\circ,e}{H,\diamond,u}}{%
+    \FormulaRefAuto{MonoidHomDef}[def]{4,5,6,7}}
+\end{tabproof}
+
+\section{Gruppenisomorphismen und Komposition}
+
+\FormulaDefDeltaK[Begriff des Gruppenisomorphismus]{%
+  \GroupIso{f}{G,\circ,e}{H,\diamond,u}%
+}{GroupIsoDef}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u}
+  \DeltaRow{Funktionen}{f\dsep\circ\dsep\diamond}
+  \DeltaRow{\textbf{Axiome}}{}
+  \DeltaPrem{Gruppenhomomorphismus}{%
+    \GroupHom{f}{G,\circ,e}{H,\diamond,u}}
+  \DeltaPrem{Bijektivität}{f\colon G\bij H}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Gruppenisomorphismus}{%
+    \GroupIso{f}{G,\circ,e}{H,\diamond,u}}
+}
+
+\FormulaThmDeltaK[Komposition von Gruppenhomomorphismen]{%
+  \begin{aligned}[t]
+    &\GroupHom{f}{G,\circ,e}{H,\diamond,u}\dsep
+      \GroupHom{g}{H,\diamond,u}{K,\bullet,v}\\
+    &\vdash\GroupHom{g\circ f}{G,\circ,e}{K,\bullet,v}
+  \end{aligned}
+}{GroupHomComposition}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep K\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{f\dsep g\dsep\circ\dsep\diamond\dsep\bullet}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupHom{f}{G,\circ,e}{H,\diamond,u}}{\rA}
+  \proofstep{2}{\GroupHom{g}{H,\diamond,u}{K,\bullet,v}}{\rA}
+  \proofstep{1}{\SemigroupHom{f}{G,\circ}{H,\diamond}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{2}{\SemigroupHom{g}{H,\diamond}{K,\bullet}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{2}}
+  \proofstep{1,2}{\SemigroupHom{g\circ f}{G,\circ}{K,\bullet}}{%
+    \FormulaRefAuto{SemigroupHomComposition}[thm]{3,4}}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1}}
+  \proofstep{2}{\GroupAlg{K}{\bullet}{v}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{2}}
+  \proofstep{1,2}{\GroupHom{g\circ f}{G,\circ,e}{K,\bullet,v}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{6,7,5}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Die Identität ist ein Gruppenisomorphismus]{%
+  \GroupAlg{G}{\circ}{e}
+  \vdash\GroupIso{\Id_G}{G,\circ,e}{G,\circ,e}%
+}{GroupIdentityIsomorphism}{%
+  \DeltaRow{Mengen}{G\dsep e}
+  \DeltaRow{Funktionen}{\circ}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\circ}{e}}{\rA}
+  \proofstep{1}{\SemigroupAlg{G}{\circ}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstep{1}{\SemigroupIso{\Id_G}{G,\circ}{G,\circ}}{%
+    \FormulaRefAuto{SemigroupIdentityIsomorphism}[thm]{2}}
+  \proofstep{1}{\SemigroupHom{\Id_G}{G,\circ}{G,\circ}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3}}
+  \proofstep{1}{\GroupHom{\Id_G}{G,\circ,e}{G,\circ,e}}{%
+    \FormulaRefAuto{GroupHomDef}[def]{1,1,4}}
+  \proofstep{}{\Id_G\colon G\bij G}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}[thm]}
+  \proofstep{1}{\GroupIso{\Id_G}{G,\circ,e}{G,\circ,e}}{%
+    \FormulaRefAuto{GroupIsoDef}[def]{5,6}}
+\end{tabproof}
+
+\section{Rekonstruktion aus der großen Potenzhalbgruppe}
+
+\subsection{Der konkrete Transport von Gruppeneinermengen}
+
+Für zwei Gruppen halten wir fest, welche Einermenge ein gegebener
+Potenzisomorphismus wohin schickt. Diese Aussage wird anschließend
+für die einseitige Gruppenstarrheit und später für Faserargumente verwendet.
+
+\FormulaThmDeltaK[Jedes Gruppenelement ist eine Einheit]{%
+  \GroupAlg{G}{\star}{e}\dsep g\in G\vdash\MonoidUnit{G,\star,e}{g}
+}{GroupElementIsMonoidUnit}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep g\dsep h}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproof}
+  \proofstep{1}{\GroupAlg{G}{\star}{e}}{\rA}
+  \proofstep{2}{g\in G}{\rA}
+  \proofstep{1}{\MonoidAlg{G}{\star}{e}}{\FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstep{1,2}{\exists h\in G\,(g\star h=e\land h\star g=e)}{\FormulaRefAuto{GroupInverseExistenceAxiom}[ax]{1,2}}
+  \proofstep{1,2}{\MonoidUnit{G,\star,e}{g}}{\FormulaRefAuto{MonoidUnitDef}[def]{3,2,4}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Einheiten einer Gruppenpotenzhalbgruppe sind genau Einermengen]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\star}{e}\dsep X\in\PowNE G\vdash{}\\[-2pt]
+    &\MonoidUnit{\PowNE G,\star_{\mathcal P},\{e\}}{X}
+      \leftrightarrow X\in\operatorname{Sing}(G)
+  \end{aligned}
+}{PowerGroupUnitsAreSingletons}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep X\dsep g}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\star}{e}}{\rA}
+  \proofstepwidestarbreakkeep[2]{X\in\PowNE G}{\rA}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{G}{\star}{e}}{\FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2]{\begin{aligned}[t]
+    &\MonoidUnit{\PowNE G,\star_{\mathcal P},\{e\}}{X}\\[-2pt]
+    &\quad\leftrightarrow\exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})
+  \end{aligned}}{\FormulaRefAuto{PowerMonoidUnitCharacterization}[thm]{3,2}}
+  \proofstepwidestarbreakkeep[5]{%
+    \exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})}{\rA}
+  \proofstepwidestarbreakkeep[6]{%
+    g\in G\land(X=\{g\}\land\MonoidUnit{G,\star,e}{g})}{\rA}
+  \proofstepwidestarbreakkeep[6]{g\in G}{\rAEa{6}}
+  \proofstepwidestarbreakkeep[6]{X=\{g\}}{\rAEa{\rAEb{6}}}
+  \proofstepwidestarbreakkeep[6]{\exists g\in G\,(X=\{g\})}{%
+    \rEI{\rAI{7,8}}}
+  \proofstepwidestarbreakkeep[5]{\exists g\in G\,(X=\{g\})}{\rEE{5,6,9}}
+  \proofstepwidestarbreakkeep[]{\begin{aligned}[t]
+    &\exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})\\[-2pt]
+    &\quad\rightarrow\exists g\in G\,(X=\{g\})
+  \end{aligned}}{\rRI{5,10}}
+  \proofstepwidestarbreakkeep[12]{\exists g\in G\,(X=\{g\})}{\rA}
+  \proofstepwidestarbreakkeep[13]{g\in G\land X=\{g\}}{\rA}
+  \proofstepwidestarbreakkeep[13]{g\in G}{\rAEa{13}}
+  \proofstepwidestarbreakkeep[13]{X=\{g\}}{\rAEb{13}}
+  \proofstepwidestarbreakkeep[1,13]{\MonoidUnit{G,\star,e}{g}}{%
+    \FormulaRefAuto{GroupElementIsMonoidUnit}[thm]{1,14}}
+  \proofstepwidestarbreakkeep[1,13]{%
+    \exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})}{%
+    \rEI{\rAI{14,\rAI{15,16}}}}
+  \proofstepwidestarbreakkeep[1,12]{%
+    \exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})}{%
+    \rEE{12,13,17}}
+  \proofstepwidestarbreakkeep[1]{\begin{aligned}[t]
+    &\exists g\in G\,(X=\{g\})\\[-2pt]
+    &\quad\rightarrow\exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})
+  \end{aligned}}{\rRI{12,18}}
+  \proofstepwidestarbreakkeep[1]{\begin{aligned}[t]
+    &\exists g\in G\,(X=\{g\}\land\MonoidUnit{G,\star,e}{g})\\[-2pt]
+    &\quad\leftrightarrow\exists g\in G\,(X=\{g\})
+  \end{aligned}}{\rLRI{11,19}}
+  \proofstepwidestar[1]{\SemigroupAlg{G}{\star}}{%
+      \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{X\in\operatorname{Sing}(G)\leftrightarrow\exists g\in G\,(X=\{g\})}{%
+    \FormulaRefAuto{SemigroupSingletonCopyDef}[def]{21}}
+  \proofstepwidestarbreakkeep[1,2]{\begin{aligned}[t]
+    &\MonoidUnit{\PowNE G,\star_{\mathcal P},\{e\}}{X}\\[-2pt]
+    &\quad\leftrightarrow X\in\operatorname{Sing}(G)
+  \end{aligned}}{\rLRS{22,\rLRS{20,4}}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Potenzisomorphismen zwischen Gruppen erhalten die Einermengenschicht]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\star}{e}\dsep\GroupAlg{H}{\diamond}{u}\dsep{}\\[-2pt]
+    &\SemigroupIso{F}{\PowNE G,\star_{\mathcal P}}{\PowNE H,\diamond_{\mathcal P}}
+      \vdash{}\\[-2pt]
+    &F[\operatorname{Sing}(G)]=\operatorname{Sing}(H)
+  \end{aligned}
+}{PowerGroupsSingletonLayer}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep X}
+  \DeltaRow{Funktionen}{F\dsep R=F\restriction_{\operatorname{Sing}(G)}\dsep\star\dsep\diamond}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\star}{e}}{\rA}
+  \proofstepwidestarbreakkeep[2]{\GroupAlg{H}{\diamond}{u}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{\PowNE G,\star_{\mathcal P}}{\PowNE H,\diamond_{\mathcal P}}}{\rA}
+  \proofstepwidestar[1]{\MonoidAlg{G}{\star}{e}}{%
+      \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{\PowNE G}{\star_{\mathcal P}}{\{e\}}}{%
+    \FormulaRefAuto{PowerSemigroupMonoid}[thm]{4}}
+  \proofstepwidestar[2]{\MonoidAlg{H}{\diamond}{u}}{%
+      \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{2}}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{\PowNE H}{\diamond_{\mathcal P}}{\{u\}}}{%
+    \FormulaRefAuto{PowerSemigroupMonoid}[thm]{6}}
+  \proofstepwidestarbreakkeep[3]{F\colon\PowNE G\bij\PowNE H}{\FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[9]{X\in\PowNE G}{\rA}
+  \proofstepwidestarbreakkeep[3,9]{F(X)\in\PowNE H}{\FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{8,9}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{\begin{aligned}[t]
+    &\MonoidUnit{\PowNE G,\star_{\mathcal P},\{e\}}{X}\\[-2pt]
+    &\quad\leftrightarrow\MonoidUnit{\PowNE H,\diamond_{\mathcal P},\{u\}}{F(X)}
+  \end{aligned}}{%
+    \FormulaRefAuto{SemigroupIsoBetweenMonoidsUnits}[thm]{5,7,3,9}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{X\in\operatorname{Sing}(G)\leftrightarrow F(X)\in\operatorname{Sing}(H)}{%
+    \rLRS{\FormulaRefAuto{PowerGroupUnitsAreSingletons}[thm]{2,10},
+      \rLRS{\FormulaRefAuto{PowerGroupUnitsAreSingletons}[thm]{1,9},11}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\forall X\in\PowNE G\,\left(
+    \begin{aligned}[t]
+      &X\in\operatorname{Sing}(G)\\[-2pt]
+      &\quad\leftrightarrow F(X)\in\operatorname{Sing}(H)
+    \end{aligned}\right)}{\rUI{\rRI{9,12}}}
+  \proofstepwidestar[1]{\SemigroupAlg{G}{\star}}{%
+      \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{\operatorname{Sing}(G)\subseteq\PowNE G}{%
+    \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{14}}
+  \proofstepwidestar[2]{\SemigroupAlg{H}{\diamond}}{%
+      \FormulaRefAuto{GroupBaseSemigroup}[thm]{2}}
+  \proofstepwidestarbreakkeep[2]{\operatorname{Sing}(H)\subseteq\PowNE H}{%
+    \FormulaRefAuto{SemigroupSingletonCopySubset}[thm]{16}}
+  \proofstepwidestarbreakkeep[1,2,3]{R\colon\operatorname{Sing}(G)\bij\operatorname{Sing}(H)}{%
+    \FormulaRefAuto{PointwiseCompatibilityImpliesBijectiveRestriction}[thm]{8,15,17,13}}
+  \proofstepwidestarbreakkeep[1,2,3]{R[\operatorname{Sing}(G)]=\operatorname{Sing}(H)}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}[thm]{18}}
+  \proofstepwidestar[1,3]{F\colon\PowNE G\to\PowNE H}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{8}}
+  \proofstepwidestarbreakkeep[1,3]{R[\operatorname{Sing}(G)]=F[\operatorname{Sing}(G)]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\vdash (F\restriction_C)[C]=F[C]}[thm]{15,20}}
+  \proofstepwidestarbreakkeep[1,2,3]{F[\operatorname{Sing}(G)]=\operatorname{Sing}(H)}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{21,19}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Gruppenrekonstruktion mit vorgegebenen Einermengenbildern]{%
+  \begin{aligned}[t]
+    &\GroupAlg{G}{\star}{e}\dsep\GroupAlg{H}{\diamond}{u}\dsep{}\\[-2pt]
+    &\SemigroupIso{F}{\PowNE G,\star_{\mathcal P}}{\PowNE H,\diamond_{\mathcal P}}
+      \vdash{}\\[-2pt]
+    &\exists\varphi\,\left(\begin{aligned}[t]
+      &\GroupIso{\varphi}{G,\star,e}{H,\diamond,u}\\[-2pt]
+      &\land\forall g\in G\,(F(\{g\})=\{\varphi(g)\})
+    \end{aligned}\right)
+  \end{aligned}
+}{PowerGroupsSingletonTransport}{%
+  \DeltaRow{Mengen}{G\dsep H\dsep e\dsep u\dsep g}
+  \DeltaRow{Funktionen}{F\dsep\varphi\dsep\star\dsep\diamond}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\star}{e}}{\rA}
+  \proofstepwidestarbreakkeep[2]{\GroupAlg{H}{\diamond}{u}}{\rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{\PowNE G,\star_{\mathcal P}}{\PowNE H,\diamond_{\mathcal P}}}{\rA}
+  \proofstepwidestarbreakkeep[1,2,3]{F[\operatorname{Sing}(G)]=\operatorname{Sing}(H)}{\FormulaRefAuto{PowerGroupsSingletonLayer}[thm]{1,2,3}}
+  \proofstepwidestar[1,2,3]{\SemigroupAlg{G}{\star}}{%
+      \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestar[1,2,3]{\SemigroupAlg{H}{\diamond}}{%
+      \FormulaRefAuto{GroupBaseSemigroup}[thm]{2}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists\varphi\,\left(\begin{aligned}[t]
+    &\SemigroupIso{\varphi}{G,\star}{H,\diamond}\\[-2pt]
+    &\land\forall g\in G\,(F(\{g\})=\{\varphi(g)\})
+  \end{aligned}\right)}{%
+    \FormulaRefAuto{PowerSemigroupSingletonLayerReconstructionWitness}[thm]{%
+      5,6,3,4}}
+  \proofstepwidestarbreakkeep[8]{\begin{aligned}[t]
+    &\SemigroupIso{\varphi}{G,\star}{H,\diamond}\\[-2pt]
+    &\land\forall g\in G\,(F(\{g\})=\{\varphi(g)\})
+  \end{aligned}}{\rA}
+  \proofstepwidestarbreakkeep[8]{\SemigroupHom{\varphi}{G,\star}{H,\diamond}}{\FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{\rAEa{8}}}
+  \proofstepwidestarbreakkeep[8]{\varphi\colon G\bij H}{\FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{\rAEa{8}}}
+  \proofstepwidestarbreakkeep[1,2,8]{\GroupHom{\varphi}{G,\star,e}{H,\diamond,u}}{\FormulaRefAuto{GroupHomDef}[def]{1,2,9}}
+  \proofstepwidestarbreakkeep[1,2,8]{\GroupIso{\varphi}{G,\star,e}{H,\diamond,u}}{\FormulaRefAuto{GroupIsoDef}[def]{11,10}}
+  \proofstepwidestarbreakkeep[1,2,8]{\exists\varphi\,\left(\begin{aligned}[t]
+    &\GroupIso{\varphi}{G,\star,e}{H,\diamond,u}\\[-2pt]
+    &\land\forall g\in G\,(F(\{g\})=\{\varphi(g)\})
+  \end{aligned}\right)}{\rEI{\rAI{12,\rAEb{8}}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists\varphi\,\left(\begin{aligned}[t]
+    &\GroupIso{\varphi}{G,\star,e}{H,\diamond,u}\\[-2pt]
+    &\land\forall g\in G\,(F(\{g\})=\{\varphi(g)\})
+  \end{aligned}\right)}{\rEE{7,8,13}}
+\end{tabproofwide}
+\endgroup
+
+
+
+\subsection{Einheitenmengen und Einheitenstabilität}
+
+\FormulaDefDeltaK[Einheitenmenge eines Monoids]{%
+  \MonoidAlg{A}{\star}{e}\vdash A^\times\coloneqq\{u\in A\mid\MonoidUnit{A,\star,e}{u}\}
+}{MonoidUnitSetDef}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u}
+  \DeltaRow{Funktionen}{\star}
+}
+
+\FormulaThmDeltaK[Inverse bleiben in der Einheitenmenge]{%
+  \MonoidAlg{A}{\star}{e}\dsep u\in A^\times\vdash\exists v\in A^\times\,(u\star v=e\land v\star u=e)
+}{MonoidUnitSetInverse}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{u\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2]{u\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\MonoidUnit{A,\star,e}{u}}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\exists v\in A\,(u\star v=e\land v\star u=e)}{%
+    \FormulaRefAuto{MonoidUnitDef}[def]{4}}
+  \proofstepwidestarbreakkeep[6]{v\in A\land(u\star v=e\land v\star u=e)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[6]{v\in A}{%
+    \rAEa{6}}
+  \proofstepwidestarbreakkeep[6]{u\star v=e\land v\star u=e}{%
+    \rAEb{6}}
+  \proofstepwidestarbreakkeep[1,2,6]{\MonoidUnit{A,\star,e}{v}}{%
+    \FormulaRefAuto{MonoidUnitDef}[def]{1,7,\rEI{\rAI{3,\rAI{\rAEb{8},\rAEa{8}}}}}}
+  \proofstepwidestarbreakkeep[1,2,6]{v\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,7,9}}
+  \proofstepwidestarbreakkeep[1,2,6]{\exists v\in A^\times\,(u\star v=e\land v\star u=e)}{%
+    \rEI{\rAI{10,8}}}
+  \proofstepwidestarbreakkeep[1,2]{\exists v\in A^\times\,(u\star v=e\land v\star u=e)}{%
+    \rEE{5,6,11}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Inverse eines Produkts im Monoid]{%
+  \begin{aligned}[t]&\MonoidAlg{A}{\star}{e}\dsep u,v,u',v'\in A\dsep{}\\&u\star u'=e\dsep u'\star u=e\dsep v\star v'=e\dsep v'\star v=e\vdash{}\\&(u\star v)\star(v'\star u')=e\land(v'\star u')\star(u\star v)=e\end{aligned}
+}{MonoidInversePairProduct}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v\dsep u'\dsep v'}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Voraussetzungen}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{u\in A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{v\in A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[4]{u'\in A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[5]{v'\in A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[6]{u\star u'=e}{%
+    \rA}
+  \proofstepwidestarbreakkeep[7]{u'\star u=e}{%
+    \rA}
+  \proofstepwidestarbreakkeep[8]{v\star v'=e}{%
+    \rA}
+  \proofstepwidestarbreakkeep[9]{v'\star v=e}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+  \closeproofpartwide
+
+  \proofpartwide{Rechtsinverse des Produkts}
+  \setcounter{proofstepnr}{10}
+  \proofstepwidestarbreakkeep[1,4,5]{v'\star u'\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{10,5,4}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5]{(u\star v)\star(v'\star u')=u\star(v\star(v'\star u'))}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{10,2,3,11}}
+  \proofstepwidestarbreakkeep[1,3,4,5]{(v\star v')\star u'=v\star(v'\star u')}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{10,3,5,4}}
+  \proofstepwidestarbreakkeep[1,3,4,5,8]{u\star(v\star(v'\star u'))=u\star(e\star u')}{%
+    \rIE{13,8}}
+  \proofstepwidestarbreakkeep[1,4]{e\star u'=u'}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,4}}
+  \proofstepwidestarbreakkeep[1,4,6]{u\star(e\star u')=e}{%
+    \rIE{15,6}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5,6,8]{(u\star v)\star(v'\star u')=e}{%
+    \rChain{12,14,16}}
+  \closeproofpartwide
+
+  \proofpartwide{Linksinverse des Produkts}
+  \setcounter{proofstepnr}{17}
+  \proofstepwidestarbreakkeep[1,2,3]{u\star v\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{10,2,3}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5]{(v'\star u')\star(u\star v)=v'\star(u'\star(u\star v))}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{10,5,4,18}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{(u'\star u)\star v=u'\star(u\star v)}{%
+    \FormulaRefAuto{SemigroupAssociativityAxiom}[ax]{10,4,2,3}}
+  \proofstepwidestarbreakkeep[1,2,3,4,7]{v'\star(u'\star(u\star v))=v'\star(e\star v)}{%
+    \rIE{20,7}}
+  \proofstepwidestarbreakkeep[1,3]{e\star v=v}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,3}}
+  \proofstepwidestarbreakkeep[1,3,9]{v'\star(e\star v)=e}{%
+    \rIE{22,9}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5,7,9]{(v'\star u')\star(u\star v)=e}{%
+    \rChain{19,21,23}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5,6,7,8,9]{(u\star v)\star(v'\star u')=e\land(v'\star u')\star(u\star v)=e}{%
+    \rAI{17,24}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Produktabschluss der Einheitenmenge]{%
+  \MonoidAlg{A}{\star}{e}\dsep u,v\in A^\times\vdash u\star v\in A^\times
+}{MonoidUnitSetProduct}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep v\dsep u'\dsep v'}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Inverse der Faktoren}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{u\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{v\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2]{u\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,2}}
+  \proofstepwidestarbreakkeep[1,2]{\exists u'\in A^\times\,(u\star u'=e\land u'\star u=e)}{%
+    \FormulaRefAuto{MonoidUnitSetInverse}[thm]{1,2}}
+  \proofstepwidestarbreakkeep[1,3]{v\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,3}}
+  \proofstepwidestarbreakkeep[1,3]{\exists v'\in A^\times\,(v\star v'=e\land v'\star v=e)}{%
+    \FormulaRefAuto{MonoidUnitSetInverse}[thm]{1,3}}
+  \proofstepwidestarbreakkeep[8]{u'\in A^\times\land(u\star u'=e\land u'\star u=e)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[9]{v'\in A^\times\land(v\star v'=e\land v'\star v=e)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,8]{u'\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{8}}}
+  \proofstepwidestarbreakkeep[1,9]{v'\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{9}}}
+  \closeproofpartwide
+
+  \proofpartwide{Produktinverse und Abschluss}
+  \setcounter{proofstepnr}{11}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2,3]{u\star v\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{12,4,6}}
+  \proofstepwidestarbreakkeep[1,8,9]{v'\star u'\in A}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{12,11,10}}
+  \proofstepwidestarbreakkeep[1,2,3,8,9]{(u\star v)\star(v'\star u')=e\land(v'\star u')\star(u\star v)=e}{%
+    \FormulaRefAuto{MonoidInversePairProduct}[thm]{1,4,6,10,11,\rAEa{\rAEb{8}},\rAEb{\rAEb{8}},\rAEa{\rAEb{9}},\rAEb{\rAEb{9}}}}
+  \proofstepwidestarbreakkeep[1,2,3,8,9]{\MonoidUnit{A,\star,e}{u\star v}}{%
+    \FormulaRefAuto{MonoidUnitDef}[def]{1,13,\rEI{\rAI{14,15}}}}
+  \proofstepwidestarbreakkeep[1,2,3,8,9]{u\star v\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,13,16}}
+  \proofstepwidestarbreakkeep[1,2,3,8]{u\star v\in A^\times}{%
+    \rEE{7,9,17}}
+  \proofstepwidestarbreakkeep[1,2,3]{u\star v\in A^\times}{%
+    \rEE{5,8,18}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Träger und Nichtleerheit der Einheitenmenge]{%
+  \MonoidAlg{A}{\star}{e}\vdash e\in A^\times\land A^\times\in\PowNE A
+}{MonoidUnitSetCarrier}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{e\in A}{%
+    \FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\MonoidUnit{A,\star,e}{e}}{%
+    \FormulaRefAuto{MonoidIdentityIsUnit}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,2,3}}
+  \proofstepwidestarbreakkeep[5]{x\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,5]{x\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,5}}
+  \proofstepwidestarbreakkeep[1]{A^\times\subseteq A}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[5]\vdots 6}}
+  \proofstepwidestarbreakkeep[1]{A^\times\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{4}}
+  \proofstepwidestarbreakkeep[1]{A^\times\in\PowNE A}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAI{7,8}}}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times\land A^\times\in\PowNE A}{%
+    \rAI{4,9}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Die Einheiten bilden eine Gruppe]{%
+  \MonoidAlg{A}{\star}{e}\vdash\GroupAlg{A^\times}{\star}{e}
+}{MonoidUnitSetIsGroup}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Halbgruppe der Einheiten}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times\land A^\times\in\PowNE A}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times}{%
+    \rAEa{3}}
+  \proofstepwidestarbreakkeep[1]{A^\times\subseteq A\land A^\times\neq\varnothing}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAEb{3}}}
+  \proofstepwidestarbreakkeep[6]{x\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[7]{y\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,6,7]{x\star y\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetProduct}[thm]{1,6,7}}
+  \proofstepwidestarbreakkeep[1]{\forall x\in A^\times\,\forall y\in A^\times\,(x\star y\in A^\times)}{%
+    \rUI{\rRI{6,\rUI{\rRI{7,8}}}}}
+  \proofstepwidestarbreakkeep[1]{\mathsf{UHGr}(A^\times;A,\star)}{%
+    \FormulaRefAuto{SemigroupSubsemigroupCriterion}[thm]{2,\rAI{\rAEa{5},\rAI{\rAEb{5},9}}}}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A^\times}{\star}}{%
+    \FormulaRefAuto{SubsemigroupFormsSemigroup}[thm]{2,10}}
+  \closeproofpartwide
+
+  \proofpartwide{Neutrales Element und Inverse}
+  \setcounter{proofstepnr}{11}
+  \proofstepwidestarbreakkeep[12]{z\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,12]{z\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,12}}
+  \proofstepwidestarbreakkeep[1,12]{e\star z=z}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,13}}
+  \proofstepwidestarbreakkeep[1,12]{z\star e=z}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,13}}
+  \proofstepwidestarbreakkeep[1]{\forall z\in A^\times\,(e\star z=z\land z\star e=z)}{%
+    \rUI{\rRI{12,\rAI{14,15}}}}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A^\times}{\star}{e}}{%
+    \FormulaRefAuto{MonoidDef}[def]{11,4,16}}
+  \proofstepwidestarbreakkeep[18]{w\in A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,18]{\exists y\in A^\times\,(w\star y=e\land y\star w=e)}{%
+    \FormulaRefAuto{MonoidUnitSetInverse}[thm]{1,18}}
+  \proofstepwidestarbreakkeep[1]{\forall w\in A^\times\,\exists y\in A^\times\,(w\star y=e\land y\star w=e)}{%
+    \rUI{\rRI{18,19}}}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{A^\times}{\star}{e}}{%
+    \FormulaRefAuto{GroupDef}[def]{17,20}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Der volle Gruppenträger absorbiert nichtleere Teilmengen]{%
+  \begin{aligned}[t]&\GroupAlg{G}{\star}{e}\dsep Y\in\PowNE G\vdash{}\\&Y\star_{\mathcal P}G=G\land G\star_{\mathcal P}Y=G\end{aligned}
+}{GroupPowerFullCarrierAbsorption}{%
+  \DeltaRow{Mengen}{G\dsep e\dsep X\dsep Y\dsep x\dsep y\dsep z\dsep a\dsep b}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Produktzeuge]{%
+    \begin{aligned}[t]
+      &\SemigroupAlg{G}{\star}\dsep X,Y\in\PowNE G\dsep x\in X\dsep y\in Y\\[-2pt]
+      &\vdash x\star y\in X\star_{\mathcal P}Y
+    \end{aligned}
+  }{%
+    \begin{aligned}[t]
+      &\SemigroupAlg{G}{\star}\dsep X,Y\in\PowNE G\dsep x\in X\dsep y\in Y\\[-2pt]
+      &\vdash x\star y\in X\star_{\mathcal P}Y
+    \end{aligned}
+  }[GroupPowerFullCarrierAbsorptionProductMember]
+    \proofstepwidestarbreakkeep[1]{\SemigroupAlg{G}{\star}}{%
+      \rA}
+    \proofstepwidestarbreakkeep[2]{X\in\PowNE G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[3]{Y\in\PowNE G}{%
+      \rA}
+    \proofstepwidestarbreakkeep[4]{x\in X}{%
+      \rA}
+    \proofstepwidestarbreakkeep[5]{y\in Y}{%
+      \rA}
+    \proofstepwidestarbreakkeep[2]{X\subseteq G}{%
+      \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{2}}}
+    \proofstepwidestarbreakkeep[3]{Y\subseteq G}{%
+      \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{3}}}
+    \proofstepwidestarbreakkeep[2,4]{x\in G}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,4}}
+    \proofstepwidestarbreakkeep[3,5]{y\in G}{%
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,5}}
+    \proofstepwidestarbreakkeep[1,2,3,4,5]{x\star y\in G}{%
+      \FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,8,9}}
+    \proofstepwidestarbreakkeep[]{x\star y=x\star y}{%
+      \rII}
+    \proofstepwidestarbreakkeep[5]{\exists b\in Y\,(x\star y=x\star b)}{%
+      \rEI{\rAI{5,11}}}
+    \proofstepwidestarbreakkeep[4,5]{\exists a\in X\,\exists b\in Y\,(x\star y=a\star b)}{%
+      \rEI{\rAI{4,12}}}
+    \proofstepwidestarbreakkeep[1,2,3,4,5]{x\star y\in X\star_{\mathcal P}Y}{%
+      \FormulaRefAuto{PowerSemigroupProductMembership}[thm]{1,2,3,\rAI{10,13}}}
+  \closeproofpartwideindR
+
+
+  \proofpartwide{Potenzträger und Zeuge der Nichtleerheit}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{G}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{Y\in\PowNE G}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{G}{\star}}{%
+    \FormulaRefAuto{GroupBaseSemigroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{\PowNE G}{\star_{\mathcal P}}}{%
+    \FormulaRefAuto{NonemptyPowerSemigroup}[thm]{3}}
+  \proofstepwidestarbreakkeep[1]{e\in G}{%
+    \FormulaRefAuto{GroupIdentityCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{G\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{5}}
+  \proofstepwidestarbreakkeep[1]{G\in\PowNE G}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAI{\FormulaRefAuto{A\subseteq A}[thm],6}}}
+  \proofstepwidestarbreakkeep[2]{Y\subseteq G\land Y\neq\varnothing}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2}}
+  \proofstepwidestarbreakkeep[2]{\exists y\in Y}{%
+    \FormulaRefAuto{A\neq\varnothing\vdash\exists x\in A}[thm]{\rAEb{8}}}
+  \proofstepwidestarbreakkeep[10]{y\in Y}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2,10]{y\in G}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{\rAEa{8},10}}
+  \proofstepwidestarbreakkeep[1,2,10]{y^{-1}\in G}{%
+    \FormulaRefAuto{GroupInverseCarrier}[thm]{1,11}}
+  \closeproofpartwide
+
+  \proofpartwide{Multiplikation von links}
+  \setcounter{proofstepnr}{12}
+  \proofstepwidestarbreakkeep[1,2]{Y\star_{\mathcal P}G\in\PowNE G}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,2,7}}
+  \proofstepwidestarbreakkeep[1,2]{Y\star_{\mathcal P}G\subseteq G}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{13}}}
+  \proofstepwidestarbreakkeep[15]{z\in G}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,10,15]{y^{-1}\star z\in G}{%
+    \FormulaRefAuto{GroupClosure}[thm]{1,12,15}}
+  \proofstepwidestarbreakkeep[1,2,10]{y\star y^{-1}=e}{%
+    \FormulaRefAuto{GroupInverseRight}[thm]{1,11}}
+  \proofstepwidestarbreakkeep[1,2,10,15]{(y\star y^{-1})\star z=y\star(y^{-1}\star z)}{%
+    \FormulaRefAuto{GroupAssociativity}[thm]{1,11,12,15}}
+  \proofstepwidestarbreakkeep[1,15]{e\star z=z}{%
+    \FormulaRefAuto{GroupLeftIdentity}[thm]{1,15}}
+  \proofstepwidestarbreakkeep[1,2,10,15]{y\star(y^{-1}\star z)=z}{%
+    \rIE{17,19,18}}
+  \proofstepwidestarbreakkeep[1,2,10,15]{z\in Y\star_{\mathcal P}G}{%
+    \rIE{20,\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{3,2,7,10,16}}}
+  \proofstepwidestarbreakkeep[1,2,10]{G\subseteq Y\star_{\mathcal P}G}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[15]\vdots 21}}
+  \proofstepwidestarbreakkeep[1,2,10]{Y\star_{\mathcal P}G=G}{%
+    \FormulaRefAuto{A\subseteq B\land B\subseteq A\eqvdash A=B}[thm]{\rAI{14,22}}}
+  \closeproofpartwide
+
+  \proofpartwide{Multiplikation von rechts}
+  \setcounter{proofstepnr}{23}
+  \proofstepwidestarbreakkeep[1,2]{G\star_{\mathcal P}Y\in\PowNE G}{%
+    \FormulaRefAuto{SemigroupClosureAxiom}[ax]{4,7,2}}
+  \proofstepwidestarbreakkeep[1,2]{G\star_{\mathcal P}Y\subseteq G}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{24}}}
+  \proofstepwidestarbreakkeep[26]{z\in G}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,10,26]{z\star y^{-1}\in G}{%
+    \FormulaRefAuto{GroupClosure}[thm]{1,26,12}}
+  \proofstepwidestarbreakkeep[1,2,10]{y^{-1}\star y=e}{%
+    \FormulaRefAuto{GroupInverseLeft}[thm]{1,11}}
+  \proofstepwidestarbreakkeep[1,2,10,26]{(z\star y^{-1})\star y=z\star(y^{-1}\star y)}{%
+    \FormulaRefAuto{GroupAssociativity}[thm]{1,26,12,11}}
+  \proofstepwidestarbreakkeep[1,26]{z\star e=z}{%
+    \FormulaRefAuto{GroupRightIdentity}[thm]{1,26}}
+  \proofstepwidestarbreakkeep[1,2,10,26]{(z\star y^{-1})\star y=z}{%
+    \rIE{28,30,29}}
+  \proofstepwidestarbreakkeep[1,2,10,26]{z\in G\star_{\mathcal P}Y}{%
+    \rIE{31,\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{3,7,2,27,10}}}
+  \proofstepwidestarbreakkeep[1,2,10]{G\subseteq G\star_{\mathcal P}Y}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[26]\vdots 32}}
+  \proofstepwidestarbreakkeep[1,2,10]{G\star_{\mathcal P}Y=G}{%
+    \FormulaRefAuto{A\subseteq B\land B\subseteq A\eqvdash A=B}[thm]{\rAI{25,33}}}
+  \proofstepwidestarbreakkeep[1,2,10]{Y\star_{\mathcal P}G=G\land G\star_{\mathcal P}Y=G}{%
+    \rAI{23,34}}
+  \proofstepwidestarbreakkeep[1,2]{Y\star_{\mathcal P}G=G\land G\star_{\mathcal P}Y=G}{%
+    \rEE{9,10,35}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaDefDeltaK[Einheitenstabiles Element]{%
+  \begin{aligned}[t]&\operatorname{UStab}_{M,\star,e}(z)\coloneqq{}\\&z\in M\land\forall u\in M\,\bigl(\MonoidUnit{M,\star,e}{u}\rightarrow(u\star z=z\land z\star u=z)\bigr)\end{aligned}
+}{MonoidUnitStableDef}{%
+  \DeltaRow{Mengen}{M\dsep e\dsep z\dsep u}
+  \DeltaRow{Funktionen}{\star}
+}
+
+\FormulaThmDeltaK[Isomorphismen transportieren Einheitenstabilität]{%
+  \begin{aligned}[t]&\MonoidAlg{M}{\star}{e}\dsep\MonoidAlg{N}{\diamond}{d}\dsep{}\\&\SemigroupIso{h}{M,\star}{N,\diamond}\dsep\operatorname{UStab}_{M,\star,e}(z)\vdash{}\\&\operatorname{UStab}_{N,\diamond,d}(h(z))\end{aligned}
+}{SemigroupIsoUnitStabilityTransport}{%
+  \DeltaRow{Mengen}{M\dsep N\dsep e\dsep d\dsep z\dsep u\dsep w}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep h}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Urbild einer Einheit}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{M}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{N}{\diamond}{d}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{h}{M,\star}{N,\diamond}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[4]{\operatorname{UStab}_{M,\star,e}(z)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[4]{z\in M}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{4}}
+  \proofstepwidestarbreakkeep[3]{h\colon M\bij N}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[3]{\SemigroupHom{h}{M,\star}{N,\diamond}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[3,4]{h(z)\in N}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{6,5}}
+  \proofstepwidestarbreakkeep[9]{w\in N}{%
+    \rA}
+  \proofstepwidestarbreakkeep[10]{\MonoidUnit{N,\diamond,d}{w}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3,9]{\exists u\in M\,(h(u)=w)}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{6,9}}
+  \proofstepwidestarbreakkeep[12]{u\in M\land h(u)=w}{%
+    \rA}
+  \proofstepwidestarbreakkeep[12]{u\in M}{%
+    \rAEa{12}}
+  \proofstepwidestarbreakkeep[12]{h(u)=w}{%
+    \rAEb{12}}
+  \proofstepwidestarbreakkeep[1,2,3,12]{\MonoidUnit{M,\star,e}{u}\leftrightarrow\MonoidUnit{N,\diamond,d}{h(u)}}{%
+    \FormulaRefAuto{SemigroupIsoBetweenMonoidsUnits}[thm]{1,2,3,13}}
+  \proofstepwidestarbreakkeep[1,2,3,10,12]{\MonoidUnit{M,\star,e}{u}}{%
+    \rLREb{15,\rIE{14,10}}}
+  \closeproofpartwide
+
+  \proofpartwide{Transport der beiden Gleichungen}
+  \setcounter{proofstepnr}{16}
+  \proofstepwidestarbreakkeep[1,2,3,4,10,12]{u\star z=z\land z\star u=z}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{4,13,16}}
+  \proofstepwidestarbreakkeep[3,4,12]{h(u\star z)=h(u)\diamond h(z)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{7,13,5}}
+  \proofstepwidestarbreakkeep[3,4,12]{h(z\star u)=h(z)\diamond h(u)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{7,5,13}}
+  \proofstepwidestarbreakkeep[1,2,3,4,10,12]{w\diamond h(z)=h(z)}{%
+    \rIE{14,\rAEa{17},18}}
+  \proofstepwidestarbreakkeep[1,2,3,4,10,12]{h(z)\diamond w=h(z)}{%
+    \rIE{14,\rAEb{17},19}}
+  \proofstepwidestarbreakkeep[1,2,3,4,10,12]{w\diamond h(z)=h(z)\land h(z)\diamond w=h(z)}{%
+    \rAI{20,21}}
+  \proofstepwidestarbreakkeep[1,2,3,4,9,10]{w\diamond h(z)=h(z)\land h(z)\diamond w=h(z)}{%
+    \rEE{11,12,22}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\forall w\in N\,\bigl(\MonoidUnit{N,\diamond,d}{w}\rightarrow(w\diamond h(z)=h(z)\land h(z)\diamond w=h(z))\bigr)}{%
+    \rUI{\rRI{9,\rRI{10,23}}}}
+  \proofstepwidestarbreakkeep[1,2,3,4]{\operatorname{UStab}_{N,\diamond,d}(h(z))}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{8,24}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Die Einheitenmenge ist im Potenzmonoid einheitenstabil]{%
+  \MonoidAlg{A}{\star}{e}\vdash \operatorname{UStab}_{\PowNE A,\star_{\mathcal P},\{e\}}(A^\times)
+}{PowerMonoidUnitSetStable}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep u\dsep W}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times\land A^\times\in\PowNE A}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{A^\times\in\PowNE A}{%
+    \rAEb{2}}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{A^\times}{\star}{e}}{%
+    \FormulaRefAuto{MonoidUnitSetIsGroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[5]{W\in\PowNE A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[6]{\MonoidUnit{\PowNE A,\star_{\mathcal P},\{e\}}{W}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,5,6]{\exists u\in A\,(W=\{u\}\land\MonoidUnit{A,\star,e}{u})}{%
+    \rLREa{\FormulaRefAuto{PowerMonoidUnitCharacterization}[thm]{1,5},6}}
+  \proofstepwidestarbreakkeep[8]{u\in A\land(W=\{u\}\land\MonoidUnit{A,\star,e}{u})}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,8]{u\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{8},\rAEb{\rAEb{8}}}}
+  \proofstepwidestarbreakkeep[1,8]{\{u\}\in\PowNE{A^\times}}{%
+    \FormulaRefAuto{MonoidPowerSingletonCarrier}[thm]{9}}
+  \proofstepwidestarbreakkeep[1,8]{\{u\}\star_{\mathcal P}A^\times=A^\times\land A^\times\star_{\mathcal P}\{u\}=A^\times}{%
+    \FormulaRefAuto{GroupPowerFullCarrierAbsorption}[thm]{4,10}}
+  \proofstepwidestarbreakkeep[1,8]{W\star_{\mathcal P}A^\times=A^\times\land A^\times\star_{\mathcal P}W=A^\times}{%
+    \rIE{\rAEa{\rAEb{8}},11}}
+  \proofstepwidestarbreakkeep[1,5,6]{W\star_{\mathcal P}A^\times=A^\times\land A^\times\star_{\mathcal P}W=A^\times}{%
+    \rEE{7,8,12}}
+  \proofstepwidestarbreakkeep[1]{\forall W\in\PowNE A\,\bigl(\MonoidUnit{\PowNE A,\star_{\mathcal P},\{e\}}{W}\rightarrow(W\star_{\mathcal P}A^\times=A^\times\land A^\times\star_{\mathcal P}W=A^\times)\bigr)}{%
+    \rUI{\rRI{5,\rRI{6,13}}}}
+  \proofstepwidestarbreakkeep[1]{\operatorname{UStab}_{\PowNE A,\star_{\mathcal P},\{e\}}(A^\times)}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{3,14}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Einheitenstabilität liefert Absorption durch die Einheitenmenge]{%
+  \begin{aligned}[t]&\MonoidAlg{A}{\star}{e}\dsep X\in\PowNE A\dsep{}\\&\operatorname{UStab}_{\PowNE A,\star_{\mathcal P},\{e\}}(X)\vdash{}\\&A^\times\star_{\mathcal P}X=X\land X\star_{\mathcal P}A^\times=X\end{aligned}
+}{PowerMonoidUnitStableAbsorption}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep X\dsep x\dsep z\dsep u}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+
+  \DeltaRow{Abkürzungen}{U=A^\times\dsep P=\PowNE A}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Träger}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{X\in P}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\operatorname{UStab}_{P,\star_{\mathcal P},\{e\}}(X)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in U\land U\in P}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in U}{%
+    \rAEa{5}}
+  \proofstepwidestarbreakkeep[1]{U\in P}{%
+    \rAEb{5}}
+  \proofstepwidestarbreakkeep[2]{X\subseteq A\land X\neq\varnothing}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2}}
+  \closeproofpartwide
+
+  \proofpartwide{Linksprodukt mit der Einheitenmenge}
+  \setcounter{proofstepnr}{8}
+  \proofstepwidestarbreakkeep[9]{z\in U\star_{\mathcal P}X}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,9]{z\in A\land\exists u\in U\,\exists x\in X\,(z=u\star x)}{%
+    \FormulaRefAuto{PowerSemigroupProductMembership}[thm]{4,7,2,9}}
+  \proofstepwidestarbreakkeep[1,2,9]{z\in A}{%
+    \rAEa{10}}
+  \proofstepwidestarbreakkeep[1,2,9]{\exists u\in U\,\exists x\in X\,(z=u\star x)}{%
+    \rAEb{10}}
+  \proofstepwidestarbreakkeep[13]{u\in U\land(x\in X\land z=u\star x)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,13]{u\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{13}}}
+  \proofstepwidestarbreakkeep[1,13]{\MonoidUnit{A,\star,e}{u}}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{13}}}
+  \proofstepwidestarbreakkeep[1,13]{\{u\}\in P}{%
+    \FormulaRefAuto{MonoidPowerSingletonCarrier}[thm]{14}}
+  \proofstepwidestarbreakkeep[1,13]{\MonoidUnit{P,\star_{\mathcal P},\{e\}}{\{u\}}}{%
+    \rLREb{\FormulaRefAuto{PowerMonoidUnitCharacterization}[thm]{1,16},\rEI{\rAI{14,\rAI{\rII,15}}}}}
+  \proofstepwidestarbreakkeep[1,3,13]{\{u\}\star_{\mathcal P}X=X}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{3,16,17}}
+  \proofstepwidestarbreakkeep[]{u\in\{u\}}{%
+    \FormulaRefAuto{a\in\{a\}}[thm]}
+  \proofstepwidestarbreakkeep[1,2,9,13]{z\in \{u\}\star_{\mathcal P}X}{%
+    \rIE{\rAEb{\rAEb{13}},\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{4,16,2,19,\rAEa{\rAEb{13}}}}}
+  \proofstepwidestarbreakkeep[1,2,3,9,13]{z\in X}{%
+    \rIE{18,20}}
+  \proofstepwidestarbreakkeep[1,2,3,9]{z\in X}{%
+    \rEEStar{12,13,21}}
+  \proofstepwidestarbreakkeep[1,2,3]{U\star_{\mathcal P}X\subseteq X}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[9]\vdots 22}}
+  \proofstepwidestarbreakkeep[24]{x\in X}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2,24]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{\rAEa{8},24}}
+  \proofstepwidestarbreakkeep[1,2,24]{e\star x=x}{%
+    \FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,25}}
+  \proofstepwidestarbreakkeep[1,2,24]{x\in U\star_{\mathcal P}X}{%
+    \rIE{26,\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{4,7,2,6,24}}}
+  \proofstepwidestarbreakkeep[1,2]{X\subseteq U\star_{\mathcal P}X}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[24]\vdots 27}}
+  \proofstepwidestarbreakkeep[1,2,3]{U\star_{\mathcal P}X=X}{%
+    \FormulaRefAuto{A\subseteq B\land B\subseteq A\eqvdash A=B}[thm]{\rAI{23,28}}}
+  \closeproofpartwide
+
+  \proofpartwide{Rechtsprodukt mit der Einheitenmenge}
+  \setcounter{proofstepnr}{29}
+  \proofstepwidestarbreakkeep[30]{z\in X\star_{\mathcal P}U}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,30]{z\in A\land\exists x\in X\,\exists u\in U\,(z=x\star u)}{%
+    \FormulaRefAuto{PowerSemigroupProductMembership}[thm]{4,2,7,30}}
+  \proofstepwidestarbreakkeep[1,2,30]{z\in A}{%
+    \rAEa{31}}
+  \proofstepwidestarbreakkeep[1,2,30]{\exists x\in X\,\exists u\in U\,(z=x\star u)}{%
+    \rAEb{31}}
+  \proofstepwidestarbreakkeep[34]{x\in X\land(u\in U\land z=x\star u)}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,34]{u\in A}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{\rAEb{34}}}}
+  \proofstepwidestarbreakkeep[1,34]{\MonoidUnit{A,\star,e}{u}}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{1,\rAEa{\rAEb{34}}}}
+  \proofstepwidestarbreakkeep[1,34]{\{u\}\in P}{%
+    \FormulaRefAuto{MonoidPowerSingletonCarrier}[thm]{35}}
+  \proofstepwidestarbreakkeep[1,34]{\MonoidUnit{P,\star_{\mathcal P},\{e\}}{\{u\}}}{%
+    \rLREb{\FormulaRefAuto{PowerMonoidUnitCharacterization}[thm]{1,37},\rEI{\rAI{35,\rAI{\rII,36}}}}}
+  \proofstepwidestarbreakkeep[1,3,34]{X\star_{\mathcal P}\{u\}=X}{%
+    \FormulaRefAuto{MonoidUnitStableDef}[def]{3,37,38}}
+  \proofstepwidestarbreakkeep[]{u\in\{u\}}{%
+    \FormulaRefAuto{a\in\{a\}}[thm]}
+  \proofstepwidestarbreakkeep[1,2,30,34]{z\in X\star_{\mathcal P}\{u\}}{%
+    \rIE{\rAEb{\rAEb{34}},\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{4,2,37,\rAEa{34},40}}}
+  \proofstepwidestarbreakkeep[1,2,3,30,34]{z\in X}{%
+    \rIE{39,41}}
+  \proofstepwidestarbreakkeep[1,2,3,30]{z\in X}{%
+    \rEEStar{33,34,42}}
+  \proofstepwidestarbreakkeep[1,2,3]{X\star_{\mathcal P}U\subseteq X}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[30]\vdots 43}}
+  \proofstepwidestarbreakkeep[45]{x\in X}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2,45]{x\in A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{\rAEa{8},45}}
+  \proofstepwidestarbreakkeep[1,2,45]{x\star e=x}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,46}}
+  \proofstepwidestarbreakkeep[1,2,45]{x\in X\star_{\mathcal P}U}{%
+    \rIE{47,\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{4,2,7,45,6}}}
+  \proofstepwidestarbreakkeep[1,2]{X\subseteq X\star_{\mathcal P}U}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[45]\vdots 48}}
+  \proofstepwidestarbreakkeep[1,2,3]{X\star_{\mathcal P}U=X}{%
+    \FormulaRefAuto{A\subseteq B\land B\subseteq A\eqvdash A=B}[thm]{\rAI{44,49}}}
+  \proofstepwidestarbreakkeep[1,2,3]{U\star_{\mathcal P}X=X\land X\star_{\mathcal P}U=X}{%
+    \rAI{29,50}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Produktkriterium für Teilmengen der Einheitenmenge]{%
+  \begin{aligned}[t]&\MonoidAlg{A}{\star}{e}\dsep Y\in\PowNE A\vdash{}\\&Y\in\PowNE{A^\times}\leftrightarrow Y\star_{\mathcal P}A^\times=A^\times\end{aligned}
+}{PowerMonoidUnitSubsetCriterion}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep Y\dsep y}
+  \DeltaRow{Funktionen}{\star\dsep\star_{\mathcal P}}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Nichtleere Teilmengen der Einheitenmenge}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{Y\in\PowNE A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times\land A^\times\in\PowNE A}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{A^\times}{\star}{e}}{%
+    \FormulaRefAuto{MonoidUnitSetIsGroup}[thm]{1}}
+  \proofstepwidestarbreakkeep[5]{Y\in\PowNE{A^\times}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,5]{Y\star_{\mathcal P}A^\times=A^\times\land A^\times\star_{\mathcal P}Y=A^\times}{%
+    \FormulaRefAuto{GroupPowerFullCarrierAbsorption}[thm]{4,5}}
+  \proofstepwidestarbreakkeep[1]{Y\in\PowNE{A^\times}\rightarrow Y\star_{\mathcal P}A^\times=A^\times}{%
+    \rRI{5,\rAEa{6}}}
+  \closeproofpartwide
+
+  \proofpartwide{Rückschluss mit dem neutralen Element}
+  \setcounter{proofstepnr}{7}
+  \proofstepwidestarbreakkeep[8]{Y\star_{\mathcal P}A^\times=A^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[9]{y\in Y}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{Y\subseteq A\land Y\neq\varnothing}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2}}
+  \proofstepwidestarbreakkeep[2,9]{y\in A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{\rAEa{10},9}}
+  \proofstepwidestarbreakkeep[1]{\SemigroupAlg{A}{\star}}{%
+    \FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1,2,9]{y\star e=y}{%
+    \FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,11}}
+  \proofstepwidestarbreakkeep[1,2,9]{y\in Y\star_{\mathcal P}A^\times}{%
+    \rIE{13,\FormulaRefAuto{GroupPowerFullCarrierAbsorptionProductMember}[thm]{12,2,\rAEb{3},9,\rAEa{3}}}}
+  \proofstepwidestarbreakkeep[1,2,8,9]{y\in A^\times}{%
+    \rIE{8,14}}
+  \proofstepwidestarbreakkeep[1,2,8]{Y\subseteq A^\times}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[9]\vdots 15}}
+  \proofstepwidestarbreakkeep[1,2,8]{Y\in\PowNE{A^\times}}{%
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAI{16,\rAEb{10}}}}
+  \proofstepwidestarbreakkeep[1,2]{Y\star_{\mathcal P}A^\times=A^\times\rightarrow Y\in\PowNE{A^\times}}{%
+    \rRI{8,17}}
+  \proofstepwidestarbreakkeep[1,2]{Y\in\PowNE{A^\times}\leftrightarrow Y\star_{\mathcal P}A^\times=A^\times}{%
+    \rLRI{7,18}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Bild der gesamten Einheitenmenge]{%
+  \begin{aligned}[t]&\MonoidAlg{A}{\star}{e_A}\dsep\MonoidAlg{B}{\diamond}{e_B}\dsep{}\\&\SemigroupIso{F}{\PowNE A,\star_{\mathcal P}}{\PowNE B,\diamond_{\mathcal P}}\vdash F(A^\times)=B^\times\end{aligned}
+}{LargePowerUnitSetImage}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e_A\dsep e_B}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep\star_{\mathcal P}\dsep\diamond_{\mathcal P}\dsep F}
+
+  \DeltaRow{Abkürzungen}{U=A^\times\dsep V=B^\times}
+  \DeltaRow{}{P=\PowNE A\dsep Q=\PowNE B}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Einheitenstabilität der beiden Bilder}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e_A}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{B}{\diamond}{e_B}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{P,\star_{\mathcal P}}{Q,\diamond_{\mathcal P}}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{P}{\star_{\mathcal P}}{\{e_A\}}}{%
+    \FormulaRefAuto{PowerSemigroupMonoid}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{Q}{\diamond_{\mathcal P}}{\{e_B\}}}{%
+    \FormulaRefAuto{PowerSemigroupMonoid}[thm]{2}}
+  \proofstepwidestarbreakkeep[1]{e_A\in U\land U\in P}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{e_B\in V\land V\in Q}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{2}}
+  \proofstepwidestarbreakkeep[1]{U\in P}{%
+    \rAEb{6}}
+  \proofstepwidestarbreakkeep[2]{V\in Q}{%
+    \rAEb{7}}
+  \proofstepwidestarbreakkeep[1]{\operatorname{UStab}_{P,\star_{\mathcal P},\{e_A\}}(U)}{%
+    \FormulaRefAuto{PowerMonoidUnitSetStable}[thm]{1}}
+  \proofstepwidestarbreakkeep[2]{\operatorname{UStab}_{Q,\diamond_{\mathcal P},\{e_B\}}(V)}{%
+    \FormulaRefAuto{PowerMonoidUnitSetStable}[thm]{2}}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F^{-1}}{Q,\diamond_{\mathcal P}}{P,\star_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoInverse}[thm]{3}}
+  \proofstepwidestarbreakkeep[1,2,3]{\operatorname{UStab}_{Q,\diamond_{\mathcal P},\{e_B\}}(F(U))}{%
+    \FormulaRefAuto{SemigroupIsoUnitStabilityTransport}[thm]{4,5,3,10}}
+  \proofstepwidestarbreakkeep[1,2,3]{\operatorname{UStab}_{P,\star_{\mathcal P},\{e_A\}}(F^{-1}(V))}{%
+    \FormulaRefAuto{SemigroupIsoUnitStabilityTransport}[thm]{5,4,12,11}}
+  \closeproofpartwide
+
+  \proofpartwide{Gleichheit der Einheitenmengenbilder}
+  \setcounter{proofstepnr}{14}
+  \proofstepwidestarbreakkeep[3]{F\colon P\bij Q}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[3]{F^{-1}\colon Q\bij P}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{12}}
+  \proofstepwidestarbreakkeep[1,3]{F(U)\in Q}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{15,8}}
+  \proofstepwidestarbreakkeep[2,3]{F^{-1}(V)\in P}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{16,9}}
+  \proofstepwidestarbreakkeep[1,2,3]{V\diamond_{\mathcal P}F(U)=F(U)\land F(U)\diamond_{\mathcal P}V=F(U)}{%
+    \FormulaRefAuto{PowerMonoidUnitStableAbsorption}[thm]{2,17,13}}
+  \proofstepwidestarbreakkeep[1,2,3]{U\star_{\mathcal P}F^{-1}(V)=F^{-1}(V)\land F^{-1}(V)\star_{\mathcal P}U=F^{-1}(V)}{%
+    \FormulaRefAuto{PowerMonoidUnitStableAbsorption}[thm]{1,18,14}}
+  \proofstepwidestarbreakkeep[2,3]{F(F^{-1}(V))=V}{%
+    \FormulaRefAuto{InverseFunctionRightInverse}[thm]{15,9}}
+  \proofstepwidestarbreakkeep[3]{\SemigroupHom{F}{P,\star_{\mathcal P}}{Q,\diamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1,2,3]{F(U\star_{\mathcal P}F^{-1}(V))=F(U)\diamond_{\mathcal P}F(F^{-1}(V))}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{22,8,18}}
+  \proofstepwidestarbreakkeep[1,2,3]{V=F(U)\diamond_{\mathcal P}V}{%
+    \rIE{\rAEa{20},21,23}}
+  \proofstepwidestarbreakkeep[1,2,3]{F(U)=V}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{\rChain{24,\rAEb{19}}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+\FormulaThmDeltaK[Bilder nichtleerer Teilmengen der Einheitenmenge]{%
+  \begin{aligned}[t]&\MonoidAlg{A}{\star}{e_A}\dsep\MonoidAlg{B}{\diamond}{e_B}\dsep\SemigroupIso{F}{\PowNE A,\star_{\mathcal P}}{\PowNE B,\diamond_{\mathcal P}}\dsep{}\\&F(A^\times)=B^\times\dsep Y\in\PowNE{A^\times}\vdash F(Y)\in\PowNE{B^\times}\end{aligned}
+}{LargePowerUnitSubsetImage}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep e_A\dsep e_B\dsep Y}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep\star_{\mathcal P}\dsep\diamond_{\mathcal P}\dsep F}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e_A}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{B}{\diamond}{e_B}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{\PowNE A,\star_{\mathcal P}}{\PowNE B,\diamond_{\mathcal P}}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[4]{F(A^\times)=B^\times}{%
+    \rA}
+  \proofstepwidestarbreakkeep[5]{Y\in\PowNE{A^\times}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{e_A\in A^\times\land A^\times\in\PowNE A}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{A^\times\subseteq A}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAEb{6}}}}
+  \proofstepwidestarbreakkeep[1,5]{Y\in\PowNE A}{%
+    \FormulaRefAuto{NonemptyPowersetMonotone}[thm]{7,5}}
+  \proofstepwidestarbreakkeep[3]{F\colon\PowNE A\bij\PowNE B}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1,3,5]{F(Y)\in\PowNE B}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{9,8}}
+  \proofstepwidestarbreakkeep[1,5]{Y\star_{\mathcal P}A^\times=A^\times}{%
+    \rLREa{\FormulaRefAuto{PowerMonoidUnitSubsetCriterion}[thm]{1,8},5}}
+  \proofstepwidestarbreakkeep[3]{\SemigroupHom{F}{\PowNE A,\star_{\mathcal P}}{\PowNE B,\diamond_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoHomAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[1,3,5]{F(Y\star_{\mathcal P}A^\times)=F(Y)\diamond_{\mathcal P}F(A^\times)}{%
+    \FormulaRefAuto{SemigroupHomOperationAxiom}[ax]{12,8,\rAEb{6}}}
+  \proofstepwidestarbreakkeep[1,3,4,5]{F(Y)\diamond_{\mathcal P}B^\times=B^\times}{%
+    \rIE{11,4,13}}
+  \proofstepwidestarbreakkeep[1,2,3,4,5]{F(Y)\in\PowNE{B^\times}}{%
+    \rLREb{\FormulaRefAuto{PowerMonoidUnitSubsetCriterion}[thm]{2,10},14}}
+\end{tabproofwide}
+\endgroup
+
+\FormulaThmDeltaK[Alle Gruppenelemente sind Einheiten]{%
+  \GroupAlg{A}{\star}{e}\vdash A^\times=A
+}{GroupUnitSetIsCarrier}{%
+  \DeltaRow{Mengen}{A\dsep e\dsep x\dsep y\dsep z}
+  \DeltaRow{Funktionen}{\star}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofwide}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{A}{\star}{e}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{e\in A^\times\land A^\times\in\PowNE A}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{2}}
+  \proofstepwidestarbreakkeep[1]{A^\times\subseteq A}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAEb{3}}}}
+  \proofstepwidestarbreakkeep[5]{x\in A}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,5]{\MonoidUnit{A,\star,e}{x}}{%
+    \FormulaRefAuto{GroupElementIsMonoidUnit}[thm]{1,5}}
+  \proofstepwidestarbreakkeep[1,5]{x\in A^\times}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{2,5,6}}
+  \proofstepwidestarbreakkeep[1]{A\subseteq A^\times}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[5]\vdots 7}}
+  \proofstepwidestarbreakkeep[1]{A^\times=A}{%
+    \FormulaRefAuto{A\subseteq B\land B\subseteq A\eqvdash A=B}[thm]{\rAI{4,8}}}
+\end{tabproofwide}
+\endgroup
+
+\newpage
+\FormulaThmDeltaK[Große Potenzhalbgruppen rekonstruieren die
+Einheitengruppen]{%
+  \begin{aligned}[t]
+    &\MonoidAlg{A}{\star}{e_A}\dsep
+      \MonoidAlg{B}{\diamond}{e_B}\dsep{}\\[-2pt]
+    &\SemigroupIso{F}
+      {\PowNE A,\star_{\mathcal P}}
+      {\PowNE B,\diamond_{\mathcal P}}\vdash{}\\[-2pt]
+    &F(A^\times)=B^\times
+      \land F[\PowNE{A^\times}]=\PowNE{B^\times}
+  \end{aligned}%
+}{LargePowerSemigroupUnitGroupReconstruction}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep A^\times\dsep B^\times
+    \dsep X\dsep Y\dsep e_A\dsep e_B}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep\star_{\mathcal P}
+    \dsep\diamond_{\mathcal P}\dsep F}
+
+  \DeltaRow{Abkürzungen}{U=A^\times\dsep V=B^\times}
+  \DeltaRow{}{P=\PowNE A\dsep Q=\PowNE B}
+  \DeltaRow{}{R=F\restriction_{\PowNE U}}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Bild der Einheitenmenge und Umkehrabbildung}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e_A}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\MonoidAlg{B}{\diamond}{e_B}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{P,\star_{\mathcal P}}{Q,\diamond_{\mathcal P}}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,3]{F(U)=V}{%
+    \FormulaRefAuto{LargePowerUnitSetImage}[thm]{1,2,3}}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F^{-1}}{Q,\diamond_{\mathcal P}}{P,\star_{\mathcal P}}}{%
+    \FormulaRefAuto{SemigroupIsoInverse}[thm]{3}}
+  \proofstepwidestarbreakkeep[1,2,3]{F^{-1}(V)=U}{%
+    \FormulaRefAuto{LargePowerUnitSetImage}[thm]{2,1,5}}
+  \proofstepwidestarbreakkeep[3]{F\colon P\bij Q}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \closeproofpartwide
+
+  \proofpartwide{Punktweiser Transport in beiden Richtungen}
+  \setcounter{proofstepnr}{7}
+  \proofstepwidestarbreakkeep[8]{Y\in P}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3,8]{F(Y)\in Q}{%
+    \FormulaRefAuto{F\colon A\bij B\dsep x\in A\vdash F(x)\in B}[thm]{7,8}}
+  \proofstepwidestarbreakkeep[10]{Y\in\PowNE U}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,3,10]{F(Y)\in\PowNE V}{%
+    \FormulaRefAuto{LargePowerUnitSubsetImage}[thm]{1,2,3,4,10}}
+  \proofstepwidestarbreakkeep[1,2,3]{Y\in\PowNE U\rightarrow F(Y)\in\PowNE V}{%
+    \rRI{10,11}}
+  \proofstepwidestarbreakkeep[13]{F(Y)\in\PowNE V}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,2,3,13]{F^{-1}(F(Y))\in\PowNE U}{%
+    \FormulaRefAuto{LargePowerUnitSubsetImage}[thm]{2,1,5,6,13}}
+  \proofstepwidestarbreakkeep[3,8]{F^{-1}(F(Y))=Y}{%
+    \FormulaRefAuto{InverseFunctionLeftInverse}[thm]{7,8}}
+  \proofstepwidestarbreakkeep[1,2,3,8,13]{Y\in\PowNE U}{%
+    \rIE{15,14}}
+  \proofstepwidestarbreakkeep[1,2,3,8]{F(Y)\in\PowNE V\rightarrow Y\in\PowNE U}{%
+    \rRI{13,16}}
+  \proofstepwidestarbreakkeep[1,2,3,8]{Y\in\PowNE U\leftrightarrow F(Y)\in\PowNE V}{%
+    \rLRI{12,17}}
+  \proofstepwidestarbreakkeep[1,2,3]{\forall Y\in P\,(Y\in\PowNE U\leftrightarrow F(Y)\in\PowNE V)}{%
+    \rUI{\rRI{8,18}}}
+  \closeproofpartwide
+
+  \proofpartwide{Bild der ganzen Teilmengenfamilie}
+  \setcounter{proofstepnr}{19}
+  \proofstepwidestarbreakkeep[1]{e_A\in U\land U\in P}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1]{U\subseteq A}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAEb{20}}}}
+  \proofstepwidestarbreakkeep[22]{Z\in\PowNE U}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,22]{Z\in P}{%
+    \FormulaRefAuto{NonemptyPowersetMonotone}[thm]{21,22}}
+  \proofstepwidestarbreakkeep[1]{\PowNE U\subseteq P}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[22]\vdots 23}}
+  \proofstepwidestarbreakkeep[2]{e_B\in V\land V\in Q}{%
+    \FormulaRefAuto{MonoidUnitSetCarrier}[thm]{2}}
+  \proofstepwidestarbreakkeep[2]{V\subseteq B}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{\rAEb{25}}}}
+  \proofstepwidestarbreakkeep[27]{Z\in\PowNE V}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2,27]{Z\in Q}{%
+    \FormulaRefAuto{NonemptyPowersetMonotone}[thm]{26,27}}
+  \proofstepwidestarbreakkeep[2]{\PowNE V\subseteq Q}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[27]\vdots 28}}
+  \proofstepwidestarbreakkeep[1,2,3]{R\colon\PowNE U\bij\PowNE V}{%
+    \FormulaRefAuto{PointwiseCompatibilityImpliesBijectiveRestriction}[thm]{7,24,29,19}}
+  \proofstepwidestarbreakkeep[1,2,3]{R[\PowNE U]=\PowNE V}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}[thm]{30}}
+  \proofstepwidestarbreakkeep[3]{F\colon P\to Q}{%
+    \FormulaRefAuto{Bijektive Funktion}[def]{7}}
+  \proofstepwidestarbreakkeep[1,3]{R[\PowNE U]=F[\PowNE U]}{%
+    \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\vdash(F\restriction_C)[C]=F[C]}[thm]{24,32}}
+  \proofstepwidestarbreakkeep[1,2,3]{F[\PowNE U]=\PowNE V}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{33,31}}
+  \proofstepwidestarbreakkeep[1,2,3]{F(U)=V\land F[\PowNE U]=\PowNE V}{%
+    \rAI{4,34}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+
+Der folgende Gruppenstarrheitssatz geht in dieser Form auf
+\href{https://doi.org/10.48550/arXiv.2606.01917}%
+  {Liu--Tringali (2026), Satz~1.3}
+zurück.  Im Unterschied zum zuvor benötigten endlichen Argument kommt er
+ohne jede Kardinalitätsannahme aus.
+
+\FormulaThmDeltaK[Einseitige Gruppenstarrheit der großen
+Potenzhalbgruppe]{%
+  \begin{aligned}[t]
+    &\GroupAlg{A}{\star}{e_A}\dsep
+      \SemigroupAlg{B}{\diamond}\dsep{}\\[-2pt]
+    &\SemigroupIso{F}
+      {\PowNE A,\star_{\mathcal P}}
+      {\PowNE B,\diamond_{\mathcal P}}\vdash{}\\[-2pt]
+    &\exists e_B\in B\,\exists f\,
+      \bigl(
+        \GroupAlg{B}{\diamond}{e_B}\land
+        \GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}
+      \bigr)
+  \end{aligned}%
+}{GroupPowerSemigroupRigidity}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep A^\times\dsep B^\times
+    \dsep E\dsep X\dsep Y\dsep e_A\dsep e_B}
+  \DeltaRow{Funktionen}{\star\dsep\diamond\dsep\star_{\mathcal P}
+    \dsep\diamond_{\mathcal P}\dsep F\dsep f}
+
+  \DeltaRow{Abkürzungen}{U=A^\times\dsep V=B^\times}
+  \DeltaRow{}{P=\PowNE A\dsep Q=\PowNE B}
+}
+\begingroup
+\ProofWideReasonsNearFormula
+\begin{tabproofsplitwide}
+  \proofpartwide{Monoidstruktur des Zielträgers}
+  \proofstepwidestarbreakkeep[1]{\GroupAlg{A}{\star}{e_A}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[2]{\SemigroupAlg{B}{\diamond}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[3]{\SemigroupIso{F}{P,\star_{\mathcal P}}{Q,\diamond_{\mathcal P}}}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{A}{\star}{e_A}}{%
+    \FormulaRefAuto{GroupBaseMonoidAxiom}[ax]{1}}
+  \proofstepwidestarbreakkeep[1]{\MonoidAlg{P}{\star_{\mathcal P}}{\{e_A\}}}{%
+    \FormulaRefAuto{PowerSemigroupMonoid}[thm]{4}}
+  \proofstepwidestarbreakkeep[1,3]{\MonoidAlg{Q}{\diamond_{\mathcal P}}{F(\{e_A\})}}{%
+    \FormulaRefAuto{SemigroupIsoMonoidTransport}[thm]{5,3}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists e_B\in B\,(F(\{e_A\})=\{e_B\}\land\MonoidAlg{B}{\diamond}{e_B})}{%
+    \FormulaRefAuto{PowerSemigroupIdentityCharacterization}[thm]{2,6}}
+  \proofstepwidestarbreakkeep[8]{e_B\in B\land(F(\{e_A\})=\{e_B\}\land\MonoidAlg{B}{\diamond}{e_B})}{%
+    \rA}
+  \proofstepwidestarbreakkeep[8]{e_B\in B}{%
+    \rAEa{8}}
+  \proofstepwidestarbreakkeep[8]{\MonoidAlg{B}{\diamond}{e_B}}{%
+    \rAEb{\rAEb{8}}}
+  \closeproofpartwide
+
+  \proofpartwide{Jedes Zielelement ist eine Einheit}
+  \setcounter{proofstepnr}{10}
+  \proofstepwidestarbreakkeep[1]{U=A}{%
+    \FormulaRefAuto{GroupUnitSetIsCarrier}[thm]{1}}
+  \proofstepwidestarbreakkeep[1,3,8]{F(U)=V\land F[\PowNE U]=\PowNE V}{%
+    \FormulaRefAuto{LargePowerSemigroupUnitGroupReconstruction}[thm]{4,10,3}}
+  \proofstepwidestarbreakkeep[1,3,8]{F[P]=\PowNE V}{%
+    \rIE{11,\rAEb{12}}}
+  \proofstepwidestarbreakkeep[3]{F\colon P\bij Q}{%
+    \FormulaRefAuto{SemigroupIsoBijectiveAxiom}[ax]{3}}
+  \proofstepwidestarbreakkeep[3]{F[P]=Q}{%
+    \FormulaRefAuto{F\colon A\bij B\vdash F[A]=B}[thm]{14}}
+  \proofstepwidestarbreakkeep[1,3,8]{Q=\PowNE V}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{15,13}}
+  \proofstepwidestarbreakkeep[17]{b\in B}{%
+    \rA}
+  \proofstepwidestarbreakkeep[17]{\{b\}\in Q}{%
+    \FormulaRefAuto{MonoidPowerSingletonCarrier}[thm]{17}}
+  \proofstepwidestarbreakkeep[1,3,8,17]{\{b\}\in\PowNE V}{%
+    \rIE{16,18}}
+  \proofstepwidestarbreakkeep[1,3,8,17]{\{b\}\subseteq V}{%
+    \rAEa{\FormulaRefAuto{NonemptyPowersetMembership}[thm]{19}}}
+  \proofstepwidestarbreakkeep[]{b\in\{b\}}{%
+    \FormulaRefAuto{a\in\{a\}}[thm]}
+  \proofstepwidestarbreakkeep[1,3,8,17]{b\in V}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{20,21}}
+  \proofstepwidestarbreakkeep[1,3,8,17]{\MonoidUnit{B,\diamond,e_B}{b}}{%
+    \FormulaRefAuto{MonoidUnitSetDef}[def]{10,22}}
+  \proofstepwidestarbreakkeep[1,3,8,17]{\exists c\in B\,(b\diamond c=e_B\land c\diamond b=e_B)}{%
+    \FormulaRefAuto{MonoidUnitDef}[def]{23}}
+  \proofstepwidestarbreakkeep[1,3,8]{\forall b\in B\,\exists c\in B\,(b\diamond c=e_B\land c\diamond b=e_B)}{%
+    \rUI{\rRI{17,24}}}
+  \proofstepwidestarbreakkeep[1,3,8]{\GroupAlg{B}{\diamond}{e_B}}{%
+    \FormulaRefAuto{GroupDef}[def]{10,25}}
+  \closeproofpartwide
+
+  \proofpartwide{Gruppenisomorphismus und Existenzschluss}
+  \setcounter{proofstepnr}{26}
+  \proofstepwidestarbreakkeep[1,3,8]{\exists f\,\bigl(\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\land\forall a\in A\,(F(\{a\})=\{f(a)\})\bigr)}{%
+    \FormulaRefAuto{PowerGroupsSingletonTransport}[thm]{1,26,3}}
+  \proofstepwidestarbreakkeep[28]{\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\land\forall a\in A\,(F(\{a\})=\{f(a)\})}{%
+    \rA}
+  \proofstepwidestarbreakkeep[1,3,8,28]{\exists f\,\bigl(\GroupAlg{B}{\diamond}{e_B}\land\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\bigr)}{%
+    \rEI{\rAI{26,\rAEa{28}}}}
+  \proofstepwidestarbreakkeep[1,3,8]{\exists f\,\bigl(\GroupAlg{B}{\diamond}{e_B}\land\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\bigr)}{%
+    \rEE{27,28,29}}
+  \proofstepwidestarbreakkeep[1,3,8]{\exists e_B\in B\,\exists f\,\bigl(\GroupAlg{B}{\diamond}{e_B}\land\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\bigr)}{%
+    \rEI{\rAI{9,30}}}
+  \proofstepwidestarbreakkeep[1,2,3]{\exists e_B\in B\,\exists f\,\bigl(\GroupAlg{B}{\diamond}{e_B}\land\GroupIso{f}{A,\star,e_A}{B,\diamond,e_B}\bigr)}{%
+    \rEE{7,8,31}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+\endgroup
+
+
+\begin{remark}
+Der Beweis verwendet wesentlich die \emph{große} Potenzhalbgruppe aller
+nichtleeren Teilmengen: Die ganze Einheitengruppe \(A^\times\) muss selbst
+als Element von \(\PowNE A\) auftreten.  Für endliche Grundträger stimmt
+die große mit der finitären Potenzhalbgruppe überein.  Bei unendlichen
+Gruppen folgt die entsprechende Aussage für die Halbgruppe nur der
+endlichen nichtleeren Teilmengen dagegen nicht aus diesem Beweis.
+\end{remark}
+
+\end{document}

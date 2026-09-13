@@ -1,0 +1,717 @@
+\subsection{Rekursion aus den Baumaxiomen}
+
+Die rekursiven Vorschriften werden zunächst als Abschlussbedingungen
+für Teilmengen von \(T\times X\) formuliert. Die Existenz ihres kleinsten
+abgeschlossenen Graphen folgt aus Aussonderung. Die nachfolgenden
+Filterbeweise zeigen getrennt, dass jeder Baum genau einen Wert besitzt.
+
+\input{tex/b27-tree-recursion-specification}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Abgeschlossene Relationsgraphen für die Baumrekursion]{%
+ \begin{aligned}[t]
+ \mathsf{BCl}_A(H;T,\ell,k;X,f,g)\coloneqq{}&
+ H\subseteq T\times X\land{}\\[-2pt]
+ &(\forall a\in A\;(\ell(a),f(a))\in H)\land{}\\[-2pt]
+ &\forall u,v\in T\,\forall x,y\in X\\[-2pt]
+ &\quad((u,x)\in H\land(v,y)\in H\\[-2pt]
+ &\qquad\rightarrow(k(u,v),g(x,y))\in H).
+ \end{aligned}
+}{BinaryTreeClosedGraphDef}{%
+ \DeltaRow{Mengen}{A\dsep T\dsep X\dsep H\dsep a\dsep u\dsep v\dsep x\dsep y}
+ \DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+ \DeltaRow{\textbf{Neues Symbol}}{}
+ \DeltaPrem{Abgeschlossener Graph}{\mathsf{BCl}_A(H;T,\ell,k;X,f,g)}}
+\end{minipage}\par
+
+In den folgenden Hilfssätzen stehen \(C\) und \(M\) für die jeweils
+im Kontext angegebenen Prädikate. Die Mengenabkürzungen stehen ebenfalls
+im Kontext; ihre Aussonderungsterme werden durch
+\FormulaRefAuto{\{x\in A\mid P(x)\}\coloneq
+ \iota B(\forall x(x\in B\leftrightarrow(x\in A\land P(x))))}[def]
+aufgrund des Aussonderungsaxioms definiert.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Träger eines abgeschlossenen Baumgraphen]{%
+C(H)\vdash H\subseteq T\times X
+}{BinaryTreeClosedGraphSubset}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C(H)}{%
+    \rA}
+  \proofstepwidestar[1]{H\subseteq T\times X}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{1}}}
+\end{tabproofwide}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Blattregel eines abgeschlossenen Baumgraphen]{%
+C(H)\dsep a\in A\vdash(\ell(a),f(a))\in H
+}{BinaryTreeClosedGraphLeaf}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C(H)}{%
+    \rA}
+  \proofstepwidestar[2]{a\in A}{%
+    \rA}
+  \proofstepwidestar[1]{\forall a\in A\;(\ell(a),f(a))\in H}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{1}}}
+  \proofstepwidestar[1,2]{(\ell(a),f(a))\in H}{%
+    \rRE{\rUE{3},2}}
+\end{tabproofwide}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Knotenregel eines abgeschlossenen Baumgraphen]{%
+\begin{aligned}[t]&C(H)\dsep u,v\in T\dsep x,y\in X\dsep{}\\&(u,x)\in H\dsep(v,y)\in H\vdash(k(u,v),g(x,y))\in H\end{aligned}
+}{BinaryTreeClosedGraphNode}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C(H)}{%
+    \rA}
+  \proofstepwidestar[2]{u,v\in T}{%
+    \rA}
+  \proofstepwidestar[3]{x,y\in X}{%
+    \rA}
+  \proofstepwidestar[4]{(u,x)\in H}{%
+    \rA}
+  \proofstepwidestar[5]{(v,y)\in H}{%
+    \rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]&\forall u,v\in T\,\forall x,y\in X\\&((u,x)\in H\land(v,y)\in H\\&\quad\rightarrow(k(u,v),g(x,y))\in H)\end{aligned}}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{1}}}
+  \proofstepwidestar[1,2,3,4,5]{(k(u,v),g(x,y))\in H}{%
+    \rRE{\rRE{\rUE{\rRE{\rUE{\rRE{\rUE{\rRE{\rUE{6},\rAEa{2}}},\rAEb{2}}},\rAEa{3}}},\rAEb{3}},\rAI{4,5}}}
+\end{tabproofwide}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Minimalität des abgeschlossenen Baumgraphen]{%
+M(G)\dsep C(H)\vdash G\subseteq H
+}{BinaryTreeMinimalGraphSubset}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{M(G)}{%
+    \rA}
+  \proofstepwidestar[2]{C(H)}{%
+    \rA}
+  \proofstepwidestar[1]{\forall H\;(C(H)\rightarrow G\subseteq H)}{%
+    \rAEb{1}}
+  \proofstepwidestar[1,2]{G\subseteq H}{%
+    \rRE{\rUE{3},2}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Existenz des kleinsten abgeschlossenen Baumgraphen]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep f\colon A\to X\dsep g\colon X\times X\to X\\&\vdash\exists G\;M(G)\end{aligned}
+}{BinaryTreeLeastClosedGraphExists}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G_0\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}
+\DeltaRow{Weitere Mengen}{B\dsep p\dsep K\dsep\mathcal C}
+\DeltaRow{Mengenabkürzungen}{\begin{aligned}[t]
+ B&\coloneqq T\times X,\\
+ \mathcal C&\coloneqq\{H\in\powerset B\mid C(H)\},\\
+ G_0&\coloneqq\{p\in B\mid\forall H\in\mathcal C\;p\in H\}
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{f\colon A\to X}{%
+    \rA}
+  \proofstepwidestar[3]{g\colon X\times X\to X}{%
+    \rA}
+  \proofstepwidestar[]{B\subseteq B}{%
+    \FormulaRefAuto{A\subseteq A}[thm]}
+  \proofstepwidestar[]{B\in\powerset B}{%
+    \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{4}}
+  \proofstepwidestar[6]{a\in A}{%
+    \rA}
+  \proofstepwidestar[1,6]{\ell(a)\in T}{%
+    \FormulaRefAuto{BinaryTreeStructureLeafTyping}[thm]{1,6}}
+  \proofstepwidestar[2,6]{f(a)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,6}}
+  \proofstepwidestar[1,2,6]{(\ell(a),f(a))\in B}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{7,8}}
+  \proofstepwidestar[1,2]{\forall a\in A\;(\ell(a),f(a))\in B}{%
+    \rUI{\rRI{6,9}}}
+  \proofstepwidestar[11]{u\in T}{%
+    \rA}
+  \proofstepwidestar[12]{v\in T}{%
+    \rA}
+  \proofstepwidestar[13]{x\in X}{%
+    \rA}
+  \proofstepwidestar[14]{y\in X}{%
+    \rA}
+  \proofstepwidestar[15]{(u,x)\in B\land(v,y)\in B}{%
+    \rA}
+  \proofstepwidestar[11,12,13,14,15]{\begin{aligned}[t]&u,v\in T\land x,y\in X\land{}\\&(u,x)\in B\land(v,y)\in B\end{aligned}}{%
+    \rAI{\rAI{11,12},\rAI{\rAI{13,14},15}}}
+  \proofstepwidestar[1,11,12,13,14,15]{k(u,v)\in T}{%
+    \FormulaRefAuto{BinaryTreeStructureNodeTyping}[thm]{1,\rAEn{16}}}
+  \proofstepwidestar[11,12,13,14,15]{(x,y)\in X\times X}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\rAEn{16},\rAEn{16}}}
+  \proofstepwidestar[3,11,12,13,14,15]{g(x,y)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,18}}
+  \proofstepwidestar[1,3,11,12,13,14,15]{(k(u,v),g(x,y))\in B}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{17,19}}
+  \proofstepwidestar[1,3]{\begin{aligned}[t]&\forall u,v\in T\,\forall x,y\in X\\&((u,x)\in B\land(v,y)\in B\rightarrow(k(u,v),g(x,y))\in B)\end{aligned}}{%
+    \rUI{\rRI{11,\rUI{\rRI{12,\rUI{\rRI{13,\rUI{\rRI{14,\rRI{15,20}}}}}}}}}}
+  \proofstepwidestar[1,2,3]{C(B)}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{\rAI{4,\rAI{10,21}}}}
+  \proofstepwidestar[1,2,3]{B\in\mathcal C}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{5,22}}
+  \proofstepwidestar[]{G_0\subseteq B}{%
+    \FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}
+  \proofstepwidestar[25]{H\in\mathcal C}{%
+    \rA}
+  \proofstepwidestar[26]{p\in G_0}{%
+    \rA}
+  \proofstepwidestar[26]{\forall H\in\mathcal C\;p\in H}{%
+    \rAEb{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{26}}}
+  \proofstepwidestar[25,26]{p\in H}{%
+    \rRE{\rUE{27},25}}
+  \proofstepwidestar[25]{G_0\subseteq H}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[26]\vdots 28}}
+  \proofstepwidestar[]{\forall H\in\mathcal C\;G_0\subseteq H}{%
+    \rUI{\rRI{25,29}}}
+  \proofstepwidestar[31]{a\in A}{%
+    \rA}
+  \proofstepwidestar[32]{H\in\mathcal C}{%
+    \rA}
+  \proofstepwidestar[32]{C(H)}{%
+    \rAEb{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{32}}}
+  \proofstepwidestar[32]{\forall a\in A\;(\ell(a),f(a))\in H}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{33}}}
+  \proofstepwidestar[31,32]{(\ell(a),f(a))\in H}{%
+    \rRE{\rUE{34},31}}
+  \proofstepwidestar[31]{\forall H\in\mathcal C\;(\ell(a),f(a))\in H}{%
+    \rUI{\rRI{32,35}}}
+  \proofstepwidestar[1,2,31]{(\ell(a),f(a))\in B}{%
+    \rRE{\rUE{10},31}}
+  \proofstepwidestar[1,2,31]{(\ell(a),f(a))\in G_0}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{37,36}}
+  \proofstepwidestar[1,2]{\forall a\in A\;(\ell(a),f(a))\in G_0}{%
+    \rUI{\rRI{31,38}}}
+  \proofstepwidestar[40]{u\in T}{%
+    \rA}
+  \proofstepwidestar[41]{v\in T}{%
+    \rA}
+  \proofstepwidestar[42]{x\in X}{%
+    \rA}
+  \proofstepwidestar[43]{y\in X}{%
+    \rA}
+  \proofstepwidestar[44]{(u,x)\in G_0\land(v,y)\in G_0}{%
+    \rA}
+  \proofstepwidestar[40,41,42,43,44]{\begin{aligned}[t]&u,v\in T\land x,y\in X\land{}\\&(u,x)\in G_0\land(v,y)\in G_0\end{aligned}}{%
+    \rAI{\rAI{40,41},\rAI{\rAI{42,43},44}}}
+  \proofstepwidestar[46]{H\in\mathcal C}{%
+    \rA}
+  \proofstepwidestar[46]{C(H)}{%
+    \rAEb{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{46}}}
+  \proofstepwidestar[46]{G_0\subseteq H}{%
+    \rRE{\rUE{30},46}}
+  \proofstepwidestar[40,46,41,42,43,44]{(u,x)\in H}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{48,\rAEn{45}}}
+  \proofstepwidestar[40,46,41,42,43,44]{(v,y)\in H}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{48,\rAEn{45}}}
+  \proofstepwidestar[46]{\begin{aligned}[t]&\forall u,v\in T\,\forall x,y\in X\\&((u,x)\in H\land(v,y)\in H\\&\quad\rightarrow(k(u,v),g(x,y))\in H)\end{aligned}}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{47}}}
+  \proofstepwidestar[40,46,41,42,43,44]{(k(u,v),g(x,y))\in H}{%
+    \rRE{\rRE{\rUE{\rRE{\rUE{\rRE{\rUE{\rRE{\rUE{51},\rAEn{45}}},\rAEn{45}}},\rAEn{45}}},\rAEn{45}},\rAI{49,50}}}
+  \proofstepwidestar[40,41,42,43,44]{\forall H\in\mathcal C\;(k(u,v),g(x,y))\in H}{%
+    \rUI{\rRI{46,52}}}
+  \proofstepwidestar[1,3,40,41,42,43,44]{(k(u,v),g(x,y))\in B}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\FormulaRefAuto{BinaryTreeStructureNodeTyping}[thm]{1,\rAEn{45}},\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\rAEn{45},\rAEn{45}}}}}
+  \proofstepwidestar[1,3,40,41,42,43,44]{(k(u,v),g(x,y))\in G_0}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{54,53}}
+  \proofstepwidestar[1,3]{\begin{aligned}[t]&\forall u,v\in T\,\forall x,y\in X\\&((u,x)\in G_0\land(v,y)\in G_0\\&\quad\rightarrow(k(u,v),g(x,y))\in G_0)\end{aligned}}{%
+    \rUI{\rRI{40,\rUI{\rRI{41,\rUI{\rRI{42,\rUI{\rRI{43,\rRI{44,55}}}}}}}}}}
+  \proofstepwidestar[1,2,3]{C(G_0)}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{\rAI{24,\rAI{39,56}}}}
+  \proofstepwidestar[58]{C(K)}{%
+    \rA}
+  \proofstepwidestar[58]{K\subseteq B}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{58}}}
+  \proofstepwidestar[58]{K\in\powerset B}{%
+    \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{59}}
+  \proofstepwidestar[58]{K\in\mathcal C}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{60,58}}
+  \proofstepwidestar[58]{G_0\subseteq K}{%
+    \rRE{\rUE{30},61}}
+  \proofstepwidestar[]{\forall K\;(C(K)\rightarrow G_0\subseteq K)}{%
+    \rUI{\rRI{58,62}}}
+  \proofstepwidestar[1,2,3]{\exists G\;M(G)}{%
+    \rEI{\rAI{57,63}}}
+\end{tabproofwide}
+
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Ein zulässiger Faserfilter erzwingt einen einzigen Wert]{%
+\begin{aligned}[t]&M(G)\dsep C(\Phi^{T,X}_{t,c}(G))\dsep c\in X\dsep(t,c)\in G\\&\vdash\exists!x\in X\;(t,x)\in G\end{aligned}
+}{BinaryTreeRecursionFilteredFiberUnique}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Weitere Mengen}{c\dsep z}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{M(G)}{%
+    \rA}
+  \proofstepwidestar[2]{C(\Phi^{T,X}_{t,c}(G))}{%
+    \rA}
+  \proofstepwidestar[3]{c\in X}{%
+    \rA}
+  \proofstepwidestar[4]{(t,c)\in G}{%
+    \rA}
+  \proofstepwidestar[1]{G\subseteq T\times X}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphSubset}[thm]{\rAEa{1}}}
+  \proofstepwidestar[1,2]{G\subseteq\Phi^{T,X}_{t,c}(G)}{%
+    \FormulaRefAuto{BinaryTreeMinimalGraphSubset}[thm]{1,2}}
+  \proofstepwidestar[7]{(t,z)\in G}{%
+    \rA}
+  \proofstepwidestar[1,2,7]{(t,z)\in\Phi^{T,X}_{t,c}(G)}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,7}}
+  \proofstepwidestar[1]{\begin{aligned}[t]&(t,z)\in\Phi^{T,X}_{t,c}(G)\leftrightarrow{}\\&((t,z)\in G\land(t\ne t\lor z=c))\end{aligned}}{%
+    \FormulaRefAuto{WordRecursionFilterMembership}[thm]{5}}
+  \proofstepwidestar[1,2,7]{t\ne t\lor z=c}{%
+    \rAEb{\rRE{\rLREa{9},8}}}
+  \proofstepwidestar[]{\neg(t\ne t)}{%
+    \FormulaRefAuto{A\eqvdash\neg\neg A}[thm]{\rII}}
+  \proofstepwidestar[1,2,7]{z=c}{%
+    \FormulaRefAuto{A\lor B\dsep\neg A\vdash B}[thm]{10,11}}
+  \proofstepwidestar[13]{z=c}{%
+    \rA}
+  \proofstepwidestar[4,13]{(t,z)\in G}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{13},4}}
+  \proofstepwidestar[1,2,4]{(t,z)\in G\leftrightarrow z=c}{%
+    \rLRI{\rRI{7,12},\rRI{13,14}}}
+  \proofstepwidestar[1,2,4]{\forall z\;((t,z)\in G\leftrightarrow z=c)}{%
+    \rUI{15}}
+  \proofstepwidestar[1,2,3,4]{\exists!x\in X\;(t,x)\in G}{%
+    \FormulaRefAuto{B27UniqueFromSingletonPredicate}[thm]{3,16}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutiger Wert am Blatt]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep f\colon A\to X\dsep M(G)\dsep a\in A\\&\vdash\exists!x\in X\;(\ell(a),x)\in G\end{aligned}
+}{BinaryTreeRecursionLeafFiberUnique}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Weitere Menge}{b}\DeltaRow{Mengenabkürzung}{H\coloneqq\Phi^{T,X}_{\ell(a),f(a)}(G)}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{f\colon A\to X}{%
+    \rA}
+  \proofstepwidestar[3]{M(G)}{%
+    \rA}
+  \proofstepwidestar[4]{a\in A}{%
+    \rA}
+  \proofstepwidestar[3]{C(G)}{%
+    \rAEa{3}}
+  \proofstepwidestar[3]{G\subseteq T\times X}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphSubset}[thm]{5}}
+  \proofstepwidestar[]{H\subseteq G}{%
+    \FormulaRefAuto{WordRecursionFilterSubset}[thm]}
+  \proofstepwidestar[3]{H\subseteq T\times X}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{7,6}}
+  \proofstepwidestar[9]{b\in A}{%
+    \rA}
+  \proofstepwidestar[3,9]{(\ell(b),f(b))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphLeaf}[thm]{5,9}}
+  \proofstepwidestar[]{\ell(b)=\ell(a)\lor\ell(b)\ne\ell(a)}{%
+    \FormulaRefAuto{A\lor\neg A}[thm]}
+  \proofstepwidestar[12]{\ell(b)=\ell(a)}{%
+    \rA}
+  \proofstepwidestar[1,4,9,12]{b=a}{%
+    \FormulaRefAuto{BinaryTreeStructureLeafAxiom}[ax]{1,9,4,12}}
+  \proofstepwidestar[1,4,9,12]{f(b)=f(a)}{%
+    \rIE{13,\rII}}
+  \proofstepwidestar[1,4,9,12]{\ell(b)\ne\ell(a)\lor f(b)=f(a)}{%
+    \rOIb{14}}
+  \proofstepwidestar[16]{\ell(b)\ne\ell(a)}{%
+    \rA}
+  \proofstepwidestar[16]{\ell(b)\ne\ell(a)\lor f(b)=f(a)}{%
+    \rOIa{16}}
+  \proofstepwidestar[1,4,9]{\ell(b)\ne\ell(a)\lor f(b)=f(a)}{%
+    \rOE{11,12,15,16,17}}
+  \proofstepwidestar[1,3,4,9]{(\ell(b),f(b))\in H}{%
+    \rRE{\rLREb{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{6}},\rAI{10,18}}}
+  \proofstepwidestar[1,3,4]{\forall b\in A\;(\ell(b),f(b))\in H}{%
+    \rUI{\rRI{9,19}}}
+  \proofstepwidestar[21]{u\in T}{%
+    \rA}
+  \proofstepwidestar[22]{v\in T}{%
+    \rA}
+  \proofstepwidestar[23]{x\in X}{%
+    \rA}
+  \proofstepwidestar[24]{y\in X}{%
+    \rA}
+  \proofstepwidestar[25]{(u,x)\in H\land(v,y)\in H}{%
+    \rA}
+  \proofstepwidestar[25]{(u,x)\in G}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,\rAEa{25}}}
+  \proofstepwidestar[25]{(v,y)\in G}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{7,\rAEb{25}}}
+  \proofstepwidestar[3,21,22,23,24,25]{(k(u,v),g(x,y))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphNode}[thm]{5,\rAI{21,22},\rAI{23,24},26,27}}
+  \proofstepwidestar[1,4,21,22]{\ell(a)\ne k(u,v)}{%
+    \FormulaRefAuto{BinaryTreeStructureDisjointnessAxiom}[ax]{1,4,\rAI{21,22}}}
+  \proofstepwidestar[30]{k(u,v)=\ell(a)}{%
+    \rA}
+  \proofstepwidestar[30]{\ell(a)=k(u,v)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{30}}
+  \proofstepwidestar[1,4,21,22,30]{\bot}{%
+    \rBI{31,29}}
+  \proofstepwidestar[1,4,21,22]{k(u,v)\ne\ell(a)}{%
+    \rCI{30,32}}
+  \proofstepwidestar[1,4,21,22]{k(u,v)\ne\ell(a)\lor g(x,y)=f(a)}{%
+    \rOIa{33}}
+  \proofstepwidestar[1,3,4,21,22,23,24,25]{(k(u,v),g(x,y))\in H}{%
+    \rRE{\rLREb{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{6}},\rAI{28,34}}}
+  \proofstepwidestar[1,3,4]{\begin{aligned}[t]&\forall u,v\in T\,\forall x,y\in X\\&((u,x)\in H\land(v,y)\in H\\&\quad\rightarrow(k(u,v),g(x,y))\in H)\end{aligned}}{%
+    \rUI{\rRI{21,\rUI{\rRI{22,\rUI{\rRI{23,\rUI{\rRI{24,\rRI{25,35}}}}}}}}}}
+  \proofstepwidestar[1,3,4]{C(H)}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{\rAI{8,\rAI{20,36}}}}
+  \proofstepwidestar[2,4]{f(a)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,4}}
+  \proofstepwidestar[3,4]{(\ell(a),f(a))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphLeaf}[thm]{5,4}}
+  \proofstepwidestar[1,2,3,4]{\exists!x\in X\;(\ell(a),x)\in G}{%
+    \FormulaRefAuto{BinaryTreeRecursionFilteredFiberUnique}[thm]{3,37,38,39}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutige Teilwerte bestimmen einen eindeutigen Knotenwert]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep g\colon X\times X\to X\dsep M(G)\dsep u,v\in T\\&\dsep\exists!z\in X\;(u,z)\in G\dsep\exists!z\in X\;(v,z)\in G\\&\vdash\exists!z\in X\;(k(u,v),z)\in G\end{aligned}
+}{BinaryTreeRecursionNodeFiberUnique}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Weitere Mengen}{p\dsep q\dsep z\dsep w}
+\DeltaRow{Iota-Abkürzungen}{\begin{aligned}[t]
+ x&\coloneqq\iota z\,(z\in X\land(u,z)\in G),\\[-2pt]
+ y&\coloneqq\iota z\,(z\in X\land(v,z)\in G)
+\end{aligned}}
+\DeltaRow{Mengenabkürzung}{H\coloneqq\Phi^{T,X}_{k(u,v),g(x,y)}(G)}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{g\colon X\times X\to X}{%
+    \rA}
+  \proofstepwidestar[3]{M(G)}{%
+    \rA}
+  \proofstepwidestar[4]{u\in T}{%
+    \rA}
+  \proofstepwidestar[5]{v\in T}{%
+    \rA}
+  \proofstepwidestar[6]{\exists!z\in X\;(u,z)\in G}{%
+    \rA}
+  \proofstepwidestar[7]{\exists!z\in X\;(v,z)\in G}{%
+    \rA}
+  \proofstepwidestar[6]{x\in X\land(u,x)\in G}{%
+    \FormulaRefAuto{IotaSymbolDef}[def]{6}}
+  \proofstepwidestar[7]{y\in X\land(v,y)\in G}{%
+    \FormulaRefAuto{IotaSymbolDef}[def]{7}}
+  \proofstepwidestar[3]{C(G)}{%
+    \rAEa{3}}
+  \proofstepwidestar[3]{G\subseteq T\times X}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphSubset}[thm]{10}}
+  \proofstepwidestar[]{H\subseteq G}{%
+    \FormulaRefAuto{WordRecursionFilterSubset}[thm]}
+  \proofstepwidestar[3]{H\subseteq T\times X}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{12,11}}
+  \proofstepwidestar[14]{a\in A}{%
+    \rA}
+  \proofstepwidestar[3,14]{(\ell(a),f(a))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphLeaf}[thm]{10,14}}
+  \proofstepwidestar[1,4,5,14]{\ell(a)\ne k(u,v)}{%
+    \FormulaRefAuto{BinaryTreeStructureDisjointnessAxiom}[ax]{1,14,\rAI{4,5}}}
+  \proofstepwidestar[1,3,4,5,14]{(\ell(a),f(a))\in H}{%
+    \rRE{\rLREb{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{11}},\rAI{15,\rOIa{16}}}}
+  \proofstepwidestar[1,3,4,5]{\forall a\in A\;(\ell(a),f(a))\in H}{%
+    \rUI{\rRI{14,17}}}
+  \proofstepwidestar[19]{p\in T}{%
+    \rA}
+  \proofstepwidestar[20]{q\in T}{%
+    \rA}
+  \proofstepwidestar[21]{z\in X}{%
+    \rA}
+  \proofstepwidestar[22]{w\in X}{%
+    \rA}
+  \proofstepwidestar[23]{(p,z)\in H\land(q,w)\in H}{%
+    \rA}
+  \proofstepwidestar[23]{(p,z)\in G}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{12,\rAEa{23}}}
+  \proofstepwidestar[23]{(q,w)\in G}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{12,\rAEb{23}}}
+  \proofstepwidestar[3,19,20,21,22,23]{(k(p,q),g(z,w))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphNode}[thm]{10,\rAI{19,20},\rAI{21,22},24,25}}
+  \proofstepwidestar[]{k(p,q)=k(u,v)\lor k(p,q)\ne k(u,v)}{%
+    \FormulaRefAuto{A\lor\neg A}[thm]}
+  \proofstepwidestar[28]{k(p,q)=k(u,v)}{%
+    \rA}
+  \proofstepwidestar[1,4,5,19,20,28]{p=u\land q=v}{%
+    \FormulaRefAuto{BinaryTreeStructureNodeAxiom}[ax]{1,\rAI{19,\rAI{20,\rAI{4,5}}},28}}
+  \proofstepwidestar[1,4,5,19,20,28,23]{(u,z)\in G}{%
+    \rIE{\rAEa{29},24}}
+  \proofstepwidestar[1,4,5,19,20,28,23]{(v,w)\in G}{%
+    \rIE{\rAEb{29},25}}
+  \proofstepwidestar[1,4,5,19,20,28,23,6,21]{z=x}{%
+    \FormulaRefAuto{\exists! x\,P(x),\;P(a),\;P(b)\vdash a=b}[thm]{6,\rAI{21,30},8}}
+  \proofstepwidestar[1,4,5,19,20,28,23,7,22]{w=y}{%
+    \FormulaRefAuto{\exists! x\,P(x),\;P(a),\;P(b)\vdash a=b}[thm]{7,\rAI{22,31},9}}
+  \proofstepwidestar[1,4,5,19,20,28,23,6,7,21,22]{g(z,w)=g(x,y)}{%
+    \rIE{32,\rIE{33,\rII}}}
+  \proofstepwidestar[1,4,5,19,20,28,23,6,7,21,22]{k(p,q)\ne k(u,v)\lor g(z,w)=g(x,y)}{%
+    \rOIb{34}}
+  \proofstepwidestar[36]{k(p,q)\ne k(u,v)}{%
+    \rA}
+  \proofstepwidestar[36]{k(p,q)\ne k(u,v)\lor g(z,w)=g(x,y)}{%
+    \rOIa{36}}
+  \proofstepwidestar[1,4,5,19,20,23,6,7,21,22]{k(p,q)\ne k(u,v)\lor g(z,w)=g(x,y)}{%
+    \rOE{27,28,35,36,37}}
+  \proofstepwidestar[1,3,4,5,19,20,23,6,7,21,22]{(k(p,q),g(z,w))\in H}{%
+    \rRE{\rLREb{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{11}},\rAI{26,38}}}
+  \proofstepwidestar[1,3,4,5,6,7]{\begin{aligned}[t]&\forall p,q\in T\,\forall z,w\in X\\&((p,z)\in H\land(q,w)\in H\\&\quad\rightarrow(k(p,q),g(z,w))\in H)\end{aligned}}{%
+    \rUI{\rRI{19,\rUI{\rRI{20,\rUI{\rRI{21,\rUI{\rRI{22,\rRI{23,39}}}}}}}}}}
+  \proofstepwidestar[1,3,4,5,6,7]{C(H)}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphDef}[def]{\rAI{13,\rAI{18,40}}}}
+  \proofstepwidestar[6,7]{(x,y)\in X\times X}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\rAEa{8},\rAEa{9}}}
+  \proofstepwidestar[2,6,7]{g(x,y)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,42}}
+  \proofstepwidestar[3,4,5,6,7]{(k(u,v),g(x,y))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphNode}[thm]{10,\rAI{4,5},\rAI{\rAEa{8},\rAEa{9}},\rAEb{8},\rAEb{9}}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{\exists!z\in X\;(k(u,v),z)\in G}{%
+    \FormulaRefAuto{BinaryTreeRecursionFilteredFiberUnique}[thm]{3,41,43,44}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Der kleinste Baumgraph ist eine Funktion]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep f\colon A\to X\dsep g\colon X\times X\to X\\&\dsep M(G)\vdash G\colon T\to X\end{aligned}
+}{BinaryTreeRecursionGraphFunction}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Prädikatsabkürzung}{P(t)\coloneqq\exists!x\in X\;(t,x)\in G}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{f\colon A\to X}{%
+    \rA}
+  \proofstepwidestar[3]{g\colon X\times X\to X}{%
+    \rA}
+  \proofstepwidestar[4]{M(G)}{%
+    \rA}
+  \proofstepwidestar[5]{a\in A}{%
+    \rA}
+  \proofstepwidestar[1,2,4,5]{P(\ell(a))}{%
+    \FormulaRefAuto{BinaryTreeRecursionLeafFiberUnique}[thm]{1,2,4,5}}
+  \proofstepwidestar[1,2,4]{\forall a\in A\;P(\ell(a))}{%
+    \rUI{\rRI{5,6}}}
+  \proofstepwidestar[8]{u\in T}{%
+    \rA}
+  \proofstepwidestar[9]{v\in T}{%
+    \rA}
+  \proofstepwidestar[10]{P(u)\land P(v)}{%
+    \rA}
+  \proofstepwidestar[1,3,4,8,9,10]{P(k(u,v))}{%
+    \FormulaRefAuto{BinaryTreeRecursionNodeFiberUnique}[thm]{1,3,4,\rAI{8,9},\rAEa{10},\rAEb{10}}}
+  \proofstepwidestar[1,3,4]{\forall u,v\in T\;(P(u)\land P(v)\rightarrow P(k(u,v)))}{%
+    \rUI{\rRI{8,\rUI{\rRI{9,\rRI{10,11}}}}}}
+  \proofstepwidestar[1,2,3,4]{\forall t\in T\;\exists!x\in X\;(t,x)\in G}{%
+    \FormulaRefAuto{BinaryTreeStructureInduction}[thm]{1,7,12}}
+  \proofstepwidestar[4]{G\subseteq T\times X}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphSubset}[thm]{\rAEa{4}}}
+  \proofstepwidestar[1,2,3,4]{G\colon T\to X}{%
+    \FormulaRefAuto{UniqueValuedGraphFunction}[thm]{14,13}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Ein abgeschlossener Funktionsgraph erfüllt die Rekursionsgleichungen]{%
+\mathsf{BaumStr}_A(T,\ell,k)\dsep G\colon T\to X\dsep C(G)\vdash\mathsf{TRec}_A(G;T,\ell,k;X,f,g)
+}{BinaryTreeRecursionGraphEquations}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{G\colon T\to X}{%
+    \rA}
+  \proofstepwidestar[3]{C(G)}{%
+    \rA}
+  \proofstepwidestar[4]{a\in A}{%
+    \rA}
+  \proofstepwidestar[3,4]{(\ell(a),f(a))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphLeaf}[thm]{3,4}}
+  \proofstepwidestar[2,3,4]{G(\ell(a))=f(a)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{2,5}}
+  \proofstepwidestar[2,3]{\forall a\in A\;G(\ell(a))=f(a)}{%
+    \rUI{\rRI{4,6}}}
+  \proofstepwidestar[8]{u\in T}{%
+    \rA}
+  \proofstepwidestar[9]{v\in T}{%
+    \rA}
+  \proofstepwidestar[2,8]{G(u)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,8}}
+  \proofstepwidestar[2,9]{G(v)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,9}}
+  \proofstepwidestar[2,8]{(u,G(u))\in G}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash(x,F(x))\in F}[thm]{2,8}}
+  \proofstepwidestar[2,9]{(v,G(v))\in G}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash(x,F(x))\in F}[thm]{2,9}}
+  \proofstepwidestar[2,3,8,9]{(k(u,v),g(G(u),G(v)))\in G}{%
+    \FormulaRefAuto{BinaryTreeClosedGraphNode}[thm]{3,\rAI{8,9},\rAI{10,11},12,13}}
+  \proofstepwidestar[2,3,8,9]{G(k(u,v))=g(G(u),G(v))}{%
+    \FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{2,14}}
+  \proofstepwidestar[2,3]{\forall u,v\in T\;G(k(u,v))=g(G(u),G(v))}{%
+    \rUI{\rRI{8,\rUI{\rRI{9,15}}}}}
+  \proofstepwidestar[2,3]{\mathsf{TRec}_A(G;T,\ell,k;X,f,g)}{%
+    \FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{\rAI{2,\rAI{7,16}}}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Zwei Lösungen derselben Baumrekursion stimmen überein]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep\mathsf{TRec}_A(F;T,\ell,k;X,f,g)\\&\dsep\mathsf{TRec}_A(F';T,\ell,k;X,f,g)\vdash F=F'\end{aligned}
+}{BinaryTreeRecursionTwoSolutionsEqual}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Funktionen}{F\dsep F'}\DeltaRow{Prädikatsabkürzung}{Q(t)\coloneqq F(t)=F'(t)}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{\mathsf{TRec}_A(F;T,\ell,k;X,f,g)}{%
+    \rA}
+  \proofstepwidestar[3]{\mathsf{TRec}_A(F';T,\ell,k;X,f,g)}{%
+    \rA}
+  \proofstepwidestar[2]{F\colon T\to X}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{2}}}
+  \proofstepwidestar[3]{F'\colon T\to X}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{3}}}
+  \proofstepwidestar[2]{\forall a\in A\;F(\ell(a))=f(a)}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{2}}}
+  \proofstepwidestar[3]{\forall a\in A\;F'(\ell(a))=f(a)}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{3}}}
+  \proofstepwidestar[2]{\forall u,v\in T\;F(k(u,v))=g(F(u),F(v))}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{2}}}
+  \proofstepwidestar[3]{\forall u,v\in T\;F'(k(u,v))=g(F'(u),F'(v))}{%
+    \rAEn{\FormulaRefAuto{BinaryTreeRecursionSpecificationDef}[def]{3}}}
+  \proofstepwidestar[10]{a\in A}{%
+    \rA}
+  \proofstepwidestar[2,10]{F(\ell(a))=f(a)}{%
+    \rRE{\rUE{6},10}}
+  \proofstepwidestar[3,10]{F'(\ell(a))=f(a)}{%
+    \rRE{\rUE{7},10}}
+  \proofstepwidestar[2,3,10]{Q(\ell(a))}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{11,12}}
+  \proofstepwidestar[2,3]{\forall a\in A\;Q(\ell(a))}{%
+    \rUI{\rRI{10,13}}}
+  \proofstepwidestar[15]{u\in T}{%
+    \rA}
+  \proofstepwidestar[16]{v\in T}{%
+    \rA}
+  \proofstepwidestar[17]{Q(u)\land Q(v)}{%
+    \rA}
+  \proofstepwidestar[2,15,16]{F(k(u,v))=g(F(u),F(v))}{%
+    \rRE{\rUE{\rRE{\rUE{8},15}},16}}
+  \proofstepwidestar[3,15,16]{F'(k(u,v))=g(F'(u),F'(v))}{%
+    \rRE{\rUE{\rRE{\rUE{9},15}},16}}
+  \proofstepwidestar[3,15,16,17]{F'(k(u,v))=g(F(u),F(v))}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{17}},\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{17}},19}}}
+  \proofstepwidestar[2,3,15,16,17]{Q(k(u,v))}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{18,20}}
+  \proofstepwidestar[2,3]{\forall u,v\in T\;(Q(u)\land Q(v)\rightarrow Q(k(u,v)))}{%
+    \rUI{\rRI{15,\rUI{\rRI{16,\rRI{17,21}}}}}}
+  \proofstepwidestar[1,2,3]{\forall t\in T\;F(t)=F'(t)}{%
+    \FormulaRefAuto{BinaryTreeStructureInduction}[thm]{1,14,22}}
+  \proofstepwidestar[1,2,3]{F=F'}{%
+    \FormulaRefAuto{FunctionExtensionality}[thm]{4,5,23}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Rekursion in jeder freien Baumstruktur]{%
+\begin{aligned}[t]&\mathsf{BaumStr}_A(T,\ell,k)\dsep f\colon A\to X\dsep g\colon X\times X\to X\\&\vdash\exists!F\;\mathsf{TRec}_A(F;T,\ell,k;X,f,g)\end{aligned}
+}{BinaryTreeStructureRecursion}{%
+\DeltaRow{Mengen}{A\dsep T\dsep X\dsep G\dsep H\dsep t\dsep u\dsep v\dsep x\dsep y\dsep a}
+\DeltaRow{Funktionen}{\ell\dsep k\dsep f\dsep g}
+\DeltaRow{Prädikatsabkürzungen}{\begin{aligned}[t]
+ C(H)&\coloneqq\mathsf{BCl}_A(H;T,\ell,k;X,f,g),\\[-2pt]
+ M(G)&\coloneqq C(G)\land\forall H(C(H)\rightarrow G\subseteq H)
+\end{aligned}}\DeltaRow{Funktionen}{F\dsep F'}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{f\colon A\to X}{%
+    \rA}
+  \proofstepwidestar[3]{g\colon X\times X\to X}{%
+    \rA}
+  \proofstepwidestar[1,2,3]{\exists G\;M(G)}{%
+    \FormulaRefAuto{BinaryTreeLeastClosedGraphExists}[thm]{1,2,3}}
+  \proofstepwidestar[5]{M(G)}{%
+    \rA}
+  \proofstepwidestar[1,2,3,5]{G\colon T\to X}{%
+    \FormulaRefAuto{BinaryTreeRecursionGraphFunction}[thm]{1,2,3,5}}
+  \proofstepwidestar[1,2,3,5]{\mathsf{TRec}_A(G;T,\ell,k;X,f,g)}{%
+    \FormulaRefAuto{BinaryTreeRecursionGraphEquations}[thm]{1,6,\rAEa{5}}}
+  \proofstepwidestar[1,2,3,5]{\exists F\;\mathsf{TRec}_A(F;T,\ell,k;X,f,g)}{%
+    \rEI{7}}
+  \proofstepwidestar[1,2,3]{\exists F\;\mathsf{TRec}_A(F;T,\ell,k;X,f,g)}{%
+    \rEE{4,5,8}}
+  \proofstepwidestar[10]{\mathsf{TRec}_A(F;T,\ell,k;X,f,g)}{%
+    \rA}
+  \proofstepwidestar[11]{\mathsf{TRec}_A(F';T,\ell,k;X,f,g)}{%
+    \rA}
+  \proofstepwidestar[1,10,11]{F=F'}{%
+    \FormulaRefAuto{BinaryTreeRecursionTwoSolutionsEqual}[thm]{1,10,11}}
+  \proofstepwidestar[1,2,3]{\exists!F\;\mathsf{TRec}_A(F;T,\ell,k;X,f,g)}{%
+    \UEI{9,10,11,12}}
+\end{tabproofwide}
+
+Die gesamte Konstruktion gilt auch bei leerem Alphabet und leerem
+Zielträger, sofern die angegebenen Abbildungen existieren. Insbesondere
+wird im Existenzbeweis kein zusätzlicher Wert aus \(X\) ausgewählt.

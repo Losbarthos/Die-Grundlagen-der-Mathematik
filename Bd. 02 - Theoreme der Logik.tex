@@ -101,15 +101,28 @@
 \end{tabproof}
 
 \FormulaThmAuto[Kommutativgesetz für \(\lor\)]{P \lor Q \eqvdash Q \lor P}
-\begin{tabproof}
-  \proofstep{1}{P \lor Q}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{P \lor Q}{\rA}
   \proofstep{1}{Q \lor P}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{1}}
   \proofstep{}{P \lor Q \rightarrow Q \lor P}{\rRI{1,2}}
-  \proofstep{4}{Q \lor P}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{Q \lor P}{\rA}
   \proofstep{4}{P \lor Q}{\FormulaRefAuto{P \lor Q \vdash Q \lor P}{4}}
   \proofstep{}{Q \lor P \rightarrow P \lor Q}{\rRI{4,5}}
-  \proofstep{}{P \lor Q \leftrightarrow Q \lor P}{\rLRI{3,6}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{P \lor Q \leftrightarrow Q \lor P}{\rLRI{3,6}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Kommutativgesetz für \(\land\)]{P \land Q \vdash Q \land P}
 \begin{tabproof}
@@ -419,44 +432,62 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \FormulaThmAuto[Erweitertes Distributivgesetz]{(P \lor Q) \land (R \lor S) \eqvdash
  (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}
 \begin{tabproofwide}
-  % 1) Distributiv
-  \proofstepwide{(P \lor Q) \land (R \lor S)}{\leftrightarrow}{(P \land (R \lor S))}%
-    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)}}}
-  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
-
-  % 2) ∧-Kommutativität im linken Disjunkt
-  \proofstepwide{}{\leftrightarrow}{((R \lor S) \land P)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},1}}}
-  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
-
-  % 3) Distributiv auf (R∨S)∧P
-  \proofstepwide{}{\leftrightarrow}{((R \land P) \lor (S \land P))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)},2}}}
-  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
-
-  % 4) ∧-Kommutativität in den Konjunkten
-  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},3}}}
-  \proofstepwide*{}{\lor}{(Q \land (R \lor S))}{}
-
-  % 5) ∧-Kommutativität im rechten Disjunkt
-  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},4}}}
-  \proofstepwide*{}{\lor}{((R \lor S) \land Q)}{}
-
-  % 6) Distributiv auf (R∨S)∧Q
-  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)},5}}}
-  \proofstepwide*{}{\lor}{((R \land Q) \lor (S \land Q))}{}
-
-  % 7) ∧-Kommutativität in den Konjunkten rechts
-  \proofstepwide{}{\leftrightarrow}{((P \land R) \lor (P \land S))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},6}}}
-  \proofstepwide*{}{\lor}{((Q \land R) \lor (Q \land S))}{}
-
-  % 8) Rechte Assoziation der vierfachen Disjunktion
-  \proofstepwide{}{\leftrightarrow}{(P \land R) \lor ((P \land S) \lor ((Q \land R) \lor (Q \land S)))}%
-    {\rLRS{\FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R},7}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow (P \land (R \lor S)){}\\[-2pt]
+      &\qquad \lor (Q \land (R \lor S))
+    \end{aligned}}{%
+    \FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((R \lor S) \land P){}\\[-2pt]
+      &\qquad \lor (Q \land (R \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},1}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((R \land P) \lor (S \land P)){}\\[-2pt]
+      &\qquad \lor (Q \land (R \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)},2}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((P \land R) \lor (P \land S)){}\\[-2pt]
+      &\qquad \lor (Q \land (R \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},3}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((P \land R) \lor (P \land S)){}\\[-2pt]
+      &\qquad \lor ((R \lor S) \land Q)
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},4}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((P \land R) \lor (P \land S)){}\\[-2pt]
+      &\qquad \lor ((R \land Q) \lor (S \land Q))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{(P \lor Q)\land R \eqvdash (P \land R) \lor (Q \land R)},5}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow ((P \land R) \lor (P \land S)){}\\[-2pt]
+      &\qquad \lor ((Q \land R) \lor (Q \land S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land Q \eqvdash Q \land P},6}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \lor Q) \land (R \lor S)\\[-2pt]
+      &\quad\leftrightarrow (P \land R) \lor ((P \land S) \lor{}\\[-2pt]
+      &\qquad ((Q \land R) \lor (Q \land S)))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \lor (Q \lor R) \eqvdash (P \lor Q) \lor R},7}}
 \end{tabproofwide}
 
 
@@ -534,36 +565,55 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \FormulaThmAuto[Erweitertes Distributivgesetz]{(P \land Q) \lor (R \land S) \eqvdash
  (P \lor R) \land (P \lor S) \land (Q \lor R) \land (Q \lor S)}
 \begin{tabproofwide}
-  % 1) ∨ über ∧ verteilen (mit X=(P∧Q), Y=R, Z=S)
-  \proofstepwide{(P \land Q) \lor (R \land S)}{\leftrightarrow}{((P \land Q) \lor R)}%
-    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \eqvdash (P \lor Q) \land (P \lor R)}}}
-  \proofstepwide*{}{\land}{((P \land Q) \lor S)}{}
-
-  % 2) Linken Konjunkt weiter distribuieren: (P∧Q)∨R
-  \proofstepwide{}{\leftrightarrow}{((P \lor R) \land (Q \lor R))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \land Q)\lor R \eqvdash (P \lor R) \land (Q \lor R)},1}}}
-  \proofstepwide*{}{\land}{((P \land Q) \lor S)}{}
-
-  % 3) Rechten Konjunkt weiter distribuieren: (P∧Q)∨S
-  \proofstepwide{}{\leftrightarrow}{((P \lor R) \land (Q \lor R))}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{(P \land Q)\lor R \eqvdash (P \lor R) \land (Q \lor R)},2}}}
-  \proofstepwide*{}{\land}{((P \lor S) \land (Q \lor S))}{}
-
-  % 4) Rechte Assoziation der aeusseren Konjunktion
-  \proofstepwide{}{\leftrightarrow}{(P \lor R) \land ((Q \lor R) \land ((P \lor S) \land (Q \lor S)))}%
-    {\rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},3}}
-
-  % 5) Assoziation im rechten Teil
-  \proofstepwide{}{\leftrightarrow}{(P \lor R) \land (((Q \lor R) \land (P \lor S)) \land (Q \lor S))}%
-    {\rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},4}}
-
-  % 6) Vertauschen der mittleren Konjunkte
-  \proofstepwide{}{\leftrightarrow}{(P \lor R) \land (((P \lor S) \land (Q \lor R)) \land (Q \lor S))}%
-    {\rLRS{\FormulaRefAuto{P\land Q\eqvdash Q\land P},5}}
-
-  % 7) Rechte Assoziation der Zielkonjunktion
-  \proofstepwide{}{\leftrightarrow}{(P \lor R) \land ((P \lor S) \land ((Q \lor R) \land (Q \lor S)))}%
-    {\rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},6}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow ((P \land Q) \lor R){}\\[-2pt]
+      &\qquad \land ((P \land Q) \lor S)
+    \end{aligned}}{%
+    \FormulaRefAuto{P \lor (Q \land R) \eqvdash (P \lor Q) \land (P \lor R)}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow ((P \lor R) \land (Q \lor R)){}\\[-2pt]
+      &\qquad \land ((P \land Q) \lor S)
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{(P \land Q)\lor R \eqvdash (P \lor R) \land (Q \lor R)},1}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow ((P \lor R) \land (Q \lor R)){}\\[-2pt]
+      &\qquad \land ((P \lor S) \land (Q \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{(P \land Q)\lor R \eqvdash (P \lor R) \land (Q \lor R)},2}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow (P \lor R) \land ((Q \lor R) \land{}\\[-2pt]
+      &\qquad ((P \lor S) \land (Q \lor S)))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},3}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow (P \lor R) \land (((Q \lor R) \land{}\\[-2pt]
+      &\qquad (P \lor S)) \land (Q \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},4}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow (P \lor R) \land (((P \lor S) \land{}\\[-2pt]
+      &\qquad (Q \lor R)) \land (Q \lor S))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P\land Q\eqvdash Q\land P},5}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(P \land Q) \lor (R \land S)\\[-2pt]
+      &\quad\leftrightarrow (P \lor R) \land ((P \lor S) \land{}\\[-2pt]
+      &\qquad ((Q \lor R) \land (Q \lor S)))
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P \land (Q \land R) \eqvdash (P \land Q) \land R},6}}
 \end{tabproofwide}
 
 \section{Doppelte Negation}
@@ -684,18 +734,30 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 
 \FormulaThmAuto[De Morgan]{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}
 \begin{tabproofsplit}
-  \proofpart{$\vdash$}
-    \proofstep{1}{\neg(P \lor Q)}{\rA}
+\proofpart{Negation der ersten Aussage}
+\proofstep{1}{\neg(P \lor Q)}{\rA}
     \proofstep{2}{P}{\rA}
     \proofstep{2}{P \lor Q}{\rOIa{2}}
     \proofstep{1,2}{\bot}{\rBI{1,3}}
     \proofstep{1}{\neg P}{\rCI{2,4}}
-    \proofstep{6}{Q}{\rA}
+
+\closeproofpart
+
+\proofpart{Negation der zweiten Aussage}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{Q}{\rA}
     \proofstep{6}{P \lor Q}{\rOIb{6}}
     \proofstep{1,6}{\bot}{\rBI{1,7}}
     \proofstep{1}{\neg Q}{\rCI{6,8}}
-    \proofstep{1}{\neg P \land \neg Q}{\rAI{5,9}}
-  \closeproofpart
+
+\closeproofpart
+
+\proofpart{Zusammenführung der Hinrichtung}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\neg P \land \neg Q}{\rAI{5,9}}
+
+\closeproofpart
+
 
   \proofpart{$\dashv$}
     \proofstep{1}{\neg P \land \neg Q}{\rA}
@@ -820,52 +882,104 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \end{tabproof}
 
 \FormulaThmAuto{P \rightarrow Q \vdash P \leftrightarrow (P \land Q)}
-\begin{tabproof}
-  \proofstep{1}{P \rightarrow Q}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{P \rightarrow Q}{\rA}
   \proofstep{}{P \rightarrow P}{\FormulaRefAuto{P \rightarrow P}}
   \proofstep{1}{P \rightarrow (P \land Q)}{\FormulaRefAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (Q \land R)}{2,1}}
-  \proofstep{4}{P \land Q}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{P \land Q}{\rA}
   \proofstep{4}{P}{\rAEa{4}}
   \proofstep{}{(P \land Q) \rightarrow P}{\rRI{4,5}}
-  \proofstep{1}{P \leftrightarrow (P \land Q)}{\rLRI{3,6}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{P \leftrightarrow (P \land Q)}{\rLRI{3,6}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}
-\begin{tabproof}
-  \proofstep{1}{P \rightarrow Q}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{P \rightarrow Q}{\rA}
   \proofstep{}{P \rightarrow P}{\FormulaRefAuto{P \rightarrow P}{}}
   \proofstep{1}{P \rightarrow (Q \land P)}{\FormulaRefAuto{P \rightarrow Q, P \rightarrow R \vdash P \rightarrow (R \land Q)}{2,1}}
-  \proofstep{4}{Q \land P}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{Q \land P}{\rA}
   \proofstep{4}{P}{\rAEb{4}}
   \proofstep{}{(Q \land P) \rightarrow P}{\rRI{4,5}}
-  \proofstep{1}{P \leftrightarrow (Q \land P)}{\rLRI{3,6}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{P \leftrightarrow (Q \land P)}{\rLRI{3,6}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{P\rightarrow Q\vdash (P\land Q)\leftrightarrow P}
-\begin{tabproof}
-  \proofstep{1}{P\rightarrow Q}{\rA}
+\begin{tabproofsplit}
+\proofpart{Rückrichtung}
+\proofstep{1}{P\rightarrow Q}{\rA}
   \proofstep{2}{P}{\rA}
   \proofstep{1,2}{Q}{\rRE{1,2}}
   \proofstep{1,2}{P\land Q}{\rAI{2,3}}
   \proofstep{1}{P\rightarrow (P\land Q)}{\rRI{2,4}}
-  \proofstep{6}{P\land Q}{\rA}
+
+\closeproofpart
+
+\proofpart{Hinrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{P\land Q}{\rA}
   \proofstep{6}{P}{\rAEa{6}}
   \proofstep{}{(P\land Q)\rightarrow P}{\rRI{6,7}}
-  \proofstep{1}{(P\land Q)\leftrightarrow P}{\rLRI{8,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{(P\land Q)\leftrightarrow P}{\rLRI{8,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{P\rightarrow Q\vdash (Q\land P)\leftrightarrow P}
-\begin{tabproof}
-  \proofstep{1}{P\rightarrow Q}{\rA}
+\begin{tabproofsplit}
+\proofpart{Rückrichtung}
+\proofstep{1}{P\rightarrow Q}{\rA}
   \proofstep{2}{P}{\rA}
   \proofstep{1,2}{Q}{\rRE{1,2}}
   \proofstep{1,2}{Q\land P}{\rAI{3,2}}
   \proofstep{1}{P\rightarrow (Q\land P)}{\rRI{2,4}}
-  \proofstep{6}{Q\land P}{\rA}
+
+\closeproofpart
+
+\proofpart{Hinrichtung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{Q\land P}{\rA}
   \proofstep{6}{P}{\rAEb{6}}
   \proofstep{}{(Q\land P)\rightarrow P}{\rRI{6,7}}
-  \proofstep{1}{(Q\land P)\leftrightarrow P}{\rLRI{8,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{(Q\land P)\leftrightarrow P}{\rLRI{8,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{P \rightarrow P \lor Q}
 \begin{tabproof}
@@ -1439,20 +1553,33 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \end{tabproof}
 
 \FormulaThmAuto{P \leftrightarrow (Q \land R), Q \rightarrow R \vdash P \leftrightarrow Q}
-\begin{tabproof}
-  \proofstep{1}{P \leftrightarrow (Q \land R)}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{P \leftrightarrow (Q \land R)}{\rA}
   \proofstep{2}{Q \rightarrow R}{\rA}
   \proofstep{3}{P}{\rA}
   \proofstep{1,3}{Q \land R}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{1,3}}
   \proofstep{1,3}{Q}{\rAEa{4}}
   \proofstep{1}{P \rightarrow Q}{\rRI{3,5}}
-  \proofstep{7}{Q}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{7}{Q}{\rA}
   \proofstep{2,7}{R}{\rRE{2,7}}
   \proofstep{2,7}{Q \land R}{\rAI{7,8}}
   \proofstep{1,2,7}{P}{\FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{1,9}}
   \proofstep{1,2}{Q \rightarrow P}{\rRI{7,10}}
-  \proofstep{1,2}{P \leftrightarrow Q}{\rLRI{6,11}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{11}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{P \leftrightarrow Q}{\rLRI{6,11}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \FormulaThmAuto{P \lor Q,\neg Q \vdash P}
@@ -1580,8 +1707,9 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
 \subsection{Invarianzen}
 
 \FormulaThmAuto{Q\vdash (P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}
-\begin{tabproof}
-  % Annahme: Q
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+% Annahme: Q
   \proofstep{1}{Q}{\rA}
 
   % Erster Teil: (P ↔ Q∧R) → (P ↔ R)
@@ -1608,7 +1736,12 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1}{(P\leftrightarrow Q\land R)\rightarrow (P\leftrightarrow R)}{\rRI{2,13}}
 
   % Zweiter Teil: (P ↔ R) → (P ↔ Q∧R)
-  \proofstep{15}{P\leftrightarrow R}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{14}% Fortlaufende Schritte dieses Beweises.
+\proofstep{15}{P\leftrightarrow R}{\rA}
   \proofstep{15}{P\rightarrow R}{\rLREa{15}}
   \proofstep{15}{R\rightarrow P}{\rLREb{15}}
 
@@ -1631,8 +1764,15 @@ Klammerkonvention und lassen Klammern künftig weg, wo keine Mehrdeutigkeit ents
   \proofstep{1}{(P\leftrightarrow R)\rightarrow (P\leftrightarrow Q\land R)}{\rRI{15,26}}
 
   % Zusammen: (P ↔ Q∧R) ↔ (P ↔ R)
-  \proofstep{1}{(P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}{\rLRI{14,27}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{27}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{(P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}{\rLRI{14,27}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \chapter{Exklusives Oder}
 
@@ -2451,49 +2591,101 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
 \section{Wahrheitstafel des Halbaddierers}
 
 \FormulaThmAuto[Halbaddierer bei zwei falschen Eingängen]{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{1}{P\rightarrow Q}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{1}}
   \proofstep{2}{Q\rightarrow P}{\FormulaRefAuto{\neg P \vdash P \rightarrow Q}{2}}
   \proofstep{1,2}{P\leftrightarrow Q}{\rLRI{3,4}}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\FormulaRefAuto{\neg\HAddSum{P}{Q}\eqvdash P\leftrightarrow Q}{5}}
-  \proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
   \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{7}}
-  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{6,8}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{6,8}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Halbaddierer bei linkem wahren Eingang]{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}}{1,2}}
-  \proofstep{2}{\neg P\lor \neg Q}{\rOIb{2}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{\neg P\lor \neg Q}{\rOIb{2}}
   \proofstep{2}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{4}}
-  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Halbaddierer bei rechtem wahren Eingang]{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}}{1,2}}
-  \proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\neg P\lor \neg Q}{\rOIa{1}}
   \proofstep{1}{\neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg\HAddCarry{P}{Q}\eqvdash \neg P\lor \neg Q}{4}}
-  \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\rAI{3,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Halbaddierer bei zwei wahren Eingängen]{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{2}{P\rightarrow Q}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{2}}
   \proofstep{1}{Q\rightarrow P}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{1}}
   \proofstep{1,2}{P\leftrightarrow Q}{\rLRI{3,4}}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}}{\FormulaRefAuto{\neg\HAddSum{P}{Q}\eqvdash P\leftrightarrow Q}{5}}
-  \proofstep{1,2}{\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \HAddCarry{P}{Q}}{1,2}}
-  \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\rAI{6,7}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \HAddCarry{P}{Q}}{1,2}}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\rAI{6,7}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \chapter{Volladdierer}
 
@@ -3104,8 +3296,9 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \vdash
   \neg\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{3}{\neg R}{\rA}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3114,20 +3307,33 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
-  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
   \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
   \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
-  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(100\)]{%
   P\dsep \neg Q\dsep \neg R
   \vdash
   \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{3}{\neg R}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3136,20 +3342,33 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
-  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
   \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
   \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
-  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(010\)]{%
   \neg P\dsep Q\dsep \neg R
   \vdash
   \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{3}{\neg R}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3158,20 +3377,33 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
-  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
   \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
   \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
-  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(001\)]{%
   \neg P\dsep \neg Q\dsep R
   \vdash
   \FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{3}{R}{\rA}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3180,20 +3412,33 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
-  \proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\neg\HAddCarry{P}{Q}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAI{6,10}}
   \proofstep{1,2,3}{\neg(\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R})}{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{11}}
   \proofstep{1,2,3}{\neg\FAddCarry{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}},12}}
-  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \neg\FAddCarry{P}{Q}{R}}{\rAI{9,13}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(110\)]{%
   P\dsep Q\dsep \neg R
   \vdash
   \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{3}{\neg R}{\rA}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{1,2}}
@@ -3202,18 +3447,31 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep \neg Q\vdash \neg\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
-  \proofstep{1,2}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
   \proofstep{1,2}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{10}}
-  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{11}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(101\)]{%
   P\dsep \neg Q\dsep R
   \vdash
   \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{\neg Q}{\rA}
   \proofstep{3}{R}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep \neg Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3222,19 +3480,32 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
-  \proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIb{10}}
   \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{11}}
-  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(011\)]{%
   \neg P\dsep Q\dsep R
   \vdash
   \neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{\neg P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{3}{R}{\rA}
   \proofstep{1,2}{\HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{1,2}}
@@ -3243,19 +3514,32 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}\land \HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\neg\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}}{\rLRS{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}},8}}
-  \proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\HAddCarry{\HAddSum{P}{Q}}{R}}{\rAEb{7}}
   \proofstep{1,2,3}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIb{10}}
   \proofstep{1,2,3}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{11}}
-  \proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\neg\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,12}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Volladdierer bei \(111\)]{%
   P\dsep Q\dsep R
   \vdash
   \FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}%
 }
-\begin{tabproof}
-  \proofstep{1}{P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Summenbit}
+\proofstep{1}{P}{\rA}
   \proofstep{2}{Q}{\rA}
   \proofstep{3}{R}{\rA}
   \proofstep{1,2}{\neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{\FormulaRefAuto{P\dsep Q\vdash \neg\HAddSum{P}{Q}\land \HAddCarry{P}{Q}}{1,2}}
@@ -3264,10 +3548,22 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}\land \neg\HAddCarry{\HAddSum{P}{Q}}{R}}{\FormulaRefAuto{\neg P\dsep Q\vdash \HAddSum{P}{Q}\land \neg\HAddCarry{P}{Q}}{5,3}}
   \proofstep{1,2,3}{\HAddSum{\HAddSum{P}{Q}}{R}}{\rAEa{7}}
   \proofstep{1,2,3}{\FAddSum{P}{Q}{R}}{\FormulaRefAuto{\FAddSum{P}{Q}{R}\eqvdash \HAddSum{\HAddSum{P}{Q}}{R}}{8}}
-  \proofstep{1,2}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
+
+\closeproofpart
+
+\proofpart{Übertragsbit}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{\rOIa{6}}
   \proofstep{1,2}{\FAddCarry{P}{Q}{R}}{\FormulaRefAuto{\FAddCarry{P}{Q}{R}\eqvdash \HAddCarry{P}{Q}\lor \HAddCarry{\HAddSum{P}{Q}}{R}}{10}}
-  \proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{11}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2,3}{\FAddSum{P}{Q}{R}\land \FAddCarry{P}{Q}{R}}{\rAI{9,11}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \chapter{Identität und Ungleichheit}
 
@@ -3482,7 +3778,7 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
   \proofstep{1}{Q(a)\leftrightarrow P(a)}{\FormulaRefAuto{P \leftrightarrow Q \vdash Q \leftrightarrow P}{2}}
   \proofstep{1}{\forall x(Q(x)\leftrightarrow P(x))}{\rUI{3}}
 \end{tabproof}
-  
+
 \FormulaThmAuto[Implikationstransitivität]{\forall x(P(x)\rightarrow Q(x)), \forall x(Q(x)\rightarrow R(x))\vdash \forall x(P(x)\rightarrow R(x))}
 \begin{tabproof}
   \proofstep{1}{\forall x(P(x)\rightarrow Q(x))}{\rA}
@@ -3877,30 +4173,30 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
 
     % (2) in zwei Zeilen
     \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x)) \leftrightarrow \neg\exists x (P(x)\land \neg Q(x))}%
-      {\multirow{2}{*}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}}
+      {\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}
     \proofstepstar{}{ \land \neg\exists x (Q(x)\land \neg P(x))}{}
 
     % (3) in zwei Zeilen
-    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))}{\multirow{2}{*}{\FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{2,1}}}
+    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))}{\FormulaRefAuto{P \leftrightarrow Q, \neg P \vdash \neg Q}{2,1}}
     \proofstepstar{}{ \land \neg\exists x (Q(x)\land \neg P(x)))}{}
 
     % (4) in zwei Zeilen
-    \proofstep{1}{\exists x (P(x)\land \neg Q(x))}{\multirow{2}{*}{\FormulaRefAuto{\neg(\neg P \land \neg Q) \eqvdash P \lor Q}{3}}}
+    \proofstep{1}{\exists x (P(x)\land \neg Q(x))}{\FormulaRefAuto{\neg(\neg P \land \neg Q) \eqvdash P \lor Q}{3}}
     \proofstepstar{}{ \lor \exists x (Q(x)\land \neg P(x))}{}
   \closeproofpart
 
   \proofpart{$\dashv$}
     % (1) in zwei Zeilen (Annahme)
-    \proofstep{1}{\exists x (P(x)\land \neg Q(x))}{\multirow{2}{*}{\rA}}
+    \proofstep{1}{\exists x (P(x)\land \neg Q(x))}{\rA}
     \proofstepstar{}{ \lor \exists x (Q(x)\land \neg P(x))}{}
 
     % (2) in zwei Zeilen
-    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))}{\multirow{2}{*}{\FormulaRefAuto{\neg(\neg P \land \neg Q) \eqvdash P \lor Q}{1}}}
+    \proofstep{1}{\neg(\neg\exists x (P(x)\land \neg Q(x))}{\FormulaRefAuto{\neg(\neg P \land \neg Q) \eqvdash P \lor Q}{1}}
     \proofstepstar{}{ \land \neg\exists x (Q(x)\land \neg P(x)))}{}
 
     % (3) in zwei Zeilen
     \proofstep{1}{\forall x(P(x)\leftrightarrow Q(x)) \leftrightarrow \neg\exists x (P(x)\land \neg Q(x))}%
-      {\multirow{2}{*}{\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}}
+      {\FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \neg\exists x (P(x)\land \neg Q(x))\land \neg\exists x (Q(x)\land \neg P(x))}}
     \proofstepstar{}{ \land \neg\exists x (Q(x)\land \neg P(x))}{}
 
     % (4) einzeilig okay
@@ -4212,15 +4508,28 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
 \end{tabproof}
 
 \FormulaThmAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}
-\begin{tabproof}
-  \proofstep{1}{\forall x(\neg Q(x))}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{\forall x(\neg Q(x))}{\rA}
   \proofstep{2}{P}{\rA}
   \proofstep{2}{P \lor Q(a)}{\rOIa{2}}
-  \proofstep{4}{P \lor Q(a)}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{P \lor Q(a)}{\rA}
   \proofstep{1}{\neg Q(a)}{\rUE{1}}
   \proofstep{1,4}{P}{\FormulaRefAuto{P \lor Q,\neg Q \vdash P}{4,5}}
-  \proofstep{1}{P \leftrightarrow P \lor Q(a)}{\rLRI{2,3,4,6}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{P \leftrightarrow P \lor Q(a)}{\rLRI{2,3,4,6}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \section{Umgang mit = in Quantoren}
 \begin{DeltaContext}{Im Kapitel verwendete Symbole}
@@ -4395,14 +4704,27 @@ Durch die Sätze \FormulaRefAuto{P\lnor P \eqvdash \neg P}, \FormulaRefAuto{P\lo
 \end{tabproof}
 
 \FormulaThmAuto[Eindeutige Existenz aus Existenz und Höchstens-eins]{\exists x\,P(x),\; \existsleone x\,P(x)\vdash \exists! x\,P(x)}
-\begin{tabproof}
-  \proofstep{1}{\exists x\,P(x)}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{\exists x\,P(x)}{\rA}
   \proofstep{2}{\existsleone x\,P(x)}{\rA}
-  \proofstep{3}{P(a)}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{2}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{P(a)}{\rA}
   \proofstep{4}{P(b)}{\rA}
   \proofstep{2,3,4}{a=b}{\FormulaRefAuto{\existsleone x\,P(x),\; P(a),\; P(b) \vdash a=b}{2,3,4}}
-  \proofstep{1,2}{\exists! x\,P(x)}{\UEI{1,3,4,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\exists! x\,P(x)}{\UEI{1,3,4,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Zerlegung der eindeutigen Existenz]{\exists! x\,P(x) \eqvdash \exists x\,P(x)\land \existsleone x\,P(x)}
 \begin{tabproofsplit}
@@ -4438,8 +4760,8 @@ Eindeutigkeit]{%
 \begingroup
 \let\proofstepwidestar\proofstepwidestarbreak
 \begin{tabproofsplitwide}
-  \proofpartwide{Beweis}
-  \proofstepwidestar[1]{%
+\proofpartwide{Existenz eines ersten Zeugen}
+\proofstepwidestar[1]{%
     \exists x\in X\,\exists y\in Y\,F(x,y)}{\rA}
   \proofstepwidestar[2]{%
     \forall x,x'\in X\,\forall y,y'\in Y\,\Bigl(
@@ -4449,7 +4771,12 @@ Eindeutigkeit]{%
     a\in X\land\exists y\in Y\,F(a,y)}{\rA}
   \proofstepwidestar[3]{a\in X}{\rAEa{3}}
   \proofstepwidestar[3]{\exists y\in Y\,F(a,y)}{\rAEb{3}}
-  \proofstepwidestar[6]{c\in Y\land F(a,c)}{\rA}
+
+\closeproofpartwide
+
+\proofpartwide{Eindeutigkeit des zweiten Zeugen}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[6]{c\in Y\land F(a,c)}{\rA}
   \proofstepwidestar[6]{c\in Y}{\rAEa{6}}
   \proofstepwidestar[6]{F(a,c)}{\rAEb{6}}
   \proofstepwidestar[9]{d\in Y\land F(a,d)}{\rA}
@@ -4464,13 +4791,23 @@ Eindeutigkeit]{%
   \proofstepwidestar[2,3,6,9]{c=d}{\rAEb{14}}
   \proofstepwidestar[2,3]{\exists!y\in Y\,F(a,y)}{%
     \UEI{5,6,9,15}}
-  \proofstepwidestar[2,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Existenz mit eindeutigem zweiten Zeugen}
+  \setcounter{proofstepnr}{16}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[2,3]{%
     a\in X\land\exists!y\in Y\,F(a,y)}{\rAI{4,16}}
   \proofstepwidestar[2,3]{%
     \exists x\in X\,\exists!y\in Y\,F(x,y)}{\rEI{17}}
   \proofstepwidestar[1,2]{%
     \exists x\in X\,\exists!y\in Y\,F(x,y)}{\rEE{1,3,18}}
-  \proofstepwidestar[20]{%
+
+\closeproofpartwide
+
+\proofpartwide{Eindeutigkeit des ersten Zeugen}
+  \setcounter{proofstepnr}{19}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[20]{%
     c\in X\land\exists!y\in Y\,F(c,y)}{\rA}
   \proofstepwidestar[21]{%
     d\in X\land\exists!y\in Y\,F(d,y)}{\rA}
@@ -4497,12 +4834,20 @@ Eindeutigkeit]{%
   \proofstepwidestar[2,20,21,28,31]{c=d}{\rAEa{36}}
   \proofstepwidestar[2,20,21,28]{c=d}{\rEE{27,31,37}}
   \proofstepwidestar[2,20,21]{c=d}{\rEE{26,28,38}}
-  \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Geschachtelte eindeutige Existenz}
+  \setcounter{proofstepnr}{39}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
     \exists!x\in X\,\exists!y\in Y\,F(x,y)}{%
     \UEI{19,20,21,39}}
-  \closeproofpartwide
+
+\closeproofpartwide
 \end{tabproofsplitwide}
 \endgroup
+
+\input{tex/b02-migrated-word-logic}
 
 \section{Konditionaler Aussagenoperator \texorpdfstring{\(\IfWff{P}{Q}{R}\)}{if-}}
 
@@ -4519,8 +4864,8 @@ Eindeutigkeit]{%
   \DeltaRow{Aussagenvariablen}{P\dsep Q\dsep R}%
 }
 \begin{tabproofsplit}
-  \proofpart{$\vdash$}
-    \proofstep{1}{\IfWff{P}{Q}{R}}{\rA}
+\proofpart{Wahrer Bedingungsfall}
+\proofstep{1}{\IfWff{P}{Q}{R}}{\rA}
     \proofstep{1}{(P\land Q)\lor(\neg P\land R)}{\FormulaRefAuto{if-}{1}}
 
     \proofstep{3}{P}{\rA}
@@ -4532,7 +4877,12 @@ Eindeutigkeit]{%
     \proofstep{1,3}{Q}{\rOE{2,4,5,6,8}}
     \proofstep{1}{P\rightarrow Q}{\rRI{3,9}}
 
-    \proofstep{11}{\neg P}{\rA}
+
+\closeproofpart
+
+\proofpart{Falscher Bedingungsfall}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstep{11}{\neg P}{\rA}
     \proofstep{12}{P\land Q}{\rA}
     \proofstep{12}{P}{\rAEa{12}}
     \proofstep{11,12}{R}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{13,11}}
@@ -4541,8 +4891,15 @@ Eindeutigkeit]{%
     \proofstep{1,11}{R}{\rOE{2,12,14,15,16}}
     \proofstep{1}{\neg P\rightarrow R}{\rRI{11,17}}
 
-    \proofstep{1}{(P\rightarrow Q)\land(\neg P\rightarrow R)}{\rAI{10,18}}
-  \closeproofpart
+
+\closeproofpart
+
+\proofpart{Zusammenführung der Hinrichtung}
+  \setcounter{proofstepnr}{18}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{(P\rightarrow Q)\land(\neg P\rightarrow R)}{\rAI{10,18}}
+
+\closeproofpart
+
 
   \proofpart{$\dashv$}
     \proofstep{1}{(P\rightarrow Q)\land(\neg P\rightarrow R)}{\rA}
@@ -4592,8 +4949,9 @@ Eindeutigkeit]{%
   \DeltaDecl{Aussagen}{P}%
   \DeltaDecl{Mengen}{a\dsep b\dsep u\dsep v\dsep w}%
 }
-\begin{tabproof}
-  \proofstep{1}{P\lor\neg P}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{P\lor\neg P}{\rA}
 
   \proofstep{2}{P}{\rA}
     \proofstep{}{a=a}{\rII}
@@ -4613,7 +4971,12 @@ Eindeutigkeit]{%
 
   \proofstep{1}{ \exists u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\rOE{1,2,8,9,15}}
 
-  \proofstep{17}{(P\rightarrow v=a)\land(\neg P\rightarrow v=b)}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{16}% Fortlaufende Schritte dieses Beweises.
+\proofstep{17}{(P\rightarrow v=a)\land(\neg P\rightarrow v=b)}{\rA}
   \proofstep{18}{(P\rightarrow w=a)\land(\neg P\rightarrow w=b)}{\rA}
 
   \proofstep{19}{P}{\rA}
@@ -4632,8 +4995,15 @@ Eindeutigkeit]{%
 
   \proofstep{1,17,18}{v=w}{\rOE{1,19,24,25,30}}
 
-  \proofstep{1}{ \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\UEI{16,17,18,31}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{31}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{ \exists ! u\Bigl((P\rightarrow u=a)\land(\neg P\rightarrow u=b)\Bigr)}{\UEI{16,17,18,31}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaDefDeltaK[Notation des Fallterms]{%
   \IfThenElse{P}{a}{b}%

@@ -1,0 +1,422 @@
+% Frühe Baumaxiome; nach b27-tree-early-foundations einfügen.
+\section{Das Axiomsystem der Baumstrukturen}
+
+Die soeben bewiesenen Eigenschaften motivieren den folgenden
+Strukturbegriff. Darin besitzt jedes Blatt eine Beschriftung in
+\(A\), und jeder innere Knoten hat genau zwei geordnete Kinder. Die
+Reihenfolge der Argumente von \(k\) entspricht der Links-rechts-Ordnung
+des planaren Baumes. Eine Vertauschung wird durch die Axiome nicht
+identifiziert.
+
+Die Symbole beschreiben ganze Bäume und ihre Konstruktion:
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}X@{}}
+\(A;\ a,b\) & \(A\) ist das Alphabet der Blattbeschriftungen;
+  \(a\) und \(b\) bezeichnen Elemente von \(A\).\\[3pt]
+\(T;\ x,y,x',y'\) & \(T\) ist der Träger der Baumstruktur.
+  Jedes seiner Elemente \(x,y,x',y'\) steht für einen ganzen Baum.\\[3pt]
+\(\ell\) & Der Blattkonstruktor ordnet einer Beschriftung \(a\)
+  den einzelnen Blattbaum \(\ell(a)\) zu.\\[3pt]
+\(k\) & Der Knotenkonstruktor verbindet zwei ganze Bäume \(x,y\)
+  unter einer neuen Wurzel zu \(k(x,y)\): \(x\) ist der linke,
+  \(y\) der rechte Teilbaum.\\[3pt]
+\(T\times T\) & Die Menge der geordneten Paare ganzer Bäume;
+  sie ist der Definitionsbereich von \(k\).\\[3pt]
+\(U;\ \ell[A]\) & \(U\subseteq T\) bezeichnet eine beliebige
+  Teilmenge des Baumträgers. \(\ell[A]\) ist die Menge aller
+  durch \(\ell\) erzeugten Blattbäume.
+\end{tabularx}
+\end{center}
+
+Im zuvor konstruierten Modell ist die Zuordnung konkret
+\[
+  T=\BracketTreeSet A,\qquad \ell=\lambda_A,\qquad k=\kappa_A.
+\]
+Die folgenden Bedingungen B0 bis B4 werden nun für die Daten
+\((T,\ell,k)\) gefordert. Die jeweils genannten Herkunftssätze
+weisen sie für dieses konkrete Modell nach. Der Ausdruck
+\(\mathsf{BaumStr}_A(T,\ell,k)\) besagt, dass die gewählten Daten
+alle fünf Bedingungen erfüllen.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Freie volle planare Binärbaumstruktur]{%
+  \mathsf{BaumStr}_A(T,\ell,k)
+}{BinaryTreeStructureDef}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep U\dsep a\dsep b\dsep x\dsep y\dsep x'\dsep y'}
+  \DeltaRow{Funktionen}{\ell\dsep k}
+  \DeltaRow{\textbf{Strukturaxiome}}{}
+  \DeltaRow{B0: Typisierung}{\ell\colon A\to T\land k\colon T\times T\to T}
+  \DeltaRow{B1: Blatteindeutigkeit}{%
+    \forall a,b\in A\;(\ell(a)=\ell(b)\rightarrow a=b)}
+  \DeltaRow{B2: Knoteneindeutigkeit}{%
+    \begin{aligned}[t]
+      &\forall x,y,x',y'\in T\\[-2pt]
+      &\quad(k(x,y)=k(x',y')\rightarrow x=x'\land y=y')
+    \end{aligned}}
+  \DeltaRow{B3: Trennung}{\forall a\in A\,\forall x,y\in T\;\ell(a)\ne k(x,y)}
+  \DeltaRow{B4: Minimalität}{%
+    \begin{aligned}[t]
+      &\forall U\subseteq T\,\Bigl(\bigl(\ell[A]\subseteq U\land{}\\[-2pt]
+      &\quad(\forall x,y\in U\;k(x,y)\in U)\bigr)\rightarrow U=T\Bigr)
+    \end{aligned}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Freie Binärbaumstruktur}{\mathsf{BaumStr}_A(T,\ell,k)}}
+\end{minipage}\par
+
+\Needspace{14\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Typisierung einer Baumstruktur]{%
+  \mathsf{BaumStr}_A(T,\ell,k)\vdash
+    \ell\colon A\to T\land k\colon T\times T\to T
+}{BinaryTreeStructureTypingAxiom}{%
+  \DeltaRow{Mengen}{A\dsep T}\DeltaRow{Funktionen}{\ell\dsep k}}
+\par\smallskip\noindent
+B0 verlangt, dass beide Konstruktoren wieder Bäume in \(T\)
+liefern. Für \(\lambda_A\) und \(\kappa_A\) auf dem konkreten
+Baumträger wurde dies in
+\FormulaRefAuto{TreeCodeConstructorTyping}[thm] bewiesen.
+\end{minipage}\par
+
+\Needspace{14\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Injektivität des Blattkonstruktors]{%
+  \mathsf{BaumStr}_A(T,\ell,k)\dsep a,b\in A\dsep\ell(a)=\ell(b)\vdash a=b
+}{BinaryTreeStructureLeafAxiom}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep a\dsep b}\DeltaRow{Funktionen}{\ell\dsep k}}
+\par\smallskip\noindent
+B1 besagt: Gleiche Blattbäume haben dieselbe Beschriftung.
+Für den konkreten Blattkonstruktor \(\lambda_A\) ist dies
+\FormulaRefAuto{TreeCodeLeafInjectivity}[thm].
+\end{minipage}\par
+
+\Needspace{15\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Injektivität des Knotenkonstruktors]{%
+  \begin{aligned}[t]
+    &\mathsf{BaumStr}_A(T,\ell,k)\dsep x,y,x',y'\in T\dsep{}\\[-2pt]
+    &k(x,y)=k(x',y')\vdash x=x'\land y=y'
+  \end{aligned}
+}{BinaryTreeStructureNodeAxiom}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep x\dsep y\dsep x'\dsep y'}
+  \DeltaRow{Funktionen}{\ell\dsep k}}
+\par\smallskip\noindent
+B2 besagt: Gleiche zusammengesetzte Bäume haben denselben linken
+und denselben rechten Teilbaum. Für \(\kappa_A\) wurde dies in
+\FormulaRefAuto{TreeCodeNodeInjectivity}[thm] bewiesen.
+\end{minipage}\par
+
+\Needspace{14\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Trennung von Blättern und Knoten]{%
+  \mathsf{BaumStr}_A(T,\ell,k)\dsep a\in A\dsep x,y\in T
+    \vdash\ell(a)\ne k(x,y)
+}{BinaryTreeStructureDisjointnessAxiom}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep a\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\ell\dsep k}}
+\par\smallskip\noindent
+B3 schließt aus, dass ein Blattbaum zugleich aus zwei Teilbäumen
+zusammengesetzt ist. Die entsprechende Trennung von
+\(\lambda_A\) und \(\kappa_A\) liefert
+\FormulaRefAuto{TreeCodeConstructorSeparation}[thm].
+\end{minipage}\par
+
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Minimalität einer Baumstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{BaumStr}_A(T,\ell,k)\dsep U\subseteq T\dsep\ell[A]\subseteq U\dsep{}\\[-2pt]
+    &\forall x,y\in U\;k(x,y)\in U\vdash U=T
+  \end{aligned}
+}{BinaryTreeStructureMinimalityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep U\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\ell\dsep k}}
+\par\smallskip\noindent
+B4 besagt: Enthält \(U\) alle Blattbäume \(\ell[A]\) und mit
+\(x,y\) jeweils auch \(k(x,y)\), so enthält \(U\) bereits alle
+Bäume von \(T\). Diese Minimalität des konkreten Baumträgers
+ist \FormulaRefAuto{TreeCodeMinimality}[thm].
+\end{minipage}\par
+
+Die zuvor bewiesenen Eigenschaften werden nun in einem Strukturbegriff
+gebündelt. Die registrierten Axiome sind Zugriffsregeln auf die
+Bedingungen B0 bis B4; sie fordern keine neuen Mengenexistenzaxiome.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Existenz einer freien Klammerungsbaumstruktur]{%
+  \mathsf{BaumStr}_A(\BracketTreeSet A,\lambda_A,\kappa_A)
+}{BinaryTreeStructureConcreteModel}{%
+  \DeltaRow{Mengen}{A\dsep U\dsep S\dsep R\dsep S'\dsep R'\dsep a\dsep b}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[]{\begin{aligned}[t]&\lambda_A\colon A\to\BracketTreeSet A\land{}\\&\kappa_A\colon\BracketTreeSet A\times\BracketTreeSet A\to\BracketTreeSet A\end{aligned}}{%
+    \FormulaRefAuto{TreeCodeConstructorTyping}[thm]}
+  \proofstepwidestar[2]{a\in A}{%
+    \rA}
+  \proofstepwidestar[3]{b\in A}{%
+    \rA}
+  \proofstepwidestar[4]{\lambda_A(a)=\lambda_A(b)}{%
+    \rA}
+  \proofstepwidestar[2,3,4]{a=b}{%
+    \FormulaRefAuto{TreeCodeLeafInjectivity}[thm]{\rAI{2,3},4}}
+  \proofstepwidestar[]{\forall a,b\in A\;(\lambda_A(a)=\lambda_A(b)\rightarrow a=b)}{%
+    \rUI{\rRI{2,\rUI{\rRI{3,\rRI{4,5}}}}}}
+  \proofstepwidestar[7]{S\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[8]{R\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[9]{S'\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[10]{R'\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[11]{\kappa_A(S,R)=\kappa_A(S',R')}{%
+    \rA}
+  \proofstepwidestar[7,8,9,10,11]{S=S'\land R=R'}{%
+    \FormulaRefAuto{TreeCodeNodeInjectivity}[thm]{\rAI{7,\rAI{8,\rAI{9,10}}},11}}
+  \proofstepwidestar[]{\begin{aligned}[t]&\forall S,R,S',R'\in\BracketTreeSet A\\&(\kappa_A(S,R)=\kappa_A(S',R')\rightarrow S=S'\land R=R')\end{aligned}}{%
+    \rUI{\rRI{7,\rUI{\rRI{8,\rUI{\rRI{9,\rUI{\rRI{10,\rRI{11,12}}}}}}}}}}
+  \proofstepwidestar[14]{a\in A}{%
+    \rA}
+  \proofstepwidestar[15]{S\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[16]{R\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[14,15,16]{\lambda_A(a)\ne\kappa_A(S,R)}{%
+    \FormulaRefAuto{TreeCodeConstructorSeparation}[thm]{14,\rAI{15,16}}}
+  \proofstepwidestar[]{\forall a\in A\,\forall S,R\in\BracketTreeSet A\;\lambda_A(a)\ne\kappa_A(S,R)}{%
+    \rUI{\rRI{14,\rUI{\rRI{15,\rUI{\rRI{16,17}}}}}}}
+  \proofstepwidestar[19]{U\subseteq\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[20]{\lambda_A[A]\subseteq U\land(\forall S,R\in U\;\kappa_A(S,R)\in U)}{%
+    \rA}
+  \proofstepwidestar[19,20]{U=\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeCodeMinimality}[thm]{19,\rAEa{20},\rAEb{20}}}
+  \proofstepwidestar[]{\begin{aligned}[t]&\forall U\subseteq\BracketTreeSet A\;\Bigl((\lambda_A[A]\subseteq U\land{}\\&\quad(\forall S,R\in U\;\kappa_A(S,R)\in U))\rightarrow U=\BracketTreeSet A\Bigr)\end{aligned}}{%
+    \rUI{\rRI{19,\rRI{20,21}}}}
+  \proofstepwidestar[]{\mathsf{BaumStr}_A(\BracketTreeSet A,\lambda_A,\kappa_A)}{%
+    \FormulaRefAuto{BinaryTreeStructureDef}[def]{1,6,13,18,22}}
+\end{tabproofwide}
+
+\subsection{Erste Folgerungen aus den Baumaxiomen}
+
+Von hier an werden Induktion und Zerlegung aus den Strukturaxiomen
+hergeleitet. Die einzelnen Codepositionen und Baumstufen gehen in diese
+Beweise nicht mehr ein. Die gewonnenen Sätze gelten deshalb für jede
+Menge mit Konstruktoren, welche B0 bis B4 erfüllt.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Blätter liegen im Strukturträger]{%
+\mathsf{BaumStr}_A(T,\ell,k)\dsep a\in A\vdash\ell(a)\in T
+}{BinaryTreeStructureLeafTyping}{%
+\DeltaRow{Mengen}{A\dsep T\dsep a}\DeltaRow{Funktionen}{\ell\dsep k}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{a\in A}{%
+    \rA}
+  \proofstepwidestar[1]{\ell\colon A\to T}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeStructureTypingAxiom}[ax]{1}}}
+  \proofstepwidestar[1,2]{\ell(a)\in T}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,2}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Knoten liegen im Strukturträger]{%
+\mathsf{BaumStr}_A(T,\ell,k)\dsep x,y\in T\vdash k(x,y)\in T
+}{BinaryTreeStructureNodeTyping}{%
+\DeltaRow{Mengen}{A\dsep T\dsep x\dsep y}\DeltaRow{Funktionen}{\ell\dsep k}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{x,y\in T}{%
+    \rA}
+  \proofstepwidestar[1]{k\colon T\times T\to T}{%
+    \rAEb{\FormulaRefAuto{BinaryTreeStructureTypingAxiom}[ax]{1}}}
+  \proofstepwidestar[2]{(x,y)\in T\times T}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\rAEa{2},\rAEb{2}}}
+  \proofstepwidestar[1,2]{k(x,y)\in T}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,4}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutigkeit des geordneten Kinderpaares]{%
+\mathsf{BaumStr}_A(T,\ell,k)\dsep p,q\in T\times T\dsep k(p)=k(q)\vdash p=q
+}{BinaryTreeStructurePairInjective}{%
+\DeltaRow{Mengen}{A\dsep T\dsep p\dsep q\dsep x\dsep y\dsep x'\dsep y'}\DeltaRow{Funktionen}{\ell\dsep k}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{p,q\in T\times T}{%
+    \rA}
+  \proofstepwidestar[3]{k(p)=k(q)}{%
+    \rA}
+  \proofstepwidestar[2]{\pi_1(p)\in T}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{\pi_2(p)\in T}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{\pi_1(q)\in T}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2]{\pi_2(q)\in T}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2]{p=(\pi_1(p),\pi_2(p))}{%
+    \FormulaRefAuto{z\in A\times B\vdash z=\bigl(\pi_1(z),\pi_2(z)\bigr)}[thm]{\rAEa{2}}}
+  \proofstepwidestar[2]{q=(\pi_1(q),\pi_2(q))}{%
+    \FormulaRefAuto{z\in A\times B\vdash z=\bigl(\pi_1(z),\pi_2(z)\bigr)}[thm]{\rAEb{2}}}
+  \proofstepwidestar[2,3]{k(\pi_1(p),\pi_2(p))=k(\pi_1(q),\pi_2(q))}{%
+    \rIE{8,\rIE{9,3}}}
+  \proofstepwidestar[1,2,3]{\pi_1(p)=\pi_1(q)\land\pi_2(p)=\pi_2(q)}{%
+    \FormulaRefAuto{BinaryTreeStructureNodeAxiom}[ax]{1,\rAI{4,\rAI{5,\rAI{6,7}}},10}}
+  \proofstepwidestar[1,2,3]{(\pi_1(p),\pi_2(p))=(\pi_1(q),\pi_2(q))}{%
+    \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{11}}
+  \proofstepwidestar[1,2,3]{p=q}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{8},\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{9},12}}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Induktion in einer Baumstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{BaumStr}_A(T,\ell,k)\dsep\forall a\in A\;P(\ell(a))\dsep{}\\[-2pt]
+    &\forall x,y\in T\;(P(x)\land P(y)\rightarrow P(k(x,y)))
+      \vdash\forall t\in T\;P(t)
+  \end{aligned}
+}{BinaryTreeStructureInduction}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep U\dsep a\dsep x\dsep y\dsep t\dsep z}
+  \DeltaRow{Funktionen}{\ell\dsep k}\DeltaRow{Prädikat}{P}
+  \DeltaRow{Abkürzung}{U\coloneqq\{t\in T\mid P(t)\}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{\forall a\in A\;P(\ell(a))}{%
+    \rA}
+  \proofstepwidestar[3]{\forall x,y\in T\;(P(x)\land P(y)\rightarrow P(k(x,y)))}{%
+    \rA}
+  \proofstepwidestar[]{U\subseteq T}{%
+    \FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}
+  \proofstepwidestar[1]{\ell\colon A\to T}{%
+    \rAEa{\FormulaRefAuto{BinaryTreeStructureTypingAxiom}[ax]{1}}}
+  \proofstepwidestar[6]{z\in\ell[A]}{%
+    \rA}
+  \proofstepwidestar[1,6]{\exists a\in A\;z=\ell(a)}{%
+    \FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash\exists x\in A\;y=F(x)}[thm]{5,6}}
+  \proofstepwidestar[8]{a\in A\land z=\ell(a)}{%
+    \rA}
+  \proofstepwidestar[1,8]{\ell(a)\in T}{%
+    \FormulaRefAuto{BinaryTreeStructureLeafTyping}[thm]{1,\rAEa{8}}}
+  \proofstepwidestar[2,8]{P(\ell(a))}{%
+    \rRE{\rUE{2},\rAEa{8}}}
+  \proofstepwidestar[1,2,8]{\ell(a)\in U}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{9,10}}
+  \proofstepwidestar[1,2,8]{z\in U}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{8}},11}}
+  \proofstepwidestar[1,2,6]{z\in U}{%
+    \rEE{7,8,12}}
+  \proofstepwidestar[1,2]{\ell[A]\subseteq U}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[6]\vdots 13}}
+  \proofstepwidestar[15]{x\in U}{%
+    \rA}
+  \proofstepwidestar[16]{y\in U}{%
+    \rA}
+  \proofstepwidestar[15,16]{x\in T\land P(x)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{15}}
+  \proofstepwidestar[15,16]{y\in T\land P(y)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{16}}
+  \proofstepwidestar[1,15,16]{k(x,y)\in T}{%
+    \FormulaRefAuto{BinaryTreeStructureNodeTyping}[thm]{1,\rAI{\rAEa{17},\rAEa{18}}}}
+  \proofstepwidestar[3,15,16]{P(k(x,y))}{%
+    \rRE{\rRE{\rUE{\rRE{\rUE{3},\rAEa{17}}},\rAEa{18}},\rAI{\rAEb{17},\rAEb{18}}}}
+  \proofstepwidestar[1,3,15,16]{k(x,y)\in U}{%
+    \FormulaRefAuto{x\in A\dsep P(x)\vdash x\in\{x\in A\mid P(x)\}}[thm]{19,20}}
+  \proofstepwidestar[1,3]{\forall x,y\in U\;k(x,y)\in U}{%
+    \rUI{\rRI{15,\rUI{\rRI{16,21}}}}}
+  \proofstepwidestar[1,2,3]{U=T}{%
+    \FormulaRefAuto{BinaryTreeStructureMinimalityAxiom}[ax]{1,4,14,22}}
+  \proofstepwidestar[24]{t\in T}{%
+    \rA}
+  \proofstepwidestar[1,2,3,24]{t\in U}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{23},24}}
+  \proofstepwidestar[1,2,3,24]{P(t)}{%
+    \rAEb{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{25}}}
+  \proofstepwidestar[1,2,3]{\forall t\in T\;P(t)}{%
+    \rUI{\rRI{24,26}}}
+\end{tabproofwide}
+
+Auch hier folgt die Minimalität umgekehrt durch Einsetzen von
+\(P(t)\coloneqq t\in U\). Insbesondere schließt das Induktionsaxiom
+zusätzliche Elemente ohne endliche Konstruktion aus.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Eindeutige Zerlegung in einer Baumstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{BaumStr}_A(T,\ell,k)\dsep t\in T\vdash{}\\[-2pt]
+    &\bigl(\exists!a\in A\;t=\ell(a)\bigr)
+      \lor\bigl(\exists!p\in T\times T\;t=k(p)\bigr)
+  \end{aligned}
+}{BinaryTreeStructureDecomposition}{%
+  \DeltaRow{Mengen}{A\dsep T\dsep t\dsep a\dsep b\dsep c\dsep p\dsep q\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\ell\dsep k}
+  \DeltaRow{Prädikatsabkürzung}{\begin{aligned}[t]
+    Q(t)\coloneqq{}&(\exists!a\in A\;t=\ell(a))\lor{}\\[-2pt]
+    &(\exists!p\in T\times T\;t=k(p))
+  \end{aligned}}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BaumStr}_A(T,\ell,k)}{%
+    \rA}
+  \proofstepwidestar[2]{t\in T}{%
+    \rA}
+  \proofstepwidestar[3]{a\in A}{%
+    \rA}
+  \proofstepwidestar[3]{\exists b\in A\;\ell(a)=\ell(b)}{%
+    \rEI{\rAI{3,\rII}}}
+  \proofstepwidestar[5]{b\in A\land\ell(a)=\ell(b)}{%
+    \rA}
+  \proofstepwidestar[6]{c\in A\land\ell(a)=\ell(c)}{%
+    \rA}
+  \proofstepwidestar[5,6]{\ell(b)=\ell(c)}{%
+    \rIE{\rAEb{5},\rAEb{6}}}
+  \proofstepwidestar[1,5,6]{b=c}{%
+    \FormulaRefAuto{BinaryTreeStructureLeafAxiom}[ax]{1,\rAEa{5},\rAEa{6},7}}
+  \proofstepwidestar[1,3]{\exists!b\in A\;\ell(a)=\ell(b)}{%
+    \UEI{4,5,6,8}}
+  \proofstepwidestar[1,3]{Q(\ell(a))}{%
+    \rOIa{9}}
+  \proofstepwidestar[1]{\forall a\in A\;Q(\ell(a))}{%
+    \rUI{\rRI{3,10}}}
+  \proofstepwidestar[12]{x\in T}{%
+    \rA}
+  \proofstepwidestar[13]{y\in T}{%
+    \rA}
+  \proofstepwidestar[12,13]{(x,y)\in T\times T}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{12,13}}
+  \proofstepwidestar[12,13]{\exists p\in T\times T\;k(x,y)=k(p)}{%
+    \rEI{\rAI{14,\rII}}}
+  \proofstepwidestar[16]{p\in T\times T\land k(x,y)=k(p)}{%
+    \rA}
+  \proofstepwidestar[17]{q\in T\times T\land k(x,y)=k(q)}{%
+    \rA}
+  \proofstepwidestar[16,17]{k(p)=k(q)}{%
+    \rIE{\rAEb{16},\rAEb{17}}}
+  \proofstepwidestar[1,16,17]{p=q}{%
+    \FormulaRefAuto{BinaryTreeStructurePairInjective}[thm]{1,\rAI{\rAEa{16},\rAEa{17}},18}}
+  \proofstepwidestar[1,12,13]{\exists!p\in T\times T\;k(x,y)=k(p)}{%
+    \UEI{15,16,17,19}}
+  \proofstepwidestar[1,12,13]{Q(k(x,y))}{%
+    \rOIb{20}}
+  \proofstepwidestar[22]{Q(x)\land Q(y)}{%
+    \rA}
+  \proofstepwidestar[1,12,13]{Q(x)\land Q(y)\rightarrow Q(k(x,y))}{%
+    \rRI{22,21}}
+  \proofstepwidestar[1]{\forall x,y\in T\;(Q(x)\land Q(y)\rightarrow Q(k(x,y)))}{%
+    \rUI{\rRI{12,\rUI{\rRI{13,23}}}}}
+  \proofstepwidestar[1]{\forall t\in T\;Q(t)}{%
+    \FormulaRefAuto{BinaryTreeStructureInduction}[thm]{1,11,24}}
+  \proofstepwidestar[1,2]{(\exists!a\in A\;t=\ell(a))\lor(\exists!p\in T\times T\;t=k(p))}{%
+    \rRE{\rUE{25},2}}
+\end{tabproofwide}
+
+Die beiden Fälle sind nach
+\FormulaRefAuto{BinaryTreeStructureDisjointnessAxiom}[ax] disjunkt.
+

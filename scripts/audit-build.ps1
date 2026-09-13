@@ -41,7 +41,9 @@ if ($IncludeMain) {
         $mainIndex = @([System.IO.File]::ReadLines((Join-Path $repoRoot $registry)) |
             ForEach-Object { ($_.Split("`t") | Select-Object -First 4) -join "`t" } |
             Sort-Object -Unique)
-        if (@(Compare-Object -ReferenceObject $standaloneIndex -DifferenceObject $mainIndex).Count -gt 0) {
+        if ($standaloneIndex.Count -ne $mainIndex.Count -or
+            ($standaloneIndex.Count -gt 0 -and
+             @(Compare-Object -ReferenceObject $standaloneIndex -DifferenceObject $mainIndex).Count -gt 0)) {
             throw "The main and standalone result indices differ for $band."
         }
         $standaloneAuxNumbers = @{}

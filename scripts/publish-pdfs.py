@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import csv
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -18,6 +19,54 @@ from pypdf.generic import DictionaryObject, NameObject, TextStringObject
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "output"
+
+
+def audit_reference_markers(reader, path):
+    """A resolved PDF link alone does not detect printed lookup errors."""
+    pattern = re.compile(
+        r"(?:Theorem|Definition|Axiom|Regel|Referenz)\s+nicht\s+gefunden"
+        r"|Mehrdeutige\s+(?:Theorem|Definition|Axiom|Regel)-Referenz"
+        r"|Mehrdeutig:\s*bitte",
+        re.IGNORECASE,
+    )
+    for number, page in enumerate(reader.pages, 1):
+        content = " ".join((page.extract_text() or "").split())
+        match = pattern.search(content)
+        if match:
+            raise ValueError(
+                f"{path.name}: unresolved reference on PDF page {number}: "
+                f"{match.group(0)}"
+            )
+
+
+def assert_build_ready(source, reader):
+    """Reject failed formula lookups before replacing a published volume."""
+    if re.fullmatch(r"_B\d{2}", source.stem):
+        debug = source.with_suffix(".debug.log")
+        log = source.with_suffix(".log")
+        for required in (debug, log):
+            if not required.is_file():
+                raise FileNotFoundError(f"Missing build diagnostic: {required}")
+        failed = re.search(
+            r"^status:\s*(?:none|ambiguous[^\r\n]*|duplicate-register)\s*$",
+            debug.read_text(encoding="utf-8", errors="replace"),
+            re.MULTILINE | re.IGNORECASE,
+        )
+        if failed:
+            raise ValueError(f"{source.name}: {debug.name}: {failed.group(0)}")
+        diagnostics = " ".join(
+            log.read_text(encoding="utf-8", errors="replace").split()
+        )
+        if re.search(
+            r"There were undefined references|There were multiply-defined labels"
+            r"|LABELS NOT IMPORTED|Rerun to get cross-references right"
+            r"|(?:LaTeX Warning:\s*(?:Reference|Hyper reference).{0,1000}?undefined)"
+            r"|thmlookup:\s*cannot open registry file",
+            diagnostics,
+            re.IGNORECASE,
+        ):
+            raise ValueError(f"{source.name}: unresolved build diagnostics in {log.name}")
+    audit_reference_markers(reader, source)
 
 
 def remote_actions(reader):
@@ -63,6 +112,7 @@ def audit(paths):
     external_link_total = 0
     for path in paths:
         reader = PdfReader(path)
+        audit_reference_markers(reader, path)
         local_total = audit_local_targets(reader, path)
         total = 0
         for action in remote_actions(reader):
@@ -92,21 +142,36 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--audit-only", action="store_true")
     parser.add_argument("--skip-main", action="store_true")
+    parser.add_argument("--bands", nargs="+", metavar="Bnn",
+                        help="Publish only these standalone volumes; still audit all current PDF links.")
     args = parser.parse_args()
     with (ROOT / "band-dependencies.tsv").open(encoding="utf-8-sig", newline="") as file:
         graph = list(csv.DictReader(file, delimiter="\t"))
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
-    publications = [(ROOT / (row["artifact_base"] + ".pdf"), OUTPUT / names[f"_{row['band']}.pdf"]) for row in graph]
+    if args.bands:
+        unknown = set(args.bands) - {row["band"] for row in graph}
+        if unknown:
+            parser.error("Unknown volumes: " + ", ".join(sorted(unknown)))
+    all_publications = [(ROOT / (row["artifact_base"] + ".pdf"), OUTPUT / names[f"_{row['band']}.pdf"]) for row in graph]
+    publications = [publication for row, publication in zip(graph, all_publications)
+                    if not args.bands or row["band"] in args.bands]
     if not args.skip_main:
         publications.append((ROOT / "main.pdf", OUTPUT / "Die Grundlagen der Mathematik - Gesamtband.pdf"))
+        all_publications.append((ROOT / "main.pdf", OUTPUT / "Die Grundlagen der Mathematik - Gesamtband.pdf"))
 
     if not args.audit_only:
         missing = [str(source.relative_to(ROOT)) for source, _ in publications if not source.is_file()]
         if missing:
             raise FileNotFoundError("Missing build artifacts: " + ", ".join(missing))
         OUTPUT.mkdir(parents=True, exist_ok=True)
-        for source, destination in publications:
+        # Preflight every selected source before changing any publication.
+        readers = {}
+        for source, _ in publications:
             reader = PdfReader(source)
+            assert_build_ready(source, reader)
+            readers[source] = reader
+        for source, destination in publications:
+            reader = readers[source]
             writer = PdfWriter(clone_from=reader)
             for action in remote_actions(writer):
                 old_name = Path(file_name(action)).name
@@ -148,7 +213,7 @@ def main():
                 temporary.unlink()
             writer.close()
             print(f"Published: {destination.name}", flush=True)
-    audit([destination for _, destination in publications])
+    audit([destination for _, destination in all_publications])
 
 
 if __name__ == "__main__":

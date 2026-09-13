@@ -1,0 +1,306 @@
+% Definierte Werkzeuge für die bereits bewiesene eindeutige Endzerlegung.
+\subsection{Rumpf und Endbuchstabe}
+
+Der Rumpf entsteht durch Entfernen des letzten Buchstabens. Er darf leer
+sein; der Endbuchstabe liegt im Alphabet. Die eindeutige Endzerlegung
+rechtfertigt beide Funktionen. Ihre Rechenregeln machen die Zerlegung
+anschließend unmittelbar benutzbar.
+
+\Needspace{18\baselineskip}
+\FormulaDefDeltaK[Rumpffunktion eines nichtleeren Wortes]{%
+  \begin{aligned}[t]
+    &\WordRumpfMap A\colon\NonemptyWords A\to\FiniteWords A,\\[-2pt]
+    &\forall w\in\NonemptyWords A\,\Bigl(\WordRumpf A w\coloneqq
+      \iota u\in\FiniteWords A\,\exists!a\in A\,
+        w=\WordConcat u{\LetterWord a}\Bigr)
+  \end{aligned}
+}{WordRumpfDef}{%
+  \DeltaRow{Mengen}{A\dsep w\dsep u\dsep a}
+  \DeltaRow{Funktionen}{\WordRumpfMap A}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Rumpf}{\WordRumpf A w}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[1]{\exists!u\in\FiniteWords A\,\exists!a\in A\,
+    w=\WordConcat u{\LetterWord a}}{%
+    \FormulaRefAuto{NonemptyWordRightDecomposition}[thm]{1}}
+  \proofstepwidestar[1]{\Bigl(\iota u\in\FiniteWords A\,\exists!a\in A\,
+    w=\WordConcat u{\LetterWord a}\Bigr)\in\FiniteWords A}{%
+    \rAEa{\FormulaRefAuto{IotaSymbolDef}[def]{2}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall w\in\NonemptyWords A\,\Bigl(\\[-2pt]
+    &\quad\iota u\in\FiniteWords A\,\exists!a\in A\,
+      w=\WordConcat u{\LetterWord a}\Bigr)\in\FiniteWords A
+  \end{aligned}}{%
+    \rUI{\rRI{1,3}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\exists!F\,\Bigl(F\colon\NonemptyWords A\to\FiniteWords A\land{}\\[-2pt]
+    &\quad\forall w\in\NonemptyWords A\,F(w)=\\[-2pt]
+    &\qquad\iota u\in\FiniteWords A\,\exists!a\in A\,
+        w=\WordConcat u{\LetterWord a}\Bigr)
+  \end{aligned}}{\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]{4}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Typisierung der Rumpffunktion]{%
+  \WordRumpfMap A\colon\NonemptyWords A\to\FiniteWords A
+}{WordRumpfFunction}{\DeltaRow{Mengen}{A}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\WordRumpfMap A\colon\NonemptyWords A\to\FiniteWords A}{%
+    \FormulaRefAuto{WordRumpfDef}[def]}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Der Rumpf ist ein endliches Wort]{%
+  w\in\NonemptyWords A\vdash\WordRumpf A w\in\FiniteWords A
+}{WordRumpfTyping}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[]{\WordRumpfMap A\colon\NonemptyWords A\to\FiniteWords A}{%
+    \FormulaRefAuto{WordRumpfFunction}[thm]}
+  \proofstepwidestar[1]{\WordRumpf A w\in\FiniteWords A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Zum Rumpf gehört genau ein Endbuchstabe]{%
+  w\in\NonemptyWords A\vdash
+    \exists!a\in A\,w=\WordConcat{\WordRumpf A w}{\LetterWord a}
+}{WordRumpfCharacterization}{\DeltaRow{Mengen}{A\dsep w\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[1]{\exists!u\in\FiniteWords A\,\exists!a\in A\,
+    w=\WordConcat u{\LetterWord a}}{%
+    \FormulaRefAuto{NonemptyWordRightDecomposition}[thm]{1}}
+  \proofstepwidestar[1]{\WordRumpf A w=
+    \iota u\in\FiniteWords A\,\exists!a\in A\,
+      w=\WordConcat u{\LetterWord a}}{\FormulaRefAuto{WordRumpfDef}[def]{1}}
+  \proofstepwidestar[1]{\exists!a\in A\,
+    w=\WordConcat{\WordRumpf A w}{\LetterWord a}}{%
+    \rIE{\FormulaRefAuto{x=y\vdash y=x}[thm]{3},
+      \rAEb{\FormulaRefAuto{IotaSymbolDef}[def]{2}}}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Endbuchstabenfunktion]{%
+  \begin{aligned}[t]
+    &\WordEndMap A\colon\NonemptyWords A\to A,\\[-2pt]
+    &\forall w\in\NonemptyWords A\,\Bigl(\WordEnd A w\coloneqq
+      \iota a\in A\,w=\WordConcat{\WordRumpf A w}{\LetterWord a}\Bigr)
+  \end{aligned}
+}{WordEndDef}{%
+  \DeltaRow{Mengen}{A\dsep w\dsep a}
+  \DeltaRow{Funktionen}{\WordEndMap A}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Endbuchstabe}{\WordEnd A w}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[1]{\exists!a\in A\,
+    w=\WordConcat{\WordRumpf A w}{\LetterWord a}}{%
+    \FormulaRefAuto{WordRumpfCharacterization}[thm]{1}}
+  \proofstepwidestar[1]{\Bigl(\iota a\in A\,
+    w=\WordConcat{\WordRumpf A w}{\LetterWord a}\Bigr)\in A}{%
+    \rAEa{\FormulaRefAuto{IotaSymbolDef}[def]{2}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall w\in\NonemptyWords A\,\Bigl(\\[-2pt]
+    &\quad\iota a\in A\,
+      w=\WordConcat{\WordRumpf A w}{\LetterWord a}\Bigr)\in A
+  \end{aligned}}{%
+    \rUI{\rRI{1,3}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\exists!F\,\Bigl(F\colon\NonemptyWords A\to A\land{}\\[-2pt]
+    &\quad\forall w\in\NonemptyWords A\,F(w)=\\[-2pt]
+    &\qquad\iota a\in A\,w=\WordConcat{\WordRumpf A w}{\LetterWord a}\Bigr)
+  \end{aligned}}{\FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]{4}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Typisierung der Endbuchstabenfunktion]{%
+  \WordEndMap A\colon\NonemptyWords A\to A
+}{WordEndFunction}{\DeltaRow{Mengen}{A}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\WordEndMap A\colon\NonemptyWords A\to A}{%
+    \FormulaRefAuto{WordEndDef}[def]}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Der Endbuchstabe liegt im Alphabet]{%
+  w\in\NonemptyWords A\vdash\WordEnd A w\in A
+}{WordEndTyping}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[]{\WordEndMap A\colon\NonemptyWords A\to A}{%
+    \FormulaRefAuto{WordEndFunction}[thm]}
+  \proofstepwidestar[1]{\WordEnd A w\in A}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,1}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Rumpf und Endbuchstabe setzen das Wort wieder zusammen]{%
+  w\in\NonemptyWords A\vdash
+    w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}
+}{WordRightDecompositionEquation}{\DeltaRow{Mengen}{A\dsep w\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[1]{\exists!a\in A\,
+    w=\WordConcat{\WordRumpf A w}{\LetterWord a}}{%
+    \FormulaRefAuto{WordRumpfCharacterization}[thm]{1}}
+  \proofstepwidestar[1]{\WordEnd A w=
+    \iota a\in A\,w=\WordConcat{\WordRumpf A w}{\LetterWord a}}{%
+    \FormulaRefAuto{WordEndDef}[def]{1}}
+  \proofstepwidestar[1]{w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}}{%
+    \rIE{\FormulaRefAuto{x=y\vdash y=x}[thm]{3},
+      \rAEb{\FormulaRefAuto{IotaSymbolDef}[def]{2}}}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Eine gegebene Endzerlegung bestimmt Rumpf und Endbuchstabe]{%
+  \begin{aligned}[t]
+    &w\in\NonemptyWords A\dsep u\in\FiniteWords A\dsep a\in A\dsep
+      w=\WordConcat u{\LetterWord a}\vdash{}\\[-2pt]
+    &\WordRumpf A w=u\land\WordEnd A w=a
+  \end{aligned}
+}{WordRightDecompositionIdentification}{\DeltaRow{Mengen}{A\dsep w\dsep u\dsep v\dsep r\dsep a\dsep b\dsep c}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[2]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[3]{a\in A}{\rA}
+  \proofstepwidestar[4]{w=\WordConcat u{\LetterWord a}}{\rA}
+  \proofstepwidestar[1]{\WordRumpf A w\in\FiniteWords A}{%
+    \FormulaRefAuto{WordRumpfTyping}[thm]{1}}
+  \proofstepwidestar[1]{\WordEnd A w\in A}{%
+    \FormulaRefAuto{WordEndTyping}[thm]{1}}
+  \proofstepwidestar[1]{w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}}{%
+    \FormulaRefAuto{WordRightDecompositionEquation}[thm]{1}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\forall r\in\FiniteWords A\,\forall v\in\FiniteWords A\,
+      \forall c\in A\,\forall b\in A\,\Bigl(\\[-2pt]
+    &\quad\bigl(w=\WordConcat r{\LetterWord c}\land
+      w=\WordConcat v{\LetterWord b}\bigr)\\[-2pt]
+    &\quad\rightarrow(r=v\land c=b)\Bigr)
+  \end{aligned}}{\FormulaRefAuto{NonemptyWordRightDecompositionJointUniqueness}[thm]{1}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\forall v\in\FiniteWords A\,\forall c\in A\,\forall b\in A\,\Bigl(\\[-2pt]
+    &\quad\bigl(w=\WordConcat{\WordRumpf A w}{\LetterWord c}\land
+      w=\WordConcat v{\LetterWord b}\bigr)\\[-2pt]
+    &\quad\rightarrow(\WordRumpf A w=v\land c=b)\Bigr)
+  \end{aligned}}{\rRE{5,\rUE{8}}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &\forall c\in A\,\forall b\in A\,\Bigl(\\[-2pt]
+    &\quad\bigl(w=\WordConcat{\WordRumpf A w}{\LetterWord c}\land
+      w=\WordConcat u{\LetterWord b}\bigr)\\[-2pt]
+    &\quad\rightarrow(\WordRumpf A w=u\land c=b)\Bigr)
+  \end{aligned}}{\rRE{2,\rUE{9}}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &\forall b\in A\,\Bigl(\bigl(
+      w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}\land{}\\[-2pt]
+    &\quad w=\WordConcat u{\LetterWord b}\bigr)\\[-2pt]
+    &\quad\rightarrow(\WordRumpf A w=u\land\WordEnd A w=b)\Bigr)
+  \end{aligned}}{\rRE{6,\rUE{10}}}
+  \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+    &\bigl(w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}\land{}\\[-2pt]
+    &\quad w=\WordConcat u{\LetterWord a}\bigr)\\[-2pt]
+    &\quad\rightarrow(\WordRumpf A w=u\land\WordEnd A w=a)
+  \end{aligned}}{\rRE{3,\rUE{11}}}
+  \proofstepwidestar[1,4]{\begin{aligned}[t]
+    &w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}\land{}\\[-2pt]
+    &\quad w=\WordConcat u{\LetterWord a}
+  \end{aligned}}{\rAI{7,4}}
+  \proofstepwidestar[1,2,3,4]{\WordRumpf A w=u\land\WordEnd A w=a}{\rRE{13,12}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Ein angehängter Buchstabe macht ein Wort nichtleer]{%
+  u\in\FiniteWords A\dsep a\in A\vdash\WordConcat u{\LetterWord a}\in\NonemptyWords A
+}{WordAppendNonempty}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[2]{\LetterWord a\in\NonemptyWords A}{\FormulaRefAuto{LetterWordNonempty}[thm]{2}}
+  \proofstepwidestar[2]{\LetterWord a\in\FiniteWords A}{\FormulaRefAuto{NonemptyWordFinite}[thm]{3}}
+  \proofstepwidestar[1,2]{\WordConcat u{\LetterWord a}\in\FiniteWords A}{%
+    \FormulaRefAuto{WordConcatenationClosure}[thm]{\rAI{1,4}}}
+  \proofstepwidestar[1]{\WordLength u\in\mathbb N}{\FormulaRefAuto{FiniteWordLengthNatural}[thm]{1}}
+  \proofstepwidestar[1]{\WordLength u+1\neq0}{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{6}}
+  \proofstepwidestar[1,2]{\WordLength{\WordConcat u{\LetterWord a}}=\WordLength u+1}{%
+    \FormulaRefAuto{WordAppendLetterLength}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\WordLength u+1=\WordLength{\WordConcat u{\LetterWord a}}}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{8}}
+  \proofstepwidestar[1,2]{\WordLength{\WordConcat u{\LetterWord a}}\neq0}{\rIE{9,7}}
+  \proofstepwidestar[1,2]{\WordConcat u{\LetterWord a}\in\NonemptyWords A}{%
+    \FormulaRefAuto{NonemptyWordMembershipIntroduction}[thm]{\rAI{5,10}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Anhängen und Entfernen eines Endbuchstabens]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+    \WordRumpf A{\WordConcat u{\LetterWord a}}=u
+}{WordRumpfAppend}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1,2]{\WordConcat u{\LetterWord a}\in\NonemptyWords A}{%
+    \FormulaRefAuto{WordAppendNonempty}[thm]{1,2}}
+  \proofstepwidestar[]{\WordConcat u{\LetterWord a}=\WordConcat u{\LetterWord a}}{\rII}
+  \proofstepwidestar[1,2]{\WordRumpf A{\WordConcat u{\LetterWord a}}=u\land
+    \WordEnd A{\WordConcat u{\LetterWord a}}=a}{%
+    \FormulaRefAuto{WordRightDecompositionIdentification}[thm]{3,1,2,4}}
+  \proofstepwidestar[1,2]{\WordRumpf A{\WordConcat u{\LetterWord a}}=u}{\rAEa{5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Der angehängte Buchstabe ist der Endbuchstabe]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+    \WordEnd A{\WordConcat u{\LetterWord a}}=a
+}{WordEndAppend}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1,2]{\WordConcat u{\LetterWord a}\in\NonemptyWords A}{%
+    \FormulaRefAuto{WordAppendNonempty}[thm]{1,2}}
+  \proofstepwidestar[]{\WordConcat u{\LetterWord a}=\WordConcat u{\LetterWord a}}{\rII}
+  \proofstepwidestar[1,2]{\WordRumpf A{\WordConcat u{\LetterWord a}}=u\land
+    \WordEnd A{\WordConcat u{\LetterWord a}}=a}{%
+    \FormulaRefAuto{WordRightDecompositionIdentification}[thm]{3,1,2,4}}
+  \proofstepwidestar[1,2]{\WordEnd A{\WordConcat u{\LetterWord a}}=a}{\rAEb{5}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Der Rumpf ist um einen Buchstaben kürzer]{%
+  w\in\NonemptyWords A\vdash\WordLength{\WordRumpf A w}+1=\WordLength w
+}{WordRumpfLength}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\NonemptyWords A}{\rA}
+  \proofstepwidestar[1]{\WordRumpf A w\in\FiniteWords A}{\FormulaRefAuto{WordRumpfTyping}[thm]{1}}
+  \proofstepwidestar[1]{\WordEnd A w\in A}{\FormulaRefAuto{WordEndTyping}[thm]{1}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\WordLength{\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}}\\[-2pt]
+    &\quad=\WordLength{\WordRumpf A w}+1
+  \end{aligned}}{\FormulaRefAuto{WordAppendLetterLength}[thm]{2,3}}
+  \proofstepwidestar[1]{w=\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}}{%
+    \FormulaRefAuto{WordRightDecompositionEquation}[thm]{1}}
+  \proofstepwidestar[1]{\WordConcat{\WordRumpf A w}{\LetterWord{\WordEnd A w}}=w}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{5}}
+  \proofstepwidestar[1]{\WordLength w=\WordLength{\WordRumpf A w}+1}{\rIE{6,4}}
+  \proofstepwidestar[1]{\WordLength{\WordRumpf A w}+1=\WordLength w}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{7}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Gleiche angehängte Wörter haben dieselben Bestandteile]{%
+  \begin{aligned}[t]
+    &u,v\in\FiniteWords A\dsep a,b\in A\dsep
+      \WordConcat u{\LetterWord a}=\WordConcat v{\LetterWord b}\vdash{}\\[-2pt]
+    &u=v\land a=b
+  \end{aligned}
+}{WordAppendJointInjectivity}{\DeltaRow{Mengen}{A\dsep u\dsep v\dsep a\dsep b}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u,v\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a,b\in A}{\rA}
+  \proofstepwidestar[3]{\WordConcat u{\LetterWord a}=\WordConcat v{\LetterWord b}}{\rA}
+  \proofstepwidestar[1,2]{\WordRumpf A{\WordConcat u{\LetterWord a}}=u}{%
+    \FormulaRefAuto{WordRumpfAppend}[thm]{\rAEa{1},\rAEa{2}}}
+  \proofstepwidestar[1,2]{\WordRumpf A{\WordConcat v{\LetterWord b}}=v}{%
+    \FormulaRefAuto{WordRumpfAppend}[thm]{\rAEb{1},\rAEb{2}}}
+  \proofstepwidestar[1,2,3]{\WordRumpf A{\WordConcat v{\LetterWord b}}=u}{\rIE{3,4}}
+  \proofstepwidestar[1,2,3]{u=v}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{6,5}}
+  \proofstepwidestar[1,2]{\WordEnd A{\WordConcat u{\LetterWord a}}=a}{%
+    \FormulaRefAuto{WordEndAppend}[thm]{\rAEa{1},\rAEa{2}}}
+  \proofstepwidestar[1,2]{\WordEnd A{\WordConcat v{\LetterWord b}}=b}{%
+    \FormulaRefAuto{WordEndAppend}[thm]{\rAEb{1},\rAEb{2}}}
+  \proofstepwidestar[1,2,3]{\WordEnd A{\WordConcat v{\LetterWord b}}=a}{\rIE{3,8}}
+  \proofstepwidestar[1,2,3]{a=b}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{10,9}}
+  \proofstepwidestar[1,2,3]{u=v\land a=b}{\rAI{7,11}}
+\end{tabproofwide}

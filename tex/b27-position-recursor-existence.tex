@@ -1,0 +1,91 @@
+% Beweis zu TreePositionMapExistenceUnique; der alte Satz bleibt unverändert.
+Für diesen Beweis werden
+\[
+  R\coloneqq\TreeRecursor{A}{\powerset(\BinaryAddresses)}{c_A}
+    {\BinaryOpFunction{\powerset(\BinaryAddresses)}{\Gamma}}
+\]
+und die folgende Eigenschaft abgekürzt:
+\[
+  \begin{aligned}
+    \Phi(P)\coloneqq{}&
+      P\colon\BracketTreeSet A\to\powerset(\BinaryAddresses)\land\Bigl(\\[-2pt]
+    &\forall a\in A\,P(\LeafTree A a)=\{\EmptyWord{\{0,1\}}\}\land{}\\[-2pt]
+    &\forall S,T\in\BracketTreeSet A\,
+      P(\NodeTree A S T)=\AddressGraft{P(S)}{P(T)}\Bigr).
+  \end{aligned}
+\]
+Der Rekursor liefert den Zeugen. Die Identifikationsregel zeigt anschließend,
+dass jede Funktion mit diesen Blatt- und Knotenregeln mit ihm übereinstimmt.
+
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Identifikation eines Kandidaten]{%
+    \Phi(P)\vdash P=R
+  }{\Phi(P)\vdash P=R}[TreePositionRecursorIdentification]
+    \proofstepwidestar[1]{\Phi(P)}{\rA}
+    \proofstepwidestar[1]{%
+      P\colon\BracketTreeSet A\to\powerset(\BinaryAddresses)}{\rAEa{1}}
+    \proofstepwidestar[1]{%
+      \forall a\in A\,P(\LeafTree A a)=\{\EmptyWord{\{0,1\}}\}}{%
+      \rAEa{\rAEb{1}}}
+    \proofstepwidestar[1]{%
+      \forall S,T\in\BracketTreeSet A\,
+        P(\NodeTree A S T)=\AddressGraft{P(S)}{P(T)}}{\rAEb{\rAEb{1}}}
+    \proofstepwidestar[]{c_A\colon A\to\powerset(\BinaryAddresses)}{%
+      \FormulaRefAuto{TreePositionLeafMapDef}[def]}
+    \proofstepwidestar[]{%
+      \mathsf{BinOp}\bigl(\powerset(\BinaryAddresses),\Gamma\bigr)}{%
+      \FormulaRefAuto{BinaryAddressGraftBinaryOperation}[thm]}
+    \proofstepwidestar[7]{a\in A}{\rA}
+    \proofstepwidestar[1,7]{%
+      P(\LeafTree A a)=\{\EmptyWord{\{0,1\}}\}}{\rRE{7,\rUE{3}}}
+    \proofstepwidestar[7]{c_A(a)=\{\EmptyWord{\{0,1\}}\}}{%
+      \FormulaRefAuto{TreePositionLeafMapDef}[def]{7}}
+    \proofstepwidestar[1,7]{P(\LeafTree A a)=c_A(a)}{%
+      \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{8,9}}
+    \proofstepwidestar[1]{\forall a\in A\,P(\LeafTree A a)=c_A(a)}{%
+      \rUI{\rRI{7,10}}}
+    \proofstepwidestar[1]{P=R}{%
+      \FormulaRefAuto{TreeRecursorBinaryOperationIdentification}[thm]{5,6,2,11,4}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Existenz und Eindeutigkeit}
+    \proofstepwidestar[]{c_A\colon A\to\powerset(\BinaryAddresses)}{%
+      \FormulaRefAuto{TreePositionLeafMapDef}[def]}
+    \proofstepwidestar[]{%
+      \mathsf{BinOp}\bigl(\powerset(\BinaryAddresses),\Gamma\bigr)}{%
+      \FormulaRefAuto{BinaryAddressGraftBinaryOperation}[thm]}
+    \proofstepwidestar[]{%
+      R\colon\BracketTreeSet A\to\powerset(\BinaryAddresses)}{%
+      \FormulaRefAuto{TreeRecursorBinaryOperationTyping}[thm]{1,2}}
+    \proofstepwidestar[4]{a\in A}{\rA}
+    \proofstepwidestar[4]{R(\LeafTree A a)=c_A(a)}{%
+      \FormulaRefAuto{TreeRecursorBinaryOperationLeafEquation}[thm]{1,2,4}}
+    \proofstepwidestar[4]{c_A(a)=\{\EmptyWord{\{0,1\}}\}}{%
+      \FormulaRefAuto{TreePositionLeafMapDef}[def]{4}}
+    \proofstepwidestar[4]{R(\LeafTree A a)=\{\EmptyWord{\{0,1\}}\}}{%
+      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}[thm]{5,6}}
+    \proofstepwidestar[]{%
+      \forall a\in A\,R(\LeafTree A a)=\{\EmptyWord{\{0,1\}}\}}{%
+      \rUI{\rRI{4,7}}}
+    \proofstepwidestar[9]{S\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[10]{T\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[9,10]{%
+      R(\NodeTree A S T)=\AddressGraft{R(S)}{R(T)}}{%
+      \FormulaRefAuto{TreeRecursorBinaryOperationNodeEquation}[thm]{1,2,\rAI{9,10}}}
+    \proofstepwidestar[]{%
+      \forall S,T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)=\AddressGraft{R(S)}{R(T)}}{%
+      \rUI{\rRI{9,\rUI{\rRI{10,11}}}}}
+    \proofstepwidestar[]{\Phi(R)}{\rAI{3,\rAI{8,12}}}
+    \proofstepwidestar[]{\exists P\,\Phi(P)}{\rEI{13}}
+    \proofstepwidestar[15]{\Phi(P)}{\rA}
+    \proofstepwidestar[16]{\Phi(Q)}{\rA}
+    \proofstepwidestar[15]{P=R}{%
+      \FormulaRefAuto{TreePositionRecursorIdentification}[thm]{15}}
+    \proofstepwidestar[16]{Q=R}{%
+      \FormulaRefAuto{TreePositionRecursorIdentification}[thm]{16}}
+    \proofstepwidestar[15,16]{P=Q}{%
+      \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{17,18}}
+    \proofstepwidestar[]{\exists!P\,\Phi(P)}{\UEI{14,15,16,19}}
+  \closeproofpartwide
+\end{tabproofsplitwide}

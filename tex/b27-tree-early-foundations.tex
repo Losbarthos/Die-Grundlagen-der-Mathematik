@@ -1,0 +1,335 @@
+% Nach TreeConstructorClosure und vor der abstrakten Baumstruktur einfügen.
+\section{Kennzeichnende Eigenschaften der Baumkonstruktion}
+
+Die Codekonstruktion hat nun ihren Zweck erfüllt: Der Baumträger
+existiert, und beide Konstruktoren bleiben in ihm. Bevor daraus ein
+allgemeiner Strukturbegriff entsteht, werden seine fünf entscheidenden
+Eigenschaften am konkreten Modell bewiesen. Nur für diesen Nachweis
+wird noch auf die Baumstufen zurückgegriffen.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Konstruktorfunktionen des Baummodells]{%
+  \begin{aligned}[t]
+    \lambda_A&\coloneqq
+      \{(a,z)\in A\times\BracketTreeSet A\mid z=\LeafTree A a\},\\[-2pt]
+    \kappa_A&\coloneqq
+      \{(p,z)\in(\BracketTreeSet A\times\BracketTreeSet A)\times\BracketTreeSet A\\[-2pt]
+      &\hspace{35mm}\mid z=\NodeTree A{\pi_1(p)}{\pi_2(p)}\}
+  \end{aligned}
+}{BinaryTreeModelConstructorsDef}{%
+  \DeltaRow{Mengen}{A\dsep a\dsep z\dsep p}
+  \DeltaRow{Projektionen auf \(\BracketTreeSet A\times\BracketTreeSet A\)}{\pi_1\dsep\pi_2}
+  \DeltaRow{Funktionen}{\lambda_A\dsep\kappa_A}
+  \DeltaRow{\textbf{Neue Symbole}}{}
+  \DeltaPrem{Blattfunktion}{\lambda_A}\DeltaPrem{Knotenfunktion}{\kappa_A}}
+\end{minipage}\par
+
+Die Graphen sind durch \(A\times\BracketTreeSet A\) beziehungsweise
+\(((\BracketTreeSet A\times\BracketTreeSet A)\times\BracketTreeSet A)\)
+gebunden. Aussonderung und die bereits bewiesene Abgeschlossenheit
+rechtfertigen daher diese Funktionsdefinitionen.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Typisierung der konkreten Baumkonstruktoren (B0)]{%
+  \lambda_A\colon A\to\BracketTreeSet A\land
+  \kappa_A\colon\BracketTreeSet A\times\BracketTreeSet A\to\BracketTreeSet A
+}{TreeCodeConstructorTyping}{\DeltaRow{Mengen}{A\dsep a\dsep p}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in A}{%
+    \rA}
+  \proofstepwidestar[1]{\LeafTree A a\in\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeLeafClosure}[thm]{1}}
+  \proofstepwidestar[]{\forall a\in A\;\LeafTree A a\in\BracketTreeSet A}{%
+    \rUI{\rRI{1,2}}}
+  \proofstepwidestar[]{\lambda_A\colon A\to\BracketTreeSet A}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{BinaryTreeModelConstructorsDef}[def]},\FormulaRefAuto{TypedTermGraphFunction}[thm]{3}}}
+  \proofstepwidestar[5]{p\in\BracketTreeSet A\times\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[5]{\pi_1(p)\in\BracketTreeSet A}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{5}}
+  \proofstepwidestar[5]{\pi_2(p)\in\BracketTreeSet A}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{5}}
+  \proofstepwidestar[5]{\NodeTree A{\pi_1(p)}{\pi_2(p)}\in\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeNodeClosure}[thm]{\rAI{6,7}}}
+  \proofstepwidestar[]{\forall p\in\BracketTreeSet A\times\BracketTreeSet A\;\NodeTree A{\pi_1(p)}{\pi_2(p)}\in\BracketTreeSet A}{%
+    \rUI{\rRI{5,8}}}
+  \proofstepwidestar[]{\kappa_A\colon\BracketTreeSet A\times\BracketTreeSet A\to\BracketTreeSet A}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{BinaryTreeModelConstructorsDef}[def]},\FormulaRefAuto{TypedTermGraphFunction}[thm]{9}}}
+  \proofstepwidestar[]{\begin{aligned}[t]&\lambda_A\colon A\to\BracketTreeSet A\land{}\\&\kappa_A\colon\BracketTreeSet A\times\BracketTreeSet A\to\BracketTreeSet A\end{aligned}}{%
+    \rAI{4,10}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Wert des konkreten Blattkonstruktors]{%
+a\in A\vdash\lambda_A(a)=\LeafTree A a
+}{TreeCodeLeafValue}{%
+\DeltaRow{Mengen}{A\dsep a\dsep b}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{b\in A}{%
+    \rA}
+  \proofstepwidestar[1]{\LeafTree A b\in\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeLeafClosure}[thm]{1}}
+  \proofstepwidestar[]{\forall b\in A\;\LeafTree A b\in\BracketTreeSet A}{%
+    \rUI{\rRI{1,2}}}
+  \proofstepwidestar[]{\forall b\in A\;\lambda_A(b)=\LeafTree A b}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{BinaryTreeModelConstructorsDef}[def]},\FormulaRefAuto{TypedTermGraphValues}[thm]{3}}}
+  \proofstepwidestar[5]{a\in A}{%
+    \rA}
+  \proofstepwidestar[5]{\lambda_A(a)=\LeafTree A a}{%
+    \rRE{\rUE{4},5}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Wert des konkreten Knotenkonstruktors]{%
+S,R\in\BracketTreeSet A\vdash\kappa_A(S,R)=\NodeTree A S R
+}{TreeCodeNodeValue}{%
+\DeltaRow{Mengen}{A\dsep S\dsep R\dsep p}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{p\in\BracketTreeSet A\times\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[1]{\pi_1(p)\in\BracketTreeSet A}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_1(z)\in A}[thm]{1}}
+  \proofstepwidestar[1]{\pi_2(p)\in\BracketTreeSet A}{%
+    \FormulaRefAuto{z\in A\times B\vdash\pi_2(z)\in B}[thm]{1}}
+  \proofstepwidestar[1]{\NodeTree A{\pi_1(p)}{\pi_2(p)}\in\BracketTreeSet A}{%
+    \FormulaRefAuto{TreeNodeClosure}[thm]{\rAI{2,3}}}
+  \proofstepwidestar[]{\forall p\in\BracketTreeSet A\times\BracketTreeSet A\;\NodeTree A{\pi_1(p)}{\pi_2(p)}\in\BracketTreeSet A}{%
+    \rUI{\rRI{1,4}}}
+  \proofstepwidestar[]{\forall p\in\BracketTreeSet A\times\BracketTreeSet A\;\kappa_A(p)=\NodeTree A{\pi_1(p)}{\pi_2(p)}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{BinaryTreeModelConstructorsDef}[def]},\FormulaRefAuto{TypedTermGraphValues}[thm]{5}}}
+  \proofstepwidestar[7]{S,R\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[7]{(S,R)\in\BracketTreeSet A\times\BracketTreeSet A}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\rAEa{7},\rAEb{7}}}
+  \proofstepwidestar[7]{\kappa_A(S,R)=\NodeTree A{\pi_1(S,R)}{\pi_2(S,R)}}{%
+    \rRE{\rUE{6},8}}
+  \proofstepwidestar[7]{\pi_1(S,R)=S}{%
+    \FormulaRefAuto{(x,y)\in A\times B\vdash\pi_1(x,y)=x}[thm]{8}}
+  \proofstepwidestar[7]{\pi_2(S,R)=R}{%
+    \FormulaRefAuto{(x,y)\in A\times B\vdash\pi_2(x,y)=y}[thm]{8}}
+  \proofstepwidestar[7]{\kappa_A(S,R)=\NodeTree A S R}{%
+    \rIE{10,\rIE{11,9}}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Blatteindeutigkeit des konkreten Modells (B1)]{%
+  a,b\in A\dsep\lambda_A(a)=\lambda_A(b)\vdash a=b
+}{TreeCodeLeafInjectivity}{\DeltaRow{Mengen}{A\dsep a\dsep b}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a,b\in A}{%
+    \rA}
+  \proofstepwidestar[2]{\lambda_A(a)=\lambda_A(b)}{%
+    \rA}
+  \proofstepwidestar[1]{\lambda_A(a)=\LeafTree A a}{%
+    \FormulaRefAuto{TreeCodeLeafValue}[thm]{\rAEa{1}}}
+  \proofstepwidestar[1]{\lambda_A(b)=\LeafTree A b}{%
+    \FormulaRefAuto{TreeCodeLeafValue}[thm]{\rAEb{1}}}
+  \proofstepwidestar[1,2]{\LeafTree A a=\LeafTree A b}{%
+    \rIE{3,\rIE{4,2}}}
+  \proofstepwidestar[1,2]{a=b}{%
+    \FormulaRefAuto{TreeLeafConstructorInjective}[thm]{1,5}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Knoteneindeutigkeit des konkreten Modells (B2)]{%
+  \begin{aligned}[t]
+    &S,R,S',R'\in\BracketTreeSet A\dsep{}\\[-2pt]
+    &\kappa_A(S,R)=\kappa_A(S',R')\vdash S=S'\land R=R'
+  \end{aligned}
+}{TreeCodeNodeInjectivity}{\DeltaRow{Mengen}{A\dsep S\dsep R\dsep S'\dsep R'}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{S,R,S',R'\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[2]{\kappa_A(S,R)=\kappa_A(S',R')}{%
+    \rA}
+  \proofstepwidestar[1]{S,R,S',R'\in\NonemptyWords{\TreeAlphabet A}}{%
+    \FormulaRefAuto{FullPlanarBinaryTreeSetDef}[def]{1}}
+  \proofstepwidestar[1]{\kappa_A(S,R)=\NodeTree A S R}{%
+    \FormulaRefAuto{TreeCodeNodeValue}[thm]{\rAEn{1}}}
+  \proofstepwidestar[1]{\kappa_A(S',R')=\NodeTree A {S'}{R'}}{%
+    \FormulaRefAuto{TreeCodeNodeValue}[thm]{\rAEn{1}}}
+  \proofstepwidestar[1,2]{\NodeTree A S R=\NodeTree A {S'}{R'}}{%
+    \rIE{4,\rIE{5,2}}}
+  \proofstepwidestar[1,2]{S=S'}{%
+    \FormulaRefAuto{TreeNodeConstructorLeftInjective}[thm]{3,6}}
+  \proofstepwidestar[1,2]{R=R'}{%
+    \FormulaRefAuto{TreeNodeConstructorRightInjective}[thm]{3,6}}
+  \proofstepwidestar[1,2]{S=S'\land R=R'}{%
+    \rAI{7,8}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Trennung der konkreten Konstruktoren (B3)]{%
+  a\in A\dsep S,R\in\BracketTreeSet A\vdash
+    \lambda_A(a)\ne\kappa_A(S,R)
+}{TreeCodeConstructorSeparation}{\DeltaRow{Mengen}{A\dsep a\dsep S\dsep R}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{a\in A}{%
+    \rA}
+  \proofstepwidestar[2]{S,R\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[2]{S,R\in\NonemptyWords{\TreeAlphabet A}}{%
+    \FormulaRefAuto{FullPlanarBinaryTreeSetDef}[def]{2}}
+  \proofstepwidestar[1,2]{\LeafTree A a\ne\NodeTree A S R}{%
+    \FormulaRefAuto{TreeConstructorsDisjoint}[thm]{1,3}}
+  \proofstepwidestar[1]{\lambda_A(a)=\LeafTree A a}{%
+    \FormulaRefAuto{TreeCodeLeafValue}[thm]{1}}
+  \proofstepwidestar[2]{\kappa_A(S,R)=\NodeTree A S R}{%
+    \FormulaRefAuto{TreeCodeNodeValue}[thm]{2}}
+  \proofstepwidestar[1,2]{\lambda_A(a)\ne\kappa_A(S,R)}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{5},\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{6},4}}}
+\end{tabproofwide}
+
+Die letzte Eigenschaft besagt, dass keine echte Teilmenge des Trägers
+alle Blätter enthält und unter der Knotenbildung abgeschlossen ist.
+Ihr Beweis benutzt zunächst nur die Gleichung für die nächste
+Baumstufe. Die Zerlegung eines beliebigen Baumes und die
+Strukturinduktion werden dabei noch nicht vorausgesetzt.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Abgeschlossene Teilmengen enthalten die nächste Baumstufe]{%
+  \begin{aligned}[t]
+    &U\subseteq\BracketTreeSet A\dsep\lambda_A[A]\subseteq U\dsep{}\\[-2pt]
+    &\forall S,R\in U\;\kappa_A(S,R)\in U\dsep{}\\[-2pt]
+    &n\in\mathbb N\dsep\TreeStage A n\subseteq U
+      \vdash\TreeStage A {n+1}\subseteq U
+  \end{aligned}
+}{TreeCodeStageContainmentStep}{\DeltaRow{Mengen}{A\dsep U\dsep n\dsep a\dsep b\dsep S\dsep R\dsep Q}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{U\subseteq\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[2]{\lambda_A[A]\subseteq U}{%
+    \rA}
+  \proofstepwidestar[3]{\forall S,R\in U\;\kappa_A(S,R)\in U}{%
+    \rA}
+  \proofstepwidestar[4]{n\in\mathbb N}{%
+    \rA}
+  \proofstepwidestar[5]{\TreeStage A n\subseteq U}{%
+    \rA}
+  \proofstepwidestar[]{\lambda_A\colon A\to\BracketTreeSet A}{%
+    \rAEa{\FormulaRefAuto{TreeCodeConstructorTyping}[thm]}}
+  \proofstepwidestar[4]{\TreeStage A n\in\powerset(\NonemptyWords{\TreeAlphabet A})}{%
+    \FormulaRefAuto{TreeStagePowerSetTyping}[thm]{4}}
+  \proofstepwidestar[8]{Q\in\TreeStage A {n+1}}{%
+    \rA}
+  \proofstepwidestar[4]{\TreeStage A {n+1}=\TreeClosure A{\TreeStage A n}}{%
+    \FormulaRefAuto{TreeStageSuccessorEquation}[thm]{4}}
+  \proofstepwidestar[4,8]{Q\in\TreeClosure A{\TreeStage A n}}{%
+    \rIE{9,8}}
+  \proofstepwidestar[4]{\begin{aligned}[t]&\TreeClosure A{\TreeStage A n}\\&=\{\LeafTree A a\mid a\in A\}\\&\quad\cup\{\NodeTree A S R\mid S,R\in\TreeStage A n\}\end{aligned}}{%
+    \FormulaRefAuto{TreeGenerationStepDef}[def]{7}}
+  \proofstepwidestar[4,8]{\begin{aligned}[t]&Q\in\{\LeafTree A a\mid a\in A\}\\&\lor Q\in\{\NodeTree A S R\mid S,R\in\TreeStage A n\}\end{aligned}}{%
+    \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{\rIE{11,10}}}
+  \proofstepwidestar[]{Q\in\{\LeafTree A a\mid a\in A\}\leftrightarrow\exists a\in A\;Q=\LeafTree A a}{%
+    \FormulaRefAuto{B27TermImageMembership}[thm]}
+  \proofstepwidestar[]{\begin{aligned}[t]&Q\in\{\NodeTree A S R\mid S,R\in\TreeStage A n\}\\&\leftrightarrow\exists S,R\in\TreeStage A n\;Q=\NodeTree A S R\end{aligned}}{%
+    \FormulaRefAuto{TreeCodeBinaryTermImageMembership}[thm]}
+  \proofstepwidestar[4,8]{\begin{aligned}[t]&(\exists a\in A\;Q=\LeafTree A a)\lor{}\\&(\exists S,R\in\TreeStage A n\;Q=\NodeTree A S R)\end{aligned}}{%
+    \rLRS{14,\rLRS{13,12}}}
+  \proofstepwidestar[16]{\exists a\in A\;Q=\LeafTree A a}{%
+    \rA}
+  \proofstepwidestar[17]{a\in A\land Q=\LeafTree A a}{%
+    \rA}
+  \proofstepwidestar[17]{\lambda_A(a)=\LeafTree A a}{%
+    \FormulaRefAuto{TreeCodeLeafValue}[thm]{\rAEa{17}}}
+  \proofstepwidestar[17]{\exists b\in A\;\lambda_A(a)=\lambda_A(b)}{%
+    \rEI{\rAI{\rAEa{17},\rII}}}
+  \proofstepwidestar[17]{\lambda_A(a)\in\lambda_A[A]}{%
+    \FormulaRefAuto{F\colon A\to B\dsep\exists x\in A\;y=F(x)\vdash y\in F[A]}[thm]{6,19}}
+  \proofstepwidestar[2,17]{\lambda_A(a)\in U}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,20}}
+  \proofstepwidestar[2,17]{Q\in U}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{17}},\rIE{18,21}}}
+  \proofstepwidestar[2,16]{Q\in U}{%
+    \rEE{16,17,22}}
+  \proofstepwidestar[24]{\exists S,R\in\TreeStage A n\;Q=\NodeTree A S R}{%
+    \rA}
+  \proofstepwidestar[25]{S\in\TreeStage A n\land\exists R\in\TreeStage A n\;Q=\NodeTree A S R}{%
+    \rA}
+  \proofstepwidestar[26]{R\in\TreeStage A n\land Q=\NodeTree A S R}{%
+    \rA}
+  \proofstepwidestar[5,26,25]{S\in U}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,\rAEn{\rAI{25,26}}}}
+  \proofstepwidestar[5,26,25]{R\in U}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,\rAEn{\rAI{25,26}}}}
+  \proofstepwidestar[1,5,26,25]{S\in\BracketTreeSet A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,27}}
+  \proofstepwidestar[1,5,26,25]{R\in\BracketTreeSet A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,28}}
+  \proofstepwidestar[1,5,26,25]{\kappa_A(S,R)=\NodeTree A S R}{%
+    \FormulaRefAuto{TreeCodeNodeValue}[thm]{\rAI{29,30}}}
+  \proofstepwidestar[3,5,26,25]{\kappa_A(S,R)\in U}{%
+    \rRE{\rUE{\rRE{\rUE{3},27}},28}}
+  \proofstepwidestar[1,3,5,26,25]{Q\in U}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEn{\rAI{25,26}}},\rIE{31,32}}}
+  \proofstepwidestar[1,3,5,25]{Q\in U}{%
+    \rEE{\rAEb{25},26,33}}
+  \proofstepwidestar[1,3,5,24]{Q\in U}{%
+    \rEE{24,25,34}}
+  \proofstepwidestar[1,2,3,4,5,8]{Q\in U}{%
+    \rOE{15,16,23,24,35}}
+  \proofstepwidestar[1,2,3,4,5]{\TreeStage A {n+1}\subseteq U}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[8]\vdots 36}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Minimalität des konkreten Baumträgers (B4)]{%
+  \begin{aligned}[t]
+    &U\subseteq\BracketTreeSet A\dsep\lambda_A[A]\subseteq U\dsep{}\\[-2pt]
+    &\forall S,R\in U\;\kappa_A(S,R)\in U\vdash U=\BracketTreeSet A
+  \end{aligned}
+}{TreeCodeMinimality}{\DeltaRow{Mengen}{A\dsep U\dsep n\dsep S\dsep R}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{U\subseteq\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[2]{\lambda_A[A]\subseteq U}{%
+    \rA}
+  \proofstepwidestar[3]{\forall S,R\in U\;\kappa_A(S,R)\in U}{%
+    \rA}
+  \proofstepwidestar[]{\TreeStage A0=\varnothing}{%
+    \FormulaRefAuto{TreeStageZeroEquation}[thm]}
+  \proofstepwidestar[]{\varnothing\subseteq U}{%
+    \FormulaRefAuto{\varnothing\subseteq A}[thm]}
+  \proofstepwidestar[]{\TreeStage A0\subseteq U}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{4},5}}
+  \proofstepwidestar[7]{n\in\mathbb N}{%
+    \rA}
+  \proofstepwidestar[8]{\TreeStage A n\subseteq U}{%
+    \rA}
+  \proofstepwidestar[1,2,3,7,8]{\TreeStage A {n+1}\subseteq U}{%
+    \FormulaRefAuto{TreeCodeStageContainmentStep}[thm]{1,2,3,7,8}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;(\TreeStage A n\subseteq U\rightarrow\TreeStage A {n+1}\subseteq U)}{%
+    \rUI{\rRI{7,\rRI{8,9}}}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;\TreeStage A n\subseteq U}{%
+    \FormulaRefAuto{PeanoInductionAddOne}[thm]{6,10}}
+  \proofstepwidestar[12]{R\in\BracketTreeSet A}{%
+    \rA}
+  \proofstepwidestar[12]{\exists n\in\mathbb N\;R\in\TreeStage A n}{%
+    \FormulaRefAuto{FullPlanarBinaryTreeSetDef}[def]{12}}
+  \proofstepwidestar[14]{n\in\mathbb N\land R\in\TreeStage A n}{%
+    \rA}
+  \proofstepwidestar[1,2,3,14]{\TreeStage A n\subseteq U}{%
+    \rRE{\rUE{11},\rAEa{14}}}
+  \proofstepwidestar[1,2,3,14]{R\in U}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{15,\rAEb{14}}}
+  \proofstepwidestar[1,2,3,12]{R\in U}{%
+    \rEE{13,14,16}}
+  \proofstepwidestar[1,2,3]{\BracketTreeSet A\subseteq U}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[12]\vdots 17}}
+  \proofstepwidestar[1,2,3]{U=\BracketTreeSet A}{%
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{1,18}}
+\end{tabproofwide}
+
+Auch für \(A=\varnothing\) gelten alle fünf Eigenschaften. In diesem
+Fall ist \(U=\varnothing\) unter den Konstruktoren abgeschlossen, und
+die Minimalität ergibt \(\BracketTreeSet\varnothing=\varnothing\).
+Ein Baum ohne beschriftetes Blatt wird durch die Konstruktion also
+nicht erzeugt.

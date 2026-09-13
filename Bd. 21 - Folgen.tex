@@ -50,11 +50,7 @@
 \setcounter{file}{21}
 \renewcommand{\FormulaBandID}{21}
 
-% Band 21 verwendet dieselben festen Beweisspalten wie Band 27.
-% Feste, oben ausgerichtete Absatzspalten halten die Begründungen dennoch
-% durchgehend an derselben Stelle; sowohl Formel als auch Begründung dürfen
-% innerhalb ihrer Spalte regulär umbrechen.
-\let\BandTwentyOneOriginalProofStepWideStar\proofstepwidestar
+% Ergänzende Umbruchstellen für die Argumentlisten dieses Bandes.
 \let\BandTwentyOneOriginalRuleRefWithArg\RuleRefWithArg
 \ExplSyntaxOn
 \cs_set_eq:NN
@@ -67,17 +63,6 @@
     \tl_use:N \l_tmpa_tl
   }
 \ExplSyntaxOff
-\makeatletter
-\newcol@{G}[0]{>{\raggedleft\arraybackslash\scriptsize}p{.10\linewidth}}
-\makeatother
-\RenewDocumentCommand{\proofstepwidestar}{O{} m m}{%
-  \stepcounter{proofstepnr}%
-  \BandTwentyOneBreakArgs{#1} & \theproofstepnr
-     & \multicolumn{3}{@{}>{\raggedright\arraybackslash}p{.59\linewidth}@{}}{%
-         \ensuremath{#2}}%
-     & \multicolumn{1}{@{\hspace{.4em}}>{\raggedright\arraybackslash}p{.23\linewidth}@{}}{%
-         #3}\\%
-}
 \ExplSyntaxOn
 \cs_set_protected:Npn \mx_formula_ref_suffix:n #1
   {
@@ -106,7 +91,7 @@ Folgen werden Konvergenz, Grenzwerte, Beschränktheit, die elementaren
 Grenzwertregeln und das Cauchy-Kriterium entwickelt. Die Bände~22 bis~26
 verwenden endliche Folgen anschließend als Wege in gerichteten und
 ungerichteten Graphen und bauen daraus den axiomatischen Baumbegriff auf.
-Band~44 löst die Abstandsargumente von der besonderen Ordnung und Arithmetik
+Band~47 löst die Abstandsargumente von der besonderen Ordnung und Arithmetik
 der reellen Zahlen und entwickelt daraus metrische Räume und metrische
 Vollständigkeit. Das letzte Kapitel dieses Bandes stellt die rein folgen- und
 mengentheoretischen Familien bereit, die in der Mogiljanskaja-Konstruktion der
@@ -341,7 +326,14 @@ ohne dass sich \(\operatorname{Bild}(a)\) ändert.
   \DeltaRow{Funktionen}{a\dsep a\restriction_J}
 }
 
-\FormulaThmDeltaK[Eigenschaften der eingeschränkten Familie]{%
+\FormulaThmDeltaKR[Eigenschaften der eingeschränkten Familie]{%
+  \begin{aligned}[t]
+    &a\colon I\to M\dsep J\subseteq I\vdash{}\\[-2pt]
+    &\text{(i)}\quad a\restriction_J\colon J\to M,\\[-2pt]
+    &\text{(ii)}\quad \forall i\in J\,\bigl((a\restriction_J)_i=a_i\bigr),\\[-2pt]
+    &\text{(iii)}\quad \operatorname{Bild}(a\restriction_J)\subseteq\operatorname{Bild}(a).
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
   &a\colon I\to M\dsep J\subseteq I\vdash
     a\restriction_J\colon J\to M\dsep{}\\[-2pt]
@@ -354,8 +346,8 @@ ohne dass sich \(\operatorname{Bild}(a)\) ändert.
   \DeltaRow{Funktionen}{a\dsep a\restriction_J}
 }
 \begin{tabproofsplitwide}
-  \proofpartwide{Typisierung, Koordinaten und Bild}
-    \proofstepwidestar[1]{%
+\proofpartwide{Funktionstyp}
+\proofstepwidestar[1]{%
       a\colon I\to M}{%
       \rA}
     \proofstepwidestar[2]{%
@@ -364,7 +356,12 @@ ohne dass sich \(\operatorname{Bild}(a)\) ändert.
     \proofstepwidestar[1,2]{%
       a\restriction_J\colon J\to M}{%
       \FormulaRefAuto{RestrictionDef}[def]{1,2}}
-    \proofstepwidestar[4]{%
+
+\closeproofpartwide
+
+\proofpartwide{Koordinaten der Einschränkung}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[4]{%
       i\in J}{%
       \rA}
     \proofstepwidestar[1,2,4]{%
@@ -376,16 +373,24 @@ ohne dass sich \(\operatorname{Bild}(a)\) ändert.
     \proofstepwidestar[1,2]{%
       \forall i\in J\,((a\restriction_J)_i=a_i)}{%
       \rUI{\rRI{4,6}}}
-    \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Bildmenge der Einschränkung}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
       (a\restriction_J)[J]=a[J]}{%
       \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\vdash(F\restriction_C)[C]=F[C]}[thm]{2,1}}
+    \proofstepwidestar[1,2]{I \subseteq I}{%
+      \FormulaRefAuto{A\subseteq A}[thm]}
     \proofstepwidestar[1,2]{%
       a[J]\subseteq a[I]}{%
-      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M\vdash F[A]\subseteq F[B]}[thm]{1,2,\FormulaRefAuto{A\subseteq A}[thm]}}
+      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M\vdash F[A]\subseteq F[B]}[thm]{1,2,9}}
     \proofstepwidestar[1,2]{%
       \operatorname{Bild}(a\restriction_J)\subseteq\operatorname{Bild}(a)}{%
-      \FormulaRefAuto{IndexedFamilyImageDef}[def]{1,3},\ \rIE{8,9}}
-  \closeproofpartwide
+      \FormulaRefAuto{IndexedFamilyImageDef}[def]{1,3},\ \rIE{8,10}}
+
+\closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Umindizierte Familie]{%
@@ -426,16 +431,18 @@ ohne dass sich \(\operatorname{Bild}(a)\) ändert.
       \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\vdash y\in F[C]\leftrightarrow\exists x\in C\,y=F(x)}[thm]{4,1},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{2}}
     \proofstepwidestar[1,2]{%
       x\in\operatorname{Bild}(a\circ\varphi)\leftrightarrow x\in a[\varphi[J]]}{%
-      \rLRI{\rRE{\rLREb{6},\rLREa{5}},\rRE{\rLREb{5},\rLREa{6}}}}
+      \FormulaRefAuto{P\leftrightarrow Q, R\leftrightarrow Q\vdash P\leftrightarrow R}[thm]{5,6}}
     \proofstepwidestar[1,2]{%
       \operatorname{Bild}(a\circ\varphi)=a[\varphi[J]]}{%
-      \text{Extensionalität}{\rUI{7}}}
+      \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{7}}}
+    \proofstepwidestar[1,2]{I \subseteq I}{%
+      \FormulaRefAuto{A\subseteq A}[thm]}
     \proofstepwidestar[1,2]{%
       a[\varphi[J]]\subseteq a[I]}{%
-      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M\vdash F[A]\subseteq F[B]}[thm]{1,4,\FormulaRefAuto{A\subseteq A}[thm]}}
+      \FormulaRefAuto{F\colon M\to N\dsep A\subseteq B\dsep B\subseteq M\vdash F[A]\subseteq F[B]}[thm]{1,4,9}}
     \proofstepwidestar[1,2]{%
       \operatorname{Bild}(a\circ\varphi)=a[\varphi[J]]\subseteq\operatorname{Bild}(a)}{%
-      8,\ \FormulaRefAuto{IndexedFamilyImageDef}[def]{1,9}}
+      8,\ \FormulaRefAuto{IndexedFamilyImageDef}[def]{1,10}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -572,6 +579,8 @@ geschrieben. Der größte Index ist also \(n-1\), die Anzahl der Glieder aber
 \(n\). Bei \(n=0\) gibt es keinen Ausdruck \(a_{n-1}\); die Folge ist dann
 die eindeutig bestimmte leere Funktion \(\varnothing\to M\).
 
+\input{tex/b21-migrated-graph-sequences}
+
 \subsection{Verschobene Graphen endlicher Folgen}
 
 Bei einer Indexverschiebung wird nur die erste Koordinate des
@@ -677,6 +686,7 @@ beliebige endliche Folgen.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
+\Needspace{16\baselineskip}
 \section{Endliche Folgen mit positiven Indizes}
 
 \FormulaDefDeltaK[Positive Indexmenge]{%
@@ -704,27 +714,35 @@ beliebige endliche Folgen.
     \proofstepwidestar[1]{%
       i\in\PosNatSeg 0}{%
       \rA}
+    \proofstepwidestar[1]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{%
       i\in\mathbb N\land1\leq i\land i\leq0}{%
-      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{\FormulaRefAuto{PeanoZero}[ax],1}}
+      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{2,1}}
     \proofstepwidestar[]{%
       1\in\mathbb N}{%
       \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[1]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{%
       1\leq0}{%
-      \FormulaRefAuto{PeanoLeqTransitive}[thm]{3,\rAEa{2},\FormulaRefAuto{PeanoZero}[ax],\rAEa{\rAEb{2}},\rAEb{\rAEb{2}}}}
+      \FormulaRefAuto{PeanoLeqTransitive}[thm]{4,\rAEa{3},5,\rAEa{\rAEb{3}},\rAEb{\rAEb{3}}}}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[]{%
       0<1}{%
-      \FormulaRefAuto{PeanoLtAddOne}[thm]{\FormulaRefAuto{PeanoZero}[ax]},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{3}}
+      \FormulaRefAuto{PeanoLtAddOne}[thm]{7},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{4}}
+    \proofstepwidestar[1]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{%
       \bot}{%
-      \FormulaRefAuto{PeanoOrderNoCycle}[thm]{\FormulaRefAuto{PeanoZero}[ax],3,5,4}}
+      \FormulaRefAuto{PeanoOrderNoCycle}[thm]{9,4,8,6}}
     \proofstepwidestar[]{%
       \forall i\,i\notin\PosNatSeg 0}{%
-      \rUI{\rCI{1,6}}}
+      \rUI{\rCI{1,10}}}
     \proofstepwidestar[]{%
       \PosNatSeg 0=\varnothing}{%
-      \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{7}}
+      \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{11}}
   \closeproofpartwideindR
 
   \proofpartwide{Elementkriterium und Zusammenfassung}
@@ -790,25 +808,37 @@ der Länge \(n\) bezeichnet werden.
     \proofstepwidestar[1,2]{%
       0\leq i}{%
       \FormulaRefAuto{PeanoZeroLeq}[thm]{\rAEa{3}}}
+    \proofstepwidestar[1,2]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1,2]{%
       0<i+1}{%
-      \FormulaRefAuto{PeanoLeqAddOneStrict}[thm]{\FormulaRefAuto{PeanoZero}[ax],\rAEa{3},5}}
+      \FormulaRefAuto{PeanoLeqAddOneStrict}[thm]{6,\rAEa{3},5}}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[1,2]{%
       1\leq i+1}{%
-      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{\FormulaRefAuto{PeanoZero}[ax],4,6},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]}}
+      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{8,4,7},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{9}}
     \proofstepwidestar[1,2]{%
       i+1\leq n}{%
       \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{\rAEa{3},1,\rAEb{3}}}
     \proofstepwidestar[1,2]{%
       i+1\in\PosNatSeg n}{%
-      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{1,4,7,8}}
+      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{1,4,10,11}}
     \proofstepwidestar[1]{%
       \forall i\in\NatSeg n\,(i+1\in\PosNatSeg n)}{%
-      \rUI{\rRI{2,9}}}
+      \rUI{\rRI{2,12}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Äquivalenz der beiden endlichen Indexkonventionen]{%
+\FormulaThmDeltaKR[Äquivalenz der beiden endlichen Indexkonventionen]{%
+  \begin{aligned}[t]
+    &n\in\mathbb N\vdash{}\\[-2pt]
+    &\text{(i)}\quad \lambda_n\colon\NatSeg{n}\bij\PosNatSeg{n},\\[-2pt]
+    &\text{(ii)}\quad j\in\PosNatSeg{n}\vdash\lambda_n^{-1}(j)=j-1.
+  \end{aligned}%
+}{%
   n\in\mathbb N\vdash
   \lambda_n\colon\NatSeg{n}\bij\PosNatSeg{n}\dsep
   j\in\PosNatSeg{n}\vdash\lambda_n^{-1}(j)=j-1%
@@ -817,10 +847,8 @@ der Länge \(n\) bezeichnet werden.
   \DeltaRow{Funktionen}{\lambda_n\dsep\lambda_n^{-1}}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Injektivität und Surjektivität]{%
-    n\in\mathbb N\vdash\lambda_n\colon\NatSeg n\bij\PosNatSeg n
-  }{n\in\mathbb N\vdash\lambda_n\colon\NatSeg n\bij\PosNatSeg n}[B21FiniteIndexShiftBijection]
-    \proofstepwidestar[1]{%
+\proofpartwide{Injektivität}
+\proofstepwidestar[1]{%
       n\in\mathbb N}{%
       \rA}
     \proofstepwidestar[1]{%
@@ -832,46 +860,66 @@ der Länge \(n\) bezeichnet werden.
     \proofstepwidestar[1,3]{%
       i+1=k+1}{%
       \FormulaRefAuto{FiniteSequenceIndexShiftDef}[def]{1,3}}
+    \proofstepwidestar[1,3]{i \in \mathbb N}{%
+      \FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,\rAEa{\rAEa{3}}}}
+    \proofstepwidestar[1,3]{k \in \mathbb N}{%
+      \FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,\rAEb{\rAEa{3}}}}
     \proofstepwidestar[1,3]{%
       i=k}{%
-      \FormulaRefAuto{PeanoAddOneInjective}[thm]{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,\rAEa{\rAEa{3}}},\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,\rAEb{\rAEa{3}}},4}}
+      \FormulaRefAuto{PeanoAddOneInjective}[thm]{5,6,4}}
     \proofstepwidestar[1]{%
       \lambda_n\colon\NatSeg n\inj\PosNatSeg n}{%
-      \FormulaRefAuto{Injektive Funktion}[def]{2,\rUI{\rUI{\rRI{3,5}}}}}
-    \proofstepwidestar[7]{%
+      \FormulaRefAuto{Injektive Funktion}[def]{2,\rUI{\rUI{\rRI{3,7}}}}}
+
+\closeproofpartwide
+
+\proofpartwide{Surjektivität}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[9]{%
       j\in\PosNatSeg n}{%
       \rA}
-    \proofstepwidestar[1,7]{%
+    \proofstepwidestar[1,9]{%
       j\in\mathbb N\land(1\leq j\land j\leq n)}{%
-      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{1,7}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PositiveNaturalSegmentDef}[def]{1,9}}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[1,9]{%
       j\neq0}{%
-      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{\FormulaRefAuto{PeanoZero}[ax],\rAEa{8},\rAEa{\rAEb{8}}},\ \FormulaRefAuto{PeanoNoLtZero}[thm]}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{11,\rAEa{10},\rAEa{\rAEb{10}}},\ \FormulaRefAuto{PeanoNoLtZero}[thm]}
+    \proofstepwidestar[1,9]{%
       j-1\in\mathbb N}{%
-      \FormulaRefAuto{PeanoMinusOneNatural}[thm]{\rAEa{8},9}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PeanoMinusOneNatural}[thm]{\rAEa{10},12}}
+    \proofstepwidestar[1,9]{%
       (j-1)+1=j}{%
-      \FormulaRefAuto{PeanoMinusOneAddOne}[thm]{\rAEa{8},9}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PeanoMinusOneAddOne}[thm]{\rAEa{10},12}}
+    \proofstepwidestar[1,9]{%
       j-1<n}{%
-      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{10,1},\ \rIE{11,\rAEb{\rAEb{8}}}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{13,1},\ \rIE{14,\rAEb{\rAEb{10}}}}
+    \proofstepwidestar[1,9]{%
       j-1\in\NatSeg n}{%
-      \FormulaRefAuto{PeanoNatSegMembership}[thm]{1,10,12}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{PeanoNatSegMembership}[thm]{1,13,15}}
+    \proofstepwidestar[1,9]{%
       \lambda_n(j-1)=j}{%
-      \FormulaRefAuto{FiniteSequenceIndexShiftDef}[def]{1,13},\ \rIE{11}}
-    \proofstepwidestar[1,7]{%
+      \FormulaRefAuto{FiniteSequenceIndexShiftDef}[def]{1,16},\ \rIE{14}}
+    \proofstepwidestar[1,9]{%
       \exists i\in\NatSeg n\,(\lambda_n(i)=j)}{%
-      \rEI{\rAI{13,14}}}
+      \rEI{\rAI{16,17}}}
     \proofstepwidestar[1]{%
       \lambda_n\colon\NatSeg n\sur\PosNatSeg n}{%
-      \FormulaRefAuto{Surjektive Funktion}[def]{2,\rUI{\rRI{7,15}}}}
-    \proofstepwidestar[1]{%
+      \FormulaRefAuto{Surjektive Funktion}[def]{2,\rUI{\rRI{9,18}}}}
+
+\closeproofpartwide
+
+\proofpartwideindR[Injektivität und Surjektivität]{%
+    n\in\mathbb N\vdash\lambda_n\colon\NatSeg n\bij\PosNatSeg n
+  }{n\in\mathbb N\vdash\lambda_n\colon\NatSeg n\bij\PosNatSeg n}[B21FiniteIndexShiftBijection]
+  \setcounter{proofstepnr}{19}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1]{%
       \lambda_n\colon\NatSeg n\bij\PosNatSeg n}{%
-      \FormulaRefAuto{Bijektive Funktion}[def]{6,16}}
-  \closeproofpartwideindR
+      \FormulaRefAuto{Bijektive Funktion}[def]{8,19}}
+
+\closeproofpartwideindR
+
 
   \proofpartwide{Wert der Umkehrfunktion}
     \proofstepwidestar[1]{%
@@ -888,17 +936,25 @@ der Länge \(n\) bezeichnet werden.
       \FormulaRefAuto{InverseFunctionDef}[def]{3,2}}
     \proofstepwidestar[1,2]{%
       \lambda_n^{-1}(j)+1=j}{%
-      \FormulaRefAuto{F\colon A\bij B\dsep y\in B\vdash F(F^{-1}(y))=y}[thm]{3,2},\ \FormulaRefAuto{FiniteSequenceIndexShiftDef}[def]{1,4}}
+      \FormulaRefAuto{InverseFunctionRightInverse}[thm]{3,2},\ \FormulaRefAuto{FiniteSequenceIndexShiftDef}[def]{1,4}}
+    \proofstepwidestar[1,2]{{ \lambda _ n ^ { - 1 } ( j ) } \in \mathbb N}{%
+      \FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,4}}
     \proofstepwidestar[1,2]{%
       (\lambda_n^{-1}(j)+1)-1=\lambda_n^{-1}(j)}{%
-      \FormulaRefAuto{PeanoAddOneMinusOne}[thm]{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{1,4}}}
+      \FormulaRefAuto{PeanoAddOneMinusOne}[thm]{6}}
     \proofstepwidestar[1,2]{%
       \lambda_n^{-1}(j)=j-1}{%
-      \rIE{5,6},\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
+      \rIE{5,7},\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Umrechnung endlicher Folgen]{%
+\FormulaThmDeltaKR[Umrechnung endlicher Folgen]{%
+  \begin{aligned}[t]
+    &n\in\mathbb N\dsep a\colon\NatSeg{n}\to M\vdash{}\\[-2pt]
+    &\text{(i)}\quad a\circ\lambda_n^{-1}\colon\PosNatSeg{n}\to M,\\[-2pt]
+    &\text{(ii)}\quad \forall j\in\PosNatSeg{n}\,\bigl((a\circ\lambda_n^{-1})_j=a_{j-1}\bigr).
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
   &n\in\mathbb N\dsep a\colon\NatSeg{n}\to M\vdash
     a\circ\lambda_n^{-1}\colon\PosNatSeg{n}\to M\dsep{}\\[-2pt]
@@ -1134,9 +1190,13 @@ reelle Potenznotation vorweggenommen werden muss.
     \proofstepwidestar[3]{%
       n,k\in\mathbb N}{%
       \rA}
+    \proofstepwidestar[3]{D(n)\subseteq D(n+0)}{%
+      \FormulaRefAuto{B21SubsetSequenceBase}[thm]{\rAEa{3}}}
+    \proofstepwidestar[2,3]{\forall k\in\mathbb N\,(D(n)\subseteq D(n+k)\rightarrow D(n)\subseteq D(n+(k+1)))}{%
+      \FormulaRefAuto{B21SubsetSequenceStep}[thm]{2,\rAEa{3}}}
     \proofstepwidestar[1,2,3]{%
       D(n)\subseteq D(n+k)}{%
-      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{\FormulaRefAuto{B21SubsetSequenceBase}[thm],\FormulaRefAuto{B21SubsetSequenceStep}[thm],2,3}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{4,5,\rAEb{3}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1258,8 +1318,8 @@ Arithmetik eingeführt.
   \DeltaRow{Folgen}{|a|\dsep a-L}
 }
 \begin{tabproofsplitwide}
-  \proofpartwide{Typisierung der rechten Terme}
-    \proofstepwidestar[1]{%
+\proofpartwide{Negation, Summe und Differenz}
+\proofstepwidestar[1]{%
       a,b\colon\mathbb N\to\mathbb R}{%
       \rA}
     \proofstepwidestar[2]{%
@@ -1277,22 +1337,48 @@ Arithmetik eingeführt.
     \proofstepwidestar[1,3]{%
       a_n+b_n,\ a_n-b_n\in\mathbb R}{%
       \FormulaRefAuto{RealCutAdditiveClosure}[thm]{4,5},\ \FormulaRefAuto{RealSequenceConventionalNotation}[def]}
-    \proofstepwidestar[1,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Produkt}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,3]{%
       a_nb_n\in\mathbb R}{%
       \FormulaRefAuto{RealCutMultiplicativeClosure}[thm]{4},\ \FormulaRefAuto{RealSequenceConventionalNotation}[def]}
-    \proofstepwidestar[1,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Betrag}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,3]{%
       |a_n|\in\mathbb R}{%
       \FormulaRefAuto{RealAbsoluteValue}[def]{4},\ \FormulaRefAuto{RealCutAdditiveClosure}[thm]{4}}
-    \proofstepwidestar[1,2,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Skalares Vielfaches}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2,3]{%
       c\,a_n\in\mathbb R}{%
       \FormulaRefAuto{RealCutMultiplicativeClosure}[thm]{2,4}}
-    \proofstepwidestar[1,2,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Verschiebung um einen konstanten Wert}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2,3]{%
       a_n-L\in\mathbb R}{%
       \FormulaRefAuto{RealCutAdditiveClosure}[thm]{2,4}}
-    \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Funktionstypen der Folgen}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
       \begin{aligned}[t]&a+b,\ a-b,\ a\mathbin{\cdot}b,\ -a,\ |a|,\ ca,\ a-L\\[-2pt]&\qquad\colon\mathbb N\to\mathbb R\end{aligned}}{%
       \FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]{5,6,7,8,9,10}}
-  \closeproofpartwide
+
+\closeproofpartwide
 \end{tabproofsplitwide}
 
 \FormulaDefDeltaK[Punktweiser Kehrwert und Quotient reeller Folgen]{%
@@ -1315,8 +1401,8 @@ Arithmetik eingeführt.
   \DeltaRow{Funktionen}{a\dsep b\dsep b^{-1}\dsep a/b}
 }
 \begin{tabproofsplitwide}
-  \proofpartwide{Nichtnullbedingung und Typisierung}
-    \proofstepwidestar[1]{%
+\proofpartwide{Kehrwertfolge}
+\proofstepwidestar[1]{%
       a,b\colon\mathbb N\to\mathbb R}{%
       \rA}
     \proofstepwidestar[2]{%
@@ -1334,13 +1420,24 @@ Arithmetik eingeführt.
     \proofstepwidestar[1,2,3]{%
       \frac1{b_n}\in\mathbb R}{%
       \FormulaRefAuto{RealCutMultiplicativeClosure}[thm]{4,5},\ \FormulaRefAuto{RealSequenceConventionalNotation}[def]}
-    \proofstepwidestar[1,2,3]{%
+
+\closeproofpartwide
+
+\proofpartwide{Quotientenfolge}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2,3]{%
       \frac{a_n}{b_n}\in\mathbb R}{%
       \FormulaRefAuto{RealCutMultiplicativeClosure}[thm]{4,6}}
-    \proofstepwidestar[1,2]{%
+
+\closeproofpartwide
+
+\proofpartwide{Funktionstypen}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[1,2]{%
       b^{-1},\ a/b\colon\mathbb N\to\mathbb R}{%
       \FormulaRefAuto{TypedFunctionDefinitionPrinciple}[thm]{6,7}}
-  \closeproofpartwide
+
+\closeproofpartwide
 \end{tabproofsplitwide}
 
 \section{Konvergenz}
@@ -1465,24 +1562,26 @@ Grenzwert.
     \proofstepwidestar[9,10]{%
       |a_{N+M}-K|<|L-K|/3}{%
       \rRE{\rRE{\rUE{\rAEb{10}},\rAEa{11}},\rAEb{\rAEb{11}}}}
+    \proofstepwidestar[1,9,10]{a_{N+M}\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,\rAEa{11}}}
     \proofstepwidestar[1,2,9,10]{%
       |L-K|\leq|a_{N+M}-L|+|a_{N+M}-K|}{%
-      \FormulaRefAuto{RealDistanceTriangle}[thm]{2,\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,\rAEa{11}}},\ \FormulaRefAuto{RealDistanceBasicLaws}[thm]}
+      \FormulaRefAuto{RealDistanceTriangle}[thm]{2,14},\ \FormulaRefAuto{RealDistanceBasicLaws}[thm]}
     \proofstepwidestar[1,2,9,10]{%
       |L-K|<2|L-K|/3}{%
-      \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{14,12,13},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
+      \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{15,12,13},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
     \proofstepwidestar[1,2,4,9,10]{%
       \bot}{%
-      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{5,15}}
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{5,16}}
     \proofstepwidestar[1,2,3,4,9]{%
       \bot}{%
-      \rEE{8,10,16}}
+      \rEE{8,10,17}}
     \proofstepwidestar[1,2,3,4]{%
       \bot}{%
-      \rEE{7,9,17}}
+      \rEE{7,9,18}}
     \proofstepwidestar[1,2,3]{%
       L=K}{%
-      \rCE{4,18}}
+      \rCE{4,19}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1516,12 +1615,14 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[1,2,4]{%
       |(\operatorname{const}_{\mathbb N,c})_n-c|=0<\varepsilon}{%
       \FormulaRefAuto{RealCutAdditiveLaws}[thm]{1},\ \FormulaRefAuto{RealAbsoluteValueNonnegativeZero}[thm],\ \rIE{5},\ 2}
+    \proofstepwidestar[1,2]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1,2]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(\operatorname{const}_{\mathbb N,c})_n-c|<\varepsilon)}{%
-      \rEI{\rAI{\FormulaRefAuto{PeanoZero}[ax],\rUI{\rRI{4,6}}}}}
+      \rEI{\rAI{7,\rUI{\rRI{4,6}}}}}
     \proofstepwidestar[1]{%
       (\operatorname{const}_{\mathbb N,c})_n\to c}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{3,1,\rUI{\rRI{2,7}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{3,1,\rUI{\rRI{2,8}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1673,9 +1774,11 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[1,2,3,4]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a^{\langle r\rangle}_n-L|<\varepsilon)}{%
       \rEE{5,6,11}}
+    \proofstepwidestar[1,2]{a^{\langle r\rangle}\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{SequenceTailDef}[def]{1,2}}
     \proofstepwidestar[1,2,3]{%
       a^{\langle r\rangle}_n\to L}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{\FormulaRefAuto{SequenceTailDef}[def]{1,2},2,\rUI{\rRI{4,12}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{13,2,\rUI{\rRI{4,12}}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Rückrichtung]{%
@@ -1702,33 +1805,37 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[7]{%
       n\in\mathbb N\land r+N\leq n}{%
       \rA}
+    \proofstepwidestar[2,6]{r+N\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,6}}
     \proofstepwidestar[2,6,7]{%
       \exists t\in\mathbb N\,(r+N+t=n)}{%
-      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{\FormulaRefAuto{PeanoAddClosure}[thm]{2,6},7}}
-    \proofstepwidestar[9]{%
+      \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{8,7}}
+    \proofstepwidestar[10]{%
       t\in\mathbb N\land r+N+t=n}{%
       \rA}
-    \proofstepwidestar[2,6,9]{%
+    \proofstepwidestar[2,6,10]{%
       N+t\in\mathbb N\land N\leq N+t}{%
-      \FormulaRefAuto{B21CommonNaturalBound}[thm]{\rAEa{6},\rAEa{9}}}
-    \proofstepwidestar[2,6,9]{%
+      \FormulaRefAuto{B21CommonNaturalBound}[thm]{\rAEa{6},\rAEa{10}}}
+    \proofstepwidestar[2,6,10]{%
       (N+t)+r=n}{%
-      \FormulaRefAuto{PeanoAddAssociative}[thm]{2,6,9},\ \FormulaRefAuto{PeanoAddCommutative}[thm],\ \rAEb{9}}
-    \proofstepwidestar[1,2,6,9]{%
+      \FormulaRefAuto{PeanoAddAssociative}[thm]{2,6,10},\ \FormulaRefAuto{PeanoAddCommutative}[thm],\ \rAEb{10}}
+    \proofstepwidestar[1,2,6,10]{%
       |a_n-L|<\varepsilon}{%
-      \rRE{\rRE{\rUE{\rAEb{6}},\rAEa{10}},\rAEb{10}},\ \FormulaRefAuto{SequenceTailDef}[def],\ \rIE{11}}
+      \rRE{\rRE{\rUE{\rAEb{6}},\rAEa{11}},\rAEb{11}},\ \FormulaRefAuto{SequenceTailDef}[def],\ \rIE{12}}
     \proofstepwidestar[1,2,6,7]{%
       |a_n-L|<\varepsilon}{%
-      \rEE{8,9,12}}
+      \rEE{9,10,13}}
+    \proofstepwidestar[2,6]{r+N\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddClosure}[thm]{2,6}}
     \proofstepwidestar[1,2,6]{%
       \exists M\in\mathbb N\,\forall n\in\mathbb N\,(M\leq n\rightarrow|a_n-L|<\varepsilon)}{%
-      \rEI{\rAI{\FormulaRefAuto{PeanoAddClosure}[thm]{2,6},\rUI{\rRI{7,13}}}}}
+      \rEI{\rAI{15,\rUI{\rRI{7,14}}}}}
     \proofstepwidestar[1,2,3,4]{%
       \exists M\in\mathbb N\,\forall n\in\mathbb N\,(M\leq n\rightarrow|a_n-L|<\varepsilon)}{%
-      \rEE{5,6,14}}
+      \rEE{5,6,16}}
     \proofstepwidestar[1,2,3]{%
       a_n\to L}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,\rUI{\rRI{4,15}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,\rUI{\rRI{4,17}}}}
   \closeproofpartwideindR
 
   \proofpartwide{Zusammenfassung}
@@ -1738,9 +1845,13 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[2]{%
       r\in\mathbb N\land L\in\mathbb R}{%
       \rA}
+    \proofstepwidestar[1,2]{(a_n\to L)\rightarrow(a^{\langle r\rangle}_n\to L)}{%
+      \FormulaRefAuto{B21TailLimitForward}[thm]{1,2}}
+    \proofstepwidestar[1,2]{(a^{\langle r\rangle}_n\to L)\rightarrow(a_n\to L)}{%
+      \FormulaRefAuto{B21TailLimitBackward}[thm]{1,2}}
     \proofstepwidestar[1,2]{%
       a_n\to L\leftrightarrow a^{\langle r\rangle}_n\to L}{%
-      \rLRI{\FormulaRefAuto{B21TailLimitForward}[thm]{1,2},\FormulaRefAuto{B21TailLimitBackward}[thm]{1,2}}}
+      \rLRI{3,4}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1766,33 +1877,39 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[2]{%
       \forall n\in\mathbb N\,(\varphi(n)<\varphi(n+1))}{%
       \rA}
+    \proofstepwidestar[1]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[1]{\varphi ( 0 ) \in \mathbb N}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{1,3}}
     \proofstepwidestar[1]{%
       0\leq\varphi(0)}{%
-      \FormulaRefAuto{PeanoZeroLeq}[thm]{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{1,\FormulaRefAuto{PeanoZero}[ax]}}}
-    \proofstepwidestar[4]{%
+      \FormulaRefAuto{PeanoZeroLeq}[thm]{4}}
+    \proofstepwidestar[6]{%
       n\in\mathbb N\land n\leq\varphi(n)}{%
       \rA}
-    \proofstepwidestar[1,4]{%
-      \varphi(n),\varphi(n+1)\in\mathbb N}{%
-      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{1,\rAEa{4},\FormulaRefAuto{PeanoAddOneClosure}[thm]}}
-    \proofstepwidestar[2,4]{%
+    \proofstepwidestar[6]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{6}}}
+    \proofstepwidestar[1,6]{%
+      \varphi(n),\varphi(n+1)\in\mathbb N}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{1,\rAEa{6},7}
+}
+    \proofstepwidestar[2,6]{%
       \varphi(n)<\varphi(n+1)}{%
-      \rRE{\rUE{2},\rAEa{4}}}
-    \proofstepwidestar[1,4]{%
+      \rRE{\rUE{2},\rAEa{6}}}
+    \proofstepwidestar[1,6]{%
       n<\varphi(n)+1}{%
-      \FormulaRefAuto{PeanoLeqAddOneStrict}[thm]{4,5}}
-    \proofstepwidestar[1,2,4]{%
+      \FormulaRefAuto{PeanoLeqAddOneStrict}[thm]{6,8}}
+    \proofstepwidestar[1,2,6]{%
       \varphi(n)+1\leq\varphi(n+1)}{%
-      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{5,6}}
-    \proofstepwidestar[1,2,4]{%
+      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{8,9}}
+    \proofstepwidestar[1,2,6]{%
       n<\varphi(n+1)}{%
-      \FormulaRefAuto{PeanoLtLeqTransitive}[thm]{4,5,7,8}}
-    \proofstepwidestar[1,2,4]{%
+      \FormulaRefAuto{PeanoLtLeqTransitive}[thm]{6,8,10,11}}
+    \proofstepwidestar[1,2,6]{%
       n+1\leq\varphi(n+1)}{%
-      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{4,5,9}}
+      \FormulaRefAuto{PeanoLtAddOneLeq}[thm]{6,8,12}}
     \proofstepwidestar[1,2]{%
       \forall n\in\mathbb N\,(n\leq\varphi(n))}{%
-      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{3,\rUI{\rRI{4,10}}}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{5,\rUI{\rRI{6,13}}}}
   \closeproofpartwideindR
 
   \proofpartwide{Übertragung der Epsilon-Schranke}
@@ -1820,27 +1937,31 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[8]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
+    \proofstepwidestar[3,4]{\forall n\in\mathbb N\,(n\leq\varphi(n))}{%
+      \FormulaRefAuto{B21IncreasingIndexDominates}[thm]{3,4}}
     \proofstepwidestar[3,4,8]{%
       n\leq\varphi(n)}{%
-      \rRE{\rUE{\FormulaRefAuto{B21IncreasingIndexDominates}[thm]{3,4}},\rAEa{8}}}
+      \rRE{\rUE{9},\rAEa{8}}}
     \proofstepwidestar[3,8]{%
       \varphi(n)\in\mathbb N}{%
       \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,\rAEa{8}}}
     \proofstepwidestar[3,4,7,8]{%
       N\leq\varphi(n)}{%
-      \FormulaRefAuto{PeanoLeqTransitive}[thm]{7,8,10,9}}
+      \FormulaRefAuto{PeanoLeqTransitive}[thm]{7,8,11,10}}
     \proofstepwidestar[3,4,7,8]{%
       |a_{\varphi(n)}-L|<\varepsilon}{%
-      \rRE{\rRE{\rUE{\rAEb{7}},10},11}}
+      \rRE{\rRE{\rUE{\rAEb{7}},11},12}}
     \proofstepwidestar[3,4,7]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_{\varphi(n)}-L|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{7},\rUI{\rRI{8,12}}}}}
+      \rEI{\rAI{\rAEa{7},\rUI{\rRI{8,13}}}}}
     \proofstepwidestar[1,2,3,4,5]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_{\varphi(n)}-L|<\varepsilon)}{%
-      \rEE{6,7,13}}
+      \rEE{6,7,14}}
+    \proofstepwidestar[1,3]{a\circ\varphi\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{CompositionDef}[def]{3,1}}
     \proofstepwidestar[1,2,3,4]{%
       a_{\varphi(n)}\to L}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{\FormulaRefAuto{CompositionDef}[def]{3,1},\rUI{\rRI{5,14}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{16,\rUI{\rRI{5,15}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1875,15 +1996,19 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[1,2,3]{%
       (a-L)_n=a_n-L}{%
       \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1,2,3}}
+    \proofstepwidestar[1,3]{a_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,3}}
     \proofstepwidestar[1,2,3]{%
       |(a-L)_n-0|=|a_n-L|}{%
-      \FormulaRefAuto{RealCutAdditiveLaws}[thm]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,3},2},\ \rIE{4}}
+      \FormulaRefAuto{RealCutAdditiveLaws}[thm]{5,2},\ \rIE{4}}
     \proofstepwidestar[1,2]{%
       \forall n\in\mathbb N\,(|(a-L)_n-0|=|a_n-L|)}{%
-      \rUI{\rRI{3,5}}}
+      \rUI{\rRI{3,6}}}
+    \proofstepwidestar[1,2]{a-L\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1,2}}
     \proofstepwidestar[1,2]{%
-      a_n\to L\leftrightarrow(a-L)_n\to0}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],6}}
+      a_n\to L\leftrightarrow(a-L)_n\to0}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,8,7}
+}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1930,21 +2055,23 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[6,7,9]{%
       N_0\leq n\land N\leq n}{%
       \FormulaRefAuto{PeanoLeqTransitive}[thm]{8,9}}
+    \proofstepwidestar[1,9]{b_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,9}}
     \proofstepwidestar[1,6,7,9]{%
       |a_n|\leq b_n\leq|b_n|<\varepsilon}{%
-      \rUE{\rAEb{6}},\ \rUE{\rAEb{7}},\ 10,\ \FormulaRefAuto{RealAbsoluteValue}[def]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,9}}}
+      \rUE{\rAEb{6}},\ \rUE{\rAEb{7}},\ 10,\ \FormulaRefAuto{RealAbsoluteValue}[def]{11}}
     \proofstepwidestar[1,6,7]{%
       \exists M\in\mathbb N\,\forall n\in\mathbb N\,(M\leq n\rightarrow|a_n|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{8},\rUI{\rRI{9,11}}}}}
+      \rEI{\rAI{\rAEa{8},\rUI{\rRI{9,12}}}}}
     \proofstepwidestar[1,2,4,6]{%
       \exists M\in\mathbb N\,\forall n\in\mathbb N\,(M\leq n\rightarrow|a_n|<\varepsilon)}{%
-      \rEE{5,7,12}}
+      \rEE{5,7,13}}
     \proofstepwidestar[1,2,3,4]{%
       \exists M\in\mathbb N\,\forall n\in\mathbb N\,(M\leq n\rightarrow|a_n|<\varepsilon)}{%
-      \rEE{3,6,13}}
+      \rEE{3,6,14}}
     \proofstepwidestar[1,2,3]{%
       a_n\to0}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\rUI{\rRI{4,14}}},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\rUI{\rRI{4,15}}},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2036,16 +2163,18 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
       \rA}
     \proofstepwidestar[2]{%
       \bot}{%
-      \FormulaRefAuto{PeanoNatSegZero}[thm],\ \text{Def. }\ensuremath{\varnothing}(2)}
+      \rBI{\rIE{\FormulaRefAuto{PeanoNatSegZero}[thm],2},\FormulaRefAuto{x\not\in\varnothing}[thm]}}
     \proofstepwidestar[1,2]{%
       |a_k|\leq0}{%
       \FormulaRefAuto{\bot\vdash P}[thm]{3}}
     \proofstepwidestar[1]{%
       \forall k\in\NatSeg 0\,(|a_k|\leq0)}{%
       \rUI{\rRI{2,4}}}
-    \proofstepwidestar[1]{%
-      \exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg 0\,(|a_k|\leq C))}{%
-      \rEI{\rAI{\FormulaRefAuto{RealCutAdditiveClosure}[thm],\rAI{\FormulaRefAuto{RealCutTotalOrder}[thm],5}}}}
+        \proofstepwidestar[]{\CompleteOrderedField{\mathbb R,\RealAdd,\RealMul,\RealNeg\cdot,\RealInv\cdot,\RealZero,\RealOne,\RealLe}}{\FormulaRefAuto{RealCutsCompleteOrderedField}[thm]}
+    \proofstepwidestar[]{0\in\mathbb R}{\FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{6}}
+    \proofstepwidestar[]{0\subseteq0}{\FormulaRefAuto{A\subseteq A}[thm]}
+    \proofstepwidestar[]{0\leq0}{\FormulaRefAuto{RealCutOrder}[def]{7,8}}
+    \proofstepwidestar[1]{\exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg0\,(|a_k|\leq C))}{\rEI{\rAI{7,\rAI{9,5}}}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Anfangsschranke: Induktionsschritt]{%
@@ -2110,9 +2239,13 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[2]{%
       N\in\mathbb N}{%
       \rA}
+    \proofstepwidestar[1]{\exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg 0\,(|a_k|\leq C))}{%
+      \FormulaRefAuto{B21FinitePrefixBase}[thm]{1}}
+    \proofstepwidestar[1]{\forall N\in\mathbb N\,\bigl((\exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg N\,(|a_k|\leq C)))\rightarrow(\exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg{N+1}\,(|a_k|\leq C)))\bigr)}{%
+      \FormulaRefAuto{B21FinitePrefixStep}[thm]{1}}
     \proofstepwidestar[1,2]{%
       \exists C\in\mathbb R\,(0\leq C\land\forall k\in\NatSeg N\,(|a_k|\leq C))}{%
-      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{\FormulaRefAuto{B21FinitePrefixBase}[thm]{1},\FormulaRefAuto{B21FinitePrefixStep}[thm]{1},2}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{3,4,2}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Eine Restschranke liefert eine globale Schranke]{%
@@ -2157,12 +2290,23 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[2,3,5]{%
       \forall k\in\mathbb N\,(|a_k|\leq C+D)}{%
       \rUI{\rRI{6,12}}}
-    \proofstepwidestar[1,2,3,5]{%
-      \operatorname{Beschr}(a)}{%
-      \FormulaRefAuto{BoundedRealSequenceDef}[def]{1,\rEI{\rAI{\FormulaRefAuto{RealCutAdditiveClosure}[thm]{2,5},\rAI{\FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{2,5},13}}}}}
-    \proofstepwidestar[1,2,3]{%
-      \operatorname{Beschr}(a)}{%
-      \rEE{4,5,14}}
+        \proofstepwidestar[2]{C\in\mathbb R}{\rAEa{\rAEb{2}}}
+    \proofstepwidestar[5]{D\in\mathbb R}{\rAEa{5}}
+    \proofstepwidestar[2]{0\leq C}{\rAEb{\rAEb{2}}}
+    \proofstepwidestar[5]{0\leq D}{\rAEa{\rAEb{5}}}
+    \proofstepwidestar[2,5]{(C+D\in\mathbb R)\land(-C\in\mathbb R\land0\in\mathbb R)}{\FormulaRefAuto{RealCutAdditiveClosure}[thm]{\rAI{14,15}}}
+    \proofstepwidestar[2,5]{C+D\in\mathbb R}{\rAEa{18}}
+    \proofstepwidestar[2,5]{0\in\mathbb R}{\rAEb{\rAEb{18}}}
+    \proofstepwidestar[2,5]{0+D\leq C+D}{\FormulaRefAuto{RealCutAdditionMonotone}[thm]{\rAI{20,\rAI{14,15}},16}}
+    \proofstepwidestar[2,5]{0+D=D+0}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{20,15}}
+    \proofstepwidestar[2,5]{D+0=D}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{15}}
+    \proofstepwidestar[2,5]{D\leq C+D}{\rIE{22,23,21}}
+    \proofstepwidestar[2,5]{0\subseteq D}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{20,15,17}}
+    \proofstepwidestar[2,5]{D\subseteq C+D}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{15,19,24}}
+    \proofstepwidestar[2,5]{0\subseteq C+D}{\FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{25,26}}
+    \proofstepwidestar[2,5]{0\leq C+D}{\FormulaRefAuto{RealCutOrder}[def]{20,19,27}}
+    \proofstepwidestar[1,2,3,5]{\operatorname{Beschr}(a)}{\FormulaRefAuto{BoundedRealSequenceDef}[def]{1,\rEI{\rAI{19,\rAI{28,13}}}}}
+    \proofstepwidestar[1,2,3]{\operatorname{Beschr}(a)}{\rEE{4,5,29}}
   \closeproofpartwideindR
 
   \proofpartwide{Konvergenz liefert eine Restschranke}
@@ -2172,27 +2316,42 @@ bestimmter Ausdruck, sobald die Folge konvergiert.
     \proofstepwidestar[2]{%
       a_n\to L}{%
       \rA}
+    \proofstepwidestar[]{\CompleteOrderedField { \mathbb R , \RealAdd , \RealMul , \RealNeg \cdot , \RealInv \cdot , \RealZero , \RealOne , \RealLe }}{%
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]}
     \proofstepwidestar[1,2]{%
       \exists N\in\mathbb N\,\forall k\in\mathbb N\,(N\leq k\rightarrow|a_k-L|<1)}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,\FormulaRefAuto{RealCutsCompleteOrderedField}[thm]}}
-    \proofstepwidestar[4]{%
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,2,3}}
+    \proofstepwidestar[5]{%
       N\in\mathbb N\land\forall k\in\mathbb N\,(N\leq k\rightarrow|a_k-L|<1)}{%
       \rA}
-    \proofstepwidestar[5]{%
+    \proofstepwidestar[6]{%
       k\in\mathbb N\land N\leq k}{%
       \rA}
-    \proofstepwidestar[1,4,5]{%
+    \proofstepwidestar[1,5,6]{%
       |a_k|\leq|a_k-L|+|L|<1+|L|}{%
-      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{1,5},\ \rRE{\rRE{\rUE{\rAEb{4}},\rAEa{5}},\rAEb{5}},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]}
-    \proofstepwidestar[1,4]{%
+      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{1,6},\ \rRE{\rRE{\rUE{\rAEb{5}},\rAEa{6}},\rAEb{6}},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]}
+    \proofstepwidestar[1,5]{%
       \forall k\in\mathbb N\,(N\leq k\rightarrow|a_k|\leq1+|L|)}{%
-      \rUI{\rRI{5,6}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
-    \proofstepwidestar[1,4]{%
-      \operatorname{Beschr}(a)}{%
-      \FormulaRefAuto{B21EventuallyBoundedIsBounded}[thm]{1,4,\FormulaRefAuto{RealAbsoluteValueNonnegativeZero}[thm]{1},\FormulaRefAuto{RealCutAdditiveClosure}[thm],7}}
-    \proofstepwidestar[1,2]{%
-      \operatorname{Beschr}(a)}{%
-      \rEE{3,4,8}}
+      \rUI{\rRI{6,7}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
+        \proofstepwidestar[1]{L\in\mathbb R}{\rAEb{1}}
+    \proofstepwidestar[1]{|L|\in\mathbb R}{\FormulaRefAuto{RealAbsoluteValue}[def]{9}, \FormulaRefAuto{RealCutAdditiveClosure}[thm]{9,9}}
+    \proofstepwidestar[1]{0\leq|L|\land(|L|=0\leftrightarrow L=0)}{\FormulaRefAuto{RealAbsoluteValueNonnegativeZero}[thm]{9}}
+    \proofstepwidestar[1]{0\leq|L|}{\rAEa{11}}
+    \proofstepwidestar[]{1\in\mathbb R}{\FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{3}}
+    \proofstepwidestar[]{0\leq1}{\FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{3}}
+    \proofstepwidestar[1]{(1+|L|\in\mathbb R)\land(-1\in\mathbb R\land0\in\mathbb R)}{\FormulaRefAuto{RealCutAdditiveClosure}[thm]{\rAI{13,10}}}
+    \proofstepwidestar[1]{1+|L|\in\mathbb R}{\rAEa{15}}
+    \proofstepwidestar[1]{0\in\mathbb R}{\rAEb{\rAEb{15}}}
+    \proofstepwidestar[1]{0+|L|\leq 1+|L|}{\FormulaRefAuto{RealCutAdditionMonotone}[thm]{\rAI{17,\rAI{13,10}},14}}
+    \proofstepwidestar[1]{0+|L|=|L|+0}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{17,10}}
+    \proofstepwidestar[1]{|L|+0=|L|}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{10}}
+    \proofstepwidestar[1]{|L|\leq 1+|L|}{\rIE{19,20,18}}
+    \proofstepwidestar[1]{0\subseteq |L|}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{17,10,12}}
+    \proofstepwidestar[1]{|L|\subseteq 1+|L|}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{10,16,21}}
+    \proofstepwidestar[1]{0\subseteq 1+|L|}{\FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{22,23}}
+    \proofstepwidestar[1]{0\leq 1+|L|}{\FormulaRefAuto{RealCutOrder}[def]{17,16,24}}
+    \proofstepwidestar[1,5]{\operatorname{Beschr}(a)}{\FormulaRefAuto{B21EventuallyBoundedIsBounded}[thm]{1,\rAEa{5},16,25,8}}
+    \proofstepwidestar[1,2]{\operatorname{Beschr}(a)}{\rEE{4,5,26}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2271,7 +2430,24 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \operatorname{Mon}_{\downarrow}}
 }
 
-\FormulaThmDeltaK[Monotone Konvergenz]{%
+\FormulaThmDeltaKR[Monotone Konvergenz]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad
+      \begin{aligned}[t]
+        &a\colon\mathbb N\to\mathbb R\dsep
+          \operatorname{Mon}_{\uparrow}(a)\dsep{}\\[-2pt]
+        &\exists C\in\mathbb R\,\forall n\in\mathbb N\,(a_n\leq C)\\[-2pt]
+        &\vdash a_n\to\sup_{\mathbb R,\RealLe}\bigl(a[\mathbb N]\bigr),
+      \end{aligned}\\[-2pt]
+    &\text{(ii)}\quad
+      \begin{aligned}[t]
+        &a\colon\mathbb N\to\mathbb R\dsep
+          \operatorname{Mon}_{\downarrow}(a)\dsep{}\\[-2pt]
+        &\exists C\in\mathbb R\,\forall n\in\mathbb N\,(C\leq a_n)\\[-2pt]
+        &\vdash a_n\to\inf_{\mathbb R,\RealLe}\bigl(a[\mathbb N]\bigr).
+      \end{aligned}
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
   &a\colon\mathbb N\to\mathbb R\dsep
     \operatorname{Mon}_{\uparrow}(a)\dsep
@@ -2302,33 +2478,35 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[3]{%
       (N\in\mathbb N\land n\in\mathbb N)\land N\leq n}{%
       \rA}
+    \proofstepwidestar[1,3]{a_N\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,3}}
     \proofstepwidestar[1,3]{%
       a_N\leq a_{N+0}}{%
-      \FormulaRefAuto{PeanoAddRightZero}[thm]{3},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,3}}}
-    \proofstepwidestar[5]{%
+      \FormulaRefAuto{PeanoAddRightZero}[thm]{3},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{4}}
+    \proofstepwidestar[6]{%
       k\in\mathbb N\land a_N\leq a_{N+k}}{%
       \rA}
-    \proofstepwidestar[1,2,3,5]{%
+    \proofstepwidestar[1,2,3,6]{%
       a_{N+k}\leq a_{N+(k+1)}}{%
-      \FormulaRefAuto{MonotoneRealSequenceDef}[def]{1,2},\ \FormulaRefAuto{PeanoAddClosure}[thm]{3,5},\ \FormulaRefAuto{PeanoAddAddOneRight}[thm]}
-    \proofstepwidestar[1,2,3,5]{%
+      \FormulaRefAuto{MonotoneRealSequenceDef}[def]{1,2},\ \FormulaRefAuto{PeanoAddClosure}[thm]{3,6},\ \FormulaRefAuto{PeanoAddAddOneRight}[thm]}
+    \proofstepwidestar[1,2,3,6]{%
       a_N\leq a_{N+(k+1)}}{%
-      \FormulaRefAuto{RealCutTotalOrder}[thm]{5,6}}
+      \FormulaRefAuto{RealCutTotalOrder}[thm]{6,7}}
     \proofstepwidestar[1,2,3]{%
       \forall k\in\mathbb N\,(a_N\leq a_{N+k})}{%
-      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{4,\rUI{\rRI{5,7}}}}
+      \FormulaRefAuto{PeanoInductionRuleAddOne}[thm]{5,\rUI{\rRI{6,8}}}}
     \proofstepwidestar[3]{%
       \exists k\in\mathbb N\,(N+k=n)}{%
       \FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\leftrightarrow\exists k\in\mathbb{N}\,(m+k=n)}[thm]{3}}
-    \proofstepwidestar[10]{%
+    \proofstepwidestar[11]{%
       k\in\mathbb N\land N+k=n}{%
       \rA}
-    \proofstepwidestar[1,2,3,10]{%
+    \proofstepwidestar[1,2,3,11]{%
       a_N\leq a_n}{%
-      \rIE{\rAEb{10},\rRE{\rUE{8},\rAEa{10}}}}
+      \rIE{\rAEb{11},\rRE{\rUE{9},\rAEa{11}}}}
     \proofstepwidestar[1,2,3]{%
       a_N\leq a_n}{%
-      \rEE{9,10,11}}
+      \rEE{10,11,12}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Fallende Folgen: Vergleich beliebiger Indizes]{%
@@ -2367,39 +2545,41 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[3]{%
       \exists C\in\mathbb R\,\forall k\in\mathbb N\,(a_k\leq C)}{%
       \rA}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{%
       a_0\in a[\mathbb N]\subseteq\mathbb R}{%
-      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,\FormulaRefAuto{PeanoZero}[ax]},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{1}}
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,4},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{1}}
     \proofstepwidestar[1,3]{%
       s\coloneqq\sup_{\mathbb R,\RealLe}(a[\mathbb N])\in\mathbb R}{%
-      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{4,3}}
-    \proofstepwidestar[6]{%
+      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{5,3}}
+    \proofstepwidestar[7]{%
       \varepsilon\in\mathbb R\land\varepsilon>0}{%
       \rA}
-    \proofstepwidestar[1,3,6]{%
+    \proofstepwidestar[1,3,7]{%
       \exists N\in\mathbb N\,(s-\varepsilon<a_N)}{%
-      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{5},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{6},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1}}
-    \proofstepwidestar[8]{%
+      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{6},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{7},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1}}
+    \proofstepwidestar[9]{%
       N\in\mathbb N\land s-\varepsilon<a_N}{%
       \rA}
-    \proofstepwidestar[9]{%
+    \proofstepwidestar[10]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
-    \proofstepwidestar[1,2,3,6,8,9]{%
+    \proofstepwidestar[1,2,3,7,9,10]{%
       s-\varepsilon<a_N\leq a_n\leq s<s+\varepsilon}{%
-      \FormulaRefAuto{B21MonotoneIncreasingNesting}[thm]{1,2,8,9},\ \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{5},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{6}}
-    \proofstepwidestar[1,2,3,6,8,9]{%
+      \FormulaRefAuto{B21MonotoneIncreasingNesting}[thm]{1,2,9,10},\ \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{6},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{7}}
+    \proofstepwidestar[1,2,3,7,9,10]{%
       |a_n-s|<\varepsilon}{%
-      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,5,6,10}}
-    \proofstepwidestar[1,2,3,6,8]{%
+      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,6,7,11}}
+    \proofstepwidestar[1,2,3,7,9]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-s|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{8},\rUI{\rRI{9,11}}}}}
-    \proofstepwidestar[1,2,3,6]{%
+      \rEI{\rAI{\rAEa{9},\rUI{\rRI{10,12}}}}}
+    \proofstepwidestar[1,2,3,7]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-s|<\varepsilon)}{%
-      \rEE{7,8,12}}
+      \rEE{8,9,13}}
     \proofstepwidestar[1,2,3]{%
       a_n\to\sup_{\mathbb R,\RealLe}(a[\mathbb N])}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,5,\rUI{\rRI{6,13}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,6,\rUI{\rRI{7,14}}}}
   \closeproofpartwide
 
   \proofpartwide{Konvergenz gegen das Infimum}
@@ -2412,45 +2592,55 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[3]{%
       \exists C\in\mathbb R\,\forall k\in\mathbb N\,(C\leq a_k)}{%
       \rA}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1]{%
       a_0\in a[\mathbb N]\subseteq\mathbb R}{%
-      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,\FormulaRefAuto{PeanoZero}[ax]},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{1}}
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,4},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{1}}
     \proofstepwidestar[1,3]{%
       r\coloneqq\inf_{\mathbb R,\RealLe}(a[\mathbb N])\in\mathbb R}{%
-      \FormulaRefAuto{RealInfimumCharacterization}[thm]{4,3}}
-    \proofstepwidestar[6]{%
+      \FormulaRefAuto{RealInfimumCharacterization}[thm]{5,3}}
+    \proofstepwidestar[7]{%
       \varepsilon\in\mathbb R\land\varepsilon>0}{%
       \rA}
-    \proofstepwidestar[1,3,6]{%
+    \proofstepwidestar[1,3,7]{%
       \exists N\in\mathbb N\,(a_N<r+\varepsilon)}{%
-      \FormulaRefAuto{RealInfimumCharacterization}[thm]{5},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{6},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1}}
-    \proofstepwidestar[8]{%
+      \FormulaRefAuto{RealInfimumCharacterization}[thm]{6},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{7},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1}}
+    \proofstepwidestar[9]{%
       N\in\mathbb N\land a_N<r+\varepsilon}{%
       \rA}
-    \proofstepwidestar[9]{%
+    \proofstepwidestar[10]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
-    \proofstepwidestar[1,2,3,6,8,9]{%
+    \proofstepwidestar[1,2,3,7,9,10]{%
       r-\varepsilon<r\leq a_n\leq a_N<r+\varepsilon}{%
-      \FormulaRefAuto{B21MonotoneDecreasingNesting}[thm]{1,2,8,9},\ \FormulaRefAuto{RealInfimumCharacterization}[thm]{5},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{6}}
-    \proofstepwidestar[1,2,3,6,8,9]{%
+      \FormulaRefAuto{B21MonotoneDecreasingNesting}[thm]{1,2,9,10},\ \FormulaRefAuto{RealInfimumCharacterization}[thm]{6},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{7}}
+    \proofstepwidestar[1,2,3,7,9,10]{%
       |a_n-r|<\varepsilon}{%
-      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,5,6,10}}
-    \proofstepwidestar[1,2,3,6,8]{%
+      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,6,7,11}}
+    \proofstepwidestar[1,2,3,7,9]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-r|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{8},\rUI{\rRI{9,11}}}}}
-    \proofstepwidestar[1,2,3,6]{%
+      \rEI{\rAI{\rAEa{9},\rUI{\rRI{10,12}}}}}
+    \proofstepwidestar[1,2,3,7]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-r|<\varepsilon)}{%
-      \rEE{7,8,12}}
+      \rEE{8,9,13}}
     \proofstepwidestar[1,2,3]{%
       a_n\to\inf_{\mathbb R,\RealLe}(a[\mathbb N])}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,5,\rUI{\rRI{6,13}}}}
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,6,\rUI{\rRI{7,14}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
 \section{Grenzwertregeln}
 
-\FormulaThmDeltaK[Lineare Grenzwertregeln]{%
+\FormulaThmDeltaKR[Lineare Grenzwertregeln]{%
+  \begin{aligned}[t]
+    &a,b\colon\mathbb N\to\mathbb R\dsep A,B,c\in\mathbb R\dsep
+      a_n\to A\dsep b_n\to B\vdash{}\\[-2pt]
+    &\text{(i)}\quad(a+b)_n\to A+B,\\[-2pt]
+    &\text{(ii)}\quad(a-b)_n\to A-B,\\[-2pt]
+    &\text{(iii)}\quad(ca)_n\to cA.
+  \end{aligned}%
+}{%
   a,b\colon\mathbb N\to\mathbb R\dsep
   A,B,c\in\mathbb R\dsep
   a_n\to A\dsep b_n\to B
@@ -2501,9 +2691,11 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[1,2,3]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(a+b)_n-(A+B)|<\varepsilon)}{%
       \rEE{5,6,10}}
+    \proofstepwidestar[1]{a+b\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1}}
     \proofstepwidestar[1,2]{%
-      (a+b)_n\to A+B}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\rUI{\rRI{3,11}}}}
+      (a+b)_n\to A+B}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,12,\rUI{\rRI{3,11}}}
+}
   \closeproofpartwideindR
 
   \proofpartwideindR[Differenz]{%
@@ -2542,9 +2734,11 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[1,2,3]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(a-b)_n-(A-B)|<\varepsilon)}{%
       \rEE{5,6,10}}
+    \proofstepwidestar[1]{a-b\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1}}
     \proofstepwidestar[1,2]{%
-      (a-b)_n\to A-B}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\rUI{\rRI{3,11}}}}
+      (a-b)_n\to A-B}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,12,\rUI{\rRI{3,11}}}
+}
   \closeproofpartwideindR
 
   \proofpartwideindR[Skalarmultiplikation ohne Sonderfall bei Null]{%
@@ -2583,9 +2777,11 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[1,2,3]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(ca)_n-cA|<\varepsilon)}{%
       \rEE{5,6,10}}
+    \proofstepwidestar[1]{ca\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1}}
     \proofstepwidestar[1,2]{%
-      (ca)_n\to cA}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\rUI{\rRI{3,11}}}}
+      (ca)_n\to cA}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,12,\rUI{\rRI{3,11}}}
+}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
@@ -2636,30 +2832,34 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[12]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
+    \proofstepwidestar[1,12]{a_n,b_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,12}}
     \proofstepwidestar[1,12]{%
       a_nb_n-AB=a_n(b_n-B)+B(a_n-A)}{%
-      \FormulaRefAuto{RealCutMultiplicativeLaws}[thm]{1,\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,12}},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
+      \FormulaRefAuto{RealCutMultiplicativeLaws}[thm]{1,13},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
     \proofstepwidestar[1,12]{%
       |a_nb_n-AB|\leq|a_n|\,|b_n-B|+|B|\,|a_n-A|}{%
-      \rIE{13},\ \FormulaRefAuto{RealAbsoluteValueTriangle}[thm],\ \FormulaRefAuto{RealAbsoluteValueNegationProduct}[thm]}
+      \rIE{14},\ \FormulaRefAuto{RealAbsoluteValueTriangle}[thm],\ \FormulaRefAuto{RealAbsoluteValueNegationProduct}[thm]}
     \proofstepwidestar[1,5,11,12]{%
       |a_nb_n-AB|\leq D(|b_n-B|+|a_n-A|)}{%
-      \rRE{\rUE{\rAEb{\rAEb{5}}},\rAEa{12}},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{7,14}}
+      \rRE{\rUE{\rAEb{\rAEb{5}}},\rAEa{12}},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{7,15}}
     \proofstepwidestar[1,5,8,11,12]{%
       |(a\mathbin{\cdot}b)_n-AB|<\varepsilon}{%
-      \rRE{\rRE{\rUE{\rAEb{11}},\rAEa{12}},\rAEb{12}},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{15,9},\ \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]}
+      \rRE{\rRE{\rUE{\rAEb{11}},\rAEa{12}},\rAEb{12}},\ \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{16,9},\ \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]}
     \proofstepwidestar[1,5,8,11]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(a\mathbin{\cdot}b)_n-AB|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{11},\rUI{\rRI{12,16}}}}}
+      \rEI{\rAI{\rAEa{11},\rUI{\rRI{12,17}}}}}
     \proofstepwidestar[1,2,5,8]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(a\mathbin{\cdot}b)_n-AB|<\varepsilon)}{%
-      \rEE{10,11,17}}
+      \rEE{10,11,18}}
+    \proofstepwidestar[1]{a\mathbin{\cdot}b\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1}}
     \proofstepwidestar[1,2,5]{%
-      (a\mathbin{\cdot}b)_n\to AB}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\rUI{\rRI{8,18}}}}
+      (a\mathbin{\cdot}b)_n\to AB}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,20,\rUI{\rRI{8,19}}}
+}
     \proofstepwidestar[1,2]{%
       (a\mathbin{\cdot}b)_n\to AB}{%
-      \rEE{4,5,19}}
+      \rEE{4,5,21}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2701,27 +2901,31 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[7,8]{%
       |b_n-B|<|B|/2\land|b_n-B|<\varepsilon|B|^2/2}{%
       \rRE{\rRE{\rUE{\rAEb{7}},\rAEa{8}},\rAEb{8}}}
+    \proofstepwidestar[1,8]{b_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,8}}
     \proofstepwidestar[1,8]{%
       |B|\leq|B-b_n|+|b_n|}{%
-      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{1,\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,8}},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
+      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{1,10},\ \FormulaRefAuto{RealCutAdditiveLaws}[thm]}
     \proofstepwidestar[1,3,7,8]{%
       0<|B|/2<|b_n|}{%
-      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{5,9,10},\ \FormulaRefAuto{RealAbsoluteValueNegationProduct}[thm]}
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{5,9,11},\ \FormulaRefAuto{RealAbsoluteValueNegationProduct}[thm]}
     \proofstepwidestar[1,3,8]{%
       \left|\frac1{b_n}-\frac1B\right|=\frac{|b_n-B|}{|b_n|\,|B|}}{%
       \FormulaRefAuto{RealCutMultiplicativeLaws}[thm]{1,3,\rRE{\rUE{\rAEb{3}},\rAEa{8}}},\ \FormulaRefAuto{RealAbsoluteValueNegationProduct}[thm]}
     \proofstepwidestar[1,3,4,7,8]{%
       \left|\frac1{b_n}-\frac1B\right|\leq\frac{2|b_n-B|}{|B|^2}<\varepsilon}{%
-      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{12,11,9}}
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{13,12,9}}
     \proofstepwidestar[1,3,4,7]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(b^{-1})_n-1/B|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{7},\rUI{\rRI{8,13}}}},\ \FormulaRefAuto{PointwiseRealSequenceReciprocalQuotientDef}[def]}
+      \rEI{\rAI{\rAEa{7},\rUI{\rRI{8,14}}}},\ \FormulaRefAuto{PointwiseRealSequenceReciprocalQuotientDef}[def]}
     \proofstepwidestar[1,2,3,4]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|(b^{-1})_n-1/B|<\varepsilon)}{%
-      \rEE{6,7,14}}
+      \rEE{6,7,15}}
+    \proofstepwidestar[1,2]{b^{-1}\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceReciprocalQuotientDef}[def]{1,2}}
     \proofstepwidestar[1,2,3]{%
-      (b^{-1})_n\to1/B}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceReciprocalQuotientDef}[def],\rUI{\rRI{4,15}}}}
+      (b^{-1})_n\to1/B}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,17,\rUI{\rRI{4,16}}}
+}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2818,18 +3022,22 @@ nur \(A\leq B\), nicht \(A<B\). Beispielsweise gilt
     \proofstepwidestar[6]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
+    \proofstepwidestar[1,6]{a_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,6}}
     \proofstepwidestar[1,5,6]{%
       \bigl|(|a|)_n-|A|\bigr|\leq|a_n-A|<\varepsilon}{%
-      \FormulaRefAuto{B21ReverseTriangle}[thm]{1,\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,6}},\ \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\ \rRE{\rRE{\rUE{\rAEb{5}},\rAEa{6}},\rAEb{6}}}
+      \FormulaRefAuto{B21ReverseTriangle}[thm]{1,7},\ \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\ \rRE{\rRE{\rUE{\rAEb{5}},\rAEa{6}},\rAEb{6}}}
     \proofstepwidestar[1,5]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow\bigl|(|a|)_n-|A|\bigr|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{5},\rUI{\rRI{6,7}}}}}
+      \rEI{\rAI{\rAEa{5},\rUI{\rRI{6,8}}}}}
     \proofstepwidestar[1,2,3]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow\bigl|(|a|)_n-|A|\bigr|<\varepsilon)}{%
-      \rEE{4,5,8}}
+      \rEE{4,5,9}}
+    \proofstepwidestar[1]{|a|\colon\mathbb N\to\mathbb R}{%
+      \FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def]{1}}
     \proofstepwidestar[1,2]{%
-      (|a|)_n\to|A|}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\FormulaRefAuto{PointwiseRealSequenceOperationsDef}[def],\rUI{\rRI{3,9}}}}
+      (|a|)_n\to|A|}{\FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,11,\rUI{\rRI{3,10}}}
+}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2885,18 +3093,20 @@ Grenzwert folgt, hängt von der Vollständigkeit der Zielmenge ab.
     \proofstepwidestar[7]{%
       (m\in\mathbb N\land n\in\mathbb N)\land(N\leq m\land N\leq n)}{%
       \rA}
+    \proofstepwidestar[1,7]{a_m,a_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,7}}
     \proofstepwidestar[1,3,6,7]{%
       |a_m-a_n|\leq|a_m-L|+|a_n-L|<\varepsilon}{%
-      \FormulaRefAuto{RealDistanceTriangle}[thm]{1,\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,7}},\ \FormulaRefAuto{RealDistanceBasicLaws}[thm],\ \rUE{\rAEb{6}},\ 7,\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]}
+      \FormulaRefAuto{RealDistanceTriangle}[thm]{1,8},\ \FormulaRefAuto{RealDistanceBasicLaws}[thm],\ \rUE{\rAEb{6}},\ 7,\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]}
     \proofstepwidestar[1,3,6]{%
       \begin{aligned}[t]&\exists N\in\mathbb N\,\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<\varepsilon)\end{aligned}}{%
-      \rEI{\rAI{\rAEa{6},\rUI{\rUI{\rRI{7,8}}}}}}
+      \rEI{\rAI{\rAEa{6},\rUI{\rUI{\rRI{7,9}}}}}}
     \proofstepwidestar[1,2,3]{%
       \begin{aligned}[t]&\exists N\in\mathbb N\,\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<\varepsilon)\end{aligned}}{%
-      \rEE{5,6,9}}
+      \rEE{5,6,10}}
     \proofstepwidestar[1,2]{%
       \operatorname{Cauchy}(a)}{%
-      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,\rUI{\rRI{3,10}}}}
+      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,\rUI{\rRI{3,11}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -2915,30 +3125,48 @@ Grenzwert folgt, hängt von der Vollständigkeit der Zielmenge ab.
     \proofstepwidestar[2]{%
       \operatorname{Cauchy}(a)}{%
       \rA}
+    \proofstepwidestar[]{\CompleteOrderedField { \mathbb R , \RealAdd , \RealMul , \RealNeg \cdot , \RealInv \cdot , \RealZero , \RealOne , \RealLe }}{%
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]}
     \proofstepwidestar[1,2]{%
       \begin{aligned}[t]&\exists N\in\mathbb N\,\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<1)\end{aligned}}{%
-      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,2,\FormulaRefAuto{RealCutsCompleteOrderedField}[thm]}}
-    \proofstepwidestar[4]{%
+      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,2,3}}
+    \proofstepwidestar[5]{%
       \begin{aligned}[t]&N\in\mathbb N\land\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<1)\end{aligned}}{%
       \rA}
-    \proofstepwidestar[5]{%
+    \proofstepwidestar[6]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
-    \proofstepwidestar[4,5]{%
+    \proofstepwidestar[5,6]{%
       |a_n-a_N|<1}{%
-      \rUE{\rUE{\rAEb{4}}},\ 5,\ \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{4}}}
-    \proofstepwidestar[1,4,5]{%
+      \rUE{\rUE{\rAEb{5}}},\ 6,\ \FormulaRefAuto{PeanoLeqReflexive}[thm]{\rAEa{5}}}
+    \proofstepwidestar[1,5]{a_N\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,5}}
+    \proofstepwidestar[1,6]{a_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,6}}
+    \proofstepwidestar[1,5,6]{%
       |a_n|\leq|a_n-a_N|+|a_N|<1+|a_N|}{%
-      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,4},\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,5}},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{6}}
-    \proofstepwidestar[1,4]{%
+      \FormulaRefAuto{RealAbsoluteValueTriangle}[thm]{8,9},\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{7}}
+    \proofstepwidestar[1,5]{%
       \forall n\in\mathbb N\,(N\leq n\rightarrow|a_n|\leq1+|a_N|)}{%
-      \rUI{\rRI{5,7}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
-    \proofstepwidestar[1,4]{%
-      \operatorname{Beschr}(a)}{%
-      \FormulaRefAuto{B21EventuallyBoundedIsBounded}[thm]{1,4,\FormulaRefAuto{RealAbsoluteValueNonnegativeZero}[thm]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,4}},\FormulaRefAuto{RealCutAdditiveClosure}[thm],8}}
-    \proofstepwidestar[1,2]{%
-      \operatorname{Beschr}(a)}{%
-      \rEE{3,4,9}}
+      \rUI{\rRI{6,10}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
+        \proofstepwidestar[1,5]{|a_N|\in\mathbb R}{\FormulaRefAuto{RealAbsoluteValue}[def]{8}, \FormulaRefAuto{RealCutAdditiveClosure}[thm]{8,8}}
+    \proofstepwidestar[1,5]{0\leq|a_N|\land(|a_N|=0\leftrightarrow a_N=0)}{\FormulaRefAuto{RealAbsoluteValueNonnegativeZero}[thm]{8}}
+    \proofstepwidestar[1,5]{0\leq|a_N|}{\rAEa{13}}
+    \proofstepwidestar[]{1\in\mathbb R}{\FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{3}}
+    \proofstepwidestar[]{0\leq1}{\FormulaRefAuto{CompleteOrderedFieldAxioms}[def]{3}}
+    \proofstepwidestar[1,5]{(1+|a_N|\in\mathbb R)\land(-1\in\mathbb R\land0\in\mathbb R)}{\FormulaRefAuto{RealCutAdditiveClosure}[thm]{\rAI{15,12}}}
+    \proofstepwidestar[1,5]{1+|a_N|\in\mathbb R}{\rAEa{17}}
+    \proofstepwidestar[1,5]{0\in\mathbb R}{\rAEb{\rAEb{17}}}
+    \proofstepwidestar[1,5]{0+|a_N|\leq 1+|a_N|}{\FormulaRefAuto{RealCutAdditionMonotone}[thm]{\rAI{19,\rAI{15,12}},16}}
+    \proofstepwidestar[1,5]{0+|a_N|=|a_N|+0}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{19,12}}
+    \proofstepwidestar[1,5]{|a_N|+0=|a_N|}{\FormulaRefAuto{RealCutAdditiveLaws}[thm]{12}}
+    \proofstepwidestar[1,5]{|a_N|\leq 1+|a_N|}{\rIE{21,22,20}}
+    \proofstepwidestar[1,5]{0\subseteq |a_N|}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{19,12,14}}
+    \proofstepwidestar[1,5]{|a_N|\subseteq 1+|a_N|}{\FormulaRefAuto{RealCutOrderCharacterization}[thm]{12,18,23}}
+    \proofstepwidestar[1,5]{0\subseteq 1+|a_N|}{\FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{24,25}}
+    \proofstepwidestar[1,5]{0\leq 1+|a_N|}{\FormulaRefAuto{RealCutOrder}[def]{19,18,26}}
+    \proofstepwidestar[1,5]{\operatorname{Beschr}(a)}{\FormulaRefAuto{B21EventuallyBoundedIsBounded}[thm]{1,\rAEa{5},18,27,11}}
+    \proofstepwidestar[1,2]{\operatorname{Beschr}(a)}{\rEE{4,5,28}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3005,114 +3233,122 @@ Grenzwert folgt, hängt von der Vollständigkeit der Zielmenge ab.
     \proofstepwidestar[1,5,9]{%
       \forall N\in\mathbb N\,(-C\leq\alpha_N\land\alpha_N\leq a_N\land a_N\leq C)}{%
       \FormulaRefAuto{RealInfimumCharacterization}[thm]{7,9}}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
     \proofstepwidestar[1,5,9]{%
       \alpha_0\in\alpha[\mathbb N]\subseteq\mathbb R}{%
-      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{9},\ \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{9,\FormulaRefAuto{PeanoZero}[ax]},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{9}}
+      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{9},\ \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{9,11},\ \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{9}}
     \proofstepwidestar[1,5,9]{%
       \begin{aligned}[t]&\exists L\in\mathbb R\,\bigl(\forall k\in\mathbb N\,(\alpha_k\leq L)\land{}\\[-2pt]&\forall u\in\mathbb R\,((\forall k\in\mathbb N\,(\alpha_k\leq u))\rightarrow L\leq u)\bigr)\end{aligned}}{%
-      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{11,10},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{9}}
-    \proofstepwidestar[13]{%
+      \FormulaRefAuto{RealLeastUpperBoundProperty}[thm]{12,10},\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{9}}
+    \proofstepwidestar[14]{%
       \begin{aligned}[t]&L\in\mathbb R\land\bigl(\forall k\in\mathbb N\,(\alpha_k\leq L)\land{}\\[-2pt]&\forall u\in\mathbb R\,((\forall k\in\mathbb N\,(\alpha_k\leq u))\rightarrow L\leq u)\bigr)\end{aligned}}{%
       \rA}
-    \proofstepwidestar[14]{%
+    \proofstepwidestar[15]{%
       \varepsilon\in\mathbb R\land\varepsilon>0}{%
       \rA}
-    \proofstepwidestar[14]{%
+    \proofstepwidestar[15]{%
       0<\varepsilon/2<\varepsilon}{%
-      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{14}}
-    \proofstepwidestar[1,2,14]{%
+      \FormulaRefAuto{RealCutsCompleteOrderedField}[thm]{15}}
+    \proofstepwidestar[1,2,15]{%
       \begin{aligned}[t]&\exists N\in\mathbb N\,\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<\varepsilon/2)\end{aligned}}{%
-      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,2,15}}
-    \proofstepwidestar[17]{%
+      \FormulaRefAuto{RealCauchySequenceDef}[def]{1,2,16}}
+    \proofstepwidestar[18]{%
       \begin{aligned}[t]&N\in\mathbb N\land\forall m,n\in\mathbb N\,\\[-2pt]&\qquad((N\leq m\land N\leq n)\rightarrow|a_m-a_n|<\varepsilon/2)\end{aligned}}{%
       \rA}
-    \proofstepwidestar[18]{%
+    \proofstepwidestar[19]{%
       n\in\mathbb N\land N\leq n}{%
       \rA}
-    \proofstepwidestar[19]{%
+    \proofstepwidestar[20]{%
       x\in T_N}{%
       \rA}
-    \proofstepwidestar[1,17,19]{%
+    \proofstepwidestar[1,18,20]{%
       \exists m\in\mathbb N\,(N\leq m\land x=a_m)}{%
-      6,\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1,19}}
-    \proofstepwidestar[21]{%
+      6,\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1,20}}
+    \proofstepwidestar[22]{%
       m\in\mathbb N\land(N\leq m\land x=a_m)}{%
       \rA}
-    \proofstepwidestar[17,18,21]{%
+    \proofstepwidestar[18,19,22]{%
       |a_m-a_n|<\varepsilon/2}{%
-      \rUE{\rUE{\rAEb{17}}},\ 18,\ 21}
-    \proofstepwidestar[1,14,17,18,21]{%
+      \rUE{\rUE{\rAEb{18}}},\ 19,\ 22}
+    \proofstepwidestar[1,19]{a_n\in\mathbb R}{%
+      \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,19}}
+    \proofstepwidestar[1,15,18,19,22]{%
       a_n-\varepsilon/2\leq x}{%
-      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{\FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]{1,18},15,22},\ \rIE{\rAEb{\rAEb{21}}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
-    \proofstepwidestar[1,14,17,18,19]{%
+      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{24,16,23},\ \rIE{\rAEb{\rAEb{22}}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]}
+    \proofstepwidestar[1,15,18,19,20]{%
       a_n-\varepsilon/2\leq x}{%
-      \rEE{20,21,23}}
-    \proofstepwidestar[1,14,17,18]{%
+      \rEE{21,22,25}}
+    \proofstepwidestar[1,15,18,19]{%
       \forall x\in T_N\,(a_n-\varepsilon/2\leq x)}{%
-      \rUI{\rRI{19,24}}}
-    \proofstepwidestar[1,5,9,14,17,18]{%
+      \rUI{\rRI{20,26}}}
+    \proofstepwidestar[1,5,9,15,18,19]{%
       a_n-\varepsilon/2\leq\alpha_N}{%
-      \FormulaRefAuto{RealInfimumCharacterization}[thm]{7,9,25}}
-    \proofstepwidestar[1,5,9,13,14,17,18]{%
+      \FormulaRefAuto{RealInfimumCharacterization}[thm]{7,9,27}}
+    \proofstepwidestar[1,5,9,14,15,18,19]{%
       a_n-\varepsilon/2\leq L}{%
-      \rRE{\rUE{\rAEa{\rAEb{13}}},\rAEa{17}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{26}}
-    \proofstepwidestar[28]{%
+      \rRE{\rUE{\rAEa{\rAEb{14}}},\rAEa{18}},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{28}}
+    \proofstepwidestar[30]{%
       k\in\mathbb N}{%
       \rA}
-    \proofstepwidestar[17,28]{%
+    \proofstepwidestar[18,30]{%
       N+k\in\mathbb N\land(N\leq N+k\land k\leq N+k)}{%
-      \FormulaRefAuto{B21CommonNaturalBound}[thm]{\rAEa{17},28}}
-    \proofstepwidestar[1,17,28]{%
+      \FormulaRefAuto{B21CommonNaturalBound}[thm]{\rAEa{18},30}}
+    \proofstepwidestar[1,18,30]{%
       a_{N+k}\in T_k}{%
-      6,\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ 29}
-    \proofstepwidestar[1,5,9,17,28]{%
+      6,\ \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ 31}
+    \proofstepwidestar[1,5,9,18,30]{%
       \alpha_k\leq a_{N+k}}{%
-      \FormulaRefAuto{RealInfimumCharacterization}[thm]{7,9,30}}
-    \proofstepwidestar[17,18,28]{%
+      \FormulaRefAuto{RealInfimumCharacterization}[thm]{7,9,32}}
+    \proofstepwidestar[18,19,30]{%
       |a_{N+k}-a_n|<\varepsilon/2}{%
-      \rUE{\rUE{\rAEb{17}}},\ 18,\ 29}
-    \proofstepwidestar[1,5,9,14,17,18,28]{%
+      \rUE{\rUE{\rAEb{18}}},\ 19,\ 31}
+    \proofstepwidestar[1,5,9,15,18,19,30]{%
       \alpha_k\leq a_n+\varepsilon/2}{%
-      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,15,32},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{31}}
-    \proofstepwidestar[1,5,9,14,17,18]{%
+      \FormulaRefAuto{RealEpsilonNeighborhoodInterval}[thm]{1,16,34},\ \FormulaRefAuto{RealCutTotalOrder}[thm]{33}}
+    \proofstepwidestar[1,5,9,15,18,19]{%
       \forall k\in\mathbb N\,(\alpha_k\leq a_n+\varepsilon/2)}{%
-      \rUI{\rRI{28,33}}}
-    \proofstepwidestar[1,5,9,13,14,17,18]{%
+      \rUI{\rRI{30,35}}}
+    \proofstepwidestar[1,5,9,14,15,18,19]{%
       L\leq a_n+\varepsilon/2}{%
-      \rUE{\rAEb{\rAEb{13}}},\ \FormulaRefAuto{RealCutAdditiveClosure}[thm]{1,14},\ 34}
-    \proofstepwidestar[1,5,9,13,14,17,18]{%
+      \rUE{\rAEb{\rAEb{14}}},\ \FormulaRefAuto{RealCutAdditiveClosure}[thm]{1,15},\ 36}
+    \proofstepwidestar[1,5,9,14,15,18,19]{%
       |a_n-L|\leq\varepsilon/2<\varepsilon}{%
-      \FormulaRefAuto{RealAbsoluteValue}[def],\ \FormulaRefAuto{RealCutNegationOrder}[thm],\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{27,35,15}}
-    \proofstepwidestar[1,5,9,13,14,17]{%
+      \FormulaRefAuto{RealAbsoluteValue}[def],\ \FormulaRefAuto{RealCutNegationOrder}[thm],\ \FormulaRefAuto{RealCutOrderArithmeticCompatibility}[thm]{29,37,16}}
+    \proofstepwidestar[1,5,9,14,15,18]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-L|<\varepsilon)}{%
-      \rEI{\rAI{\rAEa{17},\rUI{\rRI{18,36}}}}}
-    \proofstepwidestar[1,2,5,9,13,14]{%
+      \rEI{\rAI{\rAEa{18},\rUI{\rRI{19,38}}}}}
+    \proofstepwidestar[1,2,5,9,14,15]{%
       \exists N\in\mathbb N\,\forall n\in\mathbb N\,(N\leq n\rightarrow|a_n-L|<\varepsilon)}{%
-      \rEE{16,17,37}}
-    \proofstepwidestar[1,2,5,9,13]{%
+      \rEE{17,18,39}}
+    \proofstepwidestar[1,2,5,9,14]{%
       a_n\to L}{%
-      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\rAEa{13},\rUI{\rRI{14,38}}}}
-    \proofstepwidestar[1,2,5,9,13]{%
+      \FormulaRefAuto{RealSequenceConvergenceDef}[def]{1,\rAEa{14},\rUI{\rRI{15,40}}}}
+    \proofstepwidestar[1,2,5,9,14]{%
       \operatorname{Konv}(a)}{%
-      \FormulaRefAuto{RealSequenceConvergentDivergentDef}[def]{1,\rEI{\rAI{\rAEa{13},39}}}}
+      \FormulaRefAuto{RealSequenceConvergentDivergentDef}[def]{1,\rEI{\rAI{\rAEa{14},41}}}}
     \proofstepwidestar[1,2,5,9]{%
       \operatorname{Konv}(a)}{%
-      \rEE{12,13,40}}
+      \rEE{13,14,42}}
     \proofstepwidestar[1,2,5]{%
       \operatorname{Konv}(a)}{%
-      \rEE{8,9,41}}
+      \rEE{8,9,43}}
     \proofstepwidestar[1,2]{%
       \operatorname{Konv}(a)}{%
-      \rEE{4,5,42}}
+      \rEE{4,5,44}}
   \closeproofpartwideindR
 
   \proofpartwide{Äquivalenz}
     \proofstepwidestar[1]{%
       a\colon\mathbb N\to\mathbb R}{%
       \rA}
+    \proofstepwidestar[1]{\operatorname{Konv}(a)\rightarrow\operatorname{Cauchy}(a)}{%
+      \FormulaRefAuto{B21CauchyCriterionForward}[thm]{1}}
+    \proofstepwidestar[1]{\operatorname{Cauchy}(a)\rightarrow\operatorname{Konv}(a)}{%
+      \FormulaRefAuto{B21CauchyCriterionBackward}[thm]{1}}
     \proofstepwidestar[1]{%
       \operatorname{Konv}(a)\leftrightarrow\operatorname{Cauchy}(a)}{%
-      \rLRI{\FormulaRefAuto{B21CauchyCriterionForward}[thm]{1},\FormulaRefAuto{B21CauchyCriterionBackward}[thm]{1}}}
+      \rLRI{2,3}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3125,7 +3361,7 @@ Die Definitionen dieses Kapitels trennen bereits zwei Arten von Argumenten.
 Monotonie, Suprema und die Grenzwertregeln verwenden Ordnung und Arithmetik
 von \(\mathbb R\). Dagegen benötigen die Eindeutigkeit des Grenzwerts und die
 Hinrichtung des Cauchy-Kriteriums nur die Grundgesetze des reellen Abstands.
-Band~44 erhebt genau diese Gesetze zu den Axiomen einer Metrik und formuliert
+Band~47 erhebt genau diese Gesetze zu den Axiomen einer Metrik und formuliert
 die abstandstheoretischen Aussagen in dieser Allgemeinheit neu.
 
 \chapter{Die Mogiljanskaja-Familien}
@@ -3168,7 +3404,7 @@ ausdrücklich die natürlichen Peano-Zahlen und dienen lediglich als Tags.
       \rA}
     \proofstepwidestar[1]{%
       (0,i)\in\{0\}\times\mathbb N}{%
-      \text{Def. }\ensuremath{\times},\ \text{Def. }\ensuremath{\{0\}},\ 1}
+      \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{\FormulaRefAuto{a\in\{a\}}[thm],1}}
     \proofstepwidestar[]{%
       L=\{0\}\times\mathbb N}{%
       \FormulaRefAuto{MogiljanskajaLayerLDef}[def]}
@@ -3308,7 +3544,7 @@ voneinander unabhängiger Funktionen.
       \FormulaRefAuto{MogiljanskajaLayerLMembership}[thm]}
     \proofstepwidestar[]{%
       a[\mathbb N]=L}{%
-      \text{Extensionalität}(2,3)}
+      \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{\FormulaRefAuto{P\leftrightarrow Q,R\leftrightarrow Q\vdash P\leftrightarrow R}[thm]{2,3}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3325,13 +3561,13 @@ voneinander unabhängiger Funktionen.
       \FormulaRefAuto{MogiljanskajaBElementsDef}[def]}
     \proofstepwidestar[]{%
       s\in b[\mathbb N\times\mathbb N]\leftrightarrow\exists i,j\in\mathbb N\,(s=b_{ij})}{%
-      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageDef}[def],\ \text{Def. }\ensuremath{\times}}
+      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageDef}[def],\ \FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm]}
     \proofstepwidestar[]{%
       s\in D\leftrightarrow\exists i,j\in\mathbb N\,(s=b_{ij})}{%
       \FormulaRefAuto{MogiljanskajaLayerDMembership}[thm]}
     \proofstepwidestar[]{%
       b[\mathbb N\times\mathbb N]=D}{%
-      \text{Extensionalität}(2,3)}
+      \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{\FormulaRefAuto{P\leftrightarrow Q,R\leftrightarrow Q\vdash P\leftrightarrow R}[thm]{2,3}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3394,34 +3630,44 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
     \proofstepwidestar[2]{%
       n\in\mathbb N\land(j\in\mathbb N\land u=b_{(n+1)+1,j})}{%
       \rA}
+    \proofstepwidestar[2]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{2}}}
     \proofstepwidestar[2]{%
       (n+1)+1\in\mathbb N}{%
-      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{2}}}}
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}
     \proofstepwidestar[2]{%
       b_{(n+1)+1,j}\in D}{%
-      \FormulaRefAuto{MogiljanskajaBElementsDef}[def]{3,\rAEa{\rAEb{2}}},\ \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]}
+      \FormulaRefAuto{MogiljanskajaBElementsDef}[def]{4,\rAEa{\rAEb{2}}},\ \FormulaRefAuto{IndexedFamilyCoordinateTyping}[thm]}
     \proofstepwidestar[2]{%
       u\in D}{%
-      \rIE{\rAEb{\rAEb{2}},4}}
+      \rIE{\rAEb{\rAEb{2}},5}}
     \proofstepwidestar[2]{%
       u\in U}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{5,\rEI{\rAI{\rAEa{2},\rEI{\rAEb{2}}}}}}
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{6,\rEI{\rAI{\rAEa{2},\rEI{\rAEb{2}}}}}}
     \proofstepwidestar[1]{%
       u\in U}{%
-      \rEE{1,2,6}}
-    \proofstepwidestar[8]{%
+      \rEE{1,2,7}}
+    \proofstepwidestar[9]{%
       u\in U}{%
       \rA}
-    \proofstepwidestar[8]{%
+    \proofstepwidestar[9]{%
       \exists n,j\in\mathbb N\,(u=b_{(n+1)+1,j})}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{8}}
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{9}}
     \proofstepwidestar[]{%
       u\in U\leftrightarrow\exists n,j\in\mathbb N\,(u=b_{(n+1)+1,j})}{%
-      \rLRI{\rRI{8,9},\rRI{1,7}}}
+      \rLRI{\rRI{9,10},\rRI{1,8}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Die Marker und das ausgesparte Rechteckelement]{%
+\FormulaThmDeltaKR[Die Marker und das ausgesparte Rechteckelement]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad c_0,c_1,c_2\in D,\\[-2pt]
+    &\text{(ii)}\quad c_0,c_1,c_2\notin U,\\[-2pt]
+    &\text{(iii)}\quad c_0,c_1,c_2\text{ paarweise verschieden},\\[-2pt]
+    &\text{(iv)}\quad D'\subseteq D,\\[-2pt]
+    &\text{(v)}\quad b_{01}\notin D'.
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
     &c_0,c_1,c_2\in D\dsep
       c_0,c_1,c_2\notin U\dsep
@@ -3434,7 +3680,7 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
   \DeltaRow{Funktionen}{b}
 }
 \begin{tabproofsplitwide}
-  \proofpartwideindR[Die ersten beiden Zeilen liegen außerhalb der Reserve]{%
+\proofpartwideindR[Die ersten beiden Zeilen liegen außerhalb von \(U\)]{%
     i\in\{0,1\}\dsep j\in\mathbb N\vdash b_{ij}\notin U
   }{i\in\{0,1\}\dsep j\in\mathbb N\vdash b_{ij}\notin U}[B21ReserveAvoidsFirstTwoRows]
     \proofstepwidestar[1]{%
@@ -3449,120 +3695,197 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
     \proofstepwidestar[4]{%
       (n+1)+1=1}{%
       \rA}
+    \proofstepwidestar[1,4]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[1,4]{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[1,4]{0 + 1 = 1}{%
+      \FormulaRefAuto{PeanoAddLeftZero}[thm]{6}}
     \proofstepwidestar[1,4]{%
       n+1=0}{%
-      \FormulaRefAuto{PeanoAddOneInjective}[thm]{2,\FormulaRefAuto{PeanoZero}[ax],%
-        \rIE{4,\FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]}}}}
+      \FormulaRefAuto{PeanoAddOneInjective}[thm]{2,5,%
+        \rIE{4,7}}}
+    \proofstepwidestar[1,4]{n + 1 \neq 0}{%
+      \FormulaRefAuto{PeanoAddOneNonzero}[thm]{1}}
     \proofstepwidestar[1,4]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{1},5}}
+      \rBI{9,8}}
     \proofstepwidestar[1]{%
       (n+1)+1\neq1}{%
-      \rCI{4,6}}
+      \rCI{4,10}}
     \proofstepwidestar[]{%
       \forall n\in\mathbb N\,((n+1)+1\neq0\land(n+1)+1\neq1)}{%
-      \rUI{\rRI{1,\rAI{3,7}}}}
-    \proofstepwidestar[9]{%
+      \rUI{\rRI{1,\rAI{3,11}}}}
+    \proofstepwidestar[13]{%
       i\in\{0,1\}\land j\in\mathbb N}{%
       \rA}
-    \proofstepwidestar[9]{%
+    \proofstepwidestar[13]{%
       i\in\mathbb N\land(i=0\lor i=1)}{%
-      \text{Def. }\ensuremath{\{0,1\}},\ 9,\ \FormulaRefAuto{PeanoZero}[ax],\ \FormulaRefAuto{PeanoOneInN}[thm]}
-    \proofstepwidestar[11]{%
+      \FormulaRefAuto{x\in\{a,b\}\eqvdash(x=a\lor x=b)}[thm],\ 13,\ \FormulaRefAuto{PeanoZero}[ax],\ \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[15]{%
       b_{ij}\in U}{%
       \rA}
-    \proofstepwidestar[11]{%
+    \proofstepwidestar[15]{%
       \exists n,k\in\mathbb N\,(b_{ij}=b_{(n+1)+1,k})}{%
-      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{11}}
-    \proofstepwidestar[13]{%
+      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{15}}
+    \proofstepwidestar[17]{%
       n\in\mathbb N\land(k\in\mathbb N\land b_{ij}=b_{(n+1)+1,k})}{%
       \rA}
-    \proofstepwidestar[9,13]{%
-      i=(n+1)+1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{10,9,13,\FormulaRefAuto{PeanoAddOneClosure}[thm]}}}
-    \proofstepwidestar[13]{%
+    \proofstepwidestar[17]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{17}}}
+    \proofstepwidestar[17]{(n+1)+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{18}}
+    \proofstepwidestar[13,17]{i=(n+1)+1\land j=k}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{14,13,17,19}}
+    \proofstepwidestar[13,17]{%
+      i=(n+1)+1}{\rAEa{20}
+}
+    \proofstepwidestar[17]{%
       (n+1)+1\neq0\land(n+1)+1\neq1}{%
-      \rRE{\rUE{8},\rAEa{13}}}
-    \proofstepwidestar[16]{%
+      \rRE{\rUE{12},\rAEa{17}}}
+    \proofstepwidestar[23]{%
       i=0}{%
       \rA}
-    \proofstepwidestar[9,13,16]{%
+    \proofstepwidestar[13,17,23]{%
       (n+1)+1=0}{%
-      \rIE{14,16}}
-    \proofstepwidestar[9,13,16]{%
+      \rIE{21,23}}
+    \proofstepwidestar[13,17,23]{%
       \bot}{%
-      \rBI{\rAEa{15},17}}
-    \proofstepwidestar[19]{%
+      \rBI{\rAEa{22},24}}
+    \proofstepwidestar[26]{%
       i=1}{%
       \rA}
-    \proofstepwidestar[9,13,19]{%
+    \proofstepwidestar[13,17,26]{%
       (n+1)+1=1}{%
-      \rIE{14,19}}
-    \proofstepwidestar[9,13,19]{%
+      \rIE{21,26}}
+    \proofstepwidestar[13,17,26]{%
       \bot}{%
-      \rBI{\rAEb{15},20}}
-    \proofstepwidestar[9,13]{%
+      \rBI{\rAEb{22},27}}
+    \proofstepwidestar[13,17]{%
       \bot}{%
-      \rOE{\rAEb{10},16,18,19,21}}
-    \proofstepwidestar[9,11]{%
+      \rOE{\rAEb{14},23,25,26,28}}
+    \proofstepwidestar[13,15]{%
       \bot}{%
-      \rEE{12,13,22}}
-    \proofstepwidestar[9]{%
+      \rEE{16,17,29}}
+    \proofstepwidestar[13]{%
       b_{ij}\notin U}{%
-      \rCI{11,23}}
+      \rCI{15,30}}
   \closeproofpartwideindR
 
-  \proofpartwideindR[Typisierung und Verschiedenheit der Marker]{%
-    c_0,c_1,c_2\in D\dsep c_0\neq c_1\land(c_0\neq c_2\land c_1\neq c_2)
-  }{c_0,c_1,c_2\in D\dsep c_0\neq c_1\land(c_0\neq c_2\land c_1\neq c_2)}[B21ReserveMarkerDistinct]
-    \proofstepwidestar[]{%
+  \proofpartwide{Trägereigenschaft}
+\proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+\proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+\proofstepwidestar[]{%
       c_0,c_1,c_2\in D}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \FormulaRefAuto{MogiljanskajaBElementsDef}[def]{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]}}
-    \proofstepwidestar[2]{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \FormulaRefAuto{MogiljanskajaBElementsDef}[def]{1,2}}
+
+\closeproofpartwide
+
+\proofpartwide{Erster und zweiter Marker sind verschieden}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[4]{%
       c_0=c_1}{%
       \rA}
-    \proofstepwidestar[2]{%
-      0=1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{2}}}}
-    \proofstepwidestar[2]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[4]{b_{00}=b_{11}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{4}}
+    \proofstepwidestar[4]{0=1\land0=1}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{5,6,7}}
+    \proofstepwidestar[4]{%
+      0=1}{\rAEa{8}
+}
+    \proofstepwidestar[4]{0 \neq 1}{%
+      \FormulaRefAuto{PeanoZeroNeOne}[thm]}
+    \proofstepwidestar[4]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoZeroNeOne}[thm],3}}
+      \rBI{10,9}}
     \proofstepwidestar[]{%
       c_0\neq c_1}{%
-      \rCI{2,4}}
-    \proofstepwidestar[6]{%
+      \rCI{4,11}}
+
+\closeproofpartwide
+
+\proofpartwide{Erster und dritter Marker sind verschieden}
+  \setcounter{proofstepnr}{12}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[13]{%
       c_0=c_2}{%
       \rA}
-    \proofstepwidestar[6]{%
-      0=1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{6}}}}
-    \proofstepwidestar[6]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[13]{b_{00}=b_{10}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{13}}
+    \proofstepwidestar[13]{0=1\land0=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{14,15,16}}
+    \proofstepwidestar[13]{%
+      0=1}{\rAEa{17}
+}
+    \proofstepwidestar[13]{0 \neq 1}{%
+      \FormulaRefAuto{PeanoZeroNeOne}[thm]}
+    \proofstepwidestar[13]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoZeroNeOne}[thm],7}}
+      \rBI{19,18}}
     \proofstepwidestar[]{%
       c_0\neq c_2}{%
-      \rCI{6,8}}
-    \proofstepwidestar[10]{%
+      \rCI{13,20}}
+
+\closeproofpartwide
+
+\proofpartwide{Zweiter und dritter Marker sind verschieden}
+  \setcounter{proofstepnr}{21}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[22]{%
       c_1=c_2}{%
       \rA}
-    \proofstepwidestar[10]{%
-      1=0}{%
-      \rAEb{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{10}}}}
-    \proofstepwidestar[10]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[22]{b_{11}=b_{10}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{22}}
+    \proofstepwidestar[22]{1=1\land1=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{23,24,25}}
+    \proofstepwidestar[22]{%
+      1=0}{\rAEb{26}
+}
+    \proofstepwidestar[22]{1 \neq 0}{%
+      \FormulaRefAuto{PeanoOneNeZero}[thm]}
+    \proofstepwidestar[22]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoOneNeZero}[thm],11}}
+      \rBI{28,27}}
     \proofstepwidestar[]{%
       c_1\neq c_2}{%
-      \rCI{10,12}}
-    \proofstepwidestar[]{%
+      \rCI{22,29}}
+
+\closeproofpartwide
+
+\proofpartwideindR[Typisierung und Verschiedenheit der Marker]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad c_0,c_1,c_2\in D,\\[-2pt]
+    &\text{(ii)}\quad c_0\neq c_1\land(c_0\neq c_2\land c_1\neq c_2).
+  \end{aligned}%
+}{c_0,c_1,c_2\in D\dsep c_0\neq c_1\land(c_0\neq c_2\land c_1\neq c_2)}[B21ReserveMarkerDistinct]
+  \setcounter{proofstepnr}{30}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[]{%
       c_0\neq c_1\land(c_0\neq c_2\land c_1\neq c_2)}{%
-      \rAI{5,\rAI{9,13}}}
-  \closeproofpartwideindR
+      \rAI{12,\rAI{21,30}}}
+
+\closeproofpartwideindR
+
 
   \proofpartwide{Reservenausschluss und Trägerinklusion}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[]{%
       c_0,c_1,c_2\notin U}{%
-      \FormulaRefAuto{B21ReserveAvoidsFirstTwoRows}[thm]{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{B21ReserveAvoidsFirstTwoRows}[thm]{1,2},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
     \proofstepwidestar[]{%
       U\subseteq D}{%
       \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
@@ -3571,62 +3894,101 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
       \FormulaRefAuto{B21ReserveMarkerDistinct}[thm],\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \FormulaRefAuto{PairSetSubsetFromMembership}[thm]}
     \proofstepwidestar[]{%
       V\subseteq D}{%
-      \FormulaRefAuto{UnionSubsetCommonSuperset}[thm]{2,\rAEb{3}},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{UnionSubsetCommonSuperset}[thm]{4,\rAEb{5}},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
     \proofstepwidestar[]{%
       D'\subseteq D}{%
-      \FormulaRefAuto{UnionSubsetCommonSuperset}[thm]{\rAEa{3},4},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{UnionSubsetCommonSuperset}[thm]{\rAEa{5},6},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
   \closeproofpartwide
 
   \proofpartwide{Das ausgesparte Rechteckelement}
+    \proofstepwidestar[]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[]{%
       b_{01}\notin U}{%
-      \FormulaRefAuto{B21ReserveAvoidsFirstTwoRows}[thm]{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm]}}
-    \proofstepwidestar[2]{%
+      \FormulaRefAuto{B21ReserveAvoidsFirstTwoRows}[thm]{1,2}}
+    \proofstepwidestar[4]{%
       b_{01}=c_0}{%
       \rA}
-    \proofstepwidestar[2]{%
-      1=0}{%
-      \rAEb{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{2}}}}
-    \proofstepwidestar[2]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[4]{b_{01}=b_{00}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{4}}
+    \proofstepwidestar[4]{0=0\land1=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{5,6,7}}
+    \proofstepwidestar[4]{%
+      1=0}{\rAEb{8}
+}
+    \proofstepwidestar[4]{1 \neq 0}{%
+      \FormulaRefAuto{PeanoOneNeZero}[thm]}
+    \proofstepwidestar[4]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoOneNeZero}[thm],3}}
+      \rBI{10,9}}
     \proofstepwidestar[]{%
       b_{01}\neq c_0}{%
-      \rCI{2,4}}
-    \proofstepwidestar[6]{%
+      \rCI{4,11}}
+    \proofstepwidestar[13]{%
       b_{01}=c_1}{%
       \rA}
-    \proofstepwidestar[6]{%
-      0=1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{6}}}}
-    \proofstepwidestar[6]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[13]{b_{01}=b_{11}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{13}}
+    \proofstepwidestar[13]{0=1\land1=1}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{14,15,16}}
+    \proofstepwidestar[13]{%
+      0=1}{\rAEa{17}
+}
+    \proofstepwidestar[13]{0 \neq 1}{%
+      \FormulaRefAuto{PeanoZeroNeOne}[thm]}
+    \proofstepwidestar[13]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoZeroNeOne}[thm],7}}
+      \rBI{19,18}}
     \proofstepwidestar[]{%
       b_{01}\neq c_1}{%
-      \rCI{6,8}}
-    \proofstepwidestar[10]{%
+      \rCI{13,20}}
+    \proofstepwidestar[22]{%
       b_{01}=c_2}{%
       \rA}
-    \proofstepwidestar[10]{%
-      0=1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{10}}}}
-    \proofstepwidestar[10]{%
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[22]{b_{01}=b_{10}}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{22}}
+    \proofstepwidestar[22]{0=1\land1=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{23,24,25}}
+    \proofstepwidestar[22]{%
+      0=1}{\rAEa{26}
+}
+    \proofstepwidestar[22]{0 \neq 1}{%
+      \FormulaRefAuto{PeanoZeroNeOne}[thm]}
+    \proofstepwidestar[22]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoZeroNeOne}[thm],11}}
+      \rBI{28,27}}
     \proofstepwidestar[]{%
       b_{01}\neq c_2}{%
-      \rCI{10,12}}
+      \rCI{22,29}}
     \proofstepwidestar[]{%
       b_{01}\notin P\land b_{01}\notin V}{%
-      \FormulaRefAuto{NotInPairSet}[thm]{5,9},\ \FormulaRefAuto{NotInUnion}[thm]{1,13},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{NotInPairSet}[thm]{12,21},\ \FormulaRefAuto{NotInUnion}[thm]{3,30},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
     \proofstepwidestar[]{%
       b_{01}\notin D'}{%
-      \FormulaRefAuto{NotInUnion}[thm]{\rAEa{14},\rAEb{14}},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{NotInUnion}[thm]{\rAEa{31},\rAEb{31}},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Der dritte Marker liegt außerhalb des festen Kerns]{%
+\FormulaThmDeltaKR[Der dritte Marker liegt außerhalb des festen Kerns]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad c_2\notin P,\\[-2pt]
+    &\text{(ii)}\quad P\cap U=\varnothing.
+  \end{aligned}%
+}{%
   c_2\notin P\dsep P\cap U=\varnothing%
 }{MogiljanskajaReserveCoreFacts}{%
   \DeltaRow{Mengen}{P\dsep U\dsep c_0\dsep c_1\dsep c_2}
@@ -3647,7 +4009,7 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
       \FormulaRefAuto{PairSetDisjointFromTwoAvoided}[thm]{3}}
     \proofstepwidestar[]{%
       P\cap U=\varnothing}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \text{Kommutativität von }\ensuremath{\cap}(4)}
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{\rIE{\FormulaRefAuto{A\cap B=B\cap A}[thm],4}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3667,7 +4029,12 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
   \DeltaRow{Funktionen}{b\dsep\delta\dsep\upsilon}
 }
 
-\FormulaThmDeltaK[Die Zeilenparametrisierungen sind bijektiv]{%
+\FormulaThmDeltaKR[Die Zeilenparametrisierungen sind bijektiv]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad \delta\colon\mathbb N\times\mathbb N\bij D,\\[-2pt]
+    &\text{(ii)}\quad \upsilon\colon\mathbb N\times\mathbb N\bij U.
+  \end{aligned}%
+}{%
   \delta\colon\mathbb N\times\mathbb N\bij D\dsep
   \upsilon\colon\mathbb N\times\mathbb N\bij U%
 }{MogiljanskajaRowParametrizationsBijective}{%
@@ -3691,11 +4058,11 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
       b_{n,j}=b_{m,q}}{%
       \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{2,3}}
     \proofstepwidestar[2,3]{%
-      n=m\land j=q}{%
-      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,4,\FormulaRefAuto{PeanoAddOneClosure}[thm]}}
+      n=m\land j=q}{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,4}
+}
     \proofstepwidestar[2,3]{%
       n=m\land j=q}{%
-      5}
+      \rRE{\FormulaRefAuto{P\rightarrow P}[thm],5}}
     \proofstepwidestar[2,3]{%
       (n,j)=(m,q)}{%
       \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{6}}
@@ -3713,7 +4080,7 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
       \rA}
     \proofstepwidestar[11]{%
       (n,j)\in\mathbb N\times\mathbb N\land \delta(n,j)=u}{%
-      \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{11},\ \text{Def. }\ensuremath{\times},\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
+      \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{11},\ \FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm],\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
     \proofstepwidestar[11]{%
       \exists p\in\mathbb N\times\mathbb N\,(\delta(p)=u)}{%
       \rEI{12}}
@@ -3743,42 +4110,52 @@ und \(D'\) adjungiert zusätzlich \(c_0=b_{00}\) und \(c_1=b_{11}\).
     \proofstepwidestar[2,3]{%
       b_{(n+1)+1,j}=b_{(m+1)+1,q}}{%
       \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{2,3}}
+    \proofstepwidestar[2]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{2}}}
+    \proofstepwidestar[2]{m+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{\rAEb{\rAEb{2}}}}}
+    \proofstepwidestar[2]{(n+1)+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{5}}
+    \proofstepwidestar[2]{(m+1)+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{6}}
     \proofstepwidestar[2,3]{%
-      (n+1)+1=(m+1)+1\land j=q}{%
-      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,4,\FormulaRefAuto{PeanoAddOneClosure}[thm]}}
+      (n+1)+1=(m+1)+1\land j=q}{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,4,\rAI{7,8}}
+}
+    \proofstepwidestar[2,3]{n+1=m+1}{%
+      \FormulaRefAuto{PeanoAddOneInjective}[thm]{\rAEa{9}}}
     \proofstepwidestar[2,3]{%
       n=m\land j=q}{%
-      \FormulaRefAuto{PeanoAddOneInjective}[thm]{\FormulaRefAuto{PeanoAddOneInjective}[thm]{\rAEa{5}}},\ \rAEb{5}}
+      \FormulaRefAuto{PeanoAddOneInjective}[thm]{10},\ \rAEb{9}}
     \proofstepwidestar[2,3]{%
       (n,j)=(m,q)}{%
-      \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{6}}
+      \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{11}}
     \proofstepwidestar[]{%
       \upsilon\colon\mathbb N\times\mathbb N\inj U}{%
-      \FormulaRefAuto{Injektive Funktion}[def]{1,\rUI{\rUI{\rUI{\rUI{\rRI{2,\rRI{3,7}}}}}}}}
-    \proofstepwidestar[9]{%
+      \FormulaRefAuto{Injektive Funktion}[def]{1,\rUI{\rUI{\rUI{\rUI{\rRI{2,\rRI{3,12}}}}}}}}
+    \proofstepwidestar[14]{%
       u\in U}{%
       \rA}
-    \proofstepwidestar[9]{%
+    \proofstepwidestar[14]{%
       \exists n,j\in\mathbb N\,(u=b_{(n+1)+1,j})}{%
-      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{9}}
-    \proofstepwidestar[11]{%
+      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{14}}
+    \proofstepwidestar[16]{%
       n\in\mathbb N\land(j\in\mathbb N\land u=b_{(n+1)+1,j})}{%
       \rA}
-    \proofstepwidestar[11]{%
+    \proofstepwidestar[16]{%
       (n,j)\in\mathbb N\times\mathbb N\land \upsilon(n,j)=u}{%
-      \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{11},\ \text{Def. }\ensuremath{\times},\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
-    \proofstepwidestar[11]{%
+      \FormulaRefAuto{MogiljanskajaRowParametrizationsDef}[def]{16},\ \FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm],\ \FormulaRefAuto{a=b\vdash b=a}[thm]}
+    \proofstepwidestar[16]{%
       \exists p\in\mathbb N\times\mathbb N\,(\upsilon(p)=u)}{%
-      \rEI{12}}
-    \proofstepwidestar[9]{%
+      \rEI{17}}
+    \proofstepwidestar[14]{%
       \exists p\in\mathbb N\times\mathbb N\,(\upsilon(p)=u)}{%
-      \rEE{10,11,13}}
+      \rEE{15,16,18}}
     \proofstepwidestar[]{%
       \upsilon\colon\mathbb N\times\mathbb N\sur U}{%
-      \FormulaRefAuto{Surjektive Funktion}[def]{1,\rUI{\rRI{9,14}}}}
+      \FormulaRefAuto{Surjektive Funktion}[def]{1,\rUI{\rRI{14,19}}}}
     \proofstepwidestar[]{%
       \upsilon\colon\mathbb N\times\mathbb N\bij U}{%
-      \FormulaRefAuto{Bijektive Funktion}[def]{8,15}}
+      \FormulaRefAuto{Bijektive Funktion}[def]{13,20}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
@@ -3809,7 +4186,7 @@ Insbesondere gelten die präzisen Bildmengengleichheiten
       \FormulaRefAuto{B21UpsilonBijective}[thm]}
     \proofstepwidestar[]{%
       \upsilon^{-1}\colon U\bij\mathbb N\times\mathbb N}{%
-      \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}[thm]{1}}
+      \FormulaRefAuto{InverseFunctionBijection}[thm]{1}}
     \proofstepwidestar[]{%
       \delta\colon\mathbb N\times\mathbb N\bij D}{%
       \FormulaRefAuto{B21DeltaBijective}[thm]}
@@ -3841,33 +4218,37 @@ Insbesondere gelten die präzisen Bildmengengleichheiten
     \proofstepwidestar[3]{%
       n=0}{%
       \rA}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[3]{%
       b_{n+1,0}=c_2}{%
-      \rIE{3},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \rIE{3},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{4},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
     \proofstepwidestar[3]{%
       b_{n+1,0}\in V}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{4},\ \text{Def. }\ensuremath{\cup}}
-    \proofstepwidestar[6]{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{5},\ \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]}
+    \proofstepwidestar[7]{%
       \exists m\in\mathbb N\,(n=m+1)}{%
       \rA}
-    \proofstepwidestar[7]{%
+    \proofstepwidestar[8]{%
       m\in\mathbb N\land n=m+1}{%
       \rA}
-    \proofstepwidestar[7]{%
+    \proofstepwidestar[8]{%
       n=m+1}{%
-      \rAEb{7}}
-    \proofstepwidestar[7]{%
+      \rAEb{8}}
+    \proofstepwidestar[8]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[8]{%
       b_{n+1,0}\in U}{%
-      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{\rEI{\rAI{\rAEa{7},\rEI{\rAI{\FormulaRefAuto{PeanoZero}[ax],\rIE{8,\rII}}}}}}}
+      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{\rEI{\rAI{\rAEa{8},\rEI{\rAI{10,\rIE{9,\rII}}}}}}}
+    \proofstepwidestar[8]{%
+      b_{n+1,0}\in V}{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{11},\ \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]}
     \proofstepwidestar[7]{%
       b_{n+1,0}\in V}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{9},\ \text{Def. }\ensuremath{\cup}}
-    \proofstepwidestar[6]{%
-      b_{n+1,0}\in V}{%
-      \rEE{6,7,10}}
+      \rEE{7,8,12}}
     \proofstepwidestar[1]{%
       b_{n+1,0}\in V}{%
-      \rOE{2,3,5,6,11}}
+      \rOE{2,3,6,7,13}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -3882,8 +4263,14 @@ Insbesondere gelten die präzisen Bildmengengleichheiten
   \DeltaRow{Funktionen}{b\dsep H}
 }
 
-\FormulaThmDeltaK[Die punktierte Verschiebung entfernt genau den dritten
+\FormulaThmDeltaKR[Die punktierte Verschiebung entfernt genau den dritten
 Marker]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad H\colon\mathbb N\inj V,\\[-2pt]
+    &\text{(ii)}\quad H_0=c_2,\\[-2pt]
+    &\text{(iii)}\quad V\setminus\{c_2\}=U.
+  \end{aligned}%
+}{%
   H\colon\mathbb N\inj V\dsep H_0=c_2\dsep
   V\setminus\{c_2\}=U%
 }{MogiljanskajaShiftSequenceFacts}{%
@@ -3906,37 +4293,74 @@ Marker]{%
     \proofstepwidestar[2,3]{%
       b_{n+1,0}=b_{m+1,0}}{%
       \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]{2,3}}
+    \proofstepwidestar[2,3]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[2]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{2}}}
+    \proofstepwidestar[2]{m+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEb{2}}}
+    \proofstepwidestar[2,3]{n+1=m+1\land0=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,\rAI{6,7},5,4}}
     \proofstepwidestar[2,3]{%
-      n+1=m+1}{%
-      \rAEa{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{2,\FormulaRefAuto{PeanoAddOneClosure}[thm],\FormulaRefAuto{PeanoZero}[ax],4}}}
+      n+1=m+1}{\rAEa{8}
+}
     \proofstepwidestar[2,3]{%
       n=m}{%
-      \FormulaRefAuto{PeanoAddOneInjective}[thm]{2,5}}
+      \FormulaRefAuto{PeanoAddOneInjective}[thm]{2,9}}
     \proofstepwidestar[]{%
       H\colon\mathbb N\inj V}{%
-      \FormulaRefAuto{InjectiveIndexedFamilyCriterion}[thm]{1,\rUI{\rUI{\rRI{2,\rRI{3,6}}}}}}
+      \FormulaRefAuto{InjectiveIndexedFamilyCriterion}[thm]{1,\rUI{\rUI{\rRI{2,\rRI{3,10}}}}}}
   \closeproofpartwideindR
 
   \proofpartwide{Anfangswert und punktierte Zielmenge}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[]{%
       H_0=b_{0+1,0}=c_2}{%
-      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]{\FormulaRefAuto{PeanoZero}[ax]},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{\FormulaRefAuto{PeanoOneInN}[thm]},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
+      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]{1},\ \FormulaRefAuto{PeanoAddLeftZero}[thm]{2},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]}
     \proofstepwidestar[]{%
       c_2\notin U}{%
       \FormulaRefAuto{MogiljanskajaReserveMarkerFacts}[thm]}
     \proofstepwidestar[]{%
       \{c_2\}\cap U=\varnothing}{%
-      \FormulaRefAuto{SingletonDisjointFromAvoidedSet}[thm]{2}}
+      \FormulaRefAuto{SingletonDisjointFromAvoidedSet}[thm]{4}}
     \proofstepwidestar[]{%
       (\{c_2\}\cup U)\setminus\{c_2\}=U}{%
-      \FormulaRefAuto{RemoveDisjointUnionSummand}[thm]{3}}
+      \FormulaRefAuto{RemoveDisjointUnionSummand}[thm]{5}}
     \proofstepwidestar[]{%
       V\setminus\{c_2\}=U}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \text{Kommutativität von }\ensuremath{\cup}(4)}
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{\rIE{\FormulaRefAuto{A\cup B=B\cup A}[thm],6}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Tatsächliche Bildmenge der Verschiebungsfolge]{%
+\FormulaDefDeltaKR[Die durch die Verschiebungswerte beschriebene Menge]{%
+  \begin{aligned}[t]
+    &\{b_{n+1,0}\mid n\in\mathbb N\}\coloneqq\\[-2pt]
+    &\quad\iota S\,\forall x\,
+      \bigl(x\in S\leftrightarrow\exists n\in\mathbb N\,(x=b_{n+1,0})\bigr)
+  \end{aligned}%
+}{%
+  \{b_{n+1,0}\mid n\in\mathbb N\}\coloneqq
+  \iota S\,\forall x\,
+    \bigl(x\in S\leftrightarrow\exists n\in\mathbb N\,(x=b_{n+1,0})\bigr)%
+}{B21ShiftImageTermSetDef}{%
+  \DeltaRow{Mengen}{S\dsep x\dsep n\dsep b_{ij}}
+  \DeltaRow{Eindeutige Existenz}{%
+    \begin{aligned}[t]
+      &\exists!S\,\forall x\\[-2pt]
+      &\quad\bigl(x\in S\leftrightarrow\exists n\in\mathbb N\,(x=b_{n+1,0})\bigr)
+    \end{aligned}}
+    [\FormulaRefAuto{TermImageSetUniqueExists}[thm]]
+}
+
+\FormulaThmDeltaKR[Tatsächliche Bildmenge der Verschiebungsfolge]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad H[\mathbb N]=\{b_{n+1,0}\mid n\in\mathbb N\},\\[-2pt]
+    &\text{(ii)}\quad H[\mathbb N]\subsetneq V.
+  \end{aligned}%
+}{%
   H[\mathbb N]
   =\{b_{n+1,0}\mid n\in\mathbb N\}
   \dsep H[\mathbb N]\subsetneq V%
@@ -3954,49 +4378,71 @@ Marker]{%
       \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{1},\ \FormulaRefAuto{IndexedFamilyImageDef}[def],\ \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]}
     \proofstepwidestar[]{%
       H[\mathbb N]=\{b_{n+1,0}\mid n\in\mathbb N\}}{%
-      \text{Extensionalität}(2),\ \FormulaRefAuto{TermImageSetUniqueExists}[thm]}
+      \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{\rLRS{\FormulaRefAuto{B21ShiftImageTermSetDef}[def],2}}}}
     \proofstepwidestar[]{%
       H[\mathbb N]\subseteq V}{%
       \FormulaRefAuto{F\colon A\to B\vdash F[A]\subseteq B}[thm]{1}}
   \closeproofpartwide
 
   \proofpartwide{Ein explizit ausgelassener Wert}
+    \proofstepwidestar[]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
     \proofstepwidestar[]{%
       b_{(0+1)+1,1}\in U}{%
-      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{\rEI{\rAI{\FormulaRefAuto{PeanoZero}[ax],\rEI{\rAI{\FormulaRefAuto{PeanoOneInN}[thm],\rII}}}}}}
+      \FormulaRefAuto{MogiljanskajaReserveMembership}[thm]{\rEI{\rAI{1,\rEI{\rAI{2,\rII}}}}}}
     \proofstepwidestar[]{%
       b_{(0+1)+1,1}\in V}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{1},\ \text{Def. }\ensuremath{\cup}}
-    \proofstepwidestar[3]{%
+      \FormulaRefAuto{MogiljanskajaDPrimeDef}[def]{3},\ \FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]}
+    \proofstepwidestar[5]{%
       b_{(0+1)+1,1}\in H[\mathbb N]}{%
       \rA}
-    \proofstepwidestar[3]{%
-      \exists n\in\mathbb N\,(b_{(0+1)+1,1}=H_n)}{%
-      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{\FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def],3},\ \FormulaRefAuto{IndexedFamilyImageDef}[def]}
+    \proofstepwidestar[]{H\colon\mathbb N\to V}{%
+      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]}
     \proofstepwidestar[5]{%
+      \exists n\in\mathbb N\,(b_{(0+1)+1,1}=H_n)}{%
+      \FormulaRefAuto{IndexedFamilyImageMembership}[thm]{6,5},\ \FormulaRefAuto{IndexedFamilyImageDef}[def]}
+    \proofstepwidestar[8]{%
       n\in\mathbb N\land b_{(0+1)+1,1}=H_n}{%
       \rA}
-    \proofstepwidestar[5]{%
+    \proofstepwidestar[8]{%
       b_{(0+1)+1,1}=b_{n+1,0}}{%
-      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]{\rAEa{5}},\ \rIE{\rAEb{5}}}
-    \proofstepwidestar[5]{%
-      1=0}{%
-      \rAEb{\FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{\FormulaRefAuto{PeanoZero}[ax],\FormulaRefAuto{PeanoOneInN}[thm],\FormulaRefAuto{PeanoAddOneClosure}[thm],5,6}}}
+      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]{\rAEa{8}},\ \rIE{\rAEb{8}}}
+    \proofstepwidestar[8]{0 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[8]{1 \in \mathbb N}{%
+      \FormulaRefAuto{PeanoOneInN}[thm]}
+    \proofstepwidestar[8]{0+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{10}}
+    \proofstepwidestar[8]{n+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{8}}}
+    \proofstepwidestar[8]{(0+1)+1\in\mathbb N}{%
+      \FormulaRefAuto{PeanoAddOneClosure}[thm]{12}}
+    \proofstepwidestar[8]{(0+1)+1=n+1\land1=0}{%
+      \FormulaRefAuto{MogiljanskajaBIndexUnique}[thm]{10,11,\rAI{14,13},8,9}}
+    \proofstepwidestar[8]{%
+      1=0}{\rAEb{15}
+}
+    \proofstepwidestar[8]{1 \neq 0}{%
+      \FormulaRefAuto{PeanoOneNeZero}[thm]}
+    \proofstepwidestar[8]{%
+      \bot}{%
+      \rBI{17,16}}
     \proofstepwidestar[5]{%
       \bot}{%
-      \rBI{\FormulaRefAuto{PeanoOneNeZero}[thm],7}}
-    \proofstepwidestar[3]{%
-      \bot}{%
-      \rEE{4,5,8}}
+      \rEE{7,8,18}}
     \proofstepwidestar[]{%
       b_{(0+1)+1,1}\notin H[\mathbb N]}{%
-      \rCI{3,9}}
+      \rCI{5,19}}
+    \proofstepwidestar[]{H\colon\mathbb N\to V}{%
+      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]}
     \proofstepwidestar[]{%
       H[\mathbb N]\subseteq V}{%
-      \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{\FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]},\ \FormulaRefAuto{IndexedFamilyImageDef}[def]}
+      \FormulaRefAuto{IndexedFamilyImageSubsetCodomain}[thm]{21},\ \FormulaRefAuto{IndexedFamilyImageDef}[def]}
     \proofstepwidestar[]{%
       H[\mathbb N]\subsetneq V}{%
-      11,\ 2,\ 10,\ \text{Def. }\ensuremath{\subsetneq}}
+      \FormulaRefAuto{A\subset B\coloneq A\subseteq B\land A\neq B}[def]{\rAI{22,\FormulaRefAuto{P\rightarrow Q,\neg Q\vdash\neg P}[thm]{\FormulaRefAuto{a=b\vdash b=a}[thm],\FormulaRefAuto{x\in A,x\not\in B\vdash A\neq B}[thm]{4,20}}}}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -4029,15 +4475,19 @@ auf \(V\) verwendet.
     \proofstepwidestar[]{%
       \SuccShift{H}\colon V\bij V\setminus\{H(0)\}}{%
       \FormulaRefAuto{SuccShiftPuncturedBijection}[thm]{1}}
+    \proofstepwidestar[]{0\in\mathbb N}{%
+      \FormulaRefAuto{PeanoZero}[ax]}
+    \proofstepwidestar[]{H\colon\mathbb N\to V}{%
+      \FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def]}
     \proofstepwidestar[]{%
       \SuccShift{H}\colon V\bij U}{%
-      \FormulaRefAuto{IndexedFamilyDef}[def]{\FormulaRefAuto{MogiljanskajaShiftSequenceDef}[def],\FormulaRefAuto{PeanoZero}[ax]},\ \rIE{2,3}}
+      \FormulaRefAuto{IndexedFamilyDef}[def]{5,4},\ \rIE{2,3}}
     \proofstepwidestar[]{%
       (\SuccShift{H})^{-1}\colon U\bij V}{%
-      \FormulaRefAuto{F\colon A\bij B\vdash F^{-1}\colon B\bij A}[thm]{4}}
+      \FormulaRefAuto{InverseFunctionBijection}[thm]{6}}
     \proofstepwidestar[]{%
       \sigma\colon U\bij V}{%
-      \FormulaRefAuto{MogiljanskajaSigmaDef}[def],\ \rIE{5}}
+      \FormulaRefAuto{MogiljanskajaSigmaDef}[def],\ \rIE{7}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -4054,7 +4504,12 @@ weitere Fallunterscheidung eine bijektive Familie mit Bild \(V\).
   \DeltaRow{Funktionen}{\upsilon\dsep\sigma\dsep\nu}
 }
 
-\FormulaThmDeltaK[Die Familie (nu) parametrisiert (V)]{%
+\FormulaThmDeltaKR[Die Familie (nu) parametrisiert (V)]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad \nu\colon\mathbb N\times\mathbb N\bij V,\\[-2pt]
+    &\text{(ii)}\quad \nu[\mathbb N\times\mathbb N]=V.
+  \end{aligned}%
+}{%
   \nu\colon\mathbb N\times\mathbb N\bij V\dsep
   \nu[\mathbb N\times\mathbb N]=V%
 }{MogiljanskajaVParametrizationBijective}{%
@@ -4116,7 +4571,53 @@ dafür, dass sich die beiden Indexteile nicht überschneiden.
   \DeltaRow{Funktionen}{\nu\dsep\omega}
 }
 
-\FormulaThmDeltaK[Die Familie (omega) parametrisiert (D')]{%
+\FormulaThmDeltaK[Die mit null markierte Zweierschicht]{%
+  \{0\}\times\NatSeg2=\{(0,0),(0,1)\}%
+}{B21TaggedTwoLayerEquality}{%
+  \DeltaRow{Mengen}{z\dsep i}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[]{z\in\{0\}\times\NatSeg2\leftrightarrow
+    \exists i\in\NatSeg2\,(z=(0,i))}{%
+    \FormulaRefAuto{TaggedProductLayerRepresentation}[thm]}
+  \proofstepwidestar[2]{z\in\{0\}\times\NatSeg2}{\rA}
+  \proofstepwidestar[2]{\exists i\in\NatSeg2\,(z=(0,i))}{\rRE{\rLREa{1},2}}
+  \proofstepwidestar[4]{i\in\NatSeg2\land z=(0,i)}{\rA}
+  \proofstepwidestar[4]{i=0\lor i=1}{%
+    \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\rAEa{4}}}
+  \proofstepwidestar[6]{i=0}{\rA}
+  \proofstepwidestar[4,6]{z=(0,0)}{\rIE{6,\rAEb{4}}}
+  \proofstepwidestar[4,6]{z\in\{(0,0),(0,1)\}}{%
+    \FormulaRefAuto{x\in\{a,b\}\eqvdash(x=a\lor x=b)}[thm]{\rOIa{7}}}
+  \proofstepwidestar[9]{i=1}{\rA}
+  \proofstepwidestar[4,9]{z=(0,1)}{\rIE{9,\rAEb{4}}}
+  \proofstepwidestar[4,9]{z\in\{(0,0),(0,1)\}}{%
+    \FormulaRefAuto{x\in\{a,b\}\eqvdash(x=a\lor x=b)}[thm]{\rOIb{10}}}
+  \proofstepwidestar[4]{z\in\{(0,0),(0,1)\}}{\rOE{5,6,8,9,11}}
+  \proofstepwidestar[2]{z\in\{(0,0),(0,1)\}}{\rEE{3,4,12}}
+  \proofstepwidestar[14]{z\in\{(0,0),(0,1)\}}{\rA}
+  \proofstepwidestar[14]{z=(0,0)\lor z=(0,1)}{%
+    \FormulaRefAuto{x\in\{a,b\}\eqvdash(x=a\lor x=b)}[thm]{14}}
+  \proofstepwidestar[16]{z=(0,0)}{\rA}
+  \proofstepwidestar[16]{\exists i\in\NatSeg2\,(z=(0,i))}{%
+    \rEI{\rAI{\FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\rOIa{\rII}},16}}}
+  \proofstepwidestar[18]{z=(0,1)}{\rA}
+  \proofstepwidestar[18]{\exists i\in\NatSeg2\,(z=(0,i))}{%
+    \rEI{\rAI{\FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\rOIb{\rII}},18}}}
+  \proofstepwidestar[14]{\exists i\in\NatSeg2\,(z=(0,i))}{\rOE{15,16,17,18,19}}
+  \proofstepwidestar[14]{z\in\{0\}\times\NatSeg2}{\rRE{\rLREb{1},20}}
+  \proofstepwidestar[]{z\in\{0\}\times\NatSeg2\leftrightarrow z\in\{(0,0),(0,1)\}}{%
+    \rLRI{\rRI{2,13},\rRI{14,21}}}
+  \proofstepwidestar[]{\{0\}\times\NatSeg2=\{(0,0),(0,1)\}}{%
+    \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{22}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaKR[Die Familie (omega) parametrisiert (D')]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad \omega\colon I_{D'}\bij D',\\[-2pt]
+    &\text{(ii)}\quad \omega[I_{D'}]=D'.
+  \end{aligned}%
+}{%
   \omega\colon I_{D'}\bij D'\dsep \omega[I_{D'}]=D'%
 }{MogiljanskajaDPrimeParametrizationBijective}{%
   \DeltaRow{Mengen}{I_{D'}\dsep D'\dsep P\dsep V}
@@ -4135,24 +4636,32 @@ dafür, dass sich die beiden Indexteile nicht überschneiden.
     \proofstepwidestar[]{%
       I_{D'}=I_0\cup I_1}{%
       \FormulaRefAuto{MogiljanskajaDPrimeIndexSetDef}[def],\ 1,\ 2}
+    \proofstepwidestar[]{0\neq1}{%
+      \FormulaRefAuto{PeanoZeroNeOne}[thm]}
     \proofstepwidestar[]{%
       I_0\cap I_1=\varnothing}{%
-      \FormulaRefAuto{TaggedProductLayersDisjoint}[thm]{\FormulaRefAuto{PeanoZeroNeOne}[thm]},\ 1,\ 2}
+      \FormulaRefAuto{TaggedProductLayersDisjoint}[thm]{4},\ 1,\ 2}
     \proofstepwidestar[]{%
       \omega\colon I_{D'}\to D'}{%
       \FormulaRefAuto{MogiljanskajaDPrimeParametrizationDef}[def]}
+    \proofstepwidestar[]{2\in\mathbb N}{%
+      \FormulaRefAuto{PeanoTwoInN}[thm]}
     \proofstepwidestar[]{%
       I_0=\{(0,0),(0,1)\}}{%
-      \FormulaRefAuto{TaggedProductLayerRepresentation}[thm],\ \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\FormulaRefAuto{PeanoTwoInN}[thm]},\ 1,\ \text{Extensionalität}}
+      \rIE{1,\FormulaRefAuto{B21TaggedTwoLayerEquality}[thm]}}
+    \proofstepwidestar[]{0\in\NatSeg2}{%
+      \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\rOIa{\rII}}}
+    \proofstepwidestar[]{1\in\NatSeg2}{%
+      \FormulaRefAuto{PeanoNatSegTwoMembership}[thm]{\rOIb{\rII}}}
     \proofstepwidestar[]{%
-      \omega(0,0)=c_0\land\omega(0,1)=c_1}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeParametrizationDef}[def]{\FormulaRefAuto{PeanoNatSegTwoMembership}[thm]}}
+      \omega(0,0)=c_0\land\omega(0,1)=c_1}{\FormulaRefAuto{MogiljanskajaDPrimeParametrizationDef}[def]{\rAI{9,10}}
+}
     \proofstepwidestar[]{%
       c_0\neq c_1}{%
       \FormulaRefAuto{B21ReserveMarkerDistinct}[thm]}
     \proofstepwidestar[]{%
       \omega\restriction_{I_0}\colon I_0\bij P}{%
-      \FormulaRefAuto{RestrictionDef}[def]{5,3},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ 6,\ 7,\ 8,\ \FormulaRefAuto{Bijektive Funktion}[def]}
+      \FormulaRefAuto{RestrictionDef}[def]{6,3},\allowbreak\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\allowbreak\ 8,\allowbreak\ 11,\allowbreak\ 12,\allowbreak\ \FormulaRefAuto{Bijektive Funktion}[def]}
     \proofstepwidestar[]{%
       \nu\colon\mathbb N\times\mathbb N\bij V}{%
       \FormulaRefAuto{MogiljanskajaVParametrizationBijective}[thm]}
@@ -4161,16 +4670,16 @@ dafür, dass sich die beiden Indexteile nicht überschneiden.
       \FormulaRefAuto{TaggedProductLayerUniqueRepresentation}[thm],\ 2}
     \proofstepwidestar[]{%
       \forall p\in\mathbb N\times\mathbb N\,(\omega(1,p)=\nu(p))}{%
-      \FormulaRefAuto{MogiljanskajaDPrimeParametrizationDef}[def],\ \text{Def. }\ensuremath{\times}}
+      \FormulaRefAuto{MogiljanskajaDPrimeParametrizationDef}[def],\ \FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm]}
     \proofstepwidestar[]{%
       \omega\restriction_{I_1}\colon I_1\bij V}{%
-      \FormulaRefAuto{RestrictionDef}[def]{5,3},\ 10,\ 11,\ 12,\ \FormulaRefAuto{Bijektive Funktion}[def]}
+      \FormulaRefAuto{RestrictionDef}[def]{6,3},\ 14,\ 15,\ 16,\ \FormulaRefAuto{Bijektive Funktion}[def]}
     \proofstepwidestar[]{%
       P\cap V=\varnothing}{%
-      \FormulaRefAuto{MogiljanskajaReserveCoreFacts}[thm],\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ \text{Def. }\ensuremath{\cap,\cup}}
+      \FormulaRefAuto{MogiljanskajaReserveCoreFacts}[thm],\allowbreak\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\allowbreak\ \FormulaRefAuto{A\cap(B\cup C)=(A\cap B)\cup(A\cap C)}[thm]}
     \proofstepwidestar[]{%
       \omega\colon I_{D'}\bij D'}{%
-      \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{9,13,4,14},\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\ 3,\ 7,\ 12}
+      \FormulaRefAuto{CaseFunBijectiveDisjointTargets}[thm]{13,17,5,18},\allowbreak\ \FormulaRefAuto{MogiljanskajaDPrimeDef}[def],\allowbreak\ 3,\allowbreak\ 11,\allowbreak\ 16}
   \closeproofpartwideindR
 
   \proofpartwide{Bildmenge}
@@ -4186,7 +4695,15 @@ dafür, dass sich die beiden Indexteile nicht überschneiden.
   \closeproofpartwide
 \end{tabproofsplitwide}
 
-\FormulaThmDeltaK[Mogiljanskaja-Bildmengen]{%
+\FormulaThmDeltaKR[Mogiljanskaja-Bildmengen]{%
+  \begin{aligned}[t]
+    &\text{(i)}\quad a[\mathbb N]=L,\\[-2pt]
+    &\text{(ii)}\quad b[\mathbb N\times\mathbb N]=D,\\[-2pt]
+    &\text{(iii)}\quad \upsilon[\mathbb N\times\mathbb N]=U,\\[-2pt]
+    &\text{(iv)}\quad \nu[\mathbb N\times\mathbb N]=V,\\[-2pt]
+    &\text{(v)}\quad \omega[I_{D'}]=D'.
+  \end{aligned}%
+}{%
   \begin{aligned}[t]
     a[\mathbb N]&=L,&
     b[\mathbb N\times\mathbb N]&=D,\\[-2pt]
@@ -4209,9 +4726,11 @@ dafür, dass sich die beiden Indexteile nicht überschneiden.
     \proofstepwidestar[]{%
       \upsilon\colon\mathbb N\times\mathbb N\bij U}{%
       \FormulaRefAuto{B21UpsilonBijective}[thm]}
+    \proofstepwidestar[]{\upsilon \colon { \mathbb N \times \mathbb N } \to U}{%
+      \FormulaRefAuto{Bijektive Funktion}[def]{3}}
     \proofstepwidestar[]{%
       \upsilon[\mathbb N\times\mathbb N]=U}{%
-      \FormulaRefAuto{SurjectiveImageEqualsCodomain}[thm]{\FormulaRefAuto{Bijektive Funktion}[def]{3}}}
+      \FormulaRefAuto{SurjectiveImageEqualsCodomain}[thm]{4}}
     \proofstepwidestar[]{%
       \nu[\mathbb N\times\mathbb N]=V}{%
       \FormulaRefAuto{MogiljanskajaVParametrizationBijective}[thm]}
@@ -4228,15 +4747,11 @@ Markerfakten zu zitieren.
 
 % Die bandlokalen Tabellenanpassungen dürfen beim Gesamtsatz nicht in die
 % nachfolgenden Bände hineinwirken.
-\let\proofstepwidestar\BandTwentyOneOriginalProofStepWideStar
 \let\RuleRefWithArg\BandTwentyOneOriginalRuleRefWithArg
 \ExplSyntaxOn
 \cs_set_eq:NN
   \mx_formula_ref_suffix:n
   \mx_band_twentyone_original_formula_ref_suffix:n
 \ExplSyntaxOff
-\makeatletter
-\newcol@{G}[0]{>{\scriptsize}r}
-\makeatother
 
 \end{document}

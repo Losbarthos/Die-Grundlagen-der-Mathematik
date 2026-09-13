@@ -1,0 +1,479 @@
+\subsection{Erzeugung durch Adjunktion}
+
+Ein Alphabet \(A\) ist eine beliebige Menge. Wir beginnen mit der leeren
+Menge und fügen einen Buchstaben zusammen mit der Anzahl der bisher
+gebildeten Einträge an. So entstehen beispielsweise
+\[
+  \varnothing,\qquad \{(0,a)\},\qquad
+  \{(0,a),(1,b)\},\qquad \{(0,a),(1,b),(2,a)\}.
+\]
+Die Paare halten Reihenfolge und Wiederholungen fest. Der Aufbau verwendet
+nur endliche Teilmengen, ihre Kardinalzahl und die Adjunktion aus Band~20.
+Wie bei der Konstruktion der natürlichen Zahlen in Band~10 nehmen wir
+anschließend die kleinste unter den angegebenen Regeln abgeschlossene
+Menge.
+
+\newcommand{\FiniteOccurrenceSets}[1]{\mathcal E_{#1}}
+\newcommand{\OccurrenceAdjunction}[2]{J(#1,#2)}
+\newcommand{\WordGenerationFamilies}[1]{\mathfrak C_{#1}}
+
+\FormulaDefDeltaK[Umgebungsbereich der endlichen Teilmengen]{%
+  \FiniteOccurrenceSets A\coloneqq\FinSubsets{\mathbb N\times A}
+}{FiniteOccurrenceSetUniverseDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Umgebungsbereich}{\FiniteOccurrenceSets A}
+}
+
+Endlich sind die Elemente von \(\FiniteOccurrenceSets A\); der
+Umgebungsbereich selbst braucht nicht endlich zu sein.
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Elemente des Umgebungsbereichs]{%
+  w\in\FiniteOccurrenceSets A\eqvdash
+    w\subseteq\mathbb N\times A\land\Finite w
+}{FiniteOccurrenceSetUniverseMembership}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofsplitwide}
+  \Needspace{9\baselineskip}
+  \proofpartwide{Vom Umgebungsbereich zur endlichen Teilmenge}
+    \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{\rA}
+    \proofstepwidestar[]{\FiniteOccurrenceSets A=\FinSubsets{\mathbb N\times A}}{%
+      \FormulaRefAuto{FiniteOccurrenceSetUniverseDef}[def]}
+    \proofstepwidestar[1]{w\in\FinSubsets{\mathbb N\times A}}{\rIE{2,1}}
+    \proofstepwidestar[1]{w\subseteq\mathbb N\times A\land\Finite w}{%
+      \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land\Finite{F}}[thm]{3}}
+  \closeproofpartwide
+  \Needspace{9\baselineskip}
+  \proofpartwide{Von der endlichen Teilmenge zum Umgebungsbereich}
+    \proofstepwidestar[1]{w\subseteq\mathbb N\times A\land\Finite w}{\rA}
+    \proofstepwidestar[1]{w\in\FinSubsets{\mathbb N\times A}}{%
+      \FormulaRefAuto{F\in\FinSubsets{M}\eqvdash F\subseteq M\land\Finite{F}}[thm]{1}}
+    \proofstepwidestar[]{\FiniteOccurrenceSets A=\FinSubsets{\mathbb N\times A}}{%
+      \FormulaRefAuto{FiniteOccurrenceSetUniverseDef}[def]}
+    \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{\rIE{3,2}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaDefDeltaK[Adjunktion an der Kardinalzahlposition]{%
+  w\in\FiniteOccurrenceSets A\dsep a\in A\vdash
+    \OccurrenceAdjunction w a\coloneqq w\cup\{(\FiniteCard(w),a)\}
+}{OccurrenceCardinalAdjunctionDef}{%
+  \DeltaRow{Mengen}{A\dsep w\dsep a}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Erzeugungsschritt}{\OccurrenceAdjunction w a}
+}
+
+Die Kardinalzahl \(\FiniteCard(w)\) ist bereits aus Band~20 bekannt. Sie zählt
+hier die Elemente einer endlichen Menge; eine Wortlänge wird für den
+Erzeugungsschritt noch nicht vorausgesetzt. Auf einer beliebigen endlichen
+Teilmenge muss das angefügte Paar nicht neu sein. Für die Abgeschlossenheit
+des Umgebungsbereichs genügt deshalb die Adjunktion eines beliebigen
+Elements.
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Die leere Menge liegt im Umgebungsbereich]{%
+  \varnothing\in\FiniteOccurrenceSets A
+}{FiniteOccurrenceUniverseEmpty}{\DeltaRow{Mengen}{A}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\varnothing\subseteq\mathbb N\times A}{%
+    \FormulaRefAuto{\varnothing\subseteq A}[thm]}
+  \proofstepwidestar[]{\Finite\varnothing}{\FormulaRefAuto{FiniteEmptyAxiom}[ax]}
+  \proofstepwidestar[]{\varnothing\subseteq\mathbb N\times A\land\Finite\varnothing}{\rAI{1,2}}
+  \proofstepwidestar[]{\varnothing\in\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteOccurrenceSetUniverseMembership}[thm]{3}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Der Erzeugungsschritt bleibt im Umgebungsbereich]{%
+  w\in\FiniteOccurrenceSets A\dsep a\in A\vdash
+    \OccurrenceAdjunction w a\in\FiniteOccurrenceSets A
+}{FiniteOccurrenceUniverseClosed}{\DeltaRow{Mengen}{A\dsep w\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{w\subseteq\mathbb N\times A\land\Finite w}{%
+    \FormulaRefAuto{FiniteOccurrenceSetUniverseMembership}[thm]{1}}
+  \proofstepwidestar[1]{w\subseteq\mathbb N\times A}{\rAEa{3}}
+  \proofstepwidestar[1]{\Finite w}{\rAEb{3}}
+  \proofstepwidestar[1]{\FiniteCard(w)\in\mathbb N}{\FormulaRefAuto{FiniteCardNatural}[thm]{5}}
+  \proofstepwidestar[1,2]{(\FiniteCard(w),a)\in\mathbb N\times A}{%
+    \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{6,2}}}
+  \proofstepwidestar[1,2]{\{(\FiniteCard(w),a)\}\subseteq\mathbb N\times A}{%
+    \FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{7}}
+  \proofstepwidestar[1,2]{w\cup\{(\FiniteCard(w),a)\}\subseteq\mathbb N\times A}{%
+    \FormulaRefAuto{A\subseteq C\dsep B\subseteq C\vdash A\cup B\subseteq C}[thm]{4,8}}
+  \proofstepwidestar[1]{\Finite{w\cup\{(\FiniteCard(w),a)\}}}{%
+    \FormulaRefAuto{FiniteInsert}[thm]{5}}
+  \proofstepwidestar[1,2]{w\cup\{(\FiniteCard(w),a)\}\in\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteOccurrenceSetUniverseMembership}[thm]{\rAI{9,10}}}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction w a=w\cup\{(\FiniteCard(w),a)\}}{%
+    \FormulaRefAuto{OccurrenceCardinalAdjunctionDef}[def]{1,2}}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction w a\in\FiniteOccurrenceSets A}{\rIE{12,11}}
+\end{tabproofwide}
+
+\subsection{Die kleinste abgeschlossene Menge}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Familie der abgeschlossenen Mengen]{%
+  \begin{aligned}[t]
+    \WordGenerationFamilies A\coloneqq\bigl\{C\in\powerset(\FiniteOccurrenceSets A)\bigm|{}&
+      \varnothing\in C\ \land{}\\[-2pt]
+    &\forall w\in C\,\forall a\in A\,
+      (\OccurrenceAdjunction w a\in C)\bigr\}
+  \end{aligned}
+}{WordGenerationFamilyDef}{%
+  \DeltaRow{Mengen}{A\dsep C\dsep w\dsep a}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Abgeschlossene Mengen}{\WordGenerationFamilies A}
+}
+\end{minipage}\par
+
+\Needspace{18\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Elementkriterium der abgeschlossenen Mengen]{%
+  \begin{aligned}[t]
+    C\in\WordGenerationFamilies A\eqvdash{}&
+    C\subseteq\FiniteOccurrenceSets A\ \land{}\\[-2pt]
+    &\varnothing\in C\ \land
+      \forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+  \end{aligned}
+}{WordGenerationFamilyMembership}{\DeltaRow{Mengen}{A\dsep C\dsep w\dsep a}}
+\end{minipage}\par
+\begin{tabproofsplitwide}
+  \Needspace{9\baselineskip}
+  \proofpartwide{Eigenschaften eines Familienglieds}
+    \proofstepwidestar[1]{C\in\WordGenerationFamilies A}{\rA}
+    \proofstepwidestar[1]{\begin{aligned}[t]
+      &C\in\powerset(\FiniteOccurrenceSets A)\land{}\\[-2pt]
+      &\varnothing\in C\land
+        \forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+    \end{aligned}}{%
+      \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{%
+        \rIE{\FormulaRefAuto{WordGenerationFamilyDef}[def],1}}}
+    \proofstepwidestar[1]{C\subseteq\FiniteOccurrenceSets A}{%
+      \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{\rAEa{2}}}
+    \proofstepwidestar[1]{\begin{aligned}[t]
+      &C\subseteq\FiniteOccurrenceSets A\land{}\\[-2pt]
+      &\varnothing\in C\land
+        \forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+    \end{aligned}}{\rAI{3,\rAEb{2}}}
+  \closeproofpartwide
+  \Needspace{9\baselineskip}
+  \proofpartwide{Aufnahme einer abgeschlossenen Menge}
+    \proofstepwidestar[1]{\begin{aligned}[t]
+      &C\subseteq\FiniteOccurrenceSets A\land{}\\[-2pt]
+      &\varnothing\in C\land
+        \forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+    \end{aligned}}{\rA}
+    \proofstepwidestar[1]{C\in\powerset(\FiniteOccurrenceSets A)}{%
+      \FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{\rAEa{1}}}
+    \proofstepwidestar[1]{\begin{aligned}[t]
+      &C\in\powerset(\FiniteOccurrenceSets A)\land{}\\[-2pt]
+      &\varnothing\in C\land
+        \forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+    \end{aligned}}{\rAI{2,\rAEb{1}}}
+    \proofstepwidestar[1]{C\in\WordGenerationFamilies A}{%
+      \rIE{\FormulaRefAuto{WordGenerationFamilyDef}[def],%
+        \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{3}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Der Umgebungsbereich ist eine abgeschlossene Menge]{%
+  \FiniteOccurrenceSets A\in\WordGenerationFamilies A
+}{WordGenerationUniverseMember}{\DeltaRow{Mengen}{A\dsep w\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\FiniteOccurrenceSets A\subseteq\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{A\subseteq A}[thm]}
+  \proofstepwidestar[]{\varnothing\in\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteOccurrenceUniverseEmpty}[thm]}
+  \proofstepwidestar[3]{w\in\FiniteOccurrenceSets A}{\rA}
+  \proofstepwidestar[4]{a\in A}{\rA}
+  \proofstepwidestar[3,4]{\OccurrenceAdjunction w a\in\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteOccurrenceUniverseClosed}[thm]{3,4}}
+  \proofstepwidestar[]{\forall w\in\FiniteOccurrenceSets A\,\forall a\in A\,
+    (\OccurrenceAdjunction w a\in\FiniteOccurrenceSets A)}{\rUI{\rRI{3,\rUI{\rRI{4,5}}}}}
+  \proofstepwidestar[]{\FiniteOccurrenceSets A\in\WordGenerationFamilies A}{%
+    \FormulaRefAuto{WordGenerationFamilyMembership}[thm]{\rAI{1,\rAI{2,6}}}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Die Familie abgeschlossener Mengen ist nicht leer]{%
+  \WordGenerationFamilies A\neq\varnothing
+}{WordGenerationFamilyNonempty}{\DeltaRow{Mengen}{A}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\FiniteOccurrenceSets A\in\WordGenerationFamilies A}{%
+    \FormulaRefAuto{WordGenerationUniverseMember}[thm]}
+  \proofstepwidestar[]{\exists C\,(C\in\WordGenerationFamilies A)}{\rEI{1}}
+  \proofstepwidestar[]{\WordGenerationFamilies A\neq\varnothing}{%
+    \FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{2}}
+\end{tabproofwide}
+
+Damit ist der folgende Durchschnitt nach Band~03 definiert.
+
+\FormulaDefDeltaK[Menge der endlichen Wörter]{%
+  \FiniteWords A\coloneqq\bigcap\WordGenerationFamilies A
+}{FiniteWordSetDef}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Endliche Wörter}{\FiniteWords A}
+}
+
+Die Elemente von \(\FiniteWords A\) heißen \textbf{endliche Wörter über
+\(A\)}. Die Definition fordert ausschließlich den leeren Ausgangsgegenstand
+und den Erzeugungsschritt. Die folgenden Sätze zeigen, dass ihr
+Durchschnitt genau die kleinste abgeschlossene Menge ist.
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Elementkriterium des erzeugten Wortbereichs]{%
+  w\in\FiniteWords A\leftrightarrow
+    \forall C\in\WordGenerationFamilies A\,(w\in C)
+}{GeneratedWordMembership}{\DeltaRow{Mengen}{A\dsep w\dsep C}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\WordGenerationFamilies A\neq\varnothing}{%
+    \FormulaRefAuto{WordGenerationFamilyNonempty}[thm]}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in\bigcap\WordGenerationFamilies A\leftrightarrow{}\\[-2pt]
+    &\forall C\in\WordGenerationFamilies A\,(w\in C)
+  \end{aligned}}{%
+    \FormulaRefAuto{M\neq\varnothing\vdash x\in\bigcap M\leftrightarrow\forall X\in M\,(x\in X)}[thm]{1}}
+  \proofstepwidestar[]{\FiniteWords A=\bigcap\WordGenerationFamilies A}{%
+    \FormulaRefAuto{FiniteWordSetDef}[def]}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in\FiniteWords A\leftrightarrow{}\\[-2pt]
+    &\forall C\in\WordGenerationFamilies A\,(w\in C)
+  \end{aligned}}{\rIE{3,2}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Jede abgeschlossene Menge enthält alle Wörter]{%
+  C\in\WordGenerationFamilies A\vdash\FiniteWords A\subseteq C
+}{FiniteWordSetGenerationLeast}{\DeltaRow{Mengen}{A\dsep C\dsep w\dsep D}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C\in\WordGenerationFamilies A}{\rA}
+  \proofstepwidestar[2]{w\in\FiniteWords A}{\rA}
+  \proofstepwidestar[]{w\in\FiniteWords A\leftrightarrow
+    \forall D\in\WordGenerationFamilies A\,(w\in D)}{%
+    \FormulaRefAuto{GeneratedWordMembership}[thm]}
+  \proofstepwidestar[2]{\forall D\in\WordGenerationFamilies A\,(w\in D)}{\rRE{2,\rLREa{3}}}
+  \proofstepwidestar[1,2]{w\in C}{\rRE{1,\rUE{4}}}
+  \proofstepwidestar[1]{\FiniteWords A\subseteq C}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 5}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Die Wortmenge liegt im Umgebungsbereich]{%
+  \FiniteWords A\subseteq\FiniteOccurrenceSets A
+}{FiniteWordSetSubsetUniverse}{\DeltaRow{Mengen}{A}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\FiniteOccurrenceSets A\in\WordGenerationFamilies A}{%
+    \FormulaRefAuto{WordGenerationUniverseMember}[thm]}
+  \proofstepwidestar[]{\FiniteWords A\subseteq\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteWordSetGenerationLeast}[thm]{1}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Jedes Wort liegt im Umgebungsbereich]{%
+  w\in\FiniteWords A\vdash w\in\FiniteOccurrenceSets A
+}{FiniteWordInUniverse}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\FiniteWords A}{\rA}
+  \proofstepwidestar[]{\FiniteWords A\subseteq\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{FiniteWordSetSubsetUniverse}[thm]}
+  \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,1}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Jedes Wort ist eine endliche Menge]{%
+  w\in\FiniteWords A\vdash\Finite w
+}{FiniteWordUnderlyingFinite}{\DeltaRow{Mengen}{A\dsep w}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\FiniteWords A}{\rA}
+  \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordInUniverse}[thm]{1}}
+  \proofstepwidestar[1]{w\subseteq\mathbb N\times A\land\Finite w}{%
+    \FormulaRefAuto{FiniteOccurrenceSetUniverseMembership}[thm]{2}}
+  \proofstepwidestar[1]{\Finite w}{\rAEb{3}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\FormulaThmDeltaK[Das leere Wort]{%
+  \varnothing\in\FiniteWords A
+}{GeneratedWordEmpty}{\DeltaRow{Mengen}{A\dsep C\dsep w\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C\in\WordGenerationFamilies A}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &C\subseteq\FiniteOccurrenceSets A\land\varnothing\in C\land{}\\[-2pt]
+    &\forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+  \end{aligned}}{\FormulaRefAuto{WordGenerationFamilyMembership}[thm]{1}}
+  \proofstepwidestar[1]{\varnothing\in C}{\rAEa{\rAEb{2}}}
+  \proofstepwidestar[]{\forall C\in\WordGenerationFamilies A\,(\varnothing\in C)}{\rUI{\rRI{1,3}}}
+  \proofstepwidestar[]{\varnothing\in\FiniteWords A\leftrightarrow
+    \forall C\in\WordGenerationFamilies A\,(\varnothing\in C)}{%
+    \FormulaRefAuto{GeneratedWordMembership}[thm]}
+  \proofstepwidestar[]{\varnothing\in\FiniteWords A}{\rRE{4,\rLREb{5}}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Wörter bleiben unter dem Erzeugungsschritt abgeschlossen]{%
+  w\in\FiniteWords A\dsep a\in A\vdash\OccurrenceAdjunction w a\in\FiniteWords A
+}{GeneratedWordClosed}{\DeltaRow{Mengen}{A\dsep w\dsep a\dsep C\dsep u\dsep b}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{w\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{w\in\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordInUniverse}[thm]{1}}
+  \proofstepwidestar[4]{C\in\WordGenerationFamilies A}{\rA}
+  \proofstepwidestar[4]{\FiniteWords A\subseteq C}{\FormulaRefAuto{FiniteWordSetGenerationLeast}[thm]{4}}
+  \proofstepwidestar[1,4]{w\in C}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,1}}
+  \proofstepwidestar[4]{\begin{aligned}[t]
+    &C\subseteq\FiniteOccurrenceSets A\land\varnothing\in C\land{}\\[-2pt]
+    &\forall u\in C\,\forall b\in A\,(\OccurrenceAdjunction u b\in C)
+  \end{aligned}}{\FormulaRefAuto{WordGenerationFamilyMembership}[thm]{4}}
+  \proofstepwidestar[4]{\forall u\in C\,\forall b\in A\,(\OccurrenceAdjunction u b\in C)}{\rAEb{\rAEb{7}}}
+  \proofstepwidestar[1,4]{\forall b\in A\,(\OccurrenceAdjunction w b\in C)}{\rRE{6,\rUE{8}}}
+  \proofstepwidestar[1,2,4]{\OccurrenceAdjunction w a\in C}{\rRE{2,\rUE{9}}}
+  \proofstepwidestar[1,2]{\forall C\in\WordGenerationFamilies A\,(\OccurrenceAdjunction w a\in C)}{\rUI{\rRI{4,10}}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &\OccurrenceAdjunction w a\in\FiniteWords A\leftrightarrow{}\\[-2pt]
+    &\forall C\in\WordGenerationFamilies A\,(\OccurrenceAdjunction w a\in C)
+  \end{aligned}}{\FormulaRefAuto{GeneratedWordMembership}[thm]}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction w a\in\FiniteWords A}{\rRE{11,\rLREb{12}}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\FormulaThmDeltaK[Die Wortmenge ist eine abgeschlossene Menge]{%
+  \FiniteWords A\in\WordGenerationFamilies A
+}{FiniteWordSetGenerationClosed}{\DeltaRow{Mengen}{A\dsep w\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[]{\FiniteWords A\subseteq\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordSetSubsetUniverse}[thm]}
+  \proofstepwidestar[]{\varnothing\in\FiniteWords A}{\FormulaRefAuto{GeneratedWordEmpty}[thm]}
+  \proofstepwidestar[3]{w\in\FiniteWords A}{\rA}
+  \proofstepwidestar[4]{a\in A}{\rA}
+  \proofstepwidestar[3,4]{\OccurrenceAdjunction w a\in\FiniteWords A}{\FormulaRefAuto{GeneratedWordClosed}[thm]{3,4}}
+  \proofstepwidestar[]{\forall w\in\FiniteWords A\,\forall a\in A\,(\OccurrenceAdjunction w a\in\FiniteWords A)}{\rUI{\rRI{3,\rUI{\rRI{4,5}}}}}
+  \proofstepwidestar[]{\FiniteWords A\in\WordGenerationFamilies A}{%
+    \FormulaRefAuto{WordGenerationFamilyMembership}[thm]{\rAI{1,\rAI{2,6}}}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Minimalität der erzeugten Wortmenge]{%
+  \begin{aligned}[t]
+    &C\subseteq\FiniteOccurrenceSets A\dsep\varnothing\in C\dsep{}\\[-2pt]
+    &\forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)
+      \vdash\FiniteWords A\subseteq C
+  \end{aligned}
+}{GeneratedWordMinimality}{\DeltaRow{Mengen}{A\dsep C\dsep w\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{C\subseteq\FiniteOccurrenceSets A}{\rA}
+  \proofstepwidestar[2]{\varnothing\in C}{\rA}
+  \proofstepwidestar[3]{\forall w\in C\,\forall a\in A\,(\OccurrenceAdjunction w a\in C)}{\rA}
+  \proofstepwidestar[1,2,3]{C\in\WordGenerationFamilies A}{%
+    \FormulaRefAuto{WordGenerationFamilyMembership}[thm]{\rAI{1,\rAI{2,3}}}}
+  \proofstepwidestar[1,2,3]{\FiniteWords A\subseteq C}{\FormulaRefAuto{FiniteWordSetGenerationLeast}[thm]{4}}
+\end{tabproofwide}
+
+\subsection{Induktion aus der Konstruktion}
+
+Die Minimalität liefert bereits ein Induktionsprinzip für das konkrete
+Modell. Es wird hier aus der Schnittkonstruktion bewiesen. Die späteren
+Strukturaxiome werden dafür nicht verwendet.
+
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Induktion für erzeugte Wörter]{%
+  \begin{aligned}[t]
+    &P(\varnothing)\dsep{}\\[-2pt]
+    &\forall w\in\FiniteWords A\,\forall a\in A\,
+      \bigl(P(w)\rightarrow P(\OccurrenceAdjunction w a)\bigr)\dsep{}\\[-2pt]
+    &v\in\FiniteWords A\vdash P(v)
+  \end{aligned}
+}{GeneratedWordInduction}{%
+  \DeltaRow{Mengen}{A\dsep v\dsep w\dsep a}
+  \DeltaRow{Prädikat}{P}
+  \DeltaRow{Abkürzung}{U=\{w\in\FiniteWords A\mid P(w)\}}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{P(\varnothing)}{\rA}
+  \proofstepwidestar[2]{\forall w\in\FiniteWords A\,\forall a\in A\,
+    \bigl(P(w)\rightarrow P(\OccurrenceAdjunction w a)\bigr)}{\rA}
+  \proofstepwidestar[3]{v\in\FiniteWords A}{\rA}
+  \proofstepwidestar[4]{w\in U}{\rA}
+  \proofstepwidestar[4]{w\in\FiniteWords A\land P(w)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{4}}
+  \proofstepwidestar[4]{w\in\FiniteWords A}{\rAEa{5}}
+  \proofstepwidestar[4]{P(w)}{\rAEb{5}}
+  \proofstepwidestar[4]{w\in\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordInUniverse}[thm]{6}}
+  \proofstepwidestar[]{U\subseteq\FiniteOccurrenceSets A}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 8}}
+  \proofstepwidestar[]{\varnothing\in\FiniteWords A}{\FormulaRefAuto{GeneratedWordEmpty}[thm]}
+  \proofstepwidestar[1]{\varnothing\in U}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{\rAI{10,1}}}
+  \proofstepwidestar[12]{a\in A}{\rA}
+  \proofstepwidestar[2,4]{\forall a\in A\,
+    \bigl(P(w)\rightarrow P(\OccurrenceAdjunction w a)\bigr)}{\rRE{6,\rUE{2}}}
+  \proofstepwidestar[2,4,12]{P(w)\rightarrow P(\OccurrenceAdjunction w a)}{\rRE{12,\rUE{13}}}
+  \proofstepwidestar[2,4,12]{P(\OccurrenceAdjunction w a)}{\rRE{7,14}}
+  \proofstepwidestar[4,12]{\OccurrenceAdjunction w a\in\FiniteWords A}{%
+    \FormulaRefAuto{GeneratedWordClosed}[thm]{6,12}}
+  \proofstepwidestar[2,4,12]{\OccurrenceAdjunction w a\in U}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{\rAI{16,15}}}
+  \proofstepwidestar[2]{\forall w\in U\,\forall a\in A\,(\OccurrenceAdjunction w a\in U)}{\rUI{\rRI{4,\rUI{\rRI{12,17}}}}}
+  \proofstepwidestar[1,2]{\FiniteWords A\subseteq U}{%
+    \FormulaRefAuto{GeneratedWordMinimality}[thm]{9,11,18}}
+  \proofstepwidestar[1,2,3]{v\in U}{%
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{19,3}}
+  \proofstepwidestar[1,2,3]{v\in\FiniteWords A\land P(v)}{%
+    \FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{20}}
+  \proofstepwidestar[1,2,3]{P(v)}{\rAEb{21}}
+\end{tabproofwide}
+
+
+\Needspace{22\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Induktionsregel für erzeugte Wörter]{%
+  \begin{aligned}[t]
+    &P(\varnothing)\dsep{}\\[-2pt]
+    &[u\in\FiniteWords A,a\in A,P(u)]\vdots
+      P(\OccurrenceAdjunction u a)\dsep{}\\[-2pt]
+    &v\in\FiniteWords A\vdash P(v)
+  \end{aligned}
+}{GeneratedWordInductionRule}{%
+  \DeltaRow{Mengen}{A\dsep u\dsep a\dsep v}
+  \DeltaRow{Einstelliges Prädikat}{P}
+}
+\end{minipage}\par
+Die Regel fasst Anfang, lokalen Anfügungsschritt und Induktionsschluss
+zusammen, wie die Induktionsregel aus Band~10. Die Schrittvariablen
+\(u,a\) sind beliebig; sie dürfen in den übrigen offenen Annahmen nicht
+frei vorkommen. Zusätzliche Parameter des Prädikats bleiben fest.
+Eine lokale Annahme darf im Schritt unbenutzt bleiben.
+\Needspace{9\baselineskip}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{P(\varnothing)}{\rA}
+  \proofstepwidestar[2]{v\in\FiniteWords A}{\rA}
+  \proofstepwidestar[3]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[4]{a\in A}{\rA}
+  \proofstepwidestar[5]{P(u)}{\rA}
+  \proofstepwidestar[3,4,5]{P(\OccurrenceAdjunction u a)}{%
+    \begin{aligned}[t]
+      &\text{Schrittprämisse}\\[-2pt]
+      &(3,4,5)
+    \end{aligned}}
+  \proofstepwidestar[]{\forall u\in\FiniteWords A\,\forall a\in A\,
+    (P(u)\rightarrow P(\OccurrenceAdjunction u a))}{%
+    \rUI{\rRI{3,\rUI{\rRI{4,\rRI{5,6}}}}}}
+  \proofstepwidestar[1,2]{P(v)}{%
+    \FormulaRefAuto{GeneratedWordInduction}[thm]{1,7,2}}
+\end{tabproofwide}
+
+In Anwendungen genügen die Verweise auf Induktionsanfang (IA),
+Induktionsschritt (IS) und Wortzugehörigkeit. Bei einem Schritt innerhalb
+derselben Tabelle bezeichnet \([i,j,k]\vdots l\) die Teilableitung mit
+den lokalen Annahmen \(i,j,k\) und der Endzeile \(l\). Diese Annahmen
+werden beim Induktionsschluss entlassen. Für einen natürlichen Index
+\(n\) steht bereits \FormulaRefAuto{PeanoInductionRuleAddOne}[thm] zur
+Verfügung; dabei wird \(P(n)\) über Zahlen statt über Wörter bewiesen.

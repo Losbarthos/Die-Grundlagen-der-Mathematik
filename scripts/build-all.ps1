@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
-    [ValidatePattern('^B[0-9]{2}$')][string]$From = 'B01',
-    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B44',
+    [ValidatePattern('^B[0-9]{2}$')][string]$From = 'B00',
+    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B47',
     [switch]$SkipMain,
     [switch]$SkipPublish,
     [string]$Python = 'python'
@@ -19,7 +19,20 @@ if (-not $graph.ContainsKey($From) -or -not $graph.ContainsKey($To) -or $From -g
 }
 New-Item -ItemType Directory -Force -Path $registryDir | Out-Null
 New-Item -ItemType Directory -Force -Path (Join-Path $repoRoot 'tmp/build-all') | Out-Null
-$bands = @($graph.Keys | Sort-Object | Where-Object { $_ -ge $From -and $_ -le $To })
+$selected = @($graph.Keys | Sort-Object | Where-Object { $_ -ge $From -and $_ -le $To })
+# Resuming a publishing build must also refresh the overview's printed references.
+if (-not $SkipPublish -and 'B00' -notin $selected -and $graph.ContainsKey('B00')) {
+    $selected += 'B00'
+}
+# The overview is printed first but imports the results of the subject volumes.
+$buildOrder = [System.Collections.Generic.List[string]]::new()
+$seen = [System.Collections.Generic.HashSet[string]]::new()
+foreach ($target in $selected) {
+    foreach ($candidate in @((Get-TopologicalPredecessors -Band $target -Graph $graph)) + @($target)) {
+        if ($candidate -in $selected -and $seen.Add($candidate)) { $buildOrder.Add($candidate) }
+    }
+}
+$bands = @($buildOrder)
 
 function Invoke-LoggedBuild {
     param([string]$Source, [string]$JobName, [string]$OutDir = 'registry')

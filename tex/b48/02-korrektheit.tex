@@ -1,0 +1,1203 @@
+% Korrektheit fuer die konstantenfreie Sprache von Band 48.
+\section{Korrektheit}
+
+Die Objektsprache bleibt \(\mathcal L_\in\).
+In der Metatheorie duerfen die Regeln aus Band~1 benutzt werden,
+waehrend hier ihre Wirkung auf \emph{codierte} Herleitungen untersucht
+wird. Bei der All-Einfuehrung ist die Variable in keiner offenen
+Annahme frei; beim klassischen Widerspruchsschluss wird die
+angenommene Negation entladen. Die in Band~1 erklaerten
+Abhaengigkeitsmengen werden unten ausdruecklich mitgefuehrt.
+
+\FormulaDefDeltaK[Abkuerzungen in der codierten Objektsprache]
+{\begin{aligned}
+ p\lor q&\coloneq\neg(\neg p\land\neg q),\\
+ p\to q&\coloneq\neg(p\land\neg q),\\
+ p\leftrightarrow q&\coloneq(p\to q)\land(q\to p),\\
+ \forall x\,p&\coloneq\neg\exists x\,\neg p.
+\end{aligned}}
+{B48LogicalAbbreviations}{
+ \DeltaRow{Formeln und Variable}{p,q\in\mathcal F,\quad x\in\mathbb N}
+}
+Dies praezisiert die zuvor verwendeten ueblichen Abkuerzungen.
+Ihre semantischen Klauseln muessen aus der bereits konstruierten
+Erfuellungsrelation folgen.
+
+\FormulaThmDeltaK[Semantik der abgeleiteten logischen Zeichen]
+{\begin{aligned}
+ (M,s\models p\lor q)&\leftrightarrow
+       ((M,s\models p)\lor(M,s\models q)),\\
+ (M,s\models p\to q)&\leftrightarrow
+       ((M,s\models p)\to(M,s\models q)),\\
+ (M,s\models p\leftrightarrow q)&\leftrightarrow
+       ((M,s\models p)\leftrightarrow(M,s\models q)),\\
+ (M,s\models\forall x\,p)&\leftrightarrow
+       \forall a\in D\;(M,s[x\mapsto a]\models p).
+\end{aligned}}
+{B48DerivedSemanticClauses}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Formeln und Variable}{p,q\in\mathcal F,\quad x\in\mathbb N}
+}
+In den folgenden Tabellen kuerzen \(P\) und \(Q\) ausschliesslich
+die metasprachlichen Aussagen \(M,s\models p\) und \(M,s\models q\)
+ab.
+\begin{tabproofsplitwide}
+ \proofpartwideindR[Disjunktion]{(M,s\models p\lor q)\leftrightarrow(P\lor Q)}
+  {(M,s\models p\lor q)\leftrightarrow(P\lor Q)}[B48SatOrClause]
+ \proofstepwidestar[]{(M,s\models p\lor q)\leftrightarrow
+                          \neg(\neg P\land\neg Q)}
+  {\FormulaRefAuto{B48LogicalAbbreviations}[def],
+   \FormulaRefAuto{B48Satisfaction}[def]}
+ \proofstepwidestar[]{\neg(\neg P\land\neg Q)
+                          \leftrightarrow(\neg\neg P\lor\neg\neg Q)}
+  {\FormulaRefAuto{\neg(P\land Q)\eqvdash\neg P\lor\neg Q}[thm]}
+ \proofstepwidestar[]{(\neg\neg P\lor\neg\neg Q)\leftrightarrow(P\lor Q)}
+  {\FormulaRefAuto{P\lor Q\eqvdash\neg\neg P\lor\neg\neg Q}[thm],
+   \FormulaRefAuto{B48IffSymmetry}[thm]}
+ \proofstepwidestar[]{(M,s\models p\lor q)\leftrightarrow(P\lor Q)}
+  {\rLRS{3,\rLRS{2,1}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Implikation]{(M,s\models p\to q)\leftrightarrow(P\to Q)}
+  {(M,s\models p\to q)\leftrightarrow(P\to Q)}[B48SatImpClause]
+ \proofstepwidestar[]{(M,s\models p\to q)\leftrightarrow\neg(P\land\neg Q)}
+  {\FormulaRefAuto{B48LogicalAbbreviations}[def],
+   \FormulaRefAuto{B48Satisfaction}[def]}
+ \proofstepwidestar[]{\neg(P\land\neg Q)\leftrightarrow(\neg P\lor\neg\neg Q)}
+  {\FormulaRefAuto{\neg(P\land Q)\eqvdash\neg P\lor\neg Q}[thm]}
+ \proofstepwidestar[]{Q\leftrightarrow\neg\neg Q}
+  {\FormulaRefAuto{P\eqvdash\neg\neg P}[thm]}
+ \proofstepwidestar[]{\neg(P\land\neg Q)\leftrightarrow(\neg P\lor Q)}
+  {\rLRS{3,2}}
+ \proofstepwidestar[]{(P\to Q)\leftrightarrow(\neg P\lor Q)}
+  {\FormulaRefAuto{P\to Q\eqvdash\neg P\lor Q}[thm]}
+ \proofstepwidestar[]{(M,s\models p\to q)\leftrightarrow(P\to Q)}
+  {\rLRS{5,\rLRS{4,1}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Bikonditional]{
+ (M,s\models p\leftrightarrow q)\leftrightarrow(P\leftrightarrow Q)}
+ {(M,s\models p\leftrightarrow q)\leftrightarrow(P\leftrightarrow Q)}
+ [B48SatIffClause]
+ \proofstepwidestar[]{\begin{aligned}
+ (M,s\models p\leftrightarrow q)\leftrightarrow{}\\
+ ((M,s\models p\to q)\land(M,s\models q\to p))
+ \end{aligned}}
+  {\FormulaRefAuto{B48LogicalAbbreviations}[def],
+   \FormulaRefAuto{B48Satisfaction}[def]}
+ \proofstepwidestar[]{(M,s\models p\to q)\leftrightarrow(P\to Q)}
+  {\FormulaRefAuto{B48SatImpClause}[thm]}
+ \proofstepwidestar[]{(M,s\models q\to p)\leftrightarrow(Q\to P)}
+  {\FormulaRefAuto{B48SatImpClause}[thm]}
+ \proofstepwidestar[]{(M,s\models p\leftrightarrow q)
+                     \leftrightarrow((P\to Q)\land(Q\to P))}
+  {\rLRS{2,\rLRS{3,1}}}
+ \proofstepwidestar[]{(P\leftrightarrow Q)\leftrightarrow
+                       ((P\to Q)\land(Q\to P))}
+  {\FormulaRefAuto{P\leftrightarrow Q\eqvdash
+                  (P\to Q)\land(Q\to P)}[thm]}
+ \proofstepwidestar[]{(M,s\models p\leftrightarrow q)\leftrightarrow
+                       (P\leftrightarrow Q)}
+  {\rLRS{5,4}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Allquantor]{(M,s\models\forall x\,p)\leftrightarrow
+                \forall a\in D\;(M,s[x\mapsto a]\models p)}
+ {(M,s\models\forall x\,p)\leftrightarrow
+                \forall a\in D\;(M,s[x\mapsto a]\models p)}
+ [B48SatAllClause]
+ \proofstepwidestar[]{\begin{aligned}
+ (M,s\models\forall x\,p)\leftrightarrow{}\\
+ \neg\exists a\in D\;\neg(M,s[x\mapsto a]\models p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48LogicalAbbreviations}[def],
+   \FormulaRefAuto{B48Satisfaction}[def]}
+ \proofstepwidestar[]{\begin{aligned}
+ \forall a\;(a\in D\to(M,s[x\mapsto a]\models p))\leftrightarrow{}\\
+ \neg\exists a\;(a\in D\land\neg(M,s[x\mapsto a]\models p))
+ \end{aligned}}
+  {\FormulaRefAuto{\forall x(P(x)\to Q(x))\eqvdash
+                  \neg\exists x(P(x)\land\neg Q(x))}[thm]}
+ \proofstepwidestar[]{(M,s\models\forall x\,p)\leftrightarrow
+                \forall a\in D\;(M,s[x\mapsto a]\models p)}
+  {\rLRS{2,1}}
+ \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaDefDeltaK[Erfuellte Annahmen und Folgerung in einer Struktur]
+{\begin{aligned}
+ M,s\models\Gamma&\coloneq
+       \forall p\in\Gamma\;(M,s\models p),\\
+ \Gamma\models_M p&\coloneq
+       \forall s\in A_D\;((M,s\models\Gamma)\to(M,s\models p)),\\
+ x\mathrel{\#}\Gamma&\coloneq
+       \forall q\in\Gamma\;(x\notin\operatorname{FV}(q)).
+\end{aligned}}
+{B48SemanticConsequence}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Formeln und Annahmen}{p\in\mathcal F,\quad\Gamma\subseteq\mathcal F}
+ \DeltaRow{Variable}{x\in\mathbb N}
+}
+Hier duerfen Annahmen freie Variablen haben. Die Quantifikation ueber
+alle Belegungen ist Bestandteil der Folgerungsrelation.
+
+\FormulaThmDeltaK[Anwendung einer semantischen Folgerung]
+{\Gamma\models_M p,\ M,s\models\Gamma\ \vdash\ M,s\models p}
+{B48ConsequenceInstance}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Annahmen und Formel}{\Gamma\subseteq\mathcal F,\quad p\in\mathcal F}
+}
+\begin{tabproof}
+ \proofstep{1}{\Gamma\models_M p}{\rA}
+ \proofstep{2}{M,s\models\Gamma}{\rA}
+ \proofstep{1}{\forall t\in A_D\;
+    ((M,t\models\Gamma)\to(M,t\models p))}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{1}}
+ \proofstep{1}{(M,s\models\Gamma)\to(M,s\models p)}{\rUE{3}}
+ \proofstep{1,2}{M,s\models p}{\rRE{4,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vereinigung erfuellter Annahmen]
+{(M,s\models\Gamma\cup\Delta)\leftrightarrow
+ ((M,s\models\Gamma)\land(M,s\models\Delta))}
+{B48ContextUnion}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Annahmenmengen}{\Gamma,\Delta\subseteq\mathcal F}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models\Gamma\cup\Delta}{\rA}
+ \proofstep{2}{p\in\Gamma}{\rA}
+ \proofstep{2}{p\in\Gamma\cup\Delta}
+  {\FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{\rOIa{2}}}
+ \proofstep{1,2}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{1,3}}
+ \proofstep{1}{M,s\models\Gamma}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{2,4}}}}
+ \proofstep{6}{p\in\Delta}{\rA}
+ \proofstep{6}{p\in\Gamma\cup\Delta}
+  {\FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{\rOIb{6}}}
+ \proofstep{1,6}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{1,7}}
+ \proofstep{1}{M,s\models\Delta}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{6,8}}}}
+ \proofstep{1}{(M,s\models\Gamma)\land(M,s\models\Delta)}
+  {\rAI{5,9}}
+ \proofstep{}{(M,s\models\Gamma\cup\Delta)\to
+        ((M,s\models\Gamma)\land(M,s\models\Delta))}
+  {\rRI{1,10}}
+ \proofstep{12}{(M,s\models\Gamma)\land(M,s\models\Delta)}{\rA}
+ \proofstep{13}{p\in\Gamma\cup\Delta}{\rA}
+ \proofstep{13}{p\in\Gamma\lor p\in\Delta}
+  {\FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]{13}}
+ \proofstep{15}{p\in\Gamma}{\rA}
+ \proofstep{12,15}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rAEa{12},15}}
+ \proofstep{17}{p\in\Delta}{\rA}
+ \proofstep{12,17}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rAEb{12},17}}
+ \proofstep{12,13}{M,s\models p}{\rOE{14,15:16,17:18}}
+ \proofstep{12}{M,s\models\Gamma\cup\Delta}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{13,19}}}}
+ \proofstep{}{((M,s\models\Gamma)\land(M,s\models\Delta))\to
+                 (M,s\models\Gamma\cup\Delta)}
+  {\rRI{12,20}}
+ \proofstep{}{(M,s\models\Gamma\cup\Delta)\leftrightarrow
+       ((M,s\models\Gamma)\land(M,s\models\Delta))}
+  {\rLRI{11,21}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Hinzunahme einer erfuellten Annahme]
+{(M,s\models\Gamma\cup\{p\})\leftrightarrow
+ ((M,s\models\Gamma)\land(M,s\models p))}
+{B48ContextAssumption}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Annahmen und Formel}{\Gamma\subseteq\mathcal F,\quad p\in\mathcal F}
+}
+\begin{tabproof}
+ \proofstep{1}{M,s\models\{p\}}{\rA}
+ \proofstep{1}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{1}}
+ \proofstep{}{(M,s\models\{p\})\to(M,s\models p)}{\rRI{1,2}}
+ \proofstep{4}{M,s\models p}{\rA}
+ \proofstep{5}{q\in\{p\}}{\rA}
+ \proofstep{5}{q=p}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{5}}
+ \proofstep{4,5}{M,s\models q}
+  {\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{6},4}}
+ \proofstep{4}{M,s\models\{p\}}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{5,7}}}}
+ \proofstep{}{(M,s\models p)\to(M,s\models\{p\})}{\rRI{4,8}}
+ \proofstep{}{(M,s\models\{p\})\leftrightarrow(M,s\models p)}
+  {\rLRI{3,9}}
+ \proofstep{}{(M,s\models\Gamma\cup\{p\})\leftrightarrow
+    ((M,s\models\Gamma)\land(M,s\models p))}
+  {\rLRS{10,\FormulaRefAuto{B48ContextUnion}[thm]}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Belegungswechsel in variablenfreien Annahmen]
+{x\mathrel{\#}\Gamma,\ M,s\models\Gamma\ \vdash\
+                         M,s[x\mapsto a]\models\Gamma}
+{B48ContextFresh}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Annahmen, Variable und Wert}{\Gamma\subseteq\mathcal F,\quad
+                             x\in\mathbb N,\quad a\in D}
+}
+\begin{tabproof}
+ \proofstep{1}{x\mathrel{\#}\Gamma}{\rA}
+ \proofstep{2}{M,s\models\Gamma}{\rA}
+ \proofstep{3}{p\in\Gamma}{\rA}
+ \proofstep{1,3}{x\notin\operatorname{FV}(p)}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{1,3}}
+ \proofstep{2,3}{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{2,3}}
+ \proofstep{1,3}{(M,s\models p)\leftrightarrow
+                   (M,s[x\mapsto a]\models p)}
+  {\FormulaRefAuto{B48FreshUpdate}[thm]{4}}
+ \proofstep{1,2,3}{M,s[x\mapsto a]\models p}{\rLREa{6,5}}
+ \proofstep{1,2}{M,s[x\mapsto a]\models\Gamma}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{3,7}}}}
+\end{tabproof}
+
+\subsection{Einzeln nachgewiesene Regelfaelle}
+
+In den folgenden Beweisen wird \(s\in A_D\) beliebig gewaehlt.
+Die abschliessende All-Einfuehrung bindet diese Wahl. Die Formeln
+\(p,q,r\) und die Annahmenmengen sind stets im zuvor angegebenen
+Formelbereich.
+
+\FormulaThmDeltaK[Semantischer Regelfall der ersten Konjunktionsbeseitigung]
+{\Gamma\models_M p\land q\ \vdash\ \Gamma\models_M p}
+{B48RuleAndLeft}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\land q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p\land q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{M,s\models p}
+  {\FormulaRefAuto{B48SatAndLeft}[thm]{3}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p)}
+  {\rRI{2,4}}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{5}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantischer Regelfall der zweiten Konjunktionsbeseitigung]
+{\Gamma\models_M p\land q\ \vdash\ \Gamma\models_M q}
+{B48RuleAndRight}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\land q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p\land q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{M,s\models q}
+  {\FormulaRefAuto{B48SatAndRight}[thm]{3}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models q)}
+  {\rRI{2,4}}
+ \proofstepwidestar[1]{\Gamma\models_M q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{5}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Disjunktionseinfuehrung links]
+{\Gamma\models_M p\ \vdash\ \Gamma\models_M p\lor q}
+{B48RuleOrLeft}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{(M,s\models p)\lor(M,s\models q)}
+  {\rOIa{3}}
+ \proofstepwidestar[1,2]{M,s\models p\lor q}
+  {\rLREb{\FormulaRefAuto{B48SatOrClause}[thm],4}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p\lor q)}
+  {\rRI{2,5}}
+ \proofstepwidestar[1]{\Gamma\models_M p\lor q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{6}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Disjunktionseinfuehrung rechts]
+{\Gamma\models_M q\ \vdash\ \Gamma\models_M p\lor q}
+{B48RuleOrRight}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{(M,s\models p)\lor(M,s\models q)}
+  {\rOIb{3}}
+ \proofstepwidestar[1,2]{M,s\models p\lor q}
+  {\rLREb{\FormulaRefAuto{B48SatOrClause}[thm],4}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p\lor q)}
+  {\rRI{2,5}}
+ \proofstepwidestar[1]{\Gamma\models_M p\lor q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{6}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Bikonditionalbeseitigung vorwaerts]
+{\Gamma\models_M p\leftrightarrow q\ \vdash\ \Gamma\models_M p\to q}
+{B48RuleIffLeft}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\leftrightarrow q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p\leftrightarrow q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{(M,s\models p)\leftrightarrow(M,s\models q)}
+  {\rLREa{\FormulaRefAuto{B48SatIffClause}[thm],3}}
+ \proofstepwidestar[1,2]{(M,s\models p)\to(M,s\models q)}
+  {\rLREa{4}}
+ \proofstepwidestar[1,2]{M,s\models p\to q}
+  {\rLREb{\FormulaRefAuto{B48SatImpClause}[thm],5}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p\to q)}
+  {\rRI{2,6}}
+ \proofstepwidestar[1]{\Gamma\models_M p\to q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{7}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Bikonditionalbeseitigung rueckwaerts]
+{\Gamma\models_M p\leftrightarrow q\ \vdash\ \Gamma\models_M q\to p}
+{B48RuleIffRight}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\leftrightarrow q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p\leftrightarrow q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,2}}
+ \proofstepwidestar[1,2]{(M,s\models p)\leftrightarrow(M,s\models q)}
+  {\rLREa{\FormulaRefAuto{B48SatIffClause}[thm],3}}
+ \proofstepwidestar[1,2]{(M,s\models q)\to(M,s\models p)}
+  {\rLREb{4}}
+ \proofstepwidestar[1,2]{M,s\models q\to p}
+  {\rLREb{\FormulaRefAuto{B48SatImpClause}[thm],5}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models q\to p)}
+  {\rRI{2,6}}
+ \proofstepwidestar[1]{\Gamma\models_M q\to p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{7}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Konjunktionseinfuehrung fuer Annahmenmengen]
+{\begin{gathered}\Gamma\models_M p,\quad\Delta\models_M q\\
+ \vdash\ \Gamma\cup\Delta\models_M p\land q\end{gathered}}
+{B48RuleAndIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\models_M q}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[3]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],3}}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rAEa{4}}
+ \proofstepwidestar[3]{M,s\models \Delta}
+  {\rAEb{4}}
+ \proofstepwidestar[1,3]{M,s\models p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[2,3]{M,s\models q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,6}}
+ \proofstepwidestar[1,2,3]{M,s\models p\land q}
+  {\FormulaRefAuto{B48SatAndIntro}[thm]{7,8}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma\cup\Delta)\to(M,s\models p\land q)}
+  {\rRI{3,9}}
+ \proofstepwidestar[1,2]{\Gamma\cup\Delta\models_M p\land q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{10}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Implikationsbeseitigung]
+{\begin{gathered}\Gamma\models_M p\to q,\quad\Delta\models_M p\\
+ \vdash\ \Gamma\cup\Delta\models_M q\end{gathered}}
+{B48RuleImpElim}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\to q}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\models_M p}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[3]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],3}}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rAEa{4}}
+ \proofstepwidestar[3]{M,s\models \Delta}
+  {\rAEb{4}}
+ \proofstepwidestar[1,3]{M,s\models p\to q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[2,3]{M,s\models p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,6}}
+ \proofstepwidestar[1,3]{(M,s\models p)\to(M,s\models q)}
+  {\rLREa{\FormulaRefAuto{B48SatImpClause}[thm],7}}
+ \proofstepwidestar[1,2,3]{M,s\models q}
+  {\rRE{9,8}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma\cup\Delta)\to(M,s\models q)}
+  {\rRI{3,10}}
+ \proofstepwidestar[1,2]{\Gamma\cup\Delta\models_M q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{11}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Bikonditionaleinfuehrung]
+{\begin{gathered}\Gamma\models_M p\to q,\quad\Delta\models_M q\to p\\
+ \vdash\ \Gamma\cup\Delta\models_M p\leftrightarrow q\end{gathered}}
+{B48RuleIffIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\to q}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\models_M q\to p}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[3]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],3}}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rAEa{4}}
+ \proofstepwidestar[3]{M,s\models \Delta}
+  {\rAEb{4}}
+ \proofstepwidestar[1,3]{M,s\models p\to q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[2,3]{M,s\models q\to p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,6}}
+ \proofstepwidestar[1,3]{(M,s\models p)\to(M,s\models q)}
+  {\rLREa{\FormulaRefAuto{B48SatImpClause}[thm],7}}
+ \proofstepwidestar[2,3]{(M,s\models q)\to(M,s\models p)}
+  {\rLREa{\FormulaRefAuto{B48SatImpClause}[thm],8}}
+ \proofstepwidestar[1,2,3]{(M,s\models p)\leftrightarrow(M,s\models q)}
+  {\rLRI{9,10}}
+ \proofstepwidestar[1,2,3]{M,s\models p\leftrightarrow q}
+  {\rLREb{\FormulaRefAuto{B48SatIffClause}[thm],11}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma\cup\Delta)\to(M,s\models p\leftrightarrow q)}
+  {\rRI{3,12}}
+ \proofstepwidestar[1,2]{\Gamma\cup\Delta\models_M p\leftrightarrow q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{13}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Widerspruchseinfuehrung]
+{\begin{gathered}\Gamma\models_M p,\quad\Delta\models_M \neg p\\
+ \vdash\ \Gamma\cup\Delta\models_M \bot\end{gathered}}
+{B48RuleBottom}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta\subseteq\mathcal F}
+ \DeltaRow{Formeln}{p,q,r\in\mathcal F}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\models_M \neg p}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[3]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],3}}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rAEa{4}}
+ \proofstepwidestar[3]{M,s\models \Delta}
+  {\rAEb{4}}
+ \proofstepwidestar[1,3]{M,s\models p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[2,3]{M,s\models \neg p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,6}}
+ \proofstepwidestar[1,2,3]{\bot}
+  {\FormulaRefAuto{B48SatContradiction}[thm]{7,8}}
+ \proofstepwidestar[1,2,3]{M,s\models \bot}
+  {\FormulaRefAuto{B48Satisfaction}[def]{9}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma\cup\Delta)\to(M,s\models \bot)}
+  {\rRI{3,10}}
+ \proofstepwidestar[1,2]{\Gamma\cup\Delta\models_M \bot}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{11}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Implikationseinfuehrung]
+{\Gamma\cup\{p\}\models_M q\ \vdash\ \Gamma\models_M p\to q}
+{B48RuleImpIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\cup\{p\}\models_M q}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models p}
+  {\rA}
+ \proofstepwidestar[2,3]{(M,s\models \Gamma)\land(M,s\models p)}
+  {\rAI{2,3}}
+ \proofstepwidestar[2,3]{M,s\models \Gamma\cup\{p\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],4}}
+ \proofstepwidestar[1,2,3]{M,s\models q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[1,2]{(M,s\models p)\to(M,s\models q)}
+  {\rRI{3,6}}
+ \proofstepwidestar[1,2]{M,s\models p\to q}
+  {\rLREb{\FormulaRefAuto{B48SatImpClause}[thm],7}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p\to q)}
+  {\rRI{2,8}}
+ \proofstepwidestar[1]{\Gamma\models_M p\to q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{9}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Negationseinfuehrung mit Entladung]
+{\Gamma\cup\{p\}\models_M \bot\ \vdash\ \Gamma\models_M \neg p}
+{B48RuleNegIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\cup\{p\}\models_M \bot}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models p}
+  {\rA}
+ \proofstepwidestar[2,3]{(M,s\models \Gamma)\land(M,s\models p)}
+  {\rAI{2,3}}
+ \proofstepwidestar[2,3]{M,s\models \Gamma\cup\{p\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],4}}
+ \proofstepwidestar[1,2,3]{M,s\models \bot}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,5}}
+ \proofstepwidestar[1,2,3]{\bot}
+  {\FormulaRefAuto{B48Satisfaction}[def]{6}}
+ \proofstepwidestar[1,2]{\neg(M,s\models p)}
+  {\rCI{3,7}}
+ \proofstepwidestar[1,2]{M,s\models \neg p}
+  {\FormulaRefAuto{B48Satisfaction}[def]{8}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models \neg p)}
+  {\rRI{2,9}}
+ \proofstepwidestar[1]{\Gamma\models_M \neg p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{10}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantischer klassischer Regelfall mit Entladung]
+{\Gamma\cup\{\neg p\}\models_M \bot\ \vdash\ \Gamma\models_M p}
+{B48RuleClassical}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\cup\{\neg p\}\models_M \bot}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[3]{\neg(M,s\models p)}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \neg p}
+  {\FormulaRefAuto{B48Satisfaction}[def]{3}}
+ \proofstepwidestar[2,3]{(M,s\models \Gamma)\land(M,s\models \neg p)}
+  {\rAI{2,4}}
+ \proofstepwidestar[2,3]{M,s\models \Gamma\cup\{\neg p\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],5}}
+ \proofstepwidestar[1,2,3]{M,s\models \bot}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,6}}
+ \proofstepwidestar[1,2,3]{\bot}
+  {\FormulaRefAuto{B48Satisfaction}[def]{7}}
+ \proofstepwidestar[1,2]{M,s\models p}
+  {\rCE{3,8}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p)}
+  {\rRI{2,9}}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{10}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Disjunktionsbeseitigung mit beiden Entladungen]
+{\begin{gathered}
+ \Gamma\models_M p\lor q,\quad
+ \Delta\cup\{p\}\models_M r,\quad\Theta\cup\{q\}\models_M r\\
+ \vdash\ (\Gamma\cup\Delta)\cup\Theta\models_M r
+ \end{gathered}}
+{B48RuleOrElim}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p\lor q}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\cup\{p\}\models_M r}
+  {\rA}
+ \proofstepwidestar[3]{\Theta\cup\{q\}\models_M r}
+  {\rA}
+ \proofstepwidestar[4]{M,s\models (\Gamma\cup\Delta)\cup\Theta}
+  {\rA}
+ \proofstepwidestar[4]{(M,s\models \Gamma\cup\Delta)\land(M,s\models \Theta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],4}}
+ \proofstepwidestar[4]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],\rAEa{5}}}
+ \proofstepwidestar[1,4]{M,s\models p\lor q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,\rAEa{6}}}
+ \proofstepwidestar[1,4]{(M,s\models p)\lor(M,s\models q)}
+  {\rLREa{\FormulaRefAuto{B48SatOrClause}[thm],7}}
+ \proofstepwidestar[9]{M,s\models p}
+  {\rA}
+ \proofstepwidestar[4,9]{(M,s\models \Delta)\land(M,s\models p)}
+  {\rAI{\rAEb{6},9}}
+ \proofstepwidestar[4,9]{M,s\models \Delta\cup\{p\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],10}}
+ \proofstepwidestar[2,4,9]{M,s\models r}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,11}}
+ \proofstepwidestar[13]{M,s\models q}
+  {\rA}
+ \proofstepwidestar[4,13]{(M,s\models \Theta)\land(M,s\models q)}
+  {\rAI{\rAEb{5},13}}
+ \proofstepwidestar[4,13]{M,s\models \Theta\cup\{q\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],14}}
+ \proofstepwidestar[3,4,13]{M,s\models r}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{3,15}}
+ \proofstepwidestar[1,2,3,4]{M,s\models r}
+  {\rOE{8,9:12,13:16}}
+ \proofstepwidestar[1,2,3]{(M,s\models (\Gamma\cup\Delta)\cup\Theta)\to(M,s\models r)}
+  {\rRI{4,17}}
+ \proofstepwidestar[1,2,3]{(\Gamma\cup\Delta)\cup\Theta\models_M r}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{18}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische All-Einfuehrung]
+{\Gamma\models_M p,\quad x\mathrel{\#}\Gamma\
+   \vdash\ \Gamma\models_M\forall x\,p}
+{B48RuleAllIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\rA}
+ \proofstepwidestar[2]{x\mathrel{\#}\Gamma}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[4]{a\in D}
+  {\rA}
+ \proofstepwidestar[4]{s[x\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]{4}}
+ \proofstepwidestar[2,3,4]{M,s[x\mapsto a]\models\Gamma}
+  {\FormulaRefAuto{B48ContextFresh}[thm]{2,3,4}}
+ \proofstepwidestar[1,2,3,4]{M,s[x\mapsto a]\models p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,6,5}}
+ \proofstepwidestar[1,2,3]{\forall a\in D\;(M,s[x\mapsto a]\models p)}
+  {\rUI{\rRI{4,7}}}
+ \proofstepwidestar[1,2,3]{M,s\models \forall x\,p}
+  {\rLREb{\FormulaRefAuto{B48SatAllClause}[thm],8}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma)\to(M,s\models \forall x\,p)}
+  {\rRI{3,9}}
+ \proofstepwidestar[1,2]{\Gamma\models_M \forall x\,p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{10}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische All-Beseitigung mit Substitution]
+{\Gamma\models_M \forall x\,p,\quad\mathsf{Fr}(p,x,y)\
+ \vdash\ \Gamma\models_M p[y/x]}
+{B48RuleAllElim}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M \forall x\,p}
+  {\rA}
+ \proofstepwidestar[2]{\mathsf{Fr}(p,x,y)}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,3]{M,s\models \forall x\,p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,3}}
+ \proofstepwidestar[]{s\colon\mathbb N\to D}
+  {\FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstepwidestar[]{s(y)\in D}
+  {\FormulaRefAuto{F\colon A\to B,\ x\in A\vdash F(x)\in B}[thm]{5}}
+ \proofstepwidestar[2]{(M,s\models p[y/x])\leftrightarrow(M,s[x\mapsto s(y)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionLemma}[thm]{2}}
+ \proofstepwidestar[1,3]{\forall a\in D\;(M,s[x\mapsto a]\models p)}
+  {\rLREa{\FormulaRefAuto{B48SatAllClause}[thm],4}}
+ \proofstepwidestar[1,3]{M,s[x\mapsto s(y)]\models p}
+  {\rRE{\rUE{8},6}}
+ \proofstepwidestar[1,2,3]{M,s\models p[y/x]}
+  {\rLREb{7,9}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma)\to(M,s\models p[y/x])}
+  {\rRI{3,10}}
+ \proofstepwidestar[1,2]{\Gamma\models_M p[y/x]}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{11}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Existenz-Einfuehrung mit Substitution]
+{\Gamma\models_M p[y/x],\quad\mathsf{Fr}(p,x,y)\
+ \vdash\ \Gamma\models_M \exists x\,p}
+{B48RuleExistsIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M p[y/x]}
+  {\rA}
+ \proofstepwidestar[2]{\mathsf{Fr}(p,x,y)}
+  {\rA}
+ \proofstepwidestar[3]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,3]{M,s\models p[y/x]}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,3}}
+ \proofstepwidestar[]{s\colon\mathbb N\to D}
+  {\FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstepwidestar[]{s(y)\in D}
+  {\FormulaRefAuto{F\colon A\to B,\ x\in A\vdash F(x)\in B}[thm]{5}}
+ \proofstepwidestar[2]{(M,s\models p[y/x])\leftrightarrow(M,s[x\mapsto s(y)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionLemma}[thm]{2}}
+ \proofstepwidestar[1,2,3]{M,s[x\mapsto s(y)]\models p}
+  {\rLREa{7,4}}
+ \proofstepwidestar[1,2,3]{M,s\models \exists x\,p}
+  {\FormulaRefAuto{B48SatExistsIntro}[thm]{6,8}}
+ \proofstepwidestar[1,2]{(M,s\models \Gamma)\to(M,s\models \exists x\,p)}
+  {\rRI{3,9}}
+ \proofstepwidestar[1,2]{\Gamma\models_M \exists x\,p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{10}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Existenz-Beseitigung mit Eigenvariable]
+{\begin{gathered}
+ \Gamma\models_M\exists x\,p,\quad\Delta\cup\{p\}\models_M q,\\
+ x\mathrel{\#}\Delta,\quad x\notin\operatorname{FV}(q)\\
+ \vdash\ \Gamma\cup\Delta\models_M q
+ \end{gathered}}
+{B48RuleExistsElim}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+Der Zeuge \(a\) ist frisch fuer die ausserhalb seines Teilbeweises offenen Annahmen.
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M\exists x\,p}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\cup\{p\}\models_M q}
+  {\rA}
+ \proofstepwidestar[3]{x\mathrel{\#}\Delta}
+  {\rA}
+ \proofstepwidestar[4]{x\notin\operatorname{FV}(q)}
+  {\rA}
+ \proofstepwidestar[5]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[5]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],5}}
+ \proofstepwidestar[1,5]{M,s\models \exists x\,p}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,\rAEa{6}}}
+ \proofstepwidestar[1,5]{\exists a\;(a\in D\land(M,s[x\mapsto a]\models p))}
+  {\FormulaRefAuto{B48Satisfaction}[def]{7}}
+ \proofstepwidestar[9]{a\in D\land(M,s[x\mapsto a]\models p)}
+  {\rA}
+ \proofstepwidestar[9]{a\in D}
+  {\rAEa{9}}
+ \proofstepwidestar[9]{M,s[x\mapsto a]\models p}
+  {\rAEb{9}}
+ \proofstepwidestar[9]{s[x\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]{10}}
+ \proofstepwidestar[3,5,9]{M,s[x\mapsto a]\models\Delta}
+  {\FormulaRefAuto{B48ContextFresh}[thm]{3,\rAEb{6},10}}
+ \proofstepwidestar[3,5,9]{M,s[x\mapsto a]\models\Delta\cup\{p\}}
+  {\rLREb{\FormulaRefAuto{B48ContextAssumption}[thm],\rAI{13,11}}}
+ \proofstepwidestar[2,3,5,9]{M,s[x\mapsto a]\models q}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,14,12}}
+ \proofstepwidestar[4,9]{(M,s\models q)\leftrightarrow(M,s[x\mapsto a]\models q)}
+  {\FormulaRefAuto{B48FreshUpdate}[thm]{4,10}}
+ \proofstepwidestar[2,3,4,5,9]{M,s\models q}
+  {\rLREb{16,15}}
+ \proofstepwidestar[1,2,3,4,5]{M,s\models q}
+  {\rEE{8,9:17}}
+ \proofstepwidestar[1,2,3,4]{(M,s\models \Gamma\cup\Delta)\to(M,s\models q)}
+  {\rRI{5,18}}
+ \proofstepwidestar[1,2,3,4]{\Gamma\cup\Delta\models_M q}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{19}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Gleichheitseinfuehrung]
+{\Gamma\models_M v_x=v_x}
+{B48RuleEqualityIntro}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[]{s(x)=s(x)}
+  {\rII}
+ \proofstepwidestar[]{M,s\models v_x=v_x}
+  {\FormulaRefAuto{B48Satisfaction}[def]{2}}
+ \proofstepwidestar[]{(M,s\models \Gamma)\to(M,s\models v_x=v_x)}
+  {\rRI{1,3}}
+ \proofstepwidestar[]{\Gamma\models_M v_x=v_x}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{4}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantische Gleichheitsbeseitigung]
+{\begin{gathered}
+ \Gamma\models_M v_x=v_y,\quad\Delta\models_M p[x/z],\\
+ \mathsf{Fr}(p,z,x),\quad\mathsf{Fr}(p,z,y)\\
+ \vdash\ \Gamma\cup\Delta\models_M p[y/z]
+ \end{gathered}}
+{B48RuleEqualityElim}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{\Gamma\models_M v_x=v_y}
+  {\rA}
+ \proofstepwidestar[2]{\Delta\models_M p[x/z]}
+  {\rA}
+ \proofstepwidestar[3]{\mathsf{Fr}(p,z,x)}
+  {\rA}
+ \proofstepwidestar[4]{\mathsf{Fr}(p,z,y)}
+  {\rA}
+ \proofstepwidestar[5]{M,s\models \Gamma\cup\Delta}
+  {\rA}
+ \proofstepwidestar[5]{(M,s\models \Gamma)\land(M,s\models \Delta)}
+  {\rLREa{\FormulaRefAuto{B48ContextUnion}[thm],5}}
+ \proofstepwidestar[1,5]{M,s\models v_x=v_y}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{1,\rAEa{6}}}
+ \proofstepwidestar[1,5]{s(x)=s(y)}
+  {\FormulaRefAuto{B48Satisfaction}[def]{7}}
+ \proofstepwidestar[2,5]{M,s\models p[x/z]}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{2,\rAEb{6}}}
+ \proofstepwidestar[3]{(M,s\models p[x/z])\leftrightarrow(M,s[z\mapsto s(x)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionLemma}[thm]{3}}
+ \proofstepwidestar[2,3,5]{M,s[z\mapsto s(x)]\models p}
+  {\rLREa{10,9}}
+ \proofstepwidestar[1,2,3,5]{M,s[z\mapsto s(y)]\models p}
+  {\rIE{8,11}}
+ \proofstepwidestar[4]{(M,s\models p[y/z])\leftrightarrow(M,s[z\mapsto s(y)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionLemma}[thm]{4}}
+ \proofstepwidestar[1,2,3,4,5]{M,s\models p[y/z]}
+  {\rLREb{13,12}}
+ \proofstepwidestar[1,2,3,4]{(M,s\models \Gamma\cup\Delta)\to(M,s\models p[y/z])}
+  {\rRI{5,14}}
+ \proofstepwidestar[1,2,3,4]{\Gamma\cup\Delta\models_M p[y/z]}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{15}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Semantischer Annahmenfall]
+{p\in\Gamma\ \vdash\ \Gamma\models_M p}
+{B48RuleAssumption}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Annahmen}{\Gamma,\Delta,\Theta\subseteq\mathcal F}
+ \DeltaRow{Formeln und Variablen}{p,q,r\in\mathcal F,\quad x,y,z\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{p\in\Gamma}
+  {\rA}
+ \proofstepwidestar[2]{M,s\models \Gamma}
+  {\rA}
+ \proofstepwidestar[1,2]{M,s\models p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{2,1}}
+ \proofstepwidestar[1]{(M,s\models \Gamma)\to(M,s\models p)}
+  {\rRI{2,3}}
+ \proofstepwidestar[1]{\Gamma\models_M p}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{4}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\subsection{Induktion ueber die endliche Herleitung}
+
+\FormulaDefDeltaK[Daten einer elementaren Beweistabelle]
+{\begin{aligned}
+ d&=((I_j,\theta_j,r_j,J_j))_{1\leq j\leq N},\\
+ \Gamma_j&\coloneq\{\theta_k\mid k\in I_j\},\\
+ H_d(n)&\coloneq
+  \forall j\in\mathbb N\;
+  ((1\leq j\leq N\land j\leq n)\to\Gamma_j\models_M\theta_j).
+\end{aligned}}
+{B48DerivationData}{
+ \DeltaRow{Laenge}{N\in\mathbb N,\quad N\geq1}
+ \DeltaRow{Formeln}{\theta_j\in\mathcal F}
+ \DeltaRow{Annahmenindizes}{I_j\subseteq\{1,\ldots,j\}}
+ \DeltaRow{Regel und fruehere Verweise}{r_j,\quad J_j}
+}
+Der Datensatz \(d\) ist eine \emph{gueltige} elementare Beweistabelle
+nach Band~1: Eine Annahmezeile \(j\) hat \(I_j=\{j\}\).
+Jeder sonstige Verweis in \(J_j\) zeigt auf eine Zeile mit Nummer
+kleiner als \(j\). Die Formel und die Abhaengigkeitsmenge jeder
+Schlusszeile entstehen nach ihrer angegebenen Regel.
+Bei einer Entladung wird der Index der betreffenden Annahme aus
+der Abhaengigkeitsmenge des Subbeweises entfernt; danach werden die
+verbleibenden Mengen vereinigt.
+Bei \(\forall I\) kommt die Variable in keiner offenen Annahme frei
+vor. Bei \(\exists E\) kommt sie weder in der Schlussformel noch in
+den nach der Entladung verbleibenden Annahmen frei vor.
+Alle Einsetzungen erfuellen \(\mathsf{Fr}\).
+
+Die \(\Gamma_j\) sind Mengen von Formeln, aber die Entladung wird
+\emph{vorher an den Indizes} ausgefuehrt. Zwei verschiedene
+Annahmezeilen mit derselben Formel duerfen deshalb nicht
+miteinander verwechselt werden. Fuer eine entladene Annahme mit
+Formel \(p\) gilt stets
+\(\Gamma_{\rm Subbeweis}=\Gamma_{\rm Rest}\cup\{p\}\), auch wenn
+\(p\) wegen einer anderen Annahme weiterhin in \(\Gamma_{\rm Rest}\)
+liegt.
+
+\FormulaThmDeltaK[Korrektheit jeder Zeile einer Beweistabelle]
+{\forall j\in\{1,\ldots,N\}\;(\Gamma_j\models_M\theta_j)}
+{B48DerivationSoundness}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Gueltige elementare Beweistabelle}{d\text{ nach }
+                          \FormulaRefAuto{B48DerivationData}[def]}
+}
+Wir beweisen \(H_d(n)\) durch Induktion ueber \(n\).
+Fuer \(n=0\) ist der Bereich der zu pruefenden Zeilen leer.
+Sei \(H_d(n)\) gegeben. Fuer \(n+1>N\) kommt keine Zeile hinzu.
+Andernfalls betrachten wir die Regel der Zeile \(n+1\).
+Alle unten als semantische Folgerungen aufgefuehrten Premissen
+folgen aus \(H_d(n)\), weil die referenzierten Zeilen frueher
+liegen. Die Einsetzungs- und Eigenvariablenbedingungen folgen
+aus der Gueltigkeit von \(d\). Die Mengen
+\(\Gamma,\Delta,\Theta\) sind jeweils die verbleibenden
+Annahmenmengen der betreffenden Praemissen beziehungsweise
+Subbeweise.
+
+\begin{longtable}{@{}p{0.13\linewidth}p{0.56\linewidth}p{0.24\linewidth}@{}}
+\toprule
+Regel & Angewendeter semantischer Schluss & Nachweis\\
+\midrule\endhead
+\(\RuleRef{A}{A}\) &
+ \(p\in\Gamma\ \vdash\ \Gamma\models_M p\) &
+ \FormulaRefAuto{B48RuleAssumption}[thm]\\[5pt]
+\(\RuleRef{AI}{\land I}\) &
+ \(\begin{gathered}\Gamma\models_M p,\ \Delta\models_M q\\
+ \vdash\Gamma\cup\Delta\models_M p\land q\end{gathered}\) &
+ \FormulaRefAuto{B48RuleAndIntro}[thm]\\[5pt]
+\(\RuleRef{AE1}{\land E_1}\) &
+ \(\Gamma\models_M p\land q\ \vdash\Gamma\models_M p\) &
+ \FormulaRefAuto{B48RuleAndLeft}[thm]\\[5pt]
+\(\RuleRef{AE2}{\land E_2}\) &
+ \(\Gamma\models_M p\land q\ \vdash\Gamma\models_M q\) &
+ \FormulaRefAuto{B48RuleAndRight}[thm]\\[5pt]
+\(\RuleRef{OI1}{\lor I_1}\) &
+ \(\Gamma\models_M p\ \vdash\Gamma\models_M p\lor q\) &
+ \FormulaRefAuto{B48RuleOrLeft}[thm]\\[5pt]
+\(\RuleRef{OI2}{\lor I_2}\) &
+ \(\Gamma\models_M q\ \vdash\Gamma\models_M p\lor q\) &
+ \FormulaRefAuto{B48RuleOrRight}[thm]\\[5pt]
+\(\RuleRef{OE}{\lor E}\) &
+ \(\begin{gathered}\Gamma\models_M p\lor q,\\
+ \Delta\cup\{p\}\models_M r,\ \Theta\cup\{q\}\models_M r\\
+ \vdash(\Gamma\cup\Delta)\cup\Theta\models_M r\end{gathered}\) &
+ \FormulaRefAuto{B48RuleOrElim}[thm]\\[5pt]
+\(\RuleRef{RI}{\to I}\) &
+ \(\Gamma\cup\{p\}\models_M q\ \vdash\Gamma\models_M p\to q\) &
+ \FormulaRefAuto{B48RuleImpIntro}[thm]\\[5pt]
+\(\RuleRef{RE}{\to E}\) &
+ \(\begin{gathered}\Gamma\models_M p\to q,\ \Delta\models_M p\\
+ \vdash\Gamma\cup\Delta\models_M q\end{gathered}\) &
+ \FormulaRefAuto{B48RuleImpElim}[thm]\\[5pt]
+\(\RuleRef{LRI}{\leftrightarrow I}\) &
+ \(\begin{gathered}\Gamma\models_M p\to q,\ \Delta\models_M q\to p\\
+ \vdash\Gamma\cup\Delta\models_M p\leftrightarrow q\end{gathered}\) &
+ \FormulaRefAuto{B48RuleIffIntro}[thm]\\[5pt]
+\(\RuleRef{LRE1}{\leftrightarrow E_1}\) &
+ \(\Gamma\models_M p\leftrightarrow q\ \vdash\Gamma\models_M p\to q\) &
+ \FormulaRefAuto{B48RuleIffLeft}[thm]\\[5pt]
+\(\RuleRef{LRE2}{\leftrightarrow E_2}\) &
+ \(\Gamma\models_M p\leftrightarrow q\ \vdash\Gamma\models_M q\to p\) &
+ \FormulaRefAuto{B48RuleIffRight}[thm]\\[5pt]
+\(\RuleRef{BI}{\bot I}\) &
+ \(\begin{gathered}\Gamma\models_M p,\ \Delta\models_M\neg p\\
+ \vdash\Gamma\cup\Delta\models_M\bot\end{gathered}\) &
+ \FormulaRefAuto{B48RuleBottom}[thm]\\[5pt]
+\(\RuleRef{CI}{\neg I}\) &
+ \(\Gamma\cup\{p\}\models_M\bot\ \vdash\Gamma\models_M\neg p\) &
+ \FormulaRefAuto{B48RuleNegIntro}[thm]\\[5pt]
+\(\RuleRef{CE}{\neg E}\) &
+ \(\Gamma\cup\{\neg p\}\models_M\bot\ \vdash\Gamma\models_M p\) &
+ \FormulaRefAuto{B48RuleClassical}[thm]\\[5pt]
+\(\RuleRef{UI}{\forall I}\) &
+ \(\begin{gathered}\Gamma\models_M p,\ x\mathrel{\#}\Gamma\\
+ \vdash\Gamma\models_M\forall x\,p\end{gathered}\) &
+ \FormulaRefAuto{B48RuleAllIntro}[thm]\\[5pt]
+\(\RuleRef{UE}{\forall E}\) &
+ \(\begin{gathered}\Gamma\models_M\forall x\,p,\ \mathsf{Fr}(p,x,y)\\
+ \vdash\Gamma\models_M p[y/x]\end{gathered}\) &
+ \FormulaRefAuto{B48RuleAllElim}[thm]\\[5pt]
+\(\RuleRef{EI}{\exists I}\) &
+ \(\begin{gathered}\Gamma\models_M p[y/x],\ \mathsf{Fr}(p,x,y)\\
+ \vdash\Gamma\models_M\exists x\,p\end{gathered}\) &
+ \FormulaRefAuto{B48RuleExistsIntro}[thm]\\[5pt]
+\(\RuleRef{EE}{\exists E}\) &
+ \(\begin{gathered}\Gamma\models_M\exists x\,p,\ \Delta\cup\{p\}\models_M q,\\
+ x\mathrel{\#}\Delta,\ x\notin\operatorname{FV}(q)\\
+ \vdash\Gamma\cup\Delta\models_M q\end{gathered}\) &
+ \FormulaRefAuto{B48RuleExistsElim}[thm]\\[5pt]
+\(\RuleRef{II}{=I}\) &
+ \(\Gamma\models_M v_x=v_x\) &
+ \FormulaRefAuto{B48RuleEqualityIntro}[thm]\\[5pt]
+\(\RuleRef{IE}{=E}\) &
+ \(\begin{gathered}\Gamma\models_M v_x=v_y,\ \Delta\models_M p[x/z],\\
+ \mathsf{Fr}(p,z,x),\ \mathsf{Fr}(p,z,y)\\
+ \vdash\Gamma\cup\Delta\models_M p[y/z]\end{gathered}\) &
+ \FormulaRefAuto{B48RuleEqualityElim}[thm]\\
+\bottomrule
+\end{longtable}
+
+Damit ist in jedem moeglichen Regelfall
+\(\Gamma_{n+1}\models_M\theta_{n+1}\) nachgewiesen.
+Fuer \(j\leq n\) gilt die Behauptung weiter nach \(H_d(n)\);
+fuer \(j=n+1\) gilt der gerade bewiesene Fall. Also gilt
+\(H_d(n+1)\). Die Induktion
+\FormulaRefAuto{PeanoInductionRuleAddOne}[thm] liefert
+\(\forall n\in\mathbb N\;H_d(n)\). Einsetzen von \(n=N\) ist
+genau die behauptete Korrektheit aller Zeilen.
+
+\noindent
+Die aufgefuehrten 21 Faelle decken alle elementaren Regeln aus
+Band~1 ab. Die dortigen iterierten Gleichheits-, Konjunktions-
+und Existenznotationen bezeichnen endliche Folgen solcher
+Regelschritte. Der Satz setzt keine Korrektheit ungepruefter
+Bibliotheksverweise voraus: \(\operatorname{Prf}_1\) bezeichnet hier
+die elementare Herleitung, in der verwendete Abkuerzungen bereits
+aufgeloest sind. Die fuer Henkin benoetigten allgemeinen
+Umformungssaetze ueber Beweisobjekte bleiben eine eigene Aufgabe.
+
+\FormulaThmDeltaK[Ein Modell erfuellt jede Teilmenge seiner Theorie]
+{M\models T,\quad\Gamma\subseteq T\ \vdash\ M,s\models\Gamma}
+{B48ModelContext}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Theorie und Annahmen}{T\subseteq\operatorname{Sent}(\mathcal L_\in),
+                               \quad\Gamma\subseteq\mathcal F}
+}
+\begin{tabproof}
+ \proofstep{1}{M\models T}{\rA}
+ \proofstep{2}{\Gamma\subseteq T}{\rA}
+ \proofstep{3}{p\in\Gamma}{\rA}
+ \proofstep{2,3}{p\in T}
+  {\FormulaRefAuto{A\subseteq B,\ x\in A\vdash x\in B}[thm]{2,3}}
+ \proofstep{1,2,3}{M\models p}
+  {\FormulaRefAuto{B48SentenceSatisfaction}[def]{1,4}}
+ \proofstep{}{s\colon\operatorname{Var}\to D}
+  {\FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstep{1,2,3}{M,s\models p}
+  {\FormulaRefAuto{B48SentenceInstance}[thm]{5,6}}
+ \proofstep{1,2}{M,s\models\Gamma}
+  {\FormulaRefAuto{B48SemanticConsequence}[def]{\rUI{\rRI{3,7}}}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Korrektheit der Herleitung]
+{T\vdash\varphi,\quad M\models T\ \vdash\ M\models\varphi}
+{B48Soundness}{
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Theorie}{T\subseteq\operatorname{Sent}(\mathcal L_\in)}
+ \DeltaRow{Satz}{\varphi\in\operatorname{Sent}(\mathcal L_\in)}
+}
+Im Zeugenbeweis ist \(d\) frisch. Seine Laenge ist \(N\), seine
+letzte Formel ist \(\varphi\), und seine offenen Annahmen
+\(\Gamma_N\) liegen in \(T\). Die Belegung \(s\) wird beliebig
+gewaehlt und vor der Entladung von \(d\) wieder gebunden.
+\begin{tabproofsplitwide}
+ \proofpartwide{Schluss aus der letzten Beweiszeile}
+ \proofstepwidestar[1]{T\vdash\varphi}{\rA}
+ \proofstepwidestar[2]{M\models T}{\rA}
+ \proofstepwidestar[1]{\exists d\;\operatorname{Prf}_1(d,T,\varphi)}
+  {\FormulaRefAuto{B48Syntax}[def]{1}}
+ \proofstepwidestar[4]{\operatorname{Prf}_1(d,T,\varphi)}{\rA}
+ \proofstepwidestar[4]{\Gamma_N\models_M\varphi}
+  {\FormulaRefAuto{B48DerivationSoundness}[thm]{4},
+   \FormulaRefAuto{B48DerivationData}[def]}
+ \proofstepwidestar[4]{\Gamma_N\subseteq T}
+  {\FormulaRefAuto{B48Syntax}[def]{4}}
+ \proofstepwidestar[7]{s\in A_D}{\rA}
+ \proofstepwidestar[2,4,7]{M,s\models\Gamma_N}
+  {\FormulaRefAuto{B48ModelContext}[thm]{2,6,7}}
+ \proofstepwidestar[2,4,7]{M,s\models\varphi}
+  {\FormulaRefAuto{B48ConsequenceInstance}[thm]{5,8}}
+ \proofstepwidestar[2,4]{\forall s\in A_D\;(M,s\models\varphi)}
+  {\rUI{\rRI{7,9}}}
+ \proofstepwidestar[]{\exists a\;(a\in D)}
+  {\FormulaRefAuto{B48StrDomainAxiom}[ax]}
+ \proofstepwidestar[2,4]{M\models\varphi}
+  {\FormulaRefAuto{B48SentenceSatisfaction}[def]{11,10},
+   \FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstepwidestar[1,2]{M\models\varphi}{\rEE{3,4:12}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+

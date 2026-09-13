@@ -1,0 +1,605 @@
+% Syntaktische Substitution in der konstantenfreien Sprache {=, in}.
+\subsection{Kollisionsfreie Substitution}
+
+In \(\mathcal L_\in\) sind die einzigen Terme Variablen. Deshalb ist
+die hier benoetigte Einsetzung eine Variablenersetzung.
+Konstanten der spaeteren Henkin-Sprache sind in diesem Abschnitt
+noch nicht zugelassen. Eine Ersetzung wird nur dann in einer
+Quantoren- oder Gleichheitsregel verwendet, wenn sie keine freie
+Variable bindet.
+
+\FormulaDefDeltaK[Operatoren der syntaktischen Variablenersetzung]
+{\begin{aligned}
+ \rho_{xy}(j)&\coloneq\BXLVIIIIf{j=x}{y}{j},\\
+ r_{xy}((k,(i,j)))&\coloneq
+ \BXLVIIIIf{k=t_{\rm e}\lor k=t_{\rm m}}
+ {(k,(\rho_{xy}(i),\rho_{xy}(j)))}{(k,(i,j))},\\
+ f_{xy}(c)&\coloneq(\mathsf l(c),\mathsf l(r_{xy}(c))),\\
+ g_{xy}((p,u),(q,v))&\coloneq
+ \bigl(\mathsf n(p,q),
+ \BXLVIIIIf{p=\mathsf q_x}{\mathsf n(p,q)}{\mathsf n(u,v)}\bigr).
+\end{aligned}}
+{B48SubstitutionOperators}{
+ \DeltaRow{Variablen}{x,y,i,j\in\mathbb N}
+ \DeltaRow{Bereiche}{c\in\Sigma,\quad p,q,u,v\in\mathcal T}
+}
+Die Bindermarken bleiben unveraendert. Am Binder \(x\) wird der
+urspruengliche gesamte Teilbaum zurueckgegeben. Das verhindert die
+Ersetzung der dort gebundenen Vorkommen von \(x\).
+
+\FormulaThmDeltaK[Existenz der syntaktischen Ersetzung]
+{\begin{gathered}
+ \exists!\sigma_{xy}\colon\mathcal T\to\mathcal T\quad
+ \sigma_{xy}(\mathsf l(c))=\mathsf l(r_{xy}(c)),\\
+ \sigma_{xy}(\mathsf n(p,q))=
+ \BXLVIIIIf{p=\mathsf q_x}{\mathsf n(p,q)}
+            {\mathsf n(\sigma_{xy}(p),\sigma_{xy}(q))}
+\end{gathered}}
+{B48SubstitutionExists}{
+ \DeltaRow{Variablen}{x,y\in\mathbb N}
+ \DeltaRow{Universell in den Gleichungen}{c\in\Sigma,\quad p,q\in\mathcal T}
+}
+Setze \(Z=\mathcal T\times\mathcal T\).
+Die Operatoren bezeichnen wieder ihre beschraenkten Funktionsgraphen.
+\begin{tabproof}
+ \proofstep{}{\rho_{xy}(j)\in\mathbb N}
+  {\FormulaRefAuto{B48IfTyped}[thm]}
+ \proofstep{}{r_{xy}(c)\in\Sigma}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]{1},
+   \FormulaRefAuto{B48LabelType}[thm]}
+ \proofstep{}{f_{xy}\colon\Sigma\to Z}
+  {\FormulaRefAuto{TypedTermGraphFunction}[thm]{2},
+   \FormulaRefAuto{B48LeafType}[thm]}
+ \proofstep{}{g_{xy}\colon Z\times Z\to Z}
+  {\FormulaRefAuto{TypedTermGraphFunction}[thm],
+   \FormulaRefAuto{B48NodeType}[thm],
+   \FormulaRefAuto{B48IfTyped}[thm]}
+ \proofstep{}{\begin{gathered}
+  \exists!e\colon\mathcal T\to Z\quad
+  e(\mathsf l(c))=f_{xy}(c),\\
+  e(\mathsf n(p,q))=g_{xy}(e(p),e(q))
+ \end{gathered}}
+  {\FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]{3,4}}
+\end{tabproof}
+Fuer diese Auswertung sei \(H(p)\) die Aussage
+\(\exists u\in\mathcal T\;(e(p)=(p,u))\).
+\begin{tabproof}
+ \proofstep{}{e(\mathsf l(c))=
+  (\mathsf l(c),\mathsf l(r_{xy}(c)))}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]}
+ \proofstep{}{H(\mathsf l(c))}{\rEI{1}}
+ \proofstep{3}{H(p)\land H(q)}{\rA}
+ \proofstep{4}{e(p)=(p,u)\land e(q)=(q,v)}{\rA}
+ \proofstep{4}{\begin{aligned}
+ e(\mathsf n(p,q))={}&
+ (\mathsf n(p,q),\\
+ &\BXLVIIIIf{p=\mathsf q_x}{\mathsf n(p,q)}{\mathsf n(u,v)})
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]{4}}
+ \proofstep{4}{H(\mathsf n(p,q))}{\rEI{5}}
+ \proofstep{3}{H(\mathsf n(p,q))}{\rEEStar{3,4:6}}
+ \proofstep{}{\forall p\in\mathcal T\;H(p)}
+  {\FormulaRefAuto{FullPlanarBinaryTreeStructuralInduction}[thm]
+   {\rUI{2},\rUI{\rRI{3,7}}}}
+\end{tabproof}
+Die beschraenkten Zeugen \(u,v\) sind frisch.
+Die zweite Komponente ist eindeutig durch
+\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm].
+Somit definiert der Graph
+\(\{(p,u)\in\mathcal T^2\mid e(p)=(p,u)\}\) nach
+\FormulaRefAuto{UniqueValuedGraphFunction}[thm] die gesuchte Funktion.
+Ihre Gleichungen folgen durch Einsetzen der Komponenten in die
+Rekursionsgleichungen von \(e\).
+Fuer zwei Kandidaten sind die Blattwerte gleich. Am Knoten sind im
+Fall \(p=\mathsf q_x\) beide Werte der urspruengliche Knoten,
+andernfalls macht die Induktionsannahme beide Argumente von
+\(\mathsf n\) gleich. Bauminduktion und
+\FormulaRefAuto{FunctionExtensionality}[thm] beweisen Eindeutigkeit.
+
+\FormulaDefDeltaK[Ersetzung freier Vorkommen]
+{p[y/x]\coloneq\sigma_{xy}(p)}
+{B48Substitution}{
+ \DeltaRow{Formelcode}{p\in\mathcal F}
+ \DeltaRow{Variablen}{x,y\in\mathbb N}
+ \DeltaRow{Konstruierte Funktion}{\sigma_{xy}\text{ aus }
+          \FormulaRefAuto{B48SubstitutionExists}[thm]}
+}
+Die syntaktische Operation ist auch dann definiert, wenn sie eine
+Variable einfangen wuerde. Die nachstehende Bedingung schliesst
+genau diese Faelle von den logischen Regeln aus.
+
+\FormulaThmDeltaK[Rekursionsklauseln der Ersetzung]
+{\begin{aligned}
+ \mathsf e(i,j)[y/x]&=\mathsf e(\rho_{xy}(i),\rho_{xy}(j)),\\
+ \mathsf m(i,j)[y/x]&=\mathsf m(\rho_{xy}(i),\rho_{xy}(j)),\\
+ \mathsf b[y/x]&=\mathsf b,\\
+ (\neg p)[y/x]&=\neg(p[y/x]),\\
+ (p\land q)[y/x]&=p[y/x]\land q[y/x],\\
+ (\exists v_i\,p)[y/x]&=
+ \begin{cases}\exists v_i\,p,&i=x,\\
+ \exists v_i\,(p[y/x]),&i\neq x.
+ \end{cases}
+\end{aligned}}
+{B48SubstitutionClauses}{
+ \DeltaRow{Formeln}{p,q\in\mathcal F}
+ \DeltaRow{Variablen}{i,j,x,y\in\mathbb N}
+}
+\begin{tabproof}
+ \proofstep{}{\sigma_{xy}(\mathsf n_0)=\mathsf n_0,\quad
+ \sigma_{xy}(\mathsf c_0)=\mathsf c_0,\quad
+ \sigma_{xy}(\mathsf q_i)=\mathsf q_i}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def],
+   \FormulaRefAuto{B48SubstitutionExists}[thm]}
+ \proofstep{}{\mathsf q_i=\mathsf q_x\leftrightarrow i=x}
+  {\FormulaRefAuto{B48QuantifierRootEquality}[thm]}
+ \proofstep{}{\sigma_{xy}(\mathsf n(\mathsf c_0,p))=
+                         \mathsf n(\mathsf c_0,\sigma_{xy}(p))}
+  {\FormulaRefAuto{B48SubstitutionExists}[thm]{1},
+   \FormulaRefAuto{B48QNeAnd}[thm]}
+ \proofstep{}{\begin{gathered}
+ (\neg p)[y/x]=\neg(p[y/x]),\\
+ (p\land q)[y/x]=p[y/x]\land q[y/x]
+ \end{gathered}}
+  {\FormulaRefAuto{B48SubstitutionExists}[thm]{1,3},
+   \FormulaRefAuto{B48QNeNeg}[thm],
+   \FormulaRefAuto{B48LeafNotNode}[thm]}
+ \proofstep{}{\begin{aligned}
+ (\exists v_i\,p)[y/x]=
+ \BXLVIIIIf{i=x}{\exists v_i\,p}{\exists v_i\,(p[y/x])}
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionExists}[thm]{1,2}}
+\end{tabproof}
+Die drei Atomgleichungen sind unmittelbar die Blattgleichung mit
+\(r_{xy}\). Formelinduktion
+\FormulaRefAuto{B48FormulaInduction}[thm] liefert aus den sechs
+Klauseln zudem \(p[y/x]\in\mathcal F\): Atome bleiben Atome;
+Negation und Konjunktion verwenden den jeweiligen Formelabschluss;
+am Quantor bleibt entweder die urspruengliche Formel erhalten oder
+der Existenzabschluss wird auf die ersetzte Teilformel angewendet.
+
+\FormulaDefDeltaK[Frei fuer eine Variable]
+{\begin{aligned}
+ \mathsf{Fr}(\mathsf e(i,j),x,y)&\coloneq\top,\\
+ \mathsf{Fr}(\mathsf m(i,j),x,y)&\coloneq\top,\qquad
+ \mathsf{Fr}(\mathsf b,x,y)\coloneq\top,\\
+ \mathsf{Fr}(\neg p,x,y)&\coloneq\mathsf{Fr}(p,x,y),\\
+ \mathsf{Fr}(p\land q,x,y)&\coloneq
+                  \mathsf{Fr}(p,x,y)\land\mathsf{Fr}(q,x,y),\\
+ \mathsf{Fr}(\exists v_i\,p,x,y)&\coloneq
+ i=x\lor\bigl(\mathsf{Fr}(p,x,y)\land
+              (i\neq y\lor x\notin\operatorname{FV}(p))\bigr).
+\end{aligned}}
+{B48FreeFor}{
+ \DeltaRow{Bedeutung}{y\text{ ist frei fuer }x\text{ in }p}
+ \DeltaRow{Formeln und Variablen}{p,q\in\mathcal F,\quad i,j,x,y\in\mathbb N}
+}
+Hier ist \(\top\) die Abkuerzung \(\neg\bot\).
+Auch diese rekursive Definition bezeichnet eine konstruierbare
+Menge: Man fuehrt an jedem Baum gleichzeitig die Teilmenge
+\(W(p)\subseteq\mathbb N^2\) aller zulaessigen Paare \((x,y)\) mit.
+Die Blattwerte sind \(\mathbb N^2\); am Negations- und
+Konjunktionshilfsknoten \(\mathsf c_0\) wird der rechte Wert
+weitergereicht; am fertigen Konjunktionsknoten werden die beiden
+Werte geschnitten. Am Quantorenknoten mit linkem Kind
+\(\mathsf q_i\) ist der Wert
+\[
+ \{(x,y)\in\mathbb N^2\mid
+    i=x\lor((x,y)\in W(p)\land
+                 (i\neq y\lor x\notin\operatorname{FV}(p)))\}.
+\]
+Alle sonstigen Hilfsknoten erhalten den Wert \(\mathbb N^2\).
+Diese Faelle sind durch
+\FormulaRefAuto{B48LeafNotNode}[thm],
+\FormulaRefAuto{B48AndNeNeg}[thm],
+\FormulaRefAuto{B48QNeNeg}[thm],
+\FormulaRefAuto{B48QNeAnd}[thm] und
+\FormulaRefAuto{B48QuantifierRootInjective}[thm] eindeutig.
+Die beiden totalen Operatoren haben damit Werte in
+\(\mathcal T\times\powerset(\mathbb N^2)\).
+\FormulaRefAuto{TypedTermGraphFunction}[thm] und
+\FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm] liefern ihre
+eindeutige Auswertung. Wie bei
+\FormulaRefAuto{B48FVExists}[thm] bleibt die erste Komponente
+durch Blatt- und Knoteninduktion der Baumcode.
+Die Aussage \(\mathsf{Fr}(p,x,y)\) bedeutet
+\((x,y)\in W(p)\). Die angezeigten Klauseln sind die
+ausgerechneten Werte dieser Konstruktion.
+
+\FormulaThmDeltaK[Eine nicht freie Variable wird nicht ersetzt]
+{x\notin\operatorname{FV}(p)\ \vdash\ p[y/x]=p}
+{B48SubstitutionVacuous}{
+ \DeltaRow{Formel und Variablen}{p\in\mathcal F,\quad x,y\in\mathbb N}
+}
+Die Induktionsbehauptung wird fuer alle \(x,y\) gleichzeitig gefuehrt.
+\begin{tabproofsplitwide}
+ \proofpartwide{Atom- und Junktorenfaelle}
+ \proofstepwidestar[1]{x\notin\{i,j\}}{\rA}
+ \proofstepwidestar[1]{\rho_{xy}(i)=i,\quad\rho_{xy}(j)=j}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]{1},
+   \FormulaRefAuto{B48IfFalse}[thm]}
+ \proofstepwidestar[1]{\mathsf e(i,j)[y/x]=\mathsf e(i,j),\quad
+                      \mathsf m(i,j)[y/x]=\mathsf m(i,j)}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{2}}
+ \proofstepwidestar[]{\mathsf b[y/x]=\mathsf b}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]}
+ \proofstepwidestar[5]{p[y/x]=p}{\rA}
+ \proofstepwidestar[5]{(\neg p)[y/x]=\neg p}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{5}}
+ \proofstepwidestar[7]{q[y/x]=q}{\rA}
+ \proofstepwidestar[5,7]{(p\land q)[y/x]=p\land q}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{5,7}}
+ \closeproofpartwide
+ \proofpartwide{Quantorenfall und Abschluss}
+ \proofstepwidestar[1]{x\notin\operatorname{FV}(p)\setminus\{i\}}{\rA}
+ \proofstepwidestar[]{i=x\lor i\neq x}{\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[3]{i=x}{\rA}
+ \proofstepwidestar[3]{(\exists v_i\,p)[y/x]=\exists v_i\,p}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{3}}
+ \proofstepwidestar[5]{i\neq x}{\rA}
+ \proofstepwidestar[1,5]{x\notin\operatorname{FV}(p)}
+  {\FormulaRefAuto{B48MissingFromDifference}[thm]{1,
+    \FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{5}}}
+ \proofstepwidestar[7]{\forall x,y\in\mathbb N\;
+   (x\notin\operatorname{FV}(p)\to p[y/x]=p)}{\rA}
+ \proofstepwidestar[1,5,7]{p[y/x]=p}{\rRE{\rUE{7},6}}
+ \proofstepwidestar[1,5,7]{(\exists v_i\,p)[y/x]=\exists v_i\,p}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{5,8}}
+ \proofstepwidestar[1,7]{(\exists v_i\,p)[y/x]=\exists v_i\,p}
+  {\rOE{2,3:4,5:9}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+Bei Negation ist die Freivariablenmenge unveraendert; bei
+Konjunktion impliziert die Nichtzugehoerigkeit zu ihrer Vereinigung
+die Nichtzugehoerigkeit zu beiden Teilmengen.
+Damit liefern die Tabellen alle Abschlussfaelle fuer
+\FormulaRefAuto{B48FormulaInduction}[thm], zusammen mit
+\FormulaRefAuto{B48FVClauses}[thm] und den drei Formelabschluessen.
+
+\FormulaThmDeltaK[Vertauschen verschiedener Belegungswechsel]
+{i\neq x,\ i\neq y\ \vdash\
+ s[i\mapsto a][x\mapsto s[i\mapsto a](y)]
+     =s[x\mapsto s(y)][i\mapsto a]}
+{B48UpdateCommute}{
+ \DeltaRow{Belegung}{s\in A_D}
+ \DeltaRow{Variablen und Wert}{i,x,y\in\mathbb N,\quad a\in D}
+}
+Setze \(u=s[i\mapsto a][x\mapsto s[i\mapsto a](y)]\) und
+\(v=s[x\mapsto s(y)][i\mapsto a]\).
+\begin{tabproofsplitwide}
+ \proofpartwide{Beweis}
+ \proofstepwidestar[1]{i\neq x}
+  {\rA}
+ \proofstepwidestar[2]{i\neq y}
+  {\rA}
+ \proofstepwidestar[1]{x\neq i}
+  {\FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{1}}
+ \proofstepwidestar[2]{y\neq i}
+  {\FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{2}}
+ \proofstepwidestar[2]{s[i\mapsto a](y)=s(y)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{4}}
+ \proofstepwidestar[]{u\colon\mathbb N\to D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm], \FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstepwidestar[]{v\colon\mathbb N\to D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm], \FormulaRefAuto{B48AssignmentCriterion}[thm]}
+ \proofstepwidestar[]{j=x\lor j\neq x}
+  {\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[9]{j=x}
+  {\rA}
+ \proofstepwidestar[2,9]{u(j)=s(y)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{9,5}}
+ \proofstepwidestar[1,9]{v(j)=s(y)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{9,3}}
+ \proofstepwidestar[1,2,9]{u(j)=v(j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{10,11}}
+ \proofstepwidestar[13]{j\neq x}
+  {\rA}
+ \proofstepwidestar[]{j=i\lor j\neq i}
+  {\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[15]{j=i}
+  {\rA}
+ \proofstepwidestar[13,15]{u(j)=a}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{13,15}}
+ \proofstepwidestar[15]{v(j)=a}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{15}}
+ \proofstepwidestar[13,15]{u(j)=v(j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{16,17}}
+ \proofstepwidestar[19]{j\neq i}
+  {\rA}
+ \proofstepwidestar[13,19]{u(j)=s(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{13,19}}
+ \proofstepwidestar[13,19]{v(j)=s(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{13,19}}
+ \proofstepwidestar[13,19]{u(j)=v(j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{20,21}}
+ \proofstepwidestar[13]{u(j)=v(j)}
+  {\rOE{14,15:18,19:22}}
+ \proofstepwidestar[1,2]{u(j)=v(j)}
+  {\rOE{8,9:12,13:23}}
+ \proofstepwidestar[1,2]{\forall j\in\mathbb N\;(u(j)=v(j))}
+  {\rUI{24}}
+ \proofstepwidestar[1,2]{u=v}
+  {\FormulaRefAuto{FunctionExtensionality}[thm]{6,7,25}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+Die beiden Fallunterscheidungen pruefen zuerst \(j=x\), dann \(j=i\).
+Es wird keine Vertauschung bei \(i=x\) behauptet.
+
+\FormulaDefDeltaK[Induktionsbehauptung des Substitutionslemmas]
+{\begin{aligned}
+ S(p)\coloneq\forall x,y\in\mathbb N\,\forall s\in A_D\;
+ \bigl(\mathsf{Fr}(p,x,y)\to{}\\
+ ((M,s\models p[y/x])\leftrightarrow
+  (M,s[x\mapsto s(y)]\models p))\bigr)
+\end{aligned}}
+{B48SubstitutionProperty}{
+ \DeltaRow{Struktur und Formel}{\mathsf{Str}(M),\quad p\in\mathcal F}
+}
+
+\FormulaThmDeltaK[Substitutionslemma]
+{\mathsf{Fr}(p,x,y)\ \vdash\
+ ((M,s\models p[y/x])\leftrightarrow
+  (M,s[x\mapsto s(y)]\models p))}
+{B48SubstitutionLemma}{
+ \DeltaRow{Struktur und Belegung}{\mathsf{Str}(M),\quad s\in A_D}
+ \DeltaRow{Formel und Variablen}{p\in\mathcal F,\quad x,y\in\mathbb N}
+}
+\begin{tabproofsplitwide}
+ \proofpartwideindR[Variablenwerte]{s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}
+  {s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}[B48SubstitutionVariableValue]
+ \proofstepwidestar[]{j=x\lor j\neq x}
+  {\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[2]{j=x}
+  {\rA}
+ \proofstepwidestar[2]{\rho_{xy}(j)=y}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]{2}, \FormulaRefAuto{B48IfTrue}[thm]{2}}
+ \proofstepwidestar[]{s(\rho_{xy}(j))=s(\rho_{xy}(j))}
+  {\rII}
+ \proofstepwidestar[2]{s(\rho_{xy}(j))=s(y)}
+  {\rIE{3,4}}
+ \proofstepwidestar[2]{s[x\mapsto s(y)](j)=s(y)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{2}}
+ \proofstepwidestar[2]{s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{5,6}}
+ \proofstepwidestar[8]{j\neq x}
+  {\rA}
+ \proofstepwidestar[8]{\rho_{xy}(j)=j}
+  {\FormulaRefAuto{B48SubstitutionOperators}[def]{8}, \FormulaRefAuto{B48IfFalse}[thm]{8}}
+ \proofstepwidestar[]{s(\rho_{xy}(j))=s(\rho_{xy}(j))}
+  {\rII}
+ \proofstepwidestar[8]{s(\rho_{xy}(j))=s(j)}
+  {\rIE{9,10}}
+ \proofstepwidestar[8]{s[x\mapsto s(y)](j)=s(j)}
+  {\FormulaRefAuto{B48UpdateValues}[thm]{8}}
+ \proofstepwidestar[8]{s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}
+  {\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{11,12}}
+ \proofstepwidestar[]{s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}
+  {\rOE{1,2:7,8:13}}
+\closeproofpartwideindR
+
+ \proofpartwideindR[Atome]{S(\mathsf e(i,j))\land S(\mathsf m(i,j))
+                         \land S(\mathsf b)}
+  {S(\mathsf e(i,j))\land S(\mathsf m(i,j))\land S(\mathsf b)}
+  [B48SubstitutionAtoms]
+ \proofstepwidestar[]{s(\rho_{xy}(i))=s[x\mapsto s(y)](i)}
+  {\FormulaRefAuto{B48SubstitutionVariableValue}[thm]}
+ \proofstepwidestar[]{s(\rho_{xy}(j))=s[x\mapsto s(y)](j)}
+  {\FormulaRefAuto{B48SubstitutionVariableValue}[thm]}
+ \proofstepwidestar[]{\begin{aligned}
+ (M,s\models\mathsf e(i,j)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\mathsf e(i,j))
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm],
+   \FormulaRefAuto{B48Satisfaction}[def],
+   \rIE{1,2,\FormulaRefAuto{P\leftrightarrow P}[thm]}}
+ \proofstepwidestar[]{\begin{aligned}
+ (M,s\models\mathsf m(i,j)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\mathsf m(i,j))
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm],
+   \FormulaRefAuto{B48Satisfaction}[def],
+   \rIE{1,2,\FormulaRefAuto{P\leftrightarrow P}[thm]}}
+ \proofstepwidestar[]{\begin{aligned}
+ (M,s\models\mathsf b[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\mathsf b)
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm],
+   \FormulaRefAuto{B48Satisfaction}[def],
+   \FormulaRefAuto{P\leftrightarrow P}[thm]}
+ \proofstepwidestar[]{S(\mathsf e(i,j))\land S(\mathsf m(i,j))
+                    \land S(\mathsf b)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]
+   {\rAI{\rUI{3},\rAI{\rUI{4},\rUI{5}}}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Negation]{S(p)\vdash S(\neg p)}
+  {S(p)\vdash S(\neg p)}[B48SubstitutionNeg]
+ \proofstepwidestar[1]{S(p)}{\rA}
+ \proofstepwidestar[2]{\mathsf{Fr}(\neg p,x,y)}{\rA}
+ \proofstepwidestar[2]{\mathsf{Fr}(p,x,y)}
+  {\FormulaRefAuto{B48FreeFor}[def]{2}}
+ \proofstepwidestar[1,2]{(M,s\models p[y/x])\leftrightarrow
+                   (M,s[x\mapsto s(y)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{1,3}}
+ \proofstepwidestar[1,2]{(M,s\models(\neg p)[y/x])\leftrightarrow
+                   (M,s[x\mapsto s(y)]\models\neg p)}
+  {\rLRS{4,\FormulaRefAuto{P\leftrightarrow P}[thm]},
+   \FormulaRefAuto{B48Satisfaction}[def],
+   \FormulaRefAuto{B48SubstitutionClauses}[thm]}
+ \proofstepwidestar[1]{S(\neg p)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{\rUI{\rRI{2,5}}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Konjunktion]{S(p),S(q)\vdash S(p\land q)}
+  {S(p),S(q)\vdash S(p\land q)}[B48SubstitutionAnd]
+ \proofstepwidestar[1]{S(p)}{\rA}
+ \proofstepwidestar[2]{S(q)}{\rA}
+ \proofstepwidestar[3]{\mathsf{Fr}(p\land q,x,y)}{\rA}
+ \proofstepwidestar[3]{\mathsf{Fr}(p,x,y)\land\mathsf{Fr}(q,x,y)}
+  {\FormulaRefAuto{B48FreeFor}[def]{3}}
+ \proofstepwidestar[1,3]{(M,s\models p[y/x])\leftrightarrow
+                   (M,s[x\mapsto s(y)]\models p)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{1,\rAEa{4}}}
+ \proofstepwidestar[2,3]{(M,s\models q[y/x])\leftrightarrow
+                   (M,s[x\mapsto s(y)]\models q)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{2,\rAEb{4}}}
+ \proofstepwidestar[1,2,3]{(M,s\models(p\land q)[y/x])\leftrightarrow
+                   (M,s[x\mapsto s(y)]\models p\land q)}
+  {\rLRS{5,\rLRS{6,\FormulaRefAuto{P\leftrightarrow P}[thm]}},
+   \FormulaRefAuto{B48Satisfaction}[def],
+   \FormulaRefAuto{B48SubstitutionClauses}[thm]}
+ \proofstepwidestar[1,2]{S(p\land q)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{\rUI{\rRI{3,7}}}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Quantor mit demselben Binder]{i=x\vdash
+ \begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+ {i=x\vdash
+ ((M,s\models(\exists v_i\,p)[y/x])\leftrightarrow
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p))}
+ [B48SubstitutionBound]
+ \proofstepwidestar[1]{i=x}{\rA}
+ \proofstepwidestar[1]{(\exists v_i\,p)[y/x]=\exists v_i\,p}
+  {\FormulaRefAuto{B48SubstitutionClauses}[thm]{1}}
+ \proofstepwidestar[1]{x\notin\operatorname{FV}(\exists v_i\,p)}
+  {\FormulaRefAuto{B48FVClauses}[thm]{1}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models\exists v_i\,p)\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48FreshUpdate}[thm]{3}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{2},4}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Quantor ohne moegliche Kollision]{S(p),\
+ i\neq x,\ i\neq y,\ \mathsf{Fr}(p,x,y)\vdash
+ \begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+ {S(p),\ i\neq x,\ i\neq y,\ \mathsf{Fr}(p,x,y)\vdash
+ ((M,s\models(\exists v_i\,p)[y/x])\leftrightarrow
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p))}
+ [B48SubstitutionQuantifierFresh]
+ \proofstepwidestar[1]{S(p)}{\rA}
+ \proofstepwidestar[2]{i\neq x}{\rA}
+ \proofstepwidestar[3]{i\neq y}{\rA}
+ \proofstepwidestar[4]{\mathsf{Fr}(p,x,y)}{\rA}
+ \proofstepwidestar[5]{a\in D}{\rA}
+ \proofstepwidestar[5]{s[i\mapsto a]\in A_D}
+  {\FormulaRefAuto{B48AssignmentUpdate}[thm]{5}}
+ \proofstepwidestar[1,4,5]{\begin{aligned}
+ (M,s[i\mapsto a]\models p[y/x])\leftrightarrow{}\\
+ (M,s[i\mapsto a][x\mapsto s[i\mapsto a](y)]\models p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{1,4,6}}
+ \proofstepwidestar[2,3,5]{s[i\mapsto a][x\mapsto s[i\mapsto a](y)]
+                         =s[x\mapsto s(y)][i\mapsto a]}
+  {\FormulaRefAuto{B48UpdateCommute}[thm]{2,3,5}}
+ \proofstepwidestar[1,2,3,4,5]{\begin{aligned}
+ (M,s[i\mapsto a]\models p[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)][i\mapsto a]\models p)
+ \end{aligned}}
+  {\rIE{8,7}}
+ \proofstepwidestar[1,2,3,4]{\begin{aligned}
+ (\exists a\in D\;(M,s[i\mapsto a]\models p[y/x]))\leftrightarrow{}\\
+ (\exists a\in D\;(M,s[x\mapsto s(y)][i\mapsto a]\models p))
+ \end{aligned}}
+  {\FormulaRefAuto{B48ExistsIff}[thm]{\rUI{\rRI{5,9}}}}
+ \proofstepwidestar[1,2,3,4]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48Satisfaction}[def]{10},
+   \FormulaRefAuto{B48SubstitutionClauses}[thm]{2}}
+ \closeproofpartwideindR
+
+ \proofpartwideindR[Quantor bei leerer Ersetzungsstelle]{
+ x\notin\operatorname{FV}(p)\vdash
+ \begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+ {x\notin\operatorname{FV}(p)\vdash
+ ((M,s\models(\exists v_i\,p)[y/x])\leftrightarrow
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p))}
+ [B48SubstitutionQuantifierVacuous]
+ \proofstepwidestar[1]{x\notin\operatorname{FV}(p)}{\rA}
+ \proofstepwidestar[1]{x\notin\operatorname{FV}(\exists v_i\,p)}
+  {\FormulaRefAuto{B48FVClauses}[thm]{1}}
+ \proofstepwidestar[1]{(\exists v_i\,p)[y/x]=\exists v_i\,p}
+  {\FormulaRefAuto{B48SubstitutionVacuous}[thm]{2}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models\exists v_i\,p)\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48FreshUpdate}[thm]{2}}
+ \proofstepwidestar[1]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{3},4}}
+ \closeproofpartwideindR
+
+ \proofpartwide{Vollstaendiger Quantorenschritt}
+ \proofstepwidestar[1]{S(p)}{\rA}
+ \proofstepwidestar[2]{\mathsf{Fr}(\exists v_i\,p,x,y)}{\rA}
+ \proofstepwidestar[2]{i=x\lor
+  (\mathsf{Fr}(p,x,y)\land(i\neq y\lor x\notin\operatorname{FV}(p)))}
+  {\FormulaRefAuto{B48FreeFor}[def]{2}}
+ \proofstepwidestar[]{i=x\lor i\neq x}{\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[5]{i=x}{\rA}
+ \proofstepwidestar[5]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionBound}[thm]{5}}
+ \proofstepwidestar[7]{i\neq x}{\rA}
+ \proofstepwidestar[2,7]{\mathsf{Fr}(p,x,y)\land
+             (i\neq y\lor x\notin\operatorname{FV}(p))}
+  {\FormulaRefAuto{P\lor Q,\neg P\vdash Q}[thm]{3,7}}
+ \proofstepwidestar[9]{i\neq y}{\rA}
+ \proofstepwidestar[1,2,7,9]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionQuantifierFresh}[thm]{1,7,9,\rAEa{8}}}
+ \proofstepwidestar[11]{x\notin\operatorname{FV}(p)}{\rA}
+ \proofstepwidestar[11]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\FormulaRefAuto{B48SubstitutionQuantifierVacuous}[thm]{11}}
+ \proofstepwidestar[1,2,7]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\rOE{\rAEb{8},9:10,11:12}}
+ \proofstepwidestar[1,2]{\begin{aligned}
+ (M,s\models(\exists v_i\,p)[y/x])\leftrightarrow{}\\
+ (M,s[x\mapsto s(y)]\models\exists v_i\,p)
+ \end{aligned}}
+  {\rOE{4,5:6,7:13}}
+ \proofstepwidestar[1]{S(\exists v_i\,p)}
+  {\FormulaRefAuto{B48SubstitutionProperty}[def]{\rUI{\rRI{2,14}}}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+Die Atom-, Negations-, Konjunktions- und Quantorentabellen zeigen,
+dass \(\{p\in\mathcal F\mid S(p)\}\) formelabgeschlossen ist.
+Aus \FormulaRefAuto{B48FormulaInduction}[thm] folgt
+\(\forall p\in\mathcal F\;S(p)\); Einsetzen von \(p,x,y,s\)
+und Anwenden auf \(\mathsf{Fr}(p,x,y)\) ergibt den Satz.
+
+\noindent
+Beispielsweise ist \(y\) fuer \(x\) in \(x=y\) frei, aber fuer
+\(x\) in \(\exists y\,\neg(x=y)\) nicht frei. Der zweite Fall darf
+nicht durch stillschweigende Anwendung des Substitutionslemmas
+behandelt werden.
+

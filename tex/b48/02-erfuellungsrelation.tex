@@ -1,0 +1,333 @@
+% Mengeninterne Syntax und Semantik. Keine neuen Mengenaxiome.
+% Alle Hilfssaetze stehen als Proofparts beim Existenzsatz.
+\newcommand{\BXLVIIIIf}[3]{\mathsf{if}(#1,#2,#3)}
+\subsection*{Formelcodes und axiomatische Charakterisierung}
+Wie bei den induktiven Mengen in
+\FormulaRefAuto{InductiveSetDef}[def] stehen die kennzeichnenden Axiome
+eines Strukturbegriffs einzeln in dessen Definition. Die Definition
+dient als Einfuehrungsregel: Ihre Axiome werden durch getrennte
+Beweiszeilen nachgewiesen. Die anschliessenden Zugriffsaxiome liefern
+aus dem Strukturpraedikat jeweils genau eine dieser Bedingungen.
+Keine dieser Regeln behauptet die Existenz einer solchen Struktur.
+In verbleibenden logischen Formeln werden mehrgliedrige Konjunktionen
+rechts geklammert.
+Die Mengen \(D,E\) sind feste Parameter dieses Abschnitts; \(M=(D,E)\).
+\FormulaDefDeltaK[Kurzschreibweise des Fallterms]
+{\BXLVIIIIf{P}{U}{V}\coloneq\IfThenElse{P}{U}{V}}
+{B48IfNotation}{\DeltaRow{Aussage}{P}\DeltaRow{Mengen}{U,V}}
+
+
+Die folgenden Bedingungen charakterisieren eine gegebene Relation.
+Sie behaupten noch nicht deren Existenz. Als Codebereich dienen die
+bereits konstruierten Klammerungsbaeume aus Band~27.
+Gebundene Tupel sind die uebliche Abkuerzung fuer die eindeutige
+Produktzerlegung; es werden keine neuen Arten von Variablen eingefuehrt.
+Die Strukturbegriffe sind Praedikate ueber Mengen; die uebrigen
+Kurzzeichen bezeichnen Mengen und Mengenoperationen.
+
+\FormulaDefDeltaK[Marken und Codebereich]
+{\begin{gathered}
+ t_{\rm e}\coloneq0,\quad t_{\rm m}\coloneq\Succ(t_{\rm e}),\quad
+ t_{\rm n}\coloneq\Succ(t_{\rm m}),\\
+ t_{\rm c}\coloneq\Succ(t_{\rm n}),\quad
+ t_{\rm q}\coloneq\Succ(t_{\rm c}),\quad
+ t_{\rm b}\coloneq\Succ(t_{\rm q}),\\
+ \Sigma\coloneq\mathbb N\times(\mathbb N\times\mathbb N),\qquad
+ \mathcal T\coloneq\BracketTreeSet{\Sigma},\\
+ \mathsf l(c)\coloneq\LeafTree{\Sigma}{c},\qquad
+ \mathsf n(p,q)\coloneq\NodeTree{\Sigma}{p}{q}
+\end{gathered}}
+{B48CodeCarrier}{\DeltaRow{Mengen}{c\in\Sigma,\quad p,q\in\mathcal T}}
+
+\FormulaDefDeltaK[Formelkonstruktoren]
+{\begin{gathered}
+ \begin{aligned}
+ \mathsf e(i,j)&\coloneq\mathsf l((t_{\rm e},(i,j))),&
+ \mathsf m(i,j)&\coloneq\mathsf l((t_{\rm m},(i,j))),\\
+ \mathsf b&\coloneq\mathsf l((t_{\rm b},(0,0))),&
+ \mathsf n_0&\coloneq\mathsf l((t_{\rm n},(0,0))),\\
+ \mathsf c_0&\coloneq\mathsf l((t_{\rm c},(0,0))),&
+ \mathsf q_i&\coloneq\mathsf l((t_{\rm q},(i,0))),\\
+ \mathsf{neg}(p)&\coloneq\mathsf n(\mathsf n_0,p),&
+ \mathsf{and}(p,q)&\coloneq\mathsf n(\mathsf n(\mathsf c_0,p),q),\\
+ \mathsf{ex}_i(p)&\coloneq\mathsf n(\mathsf q_i,p)
+ \end{aligned}\\
+ \begin{aligned}
+ \Sigma_{\rm at}\coloneq\{(k,(i,j))\in\Sigma\mid{}&
+ k=t_{\rm e}\lor k=t_{\rm m}\\
+ &{}\lor(k=t_{\rm b}\land i=0\land j=0)\}.
+ \end{aligned}
+\end{gathered}}
+{B48FormulaConstructors}{\DeltaRow{Indizes}{i,j\in\mathbb N}
+ \DeltaRow{Baumcodes}{p,q\in\mathcal T}}
+
+\FormulaDefDeltaK[Formelabgeschlossene Menge]
+{\mathsf{Cl}(X)}{B48FormulaClosure}{
+ \DeltaRow{Mengen}{X,p,c,q,i}
+ \DeltaRow{\textbf{Axiome}}{}
+ \DeltaRow{Baumcodes}{X\subseteq\mathcal T}
+ \DeltaRow{Atome}{\forall c\in\Sigma_{\rm at}\;(\mathsf l(c)\in X)}
+ \DeltaRow{Negation}{\forall p\in X\;(\mathsf{neg}(p)\in X)}
+ \DeltaRow{Konjunktion}{\begin{aligned}[t]&\forall p\in X\,\forall q\in X\\&\quad(\mathsf{and}(p,q)\in X)\end{aligned}}
+ \DeltaRow{Existenzquantor}{\begin{aligned}[t]&\forall i\in\mathbb N\,\forall p\in X\\&\quad(\mathsf{ex}_i(p)\in X)\end{aligned}}
+ \DeltaRow{\textbf{Neues Symbol}}{}
+ \DeltaPrem{Formelabschluss}{\mathsf{Cl}(X)}
+}
+
+\FormulaAxiomDeltaK[Traeger einer formelabgeschlossenen Menge]
+{\mathsf{Cl}(X)\vdash X\subseteq\mathcal T}
+{B48ClDomainAxiom}{\DeltaRow{Mengen}{X,p,c,q,i}}
+
+\FormulaAxiomDeltaK[Atomabschluss]
+{\mathsf{Cl}(X)\vdash \forall c\in\Sigma_{\rm at}\;(\mathsf l(c)\in X)}
+{B48ClAtomsAxiom}{\DeltaRow{Mengen}{X,p,c,q,i}}
+
+\FormulaAxiomDeltaK[Abschluss unter Negation]
+{\mathsf{Cl}(X)\vdash \forall p\in X\;(\mathsf{neg}(p)\in X)}
+{B48ClNegAxiom}{\DeltaRow{Mengen}{X,p,c,q,i}}
+
+\FormulaAxiomDeltaK[Abschluss unter Konjunktion]
+{\begin{gathered}\mathsf{Cl}(X)\vdash{}\\
+ \forall p\in X\,\forall q\in X\;(\mathsf{and}(p,q)\in X)\end{gathered}}
+{B48ClAndAxiom}{\DeltaRow{Mengen}{X,p,c,q,i}}
+
+\FormulaAxiomDeltaK[Abschluss unter Existenzquantifikation]
+{\begin{gathered}\mathsf{Cl}(X)\vdash{}\\
+ \forall i\in\mathbb N\,\forall p\in X\;(\mathsf{ex}_i(p)\in X)\end{gathered}}
+{B48ClExistsAxiom}{\DeltaRow{Mengen}{X,p,c,q,i}}
+
+\FormulaDefDeltaK[Formelmenge]
+{\mathcal F\coloneq
+ \{p\in\mathcal T\mid\forall X(\mathsf{Cl}(X)\to p\in X)\}}
+{B48FormulaSet}{\DeltaRow{Mengen}{p,X}}
+
+Dies ist eine beschraenkte Aussonderung aus einer bereits vorhandenen
+Menge, keine rekursive Existenzbehauptung.
+Die Codes \(\mathsf e(i,j)\), \(\mathsf m(i,j)\), \(\mathsf b\),
+\(\mathsf{neg}(p)\), \(\mathsf{and}(p,q)\) und \(\mathsf{ex}_i(p)\)
+codieren jeweils \(v_i=v_j\), \(v_i\in v_j\), \(\bot\), \(\neg p\),
+\(p\land q\) und \(\exists v_i\,p\).
+Innerhalb von \(\models\) werden spaeter die lesbaren Formeln statt
+dieser Codes geschrieben. \(\mathsf n_0,\mathsf c_0,\mathsf q_i\)
+sind Hilfsbaeume, nicht zusaetzliche atomare Formeln.
+
+\FormulaDefDeltaK[Mengenstruktur]
+{\mathsf{Str}(M)}{B48SetStructureDef}{
+ \DeltaRow{Mengen}{M,D,E}
+ \DeltaRow{\textbf{Axiome}}{}
+ \DeltaRow{Strukturpaar}{M=(D,E)}
+ \DeltaRow{Grundmenge}{D\neq\varnothing}
+ \DeltaRow{Relation}{E\subseteq D\times D}
+ \DeltaRow{\textbf{Neues Symbol}}{}
+ \DeltaPrem{Mengenstruktur}{\mathsf{Str}(M)}
+}
+
+\FormulaAxiomDeltaK[Paar einer Mengenstruktur]
+{\mathsf{Str}(M)\vdash M=(D,E)}
+{B48StrPairAxiom}{\DeltaRow{Mengen}{M,D,E}}
+
+\FormulaAxiomDeltaK[Nichtleere Grundmenge]
+{\mathsf{Str}(M)\vdash D\neq\varnothing}
+{B48StrDomainAxiom}{\DeltaRow{Mengen}{M,D,E}}
+
+\FormulaAxiomDeltaK[Interpretation der Elementrelation]
+{\mathsf{Str}(M)\vdash E\subseteq D\times D}
+{B48StrRelationAxiom}{\DeltaRow{Mengen}{M,D,E}}
+
+\FormulaDefDeltaK[Belegungen und Belegungswechsel]
+{\begin{aligned}
+ A_D&\coloneq\{s\in\powerset(\mathbb N\times D)\mid s\colon\mathbb N\to D\},\\
+ s[i\mapsto a]&\coloneq
+ \{(j,b)\in\mathbb N\times D\mid
+       b=\BXLVIIIIf{j=i}{a}{s(j)}\}.
+\end{aligned}}
+{B48Assignments}{\DeltaRow{Mengen}{D,s,i,a,j,b}}
+
+\FormulaDefDeltaK[Atomare Wertemengen und Quantorenoperator]
+{\begin{aligned}
+ B_M((k,(i,j)))\coloneq{}&
+ \mathsf{if}\bigl(k=t_{\rm e},\{s\in A_D\mid s(i)=s(j)\},\\
+ &\qquad\BXLVIIIIf{k=t_{\rm m}}
+     {\{s\in A_D\mid(s(i),s(j))\in E\}}{\varnothing}\bigr),\\
+ Q_i(U)\coloneq{}&\{s\in A_D\mid\exists a\in D\;(s[i\mapsto a]\in U)\},\\
+ Q(t,U)\coloneq{}&\{s\in A_D\mid
+       \exists i\in\mathbb N\;(t=\mathsf q_i\land
+                              \exists a\in D\;(s[i\mapsto a]\in U))\},\\
+ R_S(p)\coloneq{}&\{s\in A_D\mid(p,s)\in S\}.
+\end{aligned}}
+{B48SemanticTerms}{\DeltaRow{Mengen}{M=(D,E),\ (k,(i,j))\in\Sigma,\ t,U,S,p}}
+
+\FormulaDefDeltaK[Atomklausel der Erfuellung]
+{C_{\rm at}(M,S)\coloneq \forall c\in\Sigma_{\rm at}\;(R_S(\mathsf l(c))=B_M(c))}
+{B48SatisfactionAtomsDef}{\DeltaRow{Mengen}{M=(D,E),S,p,q,c,i}}
+
+\FormulaDefDeltaK[Negationsklausel der Erfuellung]
+{C_{\rm n}(M,S)\coloneq \forall p\in\mathcal F\;(R_S(\mathsf{neg}(p))=A_D\setminus R_S(p))}
+{B48SatisfactionNegDef}{\DeltaRow{Mengen}{M=(D,E),S,p,q,c,i}}
+
+\FormulaDefDeltaK[Konjunktionsklausel der Erfuellung]
+{C_{\rm c}(M,S)\coloneq \begin{aligned}[t]&\forall p\in\mathcal F\,\forall q\in\mathcal F\\&\quad(R_S(\mathsf{and}(p,q))=R_S(p)\cap R_S(q))\end{aligned}}
+{B48SatisfactionAndDef}{\DeltaRow{Mengen}{M=(D,E),S,p,q,c,i}}
+
+\FormulaDefDeltaK[Quantorenklausel der Erfuellung]
+{C_{\rm q}(M,S)\coloneq \begin{aligned}[t]&\forall i\in\mathbb N\,\forall p\in\mathcal F\\&\quad(R_S(\mathsf{ex}_i(p))=Q_i(R_S(p)))\end{aligned}}
+{B48SatisfactionExistsDef}{\DeltaRow{Mengen}{M=(D,E),S,p,q,c,i}}
+
+\FormulaDefDeltaK[Erfuellungsrelation]
+{\mathsf{Erf}(M,S)}{B48SatisfactionStructure}{
+ \DeltaRow{Mengen}{M=(D,E),S}
+ \DeltaRow{\textbf{Axiome}}{}
+ \DeltaRow{Struktur}{\mathsf{Str}(M)}
+ \DeltaRow{Relationstraeger}{S\subseteq\mathcal F\times A_D}
+ \DeltaRow{Atome}{C_{\rm at}(M,S)}[\FormulaRefAuto{B48SatisfactionAtomsDef}[def]]
+ \DeltaRow{Negation}{C_{\rm n}(M,S)}[\FormulaRefAuto{B48SatisfactionNegDef}[def]]
+ \DeltaRow{Konjunktion}{C_{\rm c}(M,S)}[\FormulaRefAuto{B48SatisfactionAndDef}[def]]
+ \DeltaRow{Existenzquantor}{C_{\rm q}(M,S)}[\FormulaRefAuto{B48SatisfactionExistsDef}[def]]
+ \DeltaRow{\textbf{Neues Symbol}}{}
+ \DeltaPrem{Erfuellung}{\mathsf{Erf}(M,S)}
+}
+
+\FormulaAxiomDeltaK[Struktur einer Erfuellungsrelation]
+{\mathsf{Erf}(M,S)\vdash \mathsf{Str}(M)}
+{B48ErfStructureAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+\FormulaAxiomDeltaK[Traeger einer Erfuellungsrelation]
+{\mathsf{Erf}(M,S)\vdash S\subseteq\mathcal F\times A_D}
+{B48ErfSubsetAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+\FormulaAxiomDeltaK[Atomklausel der Erfuellung]
+{\begin{gathered}\mathsf{Erf}(M,S)\vdash{}\\
+ \forall c\in\Sigma_{\rm at}\;(R_S(\mathsf l(c))=B_M(c))\end{gathered}}
+{B48ErfAtomsAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+\FormulaAxiomDeltaK[Negationsklausel der Erfuellung]
+{\begin{gathered}\mathsf{Erf}(M,S)\vdash{}\\
+ \forall p\in\mathcal F\;(R_S(\mathsf{neg}(p))=A_D\setminus R_S(p))\end{gathered}}
+{B48ErfNegAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+\FormulaAxiomDeltaK[Konjunktionsklausel der Erfuellung]
+{\begin{gathered}\mathsf{Erf}(M,S)\vdash{}\\
+ \forall p\in\mathcal F\,\forall q\in\mathcal F\;(R_S(\mathsf{and}(p,q))=R_S(p)\cap R_S(q))\end{gathered}}
+{B48ErfAndAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+\FormulaAxiomDeltaK[Quantorenklausel der Erfuellung]
+{\begin{gathered}\mathsf{Erf}(M,S)\vdash{}\\
+ \forall i\in\mathbb N\,\forall p\in\mathcal F\;(R_S(\mathsf{ex}_i(p))=Q_i(R_S(p)))\end{gathered}}
+{B48ErfExistsAxiom}{\DeltaRow{Mengen}{M=(D,E),S}}
+
+Die vier Klauselpraedikate wurden jeweils durch eine eigene Formel
+definiert. Zusammen mit den Bedingungen an Struktur und Relation bilden
+sie die sechs Axiome des Begriffs \(\mathsf{Erf}(M,S)\).
+Aus dem Nachweis dieser sechs Bedingungen wird der Begriff eingefuehrt;
+aus dem Begriff wird jede Bedingung durch ihr eigenes Zugriffsaxiom
+gewonnen. Die Existenz einer solchen Relation folgt erst aus dem
+nachstehenden Konstruktionsbeweis.
+
+\FormulaDefDeltaK[Totaler Auswertungsoperator auf Hilfsbaeumen]
+{\begin{aligned}
+ J(t)&\coloneq\exists p\in\mathcal T\;(t=\mathsf n(\mathsf c_0,p)),\\
+ H_{2,M}(t,U,V)&\coloneq\BXLVIIIIf{J(t)}{U\cap V}{Q(t,V)},\\
+ H_{1,M}(t,U,V)&\coloneq\BXLVIIIIf{t=\mathsf c_0}{V}{H_{2,M}(t,U,V)},\\
+ H_M(t,U,V)&\coloneq\BXLVIIIIf{t=\mathsf n_0}{A_D\setminus V}{H_{1,M}(t,U,V)},\\
+ Y_D&\coloneq\mathcal T\times\powerset(A_D),\\
+ f_M&\coloneq\{(c,z)\in\Sigma\times Y_D\mid z=(\mathsf l(c),B_M(c))\},\\
+ g_M&\coloneq
+ \{(((p,U),(q,V)),z)\in(Y_D\times Y_D)\times Y_D\mid\\
+ &\hspace{42mm}z=(\mathsf n(p,q),H_M(p,U,V))\}.
+\end{aligned}}
+{B48EvaluationOperators}{\DeltaRow{Mengen}{M=(D,E),t,U,V,c,z,p,q}}
+
+Hier wird auch auf Hilfsbaeumen ausgewertet. Der erste Bestandteil eines
+Auswertungswerts speichert den Baumcode selbst. Dadurch kann der zweite
+Bestandteil die drei logischen Konstruktoren unterscheiden.
+Diese Hilfsauswertung erweitert nicht die Objektlogik.
+
+\FormulaDefDeltaK[Rekursive Auswertung]
+{\mathsf{Rec}(e,M)}{B48RecursiveEvaluationDef}{
+ \DeltaRow{Mengen}{M=(D,E),e,p,q,c}
+ \DeltaRow{\textbf{Axiome}}{}
+ \DeltaRow{Auswertung}{e\colon\mathcal T\to Y_D}
+ \DeltaRow{Blaetter}{\forall c\in\Sigma\;(e(\mathsf l(c))=f_M(c))}
+ \DeltaRow{Knoten}{\begin{aligned}[t]&\forall p\in\mathcal T\,\forall q\in\mathcal T\\&\quad(e(\mathsf n(p,q))=g_M(e(p),e(q)))\end{aligned}}
+ \DeltaRow{\textbf{Neues Symbol}}{}
+ \DeltaPrem{Auswertung}{\mathsf{Rec}(e,M)}
+}
+
+\FormulaAxiomDeltaK[Typ einer rekursiven Auswertung]
+{\mathsf{Rec}(e,M)\vdash e\colon\mathcal T\to Y_D}
+{B48RecTypeAxiom}{\DeltaRow{Mengen}{M=(D,E),e,p,q,c}}
+
+\FormulaAxiomDeltaK[Blattklausel der rekursiven Auswertung]
+{\mathsf{Rec}(e,M)\vdash \forall c\in\Sigma\;(e(\mathsf l(c))=f_M(c))}
+{B48RecLeafAxiom}{\DeltaRow{Mengen}{M=(D,E),e,p,q,c}}
+
+\FormulaAxiomDeltaK[Knotenklausel der rekursiven Auswertung]
+{\begin{gathered}\mathsf{Rec}(e,M)\vdash{}\\
+ \forall p\in\mathcal T\,\forall q\in\mathcal T\;(e(\mathsf n(p,q))=g_M(e(p),e(q)))\end{gathered}}
+{B48RecNodeAxiom}{\DeltaRow{Mengen}{M=(D,E),e,p,q,c}}
+
+\FormulaDefDeltaK[Auslesen und Kandidat]
+{\begin{aligned}
+ V_A(z,p)&\coloneq\{s\in A\mid
+           \exists U\in\powerset(A)\;(z=(p,U)\land s\in U)\},\\
+ \beta_e(p)&\coloneq V_{A_D}(e(p),p),\\
+ S_e&\coloneq\{(p,s)\in\mathcal F\times A_D\mid s\in\beta_e(p)\}.
+\end{aligned}}
+{B48EvaluationCandidate}{\DeltaRow{Mengen}{M=(D,E),e,p,z,A,s,U}}
+
+\FormulaDefDeltaK[Gleichheitstraeger zweier Relationen]
+{K(S,T)\coloneq\{p\in\mathcal F\mid R_S(p)=R_T(p)\}}
+{B48EqualityCarrier}{\DeltaRow{Mengen}{S,T,p}}
+
+\FormulaThmDeltaK[Existenz und Eindeutigkeit der Erfuellungsrelation]
+{\mathsf{Str}(M)\vdash\exists!S\;\mathsf{Erf}(M,S)}
+{B48SatisfactionExists}{\DeltaRow{Struktur}{M=(D,E)}
+ \DeltaRow{Mengen}{S,T,e,p,q,c,i,j,U,V,X,z,s,a}
+ \DeltaRow{Praedikate}{P}}
+\noindent
+Die folgenden Proofparts bilden den Beweis. Jeder Hilfssatz wird vor
+seiner Verwendung hergeleitet. In Zeugenbeweisen sind die gewaelten
+Mengen frisch fuer die ausserhalb des jeweiligen Teilbeweises offenen
+Voraussetzungen.
+\input{tex/b48/02-erfuellungsrelation-beweis.tex}
+
+
+\subsection*{Die nun gerechtfertigte Schreibweise fuer Erfuellung}
+
+Nach \FormulaRefAuto{B48SatisfactionExists}[thm] ist die folgende
+Kennzeichnung wohldefiniert. Die rekursiven Klauseln werden hier als
+gleichwertige definierende Gleichungen dieser eindeutigen Relation
+mitgefuehrt, nicht als neue Existenzaxiome.
+Die punktweisen Klauseln sind bereits hergeleitet.
+Fuer Gleichheit und Elementrelation gelten\\
+\FormulaRefAuto{B48PointEq}[thm] und \FormulaRefAuto{B48PointMem}[thm].
+
+Fuer Negation und Konjunktion gelten\\
+\FormulaRefAuto{B48PointNeg}[thm] und \FormulaRefAuto{B48PointAnd}[thm].
+
+Fuer Existenzquantor und Widerspruch gelten\\
+\FormulaRefAuto{B48PointExists}[thm] und \FormulaRefAuto{B48PointBottom}[thm].
+
+\FormulaDefDeltaK[Erfuellung in einer Mengenstruktur]
+{\begin{aligned}
+ \operatorname{Sat}(M)&\coloneq\iota S\;\mathsf{Erf}(M,S),\\
+ M,s\models p&\coloneq(p,s)\in\operatorname{Sat}(M),\\
+ M,s\models v_i=v_j&\coloneq s(v_i)=s(v_j),\\
+ M,s\models v_i\in v_j&\coloneq(s(v_i),s(v_j))\in E,\\
+ M,s\models\neg p&\coloneq\neg(M,s\models p),\\
+ M,s\models p\land q&\coloneq(M,s\models p)\land(M,s\models q),\\
+ M,s\models\exists v_i\,p&\coloneq
+          \exists a\in D\;(M,s[v_i\mapsto a]\models p),\\
+ M,s\models\bot&\coloneq\bot.
+\end{aligned}}
+{B48Satisfaction}{
+ \DeltaRow{Struktur}{M=(D,E),\quad D\neq\varnothing,\quad E\subseteq D\times D}
+ \DeltaRow{Belegung}{s\colon\operatorname{Var}\to D}
+ \DeltaRow{Formelcodes}{p,q\in\mathcal F}
+ \DeltaRow{Variablencodes}{v_i=i,\quad v_j=j,\quad i,j\in\mathbb N}
+}
+
+Die punktweise Schreibweise ist damit auf eine konstruierte Menge
+zurueckgefuehrt. Dies beweist noch nicht die Korrektheit beliebiger
+syntaktischer Herleitungen: Dafuer werden spaeter zusaetzlich
+Substitution, Koinzidenz und Herleitungsinduktion benoetigt.

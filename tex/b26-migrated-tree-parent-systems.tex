@@ -1,0 +1,138 @@
+% Allgemeine endliche Elternsysteme, nach Wurzelwegen sowie Eltern und Kindern.
+\section{Endliche Wurzelbäume und gerichtete Elternkanten}
+
+\providecommand{\BXXVIIFiniteRooted}[3]{%
+  \mathsf{EndWBaum}(#1,#2,#3)}
+\providecommand{\BXXVIIParentSystem}[4]{%
+  \mathsf{ElterSys}(#1,#2,#3,#4)}
+\providecommand{\BXXVIISymmetricEdges}[2]{%
+  \operatorname{sym}_{#1}(#2)}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Endlicher verwurzelter Baum]{%
+  \BXXVIIFiniteRooted VEr\coloneqq
+  \Finite V\land\RootedTreeStruct{V,E,r}
+}{B27FiniteRootedTreeDef}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r}
+  \DeltaRow{Neue Struktur}{\BXXVIIFiniteRooted VEr}
+}
+\end{minipage}\par
+
+Die Endlichkeit ist genau die Endlichkeit des Knotenträgers aus Band~20.
+Eltern und Kinder behalten die zuvor eingeführten Definitionen. Eine Beschriftung ist eine zusätzliche Abbildung auf den
+betreffenden Knoten; sie verändert weder deren Identität noch die Kanten.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Die Kindermengen eines endlichen Baums sind endlich]{%
+  \BXXVIIFiniteRooted VEr\dsep a\in V\vdash
+  \Finite{\TreeChildren VEr a}
+}{B27FiniteRootedChildrenFinite}{%
+  \DeltaRow{Mengen}{V\dsep E\dsep r\dsep a\dsep x}
+}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\BXXVIIFiniteRooted VEr}{\rA}
+  \proofstepwidestar[2]{a\in V}{\rA}
+  \proofstepwidestar[1]{\Finite V\land\RootedTreeStruct{V,E,r}}{%
+    \FormulaRefAuto{B27FiniteRootedTreeDef}[def]{1}}
+  \proofstepwidestar[4]{x\in\TreeChildren VEr a}{\rA}
+  \proofstepwidestar[1,2]{x\in\TreeChildren VEr a\leftrightarrow
+    \TreeParentRel VEr a x}{%
+    \FormulaRefAuto{TreeChildrenMembership}[thm]{\rAEb{3},2}}
+  \proofstepwidestar[1,2,4]{\TreeParentRel VEr a x}{%
+    \rRE{4,\rLREa{5}}}
+  \proofstepwidestar[1,2,4]{x\in V\setminus\{r\}}{%
+    \FormulaRefAuto{TreeParentAccess}[thm]{\rAEb{3},6}}
+  \proofstepwidestar[1,2,4]{x\in V}{%
+    \FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{7}}
+  \proofstepwidestar[1,2]{\TreeChildren VEr a\subseteq V}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots8}}
+  \proofstepwidestar[1,2]{\Finite{\TreeChildren VEr a}}{%
+    \FormulaRefAuto{FiniteSubset}[thm]{9,\rAEa{3}}}
+\end{tabproofwide}
+
+\subsection{Ein gerichtetes Einführungskriterium}
+
+Eine gerichtete Kante \((a,x)\) soll von einem Elternknoten zu seinem Kind
+zeigen. Eine natürliche Höhenmarke verhindert, dass man durch solche
+Kanten zu einem früheren Knoten zurückkehrt. Die Marken müssen nicht die
+Abstände zur Wurzel sein; es genügt, dass sie an jeder Kante streng wachsen.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Endliches Elternsystem mit Höhenmarken]{%
+  \begin{aligned}[t]
+    \BXXVIIParentSystem VDrh\coloneqq{}&
+      \Finite V\land D\subseteq V\times V\land r\in V\\[-2pt]
+    &\land h\colon V\to\mathbb N\land h(r)=0\\[-2pt]
+    &\land\bigl(\forall x\in V\setminus\{r\}\,
+       \exists!a\in V\,((a,x)\in D)\bigr)\\[-2pt]
+    &\land\forall a,x\in V\,
+       ((a,x)\in D\rightarrow h(a)<h(x)).
+  \end{aligned}
+}{B27RankedParentSystemDef}{%
+  \DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep a\dsep x}
+  \DeltaRow{Neue Struktur}{\BXXVIIParentSystem VDrh}
+}
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Vergessen der Kantenrichtung]{%
+  \BXXVIISymmetricEdges VD\coloneqq
+  \{(a,x)\in V\times V\mid(a,x)\in D\lor(x,a)\in D\}
+}{B27SymmetricParentEdgesDef}{%
+  \DeltaRow{Mengen}{V\dsep D\dsep a\dsep x}
+  \DeltaRow{Neue Menge}{\BXXVIISymmetricEdges VD}
+}
+\end{minipage}\par
+
+\input{tex/b26-migrated-tree-parent-proofs}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Ein Elternsystem trägt einen endlichen Wurzelbaum]{%
+  \BXXVIIParentSystem VDrh\vdash
+    \BXXVIIFiniteRooted V{\BXXVIISymmetricEdges VD}r
+}{B27RankedParentSystemTree}{%
+  \DeltaRow{Mengen}{V\dsep D\dsep r\dsep h}
+}
+\end{minipage}\par
+
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\BXXVIIParentSystem VDrh}{\rA}
+  \proofstepwidestar[1]{\Finite V}{\FormulaRefAuto{B27RankedParentSystemDef}[def]{1}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\GraphStruct{V,D}\land
+      \SimpleUndirectedGraphStruct{V,\BXXVIISymmetricEdges VD}\land{}\\[-2pt]
+    &r\in V\land\forall a\in V\;((a,r)\notin D)
+  \end{aligned}}{\FormulaRefAuto{B27RankedParentGraphData}[thm]{1}}
+  \proofstepwidestar[1]{\SimpleUndirectedGraphStruct{V,\BXXVIISymmetricEdges VD}}{\rAEa{\rAEb{3}}}
+  \proofstepwidestar[1]{r\in V}{\rAEa{\rAEb{\rAEb{3}}}}
+  \proofstepwidestar[1]{\forall x\in V\,\exists!z\;
+    (z\in\GraphPathsBetween V{\BXXVIISymmetricEdges VD}rx)}{\FormulaRefAuto{B27RankedSymmetricRootPaths}[thm]{1}}
+  \proofstepwidestar[1]{\RootedTreeStruct{V,\BXXVIISymmetricEdges VD,r}}{\FormulaRefAuto{RootedTreeFromUniqueRootPaths}[thm]{4,5,6}}
+  \proofstepwidestar[1]{\BXXVIIFiniteRooted V{\BXXVIISymmetricEdges VD}r}{\FormulaRefAuto{B27FiniteRootedTreeDef}[def]{\rAI{2,7}}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Die gerichteten Kanten sind genau die Baumeltern]{%
+  \begin{aligned}[t]
+    &\BXXVIIParentSystem VDrh\dsep a,x\in V\vdash\\[-2pt]
+    &(a,x)\in D\leftrightarrow
+      \TreeParentRel V{\BXXVIISymmetricEdges VD}r a x
+  \end{aligned}
+}{B27RankedParentEdgesAgree}{%
+  \DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep a\dsep x}
+}
+\end{minipage}\par
+\noindent\textit{Beweis.}
+Nach \FormulaRefAuto{B27RankedParentSystemTree}[thm] ist die
+zuvor definierte Elternrelation anwendbar. Gilt \((a,x)\in D\), so verlängert
+diese Kante den nach \FormulaRefAuto{B27RankedDirectedReachability}[thm]
+vorhandenen gerichteten Wurzelweg nach \(a\) zu einem einfachen
+Wurzelweg nach \(x\): Nach \FormulaRefAuto{B27RankedPathHeight}[thm] ist die Höhe von \(x\) größer als die Höhe aller
+Knoten des bisherigen Weges; \FormulaRefAuto{FinitePathFreshEndpointExtension}[thm] liefert den verlängerten Weg. Ferner ist \(x\neq r\). Der vorletzte
+Knoten dieses Weges ist \(a\); nach
+\FormulaRefAuto{TreeParentDef}[def] gilt die behauptete Elternrelation.
+Umgekehrt ist ein Baumelter der vorletzte Knoten des eindeutigen
+Wurzelwegs. Dieser Weg läuft nach
+\FormulaRefAuto{B27RankedRootPathForward}[thm] vollständig in Richtung von \(D\). Seine letzte Kante ist also
+\((a,x)\in D\).

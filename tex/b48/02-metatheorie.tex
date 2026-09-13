@@ -1,0 +1,280 @@
+\chapter{Sprach- und Beweisstruktur der Metatheorie}
+
+\section{Syntax und Wahrheit in Mengenstrukturen}
+
+\FormulaDefDeltaK[Sprache und Beweis]
+{\begin{aligned}
+ \mathcal L_\in&\coloneqq\{=,\in\},\\
+ \operatorname{Var}&\coloneq\mathbb N,\qquad v_i\coloneq i,\\
+ T\vdash\varphi&\coloneqq
+       \exists p\,\operatorname{Prf}_{1}(p,T,\varphi)
+ \end{aligned}}
+{B48Syntax}{
+  \DeltaRow{Theorie}{T\subseteq\operatorname{Sent}(\mathcal L_\in)}
+  \DeltaRow{Endliche Herleitung nach Band 1}{p}
+}
+\noindent
+\(\operatorname{Prf}_{1}(p,T,\varphi)\) bezeichnet die in Band~1
+festgelegte syntaktische Bedingung: \(p\) ist eine gueltige endliche
+elementare Herleitung mit Schlussformel \(\varphi\), deren noch offene
+Voraussetzungen zu \(T\) gehoeren. Dies ist eine Abkuerzung fuer
+das dortige Herleitungsformat, kein neues Axiom und insbesondere
+keine semantische Definition der Beweisbarkeit. Eine spaetere
+Umformung von Beweisobjekten braucht jeweils einen eigenen Nachweis.
+Abkuerzungen fuer mehrere Regelschritte werden in
+\(\operatorname{Prf}_1\) als die ausgeschriebene endliche Folge
+gelesen. Die Gueltigkeit eines blossen Bibliotheksverweises ohne
+zugehoerige Herleitung wird damit nicht vorausgesetzt.
+
+Es gibt abzählbar viele Variablen. Aus atomaren Formeln werden mit
+\(\neg,\land,\exists\) die Formeln aufgebaut; die übrigen Junktoren und
+\(\forall\) sind die üblichen Abkürzungen.
+Die folgenden Definitionen realisieren die Formelcodes als endliche
+Baumwoerter auf einem mengentheoretisch festgelegten Alphabet.
+Eine zusaetzliche Nummerierung aller Codes durch natuerliche Zahlen
+wird fuer den Existenzsatz der Erfuellungsrelation nicht vorausgesetzt.
+Wir verwenden die klassische Prädikatenlogik mit Gleichheit und den
+Einführungs- und Beseitigungsregeln aus Band~1. Die Eigenvariablenbedingungen
+bei Quantorenregeln gehören ausdrücklich zu diesen Regeln.
+
+\input{tex/b48/02-erfuellungsrelation.tex}
+
+\input{tex/b48/02-syntax-structure-bridge.tex}
+
+\input{tex/b48/02-semantische-schlussformen.tex}
+\input{tex/b48/02-koinzidenz.tex}
+\input{tex/b48/02-substitution.tex}
+\input{tex/b48/02-satzsemantik.tex}
+
+\input{tex/b48/02-korrektheit.tex}
+
+\FormulaThmDeltaK[Ein Modell sichert Konsistenz]
+{M\models T\ \vdash\ \BXLVIIICon(T)}
+{B48ModelConsistency}{
+  \DeltaRow{Theorie}{T}
+  \DeltaRow{Struktur}{M}
+}
+\noindent
+Der folgende lokale Schluss verwendet die Korrektheitsaussage
+\FormulaRefAuto{B48Soundness}[thm]. Die Korrektheit elementarer
+Herleitungen ist im vorstehenden Abschnitt aus Koinzidenz,
+Substitution und den einzelnen Regelfaellen hergeleitet.
+Die hier benoetigte semantische Unmoeglichkeit ist dagegen bereits in
+\FormulaRefAuto{B48SentenceNotBottom}[thm] hergeleitet.
+Im Schluss ist \(q\) frisch fuer \(M,T\) und die ausserhalb des
+Beweises offenen Annahmen.
+\begin{tabproofsplitwide}
+ \proofpartwideindR[Ein Widerspruchsbeweis fuehrt zum Widerspruch]{%
+   M\models T\dsep \operatorname{Prf}_{1}(p,T,\bot)\vdash\bot
+ }{%
+   M\models T\dsep \operatorname{Prf}_{1}(p,T,\bot)\vdash\bot
+ }[B48ModelConsistencyProofWitness]
+  \proofstepwidestar[1]{M\models T}{\rA}
+  \proofstepwidestar[2]{\operatorname{Prf}_{1}(p,T,\bot)}{\rA}
+  \proofstepwidestar[2]{%
+   \exists r\,\operatorname{Prf}_{1}(r,T,\bot)
+  }{\rEI{2}}
+  \proofstepwidestar[2]{T\vdash\bot}
+   {\FormulaRefAuto{B48Syntax}{3}}
+  \proofstepwidestar[1,2]{M\models\bot}
+   {\FormulaRefAuto{B48Soundness}{4,1}}
+  \proofstepwidestar[]{\neg(M\models\bot)}
+   {\FormulaRefAuto{B48SentenceNotBottom}}
+  \proofstepwidestar[1,2]{\bot}{\rBI{5,6}}
+ \closeproofpartwideindR
+
+ \proofpartwide{Schluss}
+  \proofstepwidestar[1]{M\models T}{\rA}
+  \proofstepwidestar[2]{T\vdash\bot}{\rA}
+  \proofstepwidestar[2]{%
+   \exists p\,\operatorname{Prf}_{1}(p,T,\bot)
+  }{\FormulaRefAuto{B48Syntax}{2}}
+  \proofstepwidestar[4]{\operatorname{Prf}_{1}(q,T,\bot)}{\rA}
+  \proofstepwidestar[1,4]{\bot}
+   {\FormulaRefAuto{B48ModelConsistencyProofWitness}{1,4}}
+  \proofstepwidestar[1,2]{\bot}{\rEE{3,4:5}}
+  \proofstepwidestar[1]{\neg(T\vdash\bot)}{\rCI{2,6}}
+  \proofstepwidestar[1]{\BXLVIIICon(T)}
+   {\FormulaRefAuto{B48ConsistencyNotation}{7}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\section{Henkin-Konstruktion und Vollständigkeit}
+
+Für die Konstruktion dürfen neue Konstantensymbole hinzugefügt werden.
+Ein Satz hat keine freien Variablen; Konstanten sind erlaubt.
+
+\FormulaThmDeltaK[Ein frischer Henkin-Zeuge erhält Konsistenz]
+{\BXLVIIICon(S)\ \vdash\
+ \BXLVIIICon\bigl(S\cup\{\exists x\,\psi(x)\to\psi(c)\}\bigr)}
+{B48HenkinWitness}{
+  \DeltaRow{Theorie}{S}
+  \DeltaRow{Frische Konstante}{c\notin\operatorname{Symb}(S,\psi)}
+}
+\noindent\textbf{Beweisstand: syntaktische Hilfssaetze fehlen.}
+Der folgende Entwurf setzt die Entladung auf Beweisobjekten und
+die Ersetzung einer frischen Konstante durch eine Eigenvariable
+voraus. Beides ist noch nicht durch eine vorherige Beweistabelle
+gerechtfertigt. Die Schlussregel \(\forall I\) fuer Formeln darf
+nicht ohne diesen Uebertragungssatz auf die Aussage
+\(S\vdash\psi(c)\) angewendet werden.
+\begin{tabproof}
+ \proofstep{1}{\BXLVIIICon(S)}{\rA}
+ \proofstep{2}{S+\bigl(\exists x\,\psi(x)\to\psi(c)\bigr)\vdash\bot}{\rA}
+ \proofstep{2}{S\vdash\exists x\,\psi(x)\land\neg\psi(c)}
+ {\BXLVIIIWhy{Deduktion und klassische Negation einer Implikation}}
+ \proofstep{2}{S\vdash\forall x\,\neg\psi(x)}
+ {\BXLVIIIWhy{\(c\) kommt in \(S,\psi\) nicht vor: durch eine frische
+ Variable ersetzen und generalisieren}}
+ \proofstep{1,2}{\bot}{\BXLVIIIWhy{Existenz und universelle Negation
+ widersprechen der Konsistenz von \(S\)}}
+ \proofstep{1}{\BXLVIIICon\bigl(S+(\exists x\,\psi(x)\to\psi(c))\bigr)}
+ {\BXLVIIIWhy{2 entladen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vollständige Henkin-Erweiterung]
+{\BXLVIIICon(T)\ \vdash\ \exists T^*\supseteq T\
+ \text{vollständig, konsistent und mit Henkin-Zeugen}}
+{B48HenkinCompletion}{
+  \DeltaRow{Sprache}{\mathcal L\text{ abzählbar}}
+  \DeltaRow{Theorie}{T\subseteq\operatorname{Sent}(\mathcal L)}
+}
+\noindent\textbf{Beweisstand: Henkin-Konstruktion noch offen.}
+Erforderlich sind getrennte Nachweise fuer Sprachkonservativitaet,
+endliche Beweistraeger, konsistente aufsteigende Vereinigungen,
+den Entscheidungsschritt und den deduktiven Abschluss.
+Der nachstehende Entwurf ersetzt diese Nachweise nicht.
+\begin{tabproof}
+ \proofstep{1}{\BXLVIIICon(T)}{\rA}
+ \proofstep{1}{\BXLVIIIText{Füge zunächst eine unbenutzte Konstante hinzu.
+ Zähle alle Existenzsätze der Sprache auf und füge nacheinander die
+ Zeugenaxiome mit jeweils frischen Konstanten hinzu.}}
+ {\BXLVIIIWhy{Abzählbarkeit; vorige Zeugenlemma}}
+ \proofstep{1}{\BXLVIIIText{Wiederhole diesen Vorgang in abzählbar vielen
+ Runden, damit auch Formeln mit neu hinzugefügten Konstanten Zeugen
+ erhalten. Jede endliche Menge der gesammelten Axiome liegt bereits in
+ einer konsistenten endlichen Konstruktionsstufe.}}
+ {\BXLVIIIWhy{Endlichkeit von Formeln und Beweisen}}
+ \proofstep{1}{\BXLVIIIText{Die Vereinigung \(H\) ist konsistent.
+ Zähle alle Sätze der endgültigen, weiterhin abzählbaren Sprache auf.
+ Füge jeweils \(\theta\) hinzu, wenn dies konsistent ist, sonst
+ \(\neg\theta\).}}
+ {\BXLVIIIWhy{Rekursion auf \(\omega\)}}
+ \proofstep{1}{\BXLVIIIText{Sind sowohl \(S+\theta\) als auch
+ \(S+\neg\theta\) inkonsistent, so beweist \(S\) durch Deduktion
+ sowohl \(\neg\theta\) als auch \(\theta\). Deshalb erhält jeder
+ Entscheidungsschritt die Konsistenz.}}
+ {\BXLVIIIWhy{Klassische Deduktion}}
+ \proofstep{1}{\BXLVIIIText{Die deduktive Hülle der Vereinigung ist
+ \(T^*\). Sie enthält \(T\), entscheidet jeden Satz und enthält alle
+ Zeugenaxiome. Ein Widerspruch hätte schon endlich viele ihrer
+ Voraussetzungen benutzt und ist daher ausgeschlossen.}}
+ {\BXLVIIIWhy{Endlichkeit der Herleitungen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Vollständigkeit und abzählbares Modell]
+{\BXLVIIICon(T)\ \Longleftrightarrow\
+ \exists M\ (M\models T\land |M|\le\aleph_0)}
+{B48Completeness}{
+  \DeltaRow{Sprache}{\mathcal L\text{ abzählbar, relational}}
+  \DeltaRow{Theorie}{T\subseteq\operatorname{Sent}(\mathcal L)}
+}
+\noindent\textbf{Beweisstand: kein abgeschlossener Vollstaendigkeitsbeweis.}
+Neben der Henkin-Erweiterung sind die Gleichheitskongruenz, die
+Unabhaengigkeit der Relationsinterpretation von Repraesentanten
+und das Termmodell-Wahrheitslemma noch auszuarbeiten. Die folgende
+Tabelle ist weiterhin die Konstruktionsskizze.
+\begin{tabproof}
+ \proofstep{1}{\BXLVIIICon(T)}{\rA}
+ \proofstep{1}{\BXLVIIIText{Wähle eine vollständige konsistente
+ Henkin-Theorie \(T^*\). Setze \(c\sim d\) genau dann, wenn
+ \(T^*\vdash c=d\). Die Gleichheitsregeln machen dies zu einer
+ Äquivalenzrelation.}}
+ {\FormulaRefAuto{B48HenkinCompletion}[thm]}
+ \proofstep{1}{\BXLVIIIText{Die Grundmenge \(D\) besteht aus den
+ Äquivalenzklassen der Konstanten; jede Konstante \(c\) wird
+ durch \([c]\) interpretiert. Für jedes \(n\)-stellige
+ Relationssymbol \(R\) setze
+ \(R^M([c_1],\ldots,[c_n])\) genau dann, wenn
+ \(T^*\vdash R(c_1,\ldots,c_n)\).
+ Gleichheitssubstitution sichert die Unabhängigkeit von Repräsentanten.}}
+ {\BXLVIIIWhy{Quotientenbildung}}
+ \proofstep{1}{\BXLVIIIText{Wahrheitslemma:
+ \(M\models\theta([c_1],\ldots,[c_n])\) genau dann, wenn
+ \(\theta(c_1,\ldots,c_n)\in T^*\).
+ Für atomare Formeln gilt dies per Definition; für Negation und
+ Konjunktion durch Vollständigkeit und Konsistenz von \(T^*\).}}
+ {\BXLVIIIWhy{Strukturelle Induktion über \(\theta\)}}
+ \proofstep{1}{\BXLVIIIText{Ein in \(T^*\) enthaltener Existenzsatz hat
+ durch sein Zeugenaxiom eine Zeugeninstanz in \(T^*\).
+ Umgekehrt folgt aus jeder Zeugeninstanz der Existenzsatz.
+ Dies beweist den Existenzschritt des Wahrheitslemmas.}}
+ {\BXLVIIIWhy{Henkin-Eigenschaft, Existenz-Einführung}}
+ \proofstep{1}{M\models T,\qquad |M|\le\aleph_0}
+ {\BXLVIIIWhy{Wahrheitslemma; abzählbar viele Konstanten}}
+ \proofstep{7}{\exists M\ (M\models T\land |M|\le\aleph_0)}{\rA}
+ \proofstep{7}{\BXLVIIICon(T)}
+ {\FormulaRefAuto{B48ModelConsistency}[thm]}
+ \proofstep{}{\BXLVIIICon(T)\ \Longleftrightarrow\
+ \exists M\ (M\models T\land |M|\le\aleph_0)}
+ {\BXLVIIIWhy{Beide Richtungen, 1 und 7 entladen}}
+\end{tabproof}
+
+\noindent\textbf{Wichtige Grenze.}
+Dieser Satz liefert keine transitive und keine von außen fundierte
+Mengenstruktur. Insbesondere wird im Folgenden niemals aus
+\(\BXLVIIICon(\BXLVIIIZFC)\) die Existenz eines abzählbaren
+\emph{transitiven} ZFC-Modells geschlossen.
+
+\input{tex/b48/02-modellschluesse.tex}
+
+\section{Von relativer Konsistenz zu Unabhängigkeit}
+
+\FormulaThmDeltaK[Deduktionskriterium]
+{\begin{aligned}
+ \BXLVIIICon(T+\varphi)&\Longleftrightarrow T\nvdash\neg\varphi,\\
+ \BXLVIIICon(T+\neg\varphi)&\Longleftrightarrow T\nvdash\varphi
+\end{aligned}}
+{B48ConsistencyDeduction}{
+  \DeltaRow{Satz}{\varphi}
+  \DeltaRow{Theorie}{T}
+}
+\noindent\textbf{Beweisstand: Beweisumformungen noch auszuarbeiten.}
+Die nachstehende Skizze ist noch kein referenzierter Beweis dieses
+Kriteriums. Benoetigt werden zuvor bewiesene Saetze ueber endliche
+Beweisobjekte, insbesondere Entladung und Zusammenfuegung.
+Diese Eigenschaften duerfen nicht lediglich als Definitionen neuer
+Beweisoperationen postuliert werden.
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Ein Beweis von \(\bot\) aus \(T+\varphi\)
+ lässt sich durch Entladen der zusätzlichen Annahme in einen Beweis
+ von \(\neg\varphi\) aus \(T\) umwandeln.}}
+ {\BXLVIIIWhy{Deduktion beziehungsweise Negationseinführung}}
+ \proofstep{}{\BXLVIIIText{Ein Beweis von \(\neg\varphi\) aus \(T\)
+ ergibt zusammen mit der zusätzlichen Annahme \(\varphi\) einen
+ Widerspruch.}}
+ {\BXLVIIIWhy{Negationsbeseitigung}}
+ \proofstep{}{\BXLVIIICon(T+\varphi)\Longleftrightarrow T\nvdash\neg\varphi}
+ {\BXLVIIIWhy{Negation der beiden äquivalenten Beweisexistenzen}}
+ \proofstep{}{\BXLVIIICon(T+\neg\varphi)\Longleftrightarrow T\nvdash\varphi}
+ {\BXLVIIIWhy{Vorige Zeile mit \(\neg\varphi\); doppelte Negation}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Unabhängigkeitskriterium]
+{\begin{aligned}
+ &\BXLVIIICon(T+\varphi)\land\BXLVIIICon(T+\neg\varphi)\\
+ &\hspace{12mm}\vdash (T\nvdash\varphi)\land(T\nvdash\neg\varphi)
+\end{aligned}}
+{B48IndependenceCriterion}{
+  \DeltaRow{Theorie}{T}
+  \DeltaRow{Satz}{\varphi}
+}
+\begin{tabproof}
+\proofstep{1}{\BXLVIIICon(T+\varphi)\land\BXLVIIICon(T+\neg\varphi)}{\rA}
+ \proofstep{1}{\BXLVIIICon(T+\varphi)}{\RuleRef{AE1}{\land E_1}\,1}
+ \proofstep{1}{\BXLVIIICon(T+\neg\varphi)}{\RuleRef{AE2}{\land E_2}\,1}
+ \proofstep{1}{T\nvdash\varphi}{\FormulaRefAuto{B48RelativeNonProof}{3}}
+ \proofstep{1}{T\nvdash\neg\varphi}{\FormulaRefAuto{B48RelativeNonRefutation}{2}}
+ \proofstep{1}{(T\nvdash\varphi)\land(T\nvdash\neg\varphi)}
+ {\RuleRef{AI}{\land I}\,4,5}
+\end{tabproof}

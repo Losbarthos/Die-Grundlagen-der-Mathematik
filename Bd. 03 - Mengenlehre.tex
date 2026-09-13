@@ -197,9 +197,9 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 }
 \begin{tabproofwide}
   \proofstepwide{A \neq B}{\leftrightarrow}{\neg(\forall x(x\in A\leftrightarrow x\in B))}{\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}}}
-  \proofstepwide{}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\FormulaRefAuto{\neg\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{1}}}
+  \proofstepwide{}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\FormulaRefAuto{\neg\forall x(P(x)\leftrightarrow Q(x)) \eqvdash \exists x (P(x)\land \neg Q(x))\lor \exists x (Q(x)\land \neg P(x))}{1}}
   \proofstepwide*{}{\lor}{\exists x(x \in A\land x\not\in B)}{}
-  \proofstepwide{A \neq B}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\multirow{2}{*}{\rChain{1,2}}}
+  \proofstepwide{A \neq B}{\leftrightarrow}{\exists x(x \not\in A\land x\in B)}{\rChain{1,2}}
   \proofstepwide*{}{\lor}{\exists x(x \in A\land x\not\in B)}{}
 \end{tabproofwide}
 
@@ -223,6 +223,28 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 \begin{remark}
     In Worten: \(A\) ist Teilmenge von \(B\).
 \end{remark}
+
+\Needspace{23\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Teilmengeneinführung]{%
+  [x\in M]\vdots x\in N\vdash M\subseteq N
+}{SubsetIntroductionRule}{%
+  \DeltaRow{Mengen}{M\dsep N\dsep x}
+}
+\end{minipage}\par
+Die Regel fasst einen lokalen Elementbeweis zu einer Teilmengenaussage
+zusammen. Dabei ist \(x\) beliebig und darf weder in den Mengenparametern
+noch in den übrigen offenen Annahmen frei vorkommen. Die lokale Annahme
+\(x\in M\) wird beim Schluss auf \(M\subseteq N\) entlassen.
+In einem Regelverweis bezeichnet \([i]\vdots j\) die Teilableitung
+mit der lokalen Annahme in Zeile \(i\) und der Endzeile \(j\).
+\begin{tabproof}
+  \proofstep{1}{x\in M}{\rA}
+  \proofstep{1}{x\in N}{\text{lokale Ableitung }(1)}
+  \proofstep{}{\forall x\,(x\in M\rightarrow x\in N)}{\rUI{\rRI{1,2}}}
+  \proofstep{}{M\subseteq N}{%
+    \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}[def]{3}}
+\end{tabproof}
 
 \FormulaDefDelta[Echte Teilmenge]{%
   A \subset B \coloneq A \subseteq B \land A\neq B%
@@ -283,12 +305,14 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstep{12}{x\in A\land x\notin B}{\rA}
   \proofstep{12}{x\in A}{\rAEa{12}}
   \proofstep{12}{x\notin B}{\rAEb{12}}
+  \proofstep{1,12}{x \in B}{%
+      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,13}}
   \proofstep{1,12}{\exists x\in B\setminus A}{%
     \FormulaRefAuto{P,\,\neg P \vdash Q}{%
-      \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}{1,13},14}}
-  \proofstep{1,11}{\exists x\in B\setminus A}{\rEE{11,12,15}}
+      15,14}}
+  \proofstep{1,11}{\exists x\in B\setminus A}{\rEE{11,12,16}}
 
-  \proofstep{1,2}{\exists x\in B\setminus A}{\rOE{3,4,10,11,16}}
+  \proofstep{1,2}{\exists x\in B\setminus A}{\rOE{3,4,10,11,17}}
 \end{tabproof}
 
 \FormulaThmDelta[Echte Teilmenge besitzt ein neues Obermengenelement]{%
@@ -321,16 +345,20 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 \begin{tabproof}
   \proofstep{1}{ A\subseteq B }{ \rA }
   \proofstep{2}{ x\in A }{ \rA }
-  \proofstep{1}{ x\in A \rightarrow x\in B }{ \rUE{ \FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B) }{1} } }
-  \proofstep{1,2}{ x\in B }{ \rRE{2,3} }
+  \proofstep{1}{\forall x\,(x\in A\rightarrow x\in B)}{%
+      \FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B) }{1}}
+  \proofstep{1}{ x\in A \rightarrow x\in B }{ \rUE{ 3 } }
+  \proofstep{1,2}{ x\in B }{ \rRE{2,4} }
 \end{tabproof}
 
 \FormulaThmAuto{ A = B,\, x \in A \vdash x \in B }
 \begin{tabproof}
   \proofstep{1}{ A = B }{ \rA }
   \proofstep{2}{ x \in A }{ \rA }
-  \proofstep{1}{ x \in A \leftrightarrow x \in B }{ \rUE{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } } }
-  \proofstep{1,2}{ x \in B }{ \FormulaRefAuto{ P \leftrightarrow Q, P \vdash Q }{3,2} }
+  \proofstep{1}{\forall x\,(x\in A\leftrightarrow x\in B)}{%
+      \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{1}}
+  \proofstep{1}{ x \in A \leftrightarrow x \in B }{ \rUE{ 3 } }
+  \proofstep{1,2}{ x \in B }{ \FormulaRefAuto{ P \leftrightarrow Q, P \vdash Q }{4,2} }
 \end{tabproof}
 
 \FormulaThmAuto{ a \in A,\; b \not\in A \vdash a \neq b }
@@ -349,31 +377,47 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
   \proofstepwidestar[2]{B \subseteq C}{\rA}
   \proofstepwidestar[3]{z \in A \lor z \in B}{\rA}
 
+  \proofstepwidestar[1]{\forall x\,(x\in A\rightarrow x\in C)}{%
+      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{1}}
   \proofstepwide[1]{z \in A}{\rightarrow}{z \in C}%
-    {\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{1}}}
+    {\rUE{4}}
+  \proofstepwidestar[2]{\forall x\,(x\in B\rightarrow x\in C)}{%
+      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{2}}
   \proofstepwide[2]{z \in B}{\rightarrow}{z \in C}%
-    {\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{2}}}
+    {\rUE{6}}
 
   \proofstepwidestar[1,2,3]{z \in C}%
-    {\FormulaRefAuto{P \rightarrow Q, R \rightarrow Q, P \lor R \vdash Q}{4,5,3}}
+    {\FormulaRefAuto{P \rightarrow Q, R \rightarrow Q, P \lor R \vdash Q}{5,7,3}}
 \end{tabproofwide}
 \section{Grundlegende Gesetze der Teilmengenrelation}
 
 \FormulaThmAuto[Reflexivität von Teilmengen]{ A \subseteq A }
 \begin{tabproof}
-  \proofstep{}{ x \in A \rightarrow x \in A }{ \FormulaRefAuto{ P \rightarrow P } }
-  \proofstep{}{ \forall x(x \in A \rightarrow x \in A) }{ \rUI{1} }
-  \proofstep{}{ A \subseteq A }{ \FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B) }{2} }
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{}{A\subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 1}}
 \end{tabproof}
 
 
 \FormulaThmAuto[Antisymmetrie von Teilmengen]{ A \subseteq B \land B \subseteq A \eqvdash A = B }
 \begin{tabproofwide}
-  \proofstepwide{A \subseteq B \land B \subseteq A}{\leftrightarrow}{\forall x(x \in A \rightarrow x \in B)}{\multirow{2}{*}{\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B) }}}
-  \proofstepwide{}{ \land }{\forall x(x \in B \rightarrow x \in A)}{}
-  \proofstepwide*{}{ \leftrightarrow }{\forall x(x \in A \leftrightarrow x \in B)}{\FormulaRefAuto{\forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (P(x) \rightarrow Q(x)) \land \forall x (Q(x) \rightarrow P(x))}{1}}
-  \proofstepwide{}{ \leftrightarrow }{A = B}{\FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B }{2}}
-  \proofstepwide*{A \subseteq B \land B \subseteq A}{ \leftrightarrow }{A = B}{\rChain{1,3}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(A\subseteq B\land B\subseteq A)\leftrightarrow{}\\[-2pt]
+      &\quad(\forall x(x\in A\rightarrow x\in B)\land
+        \forall x(x\in B\rightarrow x\in A))
+    \end{aligned}}{%
+    \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}}
+  \proofstepwidestar[]{%
+    \begin{aligned}[t]
+      &(\forall x(x\in A\rightarrow x\in B)\land
+        \forall x(x\in B\rightarrow x\in A))\\[-2pt]
+      &\quad\leftrightarrow\forall x(x\in A\leftrightarrow x\in B)
+    \end{aligned}}{%
+    \FormulaRefAuto{\forall x(P(x)\leftrightarrow Q(x))\eqvdash\forall x(P(x)\rightarrow Q(x))\land\forall x(Q(x)\rightarrow P(x))}}
+  \proofstepwidestar[]{%
+    \forall x(x\in A\leftrightarrow x\in B)\leftrightarrow A=B}{%
+    \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\eqvdash A=B}}
+  \proofstepwidestar[]{(A\subseteq B\land B\subseteq A)\leftrightarrow A=B}{\rChain{1,3}}
 \end{tabproofwide}
 
 \FormulaThmAuto{ A=B\vdash A\subseteq B }
@@ -406,28 +450,41 @@ A \neq B \eqvdash \exists x (x \not\in A\land x\in B) \lor  \exists x (x \in A\l
 A \subseteq B, B \subseteq C \vdash A \subseteq C
 }
 \begin{tabproof}
-  \proofstep{1}{A \subseteq B}{\rA}
-  \proofstep{2}{B \subseteq C}{\rA}
-  \proofstep{1}{\forall x(x \in A \rightarrow x \in B)}{\FormulaRefAuto{A \subseteq B \coloneq \forall x(x \in A \rightarrow x \in B)}{1}}
-  \proofstep{1}{\forall x(x \in B \rightarrow x \in C)}{\FormulaRefAuto{A \subseteq B \coloneq \forall x(x \in A \rightarrow x \in B)}{2}}
-  \proofstep{1,2}{\forall x(x \in A \rightarrow x \in C)}{\FormulaRefAuto{\forall x(P(x) \rightarrow Q(x)), \forall x(Q(x) \rightarrow R(x)) \vdash \forall x(P(x) \rightarrow R(x))}{3,4}}
-  \proofstep{1,2}{A \subseteq C}{\FormulaRefAuto{A \subseteq B \coloneq \forall x(x \in A \rightarrow x \in B)}{5}}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{B\subseteq C}{\rA}
+  \proofstep{3}{x\in A}{\rA}
+  \proofstep{1,3}{x\in B}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,3}}
+  \proofstep{1,2,3}{x\in C}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,4}}
+  \proofstep{1,2}{A\subseteq C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 5}}
 \end{tabproof}
 
 \FormulaThmAuto{A\subseteq C\vdash \exists! R\,\bigl(R\subseteq C\land R=A\bigr)}
-\begin{tabproof}
-  \proofstep{1}{A\subseteq C}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{A\subseteq C}{\rA}
   \proofstep{}{A=A}{\rII}
   \proofstep{1}{A\subseteq C\land A=A}{\rAI{1,2}}
   \proofstep{1}{\exists R\,\bigl(R\subseteq C\land R=A\bigr)}{\rEI{3}}
-  \proofstep{5}{R\subseteq C\land R=A}{\rA}
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{R\subseteq C\land R=A}{\rA}
   \proofstep{6}{S\subseteq C\land S=A}{\rA}
   \proofstep{5}{R=A}{\rAEb{5}}
   \proofstep{6}{S=A}{\rAEb{6}}
   \proofstep{6}{A=S}{\FormulaRefAuto{a=b\vdash b=a}{8}}
   \proofstep{5,6}{R=S}{\FormulaRefAuto{a=b,\, b=c \vdash a=c}{7,9}}
-  \proofstep{1}{\exists! R\,\bigl(R\subseteq C\land R=A\bigr)}{\UEI{4,5,6,10}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\exists! R\,\bigl(R\subseteq C\land R=A\bigr)}{\UEI{4,5,6,10}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Rechtsverträglichkeit von \(\subseteq\) und \(=\)]{
 A \subseteq B, B = C \vdash A \subseteq C
@@ -435,8 +492,10 @@ A \subseteq B, B = C \vdash A \subseteq C
 \begin{tabproof}
   \proofstep{1}{A \subseteq B}{\rA}
   \proofstep{2}{B = C}{\rA}
-  \proofstep{3}{B \subseteq C}{\rAEa{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{2}}}
-  \proofstep{4}{A \subseteq C}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{1,3}}
+  \proofstep{2}{B\subseteq C\land C\subseteq B}{%
+      \FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{2}}
+  \proofstep{2}{B \subseteq C}{\rAEa{3}}
+  \proofstep{1,2}{A \subseteq C}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{1,4}}
 \end{tabproof}
 
 \begin{remark}[Gemischte Kettenregel]
@@ -454,16 +513,29 @@ Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in ei
 
 
 \FormulaThmAuto{ \exists! O\forall x (x \not\in O) }
-\begin{tabproof}
-  \proofstep{}{ \exists O\forall x (x \not\in O) }{ \FormulaRefAuto{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)} }
-  \proofstep{2}{ \forall x (x \not\in O) }{ \rA }
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{}{ \exists O\forall x (x \not\in O) }{ \FormulaRefAuto{\exists O\;\bigl(\forall x\,(x \not\in O)\bigr)} }
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{1}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{ \forall x (x \not\in O) }{ \rA }
   \proofstep{3}{ \forall x (x \not\in P) }{ \rA }
   \proofstep{2}{ \forall x (x \not\in O \lor x \in P) }{ \FormulaRefAuto{\forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
   \proofstep{3}{ \forall x (x \not\in P \lor x \in O) }{ \FormulaRefAuto{ \forall x(F(x))\lor\forall x(G(x))\vdash\forall x(F(x)\lor G(x))} }
   \proofstep{2,3}{ \forall x (x \in O \leftrightarrow x \in P) }{ \FormulaRefAuto{ \forall x (P(x) \leftrightarrow Q(x)) \eqvdash \forall x (\neg P(x) \lor Q(x)) \land \forall x (\neg Q(x) \lor P(x)) }{4,5} }
   \proofstep{2,3}{ O = P }{ \FormulaRefAuto{ \forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B } }
-  \proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{ \exists! O (\forall x (x \not\in O)) }{ \UEI{1,2,3,6} }
+
+\closeproofpart
+\end{tabproofsplit}
 
 %%begin novalidate
 \FormulaDefAuto[Leere Menge]{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}
@@ -504,12 +576,11 @@ Auf Basis des vorangegangenen Theorems können \(\subseteq\) und \(=\) nun in ei
 
 \FormulaThmAuto{\forall A\,(\varnothing\subseteq A)}
 \begin{tabproof}
-  \proofstep{}{x \not\in \varnothing}{\FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}}
-  \proofstep{}{x \not\in A \rightarrow x \not\in \varnothing}{\FormulaRefAuto{Q \vdash P \rightarrow Q}{}}
-  \proofstep{}{x \in \varnothing \rightarrow x \in A}{\FormulaRefAuto{P \rightarrow Q \eqvdash \neg Q \rightarrow \neg P}{2}}
-  \proofstep{}{\forall x(x \in \varnothing \rightarrow x \in A)}{\rUI{3}}
-  \proofstep{}{\varnothing \subseteq A}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{4}}
-  \proofstep{}{\forall A(\varnothing \subseteq A)}{\rUI{5}}
+  \proofstep{1}{x\in\varnothing}{\rA}
+  \proofstep{}{x\notin\varnothing}{\FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}[def]}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{P\dsep\neg P\vdash Q}[thm]{1,2}}
+  \proofstep{}{\varnothing\subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 3}}
+  \proofstep{}{\forall A\,(\varnothing\subseteq A)}{\rUI{4}}
 \end{tabproof}
 
 \FormulaThmDelta[Leere Menge ist Teilmenge]{%
@@ -653,13 +724,26 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
 \DeltaRow{Mengen}{A}%
 \DeltaRow{Einstellige Prädikate}{P}%
 }
-\begin{tabproof}
-  \proofstep{1}{ \exists A(\forall x(x \in A\leftrightarrow P(x))) }{ \rA }
-  \proofstep{2}{ \forall x(x \in A\leftrightarrow P(x)) }{ \rA }
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{1}{ \exists A(\forall x(x \in A\leftrightarrow P(x))) }{ \rA }
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{1}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{ \forall x(x \in A\leftrightarrow P(x)) }{ \rA }
   \proofstep{3}{ \forall x(x \in B\leftrightarrow P(x)) }{ \rA }
   \proofstep{2,3}{ A = B }{ \FormulaRefAuto{ \forall x (x \in A \leftrightarrow P(x)), \forall x (x \in B \leftrightarrow P(x)) \vdash A = B}{2,3} }
-  \proofstep{1}{ \exists! A(\forall x(x \in A\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{ \exists! A(\forall x(x \in A\leftrightarrow P(x))) }{ \UEI{1,2,3,4} }
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDelta{%
   \forall x(P(x)\rightarrow x\in A)\vdash \exists B\bigl(\forall x(x\in B\leftrightarrow P(x))\bigr)
@@ -851,7 +935,7 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
   \proofstep{1}{x \in \{ x \in A \mid P(x) \}}{\rA}
   \proofstep{1}{x \in A \land P(x)}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x))))}{1}}
   \proofstep{1}{x \in A}{\rAEa{2}}
-  \proofstep{}{ \{ x \in A \mid P(x) \} \subseteq A }{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,3}}}}
+  \proofstep{}{ \{ x \in A \mid P(x) \} \subseteq A }{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 3}}
 \end{tabproof}
 
 \FormulaThmAuto{A=\{ x \in B \mid P(x) \}\vdash  A\subseteq B}
@@ -907,9 +991,11 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
   \proofstep{1}{M = \{x \in M \mid P(x)\}}{\rA}
   \proofstep{2}{y \in M}{\rA}
   \proofstep{1,2}{y \in \{x \in M \mid P(x)\}}{\FormulaRefAuto{A = B,\, x \in A \vdash x \in B}{1,2}}
-  \proofstep{1,2}{P(y)}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{3}}}
-  \proofstep{1}{y \in M \rightarrow P(y)}{\rRI{2,4}}
-  \proofstep{1}{\forall x \in M(P(x))}{\rUI{5}}
+  \proofstep{1,2}{y\in M\land P(y)}{%
+      \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{3}}
+  \proofstep{1,2}{P(y)}{\rAEb{4}}
+  \proofstep{1}{y \in M \rightarrow P(y)}{\rRI{2,5}}
+  \proofstep{1}{\forall x \in M(P(x))}{\rUI{6}}
 \closeproofpart
 \end{tabproofsplit}
 
@@ -918,8 +1004,10 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
 \proofstep{1}{A\subseteq \{x\in B\mid P(x)\}}{\rA}
 \proofstep{2}{x\in A}{\rA}
 \proofstep{1,2}{x\in \{x\in B\mid P(x)\}}{\FormulaRefAuto{ A\subseteq B,\, x\in A \vdash x\in B }{1,2}}
-\proofstep{1,2}{P(x)}{\rAEb{\FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}}
-\proofstep{1,2}{\forall x\in A(P(x))}{\rUI{\rRI{2,4}}}
+\proofstep{1,2}{x\in B\land P(x)}{%
+      \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
+\proofstep{1,2}{P(x)}{\rAEb{4}}
+\proofstep{1,2}{\forall x\in A(P(x))}{\rUI{\rRI{2,5}}}
 \end{tabproof}
 
 \chapter{Negation beschränkter Quantoren}
@@ -1275,8 +1363,8 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
   \DeltaDecl{Variablen}{x}%
 }
 \begin{tabproofsplit}
-  \proofpart{\(\vdash\)}
-    \proofstep{1}{\forall x\in A\,(P(x)\leftrightarrow Q(x))}{\rA}
+\proofpart{Ausschluss des ersten Gegenfalls}
+\proofstep{1}{\forall x\in A\,(P(x)\leftrightarrow Q(x))}{\rA}
     \proofstep{2}{x\in A}{\rA}
     \proofstep{1}{x\in A \rightarrow (P(x)\leftrightarrow Q(x))}{\rUE{1}}
     \proofstep{1,2}{P(x)\leftrightarrow Q(x)}{\rRE{2,3}}
@@ -1284,15 +1372,27 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
     \proofstep{1}{x\in A \rightarrow (P(x)\rightarrow Q(x))}{\rRI{2,5}}
     \proofstep{1}{\forall x\in A\,(P(x)\rightarrow Q(x))}{\rUI{6}}
     \proofstep{1}{\neg\exists x\in A\,(P(x)\land \neg Q(x))}{\FormulaRefAuto{\forall x\in A\,(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x\in A\,(P(x)\land \neg Q(x))}[7]}
-    \proofstep{9}{x\in A}{\rA}
+
+\closeproofpart
+
+\proofpart{Ausschluss des zweiten Gegenfalls}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{9}{x\in A}{\rA}
     \proofstep{1}{x\in A \rightarrow (P(x)\leftrightarrow Q(x))}{\rUE{1}}
     \proofstep{1,9}{P(x)\leftrightarrow Q(x)}{\rRE{9,10}}
     \proofstep{1,9}{Q(x)\rightarrow P(x)}{\rLREb{11}}
     \proofstep{1}{x\in A \rightarrow (Q(x)\rightarrow P(x))}{\rRI{9,12}}
     \proofstep{1}{\forall x\in A\,(Q(x)\rightarrow P(x))}{\rUI{13}}
     \proofstep{1}{\neg\exists x\in A\,(Q(x)\land \neg P(x))}{\FormulaRefAuto{\forall x\in A\,(P(x)\rightarrow Q(x)) \eqvdash \neg\exists x\in A\,(P(x)\land \neg Q(x))}[14]}
-    \proofstep{1}{\neg\exists x\in A\,(P(x)\land \neg Q(x)) \land \neg\exists x\in A\,(Q(x)\land \neg P(x))}{\rAI{8,15}}
-  \closeproofpart
+
+\closeproofpart
+
+\proofpart{Zusammenführung der Hinrichtung}
+  \setcounter{proofstepnr}{15}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\neg\exists x\in A\,(P(x)\land \neg Q(x)) \land \neg\exists x\in A\,(Q(x)\land \neg P(x))}{\rAI{8,15}}
+
+\closeproofpart
+
 
   \proofpart{\(\dashv\)}
     \proofstep{1}{\neg\exists x\in A\,(P(x)\land \neg Q(x)) \land \neg\exists x\in A\,(Q(x)\land \neg P(x))}{\rA}
@@ -1352,6 +1452,8 @@ A \subseteq B,\, \forall x \in B\,(x \not\in A) \vdash A = \varnothing
     \proofstep{1}{\neg\forall x\in A\,(P(x)\leftrightarrow Q(x))}{\rCI{2,10}}
   \closeproofpart
 \end{tabproofsplit}
+
+\input{tex/b03-migrated-graph-unique}
 
 \section{Negation zweifach beschränkter Quantoren}
 
@@ -1690,20 +1792,28 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 
 \FormulaThmAuto{x \in A \cap B \vdash x \in A}
 \begin{tabproof}
-\proofstep{1}{x \in A \cap B}{\rA}
-\proofstep{1}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}}}}
+  \proofstep{1}{x\in A\cap B}{\rA}
+  \proofstep{}{A\cap B=\{x\in A\mid x\in B\}}{\FormulaRefAuto{A\cap B\coloneq\{x\in A\mid x\in B\}}}
+  \proofstep{1}{x\in\{x\in A\mid x\in B\}}{\rIE{2,1}}
+  \proofstep{1}{x\in A\land x\in B}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{3}}
+  \proofstep{1}{x\in A}{\rAEa{4}}
 \end{tabproof}
 
 \FormulaThmAuto{x \in A \cap B \vdash x \in B}
 \begin{tabproof}
-\proofstep{1}{x \in A \cap B}{\rA}
-\proofstep{1}{x \in B}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}}}}
+  \proofstep{1}{x\in A\cap B}{\rA}
+  \proofstep{}{A\cap B=\{x\in A\mid x\in B\}}{\FormulaRefAuto{A\cap B\coloneq\{x\in A\mid x\in B\}}}
+  \proofstep{1}{x\in\{x\in A\mid x\in B\}}{\rIE{2,1}}
+  \proofstep{1}{x\in A\land x\in B}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{3}}
+  \proofstep{1}{x\in B}{\rAEb{4}}
 \end{tabproof}
 
 \FormulaThmAuto{x \in A \cap B \eqvdash x \in A \land x \in B}
-\begin{tabproof}
-\proofstepstar{}{x \in A \cap B \leftrightarrow x \in A \land x \in B}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}}}
-\end{tabproof}
+\begin{tabproofwide}
+  \proofstepwidestar[]{A\cap B=\{x\in A\mid x\in B\}}{\FormulaRefAuto{A\cap B\coloneq\{x\in A\mid x\in B\}}}
+  \proofstepwide{x\in\{x\in A\mid x\in B\}}{\leftrightarrow}{x\in A\land x\in B}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}}
+  \proofstepwide{x\in A\cap B}{\leftrightarrow}{x\in A\land x\in B}{\rIE{1,2}}
+\end{tabproofwide}
 
 \FormulaThmAuto{x \in A, x\in B \vdash x \in A\cap B}
 \begin{tabproof}
@@ -1732,8 +1842,11 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 
 \FormulaThmAuto[Idempotenz des Schnitts]{A = A \cap A}
 \begin{tabproofwide}
-  \proofstepwide{x \in A \cap A}{\leftrightarrow}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \mid P(x)\} \coloneq \iota B(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x))))}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}}}}
-  \proofstepwide{A}{=}{A \cap A}{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\rUI{1}}}
+  \proofstepwide{x\in A\cap A}{\leftrightarrow}{x\in A\land x\in A}{\FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}}
+  \proofstepwide{}{\leftrightarrow}{x\in A}{\FormulaRefAuto{P\land P\eqvdash P}}
+  \proofstepwidestar[]{\forall x\,(x\in A\cap A\leftrightarrow x\in A)}{\rUI{\rChain{1,2}}}
+  \proofstepwidestar[]{A\cap A=A}{\FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\eqvdash A=B}{3}}
+  \proofstepwidestar[]{A=A\cap A}{\FormulaRefAuto{a=b\vdash b=a}{4}}
 \end{tabproofwide}
 
 \FormulaThmAuto[Kommutativität des Schnitts]{A \cap B = B \cap A}
@@ -1758,16 +1871,22 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 
 \FormulaThmAuto{A \cap B \subseteq A}
 \begin{tabproof}
-  \proofstep{1}{x \in A \cap B}{\rA}
-  \proofstep{1}{x \in A}{\rAEa{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}{1}}}}
-  \proofstep{}{A \cap B \subseteq A}{\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}}}
+  \proofstep{1}{x\in A\cap B}{\rA}
+  \proofstep{}{A\cap B=\{x\in A\mid x\in B\}}{\FormulaRefAuto{A\cap B\coloneq\{x\in A\mid x\in B\}}}
+  \proofstep{1}{x\in\{x\in A\mid x\in B\}}{\rIE{2,1}}
+  \proofstep{1}{x\in A\land x\in B}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{3}}
+  \proofstep{1}{x\in A}{\rAEa{4}}
+  \proofstep{}{A\cap B\subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 5}}
 \end{tabproof}
 
 \FormulaThmAuto{A \cap B \subseteq B}
 \begin{tabproof}
-  \proofstep{1}{x \in A \cap B}{\rA}
-  \proofstep{1}{x \in B}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\FormulaRefAuto{A \cap B \coloneq \{ x \in A \mid x \in B \}}{1}}}}
-  \proofstep{}{A \cap B \subseteq B}{\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B) }{\rUI{\rRI{1,2}}}}
+  \proofstep{1}{x\in A\cap B}{\rA}
+  \proofstep{}{A\cap B=\{x\in A\mid x\in B\}}{\FormulaRefAuto{A\cap B\coloneq\{x\in A\mid x\in B\}}}
+  \proofstep{1}{x\in\{x\in A\mid x\in B\}}{\rIE{2,1}}
+  \proofstep{1}{x\in A\land x\in B}{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}{3}}
+  \proofstep{1}{x\in B}{\rAEb{4}}
+  \proofstep{}{A\cap B\subseteq B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 5}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -1808,9 +1927,8 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
   \proofstep{1,2,3}{x\in B\land x\in C}{\rAI{4,5}}
   \proofstep{1,2,3}{x\in B\cap C}{%
     \FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}{6}}
-  \proofstep{1,2}{\forall x\,(x\in A\rightarrow x\in B\cap C)}{\rUI{\rRI{3,7}}}
-  \proofstep{1,2}{A\subseteq B\cap C}{%
-    \FormulaRefAuto{A\subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{8}}
+  
+  \proofstep{1,2}{A\subseteq B\cap C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 7}}
 \end{tabproof}
 
 \FormulaThmAuto{A \subseteq B \vdash A \cap C \subseteq B \cap C}
@@ -1821,7 +1939,7 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
   \proofstep{2}{x \in C}{\FormulaRefAuto{x \in A \cap B \vdash x \in B}{2}}
   \proofstep{1,2}{x \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{1,3}}
   \proofstep{1,2}{x \in B \cap C}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{5,4}}}
-  \proofstep{1}{A \cap C \subseteq B \cap C}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,6}}}}
+  \proofstep{1}{A \cap C \subseteq B \cap C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 6}}
 \end{tabproof}
 
 
@@ -1838,9 +1956,11 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 
   \proofpartwide{\(\dashv\)}
     \proofstepwidestar[1]{A \cap B = A}{\rA}
-    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rAEb{\FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{1}}}
+    \proofstepwidestar[1]{A\cap B\subseteq A\land A\subseteq A\cap B}{%
+      \FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}{1}}
+    \proofstepwide[1]{A}{\subseteq}{A \cap B}{\rAEb{2}}
     \proofstepwide[1]{A \cap B}{\subseteq}{B}{\FormulaRefAuto{A \cap B \subseteq B}}
-    \proofstepwide[1]{A}{\subseteq}{B}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{2,3}}
+    \proofstepwide[1]{A}{\subseteq}{B}{\FormulaRefAuto{A \subseteq B, B \subseteq C \vdash A \subseteq C}{3,4}}
   \closeproofpartwide
 \end{tabproofsplitwide}
 
@@ -1853,15 +1973,19 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
 
 \FormulaThmAuto{\varnothing \cap A = \varnothing}
 \begin{tabproof}
-  \proofstep{}{ \varnothing \subseteq A }{ \rUE{\FormulaRefAuto{\forall A\,(\varnothing \subseteq A)} } }
-  \proofstep{}{ \varnothing \cap A = \varnothing }{ \FormulaRefAuto{ A \subseteq B \eqvdash A \cap B = A }{1} }
+  \proofstep{}{\forall A\,(\varnothing\subseteq A)}{%
+      \FormulaRefAuto{\forall A\,(\varnothing \subseteq A)}}
+  \proofstep{}{ \varnothing \subseteq A }{ \rUE{1 } }
+  \proofstep{}{ \varnothing \cap A = \varnothing }{ \FormulaRefAuto{ A \subseteq B \eqvdash A \cap B = A }{2} }
 \end{tabproof}
 
 
 \FormulaThmAuto{A \cap \varnothing = \varnothing}
 \begin{tabproof}
-  \proofstep{}{ \varnothing \subseteq A }{ \rUE{\FormulaRefAuto{\forall A\,(\varnothing \subseteq A)} } }
-  \proofstep{}{ A \cap \varnothing = \varnothing }{ \FormulaRefAuto{ B \subseteq A \eqvdash A \cap B = B }{1} }
+  \proofstep{}{\forall A\,(\varnothing\subseteq A)}{%
+      \FormulaRefAuto{\forall A\,(\varnothing \subseteq A)}}
+  \proofstep{}{ \varnothing \subseteq A }{ \rUE{1 } }
+  \proofstep{}{ A \cap \varnothing = \varnothing }{ \FormulaRefAuto{ B \subseteq A \eqvdash A \cap B = B }{2} }
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -1886,8 +2010,10 @@ Angenommen, es gibt eine universelle Menge \( U \) in der ZF-Mengenlehre, dann f
   \proofstep{3}{x \in B}{\rA}
   \proofstep{2,3}{x \in A \cap B}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{\rAI{2,3}}}
   \proofstep{1,2,3}{x \in \varnothing}{\rIE{1,4}}
-  \proofstep{}{x \notin \varnothing}{\rUE{\FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}}}
-  \proofstep{}{ \bot }{\rBI{5,6}}
+  \proofstep{}{\forall x\,(x\notin\varnothing)}{%
+      \FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}{}}
+  \proofstep{}{x \notin \varnothing}{\rUE{6}}
+  \proofstep{}{ \bot }{\rBI{5,7}}
   \proofstep{1,2}{x \notin B}{\rCE{1,2}}
 \end{tabproof}
 
@@ -1914,11 +2040,13 @@ Wir bezeichnen mit \( I_B \coloneq \{ x \in B \mid \forall A (P(A) \rightarrow x
 \begin{tabproof}
   \proofstep{1}{P(C)}{\rA}
   \proofstep{2}{x \in I_B}{\rA}
-  \proofstep{2}{\forall A (P(A) \rightarrow x \in A)}{\rAEb{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{2}}}
+  \proofstep{2}{x\in B\land\forall A\,(P(A)\rightarrow x\in A)}{%
+      \FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{2}}
+  \proofstep{2}{\forall A (P(A) \rightarrow x \in A)}{\rAEb{3}}
   \proofstep{2}{P(C) \rightarrow x \in C}{\rUE{4}}
   \proofstep{1,2}{x \in C}{\rRE{1,5}}
-  \proofstep{1,2}{x \in I_C}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rAI{6,3}}}
-  \proofstep{1}{I_B \subseteq I_C}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,7}}}}
+  \proofstep{1,2}{x \in I_C}{\FormulaRefAuto{\{x\in A \,\mid\, P(x)\} \coloneq \iota B\bigl(\forall x\,(x\in B \leftrightarrow (x\in A \land P(x)))\bigr)}{\rAI{6,4}}}
+  \proofstep{1}{I_B \subseteq I_C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 7}}
 \end{tabproof}
 
 \FormulaThmDeltaR{%
@@ -1948,24 +2076,49 @@ Wir bezeichnen mit \( I_B \coloneq \{ x \in B \mid \forall A (P(A) \rightarrow x
 Wir bezeichnen mit \( I_B \coloneq \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \) und entsprechend \( I_D \coloneq \{ x \in D \mid \forall A (P(A) \rightarrow x \in A) \} \).
 \end{notation*}
 \begin{tabproofsplit}
-  \proofpart{Fall 1: \( \exists D(P(D)) \vdash \exists C\forall B\bigl(P(B)\rightarrow C = I_B\bigr) \)}
+  \proofpartindR[Der Fall einer nichtleeren Prädikatklasse]{%
+    \exists D(P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)
+  }{%
+    \exists D(P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)
+  }[PredicateIntersectionExistsNonemptyCase]
     \proofstep{1}{\exists D(P(D))}{\rA}
     \proofstep{2}{P(D)}{\rA}
     \proofstep{3}{P(B)}{\rA}
-    \proofstep{2,3}{I_D = I_B}{\FormulaRefAuto{P(B),\, P(C) \vdash \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} = \{ x \in C \mid \forall A (P(A) \rightarrow x \in A) \}}}
-    \proofstep{2}{\exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rEI{\rUI{\rRI{3,4}}}}
-  \closeproofpart
+    \proofstep{2,3}{I_D=I_B}{%
+      \FormulaRefAuto{P(B),\,P(C)\vdash\{x\in B\mid\forall A(P(A)\rightarrow x\in A)\}=\{x\in C\mid\forall A(P(A)\rightarrow x\in A)\}}{2,3}}
+    \proofstep{2}{P(B)\rightarrow I_D=I_B}{\rRI{3,4}}
+    \proofstep{2}{\forall B(P(B)\rightarrow I_D=I_B)}{\rUI{5}}
+    \proofstep{2}{\exists C\forall B(P(B)\rightarrow C=I_B)}{\rEI{6}}
+    \proofstep{1}{\exists C\forall B(P(B)\rightarrow C=I_B)}{\rEE{1,2,7}}
+    \proofstep{}{\exists D(P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)}{\rRI{1,8}}
+  \closeproofpartindR
 
-  \proofpart{Fall 2: \( \forall D(\neg P(D)) \vdash \exists C\forall B\bigl(P(B)\rightarrow C = I_B\bigr) \)}
+  \proofpartindR[Der Fall einer leeren Prädikatklasse]{%
+    \forall D(\neg P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)
+  }{%
+    \forall D(\neg P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)
+  }[PredicateIntersectionExistsEmptyCase]
     \proofstep{1}{\forall D(\neg P(D))}{\rA}
-    \proofstep{1}{\forall B\,\bigl(\neg P(B) \lor C = I_B\bigr)}{\FormulaRefAuto{\forall x(F(x)) \lor \forall x(G(x)) \vdash \forall x(F(x) \lor G(x))}}
-    \proofstep{1}{\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rLRS{\FormulaRefAuto{\neg(P \lor Q) \eqvdash \neg P \land \neg Q}{}, 2}}
-    \proofstep{1}{\exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr)}{\rEI{3}}
-  \closeproofpart
+    \proofstep{1}{\neg P(B)}{\rUE{1}}
+    \proofstep{1}{P(B)\rightarrow\varnothing=I_B}{%
+      \FormulaRefAuto{\neg P\vdash P\rightarrow Q}{2}}
+    \proofstep{1}{\forall B(P(B)\rightarrow\varnothing=I_B)}{\rUI{3}}
+    \proofstep{1}{\exists C\forall B(P(B)\rightarrow C=I_B)}{\rEI{4}}
+    \proofstep{}{\forall D(\neg P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)}{\rRI{1,5}}
+  \closeproofpartindR
 
-  \proofpart{Fallunterscheidung über das klassische Prinzip \( P \lor \neg P \)}
-    \proofstep{}{ \exists D(P(D)) \lor \forall D(\neg P(D)) }{\rLRS{\FormulaRefAuto{\forall x(\neg P(x)) \eqvdash \neg \exists x(P(x))}{}, \FormulaRefAuto{P \lor \neg P}}}
-    \proofstep{}{ \exists C\,\forall B\,\bigl(P(B) \rightarrow C = I_B\bigr) }{\rOE{1,1,5,1,4}}
+  \proofpart{Zusammenführung der beiden Fälle}
+    \proofstep{}{\forall D(\neg P(D))\leftrightarrow\neg\exists D(P(D))}{%
+      \FormulaRefAuto{\forall x(\neg P(x))\eqvdash\neg\exists x(P(x))}}
+    \proofstep{}{\exists D(P(D))\lor\neg\exists D(P(D))}{%
+      \FormulaRefAuto{P\lor\neg P}}
+    \proofstep{}{\exists D(P(D))\lor\forall D(\neg P(D))}{\rLRS{1,2}}
+    \proofstep{}{\exists D(P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)}{%
+      \FormulaRefAuto{PredicateIntersectionExistsNonemptyCase}[thm]}
+    \proofstep{}{\forall D(\neg P(D))\rightarrow\exists C\forall B(P(B)\rightarrow C=I_B)}{%
+      \FormulaRefAuto{PredicateIntersectionExistsEmptyCase}[thm]}
+    \proofstep{}{\exists C\forall B(P(B)\rightarrow C=I_B)}{%
+      \FormulaRefAuto{P\rightarrow Q,R\rightarrow Q,P\lor R\vdash Q}{4,5,3}}
   \closeproofpart
 \end{tabproofsplit}
 
@@ -1997,14 +2150,27 @@ Wir bezeichnen mit \( I_B \coloneq \{ x \in B \mid \forall A (P(A) \rightarrow x
 \begin{notation*}
 Es sei \( I_B \coloneq \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \} \).
 \end{notation*}
-\begin{tabproof}
-  \proofstep{}{ \exists C\forall B\bigl(P(B)\rightarrow C=I_B\bigr) }{ \FormulaRefAuto{\exists C\forall B\Bigl(P(B)\rightarrow C = \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)} }
-  \proofstep{2}{\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\rA}
+\begin{tabproofsplit}
+\proofpart{Existenz}
+\proofstep{}{ \exists C\forall B\bigl(P(B)\rightarrow C=I_B\bigr) }{ \FormulaRefAuto{\exists C\forall B\Bigl(P(B)\rightarrow C = \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\Bigr)} }
+
+\closeproofpart
+
+\proofpart{Eindeutigkeit}
+  \setcounter{proofstepnr}{1}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\rA}
   \proofstep{3}{\forall B\bigl(P(B)\rightarrow D=I_B\bigr)}{\rA}
   \proofstep{4}{P(D)}{\rA}
   \proofstep{2,3,4}{C = D}{\FormulaRefAuto{P(B_0),\forall B\bigl(P(B)\rightarrow C= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\bigr),\, \forall B\bigl(P(B)\rightarrow D= \{ x \in B \mid \forall A (P(A) \rightarrow x \in A) \}\bigr) \vdash C=D}{4,2,3}}
-  \proofstep{4}{\exists! C\,\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\UEI{1,2,3,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Eindeutige Existenz}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{\exists! C\,\forall B\bigl(P(B)\rightarrow C=I_B\bigr)}{\UEI{1,2,3,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 %%begin novalidate
 \FormulaDefAuto[Der unendliche Schnitt]{\exists A\,P(A)\rightarrow \bigcap_{P(B)} B \coloneq \iota C\,\forall D\Bigl(P(D)\rightarrow C = \{ x \in D \mid \forall A (P(A)\rightarrow x \in A) \}\Bigr)}
 %%end novalidate
@@ -2031,7 +2197,11 @@ Wir bezeichnen mit \( I_A \coloneq \{ x \in A \mid \forall A (P(A) \rightarrow x
 \end{notation*}
 \begin{tabproof}
   \proofstep{1}{P(A)}{\rA}
-  \proofstep{1}{x\in \bigcap_{P(B)} B\leftrightarrow x\in I_A}{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D\, (P(D) \rightarrow x \in D) \}}{1}}}}
+  \proofstep{1}{\bigcap_{P(B)}B=I_A}{%
+      \FormulaRefAuto{P(A) \vdash \bigcap_{P(B)} B = \{ x \in A \mid \forall D\, (P(D) \rightarrow x \in D) \}}{1}}
+  \proofstep{1}{\forall x\,(x\in\bigcap_{P(B)}B\leftrightarrow x\in I_A)}{%
+      \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{2}}
+  \proofstep{1}{x\in \bigcap_{P(B)} B\leftrightarrow x\in I_A}{\rUE{3}}
 \end{tabproof}
 
 \FormulaThmAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}
@@ -2041,16 +2211,18 @@ Wir bezeichnen mit \( I_A \coloneq \{ x \in A \mid \forall A (P(A) \rightarrow x
 \begin{tabproofwide}
   \proofstepwidestar[1]{P(A)}{\rA}
   \proofstepwidestar[2]{\forall C\, (P(C)\rightarrow x\in C)}{\rA}
-  \proofstepwidestar[]{\forall C\, (P(C)\rightarrow x\in C) \rightarrow x\in A}{\rRI{2,\FormulaRefAuto{P(a), \forall x\, (P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}}}
+  \proofstepwidestar[1,2]{x\in A}{%
+      \FormulaRefAuto{P(a), \forall x\, (P(x) \rightarrow Q(x)) \vdash Q(a)}{1,2}}
+  \proofstepwidestar[1]{\forall C\, (P(C)\rightarrow x\in C) \rightarrow x\in A}{\rRI{2,3}}
   \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{x\in I_A}{\FormulaRefAuto{P(A) \vdash x \in \bigcap_{P(B)} B\leftrightarrow x \in \{\,x \in A \mid \forall D\,(P(D) \rightarrow x \in D)\,\}}{1}}
 
   % ---- hier die aufgesplittete Zeile (2 Zeilen) ----
-  \proofstepwide[1]{}{\leftrightarrow}{x\in A}{\multirow{2}{*}{\FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{4}}}
+  \proofstepwide[1]{}{\leftrightarrow}{x\in A}{\FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{5}}
   \proofstepwide*{}{\land}{\forall C\, (P(C)\rightarrow x\in C)}{}
   % --------------------------------------------------
 
-  \proofstepwide[1]{}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{3}}
-  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\rChain{4,6}}
+  \proofstepwide[1]{}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\FormulaRefAuto{P \rightarrow Q \vdash P \leftrightarrow (Q \land P)}{4}}
+  \proofstepwide[1]{x\in \bigcap_{P(B)} B}{\leftrightarrow}{\forall C\, (P(C)\rightarrow x\in C)}{\rChain{5,7}}
 \end{tabproofwide}
 
 \FormulaThmAuto{\exists A(P(A)) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}
@@ -2067,10 +2239,12 @@ Wir bezeichnen mit \( I_A \coloneq \{ x \in A \mid \forall A (P(A) \rightarrow x
 \begin{tabproof}
   \proofstep{1}{P(C)}{\rA}
   \proofstep{2}{x \in \bigcap_{P(A)} A}{\rA}
-  \proofstep{1,2}{\forall A\,\bigl(P(A)\rightarrow x\in A\bigr)}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{\FormulaRefAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{1},\,2}}
-  \proofstep{1,2}{x \in C}{\FormulaRefAuto{P(a), \forall x\,\bigl(P(x) \rightarrow Q(x)\bigr) \vdash Q(a)}{1,3}}
-  \proofstep{1}{\forall x\,\bigl(x\in \bigcap_{P(A)} A \rightarrow x\in C\bigr)}{\rUI{\rRI{2,4}}}
-  \proofstep{1}{\bigcap_{P(A)} A \subseteq C}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,\bigl(x\in A \rightarrow x\in B\bigr)}{5}}
+  \proofstep{1}{x\in\bigcap_{P(A)}A\leftrightarrow\forall A\,(P(A)\rightarrow x\in A)}{%
+      \FormulaRefAuto{P(A) \vdash x \in \bigcap_{P(B)} B \leftrightarrow \forall C\, (P(C) \rightarrow x \in C)}{1}}
+  \proofstep{1,2}{\forall A\,\bigl(P(A)\rightarrow x\in A\bigr)}{\FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{3,\,2}}
+  \proofstep{1,2}{x \in C}{\FormulaRefAuto{P(a), \forall x\,\bigl(P(x) \rightarrow Q(x)\bigr) \vdash Q(a)}{1,4}}
+  
+  \proofstep{1}{\bigcap_{P(A)} A \subseteq C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 5}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Elemente des unendlichen Schnitts erfüllen die definierende Eigenschaft]{%
@@ -2100,8 +2274,10 @@ Wir bezeichnen mit \( I_A \coloneq \{ x \in A \mid \forall A (P(A) \rightarrow x
   \proofstep{1,2,3}{y\in \{x\in A\mid Q(x)\}}{%
     \FormulaRefAuto{a=b \dsep c=d \dsep P(b,d)\vdash P(a,c)}{8,9,7}}
   \proofstep{1,2,3}{y\in A\land Q(y)}{%
-    \rUE{\FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{10}}}
-  \proofstep{1,2,3}{Q(y)}{\rAEb{11}}
+      \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{10}}
+  \proofstep{1,2,3}{y\in A\land Q(y)}{%
+    \rUE{11}}
+  \proofstep{1,2,3}{Q(y)}{\rAEb{12}}
 \end{tabproof}
 
 \section{Durchschnitte von Mengenfamilien}
@@ -2164,12 +2340,14 @@ eine Abkürzung für den Schnitt über alle Elemente von \(M\).
       \forall C\, (P(C) \rightarrow x \in C)}{7}}
     \proofstep{1,2}{x\in\bigcap\{X\mid X\in M\}}{%
       \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{8,6}}
+    \proofstep{1}{\bigcap M=\bigcap\{X\mid X\in M\}}{%
+      \FormulaRefAuto{M\neq\varnothing \vdash
+        \bigcap M \coloneq \bigcap\{X\mid X\in M\}}{1}}
     \proofstep{1}{\bigcap\{X\mid X\in M\}=\bigcap M}{%
       \FormulaRefAuto{a=b\vdash b=a}{%
-        \FormulaRefAuto{M\neq\varnothing \vdash
-        \bigcap M \coloneq \bigcap\{X\mid X\in M\}}{1}}}
+        10}}
     \proofstep{1,2}{x\in\bigcap M}{%
-      \FormulaRefAuto{A = B,\, x \in A \vdash x \in B}{10,9}}
+      \FormulaRefAuto{A = B,\, x \in A \vdash x \in B}{11,9}}
   \closeproofpart
 \end{tabproofsplit}
 
@@ -2339,20 +2517,19 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
 \FormulaThmAuto{x \in \{a\} \eqvdash x = a}
 \begin{tabproofwide}
-  \proofstepwide{x \in \{a\}}{\leftrightarrow}{x \in \{a,a\}}%
-    {\rIE{\FormulaRefAuto{\{a\} \coloneq \{a,a\}}{}, 1}}
-  \proofstepwide{}{\leftrightarrow}{x = a \lor x = a}%
-    {\rIE{\FormulaRefAuto{\{A,B\} \coloneq \iota C\Bigl(\forall x\,\bigl(x \in C \leftrightarrow x = A \lor x = B\bigr)\Bigr)}{}, 1}}
-  \proofstepwide{}{\leftrightarrow}{x = a}%
-    {\FormulaRefAuto{P \lor P \eqvdash P}{2}}
-  \proofstepwide{x \in \{a\}}{\leftrightarrow}{x = a}%
-    {\rChain{1,3}}
+  \proofstepwidestar[]{\{a\}=\{a,a\}}{\FormulaRefAuto{\{a\}\coloneq\{a,a\}}}
+  \proofstepwide{x\in\{a,a\}}{\leftrightarrow}{x=a\lor x=a}{\FormulaRefAuto{x\in\{A,B\}\eqvdash(x=A\lor x=B)}}
+  \proofstepwide{x\in\{a\}}{\leftrightarrow}{x=a\lor x=a}{\rIE{1,2}}
+  \proofstepwide{x=a\lor x=a}{\leftrightarrow}{x=a}{\FormulaRefAuto{P\lor P\eqvdash P}}
+  \proofstepwide{x\in\{a\}}{\leftrightarrow}{x=a}{\rChain{3,4}}
 \end{tabproofwide}
 
 \FormulaThmAuto{x \notin \{a\} \eqvdash x \neq a}
 \begin{tabproof}
+  \proofstep{}{x\in\{a\}\leftrightarrow x=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}
   \proofstep{}{x \notin \{a\} \leftrightarrow x \neq a}%
-    {\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{}}}
+    {\FormulaRefAuto{P \leftrightarrow Q \eqvdash \neg P \leftrightarrow \neg Q}{1}}
 \end{tabproof}
 
 \FormulaThmDelta[Leere Einermenge liegt nicht in sich selbst]{%
@@ -2386,7 +2563,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1}{x=a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{4}}
   \proofstep{1}{x\in \{x\in A\mid x=a\}}{\FormulaRefAuto{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}{3,5}}
   \proofstep{}{\{x\in A\mid x\in \{a\}\}\subseteq \{x\in A\mid x=a\}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,6}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 6}}
 
   \proofstep{8}{x\in \{x\in A\mid x=a\}}{\rA}
   \proofstep{8}{x\in A\land x=a}{\FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{8}}
@@ -2395,7 +2572,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{8}{x\in \{a\}}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{11}}
   \proofstep{8}{x\in \{x\in A\mid x\in \{a\}\}}{\FormulaRefAuto{x \in A\dsep P(x)\vdash x \in \{x \in A \mid P(x)\}}{10,12}}
   \proofstep{}{\{x\in A\mid x=a\}\subseteq \{x\in A\mid x\in \{a\}\}}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{8,13}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[8]\vdots 13}}
 
   \proofstep{}{\{x\in A\mid x\in \{a\}\}=\{x\in A\mid x=a\}}{\FormulaRefAuto{A \subseteq B,\, B \subseteq A \vdash A = B}{7,14}}
 \end{tabproof}
@@ -2403,14 +2580,35 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
 
 \FormulaThmAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}
-\begin{tabproof}
-  \proofstep{1}{\{a\}=\{b,c\}}{\rA}
-  \proofstep{1}{b\in\{a\}}{\rIE{1,\FormulaRefAuto{a\in\{a,b\}}}}
-  \proofstep{1}{a=b}{\FormulaRefAuto{a = b \vdash b = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{2}}}
-  \proofstep{1}{c\in\{a\}}{\rIE{1,\FormulaRefAuto{b\in\{a,b\}}}}
-  \proofstep{1}{a=c}{\FormulaRefAuto{a = b \vdash b = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{2}}}
-  \proofstep{1}{a=b\land a=c}{\rAI{3,5}}
-\end{tabproof}
+\begin{tabproofsplit}
+\proofpart{Gleichheit mit dem ersten Element}
+\proofstep{1}{\{a\}=\{b,c\}}{\rA}
+  \proofstep{}{b\in\{b,c\}}{%
+      \FormulaRefAuto{a\in\{a,b\}}}
+  \proofstep{1}{b\in\{a\}}{\rIE{1,2}}
+  \proofstep{1}{b=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{3}}
+  \proofstep{1}{a=b}{\FormulaRefAuto{a = b \vdash b = a}{4}}
+
+\closeproofpart
+
+\proofpart{Gleichheit mit dem zweiten Element}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{c\in\{b,c\}}{%
+      \FormulaRefAuto{b\in\{a,b\}}}
+\proofstep{1}{c\in\{a\}}{\rIE{1,6}}
+  \proofstep{1}{c=a}{%
+      \FormulaRefAuto{x \in \{a\} \eqvdash x = a}{7}}
+  \proofstep{1}{a=c}{\FormulaRefAuto{a = b \vdash b = a}{8}}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{a=b\land a=c}{\rAI{5,9}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{\exists x\in \{a,b\} P(x)\vdash P(a)\lor P(b)}
 \begin{tabproof}
@@ -2435,7 +2633,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{2}{a \in A}{\rA}
   \proofstep{1}{x = a}{\FormulaRefAuto{x \in \{a\} \eqvdash x = a}{1}}
   \proofstep{1,2}{x \in A}{\rIE{3,2}}
-  \proofstep{2}{\{a\} \subseteq A}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,4}}}}
+  \proofstep{2}{\{a\} \subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 4}}
 \end{tabproof}
 
 \FormulaThmAuto{a\in A\vdash A\cap \{A,a\}\neq\varnothing}
@@ -2492,7 +2690,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofcasesummary[1]{\{a,b\}\subseteq\{c,d\}}
   \proofstep{1,2,3}{x\in \{c,d\}}{\rOE{4,5,8,9,12}}
   \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}%
-    {\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,13}}}}
+    {\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 13}}
 \end{tabproof}
 
 \FormulaThmAuto{a=d,b=c\vdash \{a,b\}\subseteq \{c,d\}}
@@ -2517,7 +2715,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofcasesummary[1]{\{a,b\}\subseteq\{c,d\}}
   \proofstep{1,2,3}{x\in \{c,d\}}{\rOE{4,5,8,9,12}}
   \proofstep{1,2}{\{a,b\}\subseteq\{c,d\}}%
-    {\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,13}}}}
+    {\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 13}}
 \end{tabproof}
 
 \FormulaThmAuto{a=c,b=d\vdash \{a,b\}=\{c,d\}}
@@ -2574,16 +2772,29 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \end{tabproof}
 
 \FormulaThmAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}
-\begin{tabproof}
-    \proofstep{1}{\{a,b\}=\{c,d\}}{ \rA}
+\begin{tabproofsplit}
+\proofpart{Zugehörigkeit des ersten Elements}
+\proofstep{1}{\{a,b\}=\{c,d\}}{ \rA}
     \proofstep{}{a\in \{a,b\}}{\FormulaRefAuto{a\in \{a,b\}}}
     \proofstep{1}{a\in \{c,d\}}{\FormulaRefAuto{A=B, x\in A\vdash x\in B}{1,2}}
     \proofstep{1}{a=c\lor a=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{3}}
-    \proofstep{}{b\in \{a,b\}}{\FormulaRefAuto{b\in \{a,b\}}}
+
+\closeproofpart
+
+\proofpart{Zugehörigkeit des zweiten Elements}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{b\in \{a,b\}}{\FormulaRefAuto{b\in \{a,b\}}}
     \proofstep{1}{b\in \{c,d\}}{\FormulaRefAuto{A=B, x\in A\vdash x\in B}{1,5}}
     \proofstep{1}{b=c\lor b=d}{\FormulaRefAuto{x \in \{A,B\}\;\eqvdash\;(x = A \lor x = B)}{6}}
-    \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}{\rAI{4,7}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}{\rAI{4,7}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto{\{a,b\}=\{c,d\},a=c,b=c\vdash d=c}
 \begin{tabproof}
@@ -2615,8 +2826,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1}{(a=c\lor a=d)\land (b=c\lor b=d)}%
     {\FormulaRefAuto{\{a,b\}=\{c,d\}\vdash (a=c\lor a=d)\land (b=c\lor b=d)}{1}}
     \proofstep{1}{(a=c\land b=c)\lor (a=c\land b=d)\lor}%
-  {\multirow{2}{*}{$\FormulaRefAuto{(P \lor Q) \land (R \lor S) \eqvdash
-   (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}{2}$}}
+  {\FormulaRefAuto{(P \lor Q) \land (R \lor S) \eqvdash
+   (P \land R) \lor (P \land S) \lor (Q \land R) \lor (Q \land S)}{2}}
   \proofstepstar{}{(a=d\land b=c)\lor (a=d\land b=d)}{}
   \proofstep{4}{a=c\land b=c}{\rA}
   \proofstep{1,4}{d=c}{%
@@ -2675,6 +2886,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \end{tabproof}
 
 
+\input{tex/b03-migrated-tree-pair-sets}
+
 \section{Geordnete Paare}
 
 \FormulaThmAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}[Sei \(A\) eine Menge und \(a,b,c,d\in A\), dann gilt:]
@@ -2682,33 +2895,45 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \proofpart{\(\vdash\)}
     \proofstep{1}{(a,b) = (c,d)}{\rA}
     \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\rIE{\FormulaRefAuto{(a, b) \coloneq \{ \{ a \}, \{ a, b \} \}},1}}
-    \proofstep{1}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\multirow{2}{*}{$\FormulaRefAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}{2}$}}
+    \proofstep{1}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\FormulaRefAuto{\{a,b\}=\{c,d\} \;\eqvdash\; \bigl((a=c\land b=d)\;\lor\;(a=d\land b=c)\bigr)}{2}}
     \proofstepstar{}{\lor \{a\}=\{c,d\}\land \{a,b\}=\{c\}}{}
     \proofstep{4}{\{a\}=\{c\}\land \{a,b\}=\{c,d\}}{\rA}
+    \proofstep{4}{a=c}{%
+      \FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{\rAEa{4}}}
+    \proofstep{4}{a=c}{%
+      \FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{\rAEa{4}}}
+    \proofstep{4}{b=d}{%
+      \FormulaRefAuto{\{a,b\}=\{c,d\}, a=c \vdash b=d}{%
+          \rAEb{4},6}}
     \proofstep{4}{a=c\land b=d}{%
       \rAI{%
-        \FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{\rAEa{4}},%
-        \FormulaRefAuto{\{a,b\}=\{c,d\}, a=c \vdash b=d}{%
-          \rAEb{4},\FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{\rAEa{4}}}}}
-    \proofstep{6}{\{a\}=\{c,d\}\land \{a,b\}=\{c\}}{\rA}
-    \proofstep{6}{a=c\land a=d}{%
-      \FormulaRefAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}{\rAEa{6}}}
-    \proofstep{6}{c=a\land c=b}{%
+        5,%
+        7}}
+    \proofstep{9}{\{a\}=\{c,d\}\land \{a,b\}=\{c\}}{\rA}
+    \proofstep{9}{a=c\land a=d}{%
+      \FormulaRefAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}{\rAEa{9}}}
+    \proofstep{9}{\{c\}=\{a,b\}}{%
+      \FormulaRefAuto{a = b \vdash b = a}{\rAEb{9}}}
+    \proofstep{9}{c=a\land c=b}{%
       \FormulaRefAuto{\{a\}=\{b,c\}\vdash a=b\land a=c}{%
-        \FormulaRefAuto{a = b \vdash b = a}{\rAEb{6}}}}
-    \proofstep{6}{a=c\land b=d}{%
+        11}}
+    \proofstep{9}{c = d}{%
+      \FormulaRefAuto{a = b,\, a = c \vdash b = c}{\rAEa{10},\rAEb{10}}}
+    \proofstep{9}{b = d}{%
+      \FormulaRefAuto{a = b,\, a = c \vdash b = c}{%
+          \rAEb{12},%
+          13}}
+    \proofstep{9}{a=c\land b=d}{%
       \rAI{%
-        \rAEa{7},%
-        \FormulaRefAuto{a = b,\, a = c \vdash b = c}{%
-          \rAEb{8},%
-          \FormulaRefAuto{a = b,\, a = c \vdash b = c}{\rAEa{7},\rAEb{7}}}}}
-    \proofstep{1}{a=c\land b=d}{\rOE{3,4,5,6,9}}
+        \rAEa{10},%
+        14}}
+    \proofstep{1}{a=c\land b=d}{\rOE{3,4,8,9,15}}
     \closeproofpart
     \proofpart{\(\dashv\)}
     \proofstep{1}{a=c\land b=d}{\rA}
     \proofstep{1}{\{a,b\}=\{c,d\}}{\FormulaRefAuto{a=c\land b=d\vdash \{a,b\}=\{c,d\}}{1}}
     \proofstep{1}{a=c}{\rAEa{1}}
-    \proofstep{1}{{a}={c}}{\FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{3}}
+    \proofstep{1}{\{a\}=\{c\}}{\FormulaRefAuto{\{a\}=\{b\}\eqvdash a=b}{3}}
     \proofstep{1}{\{\{a\},\{a,b\}\}=\{\{c\},\{c,d\}\}}{\FormulaRefAuto{a=c, b=d\vdash \{a,b\}=\{c,d\}}{4,2}}
     \closeproofpart
 \end{tabproofsplit}
@@ -2750,9 +2975,11 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproof}
   \proofstep{1}{a\neq b}{\rA}
   \proofstep{2}{(c,a)=(d,b)}{\rA}
-  \proofstep{2}{a=b}{\rAEb{\FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{2}}}
-  \proofstep{1,2}{\bot}{\rBI{1,3}}
-  \proofstep{1}{(c,a)\neq (d,b)}{\rCI{2,4}}
+  \proofstep{2}{c=d\land a=b}{%
+      \FormulaRefAuto{(a,b) = (c,d)\eqvdash a=c\land b=d}{2}}
+  \proofstep{2}{a=b}{\rAEb{3}}
+  \proofstep{1,2}{\bot}{\rBI{1,4}}
+  \proofstep{1}{(c,a)\neq (d,b)}{\rCI{2,5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Getaggte Punkte mit verschiedenen Tags sind verschieden]{%
@@ -2763,10 +2990,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproof}
   \proofstep{1}{p\neq q}{\rA}
   \proofstep{2}{(p,x)=(q,y)}{\rA}
+  \proofstep{2}{p=q\land x=y}{%
+      \FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}{2}}
   \proofstep{2}{p=q}{%
-    \rAEa{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}{2}}}
-  \proofstep{1,2}{\bot}{\rBI{1,3}}
-  \proofstep{1}{(p,x)\neq(q,y)}{\rCI{2,4}}
+    \rAEa{3}}
+  \proofstep{1,2}{\bot}{\rBI{1,4}}
+  \proofstep{1}{(p,x)\neq(q,y)}{\rCI{2,5}}
 \end{tabproof}
 
 \subsection{Verschachtelte Paare und Tripel}
@@ -2850,10 +3079,14 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
 \FormulaThmAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}
 \begin{tabproofwide}
+  \proofstepwidestar[]{A\setminus B=\{x\in A\mid x\notin B\}}{%
+      \FormulaRefAuto{A \setminus B \coloneq \{ x \in A \mid x \notin B \}}{}}
+  \proofstepwidestar[]{\forall x\,(x\in A\setminus B\leftrightarrow x\in\{x\in A\mid x\notin B\})}{%
+      \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{1}}
   \proofstepwide{x \in A \setminus B}{\leftrightarrow}{x \in \{x \in A \mid x \notin B\}}%
-    {\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{A \setminus B \coloneq \{ x \in A \mid x \notin B \}}{}}}}
+    {\rUE{2}}
   \proofstepwide{}{\leftrightarrow}{x \in A \land x \notin B}%
-    {\FormulaRefAuto{\{x \in A \mid P(x)\} \coloneq \iota B\bigl(\forall x\,(x \in B \leftrightarrow (x \in A \land P(x)))\bigr)}{1}}
+    {\FormulaRefAuto{\{x \in A \mid P(x)\} \coloneq \iota B\bigl(\forall x\,(x \in B \leftrightarrow (x \in A \land P(x)))\bigr)}{3}}
 \end{tabproofwide}
 
 \FormulaThmAuto{x \in A \setminus B \vdash x \in A}
@@ -2878,9 +3111,11 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1,2}{x\in \{x\in A\mid x\notin B\}}{%
     \FormulaRefAuto{x \in A\dsep P(x)\vdash
     x \in \{x \in A \mid P(x)\}}{1,2}}
+  \proofstep{}{A\setminus B=\{x\in A\mid x\notin B\}}{%
+      \FormulaRefAuto{A \setminus B \coloneq
+    \{ x \in A \mid x \notin B \}}}
   \proofstep{1,2}{x\in A\setminus B}{%
-    \rIE{\FormulaRefAuto{A \setminus B \coloneq
-    \{ x \in A \mid x \notin B \}},3}}
+    \rIE{4,3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Negierte Mitgliedschaft im relativen Komplement]{%
@@ -2888,8 +3123,9 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 }{RelCompNotMembership}{%
   \DeltaRow{Mengen}{A\dsep B\dsep x}%
 }
-\begin{tabproof}
-  \proofstep{1}{x\in A}{\rA}
+\begin{tabproofsplit}
+\proofpart{Hinrichtung}
+\proofstep{1}{x\in A}{\rA}
   \proofstep{2}{x\notin A\setminus B}{\rA}
   \proofstep{3}{x\notin B}{\rA}
   \proofstep{1,3}{x\in A\setminus B}{%
@@ -2899,15 +3135,27 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{2}{x\in B}{\FormulaRefAuto{rDN}{6}}
   \proofstep{}{x\notin A\setminus B\rightarrow x\in B}{\rRI{2,7}}
 
-  \proofstep{9}{x\in B}{\rA}
+
+\closeproofpart
+
+\proofpart{Rückrichtung}
+  \setcounter{proofstepnr}{8}% Fortlaufende Schritte dieses Beweises.
+\proofstep{9}{x\in B}{\rA}
   \proofstep{10}{x\in A\setminus B}{\rA}
   \proofstep{10}{x\notin B}{%
     \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}{10}}
   \proofstep{9,10}{\bot}{\rBI{9,11}}
   \proofstep{9}{x\notin A\setminus B}{\rCI{10,12}}
   \proofstep{}{x\in B\rightarrow x\notin A\setminus B}{\rRI{9,13}}
-  \proofstep{1}{x\notin A\setminus B\leftrightarrow x\in B}{\rLRI{8,14}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{14}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{x\notin A\setminus B\leftrightarrow x\in B}{\rLRI{8,14}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmAuto[Differenz ist vom Subtrahenden getrennt]{%
   A=B\setminus C\vdash A\cap C=\varnothing
@@ -2933,30 +3181,42 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \FormulaThmAuto{c \in A \setminus \{a\} \vdash c \neq a}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a\}}{\rA}
-  \proofstep{1}{c \notin \{a\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
-  \proofstep{1}{c \neq a}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{2}}
+  \proofstep{1}{c\in A\land c\notin\{a\}}{%
+      \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{c \notin \{a\}}{\rAEb{2}}
+  \proofstep{1}{c \neq a}{\FormulaRefAuto{x \notin \{a\} \eqvdash x \neq a}{3}}
 \end{tabproof}
 
 \FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq a}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
-  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
-  \proofstep{1}{c \neq a}{\rAEa{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
+  \proofstep{1}{c\in A\land c\notin\{a,b\}}{%
+      \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{2}}
+  \proofstep{1}{c\neq a\land c\neq b}{%
+      \FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{3}}
+  \proofstep{1}{c \neq a}{\rAEa{4}}
 \end{tabproof}
 
 \FormulaThmAuto{c \in A \setminus \{a,b\} \vdash c \neq b}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus \{a,b\}}{\rA}
-  \proofstep{1}{c \notin \{a,b\}}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
-  \proofstep{1}{c \neq b}{\rAEb{\FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{2}}}
+  \proofstep{1}{c\in A\land c\notin\{a,b\}}{%
+      \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{c \notin \{a,b\}}{\rAEb{2}}
+  \proofstep{1}{c\neq a\land c\neq b}{%
+      \FormulaRefAuto{x \notin \{a,b\} \eqvdash x \neq a \land x \neq b}{3}}
+  \proofstep{1}{c \neq b}{\rAEb{4}}
 \end{tabproof}
 
 \FormulaThmAuto{c \in A \setminus B,\, b \in B \vdash c \neq b}
 \begin{tabproof}
   \proofstep{1}{c \in A \setminus B}{\rA}
   \proofstep{2}{b \in B}{\rA}
-  \proofstep{1}{c \notin B}{\rAEb{\FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}}
-  \proofstep{1,2}{c \neq b}{\FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,3}}
+  \proofstep{1}{c\in A\land c\notin B}{%
+      \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}{1}}
+  \proofstep{1}{c \notin B}{\rAEb{3}}
+  \proofstep{1,2}{c \neq b}{\FormulaRefAuto{ a \in A,\; b \not\in A \vdash a \neq b }{2,4}}
 \end{tabproof}
 
 \FormulaThmAuto{a \notin A \setminus \{a\}}
@@ -3005,8 +3265,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \FormulaThmAuto{A\setminus B\subseteq A}
 \begin{tabproof}
   \proofstep{1}{x\in A\setminus B}{\rA}
-  \proofstep{1}{x\in A}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
-  \proofstep{1}{A\setminus B\subseteq A}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{1,2}}}}
+  \proofstep{1}{x\in A}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{1}}
+  \proofstep{}{A\setminus B\subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 2}}
 \end{tabproof}
 
 \FormulaThmAuto{A\subseteq B\dsep B\setminus A=\varnothing\vdash B\subseteq A}
@@ -3024,9 +3284,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \rBI{6,7}}
   \proofstep{2,3}{\neg(x\notin A)}{\rCI{4,8}}
   \proofstep{2,3}{x\in A}{\FormulaRefAuto{rDN}{9}}
-  \proofstep{2}{x\in B\rightarrow x\in A}{\rRI{3,10}}
-  \proofstep{2}{B\subseteq A}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{11}}}
+  
+  \proofstep{2}{B\subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 10}}
 \end{tabproof}
 
 \FormulaThmAuto{A\subseteq C\vdash A\setminus B\subseteq C}
@@ -3035,7 +3294,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{2}{x\in A\setminus B}{\rA}
   \proofstep{2}{x\in A}{\FormulaRefAuto{x \in A \setminus B \vdash x \in A}{2}}
   \proofstep{1,2}{x\in C}{\FormulaRefAuto{A\subseteq B, x\in A\vdash x\in B}{1,3}}
-  \proofstep{1,2}{A\setminus B\subseteq C}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,4}}}}
+  \proofstep{1,2}{A\setminus B\subseteq C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 4}}
 \end{tabproof}
 
 \paragraph{Relatives Komplement in einer Grundmenge}
@@ -3065,8 +3324,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \proofstep{3,4}{z\in M\setminus X}{%
       \FormulaRefAuto{x \in A \setminus B \eqvdash x \in A \land x \notin B}[thm]{12}}
     \proofstep{3}{M\setminus Y\subseteq M\setminus X}{%
-      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}[def]{%
-        \rUI{\rRI{4,13}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 13}}
   \closeproofpart
   \proofpart{\(\dashv\)}
     \proofstep{1}{X\subseteq M}{\rA}
@@ -3088,8 +3346,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \proofstep{1,3,4}{\neg(z\notin Y)}{\rCI{6,12}}
     \proofstep{1,3,4}{z\in Y}{\FormulaRefAuto{rDN}{13}}
     \proofstep{1,3}{X\subseteq Y}{%
-      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}[def]{%
-        \rUI{\rRI{4,14}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 14}}
   \closeproofpart
 \end{tabproofsplit}
 
@@ -3098,34 +3355,49 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 }{RelCompInvolutive}{%
   \DeltaDecl{Mengen}{M\dsep X}%
 }
-\begin{tabproof}
-  \proofstep{1}{X\subseteq M}{\rA}
+\begin{tabproofsplit}
+\proofpart{Erste Inklusion}
+\proofstep{1}{X\subseteq M}{\rA}
   \proofstep{2}{z\in M\setminus(M\setminus X)}{\rA}
   \proofstep{2}{z\in M}{%
     \FormulaRefAuto{x \in A \setminus B \vdash x \in A}[thm]{2}}
   \proofstep{2}{z\notin M\setminus X}{%
     \FormulaRefAuto{x\in A\setminus B\vdash x\notin B}[thm]{2}}
+  \proofstep{2}{( z \notin M \setminus X \leftrightarrow z \in X )}{%
+      \FormulaRefAuto{RelCompNotMembership}[thm]{3}}
   \proofstep{2}{z\in X}{%
     \FormulaRefAuto{P \leftrightarrow Q, P \vdash Q}{%
-      \FormulaRefAuto{RelCompNotMembership}[thm]{3},4}}
+      5,4}}
   \proofstep{}{M\setminus(M\setminus X)\subseteq X}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}[def]{%
-      \rUI{\rRI{2,5}}}}
-  \proofstep{7}{z\in X}{\rA}
-  \proofstep{1,7}{z\in M}{%
-    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}[thm]{1,7}}
-  \proofstep{1,7}{z\notin M\setminus X}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 6}}
+
+\closeproofpart
+
+\proofpart{Zweite Inklusion}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{8}{z\in X}{\rA}
+  \proofstep{1,8}{z\in M}{%
+    \FormulaRefAuto{A\subseteq B,\, x\in A \vdash x\in B}[thm]{1,8}}
+  \proofstep{1,8}{( z \notin M \setminus X \leftrightarrow z \in X )}{%
+      \FormulaRefAuto{RelCompNotMembership}[thm]{9}}
+  \proofstep{1,8}{z\notin M\setminus X}{%
     \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}{%
-      \FormulaRefAuto{RelCompNotMembership}[thm]{8},7}}
-  \proofstep{1,7}{z\in M\setminus(M\setminus X)}{%
-    \FormulaRefAuto{x \in A\dsep x\notin B\vdash x \in A\setminus B}[thm]{8,9}}
+      10,8}}
+  \proofstep{1,8}{z\in M\setminus(M\setminus X)}{%
+    \FormulaRefAuto{x \in A\dsep x\notin B\vdash x \in A\setminus B}[thm]{9,11}}
   \proofstep{1}{X\subseteq M\setminus(M\setminus X)}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}[def]{%
-      \rUI{\rRI{7,10}}}}
-  \proofstep{1}{M\setminus(M\setminus X)=X}{%
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[8]\vdots 12}}
+
+\closeproofpart
+
+\proofpart{Mengengleichheit}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{M\setminus(M\setminus X)=X}{%
     \FormulaRefAuto{A \subseteq B \land B \subseteq A \eqvdash A = B}[thm]{%
-      \rAI{6,11}}}
-\end{tabproof}
+      \rAI{7,13}}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Gleichheit relativer Komplemente kürzen]{%
   X\subseteq M\dsep Y\subseteq M\dsep M\setminus Y=M\setminus X
@@ -3238,8 +3510,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1,2}{x\in\bigcup A}{%
     \FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{1,2}}
   \proofstep{1}{B\subseteq\bigcup A}{%
-    \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,3}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 3}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Jede Mengenfamilie liegt in der Potenzmenge ihrer Trägervereinigung]{%
@@ -3254,15 +3525,18 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1}{B\in\powerset(\bigcup A)}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}{2}}
   \proofstep{}{A\subseteq\powerset(\bigcup A)}{%
-    \FormulaRefAuto{A\subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,3}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 3}}
 \end{tabproof}
 
 \FormulaDefAuto[Vereinigung zweier Mengen]{A \cup B \coloneq \bigcup \{A, B\}}
 
 \FormulaThmAuto{x\in A \cup B \eqvdash x\in \bigcup \{A, B\}}
 \begin{tabproof}
-\proofstep{}{z \in A \cup B\leftrightarrow z \in \bigcup \{A, B\}}{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{\FormulaRefAuto{A \cup B \coloneq \bigcup \{A, B\}}}}}
+\proofstep{}{A\cup B=\bigcup\{A,B\}}{%
+      \FormulaRefAuto{A \cup B \coloneq \bigcup \{A, B\}}}
+\proofstep{}{\forall z\,(z\in A\cup B\leftrightarrow z\in\bigcup\{A,B\})}{%
+      \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{1}}
+\proofstep{}{z \in A \cup B\leftrightarrow z \in \bigcup \{A, B\}}{\rUE{2}}
 \end{tabproof}
 
 \FormulaThmAuto{A \subseteq B \vdash \bigcup A \subseteq \bigcup B}
@@ -3275,10 +3549,10 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{4}{X \in A \land x \in X}{\rA}
   \proofstep{4}{X \in A}{\rAEa{4}}
   \proofstep{4}{x \in X}{\rAEb{4}}
-  \proofstep{1,4}{X \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{5,1}}
+  \proofstep{1,4}{X \in B}{\FormulaRefAuto{A \subseteq B,\, x \in A \vdash x \in B}{1,5}}
   \proofstep{1,4}{x \in \bigcup B}{\FormulaRefAuto{B\in A\dsep x\in B\vdash x \in \bigcup A}{7,6}}
   \proofstep{1,2}{x \in \bigcup B}{\rEE{3,4,8}}
-  \proofstep{1}{\bigcup A \subseteq \bigcup B}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRE{2,9}}}}
+  \proofstep{1}{\bigcup A \subseteq \bigcup B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 9}}
 \end{tabproof}
 
 \FormulaThmAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}
@@ -3292,6 +3566,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstepwide{}{\leftrightarrow}{z \in A \lor z \in B}%
     {\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \eqvdash P(a) \lor P(b)}{3}}
 \end{tabproofwide}
+
+\input{tex/b03-migrated-singleton-union}
 
 \subsection{Dreiermengen}
 
@@ -3351,8 +3627,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
   \proofstep{1,2,3,4}{x\in H}{\rOE{5,6,8,9,16}}
   \proofstep{1,2,3}{\{a,b,c\}\subseteq H}{%
-    \FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}{%
-      \rUI{\rRI{4,17}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 17}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Nichtzugehörigkeit zu beiden Summanden]{%
@@ -3379,20 +3654,33 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 }{OutsideUnionComponents}{%
   \DeltaRow{Mengen}{A\dsep B\dsep x}
 }
-\begin{tabproof}
-  \proofstep{1}{x\notin A\cup B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Nichtzugehörigkeit zum ersten Summanden}
+\proofstep{1}{x\notin A\cup B}{\rA}
   \proofstep{2}{x\in A}{\rA}
   \proofstep{2}{x\in A\cup B}{%
     \FormulaRefAuto{x\in A\vdash x\in A\cup B}[thm]{2}}
   \proofstep{1,2}{\bot}{\rBI{3,1}}
   \proofstep{1}{x\notin A}{\rCI{2,4}}
-  \proofstep{6}{x\in B}{\rA}
+
+\closeproofpart
+
+\proofpart{Nichtzugehörigkeit zum zweiten Summanden}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{6}{x\in B}{\rA}
   \proofstep{6}{x\in A\cup B}{%
     \FormulaRefAuto{x\in B\vdash x\in A\cup B}[thm]{6}}
   \proofstep{1,6}{\bot}{\rBI{7,1}}
   \proofstep{1}{x\notin B}{\rCI{6,8}}
-  \proofstep{1}{x\notin A\land x\notin B}{\rAI{5,9}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{9}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{x\notin A\land x\notin B}{\rAI{5,9}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \section{Grundlegende Eigenschaften}
@@ -3428,7 +3716,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
   % --- Zeile 7: auf zwei Zeilen gesplittet ---
   \proofstepwide{}{\leftrightarrow}{\exists B\,\bigl(B = \{a\} \lor B = \{b\}\bigr)}%
-    {\multirow{2}{*}{\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \eqvdash P(a) \lor P(b)}{6}}}
+    {\FormulaRefAuto{\exists c\,((c = a \lor c = b) \land P(c)) \eqvdash P(a) \lor P(b)}{6}}
   \proofstepwide*{}{\land}{x \in B}{}
   % -------------------------------------------
 
@@ -3500,7 +3788,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \proofstep{1,2}{x \in A}{\rOE{3,4,4,5,7}}
 
     % Universalisierung: Teilmengenrichtung
-    \proofstep{}{A \cup \{a\} \subseteq A}{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{\rRI{2,8}}}}
+    \proofstep{}{A \cup \{a\} \subseteq A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 8}}
 
     % (ii) A \subseteq A \cup {a}
     \proofstep{}{A \subseteq A \cup \{a\}}%
@@ -3563,7 +3851,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1,3,8}{z\in Y}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{9,1}}
   \proofstep{1,2,3}{z\in Y}{\rOE{6,7,7,8,10}}
   \proofstep{1,2}{X\subseteq Y}{%
-    \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,11}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 11}}
 \end{tabproof}
 
 \FormulaThmDelta[Kürzung einer frischen Adjunktion]{%
@@ -3606,8 +3894,7 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
     \FormulaRefAuto{P\dsep \neg P \vdash Q}{8,9}}
   \proofstep{1,2,3}{x\in B}{\rOE{6,7,7,8,10}}
   \proofstep{1,2}{A\subseteq B}{%
-    \FormulaRefAuto{A \subseteq B \coloneq
-    \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{3,11}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 11}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Vereinigungskürzung bei disjunktem Zusatz]{%
@@ -3628,6 +3915,8 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
   \proofstep{1,2,3}{A=B}{%
     \FormulaRefAuto{A \subseteq B, B \subseteq A \vdash A = B}{4,6}}
 \end{tabproof}
+
+\input{tex/b03-migrated-graph-pairs}
 
 \subsection{Idempotenz, Kommutativität, Assoziativität}
 
@@ -3677,12 +3966,14 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 
 \FormulaThmAuto{x \in A \eqvdash x \in A \cup \varnothing}
 \begin{tabproofwide}
+  \proofstepwidestar[]{\forall x\,(x\notin\varnothing)}{%
+      \FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}}
   \proofstepwide{x \in A}{\leftrightarrow}{x \in A \lor x \in \varnothing}%
-    {\FormulaRefAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}{\FormulaRefAuto{\varnothing \coloneq \iota O\bigl(\forall x\,(x \not\in O)\bigr)}}}
+    {\FormulaRefAuto{\forall x(\neg Q(x)) \vdash P \leftrightarrow P \lor Q(a)}{1}}
   \proofstepwide{}{\leftrightarrow}{x \in A \cup \varnothing}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{2}}
   \proofstepwide{x \in A}{\leftrightarrow}{x \in A \cup \varnothing}%
-    {\rChain{1,2}}
+    {\rChain{2,3}}
 \end{tabproofwide}
 
 \FormulaThmAuto{A = A \cup \varnothing}
@@ -3739,7 +4030,9 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \proofpart{\(\dashv\)}
   \proofstep{1}{A = \varnothing}{\rA}
   \proofstep{}{\{\varnothing\} = \varnothing \cup \{\varnothing\}}{\FormulaRefAuto{A = \varnothing \cup A}}
-  \proofstep{1}{A \cup \{A\} = \{\varnothing\}}{\rIE{1,\FormulaRefAuto{a = b \vdash b = a}{2}}}
+  \proofstep{}{\varnothing \cup \{ \varnothing \} = \{ \varnothing \}}{%
+      \FormulaRefAuto{a = b \vdash b = a}{2}}
+  \proofstep{1}{A \cup \{A\} = \{\varnothing\}}{\rIE{1,3}}
 \closeproofpart
 \end{tabproofsplit}
 
@@ -3766,12 +4059,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cup B) \cup C}{\leftrightarrow}{z \in (A \cup B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide*{}{\lor}{z \in C}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}
   \proofstepwide*{}{\lor}{z \in C}{}
 \end{tabproofwide}
 
@@ -3779,12 +4072,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in A \cup (B \cup C)}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide*{}{\lor}{z \in (B \cup C)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}
   \proofstepwide*{}{\lor}{(z \in B \lor z \in C)}{}
 \end{tabproofwide}
 
@@ -3822,12 +4115,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide*{}{\lor}{z \in (B \cap C)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}
   \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
 \end{tabproofwide}
 
@@ -3835,12 +4128,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{z \in (A \cap B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide*{}{\lor}{z \in C}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}
   \proofstepwide*{}{\lor}{z \in C}{}
 \end{tabproofwide}
 
@@ -3848,12 +4141,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
   \proofstepwide*{}{\land}{z \in (B \cup C)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}
   \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
 \end{tabproofwide}
 
@@ -3861,12 +4154,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{z \in (A \cup B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
   \proofstepwide*{}{\land}{z \in C}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}
   \proofstepwide*{}{\land}{z \in C}{}
 \end{tabproofwide}
 
@@ -3874,12 +4167,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cup B) \cap (C \cup D)}{\leftrightarrow}{z \in (A \cup B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}}
+    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
   \proofstepwide*{}{\land}{z \in (C \cup D)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{},1}}
   \proofstepwide*{}{\land}{(z \in C \lor z \in D)}{}
 \end{tabproofwide}
 
@@ -3887,12 +4180,12 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cap B) \cup (C \cap D)}{\leftrightarrow}{z \in (A \cap B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}}
+    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
   \proofstepwide*{}{\lor}{z \in (C \cap D)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
-    {\multirow{2}{*}{\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}}
+    {\rLRS{\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{},1}}
   \proofstepwide*{}{\lor}{(z \in C \land z \in D)}{}
 \end{tabproofwide}
 
@@ -3900,17 +4193,17 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in A \cap (B \cup C)}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cap (B \cup C) \eqvdash z \in A \land (z \in B \lor z \in C)}}}
+    {\FormulaRefAuto{z \in A \cap (B \cup C) \eqvdash z \in A \land (z \in B \lor z \in C)}}
   \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{P \land (Q \lor R) \eqvdash (P \land Q) \lor (P \land R)}{1}}}
+    {\FormulaRefAuto{P \land (Q \lor R) \eqvdash (P \land Q) \lor (P \land R)}{1}}
   \proofstepwide*{}{\lor}{(z \in A \land z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in (A \cap B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}}
+    {\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}
   \proofstepwide*{}{\cup}{z \in (A \cap C)}{}
 
   % Abschluss (unverändert)
@@ -3922,17 +4215,17 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cup B) \cap C}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap C \eqvdash (z \in A \lor z \in B) \land z \in C}}}
+    {\FormulaRefAuto{z \in (A \cup B) \cap C \eqvdash (z \in A \lor z \in B) \land z \in C}}
   \proofstepwide*{}{\land}{z \in C}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \land z \in C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{(P \lor Q) \land R \eqvdash (P \land R) \lor (Q \land R)}{1}}}
+    {\FormulaRefAuto{(P \lor Q) \land R \eqvdash (P \land R) \lor (Q \land R)}{1}}
   \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in (A \cap C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}}
+    {\FormulaRefAuto{z \in (A \cap B) \cup (C \cap D) \eqvdash (z \in A \land z \in B) \lor (z \in C \land z \in D)}{2}}
   \proofstepwide*{}{\cup}{z \in (B \cap C)}{}
 
   % Abschluss
@@ -3944,17 +4237,17 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in (A \cap B) \cup C}{\leftrightarrow}{(z \in A \land z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cap B) \cup C \eqvdash (z \in A \land z \in B) \lor z \in C}}}
+    {\FormulaRefAuto{z \in (A \cap B) \cup C \eqvdash (z \in A \land z \in B) \lor z \in C}}
   \proofstepwide*{}{\lor}{z \in C}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{(P \land Q) \lor R \eqvdash (P \lor R) \land (Q \lor R)}{1}}}
+    {\FormulaRefAuto{(P \land Q) \lor R \eqvdash (P \lor R) \land (Q \lor R)}{1}}
   \proofstepwide*{}{\land}{(z \in B \lor z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in (A \cup C)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}}
+    {\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}
   \proofstepwide*{}{\cap}{z \in (B \cup C)}{}
 
   % Abschluss
@@ -3966,17 +4259,17 @@ Damit gilt in allen Fällen eine der drei behaupteten Gleichheiten.
 \begin{tabproofwide}
   % Zeile 1 -> zwei Zeilen
   \proofstepwide{z \in A \cup (B \cap C)}{\leftrightarrow}{z \in A}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in A \cup (B \cap C) \eqvdash z \in A \lor (z \in B \land z \in C)}}}
+    {\FormulaRefAuto{z \in A \cup (B \cap C) \eqvdash z \in A \lor (z \in B \land z \in C)}}
   \proofstepwide*{}{\lor}{(z \in B \land z \in C)}{}
 
   % Zeile 2 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{(z \in A \lor z \in B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{P \lor (Q \land R) \eqvdash (P \lor Q) \land (P \lor R)}{1}}}
+    {\FormulaRefAuto{P \lor (Q \land R) \eqvdash (P \lor Q) \land (P \lor R)}{1}}
   \proofstepwide*{}{\land}{(z \in A \lor z \in C)}{}
 
   % Zeile 3 -> zwei Zeilen
   \proofstepwide{}{\leftrightarrow}{z \in (A \cup B)}%
-    {\multirow{2}{*}{\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}}
+    {\FormulaRefAuto{z \in (A \cup B) \cap (C \cup D) \eqvdash (z \in A \lor z \in B) \land (z \in C \lor z \in D)}{2}}
   \proofstepwide*{}{\cap}{z \in (A \cup C)}{}
 
   % Abschluss
@@ -4091,8 +4384,7 @@ bereits in \(A\).
       \rOE{3,4,5,6,7}}
     \proofstepwidestar[1]{%
       A\subseteq (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)}{%
-      \FormulaRefAuto{A \subseteq B \coloneq
-      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{2,8}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 8}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Teilmengenrichtung \(\cdots\subseteq A\)]{%
@@ -4113,8 +4405,7 @@ bereits in \(A\).
     \proofstepwidestar[1]{x\in A}{\rOE{2,3,4,5,6}}
     \proofstepwidestar{%
       (A\cap B)\cup\bigl(A\cap(M\setminus B)\bigr)\subseteq A}{%
-      \FormulaRefAuto{A \subseteq B \coloneq
-      \forall x\,(x\in A \rightarrow x\in B)}{\rUI{\rRI{1,7}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 7}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -4161,46 +4452,32 @@ bereits in \(A\).
 \subsubsection{Elementare Teilmengenbeziehungen}
 
 \FormulaThmAuto{A \subseteq A \cup B}
-\begin{tabproofwide}
-  \proofstepwide{x \in A}{\rightarrow}{x \in A \lor x \in B}%
-    {\FormulaRefAuto{P \rightarrow P \lor Q}}
-  \proofstepwide{}{ \rightarrow}{x \in A \cup B}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
-  \proofstepwide{x \in A}{\rightarrow}{x \in A \cup B}%
-    {\rChain{1,2}}
-  \proofstepwidestar{A \subseteq A \cup B}%
-    {\FormulaRefAuto{ A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B) }{\rUI{3}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{x\in A\cup B}{\FormulaRefAuto{z\in A\vdash z\in A\cup B}[thm]{1}}
+  \proofstep{}{A\subseteq A\cup B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 2}}
+\end{tabproof}
 
 \FormulaThmAuto{A \subseteq B \cup A}
-\begin{tabproofwide}
-  \proofstepwide{x \in A}{\rightarrow}{x \in B \lor x \in A}%
-    {\FormulaRefAuto{P \rightarrow Q \lor P}}
-  \proofstepwide{}{\rightarrow}{x \in B \cup A}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{1}}
-  \proofstepwide{x \in A}{\rightarrow}{x \in B \cup A}%
-    {\rChain{1,2}}
-  \proofstepwidestar{A \subseteq B \cup A}%
-    {\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{3}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{x\in A}{\rA}
+  \proofstep{1}{x\in B\cup A}{\FormulaRefAuto{z\in B\vdash z\in A\cup B}[thm]{1}}
+  \proofstep{}{A\subseteq B\cup A}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 2}}
+\end{tabproof}
 
 \FormulaThmDeltaK[Vereinigung zweier Teilmengen einer gemeinsamen Obermenge]{%
   A\subseteq C\dsep B\subseteq C\vdash A\cup B\subseteq C%
 }{UnionSubsetCommonSuperset}{%
   \DeltaRow{Mengen}{A\dsep B\dsep C\dsep z}%
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{A \subseteq C}{\rA}
-  \proofstepwidestar[2]{B \subseteq C}{\rA}
-  \proofstepwide{z \in A \cup B}{\rightarrow}{z \in A \lor z \in B}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
-  \proofstepwide[1,2]{}{ \rightarrow}{z \in C}%
-    {\FormulaRefAuto{A\subseteq C,\, B\subseteq C,\, z\in A\lor z\in B \vdash z\in C}{1,2,3}}
-  \proofstepwide[1,2]{z \in A \cup B}{\rightarrow}{z \in C}%
-    {\rChain{3,4}}
-  \proofstepwidestar[1,2]{A \cup B \subseteq C}%
-    {\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq C}{\rA}
+  \proofstep{2}{B\subseteq C}{\rA}
+  \proofstep{3}{z\in A\cup B}{\rA}
+  \proofstep{3}{z\in A\lor z\in B}{\FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{3}}
+  \proofstep{1,2,3}{z\in C}{\FormulaRefAuto{A\subseteq C,\,B\subseteq C,\,z\in A\lor z\in B\vdash z\in C}[thm]{1,2,4}}
+  \proofstep{1,2}{A\cup B\subseteq C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 5}}
+\end{tabproof}
 
 \subsubsection{Zusammenspiel von Vereinigung, Differenz und Disjunktheit}
 
@@ -4230,8 +4507,7 @@ bereits in \(A\).
     \proofstepwidestar[2]{x\in M\cup(H\setminus M)}{%
       \rOE{3,4,5,6,8}}
     \proofstepwidestar[]{H\subseteq M\cup(H\setminus M)}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{2,9}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 9}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Zweite Inklusion]{%
@@ -4251,8 +4527,7 @@ bereits in \(A\).
       \FormulaRefAuto{x\in A\setminus B\vdash x\in A}{6}}
     \proofstepwidestar[1,2]{x\in H}{\rOE{3,4,5,6,7}}
     \proofstepwidestar[1]{M\cup(H\setminus M)\subseteq H}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{2,8}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 8}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -4287,8 +4562,7 @@ bereits in \(A\).
     \proofstepwidestar[2]{x\in K}{%
       \FormulaRefAuto{P\lor Q\dsep\neg P\vdash Q}{4,\rAEb{3}}}
     \proofstepwidestar[1]{(M\cup K)\setminus M\subseteq K}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{2,5}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 5}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Zweite Inklusion]{%
@@ -4305,8 +4579,7 @@ bereits in \(A\).
     \proofstepwidestar[1,2]{x\in(M\cup K)\setminus M}{%
       \FormulaRefAuto{x\in A\dsep x\notin B\vdash x\in A\setminus B}{4,3}}
     \proofstepwidestar[1]{K\subseteq(M\cup K)\setminus M}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}{\rUI{\rRI{2,5}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 5}}
   \closeproofpartwideindR
 
   \proofpartwide{Schluss}
@@ -4433,18 +4706,26 @@ bereits in \(A\).
     \rLRS{1}}
   \proofstepwide[1]{}{=}{P\cup(K\cup\{k\})\cup R}{%
     \rLRS{\FormulaRefAuto{A\cup B=B\cup A}[thm]}}
-  \proofstepwide[1]{}{=}{((P\cup K)\cup\{k\})\cup R}{%
-    \rLRS{\FormulaRefAuto{a=b\vdash b=a}[thm]{%
-      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}}}
+  \proofstepwidestar[]{(P\cup K)\cup\{k\}=P\cup(K\cup\{k\})}{%
+      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}
+  \proofstepwidestar[]{P\cup(K\cup\{k\})=(P\cup K)\cup\{k\}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      4}}
+  \proofstepwide[1]{P\cup(K\cup\{k\})\cup R}{=}{((P\cup K)\cup\{k\})\cup R}{%
+    \rLRS{5}}
   \proofstepwide[1]{}{=}{(P\cup K)\cup(\{k\}\cup R)}{%
     \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}
   \proofstepwide[1]{}{=}{(P\cup K)\cup(R\cup\{k\})}{%
     \rLRS{\FormulaRefAuto{A\cup B=B\cup A}[thm]}}
-  \proofstepwide[1]{}{=}{(P\cup K\cup R)\cup\{k\}}{%
-    \rLRS{\FormulaRefAuto{a=b\vdash b=a}[thm]{%
-      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}}}
+  \proofstepwidestar[]{((P\cup K)\cup R)\cup\{k\}=(P\cup K)\cup(R\cup\{k\})}{%
+      \FormulaRefAuto{(A\cup B)\cup C=A\cup(B\cup C)}[thm]}
+  \proofstepwidestar[]{(P\cup K)\cup(R\cup\{k\})=((P\cup K)\cup R)\cup\{k\}}{%
+      \FormulaRefAuto{a=b\vdash b=a}[thm]{%
+      9}}
+  \proofstepwide[1]{(P\cup K)\cup(R\cup\{k\})}{=}{(P\cup K\cup R)\cup\{k\}}{%
+    \rLRS{10}}
   \proofstepwidestar[1]{P\cup Q\cup R=(P\cup K\cup R)\cup\{k\}}{%
-    \rChain{2,7}}
+    \rChain{2,11}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Teilmengen einer Adjunktion ohne den Zusatzpunkt]{%
@@ -4470,8 +4751,7 @@ bereits in \(A\).
     \FormulaRefAuto{P\dsep\neg P\vdash Q}[thm]{9,2}}
   \proofstepwidestar[1,2,3]{x\in S}{\rOE{5,6,6,7,11}}
   \proofstepwidestar[1,2]{U\subseteq S}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{3,12}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 12}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Ein äußerer Zeuge verhindert eine Inklusion]{%
@@ -4502,13 +4782,10 @@ bereits in \(A\).
   \proofstep{3,4}{\exists u\in A\,(u\notin B)}{\rEI{\rAI{3,4}}}
   \proofstep{2,3,4}{\bot}{\rBI{2,5}}
   \proofstep{2,3}{x\in B}{\rCE{4,6}}
-  \proofstep{2}{\forall x\,(x\in A\rightarrow x\in B)}{%
-    \rUI{\rRI{3,7}}}
-  \proofstep{2}{A\subseteq B}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{8}}
-  \proofstep{1,2}{\bot}{\rBI{1,9}}
-  \proofstep{1}{\exists x\in A\,(x\notin B)}{\rCE{2,10}}
+  
+  \proofstep{2}{A\subseteq B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 7}}
+  \proofstep{1,2}{\bot}{\rBI{1,8}}
+  \proofstep{1}{\exists x\in A\,(x\notin B)}{\rCE{2,9}}
 \end{tabproof}
 
 \subsubsection{Verträglichkeit mit Gleichheit und Teilmengen}
@@ -4529,20 +4806,15 @@ bereits in \(A\).
 
 
 \FormulaThmAuto{A \subseteq B \vdash A \cup C \subseteq B \cup C}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{A \subseteq B}{\rA}
-  \proofstepwide{z \in A \cup C}{\rightarrow}{z \in A \lor z \in C}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}}
-  \proofstepwide[1]{}{ \rightarrow}{z \in B \lor z \in C}%
-    {\FormulaRefAuto{P \rightarrow Q,\, P \lor R \vdash Q \lor R}%
-      {\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{1}},2}}
-  \proofstepwide[1]{}{ \rightarrow}{z \in B \cup C}%
-    {\FormulaRefAuto{z \in A \cup B \eqvdash z \in A \lor z \in B}{3}}
-  \proofstepwide[1]{z \in A \cup C}{\rightarrow}{z \in B \cup C}%
-    {\rChain{2,4}}
-  \proofstepwidestar[1]{A \cup C \subseteq B \cup C}%
-    {\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{z\in A\cup C}{\rA}
+  \proofstep{2}{z\in A\lor z\in C}{\FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{2}}
+  \proofstep{1}{\forall z\,(z\in A\rightarrow z\in B)}{\FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\rightarrow x\in B)}[def]{1}}
+  \proofstep{1,2}{z\in B\lor z\in C}{\FormulaRefAuto{P\rightarrow Q,\,P\lor R\vdash Q\lor R}[thm]{\rUE{4},3}}
+  \proofstep{1,2}{z\in B\cup C}{\FormulaRefAuto{z\in A\cup B\eqvdash z\in A\lor z\in B}[thm]{5}}
+  \proofstep{1}{A\cup C\subseteq B\cup C}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 6}}
+\end{tabproof}
 
 \FormulaThmAuto{A \subseteq B \vdash C \cup A \subseteq C \cup B}
 \begin{tabproofwide}
@@ -4570,22 +4842,16 @@ bereits in \(A\).
 \end{tabproofwide}
 
 \FormulaThmAuto{A \subseteq B,\, C \subseteq D \vdash A \cap C \subseteq B \cap D}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{A \subseteq B}{\rA}
-  \proofstepwidestar[2]{C \subseteq D}{\rA}
-  \proofstepwide{x \in A \cap C}{\rightarrow}{x \in A \land x \in C}%
-    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}}
-  \proofstepwide[1]{}{ \rightarrow}{x \in B \land x \in C}%
-    {\FormulaRefAuto{P \rightarrow Q,\, P \land R \vdash Q \land R}{\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{1}},3}}
-  \proofstepwide[1,2]{}{ \rightarrow}{x \in B \land x \in D}%
-    {\FormulaRefAuto{P \rightarrow Q,\, R \land P \vdash R \land Q}{\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{2}},4}}
-  \proofstepwide[1,2]{}{ \rightarrow}{x \in B \cap D}%
-    {\FormulaRefAuto{x \in A \cap B \eqvdash x \in A \land x \in B}{5}}
-  \proofstepwide[1,2]{x \in A \cap C}{\rightarrow}{x \in B \cap D}%
-    {\rChain{3,6}}
-  \proofstepwidestar[1,2]{A \cap C \subseteq B \cap D}%
-    {\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{\rUI{7}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{C\subseteq D}{\rA}
+  \proofstep{3}{x\in A\cap C}{\rA}
+  \proofstep{3}{x\in A\land x\in C}{\FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}[thm]{3}}
+  \proofstep{1,3}{x\in B}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{1,\rAEa{4}}}
+  \proofstep{2,3}{x\in D}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{2,\rAEb{4}}}
+  \proofstep{1,2,3}{x\in B\cap D}{\FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}[thm]{\rAI{5,6}}}
+  \proofstep{1,2}{A\cap C\subseteq B\cap D}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots 7}}
+\end{tabproof}
 
 \FormulaThmAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}
 \begin{tabproofwide}
@@ -4613,11 +4879,13 @@ bereits in \(A\).
   \proofstepwidestar[2]{b\in H}{\rA}
   \proofstepwide[1,2]{\{a,b\}}{\subseteq}{H\cup H}%
     {\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{1,2}}
-  \proofstepwide[1,2]{}{=}{H}%
+  \proofstepwidestar[]{H = H \cup H}{%
+      \FormulaRefAuto{A = A \cup A}}
+  \proofstepwide[1,2]{H\cup H}{=}{H}%
     {\FormulaRefAuto{a=b\vdash b=a}{%
-      \FormulaRefAuto{A = A \cup A}}}
+      4}}
   \proofstepwidestar[1,2]{\{a,b\}\subseteq H}%
-    {\rChain{3,4}}
+    {\rChain{3,5}}
 \end{tabproofwide}
 
 \FormulaThmDeltaK[Zwei verschiedene äußere Elemente]{%
@@ -4998,19 +5266,14 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
 \end{tabproof}
 
 \FormulaThmAuto{A \subseteq B \vdash \powerset(A) \subseteq \powerset(B)}
-\begin{tabproofwide}
-  \proofstepwidestar[1]{A \subseteq B}{\rA}
-  \proofstepwide{x \in \powerset(A)}{\rightarrow}{x \subseteq A}%
-    {\FormulaRefAuto{\powerset(A) \coloneq \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}}
-  \proofstepwide[1]{}{ \rightarrow}{x \subseteq B}%
-    {\FormulaRefAuto{A \subseteq B,\, B \subseteq C \vdash A \subseteq C}{2,1}}
-  \proofstepwide[1]{}{ \rightarrow}{x \in \powerset(B)}%
-    {\FormulaRefAuto{\powerset(A) \coloneq \iota B\Bigl(\forall x\;\bigl(x \in B \leftrightarrow x \subseteq A\bigr)\Bigr)}{3}}
-  \proofstepwide[1]{x \in \powerset(A)}{\rightarrow}{x \in \powerset(B)}%
-    {\rChain{2,4}}
-  \proofstepwidestar[1]{\powerset(A) \subseteq \powerset(B)}%
-    {\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{\rUI{5}}}
-\end{tabproofwide}
+\begin{tabproof}
+  \proofstep{1}{A\subseteq B}{\rA}
+  \proofstep{2}{x\in\powerset(A)}{\rA}
+  \proofstep{2}{x\subseteq A}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{2}}
+  \proofstep{1,2}{x\subseteq B}{\FormulaRefAuto{A\subseteq B,\,B\subseteq C\vdash A\subseteq C}[thm]{3,1}}
+  \proofstep{1,2}{x\in\powerset(B)}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{4}}
+  \proofstep{1}{\powerset(A)\subseteq\powerset(B)}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 5}}
+\end{tabproof}
 
 \FormulaThmAuto{a \in A \vdash \{a\} \in \powerset(A)}
 \begin{tabproof}
@@ -5024,7 +5287,9 @@ Dieses Axiom verhindert zyklische Mitgliedschaften, indem jede nicht-leere Menge
   \proofstep{1}{A \subseteq B}{\rA}
   \proofstep{2}{a \in \powerset(A)}{\rA}
   \proofstep{1}{\powerset(A) \subseteq \powerset(B)}{\FormulaRefAuto{A \subseteq B \vdash \powerset(A) \subseteq \powerset(B)}{1}}
-  \proofstep{1,2}{a \in \powerset(B)}{\rRE{\rUE{\FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{3}},2}}
+  \proofstep{1}{\forall x\,(x\in\powerset(A)\rightarrow x\in\powerset(B))}{%
+      \FormulaRefAuto{A \subseteq B \coloneq \forall x\,(x \in A \rightarrow x \in B)}{3}}
+  \proofstep{1,2}{a \in \powerset(B)}{\rRE{\rUE{4},2}}
 \end{tabproof}
 
 
@@ -5109,16 +5374,17 @@ den bereits eingeführten Mengenoperationen beschrieben.
 }
 \begin{tabproof}
   \proofstep{1}{H\in\mathfrak{I}[P,Q]}{\rA}
+  \proofstep{1}{P\subseteq H\land H\subseteq Q}{%
+      \FormulaRefAuto{BooleanSetIntervalMembership}[thm]{1}}
   \proofstep{1}{H\subseteq Q}{%
-    \rAEb{\FormulaRefAuto{BooleanSetIntervalMembership}[thm]{1}}}
+    \rAEb{2}}
   \proofstep{1}{H\in\powerset(Q)}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
-      x \subseteq A}[thm]{2}}
+      x \subseteq A}[thm]{3}}
   \proofstep{}{\mathfrak{I}[P,Q]\subseteq\powerset(Q)}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{1,3}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 4}}
   \proofstep{}{\mathsf{SetSys}(\mathfrak{I}[P,Q];Q)}{%
-    \FormulaRefAuto{SetSystemOverDef}[def]{4}}
+    \FormulaRefAuto{SetSystemOverDef}[def]{5}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Kanonische Koordinaten eines booleschen Intervalls]{%
@@ -5170,8 +5436,7 @@ den bereits eingeführten Mengenoperationen beschrieben.
       \FormulaRefAuto{x\in A\dsep x\notin B\vdash
         x\in A\setminus B}[thm]{8,\rAEb{7}}}
     \proofstepwidestar[2]{H\setminus P\subseteq Q\setminus P}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{6,9}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[6]\vdots 9}}
     \proofstepwidestar[2]{H\setminus P\in\powerset(Q\setminus P)}{%
       \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
         x \subseteq A}[thm]{10}}
@@ -5294,29 +5559,29 @@ liefern sie daher die kanonische Bijektion
       \FormulaRefAuto{M\neq\varnothing\dsep a\in\bigcap M
         \dsep X\in M\vdash a\in X}[thm]{5,6,3}}
     \proofstepwidestar[1]{\bigcap\mathfrak{I}[P,Q]\subseteq P}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{6,7}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[6]\vdots 7}}
 
     \proofstepwidestar[9]{x\in P}{\rA}
     \proofstepwidestar[10]{H\in\mathfrak{I}[P,Q]}{\rA}
+    \proofstepwidestar[10]{P\subseteq H\land H\subseteq Q}{%
+      \FormulaRefAuto{BooleanSetIntervalMembership}[thm]{10}}
     \proofstepwidestar[10]{P\subseteq H}{%
-      \rAEa{\FormulaRefAuto{BooleanSetIntervalMembership}[thm]{10}}}
+      \rAEa{11}}
     \proofstepwidestar[9,10]{x\in H}{%
-      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{11,9}}
+      \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{12,9}}
     \proofstepwidestar[9]{\forall H\in\mathfrak{I}[P,Q]\,(x\in H)}{%
-      \rUI{\rRI{10,12}}}
+      \rUI{\rRI{10,13}}}
     \proofstepwidestar[1]{%
       x\in\bigcap\mathfrak{I}[P,Q]\leftrightarrow
       \forall H\in\mathfrak{I}[P,Q]\,(x\in H)}{%
       \FormulaRefAuto{M\neq\varnothing\vdash x\in\bigcap M
         \leftrightarrow\forall X\in M\,(x\in X)}[thm]{5}}
     \proofstepwidestar[1,9]{x\in\bigcap\mathfrak{I}[P,Q]}{%
-      \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}[thm]{14,13}}
+      \FormulaRefAuto{P \leftrightarrow Q, Q \vdash P}[thm]{15,14}}
     \proofstepwidestar[1]{P\subseteq\bigcap\mathfrak{I}[P,Q]}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{9,15}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[9]\vdots 16}}
     \proofstepwidestar[1]{\bigcap\mathfrak{I}[P,Q]=P}{%
-      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{8,16}}
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{8,17}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Hülle]{%
@@ -5335,17 +5600,18 @@ liefern sie daher die kanonische Bijektion
       \FormulaRefAuto{x\in\bigcup A\;\eqvdash\;
         \exists B\in A\,(x\in B)}[thm]{5}}
     \proofstepwidestar[7]{H\in\mathfrak{I}[P,Q]\land x\in H}{\rA}
+    \proofstepwidestar[7]{P\subseteq H\land H\subseteq Q}{%
+      \FormulaRefAuto{BooleanSetIntervalMembership}[thm]{\rAEa{7}}}
     \proofstepwidestar[7]{H\subseteq Q}{%
-      \rAEb{\FormulaRefAuto{BooleanSetIntervalMembership}[thm]{\rAEa{7}}}}
+      \rAEb{8}}
     \proofstepwidestar[7]{x\in Q}{%
       \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{%
-        8,\rAEb{7}}}
-    \proofstepwidestar[5]{x\in Q}{\rEE{6,7,9}}
+        9,\rAEb{7}}}
+    \proofstepwidestar[5]{x\in Q}{\rEE{6,7,10}}
     \proofstepwidestar[]{\bigcup\mathfrak{I}[P,Q]\subseteq Q}{%
-      \FormulaRefAuto{A\subseteq B\coloneq
-        \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{5,10}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[5]\vdots 11}}
     \proofstepwidestar[1]{\bigcup\mathfrak{I}[P,Q]=Q}{%
-      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{11,4}}
+      \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{12,4}}
   \closeproofpartwideindR
 \end{tabproofsplitwide}
 
@@ -5356,8 +5622,9 @@ liefern sie daher die kanonische Bijektion
   \DeltaRow{Mengen}{D\dsep H\dsep k
     \dsep\mathfrak{I}[\{k\},D\cup\{k\}]}%
 }
-\begin{tabproofwide}
-  \proofstepwidestar[1]{H\in\powerset(D\cup\{k\})}{\rA}
+\begin{tabproofsplitwide}
+\proofpartwide{Erste Inklusion}
+\proofstepwidestar[1]{H\in\powerset(D\cup\{k\})}{\rA}
   \proofstepwidestar[1]{H\subseteq D\cup\{k\}}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
       x \subseteq A}[thm]{1}}
@@ -5385,10 +5652,14 @@ liefern sie daher die kanonische Bijektion
     \rOE{3,4,7,8,11}}
   \proofstepwidestar[]{\powerset(D\cup\{k\})\subseteq
     \powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{1,12}}}}
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[1]\vdots 12}}
 
-  \proofstepwidestar[14]{H\in
+
+\closeproofpartwide
+
+\proofpartwide{Zweite Inklusion}
+  \setcounter{proofstepnr}{13}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[14]{H\in
     \powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
   \proofstepwidestar[14]{H\in\powerset(D)\lor
     H\in\mathfrak{I}[\{k\},D\cup\{k\}]}{%
@@ -5406,22 +5677,30 @@ liefern sie daher die kanonische Bijektion
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
       x \subseteq A}[thm]{19}}
   \proofstepwidestar[21]{H\in\mathfrak{I}[\{k\},D\cup\{k\}]}{\rA}
+  \proofstepwidestar[21]{\{k\}\subseteq H\land H\subseteq D\cup\{k\}}{%
+      \FormulaRefAuto{BooleanSetIntervalMembership}[thm]{21}}
   \proofstepwidestar[21]{H\subseteq D\cup\{k\}}{%
-    \rAEb{\FormulaRefAuto{BooleanSetIntervalMembership}[thm]{21}}}
+    \rAEb{22}}
   \proofstepwidestar[21]{H\in\powerset(D\cup\{k\})}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
-      x \subseteq A}[thm]{22}}
+      x \subseteq A}[thm]{23}}
   \proofstepwidestar[14]{H\in\powerset(D\cup\{k\})}{%
-    \rOE{15,16,20,21,23}}
+    \rOE{15,16,20,21,24}}
   \proofstepwidestar[]{%
     \powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]
     \subseteq\powerset(D\cup\{k\})}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{\rUI{\rRI{14,24}}}}
-  \proofstepwidestar[]{\powerset(D\cup\{k\})
+    \FormulaRefAuto{SubsetIntroductionRule}[thm]{[14]\vdots 25}}
+
+\closeproofpartwide
+
+\proofpartwide{Mengengleichheit}
+  \setcounter{proofstepnr}{26}% Fortlaufende Schritte dieses Beweises.
+\proofstepwidestar[]{\powerset(D\cup\{k\})
     =\powerset(D)\cup\mathfrak{I}[\{k\},D\cup\{k\}]}{%
-    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{13,25}}
-\end{tabproofwide}
+    \FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{13,26}}
+
+\closeproofpartwide
+\end{tabproofsplitwide}
 
 \FormulaThmDeltaK[Disjunktheit der Potenzmengenanteile an einem adjungierten Punkt]{%
   k\notin D\vdash
@@ -5440,19 +5719,21 @@ liefern sie daher die kanonische Bijektion
   \proofstepwidestar[2]{H\subseteq D}{%
     \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\;
       x \subseteq A}[thm]{\rAEa{3}}}
+  \proofstepwidestar[2]{\{k\}\subseteq H\land H\subseteq D\cup\{k\}}{%
+      \FormulaRefAuto{BooleanSetIntervalMembership}[thm]{\rAEb{3}}}
   \proofstepwidestar[2]{\{k\}\subseteq H}{%
-    \rAEa{\FormulaRefAuto{BooleanSetIntervalMembership}[thm]{\rAEb{3}}}}
+    \rAEa{5}}
   \proofstepwidestar[]{k\in\{k\}}{\FormulaRefAuto{a\in\{a\}}[thm]}
   \proofstepwidestar[2]{k\in H}{%
-    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{5,6}}
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,7}}
   \proofstepwidestar[2]{k\in D}{%
-    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,7}}
-  \proofstepwidestar[1,2]{\bot}{\rBI{8,1}}
+    \FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,8}}
+  \proofstepwidestar[1,2]{\bot}{\rBI{9,1}}
   \proofstepwidestar[1]{H\notin
-    \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]}{\rCI{2,9}}
+    \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]}{\rCI{2,10}}
   \proofstepwidestar[1]{%
     \powerset(D)\cap\mathfrak{I}[\{k\},D\cup\{k\}]=\varnothing}{%
-    \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{\rUI{10}}}
+    \FormulaRefAuto{\forall x\,x\notin A\vdash A=\varnothing}[thm]{\rUI{11}}}
 \end{tabproofwide}
 
 \section{Das kartesische Produkt}
@@ -5469,7 +5750,9 @@ liefern sie daher die kanonische Bijektion
   \proofstep{1}{\{a\} \in \powerset(A \cup B)}{\FormulaRefAuto{a \in A \vdash \{a\} \in \powerset(A)}{5}}
   \proofstep{1,2}{\{\{a\},\{a,b\}\} \subseteq \powerset(A \cup B)}{\FormulaRefAuto{a \in A,\, b \in B \vdash \{a,b\} \subseteq A \cup B}{6,4}}
   \proofstep{1,2}{\{\{a\},\{a,b\}\} \in \powerset(\powerset(A \cup B))}{\FormulaRefAuto{\powerset(A) \coloneq \iota B\bigl(\forall x\,(x \in B \leftrightarrow x \subseteq A)\bigr)}{7}}
-  \proofstep{1,2}{(a,b) \in \powerset(\powerset(A \cup B))}{\rIE{\FormulaRefAuto{(a, b) \coloneq \{ \{ a \}, \{ a, b \} \}},8}}
+  \proofstep{}{(a,b)=\{\{a\},\{a,b\}\}}{%
+      \FormulaRefAuto{(a, b) \coloneq \{ \{ a \}, \{ a, b \} \}}}
+  \proofstep{1,2}{(a,b) \in \powerset(\powerset(A \cup B))}{\rIE{9,8}}
 \end{tabproof}
 
 \FormulaThmAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \powerset(\powerset(A \cup B))}
@@ -5486,8 +5769,12 @@ liefern sie daher die kanonische Bijektion
 
 \FormulaThmAuto[Eindeutige Existenz des kartesischen Produkts]{\exists! C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}
 \begin{tabproof}
-  \proofstep{}{ \exists! C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B}{\multirow{2}{*}{\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{\FormulaRefAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \powerset(\powerset(A \cup B))}}}}}}
-  \proofstepstar{}{ \big(x=(a,b)\big)\bigr)}{}
+  \proofstep{}{(\exists a\in A\,\exists b\in B\,(x=(a,b)))\rightarrow x\in\powerset(\powerset(A\cup B))}{%
+      \FormulaRefAuto{\exists a \in A\, \exists b \in B \big(x=(a,b)\big)\vdash x \in \powerset(\powerset(A \cup B))}}
+  \proofstep{}{\begin{aligned}[t]
+    &\exists! C\,\forall x\,\bigl(x\in C\leftrightarrow{}\\[-2pt]
+    &\qquad\exists a\in A\,\exists b\in B\,(x=(a,b))\bigr)
+    \end{aligned}}{\rEI{\FormulaRefAuto{\forall x(P(x)\rightarrow x\in A)\vdash \exists! B(\forall x(x\in B\leftrightarrow P(x)))}{\rUI{1}}}}
 \end{tabproof}
 %%begin novalidate
 \FormulaDefAuto[Kartesisches Produkt ($A \times B$)]{A \times B \coloneq \iota C\, \forall x\, \bigl(x \in C \leftrightarrow \exists a \in A\, \exists b \in B \big(x=(a,b)\big)\bigr)}
@@ -5589,12 +5876,8 @@ liefern sie daher die kanonische Bijektion
       \vdash(a,b)\in A\times B}[thm]{8,6}}
   \proofstep{1,4}{z\in A'\times B}{\rIE{7,9}}
   \proofstep{1,2}{z\in A'\times B}{\rEE{3,4,10}}
-  \proofstep{1}{%
-    \forall z\,(z\in A\times B\rightarrow z\in A'\times B)}{%
-    \rUI{\rRI{2,11}}}
-  \proofstep{1}{A\times B\subseteq A'\times B}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{12}}
+  
+  \proofstep{1}{A\times B\subseteq A'\times B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 11}}
 \end{tabproof}
 
 \FormulaThmDeltaK[Monotonie des kartesischen Produkts in der zweiten Komponente]{%
@@ -5621,12 +5904,8 @@ liefern sie daher die kanonische Bijektion
       \vdash(a,b)\in A\times B}[thm]{5,8}}
   \proofstep{1,4}{z\in A\times B'}{\rIE{7,9}}
   \proofstep{1,2}{z\in A\times B'}{\rEE{3,4,10}}
-  \proofstep{1}{%
-    \forall z\,(z\in A\times B\rightarrow z\in A\times B')}{%
-    \rUI{\rRI{2,11}}}
-  \proofstep{1}{A\times B\subseteq A\times B'}{%
-    \FormulaRefAuto{A\subseteq B\coloneq
-      \forall x\,(x\in A\rightarrow x\in B)}[def]{12}}
+  
+  \proofstep{1}{A\times B\subseteq A\times B'}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[2]\vdots 11}}
 \end{tabproof}
 
 \subsubsection{Getaggte Familien}
@@ -6114,6 +6393,8 @@ bezeichnet ein Termschema und setzt keinen Funktionsgraphen voraus.
       \exists! A\bigl(\forall x\,(x\in A\leftrightarrow P(x))\bigr)%
     }[thm]{9}}
 \end{tabproofwide}
+
+\input{tex/b03-migrated-term-images}
 
 \section{Auswahlaxiom}
 

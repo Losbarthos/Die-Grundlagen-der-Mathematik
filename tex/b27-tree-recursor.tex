@@ -1,0 +1,350 @@
+% Einbindung nach dem vollständig bewiesenen Strukturrekursionssatz.
+\subsection{Der Baumrekursor: Blätter ersetzen, Ergebnisse verknüpfen}
+
+Der Baumrekursor führt zwei festgelegte Schritte aus: Er ersetzt ein Blatt
+mit Beschriftung \(a\) durch \(f(a)\), und er verknüpft die Ergebnisse der
+beiden Teilbäume mit \(g\). Der Strukturrekursionssatz liefert genau eine
+Funktion mit diesen Eigenschaften.
+
+\Needspace{16\baselineskip}
+\FormulaDefDeltaK[Baumrekursor]{%
+  \begin{aligned}[t]
+    &f\colon A\to X\dsep g\colon X\times X\to X\vdash{}\\[-2pt]
+    &\TreeRecursor{A}{X}{f}{g}\coloneqq
+      \iota E\colon\BracketTreeSet A\to X\,\Bigl(\\[-2pt]
+    &\quad\forall a\in A\,E(\LeafTree A a)=f(a)\land{}\\[-2pt]
+    &\quad\forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=g(E(S),E(T))\Bigr)
+  \end{aligned}%
+}{TreeRecursorDef}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep g\dsep E}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Baumrekursor}{\TreeRecursor{A}{X}{f}{g}}
+}
+
+Für die folgenden Aussagen und Beweise wird
+\(R\coloneqq\TreeRecursor{A}{X}{f}{g}\) abgekürzt.
+
+\FormulaThmDeltaK[Charakterisierung des Baumrekursors]{%
+  \begin{aligned}[t]
+    &f\colon A\to X\dsep g\colon X\times X\to X\vdash{}\\[-2pt]
+    &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+    &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+    &\quad\forall S,T\in\BracketTreeSet A\,
+      R(\NodeTree A S T)=g(R(S),R(T))\Bigr)
+  \end{aligned}%
+}{TreeRecursorSpecification}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep g\dsep E\dsep R}
+  \DeltaRow{Abkürzung}{R\coloneqq\TreeRecursor{A}{X}{f}{g}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{f\colon A\to X}{\rA}
+  \proofstepwidestar[2]{g\colon X\times X\to X}{\rA}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &\exists!E\colon\BracketTreeSet A\to X\,\Bigl(\\[-2pt]
+      &\quad\forall a\in A\,E(\LeafTree A a)=f(a)\land{}\\[-2pt]
+      &\quad\forall S,T\in\BracketTreeSet A\,
+        E(\NodeTree A S T)\\[-2pt]
+      &\qquad=g(E(S),E(T))\Bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]{1,2}}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+      &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+      &\quad\forall S,T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)\\[-2pt]
+      &\qquad=g(R(S),R(T))\Bigr)
+    \end{aligned}}{%
+    \FormulaRefAuto{TreeRecursorDef}[def]{1,2,3}}
+\end{tabproofwide}
+
+\Needspace{20\baselineskip}
+\FormulaThmDeltaK[Typisierung, Blattregel und Knotenregel]{%
+  \begin{aligned}[t]
+    &\text{(i)}\;f\colon A\to X\dsep g\colon X\times X\to X\vdash
+      R\colon\BracketTreeSet A\to X,\\[-2pt]
+    &\text{(ii)}\;f\colon A\to X\dsep g\colon X\times X\to X\dsep
+      a\in A\vdash R(\LeafTree A a)=f(a),\\[-2pt]
+    &\text{(iii)}\;f\colon A\to X\dsep g\colon X\times X\to X\dsep
+      S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+    &\qquad R(\NodeTree A S T)=g(R(S),R(T)).
+  \end{aligned}%
+}{TreeRecursorEquations}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep g\dsep R}
+  \DeltaRow{Abkürzung}{R\coloneqq\TreeRecursor{A}{X}{f}{g}}
+}
+\begin{tabproofsplitwide}
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Typisierung]{%
+    f\colon A\to X\dsep g\colon X\times X\to X\vdash
+      R\colon\BracketTreeSet A\to X
+  }{f\colon A\to X\dsep g\colon X\times X\to X\vdash
+      R\colon\BracketTreeSet A\to X}[TreeRecursorTyping]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{g\colon X\times X\to X}{\rA}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+        &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+        &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+        &\quad\forall S,T\in\BracketTreeSet A\,R(\NodeTree A S T)\\[-2pt]
+        &\qquad=g(R(S),R(T))\Bigr)
+      \end{aligned}}{\FormulaRefAuto{TreeRecursorSpecification}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      R\colon\BracketTreeSet A\to X}{%
+      \rAEa{3}}
+  \closeproofpartwideindR
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Blattregel]{%
+    f\colon A\to X\dsep g\colon X\times X\to X\dsep a\in A\vdash
+      R(\LeafTree A a)=f(a)
+  }{f\colon A\to X\dsep g\colon X\times X\to X\dsep a\in A\vdash
+      R(\LeafTree A a)=f(a)}[TreeRecursorLeafEquation]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{g\colon X\times X\to X}{\rA}
+    \proofstepwidestar[3]{a\in A}{\rA}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+        &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+        &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+        &\quad\forall S,T\in\BracketTreeSet A\,R(\NodeTree A S T)\\[-2pt]
+        &\qquad=g(R(S),R(T))\Bigr)
+      \end{aligned}}{\FormulaRefAuto{TreeRecursorSpecification}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \forall a\in A\,R(\LeafTree A a)=f(a)}{%
+      \rAEa{\rAEb{4}}}
+    \proofstepwidestar[1,2]{a\in A\rightarrow
+      R(\LeafTree A a)=f(a)}{\rUE{5}}
+    \proofstepwidestar[1,2,3]{R(\LeafTree A a)=f(a)}{\rRE{3,6}}
+  \closeproofpartwideindR
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Knotenregel]{%
+    \begin{aligned}[t]
+      &f\colon A\to X\dsep g\colon X\times X\to X\dsep
+        S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+      &R(\NodeTree A S T)=g(R(S),R(T))
+    \end{aligned}
+  }{\begin{aligned}[t]
+      &f\colon A\to X\dsep g\colon X\times X\to X\dsep
+        S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+      &R(\NodeTree A S T)=g(R(S),R(T))
+    \end{aligned}}[TreeRecursorNodeEquation]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{g\colon X\times X\to X}{\rA}
+    \proofstepwidestar[3]{S\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[4]{T\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[1,2]{%
+      \begin{aligned}[t]
+        &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+        &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+        &\quad\forall S,T\in\BracketTreeSet A\,R(\NodeTree A S T)\\[-2pt]
+        &\qquad=g(R(S),R(T))\Bigr)
+      \end{aligned}}{\FormulaRefAuto{TreeRecursorSpecification}[thm]{1,2}}
+    \proofstepwidestar[1,2]{%
+      \forall S,T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)=g(R(S),R(T))}{%
+      \rAEb{\rAEb{5}}}
+    \proofstepwidestar[1,2]{%
+      S\in\BracketTreeSet A\rightarrow
+      \forall T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)=g(R(S),R(T))}{\rUE{6}}
+    \proofstepwidestar[1,2,3]{%
+      \forall T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)=g(R(S),R(T))}{\rRE{3,7}}
+    \proofstepwidestar[1,2,3]{%
+      T\in\BracketTreeSet A\rightarrow
+        R(\NodeTree A S T)=g(R(S),R(T))}{\rUE{8}}
+    \proofstepwidestar[1,2,3,4]{%
+      R(\NodeTree A S T)=g(R(S),R(T))}{\rRE{4,9}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+Die nächste Regel identifiziert eine bereits gegebene Funktion: Es genügt,
+ihre Typisierung sowie ihre Blatt- und Knotenregel nachzuweisen.
+
+\FormulaThmDeltaK[Identifikationsregel für den Baumrekursor]{%
+  \begin{aligned}[t]
+    &f\colon A\to X\dsep g\colon X\times X\to X\dsep
+      E\colon\BracketTreeSet A\to X\dsep{}\\[-2pt]
+    &\forall a\in A\,E(\LeafTree A a)=f(a)\dsep{}\\[-2pt]
+    &\forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=g(E(S),E(T))\vdash E=R
+  \end{aligned}%
+}{TreeRecursorIdentification}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep g\dsep E\dsep R}
+  \DeltaRow{Abkürzung}{R\coloneqq\TreeRecursor{A}{X}{f}{g}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{f\colon A\to X}{\rA}
+  \proofstepwidestar[2]{g\colon X\times X\to X}{\rA}
+  \proofstepwidestar[3]{E\colon\BracketTreeSet A\to X}{\rA}
+  \proofstepwidestar[4]{\forall a\in A\,E(\LeafTree A a)=f(a)}{\rA}
+  \proofstepwidestar[5]{%
+    \forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=g(E(S),E(T))}{\rA}
+  \proofstepwidestar[1,2]{%
+    \begin{aligned}[t]
+      &R\colon\BracketTreeSet A\to X\land\Bigl(\\[-2pt]
+      &\quad\forall a\in A\,R(\LeafTree A a)=f(a)\land{}\\[-2pt]
+      &\quad\forall S,T\in\BracketTreeSet A\,
+        R(\NodeTree A S T)\\[-2pt]
+      &\qquad=g(R(S),R(T))\Bigr)
+    \end{aligned}}{\FormulaRefAuto{TreeRecursorSpecification}[thm]{1,2}}
+  \proofstepwidestar[1,2]{R\colon\BracketTreeSet A\to X}{\rAEa{6}}
+  \proofstepwidestar[1,2]{%
+    \forall a\in A\,R(\LeafTree A a)=f(a)}{\rAEa{\rAEb{6}}}
+  \proofstepwidestar[1,2]{%
+    \forall S,T\in\BracketTreeSet A\,
+      R(\NodeTree A S T)=g(R(S),R(T))}{\rAEb{\rAEb{6}}}
+  \proofstepwidestar[1,2,3]{E,R\colon\BracketTreeSet A\to X}{\rAI{3,7}}
+  \proofstepwidestar[1,2,3,4,5]{E=R}{%
+    \FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]{%
+      \FormulaRefAuto{FullPlanarBinaryTreeRecursion}[thm]{1,2},
+      \rAI{3,\rAI{4,5}},6}}
+\end{tabproofwide}
+
+\subsection{Rekursion mit einer binären Operation}
+
+Bei einer binären Operation \(\star\) wird ihre bereits definierte
+zugehörige Funktion eingesetzt. Wir schreiben hier
+\(R_\star\coloneqq
+\TreeRecursor{A}{X}{f}{\BinaryOpFunction{X}{\star}}\).
+Die Knotenregel verwendet dann unmittelbar das Operationszeichen.
+
+\FormulaThmDeltaK[Baumrekursor mit binärer Operation]{%
+  \begin{aligned}[t]
+    &\text{(i)}\;f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\vdash
+      R_\star\colon\BracketTreeSet A\to X,\\[-2pt]
+    &\text{(ii)}\;f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep
+      a\in A\vdash R_\star(\LeafTree A a)=f(a),\\[-2pt]
+    &\text{(iii)}\;f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep
+      S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+    &\qquad R_\star(\NodeTree A S T)=R_\star(S)\star R_\star(T).
+  \end{aligned}%
+}{TreeRecursorBinaryOperationEquations}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep R_\star}
+  \DeltaRow{Abkürzung}{R_\star\coloneqq
+    \TreeRecursor{A}{X}{f}{\BinaryOpFunction{X}{\star}}}
+}
+\begin{tabproofsplitwide}
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Typisierung]{%
+    f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\vdash
+      R_\star\colon\BracketTreeSet A\to X
+  }{f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\vdash
+      R_\star\colon\BracketTreeSet A\to X}[TreeRecursorBinaryOperationTyping]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{\mathsf{BinOp}(X,\star)}{\rA}
+    \proofstepwidestar[2]{%
+      \BinaryOpFunction{X}{\star}\colon X\times X\to X}{%
+      \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2}}
+    \proofstepwidestar[1,2]{R_\star\colon\BracketTreeSet A\to X}{%
+      \FormulaRefAuto{TreeRecursorTyping}[thm]{1,3}}
+  \closeproofpartwideindR
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Blattregel]{%
+    f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep a\in A\vdash
+      R_\star(\LeafTree A a)=f(a)
+  }{f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep a\in A\vdash
+      R_\star(\LeafTree A a)=f(a)}[TreeRecursorBinaryOperationLeafEquation]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{\mathsf{BinOp}(X,\star)}{\rA}
+    \proofstepwidestar[3]{a\in A}{\rA}
+    \proofstepwidestar[2]{%
+      \BinaryOpFunction{X}{\star}\colon X\times X\to X}{%
+      \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2}}
+    \proofstepwidestar[1,2,3]{R_\star(\LeafTree A a)=f(a)}{%
+      \FormulaRefAuto{TreeRecursorLeafEquation}[thm]{1,4,3}}
+  \closeproofpartwideindR
+  \Needspace{10\baselineskip}
+  \proofpartwideindR[Knotenregel]{%
+    \begin{aligned}[t]
+      &f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep
+        S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+      &R_\star(\NodeTree A S T)=R_\star(S)\star R_\star(T)
+    \end{aligned}
+  }{\begin{aligned}[t]
+      &f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep
+        S,T\in\BracketTreeSet A\vdash{}\\[-2pt]
+      &R_\star(\NodeTree A S T)=R_\star(S)\star R_\star(T)
+    \end{aligned}}[TreeRecursorBinaryOperationNodeEquation]
+    \proofstepwidestar[1]{f\colon A\to X}{\rA}
+    \proofstepwidestar[2]{\mathsf{BinOp}(X,\star)}{\rA}
+    \proofstepwidestar[3]{S\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[4]{T\in\BracketTreeSet A}{\rA}
+    \proofstepwidestar[2]{%
+      \BinaryOpFunction{X}{\star}\colon X\times X\to X}{%
+      \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2}}
+    \proofstepwidestar[1,2]{R_\star\colon\BracketTreeSet A\to X}{%
+      \FormulaRefAuto{TreeRecursorTyping}[thm]{1,5}}
+    \proofstepwidestar[1,2,3]{R_\star(S)\in X}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{6,3}}
+    \proofstepwidestar[1,2,4]{R_\star(T)\in X}{%
+      \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{6,4}}
+    \proofstepwidestar[1,2,3,4]{%
+      R_\star(\NodeTree A S T)=
+        \BinaryOpFunction{X}{\star}(R_\star(S),R_\star(T))}{%
+      \FormulaRefAuto{TreeRecursorNodeEquation}[thm]{1,5,\rAI{3,4}}}
+    \proofstepwidestar[1,2,3,4]{%
+      \BinaryOpFunction{X}{\star}(R_\star(S),R_\star(T))=
+        R_\star(S)\star R_\star(T)}{%
+      \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2,7,8}}
+    \proofstepwidestar[1,2,3,4]{%
+      R_\star(\NodeTree A S T)=R_\star(S)\star R_\star(T)}{%
+      \FormulaRefAuto{a=b\dsep b=c\vdash a=c}[thm]{9,10}}
+  \closeproofpartwideindR
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Identifikation bei einer binären Operation]{%
+  \begin{aligned}[t]
+    &f\colon A\to X\dsep\mathsf{BinOp}(X,\star)\dsep
+      E\colon\BracketTreeSet A\to X\dsep{}\\[-2pt]
+    &\forall a\in A\,E(\LeafTree A a)=f(a)\dsep{}\\[-2pt]
+    &\forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=E(S)\star E(T)\vdash E=R_\star
+  \end{aligned}%
+}{TreeRecursorBinaryOperationIdentification}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep a\dsep S\dsep T}
+  \DeltaRow{Funktionen}{f\dsep\star\dsep E\dsep R_\star}
+  \DeltaRow{Abkürzung}{R_\star\coloneqq
+    \TreeRecursor{A}{X}{f}{\BinaryOpFunction{X}{\star}}}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{f\colon A\to X}{\rA}
+  \proofstepwidestar[2]{\mathsf{BinOp}(X,\star)}{\rA}
+  \proofstepwidestar[3]{E\colon\BracketTreeSet A\to X}{\rA}
+  \proofstepwidestar[4]{\forall a\in A\,E(\LeafTree A a)=f(a)}{\rA}
+  \proofstepwidestar[5]{%
+    \forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=E(S)\star E(T)}{\rA}
+  \proofstepwidestar[2]{%
+    \BinaryOpFunction{X}{\star}\colon X\times X\to X}{%
+    \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2}}
+  \proofstepwidestar[7]{S\in\BracketTreeSet A}{\rA}
+  \proofstepwidestar[8]{T\in\BracketTreeSet A}{\rA}
+  \proofstepwidestar[3,7]{E(S)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,7}}
+  \proofstepwidestar[3,8]{E(T)\in X}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,8}}
+  \proofstepwidestar[5,7,8]{%
+    E(\NodeTree A S T)=E(S)\star E(T)}{%
+    \rRE{8,\rUE{\rRE{7,\rUE{5}}}}}
+  \proofstepwidestar[2,3,7,8]{%
+    \BinaryOpFunction{X}{\star}(E(S),E(T))=E(S)\star E(T)}{%
+    \FormulaRefAuto{BinaryOperationFunctionDef}[def]{2,9,10}}
+  \proofstepwidestar[2,3,5,7,8]{%
+    E(\NodeTree A S T)=\BinaryOpFunction{X}{\star}(E(S),E(T))}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{11,12}}
+  \proofstepwidestar[2,3,5]{%
+    \forall S,T\in\BracketTreeSet A\,
+      E(\NodeTree A S T)=\BinaryOpFunction{X}{\star}(E(S),E(T))}{%
+    \rUI{\rRI{7,\rUI{\rRI{8,13}}}}}
+  \proofstepwidestar[1,2,3,4,5]{E=R_\star}{%
+    \FormulaRefAuto{TreeRecursorIdentification}[thm]{1,6,3,4,14}}
+\end{tabproofwide}

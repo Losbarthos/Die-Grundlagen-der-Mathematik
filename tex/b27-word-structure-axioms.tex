@@ -1,0 +1,134 @@
+\section{Das Axiomsystem der Wortstrukturen}
+
+Die Axiomatik beschreibt, welche Eigenschaften eine Menge von Wörtern
+mit einem Anfangswort und einer Anfügungsfunktion besitzt. Dabei haben
+die Symbole folgende Bedeutung:
+
+\begingroup
+\renewcommand{\arraystretch}{1.15}
+\noindent\begin{tabular}{@{}p{.14\linewidth}p{.81\linewidth}@{}}
+\textbf{Symbol} & \textbf{Bedeutung} \\
+\(A\) & Das Alphabet, also die Menge der zugelassenen Buchstaben. \\
+\(W\) & Die Trägermenge der Struktur; ihre Elemente werden als ganze Wörter aufgefasst. \\
+\(e\) & Das ausgezeichnete Anfangswort in \(W\); es übernimmt die Rolle des leeren Wortes. \\
+\(s\) & Die Anfügungsfunktion: \(s(u,a)\) entsteht aus dem Wort \(u\), indem rechts der Buchstabe \(a\) angefügt wird. \\
+\(u,v\) & Beliebige Wörter, also Elemente von \(W\). \\
+\(a,b\) & Beliebige Buchstaben, also Elemente von \(A\). \\
+\(U\) & Eine beliebige Teilmenge von \(W\), an der die Minimalitätsbedingung geprüft wird.
+\end{tabular}\par
+\endgroup
+
+Da \(s\) auf \(W\times A\) definiert ist, bedeutet \(s(u,a)\) den
+Funktionswert am geordneten Paar \((u,a)\). Die Funktion hat somit zwei
+Eingaben: ein bisheriges Wort und einen einzelnen Buchstaben.
+Beispielsweise stellt \(s(e,a)\) das aus \(a\) bestehende Wort dar;
+\(s(s(e,a),b)\) stellt das Wort mit den aufeinanderfolgenden Buchstaben
+\(a,b\) dar. Die Buchstaben dürfen dabei gleich sein.
+
+Im zuvor aufgebauten Anfügungsmodell werden die Symbole durch
+\[
+ W=\FiniteWords A,\qquad e=\EmptyWord A,\qquad s=\sigma_A
+\]
+belegt. Nach \FormulaRefAuto{EarlyWordSuccessorEquation}[thm] ist dort
+für \(u\in\FiniteWords A\) und \(a\in A\)
+\[
+ \sigma_A(u,a)=u\cup\{(\WordLength u,a)\}.
+\]
+Der neue Buchstabe erhält also die nächste freie Position. In einer
+beliebigen Wortstruktur sind \(W,e,s\) dagegen zunächst die gewählten
+Strukturdaten; ihre konkrete Darstellung ist durch die Axiomatik nicht
+festgelegt. Insbesondere muss \(e\) dort nicht die leere Menge sein.
+
+Für eine Menge \(A\) heißt \((W,e,s)\) eine \emph{freie Wortstruktur über
+\(A\)}, wenn die folgenden Bedingungen gelten.
+
+\Needspace{19\baselineskip}
+\FormulaDefDeltaK[Freie Wortstruktur]{%
+  \mathsf{WortStr}_A(W,e,s)
+}{WordStructureDef}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep U\dsep u\dsep v\dsep a\dsep b}
+  \DeltaRow{Funktionen}{s}
+  \DeltaRow{\textbf{Strukturaxiome}}{}
+  \DeltaRow{W0: Typisierung}{e\in W\land s\colon W\times A\to W}
+  \DeltaRow{W1: Anfang}{\forall u\in W\,\forall a\in A\;s(u,a)\ne e}
+  \DeltaRow{W2: Eindeutigkeit}{%
+    \begin{aligned}[t]
+      &\forall u,v\in W\,\forall a,b\in A\\[-2pt]
+      &\quad(s(u,a)=s(v,b)\rightarrow u=v\land a=b)
+    \end{aligned}}
+  \DeltaRow{W3: Minimalität}{%
+    \begin{aligned}[t]
+      &\forall U\subseteq W\,\Bigl(\bigl(e\in U\land{}\\[-2pt]
+      &\quad(\forall u\in U\,\forall a\in A\;s(u,a)\in U)\bigr)
+        \rightarrow U=W\Bigr)
+    \end{aligned}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Freie Wortstruktur}{\mathsf{WortStr}_A(W,e,s)}
+}
+
+Die bei den einzelnen Axiomen genannten Herkunftssätze beweisen die
+jeweilige Eigenschaft für das Anfügungsmodell. Für beliebige Daten
+\((W,e,s)\) werden diese Eigenschaften in
+\FormulaRefAuto{WordStructureDef}[def] gefordert. Unter der Annahme
+\(\mathsf{WortStr}_A(W,e,s)\) geben die folgenden nummerierten Axiome
+jeweils die entsprechende Bedingung dieser Definition wieder.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Typisierung einer Wortstruktur]{%
+  \mathsf{WortStr}_A(W,e,s)\vdash e\in W\land s\colon W\times A\to W
+}{WordStructureTypingAxiom}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e}\DeltaRow{Funktionen}{s}}
+
+\smallskip\noindent\textit{Zu W0.} Das Anfangswort gehört zu \(W\), und
+die Anfügung ist für jedes Paar aus einem Wort und einem Buchstaben
+definiert und liefert wieder ein Wort. Für
+\((\FiniteWords A,\EmptyWord A,\sigma_A)\) ist dies genau
+\FormulaRefAuto{EarlyWordSuccessorTyping}[thm].
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Das Anfangswort ist kein Nachfolger]{%
+  \mathsf{WortStr}_A(W,e,s)\dsep u\in W\dsep a\in A\vdash s(u,a)\ne e
+}{WordStructureZeroAxiom}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a}\DeltaRow{Funktionen}{s}}
+
+\smallskip\noindent\textit{Zu W1.} Durch das Anfügen eines Buchstabens
+entsteht niemals das Anfangswort. Im Anfügungsmodell ist diese Aussage
+durch \FormulaRefAuto{EarlyWordSuccessorNonempty}[thm] bewiesen.
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Gemeinsame Injektivität der Wortanfügung]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep u,v\in W\dsep a,b\in A\dsep{}\\[-2pt]
+    &s(u,a)=s(v,b)\vdash u=v\land a=b
+  \end{aligned}
+}{WordStructureInjectivityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep v\dsep a\dsep b}
+  \DeltaRow{Funktionen}{s}}
+
+\smallskip\noindent\textit{Zu W2.} Gleiche angefügte Wörter haben sowohl
+denselben bisherigen Wortteil als auch denselben letzten Buchstaben.
+Die beiden Eingaben lassen sich also eindeutig zurückgewinnen.
+Injektivität nur bei festgehaltenem Buchstaben würde dafür nicht
+genügen. Der konkrete Nachweis ist
+\FormulaRefAuto{EarlyWordSuccessorInjective}[thm].
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[Minimalität einer Wortstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep U\subseteq W\dsep e\in U\dsep{}\\[-2pt]
+    &\forall u\in U\,\forall a\in A\;s(u,a)\in U\vdash U=W
+  \end{aligned}
+}{WordStructureMinimalityAxiom}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep U\dsep u\dsep a}
+  \DeltaRow{Funktionen}{s}}
+
+\smallskip\noindent\textit{Zu W3.} Enthält eine Teilmenge \(U\) das
+Anfangswort und mit jedem ihrer Wörter auch alle Anfügungen, so umfasst
+sie bereits ganz \(W\). Damit gibt es keine echte Teilmenge von \(W\),
+die unter diesen Erzeugungsregeln abgeschlossen ist und den Anfang
+enthält. Im Anfügungsmodell liefert
+\FormulaRefAuto{EarlyWordModelMinimality}[thm] genau diese Aussage.
+\end{minipage}\par

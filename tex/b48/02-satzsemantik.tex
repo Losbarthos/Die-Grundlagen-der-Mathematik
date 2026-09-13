@@ -1,0 +1,136 @@
+\subsection{Belegungsfreie Erfuellung und Widerspruch}
+
+Die folgende Abkuerzung gilt fuer Saetze, also Formeln ohne freie
+Variablen. Die Nichtleerheit des Bereichs wird ausdruecklich
+mitgefuehrt. Dadurch braucht die Existenz einer Belegung in den
+folgenden Beweisen nicht stillschweigend vorausgesetzt zu werden.
+Die verwendete Erfuellungsrelation ist durch
+\FormulaRefAuto{B48SatisfactionExists}[thm] konstruiert; ihre
+Schreibweise und ihre gerechtfertigten definierenden Klauseln stehen in
+\FormulaRefAuto{B48Satisfaction}[def].
+
+\FormulaDefDeltaK[Erfuellung von Saetzen und Theorien]
+{\begin{aligned}
+ M\models\varphi&\coloneqq
+ \bigl(\exists d\,(d\in D)\bigr)\land
+ \forall s\,\bigl((s\colon\operatorname{Var}\to D)
+          \rightarrow(M,s\models\varphi)\bigr),\\
+ M\models T&\coloneqq
+ \forall\theta\,\bigl(\theta\in T\rightarrow(M\models\theta)\bigr)
+\end{aligned}}
+{B48SentenceSatisfaction}{
+ \DeltaRow{Struktur}{M=(D,E)}
+ \DeltaRow{Satz}{\varphi}
+ \DeltaRow{Theorie}{T\subseteq\operatorname{Sent}(\mathcal L_\in)}
+}
+
+\FormulaThmDeltaK[Eine erfuellte Aussage liefert eine Belegung]
+{M\models\varphi\vdash
+ \exists s\,(s\colon\operatorname{Var}\to D)}
+{B48SentenceValuation}{
+ \DeltaRow{Struktur}{M=(D,E)}
+ \DeltaRow{Satz}{\varphi}
+}
+Der im Schluss verwendete Zeuge \(a\) ist frisch fuer \(M,D,E,\varphi\)
+und die ausserhalb des Zeugenbeweises offenen Voraussetzungen.
+\begin{tabproofsplitwide}
+ \proofpartwideindR[Konstante Belegung]{%
+   d\in D\vdash\exists s\,(s\colon\operatorname{Var}\to D)
+ }{%
+   d\in D\vdash\exists s\,(s\colon\operatorname{Var}\to D)
+ }[B48ConstantValuationWitness]
+  \proofstepwidestar[1]{d\in D}{\rA}
+  \proofstepwidestar[1]{%
+   \ConstFun{\operatorname{Var}}{D}{d}
+       \colon\operatorname{Var}\to D
+  }{\FormulaRefAuto{b\in B\vdash \ConstFun{A}{B}{b}\colon A\to B}{1}}
+  \proofstepwidestar[1]{%
+   \exists s\,(s\colon\operatorname{Var}\to D)
+  }{\rEI{2}}
+ \closeproofpartwideindR
+
+ \proofpartwide{Schluss}
+  \proofstepwidestar[1]{M\models\varphi}{\rA}
+  \proofstepwidestar[1]{%
+   \bigl(\exists d\,(d\in D)\bigr)\land
+   \forall s\,\bigl((s\colon\operatorname{Var}\to D)
+           \rightarrow(M,s\models\varphi)\bigr)
+  }{\FormulaRefAuto{B48SentenceSatisfaction}{1}}
+  \proofstepwidestar[1]{\exists d\,(d\in D)}{\rAEa{2}}
+  \proofstepwidestar[4]{a\in D}{\rA}
+  \proofstepwidestar[4]{%
+   \exists s\,(s\colon\operatorname{Var}\to D)
+  }{\FormulaRefAuto{B48ConstantValuationWitness}{4}}
+  \proofstepwidestar[1]{%
+   \exists s\,(s\colon\operatorname{Var}\to D)
+  }{\rEE{3,4:5}}
+ \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FormulaThmDeltaK[Satzwahrheit bei einer Belegung]
+{M\models\varphi\dsep s\colon\operatorname{Var}\to D
+ \vdash M,s\models\varphi}
+{B48SentenceInstance}{
+ \DeltaRow{Struktur}{M=(D,E)}
+ \DeltaRow{Satz}{\varphi}
+ \DeltaRow{Menge}{s}
+}
+\begin{tabproof}
+ \proofstep{1}{M\models\varphi}{\rA}
+ \proofstep{2}{s\colon\operatorname{Var}\to D}{\rA}
+ \proofstep{1}{%
+  \bigl(\exists d\,(d\in D)\bigr)\land
+  \forall t\,\bigl((t\colon\operatorname{Var}\to D)
+          \rightarrow(M,t\models\varphi)\bigr)
+ }{\FormulaRefAuto{B48SentenceSatisfaction}{1}}
+ \proofstep{1}{%
+  \forall t\,\bigl((t\colon\operatorname{Var}\to D)
+          \rightarrow(M,t\models\varphi)\bigr)
+ }{\rAEb{3}}
+ \proofstep{1}{%
+  (s\colon\operatorname{Var}\to D)\rightarrow(M,s\models\varphi)
+ }{\rUE{4}}
+ \proofstep{1,2}{M,s\models\varphi}{\rRE{5,2}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Keine Struktur erfuellt den Widerspruch]
+{\neg(M\models\bot)}
+{B48SentenceNotBottom}{
+ \DeltaRow{Struktur}{M=(D,E)}
+}
+Im folgenden Beweis ist \(t\) frisch fuer \(M,D,E\) und die
+ausserhalb des Beweises offenen Annahmen.
+\begin{tabproof}
+ \proofstep{1}{M\models\bot}{\rA}
+ \proofstep{1}{\exists s\,(s\colon\operatorname{Var}\to D)}
+  {\FormulaRefAuto{B48SentenceValuation}{1}}
+ \proofstep{3}{t\colon\operatorname{Var}\to D}{\rA}
+ \proofstep{1,3}{M,t\models\bot}
+  {\FormulaRefAuto{B48SentenceInstance}{1,3}}
+ \proofstep{1,3}{\bot}{\FormulaRefAuto{B48Satisfaction}{4}}
+ \proofstep{1}{\bot}{\rEE{2,3:5}}
+ \proofstep{}{\neg(M\models\bot)}{\rCI{1,6}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ein Satz und seine Negation sind nicht gemeinsam wahr]
+{M\models\varphi\dsep M\models\neg\varphi\vdash\bot}
+{B48SentenceContradiction}{
+ \DeltaRow{Struktur}{M=(D,E)}
+ \DeltaRow{Satz}{\varphi}
+}
+Hier ist \(t\) frisch fuer \(M,D,E,\varphi\) und die ausserhalb
+des Beweises offenen Annahmen.
+\begin{tabproof}
+ \proofstep{1}{M\models\varphi}{\rA}
+ \proofstep{2}{M\models\neg\varphi}{\rA}
+ \proofstep{1}{\exists s\,(s\colon\operatorname{Var}\to D)}
+  {\FormulaRefAuto{B48SentenceValuation}{1}}
+ \proofstep{4}{t\colon\operatorname{Var}\to D}{\rA}
+ \proofstep{1,4}{M,t\models\varphi}
+  {\FormulaRefAuto{B48SentenceInstance}{1,4}}
+ \proofstep{2,4}{M,t\models\neg\varphi}
+  {\FormulaRefAuto{B48SentenceInstance}{2,4}}
+ \proofstep{1,2,4}{\bot}
+  {\FormulaRefAuto{B48SatContradiction}{5,6}}
+ \proofstep{1,2}{\bot}{\rEE{3,4:7}}
+\end{tabproof}

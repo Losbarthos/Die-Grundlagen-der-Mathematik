@@ -1,0 +1,739 @@
+\Needspace{12\baselineskip}
+\subsection{Grundregeln für Adressen und Pfade}
+
+Eine Adresskante fügt ein Bit an oder entfernt das letzte Bit. Ein einfacher
+Pfad aus der Wurzel kann jedoch keinen Rückschritt machen: Er würde dabei
+einen bereits besuchten Knoten wiederholen. Daher zählt die Wortlänge seine
+Schritte, und der Rumpf liefert jeweils den vorherigen Knoten. Die allgemeinen Index- und Pfadregeln stehen in Band~10 und Band~26
+bereit; hier werden sie auf die Wortadressen angewendet.
+
+% Formale Hilfssätze für die Wurzelwege des Adressgraphen.
+% Der Graph wird ausdrücklich vorausgesetzt; seine Schlichtheit wird erst
+% im anschließenden Struktursatz aus der Adressdefinition gewonnen.
+\newcommand{\BXXVIIAddressRoot}{\EmptyWord{\{0,1\}}}
+\newcommand{\BXXVIIAddressPath}[2]{\DirectedPath{P}{\AddressEdges P}{#1}{#2}}
+\newcommand{\BXXVIIAddressForward}[2]{%
+  \forall i\in\NatSeg{#2}\,\exists a\in\{0,1\}\,
+  #1(i+1)=\WordConcat{#1(i)}{\LetterWord a}}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Adresszugehörigkeit]{%
+  \GoodAddressSet P\dsep q\in P\vdash q\in\FiniteWords{\{0,1\}}
+}{B27AddressWordTyping}{\DeltaRow{Mengen}{P\dsep q}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{q\in P}{\rA}
+  \proofstepwidestar[1]{P\in\powerset(\BinaryAddresses)}{\FormulaRefAuto{GoodBinaryAddressSetCarrierAxiom}[ax]{1}}
+  \proofstepwidestar[1]{P\subseteq\BinaryAddresses}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{3}}
+  \proofstepwidestar[1,2]{q\in\BinaryAddresses}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{4,2}}
+  \proofstepwidestar[1,2]{q\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{BinaryAddressWordSetDef}[def]{5}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Ein angehängter Buchstabe ergibt kein Leerwort]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+  \WordConcat u{\LetterWord a}\neq\EmptyWord A
+}{B27WordAppendNotEmpty}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{\WordLength u\in\mathbb N}{\FormulaRefAuto{FiniteWordLengthNatural}[thm]{1}}
+  \proofstepwidestar[1,2]{\WordLength{\WordConcat u{\LetterWord a}}=\WordLength u+1}{\FormulaRefAuto{WordAppendLetterLength}[thm]{1,2}}
+  \proofstepwidestar[1]{\WordLength u+1\neq0}{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{3}}
+  \proofstepwidestar[]{\WordLength{\EmptyWord A}=0}{\FormulaRefAuto{EmptyWordLengthZero}[thm]}
+  \proofstepwidestar[7]{\WordConcat u{\LetterWord a}=\EmptyWord A}{\rA}
+  \proofstepwidestar[1,2,7]{\WordLength{\EmptyWord A}=\WordLength u+1}{\rIE{7,4}}
+  \proofstepwidestar[1,2,7]{\WordLength u+1=0}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{8,6}}
+  \proofstepwidestar[1,2,7]{\bot}{\rBI{9,5}}
+  \proofstepwidestar[1,2]{\WordConcat u{\LetterWord a}\neq\EmptyWord A}{\rCI{7,10}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Elementkriterium der Adresskanten]{\begin{aligned}[t]
+    &\GoodAddressSet P\vdash\\[-2pt]
+    &(p,q)\in\AddressEdges P\leftrightarrow\\[-2pt]
+    &{}p\in P\land q\in P\land{}\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{B27AddressEdgeCriterion}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\AddressEdges P=\{(p,q)\in P\times P\mid\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})\}
+    \end{aligned}}{\FormulaRefAuto{BinaryAddressGraphDef}[def]{1}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &(p,q)\in\{(u,v)\in P\times P\mid\\[-2pt]
+    &{} \qquad\exists a\in\{0,1\}\,(v=\WordConcat u{\LetterWord a}\\[-2pt]
+    &\lor u=\WordConcat v{\LetterWord a})\}\\[-2pt]
+    &\leftrightarrow p\in P\land q\in P\land{} \qquad\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\FormulaRefAuto{ProductComprehensionMembership}[thm]}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\{(u,v)\in P\times P\mid\\[-2pt]
+    &{} \quad\exists a\in\{0,1\}\,(v=\WordConcat u{\LetterWord a}\\[-2pt]
+    &\lor u=\WordConcat v{\LetterWord a})\}\\[-2pt]
+    &=\AddressEdges P
+    \end{aligned}}{\FormulaRefAuto{a=b\vdash b=a}[thm]{2}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &(p,q)\in\AddressEdges P\leftrightarrow\\[-2pt]
+    &{}p\in P\land q\in P\land{}\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\rIE{4,3}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Ein einfacher Adresspfad kehrt nicht sofort um]{\begin{aligned}[t]
+    &\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep\\[-2pt]
+    &\BXXVIIAddressPath pn\dsep i\in\NatSeg n\dsep i+1\in\NatSeg n\dsep\\[-2pt]
+    &{} a,b\in\{0,1\}\dsep\\[-2pt]
+    &p(i+1)=\WordConcat{p(i)}{\LetterWord a}\dsep\\[-2pt]
+    &p(i+1)=\WordConcat{p((i+1)+1)}{\LetterWord b}\vdash\bot
+    \end{aligned}}{B27AddressNoImmediateReturn}{\DeltaRow{Mengen}{P\dsep p\dsep n\dsep i\dsep a\dsep b}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{i\in\NatSeg n}{\rA}
+  \proofstepwidestar[5]{i+1\in\NatSeg n}{\rA}
+  \proofstepwidestar[6]{a,b\in\{0,1\}}{\rA}
+  \proofstepwidestar[7]{p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rA}
+  \proofstepwidestar[8]{p(i+1)=\WordConcat{p((i+1)+1)}{\LetterWord b}}{\rA}
+  \proofstepwidestar[2,3,4]{\begin{aligned}[t]
+    &i\in\mathbb N\land i\in\NatSeg{n+1}\land i+1\in\NatSeg{n+1}\\[-2pt]
+    &\land{}p(i)\in P\land p(i+1)\in P\\[-2pt]
+    &\land(p(i),p(i+1))\in\AddressEdges P
+    \end{aligned}}{\FormulaRefAuto{B27PathStepData}[thm]{2,3,4}}
+  \proofstepwidestar[2,3,5]{\begin{aligned}[t]
+    &i+1\in\mathbb N\land i+1\in\NatSeg{n+1}\\[-2pt]
+    &\land(i+1)+1\in\NatSeg{n+1}\\[-2pt]
+    &\land{}p(i+1)\in P\land p((i+1)+1)\in P\\[-2pt]
+    &\land(p(i+1),p((i+1)+1))\in\AddressEdges P
+    \end{aligned}}{\FormulaRefAuto{B27PathStepData}[thm]{2,3,5}}
+  \proofstepwidestar[1,2,3,4]{p(i)\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,\rAEa{\rAEb{\rAEb{\rAEb{9}}}}}}
+  \proofstepwidestar[1,2,3,5]{p((i+1)+1)\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,\rAEa{\rAEb{\rAEb{\rAEb{\rAEb{10}}}}}}}
+  \proofstepwidestar[7,8]{\WordConcat{p(i)}{\LetterWord a}=\WordConcat{p((i+1)+1)}{\LetterWord b}}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{7,8}}
+  \proofstepwidestar[1,2,3,4,5,6,7,8]{p(i)=p((i+1)+1)\land a=b}{\FormulaRefAuto{WordAppendJointInjectivity}[thm]{\rAI{11,12},6,13}}
+  \proofstepwidestar[1,2,3,4,5,6,7,8]{p(i)=p((i+1)+1)}{\rAEa{14}}
+  \proofstepwidestar[2,3]{p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{DirectedPathInjectiveAxiom}[ax]{2,3}}
+  \proofstepwidestar[1,2,3,4,5,6,7,8]{i=(i+1)+1}{\FormulaRefAuto{Injektivität}[ax]{16,\rAEa{\rAEb{9}},\rAEa{\rAEb{\rAEb{10}}},15}}
+  \proofstepwidestar[2,3,4]{i<i+1}{\FormulaRefAuto{PeanoLtAddOne}[thm]{\rAEa{9}}}
+  \proofstepwidestar[2,3,5]{i+1<(i+1)+1}{\FormulaRefAuto{PeanoLtAddOne}[thm]{\rAEa{10}}}
+  \proofstepwidestar[2,3,5]{(i+1)+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{\rAEa{10}}}
+  \proofstepwidestar[2,3,4,5]{i<(i+1)+1}{\FormulaRefAuto{PeanoLtTransitive}[thm]{\rAEa{9},\rAEa{10},20,18,19}}
+  \proofstepwidestar[1,2,3,4,5,6,7,8]{\bot}{\FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]{\rAEa{9},20,21,17}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Adressfortsetzung ist eine Kante]{%
+  \GoodAddressSet P\dsep p\in P\dsep a\in\{0,1\}\dsep
+  \WordConcat p{\LetterWord a}\in P\vdash
+  (p,\WordConcat p{\LetterWord a})\in\AddressEdges P
+}{B27AddressAppendEdge}{\DeltaRow{Mengen}{P\dsep p\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{p\in P}{\rA}
+  \proofstepwidestar[3]{a\in\{0,1\}}{\rA}
+  \proofstepwidestar[4]{\WordConcat p{\LetterWord a}\in P}{\rA}
+  \proofstepwidestar[]{\WordConcat p{\LetterWord a}=\WordConcat p{\LetterWord a}}{\rII}
+  \proofstepwidestar[3]{\begin{aligned}[t]
+    &\exists i\in\{0,1\}\, (\WordConcat p{\LetterWord a}=\WordConcat p{\LetterWord i}\\[-2pt]
+    &\lor p=\WordConcat{\WordConcat p{\LetterWord a}}{\LetterWord i})
+    \end{aligned}}{\rEI{\rAI{3,\rOIa{5}}}}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &(p,\WordConcat p{\LetterWord a})\in\AddressEdges P\leftrightarrow\\[-2pt]
+    &{} p\in P\land\WordConcat p{\LetterWord a}\in P\land{}\\[-2pt]
+    &\exists i\in\{0,1\}\, (\WordConcat p{\LetterWord a}=\WordConcat p{\LetterWord i}\\[-2pt]
+    &\lor p=\WordConcat{\WordConcat p{\LetterWord a}}{\LetterWord i})
+    \end{aligned}}{\FormulaRefAuto{B27AddressEdgeCriterion}[thm]{1}}
+  \proofstepwidestar[2,3,4]{\begin{aligned}[t]
+    &p\in P\land\WordConcat p{\LetterWord a}\in P\land{}\\[-2pt]
+    &\exists i\in\{0,1\}\, (\WordConcat p{\LetterWord a}=\WordConcat p{\LetterWord i}\\[-2pt]
+    &\lor p=\WordConcat{\WordConcat p{\LetterWord a}}{\LetterWord i})
+    \end{aligned}}{\rAIStar{2,4,6}}
+  \proofstepwidestar[1,2,3,4]{(p,\WordConcat p{\LetterWord a})\in\AddressEdges P}{\rRE{\rLREb{7},8}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Der Rumpf bleibt in der Präfixmenge]{%
+  \GoodAddressSet P\dsep q\in P\dsep q\neq\BXXVIIAddressRoot\vdash
+  q\in\NonemptyWords{\{0,1\}}\land\WordRumpf{\{0,1\}}q\in P
+}{B27AddressRumpfClosure}{\DeltaRow{Mengen}{P\dsep q\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{q\in P}{\rA}
+  \proofstepwidestar[3]{q\neq\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[3]{q\notin\{\BXXVIIAddressRoot\}}{\FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}[thm]{3}}
+  \proofstepwidestar[2,3]{q\in P\setminus\{\BXXVIIAddressRoot\}}{\FormulaRefAuto{x\in A\dsep x\notin B\vdash x\in A\setminus B}[thm]{2,4}}
+  \proofstepwidestar[1,2,3]{\exists u\in P\,\exists a\in\{0,1\}\,q=\WordConcat u{\LetterWord a}}{\FormulaRefAuto{GoodBinaryAddressSetPrefixAxiom}[ax]{1,5}}
+  \proofstepwidestar[7]{u\in P\land a\in\{0,1\}\land q=\WordConcat u{\LetterWord a}}{\rA}
+  \proofstepwidestar[7]{u\in P}{\rAEa{7}}
+  \proofstepwidestar[7]{a\in\{0,1\}}{\rAEa{\rAEb{7}}}
+  \proofstepwidestar[7]{q=\WordConcat u{\LetterWord a}}{\rAEb{\rAEb{7}}}
+  \proofstepwidestar[1,7]{u\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,8}}
+  \proofstepwidestar[1,7]{\WordConcat u{\LetterWord a}\in\NonemptyWords{\{0,1\}}}{\FormulaRefAuto{WordAppendNonempty}[thm]{11,9}}
+  \proofstepwidestar[7]{\WordConcat u{\LetterWord a}=q}{\FormulaRefAuto{a=b\vdash b=a}[thm]{10}}
+  \proofstepwidestar[1,7]{q\in\NonemptyWords{\{0,1\}}}{\rIE{13,12}}
+  \proofstepwidestar[1,7]{\WordRumpf{\{0,1\}}{\WordConcat u{\LetterWord a}}=u}{\FormulaRefAuto{WordRumpfAppend}[thm]{11,9}}
+  \proofstepwidestar[1,7]{\WordRumpf{\{0,1\}}q=u}{\rIE{13,15}}
+  \proofstepwidestar[1,7]{u=\WordRumpf{\{0,1\}}q}{\FormulaRefAuto{a=b\vdash b=a}[thm]{16}}
+  \proofstepwidestar[1,7]{\WordRumpf{\{0,1\}}q\in P}{\rIE{17,8}}
+  \proofstepwidestar[1,7]{q\in\NonemptyWords{\{0,1\}}\land\WordRumpf{\{0,1\}}q\in P}{\rAI{14,18}}
+  \proofstepwidestar[1,2,3]{q\in\NonemptyWords{\{0,1\}}\land\WordRumpf{\{0,1\}}q\in P}{\rEEStar{6,7,19}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Die beiden Richtungen einer Adresskante]{\begin{aligned}[t]
+    &\GoodAddressSet P\dsep(p,q)\in\AddressEdges P\vdash\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{B27AddressEdgeDirections}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{(p,q)\in\AddressEdges P}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &(p,q)\in\AddressEdges P\leftrightarrow\\[-2pt]
+    &{}p\in P\land q\in P\land{}\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\FormulaRefAuto{B27AddressEdgeCriterion}[thm]{1}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &p\in P\land q\in P\land{}\\[-2pt]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\rRE{\rLREa{3},2}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &\exists a\in\{0,1\}\,(q=\WordConcat p{\LetterWord a}\\[-2pt]
+    &\lor p=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\rAEb{\rAEb{4}}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Eine Adresskante aus der Wurzel führt vorwärts]{%
+  \GoodAddressSet P\dsep q\in P\dsep
+  (\BXXVIIAddressRoot,q)\in\AddressEdges P\vdash
+  \exists a\in\{0,1\}\,q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}
+}{B27AddressRootEdgeForward}{\DeltaRow{Mengen}{P\dsep q\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{q\in P}{\rA}
+  \proofstepwidestar[3]{(\BXXVIIAddressRoot,q)\in\AddressEdges P}{\rA}
+  \proofstepwidestar[1,3]{\begin{aligned}[t]
+    &\exists a\in\{0,1\}\, (q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}\\[-2pt]
+    &\lor \BXXVIIAddressRoot=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\FormulaRefAuto{B27AddressEdgeDirections}[thm]{1,3}}
+  \proofstepwidestar[5]{\begin{aligned}[t]
+    &a\in\{0,1\}\land (q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}\\[-2pt]
+    &\lor \BXXVIIAddressRoot=\WordConcat q{\LetterWord a})
+    \end{aligned}}{\rA}
+  \proofstepwidestar[5]{a\in\{0,1\}}{\rAEa{5}}
+  \proofstepwidestar[1,2]{q\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,2}}
+  \proofstepwidestar[1,2,5]{\WordConcat q{\LetterWord a}\neq\BXXVIIAddressRoot}{\FormulaRefAuto{B27WordAppendNotEmpty}[thm]{7,6}}
+  \proofstepwidestar[9]{\BXXVIIAddressRoot=\WordConcat q{\LetterWord a}}{\rA}
+  \proofstepwidestar[9]{\WordConcat q{\LetterWord a}=\BXXVIIAddressRoot}{\FormulaRefAuto{a=b\vdash b=a}[thm]{9}}
+  \proofstepwidestar[1,2,5,9]{\bot}{\rBI{10,8}}
+  \proofstepwidestar[1,2,5]{\BXXVIIAddressRoot\neq\WordConcat q{\LetterWord a}}{\rCI{9,11}}
+  \proofstepwidestar[1,2,5]{q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}}{\FormulaRefAuto{P\lor Q,\neg Q\vdash P}[thm]{\rAEb{5},12}}
+  \proofstepwidestar[1,2,5]{\exists a\in\{0,1\}\,q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}}{\rEI{\rAI{6,13}}}
+  \proofstepwidestar[1,2,3]{\exists a\in\{0,1\}\,q=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}}{\rEE{4,5,14}}
+\end{tabproofwide}
+
+\subsection{Wurzelwege wachsen mit ihren Adressen}
+
+Wortinduktion liefert einen Weg zu jeder Adresse. Für die Eindeutigkeit
+wird anschließend vom Endknoten rückwärts argumentiert: Gleiche Adressen
+haben gleiche Rümpfe und damit dieselben vorherigen Wegknoten.
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Jede Adresse besitzt einen Wurzelpfad]{%
+  \GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep q\in P\vdash
+  \exists z\,(z\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q)
+}{B27AddressRootPathExists}{\DeltaRow{Mengen}{P\dsep q\dsep u\dsep a\dsep z}}
+Hier steht \(D(q)\) für
+\(\exists z\,(z\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q)\)
+und \(J(q)\) für \(q\in P\rightarrow D(q)\).
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Buchstabenadressen]{%
+  \GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\vdash
+  \forall a\in\{0,1\}\,J(\LetterWord a)
+  }{\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\vdash
+  \forall a\in\{0,1\}\,J(\LetterWord a)}[B27AddressRootPathExistsBase]
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{a\in\{0,1\}}{\rA}
+  \proofstepwidestar[4]{\LetterWord a\in P}{\rA}
+  \proofstepwidestar[1]{\BXXVIIAddressRoot\in P}{\FormulaRefAuto{GoodBinaryAddressSetRootAxiom}[ax]{1}}
+  \proofstepwidestar[1,2]{D(\BXXVIIAddressRoot)}{\FormulaRefAuto{B27RootPathSingleton}[thm]{2,5}}
+  \proofstepwidestar[3]{\LetterWord a\in\NonemptyWords{\{0,1\}}}{\FormulaRefAuto{LetterWordNonempty}[thm]{3}}
+  \proofstepwidestar[3]{\LetterWord a\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{NonemptyWordFinite}[thm]{7}}
+  \proofstepwidestar[3]{\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}=\LetterWord a}{\FormulaRefAuto{WordConcatenationLeftIdentity}[thm]{8}}
+  \proofstepwidestar[3]{\LetterWord a=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}}{\FormulaRefAuto{a=b\vdash b=a}[thm]{9}}
+  \proofstepwidestar[3,4]{\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}\in P}{\rIE{10,4}}
+  \proofstepwidestar[1,3,4]{(\BXXVIIAddressRoot,\WordConcat{\BXXVIIAddressRoot}{\LetterWord a})\in\AddressEdges P}{\FormulaRefAuto{B27AddressAppendEdge}[thm]{1,5,3,11}}
+  \proofstepwidestar[1,3,4]{(\BXXVIIAddressRoot,\LetterWord a)\in\AddressEdges P}{\rIE{9,12}}
+  \proofstepwidestar[1,2,3,4]{D(\LetterWord a)}{\FormulaRefAuto{B27RootPathExtendExistence}[thm]{2,6,13}}
+  \proofstepwidestar[1,2,3]{J(\LetterWord a)}{\rRI{4,14}}
+  \proofstepwidestar[1,2]{\forall a\in\{0,1\}\,J(\LetterWord a)}{\rUI{\rRI{3,15}}}
+  \closeproofpartwideindR
+  \Needspace{15\baselineskip}
+  \proofpartwideindR[Eine weitere Stelle]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\vdash{}\\[-2pt]
+  &\forall u\in\NonemptyWords{\{0,1\}}\,\forall a\in\{0,1\}\,
+  (J(u)\rightarrow J(\WordConcat u{\LetterWord a}))\end{aligned}
+  }{\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\vdash
+  \forall u\in\NonemptyWords{\{0,1\}}\,\forall a\in\{0,1\}\,
+  (J(u)\rightarrow J(\WordConcat u{\LetterWord a}))}[B27AddressRootPathExistsStep]
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{u\in\NonemptyWords{\{0,1\}}}{\rA}
+  \proofstepwidestar[4]{a\in\{0,1\}}{\rA}
+  \proofstepwidestar[5]{J(u)}{\rA}
+  \proofstepwidestar[6]{\WordConcat u{\LetterWord a}\in P}{\rA}
+  \proofstepwidestar[3]{u\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{NonemptyWordFinite}[thm]{3}}
+  \proofstepwidestar[3,4]{\WordConcat u{\LetterWord a}\neq\BXXVIIAddressRoot}{\FormulaRefAuto{B27WordAppendNotEmpty}[thm]{7,4}}
+  \proofstepwidestar[1,3,4,6]{\begin{aligned}[t]&\WordConcat u{\LetterWord a}\in\NonemptyWords{\{0,1\}}\land{}\\[-2pt]&\WordRumpf{\{0,1\}}{\WordConcat u{\LetterWord a}}\in P\end{aligned}}{\FormulaRefAuto{B27AddressRumpfClosure}[thm]{1,6,8}}
+  \proofstepwidestar[3,4]{\WordRumpf{\{0,1\}}{\WordConcat u{\LetterWord a}}=u}{\FormulaRefAuto{WordRumpfAppend}[thm]{7,4}}
+  \proofstepwidestar[1,3,4,6]{u\in P}{\rIE{10,\rAEb{9}}}
+  \proofstepwidestar[1,3,4,5,6]{D(u)}{\rRE{5,11}}
+  \proofstepwidestar[1,3,4,6]{(u,\WordConcat u{\LetterWord a})\in\AddressEdges P}{\FormulaRefAuto{B27AddressAppendEdge}[thm]{1,11,4,6}}
+  \proofstepwidestar[1,2,3,4,5,6]{D(\WordConcat u{\LetterWord a})}{\FormulaRefAuto{B27RootPathExtendExistence}[thm]{2,12,13}}
+  \proofstepwidestar[1,2,3,4,5]{J(\WordConcat u{\LetterWord a})}{\rRI{6,14}}
+  \proofstepwidestar[1,2,3,4]{J(u)\rightarrow J(\WordConcat u{\LetterWord a})}{\rRI{5,15}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]&\forall u\in\NonemptyWords{\{0,1\}}\,\forall a\in\{0,1\}\,\\[-2pt]&(J(u)\rightarrow J(\WordConcat u{\LetterWord a}))\end{aligned}}{\rUI{\rRI{3,\rUI{\rRI{4,16}}}}}
+  \closeproofpartwideindR
+  \Needspace{28\baselineskip}
+  \proofpartwide{Leerwort und Wortinduktion}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{q\in P}{\rA}
+  \proofstepwidestar[1,2]{\forall a\in\{0,1\}\,J(\LetterWord a)}{\FormulaRefAuto{B27AddressRootPathExistsBase}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]&\forall u\in\NonemptyWords{\{0,1\}}\,\forall a\in\{0,1\}\,\\[-2pt]&(J(u)\rightarrow J(\WordConcat u{\LetterWord a}))\end{aligned}}{\FormulaRefAuto{B27AddressRootPathExistsStep}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\forall q\in\NonemptyWords{\{0,1\}}\,J(q)}{\FormulaRefAuto{NonemptyWordInduction}[thm]{4,5}}
+  \proofstepwidestar[]{q=\BXXVIIAddressRoot\lor q\neq\BXXVIIAddressRoot}{\FormulaRefAuto{P\lor\neg P}[thm]}
+  \proofstepwidestar[8]{q=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[1]{\BXXVIIAddressRoot\in P}{\FormulaRefAuto{GoodBinaryAddressSetRootAxiom}[ax]{1}}
+  \proofstepwidestar[1,2]{D(\BXXVIIAddressRoot)}{\FormulaRefAuto{B27RootPathSingleton}[thm]{2,9}}
+  \proofstepwidestar[8]{\BXXVIIAddressRoot=q}{\FormulaRefAuto{a=b\vdash b=a}[thm]{8}}
+  \proofstepwidestar[1,2,8]{D(q)}{\rIE{11,10}}
+  \proofstepwidestar[13]{q\neq\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[1,3,13]{q\in\NonemptyWords{\{0,1\}}\land\WordRumpf{\{0,1\}}q\in P}{\FormulaRefAuto{B27AddressRumpfClosure}[thm]{1,3,13}}
+  \proofstepwidestar[1,2,3,13]{J(q)}{\rRE{\rUE{6},\rAEa{14}}}
+  \proofstepwidestar[1,2,3,13]{D(q)}{\rRE{15,3}}
+  \proofstepwidestar[1,2,3]{D(q)}{\rOE{7,8,12,13,16}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Jeder Wurzelpfadschritt fügt ein Bit an]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+  \BXXVIIAddressPath pn\dsep p(0)=\BXXVIIAddressRoot\vdash{}\\[-2pt]
+  &\BXXVIIAddressForward pn\end{aligned}
+}{B27AddressRootPathForward}{\DeltaRow{Mengen}{P\dsep p\dsep n\dsep i\dsep a\dsep b}}
+Für diesen Beweis sei
+\[
+  Q(i)\coloneqq i\in\NatSeg n\rightarrow
+  \exists a\in\{0,1\}\,p(i+1)=\WordConcat{p(i)}{\LetterWord a}.
+\]
+\Needspace{12\baselineskip}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Erster Schritt]{%
+    \GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep p(0)=\BXXVIIAddressRoot\vdash Q(0)
+  }{\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep p(0)=\BXXVIIAddressRoot\vdash Q(0)}[B27AddressRootPathForwardBase]
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[5]{0\in\NatSeg n}{\rA}
+  \proofstepwidestar[2,3]{\DirectedWalk{P}{\AddressEdges P}{p}{n}}{\FormulaRefAuto{DirectedPathWalkAxiom}[ax]{2,3}}
+  \proofstepwidestar[2,3,5]{(p(0),p(0+1))\in\AddressEdges P}{\FormulaRefAuto{DirectedWalkStepEdge}[thm]{2,6,5}}
+  \proofstepwidestar[2,3,5]{p(0)\in P\land p(0+1)\in P}{\FormulaRefAuto{GraphEdgeEndpointTyping}[thm]{2,7}}
+  \proofstepwidestar[2,3,5]{p(0+1)\in P}{\rAEb{8}}
+  \proofstepwidestar[2,3,4,5]{(\BXXVIIAddressRoot,p(0+1))\in\AddressEdges P}{\rIE{4,7}}
+  \proofstepwidestar[1,2,3,4,5]{\exists a\in\{0,1\}\,p(0+1)=\WordConcat{\BXXVIIAddressRoot}{\LetterWord a}}{\FormulaRefAuto{B27AddressRootEdgeForward}[thm]{1,9,10}}
+  \proofstepwidestar[4]{\BXXVIIAddressRoot=p(0)}{\FormulaRefAuto{a=b\vdash b=a}[thm]{4}}
+  \proofstepwidestar[1,2,3,4,5]{\exists a\in\{0,1\}\,p(0+1)=\WordConcat{p(0)}{\LetterWord a}}{\rIE{12,11}}
+  \proofstepwidestar[1,2,3,4]{Q(0)}{\rRI{5,13}}
+  \closeproofpartwideindR
+
+  \Needspace{15\baselineskip}
+  \proofpartwideindR[Ein Rückschritt würde einen Knoten wiederholen]{%
+    \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep{}\\[-2pt]&i\in\mathbb N\dsep Q(i)\vdash Q(i+1)\end{aligned}
+  }{\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep i\in\mathbb N\dsep Q(i)\vdash Q(i+1)}[B27AddressRootPathForwardStep]
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{i\in\mathbb N}{\rA}
+  \proofstepwidestar[5]{Q(i)}{\rA}
+  \proofstepwidestar[6]{i+1\in\NatSeg n}{\rA}
+  \proofstepwidestar[2,3]{n\in\mathbb N\land p\colon\NatSeg{n+1}\to P\land p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,3}}
+  \proofstepwidestar[2,3]{n\in\mathbb N}{\rAEa{7}}
+  \proofstepwidestar[4]{i+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{4}}
+  \proofstepwidestar[4]{i<i+1}{\FormulaRefAuto{PeanoLtAddOne}[thm]{4}}
+  \proofstepwidestar[2,3,4,6]{i\in\NatSeg n}{\FormulaRefAuto{B27SmallerIndexInSegment}[thm]{\rAIStar{8,4,9},10,6}}
+  \proofstepwidestar[2,3,4,5,6]{\exists a\in\{0,1\}\,p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rRE{11,5}}
+  \proofstepwidestar[13]{a\in\{0,1\}\land p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rA}
+  \proofstepwidestar[2,3]{\DirectedWalk{P}{\AddressEdges P}{p}{n}}{\FormulaRefAuto{DirectedPathWalkAxiom}[ax]{2,3}}
+  \proofstepwidestar[2,3,6]{(p(i+1),p((i+1)+1))\in\AddressEdges P}{\FormulaRefAuto{DirectedWalkStepEdge}[thm]{2,14,6}}
+  \proofstepwidestar[1,2,3,6]{\begin{aligned}[t]&\exists b\in\{0,1\}\,(\\[-2pt]&\quad p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}\lor{}\\[-2pt]&\quad p(i+1)=\WordConcat{p((i+1)+1)}{\LetterWord b})\end{aligned}}{\FormulaRefAuto{B27AddressEdgeDirections}[thm]{1,15}}
+  \proofstepwidestar[17]{\begin{aligned}[t]&b\in\{0,1\}\land(\\[-2pt]&\quad p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}\lor{}\\[-2pt]&\quad p(i+1)=\WordConcat{p((i+1)+1)}{\LetterWord b})\end{aligned}}{\rA}
+  \proofstepwidestar[18]{p(i+1)=\WordConcat{p((i+1)+1)}{\LetterWord b}}{\rA}
+  \proofstepwidestar[1,2,3,4,6,13,17,18]{\bot}{\FormulaRefAuto{B27AddressNoImmediateReturn}[thm]{1,2,3,11,6,\rAI{\rAEa{13},\rAEa{17}},\rAEb{13},18}}
+  \proofstepwidestar[1,2,3,4,6,13,17]{p(i+1)\neq\WordConcat{p((i+1)+1)}{\LetterWord b}}{\rCI{18,19}}
+  \proofstepwidestar[1,2,3,4,6,13,17]{p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}}{\FormulaRefAuto{P\lor Q,\neg Q\vdash P}[thm]{\rAEb{17},20}}
+  \proofstepwidestar[1,2,3,4,6,13,17]{\begin{aligned}[t]&\exists b\in\{0,1\}\,\\[-2pt]&p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}\end{aligned}}{\rEI{\rAI{\rAEa{17},21}}}
+  \proofstepwidestar[1,2,3,4,6,13]{\begin{aligned}[t]&\exists b\in\{0,1\}\,\\[-2pt]&p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}\end{aligned}}{\rEE{16,17,22}}
+  \proofstepwidestar[1,2,3,4,5,6]{\begin{aligned}[t]&\exists b\in\{0,1\}\,\\[-2pt]&p((i+1)+1)=\WordConcat{p(i+1)}{\LetterWord b}\end{aligned}}{\rEE{12,13,23}}
+  \proofstepwidestar[1,2,3,4,5]{Q(i+1)}{\rRI{6,24}}
+  \closeproofpartwideindR
+
+  \Needspace{28\baselineskip}
+  \proofpartwide{Induktionsschluss}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[1,2,3,4]{Q(0)}{\FormulaRefAuto{B27AddressRootPathForwardBase}[thm]{1,2,3,4}}
+  \proofstepwidestar[6]{i\in\mathbb N}{\rA}
+  \proofstepwidestar[7]{Q(i)}{\rA}
+  \proofstepwidestar[1,2,3,6,7]{Q(i+1)}{\FormulaRefAuto{B27AddressRootPathForwardStep}[thm]{1,2,3,6,7}}
+  \proofstepwidestar[1,2,3,6]{Q(i)\rightarrow Q(i+1)}{\rRI{7,8}}
+  \proofstepwidestar[1,2,3]{i\in\mathbb N\rightarrow(Q(i)\rightarrow Q(i+1))}{\rRI{6,9}}
+  \proofstepwidestar[1,2,3]{\forall i\in\mathbb N\,(Q(i)\rightarrow Q(i+1))}{\rUI{10}}
+  \proofstepwidestar[1,2,3,4]{\forall i\in\mathbb N\,Q(i)}{\FormulaRefAuto{PeanoInductionAddOne}[thm]{5,11}}
+  \proofstepwidestar[13]{i\in\NatSeg n}{\rA}
+  \proofstepwidestar[2,3]{n\in\mathbb N\land p\colon\NatSeg{n+1}\to P\land p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,3}}
+  \proofstepwidestar[2,3]{n\in\mathbb N}{\rAEa{14}}
+  \proofstepwidestar[2,3,13]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{15,13}}
+  \proofstepwidestar[1,2,3,4]{i\in\mathbb N\rightarrow Q(i)}{\rUE{12}}
+  \proofstepwidestar[1,2,3,4,13]{Q(i)}{\rRE{16,17}}
+  \proofstepwidestar[1,2,3,4,13]{\exists a\in\{0,1\}\,p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rRE{13,18}}
+  \proofstepwidestar[1,2,3,4]{\BXXVIIAddressForward pn}{\rUI{\rRI{13,19}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{32\baselineskip}
+\FormulaThmDeltaK[Die Adresslänge zählt die Pfadschritte]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+  \BXXVIIAddressPath pn\dsep p(0)=\BXXVIIAddressRoot\vdash{}\\[-2pt]
+  &\forall i\in\NatSeg{n+1}\,\WordLength{p(i)}=i\end{aligned}
+}{B27AddressRootPathRanks}{\DeltaRow{Mengen}{P\dsep p\dsep n\dsep i\dsep a}}
+Hier bezeichnet \(R(i)\) die Formel
+\(i\in\NatSeg{n+1}\rightarrow\WordLength{p(i)}=i\).
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Länge an der Wurzel]{%
+    p(0)=\BXXVIIAddressRoot\vdash R(0)
+  }{p(0)=\BXXVIIAddressRoot\vdash R(0)}[B27AddressRootPathRanksBase]
+\proofstepwidestar[1]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[2]{0\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestar[]{\WordLength{\BXXVIIAddressRoot}=0}{\FormulaRefAuto{EmptyWordLengthZero}[thm]}
+  \proofstepwidestar[1]{\BXXVIIAddressRoot=p(0)}{\FormulaRefAuto{a=b\vdash b=a}[thm]{1}}
+  \proofstepwidestar[1]{\WordLength{p(0)}=0}{\rIE{4,3}}
+  \proofstepwidestar[1,2]{0\in\NatSeg{n+1}\land\WordLength{p(0)}=0}{\rAI{2,5}}
+  \proofstepwidestar[1,2]{\WordLength{p(0)}=0}{\rAEb{6}}
+  \proofstepwidestar[1]{R(0)}{\rRI{2,7}}
+  \closeproofpartwideindR
+  \Needspace{16\baselineskip}
+  \proofpartwideindR[Längenzuwachs um eins]{%
+    \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep{}\\[-2pt]
+    &\BXXVIIAddressForward pn\dsep{}\\[-2pt]
+    &i\in\mathbb N\dsep R(i)\vdash R(i+1)\end{aligned}
+  }{\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+    \BXXVIIAddressPath pn\dsep\BXXVIIAddressForward pn\dsep
+    i\in\mathbb N\dsep R(i)\vdash R(i+1)}[B27AddressRootPathRanksStep]
+\proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{\BXXVIIAddressForward pn}{\rA}
+  \proofstepwidestar[5]{i\in\mathbb N}{\rA}
+  \proofstepwidestar[6]{R(i)}{\rA}
+  \proofstepwidestar[7]{i+1\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestar[2,3]{n\in\mathbb N\land p\colon\NatSeg{n+1}\to P\land p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,3}}
+  \proofstepwidestar[2,3]{n\in\mathbb N}{\rAEa{8}}
+  \proofstepwidestar[2,3,5]{n,i\in\mathbb N}{\rAI{9,5}}
+  \proofstepwidestar[2,3,5,7]{i\in\NatSeg n}{\FormulaRefAuto{B27SuccessorIndexBackward}[thm]{10,7}}
+  \proofstepwidestar[2,3,5,7]{\begin{aligned}[t]&i\in\mathbb N\land i\in\NatSeg{n+1}\land i+1\in\NatSeg{n+1}\land{}\\[-2pt]&p(i)\in P\land p(i+1)\in P\land{}\\[-2pt]&(p(i),p(i+1))\in\AddressEdges P\end{aligned}}{\FormulaRefAuto{B27PathStepData}[thm]{2,3,11}}
+  \proofstepwidestar[2,3,5,7]{i\in\NatSeg{n+1}}{\rAEa{\rAEb{12}}}
+  \proofstepwidestar[2,3,5,6,7]{\WordLength{p(i)}=i}{\rRE{6,13}}
+  \proofstepwidestar[2,3,4,5,7]{\exists a\in\{0,1\}\,p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rRE{\rUE{4},11}}
+  \proofstepwidestar[16]{a\in\{0,1\}\land p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rA}
+  \proofstepwidestar[2,3,5,7]{p(i)\in P}{\rAEa{\rAEb{\rAEb{\rAEb{12}}}}}
+  \proofstepwidestar[1,2,3,5,7]{p(i)\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,17}}
+  \proofstepwidestar[1,2,3,5,7,16]{\WordLength{\WordConcat{p(i)}{\LetterWord a}}=\WordLength{p(i)}+1}{\FormulaRefAuto{WordAppendLetterLength}[thm]{18,\rAEa{16}}}
+  \proofstepwidestar[16]{\WordConcat{p(i)}{\LetterWord a}=p(i+1)}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{16}}}
+  \proofstepwidestar[1,2,3,5,7,16]{\WordLength{p(i+1)}=\WordLength{p(i)}+1}{\rIE{20,19}}
+  \proofstepwidestar[1,2,3,5,6,7,16]{\WordLength{p(i+1)}=i+1}{\rIE{14,21}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{\WordLength{p(i+1)}=i+1}{\rEE{15,16,22}}
+  \proofstepwidestar[1,2,3,4,5,6]{R(i+1)}{\rRI{7,23}}
+  \closeproofpartwideindR
+  \Needspace{10\baselineskip}
+  \proofpartwide{Induktionsschluss}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[1,2,3,4]{\BXXVIIAddressForward pn}{\FormulaRefAuto{B27AddressRootPathForward}[thm]{1,2,3,4}}
+  \proofstepwidestar[4]{R(0)}{\FormulaRefAuto{B27AddressRootPathRanksBase}[thm]{4}}
+  \proofstepwidestar[7]{j\in\mathbb N}{\rA}
+  \proofstepwidestar[8]{R(j)}{\rA}
+  \proofstepwidestar[1,2,3,4,7,8]{R(j+1)}{\FormulaRefAuto{B27AddressRootPathRanksStep}[thm]{1,2,3,5,7,8}}
+  \proofstepwidestar[1,2,3,4,7]{R(j)\rightarrow R(j+1)}{\rRI{8,9}}
+  \proofstepwidestar[1,2,3,4]{\forall j\in\mathbb N\,(R(j)\rightarrow R(j+1))}{\rUI{\rRI{7,10}}}
+  \proofstepwidestar[1,2,3,4]{\forall j\in\mathbb N\,R(j)}{\FormulaRefAuto{PeanoInductionAddOne}[thm]{6,11}}
+  \proofstepwidestar[13]{i\in\NatSeg{n+1}}{\rA}
+  \proofstepwidestar[2,3]{n\in\mathbb N\land p\colon\NatSeg{n+1}\to P\land p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,3}}
+  \proofstepwidestar[2,3]{n\in\mathbb N}{\rAEa{14}}
+  \proofstepwidestar[2,3]{n+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{15}}
+  \proofstepwidestar[2,3,13]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{16,13}}
+  \proofstepwidestar[1,2,3,4,13]{R(i)}{\rRE{\rUE{12},17}}
+  \proofstepwidestar[1,2,3,4,13]{\WordLength{p(i)}=i}{\rRE{18,13}}
+  \proofstepwidestar[1,2,3,4]{\forall i\in\NatSeg{n+1}\,\WordLength{p(i)}=i}{\rUI{\rRI{13,19}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Der vorherige Pfadknoten ist der Rumpf]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+  \BXXVIIAddressPath pn\dsep p(0)=\BXXVIIAddressRoot\dsep
+  i\in\NatSeg n\vdash{}\\[-2pt]
+  &p(i+1)\in\NonemptyWords{\{0,1\}}\land
+  p(i)=\WordRumpf{\{0,1\}}{p(i+1)}\end{aligned}
+}{B27AddressRootPathRumpf}{\DeltaRow{Mengen}{P\dsep p\dsep n\dsep i\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[5]{i\in\NatSeg n}{\rA}
+  \proofstepwidestar[1,2,3,4]{\BXXVIIAddressForward pn}{\FormulaRefAuto{B27AddressRootPathForward}[thm]{1,2,3,4}}
+  \proofstepwidestar[1,2,3,4,5]{\exists a\in\{0,1\}\,p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rRE{\rUE{6},5}}
+  \proofstepwidestar[8]{a\in\{0,1\}\land p(i+1)=\WordConcat{p(i)}{\LetterWord a}}{\rA}
+  \proofstepwidestar[2,3,5]{\begin{aligned}[t]&i\in\mathbb N\land i\in\NatSeg{n+1}\land i+1\in\NatSeg{n+1}\land{}\\[-2pt]&p(i)\in P\land p(i+1)\in P\land{}\\[-2pt]&(p(i),p(i+1))\in\AddressEdges P\end{aligned}}{\FormulaRefAuto{B27PathStepData}[thm]{2,3,5}}
+  \proofstepwidestar[2,3,5]{p(i)\in P}{\rAEa{\rAEb{\rAEb{\rAEb{9}}}}}
+  \proofstepwidestar[1,2,3,5]{p(i)\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,10}}
+  \proofstepwidestar[1,2,3,5,8]{\WordConcat{p(i)}{\LetterWord a}\in\NonemptyWords{\{0,1\}}}{\FormulaRefAuto{WordAppendNonempty}[thm]{11,\rAEa{8}}}
+  \proofstepwidestar[1,2,3,5,8]{\WordRumpf{\{0,1\}}{\WordConcat{p(i)}{\LetterWord a}}=p(i)}{\FormulaRefAuto{WordRumpfAppend}[thm]{11,\rAEa{8}}}
+  \proofstepwidestar[8]{\WordConcat{p(i)}{\LetterWord a}=p(i+1)}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{8}}}
+  \proofstepwidestar[1,2,3,5,8]{p(i+1)\in\NonemptyWords{\{0,1\}}}{\rIE{14,12}}
+  \proofstepwidestar[1,2,3,5,8]{\WordRumpf{\{0,1\}}{p(i+1)}=p(i)}{\rIE{14,13}}
+  \proofstepwidestar[1,2,3,5,8]{p(i)=\WordRumpf{\{0,1\}}{p(i+1)}}{\FormulaRefAuto{a=b\vdash b=a}[thm]{16}}
+  \proofstepwidestar[1,2,3,5,8]{\begin{aligned}[t]&p(i+1)\in\NonemptyWords{\{0,1\}}\land{}\\[-2pt]&p(i)=\WordRumpf{\{0,1\}}{p(i+1)}\end{aligned}}{\rAI{15,17}}
+  \proofstepwidestar[1,2,3,4,5]{\begin{aligned}[t]&p(i+1)\in\NonemptyWords{\{0,1\}}\land{}\\[-2pt]&p(i)=\WordRumpf{\{0,1\}}{p(i+1)}\end{aligned}}{\rEE{7,8,18}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Wurzelpfade mit gleichem Endknoten stimmen überein]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+  \BXXVIIAddressPath pn\dsep\BXXVIIAddressPath qm\dsep{}\\[-2pt]
+  &p(0)=\BXXVIIAddressRoot\dsep q(0)=\BXXVIIAddressRoot\dsep
+  p(n)=q(m)\vdash(n,p)=(m,q)\end{aligned}
+}{B27AddressRootPathEquality}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep n\dsep m\dsep i}}
+\begin{tabproofsplitwide}
+  \proofpartwide{Gleiche Länge}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{\BXXVIIAddressPath pn}{\rA}
+  \proofstepwidestar[4]{\BXXVIIAddressPath qm}{\rA}
+  \proofstepwidestar[5]{p(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[6]{q(0)=\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[7]{p(n)=q(m)}{\rA}
+  \proofstepwidestar[2,3]{n\in\mathbb N\land p\colon\NatSeg{n+1}\to P\land p\colon\NatSeg{n+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,3}}
+  \proofstepwidestar[2,3]{n\in\mathbb N}{\rAEa{8}}
+  \proofstepwidestar[2,4]{m\in\mathbb N\land q\colon\NatSeg{m+1}\to P\land q\colon\NatSeg{m+1}\inj P}{\FormulaRefAuto{FinitePathTyping}[thm]{2,4}}
+  \proofstepwidestar[2,4]{m\in\mathbb N}{\rAEa{10}}
+  \proofstepwidestar[2,3]{n\in\NatSeg{n+1}}{\FormulaRefAuto{PeanoNatSegEndpointInAddOne}[thm]{9}}
+  \proofstepwidestar[2,4]{m\in\NatSeg{m+1}}{\FormulaRefAuto{PeanoNatSegEndpointInAddOne}[thm]{11}}
+  \proofstepwidestar[1,2,3,5]{\forall i\in\NatSeg{n+1}\,\WordLength{p(i)}=i}{\FormulaRefAuto{B27AddressRootPathRanks}[thm]{1,2,3,5}}
+  \proofstepwidestar[1,2,4,6]{\forall i\in\NatSeg{m+1}\,\WordLength{q(i)}=i}{\FormulaRefAuto{B27AddressRootPathRanks}[thm]{1,2,4,6}}
+  \proofstepwidestar[1,2,3,5]{\WordLength{p(n)}=n}{\rRE{\rUE{14},12}}
+  \proofstepwidestar[1,2,4,6]{\WordLength{q(m)}=m}{\rRE{\rUE{15},13}}
+  \proofstepwidestar[1,2,3,5,7]{\WordLength{q(m)}=n}{\rIE{7,16}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{n=m}{\FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{18,17}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{m=n}{\FormulaRefAuto{a=b\vdash b=a}[thm]{19}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{\BXXVIIAddressPath qn}{\rIE{20,4}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{p(n)=q(n)}{\rIE{20,7}}
+  \closeproofpartwide
+  \proofpartwide{Vom Endknoten rückwärts}
+  \setcounter{proofstepnr}{22}
+  \proofstepwidestar[23]{i\in\NatSeg n}{\rA}
+  \proofstepwidestar[24]{p(i+1)=q(i+1)}{\rA}
+  \proofstepwidestar[1,2,3,5,23]{p(i+1)\in\NonemptyWords{\{0,1\}}\land p(i)=\WordRumpf{\{0,1\}}{p(i+1)}}{\FormulaRefAuto{B27AddressRootPathRumpf}[thm]{1,2,3,5,23}}
+  \proofstepwidestar[1,2,3,4,5,6,7,23]{q(i+1)\in\NonemptyWords{\{0,1\}}\land q(i)=\WordRumpf{\{0,1\}}{q(i+1)}}{\FormulaRefAuto{B27AddressRootPathRumpf}[thm]{1,2,21,6,23}}
+  \proofstepwidestar[1,2,3,5,23,24]{p(i)=\WordRumpf{\{0,1\}}{q(i+1)}}{\rIE{24,\rAEb{25}}}
+  \proofstepwidestar[1,2,3,4,5,6,7,23,24]{p(i)=q(i)}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{27,\rAEb{26}}}
+  \proofstepwidestar[1,2,3,4,5,6,7,23]{p(i+1)=q(i+1)\rightarrow p(i)=q(i)}{\rRI{24,28}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{\forall i\in\NatSeg n\,(p(i+1)=q(i+1)\rightarrow p(i)=q(i))}{\rUI{\rRI{23,29}}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{\forall i\in\NatSeg{n+1}\,p(i)=q(i)}{\FormulaRefAuto{B27FiniteBackwardInduction}[thm]{9,22,30}}
+  \proofstepwidestar[2,3]{p\colon\NatSeg{n+1}\to P}{\FormulaRefAuto{DirectedPathFunction}[thm]{2,3}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{q\colon\NatSeg{n+1}\to P}{\FormulaRefAuto{DirectedPathFunction}[thm]{2,21}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{p=q}{\FormulaRefAuto{FunctionExtensionality}[thm]{32,33,31}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{(n,p)=(m,q)}{\FormulaRefAuto{a=c,\, b=d\vdash (a,b) = (c,d)}[thm]{19,34}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Eindeutigkeit gespeicherter Wurzelpfade]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep
+  z_1\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\dsep{}\\[-2pt]
+  &z_2\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\vdash z_1=z_2\end{aligned}
+}{B27AddressStoredRootPathsEqual}{\DeltaRow{Mengen}{P\dsep q\dsep z_1\dsep z_2\dsep n\dsep m\dsep p\dsep s}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{z_1\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q}{\rA}
+  \proofstepwidestar[4]{z_2\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q}{\rA}
+  \proofstepwidestar[2]{z_1\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\leftrightarrow\exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times P)\,(z_1=(n,p)\land\BXXVIIAddressPath pn\land p(0)=\BXXVIIAddressRoot\land p(n)=q)}{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{2}}
+  \proofstepwidestar[2,3]{\exists n\in\mathbb N\,\exists p\in\powerset(\mathbb N\times P)\,(z_1=(n,p)\land\BXXVIIAddressPath pn\land p(0)=\BXXVIIAddressRoot\land p(n)=q)}{\rRE{3,\rLREa{5}}}
+  \proofstepwidestar[7]{n\in\mathbb N\land p\in\powerset(\mathbb N\times P)\land z_1=(n,p)\land\BXXVIIAddressPath pn\land p(0)=\BXXVIIAddressRoot\land p(n)=q}{\rA}
+  \proofstepwidestar[2]{z_2\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\leftrightarrow\exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times P)\,(z_2=(m,s)\land\BXXVIIAddressPath sm\land s(0)=\BXXVIIAddressRoot\land s(m)=q)}{\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]{2}}
+  \proofstepwidestar[2,4]{\exists m\in\mathbb N\,\exists s\in\powerset(\mathbb N\times P)\,(z_2=(m,s)\land\BXXVIIAddressPath sm\land s(0)=\BXXVIIAddressRoot\land s(m)=q)}{\rRE{4,\rLREa{8}}}
+  \proofstepwidestar[10]{m\in\mathbb N\land s\in\powerset(\mathbb N\times P)\land z_2=(m,s)\land\BXXVIIAddressPath sm\land s(0)=\BXXVIIAddressRoot\land s(m)=q}{\rA}
+  \proofstepwidestar[7,10]{p(n)=s(m)}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEb{\rAEb{\rAEb{\rAEb{\rAEb{7}}}}},\rAEb{\rAEb{\rAEb{\rAEb{\rAEb{10}}}}}}}
+  \proofstepwidestar[1,2,7,10]{(n,p)=(m,s)}{\FormulaRefAuto{B27AddressRootPathEquality}[thm]{1,2,\rAEa{\rAEb{\rAEb{\rAEb{7}}}},\rAEa{\rAEb{\rAEb{\rAEb{10}}}},\rAEa{\rAEb{\rAEb{\rAEb{\rAEb{7}}}}},\rAEa{\rAEb{\rAEb{\rAEb{\rAEb{10}}}}},11}}
+  \proofstepwidestar[7]{z_1=(n,p)}{\rAEa{\rAEb{\rAEb{7}}}}
+  \proofstepwidestar[10]{z_2=(m,s)}{\rAEa{\rAEb{\rAEb{10}}}}
+  \proofstepwidestar[1,2,7,10]{z_1=(m,s)}{\rChain{13,12}}
+  \proofstepwidestar[1,2,7,10]{z_1=z_2}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{15,14}}
+  \proofstepwidestar[1,2,4,7]{z_1=z_2}{\rEEStar{9,10,16}}
+  \proofstepwidestar[1,2,3,4]{z_1=z_2}{\rEEStar{6,7,17}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Jede Adresse besitzt genau einen Wurzelpfad]{%
+  \GoodAddressSet P\dsep\GraphStruct{P,\AddressEdges P}\dsep q\in P\vdash
+    \exists!z\,(z\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q)
+}{B27AddressRootPathUnique}{%
+  \DeltaRow{Mengen}{P\dsep q\dsep z\dsep z_1\dsep z_2}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rA}
+  \proofstepwidestar[3]{q\in P}{\rA}
+  \proofstepwidestar[1,2,3]{%
+    \exists z\,(z\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q)}{%
+    \FormulaRefAuto{B27AddressRootPathExists}[thm]{1,2,3}}
+  \proofstepwidestar[5]{z_1\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q}{\rA}
+  \proofstepwidestar[6]{z_2\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q}{\rA}
+  \proofstepwidestar[1,2,5,6]{z_1=z_2}{%
+    \FormulaRefAuto{B27AddressStoredRootPathsEqual}[thm]{1,2,5,6}}
+  \proofstepwidestar[1,2,3]{%
+    \exists!z\,(z\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q)}{%
+    \UEI{4,5,6,7}}
+\end{tabproofwide}
+
+\subsection{Eltern und Kinder als Wortoperationen}
+
+Sobald der Adressgraph als verwurzelter Baum vorliegt, lassen sich seine
+Eltern und Kinder mit den Wortoperationen beschreiben. Ein Elternschritt
+entfernt das letzte Bit; ein Kinderschritt fügt ein Bit an, sofern die verlängerte Adresse vorhanden ist.
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Der Baumelter einer Adresse ist ihr Rumpf]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep
+  \RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}\dsep
+  \TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q\vdash{}\\[-2pt]
+  &q\in\NonemptyWords{\{0,1\}}\land p=\WordRumpf{\{0,1\}}q\end{aligned}
+}{B27AddressParentIsRumpf}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep k\dsep s}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}}{\rA}
+  \proofstepwidestar[3]{\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\rA}
+  \proofstepwidestar[2]{\TreeStruct{P,\AddressEdges P}}{\FormulaRefAuto{RootedTreeTreeAxiom}[ax]{2}}
+  \proofstepwidestar[2]{\SimpleUndirectedGraphStruct{P,\AddressEdges P}}{\FormulaRefAuto{TreeGraphAxiom}[ax]{4}}
+  \proofstepwidestar[2]{\UndirectedGraphStruct{P,\AddressEdges P}\land\GraphStruct{P,\AddressEdges P}}{\FormulaRefAuto{SimpleUndirectedGraphAccess}[thm]{5}}
+  \proofstepwidestar[2]{\GraphStruct{P,\AddressEdges P}}{\rAEb{6}}
+  \proofstepwidestar[2,3]{\exists k\in\mathbb N\,\exists s\in\powerset(\mathbb N\times P)\,((k+1,s)\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\land s(k)=p)}{\FormulaRefAuto{TreeParentAccess}[thm]{2,3}}
+  \proofstepwidestar[9]{k\in\mathbb N\land s\in\powerset(\mathbb N\times P)\land(k+1,s)\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q\land s(k)=p}{\rA}
+  \proofstepwidestar[9]{k\in\mathbb N}{\rAEa{9}}
+  \proofstepwidestar[9]{(k+1,s)\in\GraphPathsBetween P{\AddressEdges P}{\BXXVIIAddressRoot}q}{\rAEa{\rAEb{\rAEb{9}}}}
+  \proofstepwidestar[9]{s(k)=p}{\rAEb{\rAEb{\rAEb{9}}}}
+  \proofstepwidestar[2,9]{k+1\in\mathbb N\land s\in\powerset(\mathbb N\times P)\land\BXXVIIAddressPath s{k+1}\land s(0)=\BXXVIIAddressRoot\land s(k+1)=q}{\FormulaRefAuto{B27SimplePathFamilyPairElimination}[thm]{7,11}}
+  \proofstepwidestar[2,9]{\begin{aligned}[t]&\BXXVIIAddressPath s{k+1}\\[-2pt]&\quad\land s(0)=\BXXVIIAddressRoot\land s(k+1)=q\end{aligned}}{\rAEb{\rAEb{13}}}
+  \proofstepwidestar[9]{k\in\NatSeg{k+1}}{\FormulaRefAuto{PeanoNatSegEndpointInAddOne}[thm]{10}}
+  \proofstepwidestar[1,2,9]{\begin{aligned}[t]&s(k+1)\in\NonemptyWords{\{0,1\}}\\[-2pt]&\quad\land s(k)=\WordRumpf{\{0,1\}}{s(k+1)}\end{aligned}}{\FormulaRefAuto{B27AddressRootPathRumpf}[thm]{1,7,\rAEa{14},\rAEa{\rAEb{14}},15}}
+  \proofstepwidestar[1,2,9]{q\in\NonemptyWords{\{0,1\}}\land p=\WordRumpf{\{0,1\}}q}{\rIE{12,\rAEb{\rAEb{14}},16}}
+  \proofstepwidestar[1,2,3]{q\in\NonemptyWords{\{0,1\}}\land p=\WordRumpf{\{0,1\}}q}{\rEEStar{8,9,17}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Der Rumpf ist ein Baumelter]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep
+  \RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}\dsep{}\\[-2pt]
+  &q\in P\dsep q\neq\BXXVIIAddressRoot\dsep p=\WordRumpf{\{0,1\}}q\vdash{}\\[-2pt]
+  &\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q\end{aligned}
+}{B27AddressRumpfIsParent}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep b}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}}{\rA}
+  \proofstepwidestar[3]{q\in P}{\rA}
+  \proofstepwidestar[4]{q\neq\BXXVIIAddressRoot}{\rA}
+  \proofstepwidestar[5]{p=\WordRumpf{\{0,1\}}q}{\rA}
+  \proofstepwidestar[]{q\notin\{\BXXVIIAddressRoot\}\leftrightarrow q\neq\BXXVIIAddressRoot}{\FormulaRefAuto{x\notin\{a\}\eqvdash x\neq a}[thm]}
+  \proofstepwidestar[4]{q\notin\{\BXXVIIAddressRoot\}}{\rRE{4,\rLREb{6}}}
+  \proofstepwidestar[3,4]{q\in P\setminus\{\BXXVIIAddressRoot\}}{\FormulaRefAuto{x\in A\dsep x\notin B\vdash x\in A\setminus B}[thm]{3,7}}
+  \proofstepwidestar[2,3,4]{\exists b\in P\,\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}b q}{\FormulaRefAuto{TreeParentExists}[thm]{2,8}}
+  \proofstepwidestar[10]{b\in P\land\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}b q}{\rA}
+  \proofstepwidestar[1,2,10]{q\in\NonemptyWords{\{0,1\}}\land b=\WordRumpf{\{0,1\}}q}{\FormulaRefAuto{B27AddressParentIsRumpf}[thm]{1,2,\rAEb{10}}}
+  \proofstepwidestar[1,2,5,10]{b=p}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEb{11},5}}
+  \proofstepwidestar[1,2,5,10]{\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\rIE{12,\rAEb{10}}}
+  \proofstepwidestar[1,2,3,4,5]{\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\rEE{9,10,13}}
+\end{tabproofwide}
+
+\Needspace{10\baselineskip}
+\FormulaThmDeltaK[Adresskinder sind die vorhandenen Fortsetzungen]{%
+  \begin{aligned}[t]&\GoodAddressSet P\dsep
+  \RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}\dsep p\in P\vdash{}\\[-2pt]
+  &\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p
+  =\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P\end{aligned}
+}{B27AddressChildrenSet}{\DeltaRow{Mengen}{P\dsep p\dsep q\dsep i}}
+\begin{tabproofsplitwide}
+  \proofpartwide{Vom Kind zur Fortsetzung}
+  \proofstepwidestar[1]{\GoodAddressSet P}{\rA}
+  \proofstepwidestar[2]{\RootedTreeStruct{P,\AddressEdges P,\BXXVIIAddressRoot}}{\rA}
+  \proofstepwidestar[3]{p\in P}{\rA}
+  \proofstepwidestar[1,3]{p\in\FiniteWords{\{0,1\}}}{\FormulaRefAuto{B27AddressWordTyping}[thm]{1,3}}
+  \proofstepwidestar[1,3]{p\in\BinaryAddresses}{\FormulaRefAuto{BinaryAddressWordSetDef}[def]{4}}
+  \proofstepwidestar[6]{q\in\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p}{\rA}
+  \proofstepwidestar[2,3]{q\in\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p\leftrightarrow\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\FormulaRefAuto{TreeChildrenMembership}[thm]{2,3}}
+  \proofstepwidestar[2,3,6]{\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\rRE{\rLREa{7},6}}
+  \proofstepwidestar[2,3,6]{q\in P\setminus\{\BXXVIIAddressRoot\}}{\FormulaRefAuto{TreeParentAccess}[thm]{2,8}}
+  \proofstepwidestar[2,3,6]{q\in P}{\FormulaRefAuto{x\in A\setminus B\vdash x\in A}[thm]{9}}
+  \proofstepwidestar[1,2,3,6]{q\in\NonemptyWords{\{0,1\}}\land p=\WordRumpf{\{0,1\}}q}{\FormulaRefAuto{B27AddressParentIsRumpf}[thm]{1,2,8}}
+  \proofstepwidestar[1,2,3,6]{q=\WordConcat{\WordRumpf{\{0,1\}}q}{\LetterWord{\WordEnd{\{0,1\}}q}}}{\FormulaRefAuto{WordRightDecompositionEquation}[thm]{\rAEa{11}}}
+  \proofstepwidestar[1,2,3,6]{\WordRumpf{\{0,1\}}q=p}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{11}}}
+  \proofstepwidestar[1,2,3,6]{q=\WordConcat p{\LetterWord{\WordEnd{\{0,1\}}q}}}{\rIE{13,12}}
+  \proofstepwidestar[1,2,3,6]{\WordEnd{\{0,1\}}q\in\{0,1\}}{\FormulaRefAuto{WordEndTyping}[thm]{\rAEa{11}}}
+  \proofstepwidestar[1,2,3,6]{\exists i\in\{0,1\}\,q=\WordConcat p{\LetterWord i}}{\rEI{\rAI{15,14}}}
+  \proofstepwidestar[1,3]{\begin{aligned}[t]&\forall q\,\Bigl(q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\\[-2pt]&\quad\leftrightarrow\exists i\in\{0,1\}\,q=\WordConcat p{\LetterWord i}\Bigr)\end{aligned}}{\FormulaRefAuto{B27BinaryChildTermSetDef}[def]{5}}
+  \proofstepwidestar[1,3]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\leftrightarrow\exists i\in\{0,1\}\,q=\WordConcat p{\LetterWord i}}{\rUE{17}}
+  \proofstepwidestar[1,2,3,6]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}}{\rRE{\rLREb{18},16}}
+  \proofstepwidestar[]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P\leftrightarrow(q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\land q\in P)}{\FormulaRefAuto{x\in A\cap B\eqvdash x\in A\land x\in B}[thm]}
+  \proofstepwidestar[1,2,3,6]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P}{\rRE{\rAI{19,10},\rLREb{20}}}
+  \closeproofpartwide
+  \proofpartwide{Von der Fortsetzung zum Kind}
+  \setcounter{proofstepnr}{21}
+  \proofstepwidestar[22]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P}{\rA}
+  \proofstepwidestar[22]{q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\land q\in P}{\rRE{22,\rLREa{20}}}
+  \proofstepwidestar[1,3,22]{\exists i\in\{0,1\}\,q=\WordConcat p{\LetterWord i}}{\rRE{\rLREa{18},\rAEa{23}}}
+  \proofstepwidestar[25]{i\in\{0,1\}\land q=\WordConcat p{\LetterWord i}}{\rA}
+  \proofstepwidestar[1,3,25]{\WordConcat p{\LetterWord i}\neq\BXXVIIAddressRoot}{\FormulaRefAuto{B27WordAppendNotEmpty}[thm]{4,\rAEa{25}}}
+  \proofstepwidestar[25]{\WordConcat p{\LetterWord i}=q}{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{25}}}
+  \proofstepwidestar[1,3,25]{q\neq\BXXVIIAddressRoot}{\rIE{27,26}}
+  \proofstepwidestar[1,3,25]{\WordRumpf{\{0,1\}}{\WordConcat p{\LetterWord i}}=p}{\FormulaRefAuto{WordRumpfAppend}[thm]{4,\rAEa{25}}}
+  \proofstepwidestar[1,3,25]{\WordRumpf{\{0,1\}}q=p}{\rIE{27,29}}
+  \proofstepwidestar[1,3,25]{p=\WordRumpf{\{0,1\}}q}{\FormulaRefAuto{a=b\vdash b=a}[thm]{30}}
+  \proofstepwidestar[1,2,3,22,25]{\TreeParentRel P{\AddressEdges P}{\BXXVIIAddressRoot}p q}{\FormulaRefAuto{B27AddressRumpfIsParent}[thm]{1,2,\rAEb{23},28,31}}
+  \proofstepwidestar[1,2,3,22,25]{q\in\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p}{\rRE{\rLREb{7},32}}
+  \proofstepwidestar[1,2,3,22]{q\in\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p}{\rEE{24,25,33}}
+  \proofstepwidestar[1,2,3]{q\in\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p\leftrightarrow q\in\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P}{\rLRI{\rRI{6,21},\rRI{22,34}}}
+  \proofstepwidestar[1,2,3]{\begin{aligned}[t]&\TreeChildren P{\AddressEdges P}{\BXXVIIAddressRoot}p\\[-2pt]&\quad=\{\WordConcat p{\LetterWord i}\mid i\in\{0,1\}\}\cap P\end{aligned}}{\FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)\vdash A=B}[ax]{\rUI{35}}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+

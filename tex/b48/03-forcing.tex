@@ -1,0 +1,921 @@
+\section{Forcing über einem abzählbaren Modell}
+
+\subsection{Bedingungen und generische Filter}
+
+Wir entwickeln Mengenforcing so, dass auch ein von außen nicht
+fundiertes Modell als Ausgangsmodell zulässig ist. Die Definitionen
+und Ranginduktionen werden zunächst \emph{innerhalb von ZFC}
+durchgeführt. Danach wird über einem abzählbaren Modell ein äußerer
+Quotient gebildet. Eine äußere rekursive Auswertung möglicherweise
+nicht fundierter Namen wäre dagegen unzulässig.
+
+\FormulaDefDeltaK[Forcingordnung und Dichtheit]
+{\begin{aligned}
+ \mathbb P&=(P,\le,1),\qquad p\le1\quad(p\in P),\\
+ p\perp q&\ \Longleftrightarrow\ \neg\exists r\ (r\le p\land r\le q),\\
+ D\text{ dicht unter }p
+ &\ \Longleftrightarrow\ \forall q\le p\ \exists r\le q\ (r\in D)
+\end{aligned}}
+{B48ForcingOrder}{
+  \DeltaRow{Menge}{P\ne\varnothing}
+  \DeltaRow{Ordnung}{\le\text{ partiell}}
+}
+\noindent
+\(p\le q\) bedeutet: \(p\) ist die stärkere, informativere Bedingung.
+Eine Antikette ist eine Menge paarweise unverträglicher Bedingungen.
+Sie heißt maximal in einer Teilmenge \(D\), wenn keine weitere
+Bedingung aus \(D\) hinzugefügt werden kann.
+
+\FormulaDefDeltaK[Generischer Filter]
+{\begin{aligned}
+ &\varnothing\ne G\subseteq P,\\
+ &p\in G,\ p\le q\ \Longrightarrow\ q\in G,\\
+ &p,q\in G\ \Longrightarrow\ \exists r\in G\ (r\le p,q),\\
+ &D\in M,\quad M\models\text{\(D\) dicht in \(\mathbb P\)}
+       \ \Longrightarrow\ G\cap D^M\ne\varnothing
+\end{aligned}}
+{B48GenericDef}{
+  \DeltaRow{Modell}{M\models\BXLVIIIZFC,\quad\mathbb P\in M}
+}
+\noindent
+Bei nichttransitivem \(M\) bedeutet \(D^M\) die äußere Menge der
+Modellelemente, welche nach der Mitgliedschaftsrelation von \(M\)
+in \(D\) liegen. Dasselbe gilt für \(P^M\) und für die Ordnung.
+Zur Lesbarkeit werden diese hochgestellten \(M\) im weiteren Text
+weggelassen, wenn klar intern gearbeitet wird.
+
+\FormulaThmDeltaK[Existenz generischer Filter]
+{\begin{gathered}
+ M\models\BXLVIIIZFC,\quad |M|\le\aleph_0,\quad
+ M\models p\in\mathbb P\\
+ \vdash\ \exists G\quad
+ G\text{ ist \(M\)-generisch und }p\in G
+ \end{gathered}}
+{B48GenericExists}{
+  \DeltaRow{Äußere Voraussetzung}{M\text{ abzählbar}}
+}
+\begin{tabproof}
+ \proofstep{1}{M\text{ abzählbar},\quad M\models p\in\mathbb P}{\rA}
+ \proofstep{1}{\BXLVIIIText{Zähle von außen alle Elemente
+ \(D_0,D_1,\ldots\) von \(M\) auf, welche \(M\) für dichte
+ Teilmengen von \(\mathbb P\) hält.}}
+ {\BXLVIIIWhy{Teilmenge einer abzählbaren Grundmenge}}
+ \proofstep{1}{p_0=p,\qquad p_{n+1}\le p_n,\quad p_{n+1}\in D_n}
+ {\BXLVIIIWhy{Interne Dichtheit liefert jeweils ein Modellelement}}
+ \proofstep{1}{G=\{q:\exists n<\omega\ (p_n\le q)\}}
+ {\BXLVIIIWhy{Äußere Mengenbildung}}
+ \proofstep{1}{\BXLVIIIText{Aufwärtsabschluss ist unmittelbar.
+ Zwei Elemente werden durch ein \(p_n\) mit genügend großem
+ Index gemeinsam verstärkt. Außerdem liegt
+ \(p_{n+1}\in G\cap D_n\).}}
+ {\BXLVIIIWhy{Absteigende Folge}}
+\end{tabproof}
+\noindent
+Ist \(D\in M\) nur unter \(p\in G\) dicht, so trifft \(G\) ebenfalls
+\(D\): Die Menge
+\(D\cup\{q:q\perp p\}\) ist dicht in ganz \(\mathbb P\), und ein
+Filter, der \(p\) enthält, kann keine zu \(p\) unverträgliche
+Bedingung enthalten. Dieselbe Beobachtung gilt für maximale
+Antiketten über die Menge ihrer Verstärkungen.
+
+\subsection{Namen und die Forcingrelation}
+
+\FormulaDefDeltaK[Namen und kanonische Namen]
+{\begin{aligned}
+ N_0&=\varnothing,\qquad
+ N_{\alpha+1}=\mathcal P(N_\alpha\times P),\qquad
+ N_\lambda=\bigcup_{\alpha<\lambda}N_\alpha,\\
+ \tau\text{ ist ein Name}&\ \Longleftrightarrow\
+             \exists\alpha\ (\tau\in N_\alpha),\\
+ \check x&=\{(\check y,1):y\in x\},\\
+ \rho(\tau)&=\sup\{\rho(\sigma)+1:
+                         \exists p\ ((\sigma,p)\in\tau)\}
+\end{aligned}}
+{B48Names}{
+  \DeltaRow{Forcingordnung}{\mathbb P}
+}
+\noindent
+Die Namensstufen sind aufsteigend; jeder Name ist eine Menge von
+Paaren aus früheren Namen und Bedingungen. Die Rekursionen sind
+durch Rang beziehungsweise Fundiertheit gerechtfertigt.
+Alle hier auftretenden Namen gehören zunächst zum Ausgangsuniversum.
+
+\FormulaDefDeltaK[Atomare Forcingrelation]
+{\begin{aligned}
+ p\Vdash\tau\in\sigma\ \Longleftrightarrow\
+ &\ \forall q\le p\ \exists r\le q\
+ \exists(\eta,s)\in\sigma\
+       (r\le s\land r\Vdash\tau=\eta),\\
+ p\Vdash\tau\subseteq\sigma\ \Longleftrightarrow\
+ &\ \forall(\eta,s)\in\tau\ \forall q\le p,s\
+                       \exists r\le q\ (r\Vdash\eta\in\sigma),\\
+ p\Vdash\tau=\sigma\ \Longleftrightarrow\
+ &\ (p\Vdash\tau\subseteq\sigma)
+       \land(p\Vdash\sigma\subseteq\tau)
+\end{aligned}}
+{B48AtomicForcing}{
+  \DeltaRow{Namen}{\tau,\sigma,\eta}
+  \DeltaRow{Bedingungen}{p,q,r,s}
+}
+\noindent
+Die Teilmengenrelation in dieser Definition ist zunächst eine
+Hilfsrelation. Die Rekursion ist wohlfundiert: Ordne die beiden
+Namensränge absteigend und vergleiche die geordneten Paare
+lexikographisch. Jeder echte rekursive Aufruf ersetzt einen
+Namen durch einen Namen kleineren Ranges. Gleichheit wird danach
+als Konjunktion der beiden schon bestimmten Inklusionen definiert.
+
+\FormulaDefDeltaK[Forcing für zusammengesetzte Formeln]
+{\begin{aligned}
+ p\Vdash\varphi\land\psi
+ &\ \Longleftrightarrow\
+       (p\Vdash\varphi)\land(p\Vdash\psi),\\
+ p\Vdash\neg\varphi
+ &\ \Longleftrightarrow\
+       \neg\exists q\le p\ (q\Vdash\varphi),\\
+ p\Vdash\exists x\,\varphi(x)
+ &\ \Longleftrightarrow\
+       \forall q\le p\ \exists r\le q\
+       \exists\tau\text{ Name}\ (r\Vdash\varphi(\tau))
+\end{aligned}}
+{B48FormulaForcing}{
+  \DeltaRow{Formeln}{\varphi,\psi\text{ jeweils fest}}
+}
+\noindent
+Dies ist eine metatheoretische Rekursion über gewöhnliche endliche
+Formeln: Für jede feste Formel erhält man eine Mengenlehreformel,
+die ihre Forcingrelation definiert. Der Namensquantor ist ein
+gewöhnlicher Mengenquantor mit der definierbaren Einschränkung
+\enquote{ist ein Name}. Es wird keine einzige interne
+Wahrheitsrelation für alle Formeln des Mengenuniversums behauptet.
+
+\FormulaThmDeltaK[Monotonie, Dichtheitslemma und Entscheidung]
+{\begin{aligned}
+ q\le p,\ p\Vdash\varphi&\ \Longrightarrow\ q\Vdash\varphi,\\
+ \{q:q\Vdash\varphi\}\text{ dicht unter }p
+       &\ \Longrightarrow\ p\Vdash\varphi,\\
+ \{p:p\Vdash\varphi\text{ oder }p\Vdash\neg\varphi\}
+       &\text{ ist dicht in }\mathbb P
+\end{aligned}}
+{B48ForcingDensity}{
+  \DeltaRow{Formel}{\varphi\text{ mit Namensparametern}}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Induktion zuerst über die atomare
+ Rangrekursion, dann über die Formel. Eine Verstärkung
+ verkleinert jeweils nur den Bereich der Bedingungen, die noch
+ betrachtet werden müssen. Dies beweist Monotonie.}}
+ {\BXLVIIIWhy{Definitionsklauseln}}
+ \proofstep{}{\BXLVIIIText{Für atomare Mitgliedschaft und
+ Inklusion lässt sich unter jeder vorgegebenen Bedingung
+ zunächst eine forcierende Bedingung wählen und danach der
+ dort verlangte Mitgliedschafts- oder Gleichheitszeuge.
+ So werden zwei aufeinanderfolgende Dichtheitsforderungen
+ zu einer. Gleichheit folgt komponentenweise.}}
+ {\BXLVIIIWhy{Atomare Klauseln}}
+ \proofstep{}{\BXLVIIIText{Für Konjunktion gilt das Dichtheitslemma
+ für beide Teile; für Existenz werden wieder zwei dichte
+ Verstärkungsschritte hintereinander ausgeführt.
+ Ist hingegen das Forcen von \(\neg\psi\) dicht unter \(p\),
+ so kann kein \(q\le p\) die Formel \(\psi\) forcen:
+ Eine weitere Verstärkung würde beides forcen.}}
+ {\BXLVIIIWhy{Formelinduktion; Negationsklausel}}
+ \proofstep{}{\BXLVIIIText{Für ein beliebiges \(p\) gibt es
+ entweder ein \(q\le p\) mit \(q\Vdash\varphi\), oder die
+ Negationsklausel besagt bereits \(p\Vdash\neg\varphi\).
+ Daher ist die Entscheidungsmenge dicht.}}
+ {\BXLVIIIWhy{Klassische Fallunterscheidung}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Gleichheitsgesetze des Forcings]
+{\begin{aligned}
+ &1\Vdash\tau=\tau,\\
+ &p\Vdash\tau=\sigma\ \Longrightarrow\ p\Vdash\sigma=\tau,\\
+ &p\Vdash\tau=\sigma,\ p\Vdash\sigma=\eta
+                 \ \Longrightarrow\ p\Vdash\tau=\eta,\\
+ &p\Vdash\tau=\sigma,\ p\Vdash\varphi(\tau)
+                 \ \Longrightarrow\ p\Vdash\varphi(\sigma)
+\end{aligned}}
+{B48ForcingEquality}{
+  \DeltaRow{Namen}{\tau,\sigma,\eta}
+  \DeltaRow{Formel}{\varphi}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Reflexivität folgt durch Ranginduktion.
+ Zu \((\nu,s)\in\tau\) und \(q\le s\) liefert
+ \(1\Vdash\nu=\nu\) die Mitgliedschaft
+ \(q\Vdash\nu\in\tau\). Beide Inklusionsklauseln für
+ \(\tau=\tau\) sind damit erfüllt. Symmetrie ist definitorisch.}}
+ {\BXLVIIIWhy{Atomare Rekursion}}
+ \proofstep{}{\BXLVIIIText{Für Transitivität und atomare
+ Substitution führe eine gemeinsame Induktion über die
+ absteigend sortierten Tripel der beteiligten Namensränge.
+ Beim Übergang von \(\tau\) nach \(\sigma\) und weiter nach
+ \(\eta\) liefert jede verlangte Verstärkung sukzessive
+ Mitgliedschaftszeugen aus den beiden folgenden Namen.}}
+ {\BXLVIIIWhy{Wohlfundierte lexikographische Rangordnung}}
+ \proofstep{}{\BXLVIIIText{Genauer: Zu einem Paar \((u,s)\in\tau\)
+ und einer Bedingung unter \(p,s\) wähle aus
+ \(\tau\subseteq\sigma\) ein Paar \((v,t)\in\sigma\) mit
+ stärkerer Bedingung, die \(u=v\) forciert.
+ Aus \(\sigma\subseteq\eta\) wähle danach
+ \((w,a)\in\eta\) und eine weitere Verstärkung, die \(v=w\)
+ forciert. Die Ränge von \(u,v,w\) sind jeweils kleiner als
+ die von \(\tau,\sigma,\eta\); Induktion ergibt \(u=w\).
+ Dies beweist \(\tau\subseteq\eta\); die Rückrichtung ist gleich.}}
+ {\BXLVIIIWhy{Transitivitätsschritt}}
+ \proofstep{}{\BXLVIIIText{Für die Substitution in \(u\in v\)
+ ersetze zunächst den Mitgliedschaftszeugen durch den
+ gleichgesetzten Namen und verwende die gerade bewiesene
+ Transitivität. Wird der rechte Name ersetzt, transportiere
+ seinen Zeugen über die erzwungene Inklusion in den neuen
+ rechten Namen. Dabei sinkt mindestens einer der drei Ränge;
+ die übrigen steigen nicht. Das Dichtheitslemma entfernt die
+ jeweils eingeführten Verstärkungen.}}
+ {\BXLVIIIWhy{Gemeinsamer atomarer Induktionsschritt}}
+ \proofstep{}{\BXLVIIIText{Formelinduktion liefert die allgemeine
+ Substitution. Konjunktion und Existenz transportieren die
+ Teilformeln und Zeugen. Bei Negation würde eine forcierte
+ Gegeninstanz nach Symmetrie und Induktion eine Gegeninstanz
+ vor der Substitution liefern, entgegen der Negationsklausel.}}
+ {\BXLVIIIWhy{Monotonie und Formeldefinition}}
+\end{tabproof}
+
+\subsection{Der generische Quotient und das Wahrheitslemma}
+
+\FormulaDefDeltaK[Generische Erweiterung als Quotient]
+{\begin{aligned}
+ \tau\sim_G\sigma
+ &\ \Longleftrightarrow\
+ \exists p\in G\ (M\models p\Vdash\tau=\sigma),\\
+ [\tau]_G\ E_G\ [\sigma]_G
+ &\ \Longleftrightarrow\
+ \exists p\in G\ (M\models p\Vdash\tau\in\sigma),\\
+ M[G]&=\bigl(\{\text{\(M\)-Namen}\}/\sim_G,\ E_G\bigr)
+\end{aligned}}
+{B48GenericQuotient}{
+  \DeltaRow{Modell}{M\models\BXLVIIIZFC}
+  \DeltaRow{Filter}{G\text{ ist \(M\)-generisch}}
+}
+\noindent
+Die \(M\)-Namen bilden von außen eine Teilmenge der Grundmenge von
+\(M\), also eine Menge. Die Gleichheitsgesetze und die gemeinsame
+Verstärkung endlich vieler Bedingungen aus \(G\) machen
+\(\sim_G\) zu einer Äquivalenzrelation und \(E_G\) unabhängig von
+der Repräsentantenwahl. Im Folgenden schreiben wir kurz
+\(\tau_G=[\tau]_G\) und innerhalb der Erweiterung wieder \(\in\)
+anstelle von \(E_G\).
+
+\FormulaThmDeltaK[Wahrheitslemma]
+{M[G]\models\varphi(\tau_{1,G},\ldots,\tau_{n,G})
+ \ \Longleftrightarrow\
+ \exists p\in G\ (M\models p\Vdash\varphi(\tau_1,\ldots,\tau_n))}
+{B48TruthLemma}{
+  \DeltaRow{Formel}{\varphi\text{ eine feste gewöhnliche Formel}}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Induktion über den wirklichen endlichen
+ Aufbau von \(\varphi\). Atomare Gleichheit und Mitgliedschaft
+ gelten nach Definition des Quotienten.}}
+ {\BXLVIIIWhy{Quotientendefinition}}
+ \proofstep{}{\BXLVIIIText{Für Konjunktion liefert die
+ Induktionsvoraussetzung Bedingungen für beide Teile.
+ Eine gemeinsame Verstärkung aus \(G\) forciert beide.
+ Umgekehrt forciert eine Konjunktion jeden ihrer Teile.}}
+ {\BXLVIIIWhy{Filtereigenschaft und Monotonie}}
+ \proofstep{}{\BXLVIIIText{Forciert ein \(p\in G\) die Negation,
+ kann keine Bedingung aus \(G\) das Positive forcen:
+ Eine gemeinsame Verstärkung widerspräche der Negationsklausel.
+ Ist umgekehrt das Positive in \(M[G]\) falsch, so trifft \(G\)
+ die in \(M\) definierte dichte Entscheidungsmenge.
+ Der getroffene Fall kann nur die Negation sein.}}
+ {\FormulaRefAuto{B48ForcingDensity}[thm]}
+ \proofstep{}{\BXLVIIIText{Forciert \(p\in G\) einen Existenzsatz,
+ trifft \(G\) die unter \(p\) dichte Menge von Bedingungen mit
+ einem Namenszeugen. Dieser Zeuge erfüllt nach Induktion die
+ Formel in \(M[G]\). Umgekehrt besitzt jeder Zeuge in
+ \(M[G]\) einen Namensrepräsentanten; eine dessen Formel
+ forcierende Bedingung forciert auch den Existenzsatz.}}
+ {\BXLVIIIWhy{Generizität, Existenzklausel und Induktionsvoraussetzung}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Mitglieder eines ausgewerteten Namens]
+{x\in\sigma_G\ \Longleftrightarrow\
+ \exists(\eta,s)\in^M\sigma\ (s\in G\land x=\eta_G)}
+{B48NameMembers}{
+  \DeltaRow{Element}{x\in M[G]}
+  \DeltaRow{Name}{\sigma\in M}
+}
+\begin{tabproof}
+ \proofstep{1}{x=\tau_G\in\sigma_G}{\rA}
+ \proofstep{1}{\BXLVIIIText{Wähle \(p\in G\) mit
+ \(p\Vdash\tau\in\sigma\). Die atomare Klausel gibt eine
+ unter \(p\) dichte Menge von Bedingungen \(r\), die für ein
+ \((\eta,s)\in\sigma\) sowohl \(r\le s\) als auch
+ \(r\Vdash\tau=\eta\) erfüllen.}}
+ {\BXLVIIIWhy{Wahrheitslemma und atomare Definition}}
+ \proofstep{1}{\BXLVIIIText{Ein solcher Zeuge \(r\) liegt in \(G\);
+ dann liegt auch \(s\) in \(G\) und \(x=\eta_G\).}}
+ {\BXLVIIIWhy{Generizität und Aufwärtsabschluss}}
+ \proofstep{4}{(\eta,s)\in^M\sigma,\quad s\in G,\quad x=\eta_G}{\rA}
+ \proofstep{4}{s\Vdash\eta\in\sigma,\qquad x\in\sigma_G}
+ {\BXLVIIIWhy{Reflexivität von Gleichheit; atomare Klausel und
+ Wahrheitslemma}}
+\end{tabproof}
+
+\noindent
+Aus den Definitionsklauseln folgen auch die üblichen logischen
+Schlussregeln für \(\Vdash\). Beispielsweise gilt
+\[
+ p\Vdash\forall x\,\varphi(x)
+ \quad\Longleftrightarrow\quad
+ \text{für jeden Namen }\tau\text{ gilt }p\Vdash\varphi(\tau).
+\]
+Für die Hinrichtung würde eine nicht forcierte Instanz durch das
+Dichtheitslemma eine Verstärkung mit forcierter Gegeninstanz
+zulassen. Für die Rückrichtung würde ein forcierter existenzieller
+Gegenzeuge einer der Instanzen widersprechen.
+Mitgliedschaftszeugen und Gleichheitssubstitution zeigen entsprechend,
+dass die atomare Hilfsrelation \(\tau\subseteq\sigma\) genau die
+Formel \(\forall x(x\in\tau\to x\in\sigma)\) forciert.
+Diese Ableitungen geschehen intern; sie benötigen nicht erst die
+Existenz eines generischen Filters.
+
+\FormulaThmDeltaK[Einbettung des Ausgangsmodells]
+{\begin{aligned}
+ j:M&\longrightarrow M[G],\qquad j(x)=\check x_G,\\
+ j(x)=j(y)&\Longleftrightarrow x=y,\\
+ j(x)\in j(y)&\Longleftrightarrow M\models x\in y
+\end{aligned}}
+{B48CheckEmbedding}{
+  \DeltaRow{Abbildung}{j\text{ von außen definiert}}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Interne Ranginduktion über \(x,y\)
+ zeigt: Für kanonische Namen wird wahre Gleichheit und
+ Mitgliedschaft von \(1\) forciert; ihre falschen Fälle
+ werden von keiner Bedingung forciert.
+ Die atomaren Klauseln reduzieren jeden Vergleich auf
+ Elemente kleineren Ranges.}}
+ {\BXLVIIIWhy{Kanonische Namen und atomare Rekursion}}
+ \proofstep{}{\BXLVIIIText{Wahrheitslemma und Quotientendefinition
+ übersetzen diese Aussagen in genau die beiden angegebenen
+ Äquivalenzen. Insbesondere ist \(j\) injektiv.}}
+ {\FormulaRefAuto{B48TruthLemma}[thm]}
+\end{tabproof}
+\noindent
+Diese Einbettung ist keine Behauptung elementarer Äquivalenz.
+Gerade die Potenzmengen und damit die Wahrheit von CH dürfen sich
+ändern. Wir identifizieren alte Elemente im Folgenden mit ihren
+kanonischen Bildern, ohne eine wörtliche transitive Inklusion
+der äußeren Strukturen zu verlangen.
+
+\subsection{Warum die Erweiterung wieder ZFC erfüllt}
+
+Die folgenden Beweise behandeln jedes Axiom und jede einzelne
+Instanz der Axiomenschemata. Die angegebenen Namen werden in \(M\)
+gebildet. Die Dichtheits- und Zeugenargumente zeigen zugleich
+intern, dass \(1\) das jeweilige Axiom forciert; das Wahrheitslemma
+überträgt dies auf den generischen Quotienten.
+
+\FormulaThmDeltaK[Extensionalität und elementare Mengenoperationen]
+{M[G]\models
+ \text{Extensionalität, leere Menge, Paarung und Vereinigung}}
+{B48ForcingBasicAxioms}{
+  \DeltaRow{Ausgangsmodell}{M\models\BXLVIIIZFC}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Extensionalität: Forciert eine Bedingung
+ \(\tau\ne\sigma\), so gibt es dicht darunter einen Zeugen
+ für das Scheitern einer der beiden Inklusionen.
+ Andernfalls würden die Inklusionsklauseln zusammen Gleichheit
+ forcen. Ein solcher Zeuge gehört zu genau einer der beiden
+ Mengen. Daher haben verschiedene Mengen verschiedene Elemente.}}
+ {\BXLVIIIWhy{Atomare Gleichheit, Negation und Dichtheitslemma}}
+ \proofstep{}{\varnothing_G\text{ hat kein Element}}
+ {\FormulaRefAuto{B48NameMembers}[thm]}
+ \proofstep{}{\{(\tau,1),(\sigma,1)\}_G=\{\tau_G,\sigma_G\}}
+ {\FormulaRefAuto{B48NameMembers}[thm]}
+ \proofstep{}{\BXLVIIIText{Für einen Namen \(\sigma\) bilde
+ \[
+ u=\{(\eta,q):\exists(\nu,p)\in\sigma\
+               \exists(\eta,r)\in\nu\ (q\le p,r)\}.
+ \]
+ Dies ist eine Menge: Die möglichen Unternamen werden aus
+ zwei Namensebenen gesammelt, die Bedingungen aus \(P\).}}
+ {\BXLVIIIWhy{Ersetzung, Vereinigung und Aussonderung in \(M\)}}
+ \proofstep{}{\BXLVIIIText{Ein Element von \(u_G\) liegt nach
+ der Mitgliederbeschreibung in einem \(\nu_G\in\sigma_G\).
+ Umgekehrt lassen sich die beiden dafür zuständigen Bedingungen
+ aus \(G\) gemeinsam verstärken; das resultierende Paar tritt
+ dann in \(u\) auf. Also \(u_G=\bigcup\sigma_G\).}}
+ {\BXLVIIIWhy{Mitgliederbeschreibung und Filtergerichtetheit}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Aussonderung in der Erweiterung]
+{M[G]\models\text{jede feste Instanz des Aussonderungsschemas}}
+{B48ForcingSeparation}{
+  \DeltaRow{Formel}{\varphi(x,\bar a)}
+  \DeltaRow{Namen}{\sigma,\bar\tau}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{In \(M\) existiert die Menge
+ \[
+ s=\{(\eta,q):\exists(\eta,r)\in\sigma\
+       (q\le r\land q\Vdash\varphi(\eta,\bar\tau))\}.
+ \]
+ Die Formel ist fest, ihre Forcingrelation definierbar.}}
+ {\BXLVIIIWhy{Aussonderung auf \(\operatorname{dom}(\sigma)\times P\)}}
+ \proofstep{}{\BXLVIIIText{Ist \(x\in s_G\), so liefern ein Paar
+ des Namens und eine Bedingung aus \(G\) sowohl
+ \(x\in\sigma_G\) als auch \(\varphi(x,\bar\tau_G)\).}}
+ {\BXLVIIIWhy{Mitgliederbeschreibung und Wahrheitslemma}}
+ \proofstep{}{\BXLVIIIText{Sind umgekehrt \(x\in\sigma_G\) und
+ \(\varphi(x,\bar\tau_G)\) wahr, so wähle einen
+ Mitgliedschaftsrepräsentanten und eine die Formel forcierende
+ Bedingung in \(G\). Eine gemeinsame Verstärkung gehört zum
+ gerade definierten Namen \(s\).}}
+ {\BXLVIIIWhy{Gleichheitssubstitution und Filtergerichtetheit}}
+ \proofstep{}{s_G=\{x\in\sigma_G:\varphi(x,\bar\tau_G)\}}
+ {\BXLVIIIWhy{Beide Inklusionen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Potenzmenge in der Erweiterung]
+{M[G]\models\text{Potenzmengenaxiom}}
+{B48ForcingPowerset}{
+  \DeltaRow{Name}{\sigma}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Setze in \(M\)
+ \(D=\{\eta:\exists r\ ((\eta,r)\in\sigma)\}\) und
+ \(R=\mathcal P(D\times P)\). Jedes Element von \(R\) ist
+ ein Name. Definiere
+ \(\pi=\{(\tau,p):\tau\in R,\ p\Vdash\tau\subseteq\sigma\}\).}}
+ {\BXLVIIIWhy{Potenzmenge und Aussonderung in \(M\)}}
+ \proofstep{}{\pi_G\subseteq\mathcal P^{M[G]}(\sigma_G)}
+ {\BXLVIIIWhy{Mitgliederbeschreibung und Wahrheitslemma}}
+ \proofstep{3}{\tau_G\subseteq\sigma_G}{\rA}
+ \proofstep{3}{p\in G,\qquad p\Vdash\tau\subseteq\sigma}
+ {\FormulaRefAuto{B48TruthLemma}[thm]}
+ \proofstep{3}{\BXLVIIIText{Normalisiere den Namen unter \(p\):
+ \[
+ \tau'=\{(\eta,q):\exists(\eta,r)\in\sigma\
+                 (q\le p,r\land q\Vdash\eta\in\tau)\}.
+ \]
+ Dann liegt \(\tau'\) in der festen Menge \(R\).}}
+ {\BXLVIIIWhy{Aussonderung}}
+ \proofstep{3}{\BXLVIIIText{Die atomaren Klauseln zeigen
+ \(p\Vdash\tau'=\tau\) und \(p\Vdash\tau'\subseteq\sigma\):
+ Mitglieder von \(\tau'\) sind ausdrücklich Mitglieder von
+ \(\tau\) und \(\sigma\). Für ein Mitglied von \(\tau\)
+ liefert die unter \(p\) forcierte Inklusion einen Vertreter
+ aus \(\sigma\); eine weitere Verstärkung nimmt diesen in
+ \(\tau'\) auf.}}
+ {\BXLVIIIWhy{Zeugen, Substitution und Dichtheitslemma}}
+ \proofstep{3}{\tau_G=\tau'_G\in\pi_G}
+ {\BXLVIIIWhy{\((\tau',p)\in\pi\), \(p\in G\)}}
+ \proofstep{}{\pi_G=\mathcal P^{M[G]}(\sigma_G)}
+ {\BXLVIIIWhy{Beliebige Teilmenge erfasst, 3 entladen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Ersetzung in der Erweiterung]
+{M[G]\models\text{jede feste Instanz des Ersetzungsschemas}}
+{B48ForcingReplacement}{
+  \DeltaRow{Formel}{\varphi(x,y,\bar a)}
+  \DeltaRow{Name der Ausgangsmenge}{\sigma}
+}
+\begin{tabproof}
+ \proofstep{1}{\BXLVIIIText{In \(M[G]\) ordne \(\varphi\) jedem
+ \(x\in\sigma_G\) genau ein \(y\) zu. Wähle \(p\in G\),
+ das diese Aussage für die entsprechenden Namen forciert.}}{\rA}
+ \proofstep{1}{\BXLVIIIText{Für jedes \((\eta,r)\in\sigma\) sind
+ unter gemeinsamen Verstärkungen von \(p,r\) die Bedingungen
+ dicht, die \(\varphi(\eta,\nu,\bar\tau)\) für irgendeinen
+ Namen \(\nu\) forcen. Denn dort ist \(\eta\in\sigma\)
+ forciert und damit die Existenz des zugehörigen Wertes.}}
+ {\BXLVIIIWhy{Universalklausel und Existenzklausel}}
+ \proofstep{1}{\BXLVIIIText{Wähle in dieser dichten Menge eine
+ maximale Antikette \(A_{\eta,r}\). Für jedes ihrer Elemente
+ \(a\) wähle einen Zeugen \(\nu_{\eta,r,a}\).
+ Diese Wahlen sind Mengenwahlen: Die Bedingungen liegen in
+ \(P\); für jeden benötigten Zeugen wählt man zunächst den
+ kleinsten möglichen Namensrang. Ersetzung begrenzt alle
+ diese Ränge, danach genügt Auswahl in einer einzigen
+ Namensstufe.}}
+ {\BXLVIIIWhy{Auswahl und Ersetzung in \(M\);
+ keine Auswahl aus einer echten Klasse}}
+ \proofstep{1}{b=\{(\nu_{\eta,r,a},a):
+                  (\eta,r)\in\sigma,\ a\in A_{\eta,r}\}}
+ {\BXLVIIIWhy{Mengenindexierte Ersetzung und Vereinigung}}
+ \proofstep{1}{\BXLVIIIText{Jedes Mitglied von \(b_G\) ist ein
+ durch \(\varphi\) zugeordnetes Bild eines Mitglieds von
+ \(\sigma_G\), denn die gewählte Bedingung liegt unter
+ \(p,r\). Umgekehrt trifft \(G\) bei jedem
+ Mitgliedschaftsvertreter die entsprechende Antikette.
+ Die forcierte Eindeutigkeit identifiziert deren Zeugen mit
+ dem gesuchten Wert.}}
+ {\BXLVIIIWhy{Generizität, Mitgliederbeschreibung und Eindeutigkeit}}
+ \proofstep{1}{b_G=\{y:\exists x\in\sigma_G\
+                         \varphi(x,y,\bar\tau_G)\}}
+ {\BXLVIIIWhy{Beide Inklusionen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Fundierung, Unendlichkeit und Auswahl]
+{M[G]\models
+ \text{Fundierung, Unendlichkeit und Auswahl}}
+{B48ForcingRemainingAxioms}{
+  \DeltaRow{Ausgangsmodell}{M\models\BXLVIIIZFC}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Fundierung: Sei \(p\Vdash\sigma\ne\varnothing\)
+ und \(q\le p\). Wähle unter allen Namen, deren Mitgliedschaft
+ in \(\sigma\) irgendeine Verstärkung von \(q\) forciert,
+ einen Namen \(\eta\) kleinsten Ranges; wähle dazu
+ \(r\le q\) mit \(r\Vdash\eta\in\sigma\).
+ Diese Minimalwahl geschieht im Ausgangsmodell.}}
+ {\BXLVIIIWhy{Existenzklausel und interne Ordinalwohlordnung}}
+ \proofstep{}{\BXLVIIIText{Keine Verstärkung von \(r\) kann ein
+ Mitglied von \(\eta\cap\sigma\) forcen.
+ Andernfalls liefert die atomare Mitgliedschaft in \(\eta\)
+ nach weiterer Verstärkung einen Unternamen \(\nu\) von
+ \(\eta\), der zugleich Mitglied von \(\sigma\) ist.
+ Es wäre \(\rho(\nu)<\rho(\eta)\), entgegen der Minimalwahl.
+ Somit forciert \(r\) ein \(\in\)-minimales Element von
+ \(\sigma\). Solche \(r\) sind dicht unter \(p\).}}
+ {\BXLVIIIWhy{Mitgliedschaftszeugen, Substitution und Dichtheitslemma}}
+ \proofstep{}{\BXLVIIIText{Unendlichkeit: \(\check\omega_G\)
+ enthält die leere Menge und mit jedem Mitglied dessen
+ Nachfolger. Dies folgt aus den kanonischen Namen und der
+ Mitgliederbeschreibung; sie ist also eine induktive Menge.}}
+ {\FormulaRefAuto{B48CheckEmbedding}[thm]}
+ \proofstep{}{\BXLVIIIText{Auswahl: Wohlordne in \(M\) den
+ Namenbereich \(D=\operatorname{dom}(\sigma)\) als
+ \((\eta_i)_{i<\mu}\). Ein Mengenname für den Graphen mit
+ Paaren \((\check i,\eta_i)\), jeweils unter den Bedingungen,
+ unter denen \(\eta_i\) als Mitglied von \(\sigma\) auftritt,
+ ergibt eine Surjektion von einer Teilmenge von
+ \(\check\mu_G\) auf \(\sigma_G\).}}
+ {\BXLVIIIWhy{Auswahl in \(M\); Paar- und Graphennamen}}
+ \proofstep{}{\BXLVIIIText{Die Menge \(\check\mu_G\) ist transitiv
+ und durch \(\in\) strikt linear geordnet, nach der
+ Mitgliederbeschreibung und der Einbettung.
+ Die bereits bewiesene Fundierung macht sie zu einer
+ Ordinalzahl. Ordne jedem Element von \(\sigma_G\) seinen
+ kleinsten Urbildindex zu. So wird \(\sigma_G\) wohlgeordnet.}}
+ {\BXLVIIIWhy{Aussonderung und Ersetzung in \(M[G]\)}}
+ \proofstep{}{M[G]\models\mathsf{AC}}
+ {\BXLVIIIWhy{Wohlordnung jeder Menge impliziert Auswahl}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Erhaltung von ZFC durch Mengenforcing]
+{M\models\BXLVIIIZFC,\ G\text{ \(M\)-generisch}
+ \ \vdash\ M[G]\models\BXLVIIIZFC}
+{B48ForcingZFC}{
+  \DeltaRow{Forcingordnung}{M\models\mathbb P\text{ ist eine Menge}}
+}
+\begin{tabproof}
+ \proofstep{1}{M\models\BXLVIIIZFC,\quad G\text{ \(M\)-generisch}}{\rA}
+ \proofstep{1}{\BXLVIIIText{Extensionalität, leere Menge,
+ Paarung und Vereinigung gelten durch die angegebenen
+ elementaren Namen.}}
+ {\FormulaRefAuto{B48ForcingBasicAxioms}[thm]}
+ \proofstep{1}{\BXLVIIIText{Aussonderung und Ersetzung gelten
+ für jede feste Formel; die Potenzmenge wird durch die
+ Normalisierung auf einen festen Namenbereich als Menge erfasst.}}
+ {\BXLVIIIWhy{Aussonderungs-, Ersetzungs- und Potenzmengenbeweis}}
+ \proofstep{1}{\BXLVIIIText{Fundierung, Unendlichkeit und Auswahl
+ gelten nach dem vorigen Satz. Damit ist jedes einzelne
+ ZFC-Axiom im Quotienten erfüllt.}}
+ {\FormulaRefAuto{B48ForcingRemainingAxioms}[thm]}
+ \proofstep{1}{M[G]\models\BXLVIIIZFC}
+ {\BXLVIIIWhy{Definition der Theorie ZFC}}
+\end{tabproof}
+
+\noindent
+Die innere Ranginduktion wird nicht mit einer äußeren Fundiertheit
+von \(M\) verwechselt. Außen benutzt das Wahrheitslemma nur
+Induktion über die gewöhnliche endliche Formel.
+Gerade deshalb lässt sich die Konstruktion auf die durch
+Vollständigkeit gewonnenen beliebigen abzählbaren Modelle anwenden.
+
+\subsection{Ordinale und die abzählbare Kettenbedingung}
+
+\FormulaThmDeltaK[Keine neuen Ordinalzahlen]
+{\operatorname{Ord}^{M[G]}
+   =\{\check\alpha_G:M\models\alpha\in\BXLVIIIOrd\}}
+{B48ForcingOrdinals}{
+  \DeltaRow{Erweiterung}{M[G]}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Jede alte Ordinalzahl bleibt eine
+ Ordinalzahl: Transitivität und strikte \(\in\)-Linearität
+ folgen aus den kanonischen Namen, Wohlgeordnetheit aus
+ Fundierung in der Erweiterung.}}
+ {\BXLVIIIWhy{Einbettung und Fundierung}}
+ \proofstep{}{\BXLVIIIText{Interne Induktion über die Namensränge
+ zeigt
+ \(1\Vdash\operatorname{rk}(\tau)\le\check{\rho(\tau)}\).
+ Denn jedes Mitglied von \(\tau\) wird dicht durch einen
+ Unternamen \(\eta\) vertreten; dessen Rang liegt unter
+ \(\rho(\tau)\). Supremum der Nachfolger der Mitgliedsränge
+ liefert die Schranke.}}
+ {\BXLVIIIWhy{Rangrekursion und Mitgliedschaftsklausel}}
+ \proofstep{3}{p\Vdash\tau\text{ ist eine Ordinalzahl},\quad q\le p}{\rA}
+ \proofstep{3}{\BXLVIIIText{Wähle intern die kleinste alte
+ Ordinalzahl \(\alpha\le\rho(\tau)\), für die
+ \(q\not\Vdash\check\alpha\in\tau\).
+ Eine solche gibt es wegen der Rangschranke und
+ \(\operatorname{rk}(\tau)=\tau\) für Ordinale.}}
+ {\BXLVIIIWhy{Interne Wohlordnung eines Mengenintervalls}}
+ \proofstep{3}{\BXLVIIIText{Nach dem Dichtheitslemma gibt es
+ \(r\le q\) mit \(r\Vdash\check\alpha\notin\tau\).
+ Für jedes \(\beta<\alpha\) forciert schon \(q\) die
+ Mitgliedschaft von \(\check\beta\) in \(\tau\).
+ Die Mitgliederbeschreibung kanonischer Namen macht daraus
+ \(r\Vdash\check\alpha\subseteq\tau\).}}
+ {\BXLVIIIWhy{Minimalität; jedes Mitglied von \(\check\alpha\)
+ wird dicht durch ein altes \(\check\beta\) vertreten}}
+ \proofstep{3}{r\Vdash\tau=\check\alpha}
+ {\BXLVIIIWhy{Ordinalvergleich; echte Obermenge würde
+ \(\check\alpha\in\tau\) erzwingen}}
+ \proofstep{}{\BXLVIIIText{Die Bedingungen, welche den Wert
+ eines Ordinalnamens auf eine alte Ordinalzahl festlegen,
+ sind daher dicht unter jeder Bedingung, die sein
+ Ordinalsein forciert. Generizität und Wahrheitslemma
+ liefern die Behauptung.}}
+ {\BXLVIIIWhy{3 entladen}}
+\end{tabproof}
+\noindent
+Insbesondere ist \(\omega^{M[G]}=\check\omega_G\):
+Die alte \(\omega\) bleibt eine nichtnullige Limesordinalzahl,
+und alle kleineren alten Ordinale bleiben \(0\) oder Nachfolger.
+Das Argument gilt intern auch dann, wenn \(M\) von außen
+nichtstandardmäßige natürliche Zahlen besitzt.
+
+\FormulaDefDeltaK[Abzählbare Kettenbedingung]
+{\mathbb P\text{ erfüllt ccc}\ \Longleftrightarrow\
+ \forall A\subseteq P\
+ (A\text{ Antikette}\ \longrightarrow\ |A|\le\aleph_0)}
+{B48CCCDef}{
+  \DeltaRow{Abkürzung}{\text{ccc: countable chain condition}}
+}
+
+\FormulaThmDeltaK[ccc erhält die Kardinalzahlen]
+{M\models\text{\(\mathbb P\) erfüllt ccc}
+ \ \vdash\ \text{\(M[G]\) und \(M\) haben dieselben Kardinalzahlen}}
+{B48CCCPreservesCardinals}{
+  \DeltaRow{Identifikation}{\alpha\longmapsto\check\alpha_G}
+}
+\begin{tabproof}
+ \proofstep{1}{M\models\text{\(\mathbb P\) erfüllt ccc}}{\rA}
+ \proofstep{2}{\BXLVIIIText{Eine alte unendliche Kardinalzahl
+ \(\kappa\) sei in der Erweiterung keine Kardinalzahl mehr.
+ Dann gibt es eine alte Ordinalzahl \(\mu<\kappa\) und eine
+ Surjektion \(f:\mu\to\kappa\). Wähle \(p\in G\), das
+ diese Aussage für einen Namen von \(f\) forciert.}}{\rA}
+ \proofstep{1,2}{\BXLVIIIText{Für jedes \(\xi<\mu\) wähle in
+ \(M\) eine maximale Antikette unter \(p\), deren Bedingungen
+ den Ordinalwert \(f(\xi)\) entscheiden. Solche Entscheider
+ sind dicht, weil keine neuen Ordinale entstehen.
+ Jede Antikette ist nach ccc abzählbar; daher liegt
+ \(f(\xi)\) in einer alten abzählbaren Menge \(B_\xi\subseteq\kappa\).}}
+ {\BXLVIIIWhy{Entscheidung von Ordinalnamen; Auswahl in \(M\)}}
+ \proofstep{1,2}{\BXLVIIIText{Ist \(\kappa>\aleph_0\), so gilt
+ in \(M\)
+ \(\bigl|\bigcup_{\xi<\mu}B_\xi\bigr|
+ \le\max(|\mu|,\aleph_0)<\kappa\).
+ Wähle dort ein \(\beta\) außerhalb dieser Vereinigung.
+ Die maximalen Antiketten erzwingen, dass \(f\) dieses
+ \(\beta\) nicht trifft, im Widerspruch zur Surjektivität.}}
+ {\FormulaRefAuto{B48CardinalProduct}[thm]}
+ \proofstep{1,2}{\BXLVIIIText{Für \(\kappa=\aleph_0\) müsste
+ eine endliche Menge auf \(\omega\) surjizieren, was in ZFC
+ unmöglich ist. Die natürlichen Zahlen und \(\omega\)
+ sind unter der kanonischen Einbettung unverändert.}}
+ {\BXLVIIIWhy{Endliche Arithmetik und Erhaltung von \(\omega\)}}
+ \proofstep{1}{\BXLVIIIText{Keine alte Kardinalzahl wird also
+ kollabiert. Alte Nichtkardinale bleiben Nichtkardinale,
+ denn eine alte Bijektion mit einer kleineren Ordinalzahl
+ bleibt bestehen. Neue Ordinalzahlen gibt es nicht.}}
+ {\BXLVIIIWhy{2 entladen; Einbettung und Ordinalerhaltung}}
+\end{tabproof}
+
+\subsection{Cohen-Bedingungen und neue reelle Zahlen}
+
+\FormulaThmDeltaK[Delta-System-Lemma für endliche Mengen]
+{\begin{gathered}
+ \mathcal A\text{ überabzählbare Familie verschiedener endlicher Mengen}\\
+ \vdash\ \exists\mathcal B\subseteq\mathcal A\
+ \exists r\quad |\mathcal B|=\aleph_1,\quad
+ \forall a\ne b\in\mathcal B\ (a\cap b=r)
+ \end{gathered}}
+{B48DeltaSystem}{
+  \DeltaRow{Menge}{\mathcal A}
+}
+\begin{tabproof}
+ \proofstep{1}{\mathcal A\text{ wie vorausgesetzt}}{\rA}
+ \proofstep{1}{\BXLVIIIText{Beschränke auf eine Familie der
+ Mächtigkeit \(\aleph_1\). Für eine feste natürliche Zahl
+ \(n\) gibt es überabzählbar viele Mitglieder mit genau
+ \(n\) Elementen; sonst wäre die ganze Familie abzählbar.
+ Induktion über \(n\).}}
+ {\BXLVIIIWhy{Abzählbare Vereinigung abzählbarer Mengen}}
+ \proofstep{1}{\BXLVIIIText{Kommt ein Element \(x\) in
+ überabzählbar vielen Mitgliedern vor, entferne \(x\)
+ aus diesen Mitgliedern. Sie bleiben verschieden und
+ haben Größe \(n-1\). Die Induktionsvoraussetzung liefert
+ ein Delta-System; füge \(x\) zu seiner Wurzel hinzu.}}
+ {\BXLVIIIWhy{Induktionsschritt, erster Fall}}
+ \proofstep{1}{\BXLVIIIText{Andernfalls kommt jedes Element
+ nur in abzählbar vielen Mitgliedern vor.
+ Wähle rekursiv \(\aleph_1\) viele paarweise disjunkte
+ Mitglieder: Vor jeder Stufe \(\xi<\omega_1\) wurden nur
+ abzählbar viele endliche Mengen gewählt; ihre Vereinigung
+ trifft nur abzählbar viele verbotene Mitglieder.
+ Es bleibt ein weiteres Mitglied übrig.}}
+ {\BXLVIIIWhy{Induktionsschritt, zweiter Fall; Wurzel \(\varnothing\)}}
+ \proofstep{1}{\BXLVIIIText{Der Anfang \(n=0\) ist leer, da
+ es nicht überabzählbar viele verschiedene leere Mengen
+ gibt. Beide Fälle schließen die Induktion ab.}}
+ {\BXLVIIIWhy{Induktion auf den natürlichen Zahlen}}
+\end{tabproof}
+
+\FormulaDefDeltaK[Cohen-Forcing für \(\lambda\) reelle Zahlen]
+{\begin{aligned}
+ \operatorname{Add}(\omega,\lambda)
+ &=\{p:p\text{ endliche partielle Funktion }
+                         \lambda\times\omega\longrightarrow2\},\\
+ p\le q&\ \Longleftrightarrow\ p\supseteq q,\qquad 1=\varnothing
+\end{aligned}}
+{B48CohenOrder}{
+  \DeltaRow{Unendliche Kardinalzahl}{\lambda}
+}
+
+\FormulaThmDeltaK[Größe und ccc des Cohen-Forcings]
+{\lambda\ge\aleph_0\ \vdash\
+ |\operatorname{Add}(\omega,\lambda)|=\lambda
+ \quad\land\quad \operatorname{Add}(\omega,\lambda)\text{ erfüllt ccc}}
+{B48CohenCCC}{
+  \DeltaRow{Kardinalzahl}{\lambda}
+}
+\begin{tabproof}
+ \proofstep{1}{\lambda\ge\aleph_0}{\rA}
+ \proofstep{1}{\BXLVIIIText{Eine Bedingung wird durch endlich
+ viele Tripel aus \(\lambda\times\omega\times2\) codiert.
+ Daher gibt es höchstens \(\lambda\) Bedingungen.
+ Die Einzelbedingungen an den Stellen \((\alpha,0)\)
+ liefern die untere Schranke \(\lambda\).}}
+ {\FormulaRefAuto{B48CardinalProduct}[thm]}
+ \proofstep{3}{\mathcal A\text{ überabzählbare Antikette}}{\rA}
+ \proofstep{1,3}{\BXLVIIIText{Es treten überabzählbar viele
+ verschiedene endliche Definitionsbereiche auf, da jeder
+ feste endliche Bereich nur endlich viele Funktionen nach
+ \(2\) zulässt. Wähle je einen Vertreter und ein
+ überabzählbares Delta-System seiner Bereiche mit Wurzel \(r\).}}
+ {\FormulaRefAuto{B48DeltaSystem}[thm]}
+ \proofstep{1,3}{\BXLVIIIText{Auf der endlichen Wurzel gibt es
+ nur endlich viele mögliche Belegungen. Zwei der gewählten
+ Bedingungen, sogar überabzählbar viele, stimmen dort
+ überein. Außerhalb der Wurzel sind ihre Bereiche disjunkt;
+ ihre Vereinigung ist daher eine gemeinsame Verstärkung.}}
+ {\BXLVIIIWhy{Endliches Schubfachprinzip und Funktionsvereinigung}}
+ \proofstep{1}{\operatorname{Add}(\omega,\lambda)\text{ erfüllt ccc}}
+ {\BXLVIIIWhy{Widerspruch zur Antikette, 3 entladen}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Mindestens \(\lambda\) verschiedene neue Binärfolgen]
+{\begin{gathered}
+ M\models\lambda\ge\aleph_0,\quad
+ \mathbb P=\operatorname{Add}(\omega,\lambda)^M\\
+ \vdash\ M[G]\models \lambda\le2^{\aleph_0}
+ \end{gathered}}
+{B48CohenReals}{
+  \DeltaRow{Filter}{G\text{ \(M\)-generisch}}
+}
+\begin{tabproof}
+ \proofstep{}{\BXLVIIIText{Für jede alte Stelle \((\alpha,n)\)
+ ist die Menge der Bedingungen, die dort einen Wert
+ festlegen, dicht: Fehlt die Stelle, füge einen der Werte
+ \(0,1\) hinzu. Vereinbarkeit in einem Filter verhindert
+ widersprüchliche Werte.}}
+ {\BXLVIIIWhy{Endliche partielle Funktionen}}
+ \proofstep{}{\BXLVIIIText{Für verschiedene \(\alpha,\beta\)
+ ist auch die Menge der Bedingungen dicht, die an einer
+ Stelle \(n\) verschiedene Werte für \((\alpha,n)\) und
+ \((\beta,n)\) festlegen. Man wählt ein von den endlich
+ vielen belegten Stellen noch nicht betroffenes \(n\).}}
+ {\BXLVIIIWhy{Endlichkeit der Bedingungen}}
+ \proofstep{}{\BXLVIIIText{Die Namen
+ \(\dot c_\alpha=\{(\check n,p):p(\alpha,n)=1\}\)
+ definieren daher paarweise verschiedene Teilmengen von
+ \(\omega\). Die ganze Familie gehört zur Erweiterung:
+ Ein Mengenname für ihren Graphen wird aus
+ \((\langle\check\alpha,\dot c_\alpha\rangle,1)\),
+ \(\alpha<\lambda\), gebildet.}}
+ {\BXLVIIIWhy{Ersetzung in \(M\); Paar- und Graphennamen}}
+ \proofstep{}{\BXLVIIIText{Fixiere \(\alpha<\lambda\) und eine
+ alte Binärfolge \(x\in(2^\omega)^M\). Die in \(M\) definierte
+ Menge \(D_{\alpha,x}\) aller Bedingungen, die an einer Stelle
+ \((\alpha,n)\) den Wert \(1-x(n)\) festlegen, ist dicht:
+ Zu jeder Bedingung wähle ein noch unbelegtes \(n\) und füge
+ genau diesen Wert hinzu.}}
+ {\BXLVIIIWhy{Endlichkeit; Aussonderung in \(M\)}}
+ \proofstep{}{\BXLVIIIText{Da \(G\) die Menge
+ \(D_{\alpha,x}\) trifft, unterscheidet sich die generische
+ Binärfolge an dieser Stelle von \(x\). Dies gilt für jede
+ alte Binärfolge. Über charakteristische Funktionen ist
+ somit auch \(\dot c_\alpha^G\) keine alte Teilmenge von
+ \(\omega\). Die Folgen sind also nicht nur untereinander
+ verschieden, sondern tatsächlich neu.}}
+ {\BXLVIIIWhy{Generizität; kanonische Einbettung von \(M\)}}
+ \proofstep{}{M[G]\models\lambda\hookrightarrow\mathcal P(\omega)}
+ {\BXLVIIIWhy{Generizität für die angegebenen dichten Mengen}}
+ \proofstep{}{M[G]\models\lambda\le2^{\aleph_0}}
+ {\BXLVIIIWhy{ccc erhält \(\lambda,\omega\); charakteristische Funktionen}}
+\end{tabproof}
+
+\subsection{Zählen von Namen: die notwendige obere Schranke}
+
+\FormulaThmDeltaK[Schöne Namen für Teilmengen einer Ordinalzahl]
+{\begin{gathered}
+ x\in M[G],\quad M[G]\models x\subseteq\mu\\
+ \vdash\ x=\nu_G,\qquad
+ \nu=\{(\check\xi,p):\xi<\mu,\ p\in A_\xi\},\\
+ A_\xi\text{ ist eine Antikette in }\mathbb P\text{ aus }M
+ \end{gathered}}
+{B48NiceNames}{
+  \DeltaRow{Alte Ordinalzahl}{\mu}
+}
+\begin{tabproof}
+ \proofstep{1}{x=\tau_G\subseteq\mu}{\rA}
+ \proofstep{1}{\BXLVIIIText{Wähle in \(M\) für jedes \(\xi<\mu\)
+ eine maximale Antikette \(A_\xi\) in der Menge
+ \(\{p:p\Vdash\check\xi\in\tau\}\).
+ Diese Menge kann leer sein; dann ist die Antikette leer.
+ Ersetzung und Auswahl sammeln die Antiketten zu einer Folge.}}
+ {\BXLVIIIWhy{Definierbarkeit des atomaren Forcings; Auswahl}}
+ \proofstep{1}{\nu=\bigcup_{\xi<\mu}
+                \{(\check\xi,p):p\in A_\xi\}}
+ {\BXLVIIIWhy{Mengenbildung in \(M\)}}
+ \proofstep{1}{\BXLVIIIText{Trifft \(G\) die Antikette \(A_\xi\),
+ so gilt \(\xi\in\tau_G\). Gilt umgekehrt
+ \(\xi\in\tau_G\), so gibt es \(q\in G\), das diese
+ Mitgliedschaft forciert. Unter \(q\) sind die
+ Verstärkungen der Elemente von \(A_\xi\) dicht:
+ Jede Verstärkung von \(q\) gehört zur positiven
+ Forcingmenge und ist nach Maximalität mit einem
+ Antikettenelement verträglich.}}
+ {\BXLVIIIWhy{Wahrheitslemma und Maximalität}}
+ \proofstep{1}{\BXLVIIIText{Generizität unter \(q\) liefert
+ deshalb ein Element von \(A_\xi\) in \(G\).
+ Somit haben \(\nu_G\) und \(\tau_G\) genau dieselben
+ Mitglieder aus \(\mu\), und nach Voraussetzung keine
+ weiteren.}}
+ {\BXLVIIIWhy{Mitgliederbeschreibung; \(x\subseteq\mu\)}}
+ \proofstep{1}{\nu_G=x}{\BXLVIIIWhy{Extensionalität}}
+\end{tabproof}
+
+\FormulaThmDeltaK[Zählschranke bei ccc]
+{\begin{gathered}
+ M\models\bigl(\mathbb P\text{ ccc},\
+ |\mathbb P|=\lambda\ge\aleph_0,\ \mu\ge\aleph_0\bigr)\\
+ K=\bigl((\lambda^{\aleph_0})^\mu\bigr)^M
+ \quad\Longrightarrow\quad M[G]\models 2^\mu\le K
+ \end{gathered}}
+{B48NiceNameBound}{
+  \DeltaRow{Alte Kardinale}{\lambda,\mu,K}
+}
+\begin{tabproof}
+ \proofstep{1}{M\models\mathbb P\text{ ccc},\quad |P|=\lambda\ge\aleph_0}
+ {\rA}
+ \proofstep{1}{\BXLVIIIText{Jede Antikette ist in \(M\)
+ abzählbar. Die nichtleeren abzählbaren Teilmengen von
+ \(P\) werden von Folgen in \(P^\omega\) aufgezählt;
+ Hinzunahme der leeren Menge ändert die unendliche
+ obere Schranke \(\lambda^{\aleph_0}\) nicht.}}
+ {\BXLVIIIWhy{ccc und Auswahl in \(M\)}}
+ \proofstep{1}{\BXLVIIIText{Ein schöner Name wird durch eine
+ \(\mu\)-Folge solcher Antiketten bestimmt.
+ Die Menge \(\mathcal N\) aller schönen Namen hat daher
+ in \(M\) Mächtigkeit höchstens
+ \(K=(\lambda^{\aleph_0})^\mu\).}}
+ {\BXLVIIIWhy{Funktionszählung}}
+ \proofstep{1}{\BXLVIIIText{Wähle eine Aufzählung
+ \((\nu_i)_{i<K}\) aller dieser Namen, gegebenenfalls mit
+ Wiederholungen. Der Graphenname mit Paaren
+ \((\check i,\nu_i)\) liefert in der Erweiterung eine
+ Abbildung auf sämtliche Teilmengen von \(\mu\):
+ Jede solche Teilmenge besitzt nach dem vorigen Satz
+ einen schönen Namen.}}
+ {\FormulaRefAuto{B48NiceNames}[thm]}
+ \proofstep{1}{M[G]\models|\mathcal P(\mu)|\le K}
+ {\BXLVIIIWhy{Surjektion, Auswahl in \(M[G]\);
+ ccc erhält die alte Kardinalzahl \(K\)}}
+\end{tabproof}
+
+\noindent
+Alle Zählungen finden zunächst \emph{in \(M\)} statt.
+Die äußere Abzählbarkeit von \(M\) sagt nichts darüber aus,
+welche Mächtigkeiten \(M\) oder \(M[G]\) intern besitzen.
+Die Mengen von Namen und ihre Aufzählungsgraphen sind deshalb
+ausdrücklich innerhalb des Ausgangsmodells konstruiert worden.

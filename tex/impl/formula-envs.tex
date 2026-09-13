@@ -431,6 +431,37 @@
   \end{formulaDef}%
 }
 
+% Layout changes to a definition preserve its structural formula and ID.
+% [Title]{Display}{Original structure}{ID}{Delta rows}
+\NewDocumentCommand{\FormulaDefDeltaKR}{o m m m +m}{%
+  \par\noindent\begin{minipage}{\linewidth}%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaDef}%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#4}%
+    }{%
+      \begin{formulaDef}[#1]%
+      \edef\mxLbl{def:auto:\theformulaDef}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#3}{#1}%
+      \ThmLookupRegister{\mxLbl}{definition}{\theformulaDef}{#4}{#1}%
+    }%
+  \ThmLookupRegisterId{#4}{definition}{\mxLbl}%
+  \MxPushFormula{definition}{\mxLbl}{#2}%
+  \IfBlankTF{#5}{}{%
+    \begin{DeltaContext}{ }%
+      #5%
+    \end{DeltaContext}%
+  }%
+  \phantomsection\label{\mxLbl}%
+  \[
+    #2
+  \]%
+  \end{formulaDef}%
+  \end{minipage}\par%
+}
+
 % ------------------------------------------------------------
 % DeltaK: Theorem
 % ------------------------------------------------------------
@@ -455,6 +486,34 @@
     #2
   \]%
   \end{formulaThm}%
+}
+
+% Display-only changes (for example numbered conclusion lists) keep both
+% the original structural lookup key and the explicit theorem ID.
+% [Title]{Display}{Original structure}{ID}{Delta rows}
+\NewDocumentCommand{\FormulaThmDeltaKR}{o m m m +m}{%
+  \par\noindent\begin{minipage}{\linewidth}%
+  \IfNoValueTF{#1}
+    {%
+      \begin{formulaThm}%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#3}%
+    }{%
+      \begin{formulaThm}[#1]%
+      \edef\mxLbl{thm:auto:\theformulaThm}%
+      \ThmLookupRegister{\mxLbl}{theorem}{\theformulaThm}{#3}{#1}%
+    }%
+  \ThmLookupRegisterId{#4}{theorem}{\mxLbl}%
+  \MxPushFormula{theorem}{\mxLbl}{#2}%
+  \begin{DeltaContext}{ }%
+    #5%
+  \end{DeltaContext}%
+  \phantomsection\label{\mxLbl}%
+  \[
+    #2
+  \]%
+  \end{formulaThm}%
+  \end{minipage}\par%
 }
 
 % ------------------------------------------------------------
@@ -569,10 +628,12 @@
 \cs_new_protected:Npn \mx_formula_ref_suffix:n #1
   {
     \IfNoValueF{#1}
-      { \tl_if_blank:nF {#1} { (#1) } }
+      { \tl_if_blank:nF {#1}
+          { \allowbreak (\mxProofPairedDependencies{#1}) } }
   }
 
 \ProvideDocumentCommand{\FormulaRefAuto}{s O{} m o g}{%
+  \allowbreak
   \tl_set:Nn \l_tmpa_tl {#2}
 
   \IfNoValueF{#4}{
@@ -628,6 +689,7 @@
 }
 
 \ProvideDocumentCommand{\FormulaRefAutoFwd}{s O{} m o g}{%
+  \allowbreak
   \tl_set:Nn \l_tmpa_tl {#2}
 
   \IfNoValueF{#4}{

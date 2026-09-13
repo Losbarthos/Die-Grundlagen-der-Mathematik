@@ -88,9 +88,11 @@ eigenständigen Band~09 untersucht.
   \proofstep{1}{C\subseteq A}{\rA}
   \proofstep{2}{F\colon A\sur B}{\rA}
   \proofstep{3}{x\in C}{\rA}
+  \proofstep{2}{F \colon A \to B}{%
+      \FormulaRefAuto{Surjektive Funktion}{2}}
   \proofstep{1,2,3}{F(x)\in F[C]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}{%
-      1,\FormulaRefAuto{Surjektive Funktion}{2},3}}
+      1,4,3}}
 \end{tabproof}
 
 \FormulaThmDeltaR[Nichtsurjektivität liefert ausgelassenes Element]{%
@@ -136,16 +138,32 @@ eigenständigen Band~09 untersucht.
   \DeltaRow{Mengen}{A\dsep B\dsep x\dsep y}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\to B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Trägerrelation}
+\proofstep{1}{F\colon A\to B}{\rA}
   \proofstep{1}{F\subseteq A\times F[A]}{%
     \FormulaRefAuto{F\colon A\to B\vdash F\subseteq A\times F[A]}{1}}
-  \proofstep{1}{\forall x,y\,((x,y)\in F\dsep (x,z)\in F\rightarrow y=z)}{%
+
+\closeproofpart
+
+\proofpart{Funktionale Eindeutigkeit}
+  \setcounter{proofstepnr}{2}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\forall x,y\,((x,y)\in F\dsep (x,z)\in F\rightarrow y=z)}{%
     \FormulaRefAuto{(x,y)\in F\dsep (x,z)\in F \vdash y=z}{1}}
-  \proofstep{1}{\forall x\,(x\in A\rightarrow \exists y\,(x,y)\in F)}{%
+
+\closeproofpart
+
+\proofpart{Totalität}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\forall x\,(x\in A\rightarrow \exists y\,(x,y)\in F)}{%
     \FormulaRefAuto{x\in A \vdash \exists y\,(x,y)\in F}{1}}
 
-  \proofstep{5}{y\in F[A]}{\rA}
+
+\closeproofpart
+
+\proofpart{Surjektivität}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{y\in F[A]}{\rA}
   \proofstep{1,5}{\exists x\in A\,y=F(x)}{%
     \FormulaRefAuto{F\colon A\to B\dsep y\in F[A] \vdash \exists x\in A\,y=F(x)}{1,5}}
 
@@ -159,8 +177,15 @@ eigenständigen Band~09 untersucht.
   \proofstep{1,5}{\exists x\in A\,F(x)=y}{\rEE{6,7,12}}
   \proofstep{1}{\forall y\,(y\in F[A]\rightarrow \exists x\in A\,F(x)=y)}{\rUI{\rRI{5,13}}}
 
-  \proofstep{1}{F\colon A\sur F[A]}{\FormulaRefAuto{Surjektive Funktion}{2,3,4,14}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{14}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{F\colon A\sur F[A]}{\FormulaRefAuto{Surjektive Funktion}{2,3,4,14}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDeltaK[Surjektivität genau bei vollem Bild]{%
   F\colon A\to B\vdash
@@ -196,10 +221,7 @@ eigenständigen Band~09 untersucht.
     \proofstepwidestar[1,2,4]{y\in F[A]}{%
       \rEE{5,6,7,10}}
     \proofstepwidestar[1,2]{B\subseteq F[A]}{%
-      \FormulaRefAuto{%
-        A \subseteq B \coloneq
-        \forall x\,(x \in A \rightarrow x \in B)}[def]{%
-        \rUI{\rRI{4,11}}}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 11}}
     \proofstepwidestar[1,2]{F[A]=B}{%
       \FormulaRefAuto{%
         A \subseteq B, B \subseteq A \vdash A = B}[thm]{3,12}}
@@ -267,20 +289,22 @@ eigenständigen Band~09 untersucht.
   \proofstepwidestar[1]{a\in A}{\rA}
   \proofstepwidestar[2]{F(a)=\{x\in A\mid x\notin F(x)\}}{\rA}
 
+  \proofstepwidestar[2]{\forall x\,(x\in F(a)\leftrightarrow x\in\{x\in A\mid x\notin F(x)\})}{%
+      \FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{2}}
   \proofstepwide[1,2]{a\in F(a)}{\leftrightarrow}{%
     \begin{aligned}[t]
       a\in \{x\in A\mid {}\\
       x\notin F(x)\}
     \end{aligned}
-  }{\rUE{\FormulaRefAuto{\forall x\, (x \in A \leftrightarrow x \in B) \eqvdash A = B}{2}}}
+  }{\rUE{3}}
 
   \proofstepwide[1,2]{}{\leftrightarrow}{a\in A \land a\notin F(a)}{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{4}}
 
   \proofstepwide[1,2]{}{\leftrightarrow}{a\notin F(a)}{%
     \FormulaRefAuto{Q\vdash (P\leftrightarrow Q\land R)\leftrightarrow (P\leftrightarrow R)}{1}}
 
-  \proofstepwide[1,2]{a\in F(a)}{\leftrightarrow}{a\notin F(a)}{\rChain{3,5}}
+  \proofstepwide[1,2]{a\in F(a)}{\leftrightarrow}{a\notin F(a)}{\rChain{4,6}}
 \end{tabproofwide}
 
 
@@ -357,9 +381,11 @@ eigenständigen Band~09 untersucht.
       \subseteq B\times A
     \end{gathered}
   }{\FormulaRefAuto{\{\,x\in A \mid P(x)\,\}\subseteq A}}
+  \proofstep{1}{\Gsurjfrominj{F}{a_0}=\{(b,a)\in B\times A\mid(b\in F[A]\land F(a)=b)\lor(b\notin F[A]\land a=a_0)\}}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
+    \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1}}
   \proofstep{1}{\Gsurjfrominj{F}{a_0}\subseteq B\times A}{%
-    \rIE{\FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
-    \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1},2}}
+    \rIE{3,2}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -371,6 +397,9 @@ eigenständigen Band~09 untersucht.
 \begin{tabproof}
   \proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{(b,a)\in \Gsurjfrominj{F}{a_0}}{\rA}
+  \proofstep{1}{\Gsurjfrominj{F}{a_0}=\{(b,a)\in B\times A\mid(b\in F[A]\land F(a)=b)\lor(b\notin F[A]\land a=a_0)\}}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
+      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in \{\, (b,a)\in B\times A \mid {}&
@@ -378,8 +407,7 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\,\}
     \end{aligned}
   }{%
-    \rIE{\FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
-      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1},2}}
+    \rIE{3,2}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in B\times A \land \bigl({}&
@@ -387,10 +415,10 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
-  \proofstep{1,2}{(b,a)\in B\times A}{\rAEa{4}}
-  \proofstep{1,2}{b\in B\land a\in A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{5}}
-  \proofstep{1,2}{b\in B}{\rAEa{6}}
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{4}}
+  \proofstep{1,2}{(b,a)\in B\times A}{\rAEa{5}}
+  \proofstep{1,2}{b\in B\land a\in A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{6}}
+  \proofstep{1,2}{b\in B}{\rAEa{7}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -402,6 +430,9 @@ eigenständigen Band~09 untersucht.
 \begin{tabproof}
   \proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{(b,a)\in \Gsurjfrominj{F}{a_0}}{\rA}
+  \proofstep{1}{\Gsurjfrominj{F}{a_0}=\{(b,a)\in B\times A\mid(b\in F[A]\land F(a)=b)\lor(b\notin F[A]\land a=a_0)\}}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
+      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in \{\, (b,a)\in B\times A \mid {}&
@@ -409,8 +440,7 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\,\}
     \end{aligned}
   }{%
-    \rIE{\FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
-      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1},2}}
+    \rIE{3,2}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in B\times A \land \bigl({}&
@@ -418,10 +448,10 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
-  \proofstep{1,2}{(b,a)\in B\times A}{\rAEa{4}}
-  \proofstep{1,2}{b\in B\land a\in A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{5}}
-  \proofstep{1,2}{a\in A}{\rAEb{6}}
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{4}}
+  \proofstep{1,2}{(b,a)\in B\times A}{\rAEa{5}}
+  \proofstep{1,2}{b\in B\land a\in A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}{6}}
+  \proofstep{1,2}{a\in A}{\rAEb{7}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -434,6 +464,9 @@ eigenständigen Band~09 untersucht.
 \begin{tabproof}
   \proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{(b,a)\in \Gsurjfrominj{F}{a_0}}{\rA}
+  \proofstep{1}{\Gsurjfrominj{F}{a_0}=\{(b,a)\in B\times A\mid(b\in F[A]\land F(a)=b)\lor(b\notin F[A]\land a=a_0)\}}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
+      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in \{\, (b,a)\in B\times A \mid {}&
@@ -441,8 +474,7 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\,\}
     \end{aligned}
   }{%
-    \rIE{\FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
-      \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1},2}}
+    \rIE{3,2}}
   \proofstep{1,2}{%
     \begin{aligned}[t]
       (b,a)\in B\times A \land \bigl({}&
@@ -450,8 +482,8 @@ eigenständigen Band~09 untersucht.
         &\lor (b\notin F[A]\land a=a_0)\bigr)
     \end{aligned}
   }{%
-    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{3}}
-  \proofstep{1,2}{(b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)}{\rAEb{4}}
+    \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{4}}
+  \proofstep{1,2}{(b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)}{\rAEb{5}}
 \end{tabproof}
 
 \FormulaThmDeltaR{%
@@ -495,9 +527,11 @@ eigenständigen Band~09 untersucht.
     \end{gathered}
   }{%
     \FormulaRefAuto{x \in \{u \in A \mid P(u)\} \eqvdash x \in A \land P(x)}{6}}
+  \proofstep{1}{\Gsurjfrominj{F}{a_0}=\{(b,a)\in B\times A\mid(b\in F[A]\land F(a)=b)\lor(b\notin F[A]\land a=a_0)\}}{%
+      \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
+    \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1}}
   \proofstep{1,2,3,4}{(b,a)\in \Gsurjfrominj{F}{a_0}}{%
-    \rIE{\FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0} \coloneqq
-    \{\, (b,a)\in B\times A \mid (b\in F[A]\land F(a)=b)\lor (b\notin F[A]\land a=a_0)\,\}}{1},7}}
+    \rIE{8,7}}
 \end{tabproof}
 
 \FormulaThmDelta{%
@@ -663,23 +697,41 @@ eigenständigen Band~09 untersucht.
   \DeltaRow{Mengen}{A\dsep B\dsep a_0\dsep a\dsep b\dsep c}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\inj B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Trägerrelation}
+\proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{a_0\in A}{\rA}
   \proofstep{1}{\Gsurjfrominj{F}{a_0}\subseteq B\times A}{%
     \FormulaRefAuto{F\colon A\inj B \vdash \Gsurjfrominj{F}{a_0}\subseteq B\times A}{1}}
-  \proofstep{4}{b\in B}{\rA}
+
+\closeproofpart
+
+\proofpart{Totalität}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{b\in B}{\rA}
   \proofstep{1,2,4}{\exists a\in A\,((b,a)\in \Gsurjfrominj{F}{a_0})}{%
     \FormulaRefAuto{F\colon A\inj B \dsep a_0\in A \dsep b\in B \vdash \exists a\in A\,\bigl((b,a)\in \Gsurjfrominj{F}{a_0}\bigr)}{1,2,4}}
   \proofstep{1,2}{b\in B\rightarrow \exists a\in A\,((b,a)\in \Gsurjfrominj{F}{a_0})}{\rRI{4,5}}
-  \proofstep{7}{(b,a)\in \Gsurjfrominj{F}{a_0}\land (b,c)\in \Gsurjfrominj{F}{a_0}}{\rA}
+
+\closeproofpart
+
+\proofpart{Funktionale Eindeutigkeit}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{7}{(b,a)\in \Gsurjfrominj{F}{a_0}\land (b,c)\in \Gsurjfrominj{F}{a_0}}{\rA}
   \proofstep{7}{(b,a)\in \Gsurjfrominj{F}{a_0}}{\rAEa{7}}
   \proofstep{7}{(b,c)\in \Gsurjfrominj{F}{a_0}}{\rAEb{7}}
   \proofstep{1,7}{a=c}{%
     \FormulaRefAuto{F\colon A\inj B \dsep (b,a)\in \Gsurjfrominj{F}{a_0} \dsep (b,c)\in \Gsurjfrominj{F}{a_0}\vdash a=c}{1,8,9}}
   \proofstep{1}{((b,a)\in \Gsurjfrominj{F}{a_0}\land (b,c)\in \Gsurjfrominj{F}{a_0})\rightarrow a=c}{\rRI{7,10}}
-  \proofstep{1,2}{\Gsurjfrominj{F}{a_0}\colon B\to A}{\FormulaRefAuto{Funktion}{3,6,11}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{11}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\Gsurjfrominj{F}{a_0}\colon B\to A}{\FormulaRefAuto{Funktion}{3,6,11}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDelta{%
   F\colon A\inj B \dsep a_0\in A \vdash \Gsurjfrominj{F}{a_0}\colon B\sur A%
@@ -687,13 +739,19 @@ eigenständigen Band~09 untersucht.
   \DeltaRow{Mengen}{A\dsep B\dsep a_0\dsep b\dsep y\dsep x}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\inj B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{a_0\in A}{\rA}
   \proofstep{1}{F\colon A\to B}{\FormulaRefAuto{Injektive Funktion}{1}}
   \proofstep{1,2}{\Gsurjfrominj{F}{a_0}\colon B\to A}{%
     \FormulaRefAuto{F\colon A\inj B \dsep a_0\in A \vdash \Gsurjfrominj{F}{a_0}\colon B\to A}{1,2}}
-  \proofstep{5}{y\in A}{\rA}
+
+\closeproofpart
+
+\proofpart{Surjektivität}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{5}{y\in A}{\rA}
   \proofstep{1,5}{(y,F(y))\in F}{%
     \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash (x,F(x))\in F}{3,5}}
   \proofstep{1,5}{F(y)\in B}{%
@@ -717,8 +775,15 @@ eigenständigen Band~09 untersucht.
     \FormulaRefAuto{F\colon A\to B\dsep (x,y)\in F\vdash F(x)=y}{4,14}}
   \proofstep{1,2,5}{\exists b\in B\,\bigl(\Gsurjfrominj{F}{a_0}(b)=y\bigr)}{\rEI{\rAI{7,15}}}
   \proofstep{1,2}{y\in A\rightarrow \exists b\in B\,\bigl(\Gsurjfrominj{F}{a_0}(b)=y\bigr)}{\rRI{5,16}}
-  \proofstep{1,2}{\Gsurjfrominj{F}{a_0}\colon B\sur A}{\FormulaRefAuto{Surjektive Funktion}{4,17}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{17}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\Gsurjfrominj{F}{a_0}\colon B\sur A}{\FormulaRefAuto{Surjektive Funktion}{4,17}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \FormulaThmDelta{%
   F\colon A\inj B \dsep A\neq \varnothing \vdash \exists G\colon B\sur A%
@@ -963,14 +1028,18 @@ eigenständigen Band~09 untersucht.
 }
 \begin{tabproofwide}
   \proofstepwidestar[1]{(x,y)\in A\times B}{\rA}
+  \proofstepwidestar[1]{\pi _ 1 ( x , y ) = x}{%
+      \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{1}}
   \proofstepwidestar[1]{x=\pi_1(x,y)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{(x,y)\in A\times B \vdash \pi_1(x,y)=x}{1}}}
+    \FormulaRefAuto{a=b\vdash b=a}{2}}
+  \proofstepwidestar[1]{\pi _ 2 ( x , y ) = y}{%
+      \FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{1}}
   \proofstepwidestar[1]{y=\pi_2(x,y)}{%
-    \FormulaRefAuto{a=b\vdash b=a}{\FormulaRefAuto{(x,y)\in A\times B \vdash \pi_2(x,y)=y}{1}}}
+    \FormulaRefAuto{a=b\vdash b=a}{4}}
   \proofstepwide[1]{(x,y)}{=}{(x,y)}{\rII}
-  \proofstepwide[1]{}{=}{(\pi_1(x,y),y)}{\rIE{2,4}}
-  \proofstepwide[1]{}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rIE{3,5}}
-  \proofstepwide[1]{(x,y)}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rChain{4,6}}
+  \proofstepwide[1]{}{=}{(\pi_1(x,y),y)}{\rIE{3,6}}
+  \proofstepwide[1]{}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rIE{5,7}}
+  \proofstepwide[1]{(x,y)}{=}{(\pi_1(x,y),\pi_2(x,y))}{\rChain{6,8}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Element des Produkts als Paar]{%
@@ -1030,18 +1099,40 @@ eigenständigen Band~09 untersucht.
   \proofstepwidestar[2]{\pi_2(x,y)=y}{%
     \FormulaRefAuto{(x,y)\in A\times B\vdash\pi_2(x,y)=y}[thm]{2}}
   \proofstepwidestar[2]{%
-    P(\pi_1(x,y),\pi_2(x,y))\leftrightarrow P(x,y)}{\rIE{3,4}}
+    P(\pi_1(x,y),\pi_2(x,y))\leftrightarrow P(x,y)}{%
+    \rIE{3,4,\FormulaRefAuto{P\leftrightarrow P}[thm]}}
   \proofstepwidestar[]{%
     (x,y)\in A\times B\rightarrow
     \bigl(P(\pi_1(x,y),\pi_2(x,y))\leftrightarrow P(x,y)\bigr)}{%
     \rRI{2,5}}
   \proofstepwidestar[]{(x,y)\in A\times B\leftrightarrow x\in A\land y\in B}{%
     \FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]}
+  \proofstepwidestar[8]{%
+    (x,y)\in A\times B\land P(\pi_1(x,y),\pi_2(x,y))}{\rA}
+  \proofstepwidestar[8]{%
+    P(\pi_1(x,y),\pi_2(x,y))\leftrightarrow P(x,y)}{%
+    \rRE{\rAEa{8},6}}
+  \proofstepwidestar[8]{(x,y)\in A\times B\land P(x,y)}{%
+    \rAI{\rAEa{8},\rRE{\rAEb{8},\rLREa{9}}}}
+  \proofstepwidestar[11]{(x,y)\in A\times B\land P(x,y)}{\rA}
+  \proofstepwidestar[11]{%
+    P(\pi_1(x,y),\pi_2(x,y))\leftrightarrow P(x,y)}{%
+    \rRE{\rAEa{11},6}}
+  \proofstepwidestar[11]{%
+    (x,y)\in A\times B\land P(\pi_1(x,y),\pi_2(x,y))}{%
+    \rAI{\rAEa{11},\rRE{\rAEb{11},\rLREb{12}}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &((x,y)\in A\times B\land
+      P(\pi_1(x,y),\pi_2(x,y)))\\[-2pt]
+    &\quad\leftrightarrow((x,y)\in A\times B\land P(x,y))
+  \end{aligned}}{\rLRI{\rRI{8,10},\rRI{11,13}}}
   \proofstepwidestar[]{%
     \begin{aligned}[t]
       &(x,y)\in\{p\in A\times B\mid P(\pi_1(p),\pi_2(p))\}\\[-2pt]
       &\quad\leftrightarrow x\in A\land y\in B\land P(x,y)
-    \end{aligned}}{\rLRS{1,6,7}}
+    \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{P\land(Q\land R)\eqvdash
+      (P\land Q)\land R}[thm],\rLRS{7,\rLRS{14,1}}}}
 \end{tabproofwide}
 
 \FormulaThmDelta[Erste Komponente eines Produkteelements]{%
@@ -1180,11 +1271,17 @@ x\in A \dsep b_0\in B \vdash \exists z\in A\times B\; \pi_1(z)=x
 }{FirstProjectionSurjective}{%
   \DeltaRow{Mengen}{A\dsep B\dsep b_0\dsep x\dsep z}%
 }
-\begin{tabproof}
-  \proofstep{1}{b_0\in B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{b_0\in B}{\rA}
   \proofstep{}{\pi_1\colon A\times B\to A}{%
     \FormulaRefAuto{\pi_1\colon A\times B\to A}}
-  \proofstep{3}{x\in A}{\rA}
+
+\closeproofpart
+
+\proofpart{Surjektivität}
+  \setcounter{proofstepnr}{2}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{x\in A}{\rA}
   \proofstep{1,3}{\exists z\in A\times B\,\pi_1(z)=x}{%
     \FormulaRefAuto{%
       x\in A\dsep b_0\in B\vdash
@@ -1192,9 +1289,16 @@ x\in A \dsep b_0\in B \vdash \exists z\in A\times B\; \pi_1(z)=x
     }{3,1}}
   \proofstep{1}{\forall x\in A\,\exists z\in A\times B\,\pi_1(z)=x}{%
     \rUI{\rRI{3,4}}}
-  \proofstep{1}{\pi_1\colon A\times B\sur A}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\pi_1\colon A\times B\sur A}{%
     \FormulaRefAuto{Surjektive Funktion}{2,5}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \subsubsection{Zweite Projektion}
 
@@ -1222,11 +1326,17 @@ y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
 }{SecondProjectionSurjective}{%
   \DeltaRow{Mengen}{A\dsep B\dsep a_0\dsep y\dsep z}%
 }
-\begin{tabproof}
-  \proofstep{1}{a_0\in A}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{a_0\in A}{\rA}
   \proofstep{}{\pi_2\colon A\times B\to B}{%
     \FormulaRefAuto{\pi_2\colon A\times B\to B}}
-  \proofstep{3}{y\in B}{\rA}
+
+\closeproofpart
+
+\proofpart{Surjektivität}
+  \setcounter{proofstepnr}{2}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{y\in B}{\rA}
   \proofstep{1,3}{\exists z\in A\times B\,\pi_2(z)=y}{%
     \FormulaRefAuto{%
       y\in B\dsep a_0\in A\vdash
@@ -1234,11 +1344,23 @@ y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
     }{3,1}}
   \proofstep{1}{\forall y\in B\,\exists z\in A\times B\,\pi_2(z)=y}{%
     \rUI{\rRI{3,4}}}
-  \proofstep{1}{\pi_2\colon A\times B\sur B}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{\pi_2\colon A\times B\sur B}{%
     \FormulaRefAuto{Surjektive Funktion}{2,5}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
+\input{tex/b07-migrated-tree-binary-term-images}
+\input{tex/b07-migrated-binary-operator}
+\input{tex/b07-migrated-fiber-filter}
+
+\Needspace{16\baselineskip}
 \section{Fasern surjektiver Funktionen}
 
 \FormulaThmDeltaR{y\in B \vdash \Fib_F(y)\neq\varnothing}
@@ -1290,17 +1412,30 @@ y\in B \dsep a_0\in A \vdash \exists z\in A\times B\; \pi_2(z)=y
   \DeltaRow{Mengen}{A\dsep B\dsep X\dsep Y}
   \DeltaRow{Surjektive Funktion}{F\colon A\sur B}
 }
-\begin{tabproof}
-  \proofstep{1}{X\in \Fib_F[B]}{\rA}
+\begin{tabproofsplit}
+\proofpart{Nichtleerheit der Familienglieder}
+\proofstep{1}{X\in \Fib_F[B]}{\rA}
   \proofstep{1}{X\neq\varnothing}{%
     \FormulaRefAuto{X\in \Fib_F[B] \vdash X\neq\varnothing}{1}}
-  \proofstep{3}{Y\in \Fib_F[B]}{\rA}
+
+\closeproofpart
+
+\proofpart{Paarweise Disjunktheit}
+  \setcounter{proofstepnr}{2}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{Y\in \Fib_F[B]}{\rA}
   \proofstep{4}{X\neq Y}{\rA}
   \proofstep{1,3,4}{X\cap Y=\varnothing}{%
     \FormulaRefAuto{X\in \Fib_F[B] \dsep Y\in \Fib_F[B] \dsep X\neq Y \vdash X\cap Y=\varnothing}{1,3,4}}
-  \proofstep{}{\DisjFam(\Fib_F[B])}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{\DisjFam(\Fib_F[B])}{%
     \FormulaRefAuto{Disjunkte Familie}{2,5}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \section{Einschränkungen und Korestriktionen}
@@ -1438,9 +1573,11 @@ C\subseteq A \vdash F\restriction_C\colon C\twoheadrightarrow F[C]
   \DeltaPrem{Totale Relationen}{\TotRel{R,A,B}}
 }
 \begin{tabproof}
-    \proofstep{}{\pi_1\restriction_R\colon R\to A}{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{\FormulaRefAuto{R\subseteq A\times B}}}
+    \proofstep{}{R\subseteq A\times B}{%
+      \FormulaRefAuto{R\subseteq A\times B}}
+    \proofstep{}{\pi_1\restriction_R\colon R\to A}{\FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{1}}
     \proofstep{}{\forall x\in A \exists y\in R\,(\pi_1\restriction_R(y)=x)}{\FormulaRefAuto{x\in A\vdash \exists y\in R(\pi_1\restriction_R(y)=x)}}
-    \proofstep{}{\pi_1\restriction_R\colon R\sur A}{\FormulaRefAuto{Surjektive Funktion}{1,2}}
+    \proofstep{}{\pi_1\restriction_R\colon R\sur A}{\FormulaRefAuto{Surjektive Funktion}{2,3}}
 \end{tabproof}
 
 
@@ -1491,6 +1628,847 @@ G\circ F\colon A\sur C
 \end{tabproof}
 
 
+\section{Abstieg entlang von Surjektionen}
+
+\input{tex/b07-quotient-normalization.tex}
+
+Eine Vorschrift auf Repräsentanten bestimmt genau dann einen Wert auf
+jedem Bildpunkt, wenn sie auf dessen Faser konstant ist. Die folgenden
+Schemata halten diese Konstruktion ohne Auswahl von Repräsentanten fest.
+Die Ausdrücke \(\kappa(a,b)\) und \(\tau(a,b)\), beziehungsweise
+\(\tau(a,b,c,d)\), sind bereits gebildete Terme. Die angegebenen
+Allquantoren binden deren ausgezeichnete Variablen; alle anderen Parameter
+bleiben fest. Gebundene Variablen werden vor Einsetzungen so umbenannt,
+dass keine freien Parameter gebunden werden. Insbesondere sind die
+Zielvariablen \(u,v,z,w\) und die neu eingeführten Funktionsvariablen
+frisch für diese Parameter. \(P\) darf die Zugehörigkeit der beiden
+Komponenten zu verschiedenen Mengen ausdrücken. Die Variablen der
+Existenzelimination werden stets frisch gewählt.
+
+
+\FormulaThmDeltaK[Eindeutiger Wert aus Paarrepräsentanten]{%
+  \begin{aligned}[t]&\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)\dsep{}\\[-2pt]&\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))\dsep{}\\[-2pt]&\forall a\forall b\,\bigl(P(a,b)\rightarrow \tau(a,b)\in B\bigr)\dsep{}\\[-2pt]&\forall a\forall b\forall c\forall d\,\bigl((P(a,b)\land P(c,d)\land \kappa(a,b)=\kappa(c,d))\rightarrow \tau(a,b)=\tau(c,d)\bigr)\dsep{}\\[-2pt]&u\in Q\vdash{}\\[-2pt]&\exists!z\in B\,\exists a\exists b\,\bigl(P(a,b)\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)\end{aligned}
+}{RepresentativePairValueUnique}{%
+  \DeltaRow{Mengen}{Q\dsep B\dsep u\dsep v\dsep z\dsep w}
+  \DeltaRow{Prädikat}{P}
+  \DeltaRow{Termschemata}{\kappa(a,b)\dsep\tau(a,b)}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz eines Werts}
+  \proofstepwidestar[1]{\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)}{%
+    \rA}
+  \proofstepwidestar[2]{\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rA}
+  \proofstepwidestar[3]{\forall a\forall b\,\bigl(P(a,b)\rightarrow \tau(a,b)\in B\bigr)}{%
+    \rA}
+  \proofstepwidestar[4]{\forall a\forall b\forall c\forall d\,\bigl((P(a,b)\land P(c,d)\land \kappa(a,b)=\kappa(c,d))\rightarrow \tau(a,b)=\tau(c,d)\bigr)}{%
+    \rA}
+  \proofstepwidestar[5]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[2]{u\in Q\rightarrow\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rUE{2}}
+  \proofstepwidestar[2,5]{\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rRE{6,5}}
+  \proofstepwidestar[8]{P(a,b)\land u=\kappa(a,b)}{%
+    \rA}
+  \proofstepwidestar[8]{P(a,b)}{%
+    \rAEa{8}}
+  \proofstepwidestar[8]{u=\kappa(a,b)}{%
+    \rAEb{8}}
+  \proofstepwidestar[3]{P(a,b)\rightarrow \tau(a,b)\in B}{%
+    \rUE{\rUE{3}}}
+  \proofstepwidestar[3,8]{\tau(a,b)\in B}{%
+    \rRE{11,9}}
+  \proofstepwidestar[]{\tau(a,b)=\tau(a,b)}{%
+    \rII}
+  \proofstepwidestar[8]{P(a,b)\land u=\kappa(a,b)\land \tau(a,b)=\tau(a,b)}{%
+    \rAIStar{9,10,13}}
+  \proofstepwidestar[8]{\exists a_0\exists b_0\,\bigl(P(a_0,b_0)\land u=\kappa(a_0,b_0)\land \tau(a,b)=\tau(a_0,b_0)\bigr)}{%
+    \rEIStar{14}}
+  \proofstepwidestar[3,8]{\tau(a,b)\in B\land \exists a_0\exists b_0\,\bigl(P(a_0,b_0)\land u=\kappa(a_0,b_0)\land \tau(a,b)=\tau(a_0,b_0)\bigr)}{%
+    \rAIStar{12,15}}
+  \proofstepwidestar[3,8]{\begin{aligned}[t]&\exists z\in B\,\exists a\exists b\,\bigl(P(a,b)\\[-2pt]&\quad\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)\end{aligned}}{%
+    \rEIStar{16}}
+  \proofstepwidestar[2,3,5]{\begin{aligned}[t]&\exists z\in B\,\exists a\exists b\,\bigl(P(a,b)\\[-2pt]&\quad\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)\end{aligned}}{%
+    \rEEStar{7,8,17}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit des Werts}
+\setcounter{proofstepnr}{18}
+  \proofstepwidestar[19]{\begin{aligned}[t]&z\in B\land \exists a\exists b\,\bigl(P(a,b)\\[-2pt]&\quad\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[20]{\begin{aligned}[t]&w\in B\land \exists c\exists d\,\bigl(P(c,d)\\[-2pt]&\quad\land u=\kappa(c,d)\land w=\tau(c,d)\bigr)\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[19]{\exists a\exists b\,\bigl(P(a,b)\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)}{%
+    \rAEb{19}}
+  \proofstepwidestar[20]{\exists c\exists d\,\bigl(P(c,d)\land u=\kappa(c,d)\land w=\tau(c,d)\bigr)}{%
+    \rAEb{20}}
+  \proofstepwidestar[23]{P(a,b)\land u=\kappa(a,b)\land z=\tau(a,b)}{%
+    \rA}
+  \proofstepwidestar[24]{P(c,d)\land u=\kappa(c,d)\land w=\tau(c,d)}{%
+    \rA}
+  \proofstepwidestar[23]{P(a,b)}{%
+    \rAEa{23}}
+  \proofstepwidestar[24]{P(c,d)}{%
+    \rAEa{24}}
+  \proofstepwidestar[23]{u=\kappa(a,b)}{%
+    \rAEa{\rAEb{23}}}
+  \proofstepwidestar[24]{u=\kappa(c,d)}{%
+    \rAEa{\rAEb{24}}}
+  \proofstepwidestar[23,24]{\kappa(a,b)=\kappa(c,d)}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{27,28}}
+  \proofstepwidestar[23]{z=\tau(a,b)}{%
+    \rAEb{\rAEb{23}}}
+  \proofstepwidestar[24]{w=\tau(c,d)}{%
+    \rAEb{\rAEb{24}}}
+  \proofstepwidestar[4]{\begin{aligned}[t]&(P(a,b)\land P(c,d)\land \kappa(a,b)=\kappa(c,d))\\[-2pt]&\quad\rightarrow \tau(a,b)=\tau(c,d)\end{aligned}}{%
+    \rUE{\rUE{\rUE{\rUE{4}}}}}
+  \proofstepwidestar[23,24]{P(a,b)\land P(c,d)\land \kappa(a,b)=\kappa(c,d)}{%
+    \rAIStar{25,26,29}}
+  \proofstepwidestar[4,23,24]{\tau(a,b)=\tau(c,d)}{%
+    \rRE{32,33}}
+  \proofstepwidestar[4,23,24]{z=\tau(c,d)}{%
+    \rIE{34,30}}
+  \proofstepwidestar[4,23,24]{z=w}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{35,31}}
+  \proofstepwidestar[4,20,23]{z=w}{%
+    \rEEStar{22,24,36}}
+  \proofstepwidestar[4,19,20]{z=w}{%
+    \rEEStar{21,23,37}}
+\closeproofpartwide
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{38}
+  \proofstepwidestar[2,3,4,5]{\begin{aligned}[t]&\exists!z\in B\,\exists a\exists b\,\bigl(P(a,b)\\[-2pt]&\quad\land u=\kappa(a,b)\land z=\tau(a,b)\bigr)\end{aligned}}{%
+    \UEI{18,19,20,38}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\FormulaThmDeltaK[Eindeutiger binärer Wert aus Paarrepräsentanten]{%
+  \begin{aligned}[t]&\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)\dsep{}\\[-2pt]&\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))\dsep{}\\[-2pt]&\forall a\forall b\forall c\forall d\,\bigl(P(a,b)\land P(c,d)\rightarrow \tau(a,b,c,d)\in B\bigr)\dsep{}\\[-2pt]&\begin{aligned}[t]&\forall a\forall b\forall c\forall d\forall e\forall f\forall g\forall h\,\bigl((P(a,b)\land P(c,d)\\[-2pt]&\quad\land P(e,f)\land P(g,h)\\[-2pt]&\quad\land \kappa(a,b)=\kappa(e,f)\land \kappa(c,d)=\kappa(g,h))\\[-2pt]&\quad \rightarrow \tau(a,b,c,d)=\tau(e,f,g,h)\bigr)\end{aligned}\dsep{}\\[-2pt]&u\in Q\dsep{}\\[-2pt]&v\in Q\vdash{}\\[-2pt]&\exists!z\in B\,\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\\[-2pt]&\quad\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)\end{aligned}
+}{RepresentativePairBinaryValueUnique}{%
+  \DeltaRow{Mengen}{Q\dsep B\dsep u\dsep v\dsep z\dsep w}
+  \DeltaRow{Prädikat}{P}
+  \DeltaRow{Termschemata}{\kappa(a,b)\dsep\tau(a,b,c,d)}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz eines Werts}
+  \proofstepwidestar[1]{\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)}{%
+    \rA}
+  \proofstepwidestar[2]{\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rA}
+  \proofstepwidestar[3]{\forall a\forall b\forall c\forall d\,\bigl(P(a,b)\land P(c,d)\rightarrow \tau(a,b,c,d)\in B\bigr)}{%
+    \rA}
+  \proofstepwidestar[4]{\begin{aligned}[t]&\forall a\forall b\forall c\forall d\forall e\forall f\forall g\forall h\,\bigl((P(a,b)\land P(c,d)\\[-2pt]&\quad\land P(e,f)\land P(g,h)\\[-2pt]&\quad\land \kappa(a,b)=\kappa(e,f)\land \kappa(c,d)=\kappa(g,h))\\[-2pt]&\quad \rightarrow \tau(a,b,c,d)=\tau(e,f,g,h)\bigr)\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[5]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[6]{v\in Q}{%
+    \rA}
+  \proofstepwidestar[2]{u\in Q\rightarrow\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rUE{2}}
+  \proofstepwidestar[2,5]{\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rRE{7,5}}
+  \proofstepwidestar[9]{P(a,b)\land u=\kappa(a,b)}{%
+    \rA}
+  \proofstepwidestar[9]{P(a,b)}{%
+    \rAEa{9}}
+  \proofstepwidestar[9]{u=\kappa(a,b)}{%
+    \rAEb{9}}
+  \proofstepwidestar[2]{v\in Q\rightarrow\exists c\exists d\,(P(c,d)\land v=\kappa(c,d))}{%
+    \rUE{2}}
+  \proofstepwidestar[2,6]{\exists c\exists d\,(P(c,d)\land v=\kappa(c,d))}{%
+    \rRE{12,6}}
+  \proofstepwidestar[14]{P(c,d)\land v=\kappa(c,d)}{%
+    \rA}
+  \proofstepwidestar[14]{P(c,d)}{%
+    \rAEa{14}}
+  \proofstepwidestar[14]{v=\kappa(c,d)}{%
+    \rAEb{14}}
+  \proofstepwidestar[9,14]{P(a,b)\land P(c,d)}{%
+    \rAIStar{10,15}}
+  \proofstepwidestar[3]{P(a,b)\land P(c,d)\rightarrow \tau(a,b,c,d)\in B}{%
+    \rUE{\rUE{\rUE{\rUE{3}}}}}
+  \proofstepwidestar[3,9,14]{\tau(a,b,c,d)\in B}{%
+    \rRE{18,17}}
+  \proofstepwidestar[]{\tau(a,b,c,d)=\tau(a,b,c,d)}{%
+    \rII}
+  \proofstepwidestar[9,14]{P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land \tau(a,b,c,d)=\tau(a,b,c,d)}{%
+    \rAIStar{10,15,11,16,20}}
+  \proofstepwidestar[9,14]{\begin{aligned}[t]&\exists a_0\exists b_0\exists c_0\exists d_0\,\bigl(P(a_0,b_0)\land P(c_0,d_0)\\[-2pt]&\quad\land u=\kappa(a_0,b_0)\land v=\kappa(c_0,d_0)\\[-2pt]&\quad\land \tau(a,b,c,d)=\tau(a_0,b_0,c_0,d_0)\bigr)\end{aligned}}{%
+    \rEIStar{21}}
+  \proofstepwidestar[3,9,14]{\begin{aligned}[t]&\tau(a,b,c,d)\in B\land \exists a_0\exists b_0\exists c_0\exists d_0\\[-2pt]&\quad\bigl(P(a_0,b_0)\land P(c_0,d_0)\\[-2pt]&\quad \land u=\kappa(a_0,b_0)\land v=\kappa(c_0,d_0)\\[-2pt]&\quad\land \tau(a,b,c,d)=\tau(a_0,b_0,c_0,d_0)\bigr)\end{aligned}}{%
+    \rAIStar{19,22}}
+  \proofstepwidestar[3,9,14]{\exists z\in B\,\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \rEIStar{23}}
+  \proofstepwidestar[2,3,6,9]{\exists z\in B\,\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \rEEStar{13,14,24}}
+  \proofstepwidestar[2,3,5,6]{\exists z\in B\,\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \rEEStar{8,9,25}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit des Werts}
+\setcounter{proofstepnr}{26}
+  \proofstepwidestar[27]{z\in B\land \exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \rA}
+  \proofstepwidestar[28]{w\in B\land \exists e\exists f\exists g\exists h\,\bigl(P(e,f)\land P(g,h)\land u=\kappa(e,f)\land v=\kappa(g,h)\land w=\tau(e,f,g,h)\bigr)}{%
+    \rA}
+  \proofstepwidestar[27]{\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \rAEb{27}}
+  \proofstepwidestar[28]{\exists e\exists f\exists g\exists h\,\bigl(P(e,f)\land P(g,h)\land u=\kappa(e,f)\land v=\kappa(g,h)\land w=\tau(e,f,g,h)\bigr)}{%
+    \rAEb{28}}
+  \proofstepwidestar[31]{P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)}{%
+    \rA}
+  \proofstepwidestar[32]{P(e,f)\land P(g,h)\land u=\kappa(e,f)\land v=\kappa(g,h)\land w=\tau(e,f,g,h)}{%
+    \rA}
+  \proofstepwidestar[31]{P(a,b)}{%
+    \rAEa{31}}
+  \proofstepwidestar[31]{P(c,d)}{%
+    \rAEa{\rAEb{31}}}
+  \proofstepwidestar[32]{P(e,f)}{%
+    \rAEa{32}}
+  \proofstepwidestar[32]{P(g,h)}{%
+    \rAEa{\rAEb{32}}}
+  \proofstepwidestar[31]{u=\kappa(a,b)}{%
+    \rAEa{\rAEb{\rAEb{31}}}}
+  \proofstepwidestar[32]{u=\kappa(e,f)}{%
+    \rAEa{\rAEb{\rAEb{32}}}}
+  \proofstepwidestar[31,32]{\kappa(a,b)=\kappa(e,f)}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{37,38}}
+  \proofstepwidestar[31]{v=\kappa(c,d)}{%
+    \rAEa{\rAEb{\rAEb{\rAEb{31}}}}}
+  \proofstepwidestar[32]{v=\kappa(g,h)}{%
+    \rAEa{\rAEb{\rAEb{\rAEb{32}}}}}
+  \proofstepwidestar[31,32]{\kappa(c,d)=\kappa(g,h)}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{40,41}}
+  \proofstepwidestar[31]{z=\tau(a,b,c,d)}{%
+    \rAEb{\rAEb{\rAEb{\rAEb{31}}}}}
+  \proofstepwidestar[32]{w=\tau(e,f,g,h)}{%
+    \rAEb{\rAEb{\rAEb{\rAEb{32}}}}}
+  \proofstepwidestar[4]{(P(a,b)\land P(c,d)\land P(e,f)\land P(g,h)\land \kappa(a,b)=\kappa(e,f)\land \kappa(c,d)=\kappa(g,h))\rightarrow \tau(a,b,c,d)=\tau(e,f,g,h)}{%
+    \rUE{\rUE{\rUE{\rUE{\rUE{\rUE{\rUE{\rUE{4}}}}}}}}}
+  \proofstepwidestar[31,32]{P(a,b)\land P(c,d)\land P(e,f)\land P(g,h)\land \kappa(a,b)=\kappa(e,f)\land \kappa(c,d)=\kappa(g,h)}{%
+    \rAIStar{33,34,35,36,39,42}}
+  \proofstepwidestar[4,31,32]{\tau(a,b,c,d)=\tau(e,f,g,h)}{%
+    \rRE{45,46}}
+  \proofstepwidestar[4,31,32]{z=\tau(e,f,g,h)}{%
+    \rIE{47,43}}
+  \proofstepwidestar[4,31,32]{z=w}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{48,44}}
+  \proofstepwidestar[4,28,31]{z=w}{%
+    \rEEStar{30,32,49}}
+  \proofstepwidestar[4,27,28]{z=w}{%
+    \rEEStar{29,31,50}}
+\closeproofpartwide
+\Needspace{7\baselineskip}
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{51}
+  \proofstepwidestar[2,3,4,5,6]{\exists!z\in B\,\exists a\exists b\exists c\exists d\,\bigl(P(a,b)\land P(c,d)\land u=\kappa(a,b)\land v=\kappa(c,d)\land z=\tau(a,b,c,d)\bigr)}{%
+    \UEI{26,27,28,51}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\FormulaThmDeltaK[Eindeutiger Wert auf Surjektionsfasern]{%
+  \begin{aligned}[t]&q\colon S\sur Q\dsep{}\\[-2pt]&h\colon S\to B\dsep{}\\[-2pt]&\forall s\in S\,\forall s^{\prime}\in S\,\bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)\dsep{}\\[-2pt]&u\in Q\vdash{}\\[-2pt]&\exists!z\in B\,\exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)\end{aligned}
+}{SurjectionFiberValueUnique}{%
+  \DeltaRow{Mengen}{S\dsep Q\dsep B\dsep u\dsep v\dsep z\dsep w}
+  \DeltaRow{Funktionen}{q\dsep h}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz eines Werts}
+  \proofstepwidestar[1]{q\colon S\sur Q}{%
+    \rA}
+  \proofstepwidestar[2]{h\colon S\to B}{%
+    \rA}
+  \proofstepwidestar[3]{\forall s\in S\,\forall s^{\prime}\in S\,\bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)}{%
+    \rA}
+  \proofstepwidestar[4]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[1]{q\colon S\to Q}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{1}}
+  \proofstepwidestar[1,4]{\exists s\in S\,q(s)=u}{%
+    \FormulaRefAuto{Surjektivität}[ax]{1,4}}
+  \proofstepwidestar[7]{s\in S\land q(s)=u}{%
+    \rA}
+  \proofstepwidestar[7]{s\in S}{%
+    \rAEa{7}}
+  \proofstepwidestar[7]{q(s)=u}{%
+    \rAEb{7}}
+  \proofstepwidestar[7]{u=q(s)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{9}}
+  \proofstepwidestar[2,7]{h(s)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,8}}
+  \proofstepwidestar[]{h(s)=h(s)}{%
+    \rII}
+  \proofstepwidestar[7]{u=q(s)\land h(s)=h(s)}{%
+    \rAIStar{10,12}}
+  \proofstepwidestar[7]{\exists s_0\in S\,\bigl(u=q(s_0)\land h(s)=h(s_0)\bigr)}{%
+    \rEIStar{8,13}}
+  \proofstepwidestar[2,7]{h(s)\in B\land \exists s_0\in S\,\bigl(u=q(s_0)\land h(s)=h(s_0)\bigr)}{%
+    \rAIStar{11,14}}
+  \proofstepwidestar[2,7]{\exists z\in B\,\exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)}{%
+    \rEIStar{15}}
+  \proofstepwidestar[1,2,4]{\exists z\in B\,\exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)}{%
+    \rEEStar{6,7,16}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit des Werts}
+\setcounter{proofstepnr}{17}
+  \proofstepwidestar[18]{z\in B\land \exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)}{%
+    \rA}
+  \proofstepwidestar[19]{w\in B\land \exists s^{\prime}\in S\,\bigl(u=q(s^{\prime})\land w=h(s^{\prime})\bigr)}{%
+    \rA}
+  \proofstepwidestar[18]{\exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)}{%
+    \rAEb{18}}
+  \proofstepwidestar[19]{\exists s^{\prime}\in S\,\bigl(u=q(s^{\prime})\land w=h(s^{\prime})\bigr)}{%
+    \rAEb{19}}
+  \proofstepwidestar[22]{s\in S\land u=q(s)\land z=h(s)}{%
+    \rA}
+  \proofstepwidestar[23]{s^{\prime}\in S\land u=q(s^{\prime})\land w=h(s^{\prime})}{%
+    \rA}
+  \proofstepwidestar[22]{s\in S}{%
+    \rAEa{22}}
+  \proofstepwidestar[23]{s^{\prime}\in S}{%
+    \rAEa{23}}
+  \proofstepwidestar[22]{u=q(s)}{%
+    \rAEa{\rAEb{22}}}
+  \proofstepwidestar[23]{u=q(s^{\prime})}{%
+    \rAEa{\rAEb{23}}}
+  \proofstepwidestar[22,23]{q(s)=q(s^{\prime})}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{26,27}}
+  \proofstepwidestar[22]{z=h(s)}{%
+    \rAEb{\rAEb{22}}}
+  \proofstepwidestar[23]{w=h(s^{\prime})}{%
+    \rAEb{\rAEb{23}}}
+  \proofstepwidestar[3]{s\in S\rightarrow \forall s^{\prime}\in S\,\bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)}{%
+    \rUE{3}}
+  \proofstepwidestar[3,22]{\forall s^{\prime}\in S\,\bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)}{%
+    \rRE{31,24}}
+  \proofstepwidestar[3,22]{s^{\prime}\in S\rightarrow \bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)}{%
+    \rUE{32}}
+  \proofstepwidestar[3,22,23]{\bigl((q(s)=q(s^{\prime}))\rightarrow h(s)=h(s^{\prime})\bigr)}{%
+    \rRE{33,25}}
+  \proofstepwidestar[3,22,23]{h(s)=h(s^{\prime})}{%
+    \rRE{34,28}}
+  \proofstepwidestar[3,22,23]{z=h(s^{\prime})}{%
+    \rIE{35,29}}
+  \proofstepwidestar[3,22,23]{z=w}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{36,30}}
+  \proofstepwidestar[3,19,22]{z=w}{%
+    \rEEStar{21,23,37}}
+  \proofstepwidestar[3,18,19]{z=w}{%
+    \rEEStar{20,22,38}}
+\closeproofpartwide
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{39}
+  \proofstepwidestar[1,2,3,4]{\exists!z\in B\,\exists s\in S\,\bigl(u=q(s)\land z=h(s)\bigr)}{%
+    \UEI{17,18,19,39}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\FormulaThmDeltaK[Eindeutiger binärer Wert auf Surjektionsfasern]{%
+  \begin{aligned}[t]&q\colon S\sur Q\dsep{}\\[-2pt]&h\colon S\times S\to B\dsep{}\\[-2pt]&\begin{aligned}[t]&\forall s\in S\,\forall t\in S\,\forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\\[-2pt]&\quad \land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}\dsep{}\\[-2pt]&u\in Q\dsep{}\\[-2pt]&v\in Q\vdash{}\\[-2pt]&\exists!z\in B\,\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)\end{aligned}
+}{SurjectionBinaryFiberValueUnique}{%
+  \DeltaRow{Mengen}{S\dsep Q\dsep B\dsep u\dsep v\dsep z\dsep w}
+  \DeltaRow{Funktionen}{q\dsep h}
+}
+\Needspace{8\baselineskip}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz eines Werts}
+  \proofstepwidestar[1]{q\colon S\sur Q}{%
+    \rA}
+  \proofstepwidestar[2]{h\colon S\times S\to B}{%
+    \rA}
+  \proofstepwidestar[3]{\begin{aligned}[t]&\forall s\in S\,\forall t\in S\,\forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\\[-2pt]&\quad \land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[4]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[5]{v\in Q}{%
+    \rA}
+  \proofstepwidestar[1]{q\colon S\to Q}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{1}}
+  \proofstepwidestar[1,4]{\exists s\in S\,q(s)=u}{%
+    \FormulaRefAuto{Surjektivität}[ax]{1,4}}
+  \proofstepwidestar[8]{s\in S\land q(s)=u}{%
+    \rA}
+  \proofstepwidestar[8]{s\in S}{%
+    \rAEa{8}}
+  \proofstepwidestar[8]{q(s)=u}{%
+    \rAEb{8}}
+  \proofstepwidestar[8]{u=q(s)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{10}}
+  \proofstepwidestar[1,5]{\exists t\in S\,q(t)=v}{%
+    \FormulaRefAuto{Surjektivität}[ax]{1,5}}
+  \proofstepwidestar[13]{t\in S\land q(t)=v}{%
+    \rA}
+  \proofstepwidestar[13]{t\in S}{%
+    \rAEa{13}}
+  \proofstepwidestar[13]{q(t)=v}{%
+    \rAEb{13}}
+  \proofstepwidestar[13]{v=q(t)}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{15}}
+  \proofstepwidestar[8,13]{(s,t)\in S\times S}{%
+    \FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}[thm]{9,14}}
+  \proofstepwidestar[2,8,13]{h(s,t)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,17}}
+  \proofstepwidestar[]{h(s,t)=h(s,t)}{%
+    \rII}
+  \proofstepwidestar[8,13]{u=q(s)\land v=q(t)\land h(s,t)=h(s,t)}{%
+    \rAIStar{11,16,19}}
+  \proofstepwidestar[8,13]{\begin{aligned}[t]&\exists s_0\in S\,\exists t_0\in S\,\bigl(u=q(s_0)\\[-2pt]&\quad\land v=q(t_0)\land h(s,t)=h(s_0,t_0)\bigr)\end{aligned}}{%
+    \rEIStar{9,14,20}}
+  \proofstepwidestar[2,8,13]{h(s,t)\in B\land \exists s_0\in S\,\exists t_0\in S\,\bigl(u=q(s_0)\land v=q(t_0)\land h(s,t)=h(s_0,t_0)\bigr)}{%
+    \rAIStar{18,21}}
+  \proofstepwidestar[2,8,13]{\exists z\in B\,\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)}{%
+    \rEIStar{22}}
+  \proofstepwidestar[1,2,5,8]{\exists z\in B\,\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)}{%
+    \rEEStar{12,13,23}}
+  \proofstepwidestar[1,2,4,5]{\exists z\in B\,\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)}{%
+    \rEEStar{7,8,24}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit des Werts}
+\setcounter{proofstepnr}{25}
+  \proofstepwidestar[26]{z\in B\land \exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)}{%
+    \rA}
+  \proofstepwidestar[27]{w\in B\land \exists s^{\prime}\in S\,\exists t^{\prime}\in S\,\bigl(u=q(s^{\prime})\land v=q(t^{\prime})\land w=h(s^{\prime},t^{\prime})\bigr)}{%
+    \rA}
+  \proofstepwidestar[26]{\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\land v=q(t)\land z=h(s,t)\bigr)}{%
+    \rAEb{26}}
+  \proofstepwidestar[27]{\exists s^{\prime}\in S\,\exists t^{\prime}\in S\,\bigl(u=q(s^{\prime})\land v=q(t^{\prime})\land w=h(s^{\prime},t^{\prime})\bigr)}{%
+    \rAEb{27}}
+  \proofstepwidestar[30]{s\in S\land t\in S\land u=q(s)\land v=q(t)\land z=h(s,t)}{%
+    \rA}
+  \proofstepwidestar[31]{\begin{aligned}[t]&s^{\prime}\in S\land t^{\prime}\in S\land u=q(s^{\prime})\\[-2pt]&\quad\land v=q(t^{\prime})\land w=h(s^{\prime},t^{\prime})\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[30]{s\in S}{%
+    \rAEa{30}}
+  \proofstepwidestar[30]{t\in S}{%
+    \rAEa{\rAEb{30}}}
+  \proofstepwidestar[31]{s^{\prime}\in S}{%
+    \rAEa{31}}
+  \proofstepwidestar[31]{t^{\prime}\in S}{%
+    \rAEa{\rAEb{31}}}
+  \proofstepwidestar[30]{u=q(s)}{%
+    \rAEa{\rAEb{\rAEb{30}}}}
+  \proofstepwidestar[31]{u=q(s^{\prime})}{%
+    \rAEa{\rAEb{\rAEb{31}}}}
+  \proofstepwidestar[30,31]{q(s)=q(s^{\prime})}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{36,37}}
+  \proofstepwidestar[30]{v=q(t)}{%
+    \rAEa{\rAEb{\rAEb{\rAEb{30}}}}}
+  \proofstepwidestar[31]{v=q(t^{\prime})}{%
+    \rAEa{\rAEb{\rAEb{\rAEb{31}}}}}
+  \proofstepwidestar[30,31]{q(t)=q(t^{\prime})}{%
+    \FormulaRefAuto{a=b\dsep a=c\vdash b=c}[thm]{39,40}}
+  \proofstepwidestar[30]{z=h(s,t)}{%
+    \rAEb{\rAEb{\rAEb{\rAEb{30}}}}}
+  \proofstepwidestar[31]{w=h(s^{\prime},t^{\prime})}{%
+    \rAEb{\rAEb{\rAEb{\rAEb{31}}}}}
+  \proofstepwidestar[3]{\begin{aligned}[t]&s\in S\rightarrow \forall t\in S\,\forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\\[-2pt]&\quad \land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rUE{3}}
+  \proofstepwidestar[3,30]{\begin{aligned}[t]&\forall t\in S\,\forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\\[-2pt]&\quad \land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rRE{44,32}}
+  \proofstepwidestar[3,30]{\begin{aligned}[t]&t\in S\rightarrow \forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\\[-2pt]&\quad \land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rUE{45}}
+  \proofstepwidestar[3,30]{\begin{aligned}[t]&\forall s^{\prime}\in S\,\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\land q(t)=q(t^{\prime}))\\[-2pt]&\quad \rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rRE{46,33}}
+  \proofstepwidestar[3,30]{\begin{aligned}[t]&s^{\prime}\in S\rightarrow \forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\land q(t)=q(t^{\prime}))\\[-2pt]&\quad \rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rUE{47}}
+  \proofstepwidestar[3,30,31]{\forall t^{\prime}\in S\,\bigl((q(s)=q(s^{\prime})\land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)}{%
+    \rRE{48,34}}
+  \proofstepwidestar[3,30,31]{t^{\prime}\in S\rightarrow \bigl((q(s)=q(s^{\prime})\land q(t)=q(t^{\prime}))\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)}{%
+    \rUE{49}}
+  \proofstepwidestar[3,30,31]{\begin{aligned}[t]&\bigl((q(s)=q(s^{\prime})\land q(t)=q(t^{\prime}))\\[-2pt]&\quad\rightarrow h(s,t)=h(s^{\prime},t^{\prime})\bigr)\end{aligned}}{%
+    \rRE{50,35}}
+  \proofstepwidestar[30,31]{q(s)=q(s^{\prime})\land q(t)=q(t^{\prime})}{%
+    \rAIStar{38,41}}
+  \proofstepwidestar[3,30,31]{h(s,t)=h(s^{\prime},t^{\prime})}{%
+    \rRE{51,52}}
+  \proofstepwidestar[3,30,31]{z=h(s^{\prime},t^{\prime})}{%
+    \rIE{53,42}}
+  \proofstepwidestar[3,30,31]{z=w}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{54,43}}
+  \proofstepwidestar[3,27,30]{z=w}{%
+    \rEEStar{29,31,55}}
+  \proofstepwidestar[3,26,27]{z=w}{%
+    \rEEStar{28,30,56}}
+\closeproofpartwide
+\Needspace{7\baselineskip}
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{57}
+  \proofstepwidestar[1,2,3,4,5]{\begin{aligned}[t]&\exists!z\in B\,\exists s\in S\,\exists t\in S\,\bigl(u=q(s)\\[-2pt]&\quad\land v=q(t)\land z=h(s,t)\bigr)\end{aligned}}{%
+    \UEI{25,26,27,57}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\subsection{Funktionen aus eindeutigen Relationswerten}
+
+Im folgenden Beweis steht \(D_R\) für den Mengenterm
+\[
+  \{p\in Q\times B\mid R(\pi_1(p),\pi_2(p))\}.
+\]
+Die Graphkonstruktion verwendet nur Aussonderung im kartesischen Produkt.
+
+
+\FormulaThmDeltaK[Funktion aus einer Relation mit eindeutigem Wert]{%
+  \begin{aligned}[t]&\forall u\in Q\,\exists!z\in B\,R(u,z)\vdash{}\\[-2pt]&\exists F\,\bigl(F\colon Q\to B\land\forall u\in Q\,\forall z\in B\,(R(u,z)\rightarrow F(u)=z)\bigr)\end{aligned}
+}{UniqueRelationFunctionExists}{%
+  \DeltaRow{Mengen}{Q\dsep B\dsep u\dsep z\dsep w}
+  \DeltaRow{Prädikat}{R}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Der Relationgraph ist eine Funktion}
+  \proofstepwidestar[1]{\forall u\in Q\,\exists!z\in B\,R(u,z)}{%
+    \rA}
+  \proofstepwidestar[]{D_R\subseteq Q\times B}{%
+    \FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]{}}
+  \proofstepwidestar[3]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[1]{u\in Q\rightarrow\exists!z\in B\,R(u,z)}{%
+    \rUE{1}}
+  \proofstepwidestar[1,3]{\exists!z\in B\,R(u,z)}{%
+    \rRE{4,3}}
+  \proofstepwidestar[1,3]{\exists z\in B\,R(u,z)}{%
+    \FormulaRefAuto{\exists! x\,P(x)\vdash \exists x\,P(x)}[thm]{5}}
+  \proofstepwidestar[7]{z\in B\land R(u,z)}{%
+    \rA}
+  \proofstepwidestar[7]{z\in B}{%
+    \rAEa{7}}
+  \proofstepwidestar[7]{R(u,z)}{%
+    \rAEb{7}}
+  \proofstepwidestar[]{(u,z)\in D_R\leftrightarrow u\in Q\land z\in B\land R(u,z)}{%
+    \FormulaRefAuto{ProductComprehensionMembership}[thm]{}}
+  \proofstepwidestar[3,7]{u\in Q\land z\in B\land R(u,z)}{%
+    \rAIStar{3,8,9}}
+  \proofstepwidestar[3,7]{(u,z)\in D_R}{%
+    \rRE{\rLREb{10},11}}
+  \proofstepwidestar[3,7]{z\in B\land(u,z)\in D_R}{%
+    \rAIStar{8,12}}
+  \proofstepwidestar[3,7]{\exists z\in B\,(u,z)\in D_R}{%
+    \rEIStar{13}}
+  \proofstepwidestar[1,3]{\exists z\in B\,(u,z)\in D_R}{%
+    \rEEStar{6,7,14}}
+  \proofstepwidestar[16]{z\in B\land(u,z)\in D_R}{%
+    \rA}
+  \proofstepwidestar[17]{w\in B\land(u,w)\in D_R}{%
+    \rA}
+  \proofstepwidestar[16]{(u,z)\in D_R}{%
+    \rAEb{16}}
+  \proofstepwidestar[17]{(u,w)\in D_R}{%
+    \rAEb{17}}
+  \proofstepwidestar[16]{u\in Q\land z\in B\land R(u,z)}{%
+    \rRE{\rLREa{10},18}}
+  \proofstepwidestar[]{(u,w)\in D_R\leftrightarrow u\in Q\land w\in B\land R(u,w)}{%
+    \FormulaRefAuto{ProductComprehensionMembership}[thm]{}}
+  \proofstepwidestar[17]{u\in Q\land w\in B\land R(u,w)}{%
+    \rRE{\rLREa{21},19}}
+  \proofstepwidestar[16]{z\in B}{%
+    \rAEa{\rAEb{20}}}
+  \proofstepwidestar[16]{R(u,z)}{%
+    \rAEb{\rAEb{20}}}
+  \proofstepwidestar[17]{w\in B}{%
+    \rAEa{\rAEb{22}}}
+  \proofstepwidestar[17]{R(u,w)}{%
+    \rAEb{\rAEb{22}}}
+  \proofstepwidestar[16]{z\in B\land R(u,z)}{%
+    \rAIStar{23,24}}
+  \proofstepwidestar[17]{w\in B\land R(u,w)}{%
+    \rAIStar{25,26}}
+  \proofstepwidestar[1,3,16,17]{z=w}{%
+    \FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]{5,27,28}}
+  \proofstepwidestar[1,3]{\exists!z\in B\,(u,z)\in D_R}{%
+    \UEI{15,16,17,29}}
+  \proofstepwidestar[1]{\forall u\in Q\,\exists!z\in B\,(u,z)\in D_R}{%
+    \rUI{\rRI{3,30}}}
+  \proofstepwidestar[1]{D_R\colon Q\to B}{%
+    \FormulaRefAuto{UniqueValuedGraphFunction}[thm]{2,31}}
+\closeproofpartwide
+\proofpartwide{Auswertung des Relationgraphen}
+\setcounter{proofstepnr}{32}
+  \proofstepwidestar[33]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[34]{z\in B}{%
+    \rA}
+  \proofstepwidestar[35]{R(u,z)}{%
+    \rA}
+  \proofstepwidestar[]{(u,z)\in D_R\leftrightarrow u\in Q\land z\in B\land R(u,z)}{%
+    \FormulaRefAuto{ProductComprehensionMembership}[thm]{}}
+  \proofstepwidestar[33,34,35]{u\in Q\land z\in B\land R(u,z)}{%
+    \rAIStar{33,34,35}}
+  \proofstepwidestar[33,34,35]{(u,z)\in D_R}{%
+    \rRE{\rLREb{36},37}}
+  \proofstepwidestar[1,33,34,35]{D_R(u)=z}{%
+    \FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{32,38}}
+  \proofstepwidestar[1,33,34]{R(u,z)\rightarrow D_R(u)=z}{%
+    \rRI{35,39}}
+  \proofstepwidestar[1,33]{\forall z\in B\,(R(u,z)\rightarrow D_R(u)=z)}{%
+    \rUI{\rRI{34,40}}}
+  \proofstepwidestar[1]{\forall u\in Q\,\forall z\in B\,(R(u,z)\rightarrow D_R(u)=z)}{%
+    \rUI{\rRI{33,41}}}
+  \proofstepwidestar[1]{D_R\colon Q\to B\land \forall u\in Q\,\forall z\in B\,(R(u,z)\rightarrow D_R(u)=z)}{%
+    \rAIStar{32,42}}
+  \proofstepwidestar[1]{\exists F\,\bigl(F\colon Q\to B\land\forall u\in Q\,\forall z\in B\,(R(u,z)\rightarrow F(u)=z)\bigr)}{%
+    \rEIStar{43}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\Needspace{18\baselineskip}
+\FormulaThmDeltaK[Faktorabbildung einer paarweise dargestellten Vorschrift]{%
+  \begin{aligned}[t]&\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)\dsep{}\\[-2pt]&\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))\dsep{}\\[-2pt]&\forall a\forall b\,\bigl(P(a,b)\rightarrow\tau(a,b)\in B\bigr)\dsep{}\\[-2pt]&\forall a\forall b\forall c\forall d\,\bigl((P(a,b)\land P(c,d)\land\kappa(a,b)=\kappa(c,d))\rightarrow\tau(a,b)=\tau(c,d)\bigr)\vdash{}\\[-2pt]&\exists!F\,\bigl(F\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)\bigr)\end{aligned}
+}{RepresentativePairFactorization}{%
+  \DeltaRow{Mengen}{Q\dsep B\dsep u\dsep v\dsep z\dsep w}
+  \DeltaRow{Prädikat}{P}
+  \DeltaRow{Termschemata}{\kappa(a,b)\dsep\tau(a,b)}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz der Faktorabbildung}
+  \proofstepwidestar[1]{\forall a\forall b\,\bigl(P(a,b)\rightarrow\kappa(a,b)\in Q\bigr)}{%
+    \rA}
+  \proofstepwidestar[2]{\forall u\in Q\,\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rA}
+  \proofstepwidestar[3]{\forall a\forall b\,\bigl(P(a,b)\rightarrow\tau(a,b)\in B\bigr)}{%
+    \rA}
+  \proofstepwidestar[4]{\forall a\forall b\forall c\forall d\,\bigl((P(a,b)\land P(c,d)\land\kappa(a,b)=\kappa(c,d))\rightarrow\tau(a,b)=\tau(c,d)\bigr)}{%
+    \rA}
+  \proofstepwidestar[5]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[1,2,3,4,5]{\begin{aligned}[t]&\exists!z\in B\,\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land u=\kappa(c,d)\land z=\tau(c,d))\end{aligned}}{%
+    \FormulaRefAuto{RepresentativePairValueUnique}[thm]{1,2,3,4,5}}
+  \proofstepwidestar[1,2,3,4]{\begin{aligned}[t]&\forall u\in Q\,\exists!z\in B\,\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land u=\kappa(c,d)\land z=\tau(c,d))\end{aligned}}{%
+    \rUI{\rRI{5,6}}}
+  \proofstepwidestar[1,2,3,4]{\begin{aligned}[t]&\exists F\,(F\colon Q\to B\land \forall u\in Q\,\forall z\in B\,\bigl((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad \land u=\kappa(c,d)\land z=\tau(c,d)))\rightarrow F(u)=z\bigr))\end{aligned}}{%
+    \FormulaRefAuto{UniqueRelationFunctionExists}[thm]{7}}
+  \proofstepwidestar[9]{\begin{aligned}[t]&F\colon Q\to B\land \forall u\in Q\,\forall z\in B\,\bigl((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land u=\kappa(c,d)\land z=\tau(c,d)))\rightarrow F(u)=z\bigr)\end{aligned}}{%
+    \rA}
+  \proofstepwidestar[9]{F\colon Q\to B}{%
+    \rAEa{9}}
+  \proofstepwidestar[9]{\begin{aligned}[t]&\forall u\in Q\,\forall z\in B\,\bigl((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land u=\kappa(c,d)\land z=\tau(c,d)))\\[-2pt]&\quad\rightarrow F(u)=z\bigr)\end{aligned}}{%
+    \rAEb{9}}
+  \proofstepwidestar[12]{P(a,b)}{%
+    \rA}
+  \proofstepwidestar[1]{P(a,b)\rightarrow\kappa(a,b)\in Q}{%
+    \rUE{\rUE{1}}}
+  \proofstepwidestar[1,12]{\kappa(a,b)\in Q}{%
+    \rRE{13,12}}
+  \proofstepwidestar[3]{P(a,b)\rightarrow\tau(a,b)\in B}{%
+    \rUE{\rUE{3}}}
+  \proofstepwidestar[3,12]{\tau(a,b)\in B}{%
+    \rRE{15,12}}
+  \proofstepwidestar[]{\kappa(a,b)=\kappa(a,b)}{%
+    \rII}
+  \proofstepwidestar[]{\tau(a,b)=\tau(a,b)}{%
+    \rII}
+  \proofstepwidestar[12]{P(a,b)\land\kappa(a,b)=\kappa(a,b)\land\tau(a,b)=\tau(a,b)}{%
+    \rAIStar{12,17,18}}
+  \proofstepwidestar[12]{\begin{aligned}[t]&\exists c\exists d\,(P(c,d)\land \kappa(a,b)=\kappa(c,d)\\[-2pt]&\quad\land \tau(a,b)=\tau(c,d))\end{aligned}}{%
+    \rEIStar{19}}
+  \proofstepwidestar[9]{\begin{aligned}[t]&\kappa(a,b)\in Q\rightarrow \forall z\in B\\[-2pt]&\quad\bigl((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land \kappa(a,b)=\kappa(c,d)\land z=\tau(c,d)))\\[-2pt]&\quad\rightarrow F(\kappa(a,b))=z\bigr)\end{aligned}}{%
+    \rUE{11}}
+  \proofstepwidestar[1,9,12]{\begin{aligned}[t]&\forall z\in B\,\bigl((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land \kappa(a,b)=\kappa(c,d)\land z=\tau(c,d)))\\[-2pt]&\quad\rightarrow F(\kappa(a,b))=z\bigr)\end{aligned}}{%
+    \rRE{21,14}}
+  \proofstepwidestar[1,9,12]{\begin{aligned}[t]&\tau(a,b)\in B\rightarrow((\exists c\exists d\,(P(c,d)\\[-2pt]&\quad\land \kappa(a,b)=\kappa(c,d)\land \tau(a,b)=\tau(c,d)))\\[-2pt]&\quad\rightarrow F(\kappa(a,b))=\tau(a,b))\end{aligned}}{%
+    \rUE{22}}
+  \proofstepwidestar[1,3,9,12]{\begin{aligned}[t]&(\exists c\exists d\,(P(c,d)\land \kappa(a,b)=\kappa(c,d)\\[-2pt]&\quad\land \tau(a,b)=\tau(c,d)))\\[-2pt]&\quad\rightarrow F(\kappa(a,b))=\tau(a,b)\end{aligned}}{%
+    \rRE{23,16}}
+  \proofstepwidestar[1,3,9,12]{F(\kappa(a,b))=\tau(a,b)}{%
+    \rRE{24,20}}
+  \proofstepwidestar[1,3,9]{\forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rUI{\rUI{\rRI{12,25}}}}
+  \proofstepwidestar[1,3,9]{F\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rAIStar{10,26}}
+  \proofstepwidestar[1,3,9]{\exists F\,\bigl(F\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)\bigr)}{%
+    \rEIStar{27}}
+  \proofstepwidestar[1,2,3,4]{\exists F\,\bigl(F\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)\bigr)}{%
+    \rEEStar{8,9,28}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit der Faktorabbildung}
+\setcounter{proofstepnr}{29}
+  \proofstepwidestar[30]{G\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow G(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rA}
+  \proofstepwidestar[31]{H\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow H(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rA}
+  \proofstepwidestar[30]{G\colon Q\to B}{%
+    \rAEa{30}}
+  \proofstepwidestar[31]{H\colon Q\to B}{%
+    \rAEa{31}}
+  \proofstepwidestar[30]{\forall a\forall b\,\bigl(P(a,b)\rightarrow G(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rAEb{30}}
+  \proofstepwidestar[31]{\forall a\forall b\,\bigl(P(a,b)\rightarrow H(\kappa(a,b))=\tau(a,b)\bigr)}{%
+    \rAEb{31}}
+  \proofstepwidestar[36]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[2]{u\in Q\rightarrow\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rUE{2}}
+  \proofstepwidestar[2,36]{\exists a\exists b\,(P(a,b)\land u=\kappa(a,b))}{%
+    \rRE{37,36}}
+  \proofstepwidestar[39]{P(a,b)\land u=\kappa(a,b)}{%
+    \rA}
+  \proofstepwidestar[39]{P(a,b)}{%
+    \rAEa{39}}
+  \proofstepwidestar[39]{u=\kappa(a,b)}{%
+    \rAEb{39}}
+  \proofstepwidestar[30]{P(a,b)\rightarrow G(\kappa(a,b))=\tau(a,b)}{%
+    \rUE{\rUE{34}}}
+  \proofstepwidestar[30,39]{G(\kappa(a,b))=\tau(a,b)}{%
+    \rRE{42,40}}
+  \proofstepwidestar[31]{P(a,b)\rightarrow H(\kappa(a,b))=\tau(a,b)}{%
+    \rUE{\rUE{35}}}
+  \proofstepwidestar[31,39]{H(\kappa(a,b))=\tau(a,b)}{%
+    \rRE{44,40}}
+  \proofstepwidestar[30,31,39]{G(\kappa(a,b))=H(\kappa(a,b))}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{43,45}}
+  \proofstepwidestar[39]{\kappa(a,b)=u}{%
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{41}}
+  \proofstepwidestar[30,31,39]{G(u)=H(u)}{%
+    \rIE{47,46}}
+  \proofstepwidestar[2,30,31,36]{G(u)=H(u)}{%
+    \rEEStar{38,39,48}}
+  \proofstepwidestar[2,30,31]{\forall u\in Q\,(G(u)=H(u))}{%
+    \rUI{\rRI{36,49}}}
+  \proofstepwidestar[2,30,31]{G=H}{%
+    \FormulaRefAuto{FunctionExtensionality}[thm]{32,33,50}}
+\closeproofpartwide
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{51}
+  \proofstepwidestar[1,2,3,4]{\exists!F\,\bigl(F\colon Q\to B\land \forall a\forall b\,\bigl(P(a,b)\rightarrow F(\kappa(a,b))=\tau(a,b)\bigr)\bigr)}{%
+    \UEI{29,30,31,51}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
+\FormulaThmDeltaK[Eindeutige Faktorisierung durch eine Surjektion]{%
+  \begin{aligned}[t]&q\colon S\sur Q\dsep{}\\[-2pt]&h\colon S\to B\dsep{}\\[-2pt]&\forall s\in S\,\forall t\in S\,(q(s)=q(t)\rightarrow h(s)=h(t))\vdash{}\\[-2pt]&\exists!F\,(F\colon Q\to B\land F\circ q=h)\end{aligned}
+}{SurjectionFactorization}{%
+  \DeltaRow{Mengen}{S\dsep Q\dsep B\dsep s\dsep t\dsep u\dsep z}
+  \DeltaRow{Funktionen}{q\dsep h\dsep F\dsep G\dsep H}
+}
+\begin{tabproofsplitwide}
+\proofpartwide{Existenz der Faktorabbildung}
+  \proofstepwidestar[1]{q\colon S\sur Q}{%
+    \rA}
+  \proofstepwidestar[2]{h\colon S\to B}{%
+    \rA}
+  \proofstepwidestar[3]{\forall s\in S\,\forall t\in S\,(q(s)=q(t)\rightarrow h(s)=h(t))}{%
+    \rA}
+  \proofstepwidestar[4]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[1,2,3,4]{\exists!z\in B\,\exists t\in S\,(u=q(t)\land z=h(t))}{%
+    \FormulaRefAuto{SurjectionFiberValueUnique}[thm]{1,2,3,4}}
+  \proofstepwidestar[1,2,3]{\forall u\in Q\,\exists!z\in B\,\exists t\in S\,(u=q(t)\land z=h(t))}{%
+    \rUI{\rRI{4,5}}}
+  \proofstepwidestar[1,2,3]{\exists F\,(F\colon Q\to B\land \forall u\in Q\,\forall z\in B\,\bigl((\exists t\in S\,(u=q(t)\land z=h(t)))\rightarrow F(u)=z\bigr))}{%
+    \FormulaRefAuto{UniqueRelationFunctionExists}[thm]{6}}
+  \proofstepwidestar[8]{F\colon Q\to B\land \forall u\in Q\,\forall z\in B\,\bigl((\exists t\in S\,(u=q(t)\land z=h(t)))\rightarrow F(u)=z\bigr)}{%
+    \rA}
+  \proofstepwidestar[8]{F\colon Q\to B}{%
+    \rAEa{8}}
+  \proofstepwidestar[8]{\begin{aligned}[t]&\forall u\in Q\,\forall z\in B\,\bigl((\exists t\in S\,(u=q(t)\\[-2pt]&\quad\land z=h(t)))\rightarrow F(u)=z\bigr)\end{aligned}}{%
+    \rAEb{8}}
+  \proofstepwidestar[1]{q\colon S\to Q}{%
+    \FormulaRefAuto{Surjektive Funktion}[def]{1}}
+  \proofstepwidestar[1,8]{F\circ q\colon S\to B}{%
+    \FormulaRefAuto{G\circ F\colon A\to C}[thm]{11,9}}
+  \proofstepwidestar[13]{s\in S}{%
+    \rA}
+  \proofstepwidestar[1,13]{q(s)\in Q}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{11,13}}
+  \proofstepwidestar[2,13]{h(s)\in B}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,13}}
+  \proofstepwidestar[]{q(s)=q(s)}{%
+    \rII}
+  \proofstepwidestar[]{h(s)=h(s)}{%
+    \rII}
+  \proofstepwidestar[]{q(s)=q(s)\land h(s)=h(s)}{%
+    \rAIStar{16,17}}
+  \proofstepwidestar[13]{\exists t\in S\,(q(s)=q(t)\land h(s)=h(t))}{%
+    \rEIStar{13,18}}
+  \proofstepwidestar[8]{q(s)\in Q\rightarrow \forall z\in B\,\bigl((\exists t\in S\,(q(s)=q(t)\land z=h(t)))\rightarrow F(q(s))=z\bigr)}{%
+    \rUE{10}}
+  \proofstepwidestar[1,8,13]{\forall z\in B\,\bigl((\exists t\in S\,(q(s)=q(t)\land z=h(t)))\rightarrow F(q(s))=z\bigr)}{%
+    \rRE{20,14}}
+  \proofstepwidestar[1,8,13]{h(s)\in B\rightarrow((\exists t\in S\,(q(s)=q(t)\land h(s)=h(t)))\rightarrow F(q(s))=h(s))}{%
+    \rUE{21}}
+  \proofstepwidestar[1,2,8,13]{\begin{aligned}[t]&(\exists t\in S\,(q(s)=q(t)\land h(s)=h(t)))\\[-2pt]&\quad\rightarrow F(q(s))=h(s)\end{aligned}}{%
+    \rRE{22,15}}
+  \proofstepwidestar[1,2,8,13]{F(q(s))=h(s)}{%
+    \rRE{23,19}}
+  \proofstepwidestar[1,8,13]{(F\circ q)(s)=F(q(s))}{%
+    \FormulaRefAuto{x\in A\vdash(G\circ F)(x)=G(F(x))}[thm]{11,9,13}}
+  \proofstepwidestar[1,2,8,13]{(F\circ q)(s)=h(s)}{%
+    \rIE{24,25}}
+  \proofstepwidestar[1,2,8]{\forall s\in S\,((F\circ q)(s)=h(s))}{%
+    \rUI{\rRI{13,26}}}
+  \proofstepwidestar[1,2,8]{F\circ q=h}{%
+    \FormulaRefAuto{FunctionExtensionality}[thm]{12,2,27}}
+  \proofstepwidestar[1,2,8]{F\colon Q\to B\land F\circ q=h}{%
+    \rAIStar{9,28}}
+  \proofstepwidestar[1,2,8]{\exists F\,(F\colon Q\to B\land F\circ q=h)}{%
+    \rEIStar{29}}
+  \proofstepwidestar[1,2,3]{\exists F\,(F\colon Q\to B\land F\circ q=h)}{%
+    \rEEStar{7,8,30}}
+\closeproofpartwide
+\proofpartwide{Eindeutigkeit aus Surjektivität}
+\setcounter{proofstepnr}{31}
+  \proofstepwidestar[32]{G\colon Q\to B\land G\circ q=h}{%
+    \rA}
+  \proofstepwidestar[33]{H\colon Q\to B\land H\circ q=h}{%
+    \rA}
+  \proofstepwidestar[32]{G\colon Q\to B}{%
+    \rAEa{32}}
+  \proofstepwidestar[33]{H\colon Q\to B}{%
+    \rAEa{33}}
+  \proofstepwidestar[32]{G\circ q=h}{%
+    \rAEb{32}}
+  \proofstepwidestar[33]{H\circ q=h}{%
+    \rAEb{33}}
+  \proofstepwidestar[1,32]{G\circ q\colon S\to B}{%
+    \FormulaRefAuto{G\circ F\colon A\to C}[thm]{11,34}}
+  \proofstepwidestar[1,33]{H\circ q\colon S\to B}{%
+    \FormulaRefAuto{G\circ F\colon A\to C}[thm]{11,35}}
+  \proofstepwidestar[40]{u\in Q}{%
+    \rA}
+  \proofstepwidestar[1,40]{\exists s\in S\,q(s)=u}{%
+    \FormulaRefAuto{Surjektivität}[ax]{1,40}}
+  \proofstepwidestar[42]{s\in S\land q(s)=u}{%
+    \rA}
+  \proofstepwidestar[42]{s\in S}{%
+    \rAEa{42}}
+  \proofstepwidestar[42]{q(s)=u}{%
+    \rAEb{42}}
+  \proofstepwidestar[1,2,32,42]{(G\circ q)(s)=h(s)}{%
+    \FormulaRefAuto{FunctionEqualityEvaluation}[thm]{38,2,43,36}}
+  \proofstepwidestar[1,2,33,42]{(H\circ q)(s)=h(s)}{%
+    \FormulaRefAuto{FunctionEqualityEvaluation}[thm]{39,2,43,37}}
+  \proofstepwidestar[1,32,42]{(G\circ q)(s)=G(q(s))}{%
+    \FormulaRefAuto{x\in A\vdash(G\circ F)(x)=G(F(x))}[thm]{11,34,43}}
+  \proofstepwidestar[1,33,42]{(H\circ q)(s)=H(q(s))}{%
+    \FormulaRefAuto{x\in A\vdash(G\circ F)(x)=G(F(x))}[thm]{11,35,43}}
+  \proofstepwidestar[1,2,32,42]{G(q(s))=h(s)}{%
+    \rIE{47,45}}
+  \proofstepwidestar[1,2,33,42]{H(q(s))=h(s)}{%
+    \rIE{48,46}}
+  \proofstepwidestar[1,2,32,33,42]{G(q(s))=H(q(s))}{%
+    \FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{49,50}}
+  \proofstepwidestar[1,2,32,33,42]{G(u)=H(u)}{%
+    \rIE{44,51}}
+  \proofstepwidestar[1,2,32,33,40]{G(u)=H(u)}{%
+    \rEEStar{41,42,52}}
+  \proofstepwidestar[1,2,32,33]{\forall u\in Q\,(G(u)=H(u))}{%
+    \rUI{\rRI{40,53}}}
+  \proofstepwidestar[1,2,32,33]{G=H}{%
+    \FormulaRefAuto{FunctionExtensionality}[thm]{34,35,54}}
+\closeproofpartwide
+\proofpartwide{Eindeutige Existenz}
+\setcounter{proofstepnr}{55}
+  \proofstepwidestar[1,2,3]{\exists!F\,(F\colon Q\to B\land F\circ q=h)}{%
+    \UEI{31,32,33,55}}
+\closeproofpartwide
+\end{tabproofsplitwide}
+
+
 \section{Leere Bereiche}
 
 \FormulaThmDelta[Leere Relation ist surjektiv auf $\varnothing$]{%
@@ -1498,19 +2476,32 @@ G\circ F\colon A\sur C
 }{%
   \DeltaDecl{Mengen}{y\dsep x}%
 }
-\begin{tabproof}
-  \proofstep{}{ \varnothing\colon \varnothing\to \varnothing }{%
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{}{ \varnothing\colon \varnothing\to \varnothing }{%
     \FormulaRefAuto{\varnothing\colon \varnothing\to M}}
 
-  \proofstep{2}{y\in \varnothing}{\rA}
+
+\closeproofpart
+
+\proofpart{Surjektivität}
+  \setcounter{proofstepnr}{1}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{y\in \varnothing}{\rA}
   \proofstep{}{y\notin \varnothing}{\FormulaRefAuto{x \not\in \varnothing}}
   \proofstep{2}{\bot}{\rBI{2,3}}
   \proofstep{2}{\exists x\in \varnothing\,(\varnothing(x)=y)}{%
     \FormulaRefAuto{P\dsep \neg P \vdash Q}{2,3}}
   \proofstep{}{y\in \varnothing\rightarrow \exists x\in \varnothing\,(\varnothing(x)=y)}{\rRI{2,5}}
 
-  \proofstep{}{ \varnothing\colon \varnothing\sur \varnothing }{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{ \varnothing\colon \varnothing\sur \varnothing }{%
     \FormulaRefAuto{Surjektive Funktion}{1,6}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \end{document}

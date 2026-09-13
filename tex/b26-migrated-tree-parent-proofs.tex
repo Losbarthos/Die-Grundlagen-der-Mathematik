@@ -1,0 +1,262 @@
+% Zitierbare Zwischenergebnisse des allgemeinen Elternsystem-Kriteriums.
+\FormulaThmDeltaK[Graphdaten eines Elternsystems]{%
+  \begin{aligned}[t]
+    \BXXVIIParentSystem VDrh\vdash{}&\GraphStruct{V,D}\land
+      \SimpleUndirectedGraphStruct{V,\BXXVIISymmetricEdges VD}\land{}\\[-2pt]
+    &r\in V\land\forall a\in V\;((a,r)\notin D)
+  \end{aligned}
+}{B27RankedParentGraphData}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep a\dsep x}}
+\begin{proof}
+\emergencystretch=2em
+\FormulaRefAuto{B27RankedParentSystemDef}[def] liefert
+\(D\subseteq V\times V\), \(r\in V\), \(h\colon V\to\mathbb N\),
+\(h(r)=0\) und die strikte Höhenzunahme an jeder Kante.
+Nach \FormulaRefAuto{GraphDef}[def] ist \((V,D)\) ein Graph.
+Aus \FormulaRefAuto{B27SymmetricParentEdgesDef}[def] und
+\FormulaRefAuto{ProductComprehensionMembership}[thm] folgt für
+\(a,x\in V\)
+\[
+ (a,x)\in\BXXVIISymmetricEdges VD
+ \leftrightarrow ((a,x)\in D\lor(x,a)\in D).
+\]
+Die definierte Relation liegt in \(V\times V\); die rechte Seite ist
+unter Vertauschung von \(a,x\) invariant. Daher gilt
+\FormulaRefAuto{UndirectedGraphIntroduction}[thm]. Eine Schleife würde
+in beiden Disjunktionsfällen \(h(x)<h(x)\) ergeben. Dies widerspricht
+\FormulaRefAuto{PeanoStrictEqualityImpossible}[thm] mit der reflexiven
+Gleichheit \(h(x)=h(x)\). Mit
+\FormulaRefAuto{SimpleUndirectedGraphIntroduction}[thm] folgt die
+Schlichtheit. Für \(a\in V\) würde \((a,r)\in D\) entsprechend
+\(h(a)<h(r)=0\) liefern. Der Funktionswert liegt in \(\mathbb N\)
+nach \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm];
+\FormulaRefAuto{PeanoNoLtZero}[thm] schließt die Kante aus.
+\end{proof}
+
+\FormulaThmDeltaK[Höhenzunahme entlang eines gerichteten Elternwegs]{%
+  \begin{aligned}[t]
+    &\BXXVIIParentSystem VDrh\dsep\DirectedPath VDp n\dsep
+      i,j\in\NatSeg{n+1}\dsep i<j\\[-2pt]
+    &\vdash h(p(i))<h(p(j))
+  \end{aligned}
+}{B27RankedPathHeight}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep p\dsep n\dsep i\dsep j}}
+\begin{proof}
+\emergencystretch=2em
+Die Typdaten von \(p\) folgen aus
+\FormulaRefAuto{B27RankedParentGraphData}[thm] und
+\FormulaRefAuto{FinitePathTyping}[thm]. Für jeden Schrittindex
+\(k\in\NatSeg n\) liefern
+\FormulaRefAuto{DirectedPathWalkAxiom}[ax] und
+\FormulaRefAuto{DirectedWalkStepEdge}[thm] die Kante
+\((p(k),p(k+1))\in D\). Nach
+\FormulaRefAuto{B27RankedParentSystemDef}[def] gilt deshalb
+\(h(p(k))<h(p(k+1))\).
+
+Für die festen Parameter \(i,n\) verwenden wir das Prädikat
+\[
+ Q(d)\coloneqq\bigl(i+(d+1)\in\NatSeg{n+1}\rightarrow
+   h(p(i))<h(p(i+(d+1)))\bigr).
+\]
+Induktion über \(d\) mit
+\FormulaRefAuto{PeanoInductionAddOne}[thm] verkettet die Schrittungleichungen.
+Bei \(d=0\) ist die Behauptung unter ihrer Indexvoraussetzung die
+soeben bewiesene Kantenungleichung. Für \(Q(d+1)\) nehmen wir
+\(i+((d+1)+1)\in\NatSeg{n+1}\) an. Dann ist auch der Zwischenindex
+\(i+(d+1)\) zulässig; die Anfangsabschnittskriterien
+\FormulaRefAuto{PeanoNatSegStrictMembership}[thm] und
+\FormulaRefAuto{FinitePathPrefixIndexData}[thm] sichern alle benötigten
+Indexzugehörigkeiten. Die Induktionsungleichung und die letzte
+Schrittungleichung ergeben \(Q(d+1)\) durch
+\FormulaRefAuto{PeanoLtTransitive}[thm]; die Schreibweisen der Indizes
+stimmen nach \FormulaRefAuto{PeanoAddAssociative}[thm] überein.
+Aus dem ursprünglich gegebenen \(i<j\) liefert
+\FormulaRefAuto{PeanoStrictAddOneDistance}[thm] schließlich ein
+\(d\in\mathbb N\) mit \(j=i+(d+1)\). Die nun bewiesene Aussage
+\(Q(d)\) liefert wegen \(j\in\NatSeg{n+1}\) die Behauptung.
+\end{proof}
+
+\FormulaThmDeltaK[Gerichtete Erreichbarkeit vom Wurzelknoten]{%
+  \BXXVIIParentSystem VDrh\dsep x\in V\vdash
+    \exists z\;(z\in\GraphPathsBetween VDrx)
+}{B27RankedDirectedReachability}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep x\dsep n}}
+\begin{proof}
+\emergencystretch=2em
+Wir beweisen für jedes \(n\in\mathbb N\): Jeder Knoten \(x\in V\)
+mit \(h(x)\leq n\) ist durch einen gerichteten einfachen Weg erreichbar.
+Das Induktionsprinzip ist \FormulaRefAuto{PeanoInductionAddOne}[thm].
+Für \(n=0\) gilt \(h(x)=0\), denn
+\FormulaRefAuto{PeanoZeroLeq}[thm] und
+\FormulaRefAuto{PeanoLeqAntisymmetric}[thm] liefern beide Richtungen.
+Wäre \(x\ne r\), so gäbe es nach
+\FormulaRefAuto{B27RankedParentSystemDef}[def] einen Elternknoten
+\(a\in V\) mit \(h(a)<h(x)=0\), entgegen
+\FormulaRefAuto{PeanoNoLtZero}[thm]. Also ist \(x=r\).
+Der Graph \(p=\{(0,r)\}\) ist nach
+\FormulaRefAuto{SingletonGraphFunction}[thm],
+\FormulaRefAuto{SingletonGraphValue}[thm] und
+\FormulaRefAuto{PeanoNatSegOneEquality}[thm] eine injektive Folge auf
+\(\NatSeg1\) mit Anfang und Ende \(r\). Die Kantenbedingung ist auf
+\(\NatSeg0=\varnothing\) leer. Somit gelten
+\FormulaRefAuto{DirectedPathCharacterization}[thm] und
+\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm].
+
+Im Induktionsschritt sei \(h(x)\leq n+1\). Falls \(h(x)\leq n\),
+gilt die Induktionsannahme. Andernfalls liefert
+\FormulaRefAuto{PeanoLeqSplit}[thm], zusammen mit
+\FormulaRefAuto{PeanoLeqAddOneStrictBackward}[thm], die Gleichheit \(h(x)=n+1\).
+Wegen \(h(r)=0\) und \FormulaRefAuto{PeanoZeroNeAddOne}[thm] ist
+\(x\ne r\). Wähle den durch
+\FormulaRefAuto{B27RankedParentSystemDef}[def] gegebenen Elternknoten
+\(a\in V\). Aus \(h(a)<n+1\) folgt \(h(a)\leq n\) nach
+\FormulaRefAuto{PeanoLeqAddOneStrictBackward}[thm]. Die Induktionsannahme und
+\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm] liefern einen
+einfachen Weg \(p\) mit \(p(0)=r\) und \(p(m)=a\).
+Kein Wert von \(p\) kann \(x\) sein: Am Endindex wäre sonst
+\(h(a)=h(x)\); an einem früheren Index ergäbe
+\FormulaRefAuto{B27RankedPathHeight}[thm] sogar \(h(x)<h(a)\).
+Im ersten Fall widerspricht dies \(h(a)<h(x)\) nach
+\FormulaRefAuto{PeanoStrictEqualityImpossible}[thm]. Im zweiten Fall
+liefert \FormulaRefAuto{PeanoLtTransitive}[thm] die unmögliche
+Ungleichung \(h(x)<h(x)\).
+Das Bildmengenkriterium
+\FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash\exists x\in A\;y=F(x)}[thm]
+liefert folglich \(x\notin p[\NatSeg{m+1}]\).
+\FormulaRefAuto{FinitePathFreshEndpointExtension}[thm] hängt die Kante
+\((a,x)\) an; \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm]
+liefert das neue gespeicherte Wegobjekt. Damit ist der Induktionsschritt
+bewiesen. Für den gegebenen Knoten setzen wir schließlich \(n=h(x)\);
+Natürlichkeit und \FormulaRefAuto{PeanoLeqReflexive}[thm] sind erfüllt.
+\end{proof}
+
+\FormulaThmDeltaK[Jeder einfache Wurzelweg folgt der Elternrichtung]{%
+  \begin{aligned}[t]
+    &\BXXVIIParentSystem VDrh\dsep
+      \DirectedPath V{\BXXVIISymmetricEdges VD}p n\dsep p(0)=r\vdash
+      \DirectedPath VDp n
+  \end{aligned}
+}{B27RankedRootPathForward}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep p\dsep n\dsep i}}
+\begin{proof}
+\emergencystretch=2em
+Nach \FormulaRefAuto{FinitePathTyping}[thm] ist \(p\) eine injektive
+Folge auf \(\NatSeg{n+1}\). Für das feste \(n\) setzen wir
+\[
+ Q(i)\coloneqq\bigl(i\in\NatSeg n\rightarrow(p(i),p(i+1))\in D\bigr).
+\]
+Wir beweisen \(Q(i)\) über den natürlichen Schrittindex; das Prinzip ist
+\FormulaRefAuto{PeanoInductionAddOne}[thm]. Das Kantenkriterium aus
+\FormulaRefAuto{B27SymmetricParentEdgesDef}[def] und
+\FormulaRefAuto{ProductComprehensionMembership}[thm] liefert jeweils
+die Vorwärts- oder Rückwärtskante.
+
+Ist der jeweils betrachtete Index nicht in \(\NatSeg n\), ist
+\(Q(i)\) wegen der falschen Voraussetzung erfüllt. Dies erfasst
+insbesondere den Fall \(n=0\). Beim ersten zulässigen Schritt würde
+die Rückwärtskante nach \(p(0)=r\)
+führen. Dies widerspricht
+\FormulaRefAuto{B27RankedParentGraphData}[thm]. Angenommen, der Schritt
+von \(p(i)\) nach \(p(i+1)\) liegt in \(D\), und der nächste Schritt
+läge rückwärts: \((p(i+2),p(i+1))\in D\).
+Der Knoten \(p(i+1)\) ist von \(r=p(0)\) verschieden, da \(p\)
+injektiv und \(i+1\ne0\) ist
+(\FormulaRefAuto{PeanoZeroNeAddOne}[thm]). Die eindeutige
+Elternexistenz in \FormulaRefAuto{B27RankedParentSystemDef}[def]
+und \FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]
+ergeben \(p(i)=p(i+2)\). Injektivität liefert \(i=i+2\).
+Andererseits liefern zwei Anwendungen von
+\FormulaRefAuto{PeanoLtAddOne}[thm] die Ungleichungen
+\(i<i+1\) und \(i+1<i+2\). Nach
+\FormulaRefAuto{PeanoLtTransitive}[thm] gilt also \(i<i+2\), im
+Widerspruch zu \FormulaRefAuto{PeanoStrictEqualityImpossible}[thm].
+Also ist auch der nächste
+Schritt vorwärts gerichtet. Die Indexzugehörigkeiten in diesem Schritt
+folgen aus \FormulaRefAuto{FinitePathPrefixIndexData}[thm] und
+\FormulaRefAuto{FinitePathIndexShiftOne}[thm].
+Die Folge und ihre Injektivität bleiben unverändert; die bewiesenen
+Kantenbedingungen liefern mit
+\FormulaRefAuto{DirectedPathCharacterization}[thm] den gerichteten Pfad.
+\end{proof}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Eindeutigkeit gerichteter Wurzelwege]{%
+  \begin{aligned}[t]
+    &\BXXVIIParentSystem VDrh\dsep x\in V\dsep
+      z,z'\in\GraphPathsBetween VDrx\vdash z=z'
+  \end{aligned}
+}{B27RankedDirectedPathUnique}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep x\dsep z\dsep z'}}
+\begin{proof}
+\emergencystretch=2em
+\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm] schreibt
+\(z=(m,p)\), \(z'=(n,q)\) mit natürlichen Längen und einfachen
+gerichteten Wegen, beide von \(r\) nach \(x\).
+Für die festen Parameter \(V,D,r,h\) betrachten wir
+\[
+\begin{aligned}
+ \mathcal C=\{s\in\mathbb N\mid{}&\exists x\in V\,\exists m,n\in\mathbb N\,
+   \exists p,q\in\powerset(\mathbb N\times V)\\[-2pt]
+ &((m,p),(n,q)\in\GraphPathsBetween VDrx\land{}\\[-2pt]
+ &\quad s=m+n\land(m,p)\ne(n,q))\}.
+\end{aligned}
+\]
+Der Endpunkt wird hier ausdrücklich mitquantifiziert. Die Menge ist
+durch Aussonderung definiert. Wäre sie nicht leer, gäbe
+\FormulaRefAuto{NaturalWellOrderingPrinciple}[thm] eine kleinste
+Gegenbeispiellänge. Wähle zu ihr die angezeigten Endpunkt- und
+Wegzeugen. Sie hätten folgende Eigenschaften.
+
+Ist eine Länge null, so ist \(x=r\). Eine positive andere Länge
+hätte eine letzte eingehende Kante nach \(r\), was
+\FormulaRefAuto{B27RankedParentGraphData}[thm] ausschließt.
+Also sind beide Längen null. Die Folgen sind dann auf
+\(\NatSeg1=\{0\}\) gleich; dies folgt aus
+\FormulaRefAuto{PeanoNatSegOneEquality}[thm] und
+\FormulaRefAuto{FunctionExtensionality}[thm].
+
+Sind beide Längen positiv, liefert
+\FormulaRefAuto{PeanoNonzeroUniquePredecessor}[thm]
+\(m=k+1\) und \(n=l+1\). Der gemeinsame Endpunkt ist wegen
+\FormulaRefAuto{B27RankedParentGraphData}[thm] keine Wurzel.
+Die beiden letzten Kanten geben daher dieselben Eltern:
+\(p(k)=q(l)\), nach \FormulaRefAuto{B27RankedParentSystemDef}[def]
+und der Eindeutigkeitsregel
+\FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm].
+\FormulaRefAuto{FinitePathInitialSegment}[thm] liefert die beiden
+verkürzten Wege \(p\restriction_{\NatSeg{k+1}}\) und
+\(q\restriction_{\NatSeg{l+1}}\) zu diesem gemeinsamen Elternknoten.
+Ihre Längensumme ist kleiner: \(k+l<m+n\) folgt aus
+\FormulaRefAuto{PeanoLtAddOne}[thm] und
+\FormulaRefAuto{PeanoAddStrictMonotoneBoth}[thm]. Die Minimalität
+der gewählten Gegenbeispiellänge erzwingt deshalb die Gleichheit
+der verkürzten Wegobjekte. Nach
+\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]
+sind \(k=l\) und die beiden Einschränkungen gleich.
+Somit sind \(m=n\), alle früheren Koordinaten gleich und beide
+letzten Koordinaten gleich \(x\). Die Aufteilung in den früheren
+Anfangsabschnitt und den letzten Index folgt aus
+\FormulaRefAuto{PeanoNatSegAddOneMembershipIff}[thm].
+\FormulaRefAuto{FunctionExtensionality}[thm] ergibt \(p=q\),
+und das Paargleichheitskriterium liefert \(z=z'\).
+Es gibt daher kein kleinstes und folglich kein Gegenbeispiel.
+\end{proof}
+
+\FormulaThmDeltaK[Eindeutige Wege im symmetrisierten Elternsystem]{%
+  \BXXVIIParentSystem VDrh\vdash
+    \forall x\in V\,\exists!z\;(z\in\GraphPathsBetween V{\BXXVIISymmetricEdges VD}rx)
+}{B27RankedSymmetricRootPaths}{\DeltaRow{Mengen}{V\dsep D\dsep r\dsep h\dsep x\dsep z}}
+\begin{proof}
+\emergencystretch=2em
+Für \(x\in V\) liefert
+\FormulaRefAuto{B27RankedDirectedReachability}[thm] einen gerichteten
+Wurzelweg. Jede Kante aus \(D\) liegt nach
+\FormulaRefAuto{B27SymmetricParentEdgesDef}[def] auch in der
+symmetrisierten Relation. Folglich bleibt die gleiche injektive Folge
+ein Pfad, nach \FormulaRefAuto{DirectedPathCharacterization}[thm].
+Mit \FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm] ist also
+ein gespeicherter symmetrisierter Wurzelweg vorhanden.
+
+Sind zwei solche Wegobjekte gegeben, so liefern
+\FormulaRefAuto{FiniteSimplePathFamilyMembership}[thm] und
+\FormulaRefAuto{B27RankedRootPathForward}[thm] gerichtete Wege
+mit denselben Folgen und Längen. Ihre Gleichheit folgt aus
+\FormulaRefAuto{B27RankedDirectedPathUnique}[thm]. Die Regel
+\UEI{} verbindet den vorhandenen Zeugen mit dieser Eindeutigkeit;
+\rUI{} schließt über den beliebigen Knoten \(x\).
+\end{proof}

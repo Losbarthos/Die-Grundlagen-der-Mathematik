@@ -1,0 +1,120 @@
+\chapter[Band 22: Gerichtete Graphen]{Band 22 auf einen Blick}
+\noindent\textbf{Gerichtete Graphen}\par\medskip
+Vorausgesetzt sind Relationen und endliche Folgen. Es gilt
+\(\NatSeg n=\{i\in\mathbb N\mid i<n\}\); \(n\) zählt Kanten,
+eine Knotenfolge hat daher \(n+1\) Einträge. Schleifen sind zugelassen.
+
+\begin{BandUebersicht}
+\textbf{Graph und Kantenrelation}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E}\ \coloneqq\ E\subseteq V\times V.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{GraphDef}[def]}
+&
+\textbf{Endpunkte liegen im Träger}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E},\ (x,y)\in E\ \vdash\\
+&\qquad x\in V\land y\in V.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{GraphEdgeEndpointTyping}[thm]} \\
+\addlinespace[.8ex]
+
+\textbf{Ein- und Ausnachbarschaften}
+Für \(\GraphStruct{V,E}\) und \(x\in V\):\UebFormel{\begin{aligned}
+&\OutNeighbors E x=\{y\in V\mid(x,y)\in E\},\\
+&\InNeighbors E x=\{y\in V\mid(y,x)\in E\}.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedOutNeighborhoodDef}[def];
+\FormulaRefAuto{DirectedInNeighborhoodDef}[def]}
+&
+\textbf{Mitgliedschaftskriterien}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E},\ x,y\in V\ \vdash\\
+&y\in\OutNeighbors E x\ \leftrightarrow\ (x,y)\in E,\\
+&y\in\InNeighbors E x\ \leftrightarrow\ (y,x)\in E.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedNeighborhoodMembership}[thm]} \\
+\addlinespace[.8ex]
+
+\textbf{Umkehrung und Einschränkung}
+Für \(\GraphStruct{V,E}\) und \(U\subseteq V\):\UebFormel{\begin{aligned}
+&\ReverseEdges E=\{(y,x)\mid(x,y)\in E\},\\
+&\DirectedInducedEdges E U=E\cap(U\times U).
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedReverseEdgeRelationDef}[def];
+\FormulaRefAuto{DirectedInducedEdgeRelationDef}[def]}
+&
+\textbf{Beide Konstruktionen erhalten Graphen}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E}\ \vdash\
+  \GraphStruct{V,\ReverseEdges E},\\
+&\GraphStruct{V,E},\ U\subseteq V\ \vdash\\
+&\qquad\GraphStruct{U,\DirectedInducedEdges E U}.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedReverseGraph}[thm];
+\FormulaRefAuto{DirectedInducedSubgraph}[thm]} \\
+\addlinespace[.8ex]
+
+\textbf{Walk und injektiver Pfad}
+Bei festem \(\GraphStruct{V,E}\) bestehen die Walkaxiome aus\UebFormel{\begin{aligned}
+&n\in\mathbb N,\quad p:\NatSeg{n+1}\to V,\\
+&\forall i\in\NatSeg n\quad(p(i),p(i+1))\in E.\\
+&\DirectedPath V E p n\ \leftrightarrow\\
+&\quad\DirectedWalk V E p n
+ \land p:\NatSeg{n+1}\inj V.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedWalkDef}[def];
+\FormulaRefAuto{DirectedPathDef}[def]}
+&
+\textbf{Typisierung und einzelne Schritte}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E},\
+ \DirectedWalk V E p n\ \vdash\\
+&\qquad p(0)\in V\land p(n)\in V,\\
+&\GraphStruct{V,E},\
+ \DirectedWalk V E p n,\ i\in\NatSeg n\ \vdash\\
+&\qquad(p(i),p(i+1))\in E.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedWalkEndpointTyping}[thm];
+\FormulaRefAuto{DirectedWalkStepEdge}[thm]} \\
+\addlinespace[.8ex]
+
+\textbf{Kreis und Kreisfreiheit}
+Ein Kreis ist ein Walk positiver Länge mit\UebFormel{\begin{aligned}
+&p(0)=p(n),\\
+&\forall i,j\in\NatSeg n\
+   (p(i)=p(j)\to i=j).
+\end{aligned}}Kreisfreiheit schließt sämtliche solchen Kreise aus.
+\UebQuellen{\FormulaRefAuto{DirectedCycleDef}[def];
+\FormulaRefAuto{DirectedAcyclicGraphDef}[def]}
+&
+\textbf{Charakterisierung der Kreisfreiheit}
+\UebFormel{\begin{aligned}
+&\AcyclicGraphStruct{V,E}\ \eqvdash\\
+&\quad\GraphStruct{V,E}\ \land\\
+&\quad\neg\exists n\in\mathbb N\,\exists p\
+          \DirectedCycle V E p n.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedAcyclicGraphCharacterization}[thm]} \\
+\addlinespace[.8ex]
+
+\textbf{Erreichbarkeit}
+Für \(u,v\in V\) bedeutet \(u\GraphReach E v\):\UebFormel{\begin{aligned}
+&u=v\ \lor\ \exists n\in\mathbb N\,\exists p\\
+&\quad(\DirectedWalk V E p n\\
+&\qquad{}\land p(0)=u\land p(n)=v).
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedReachabilityDef}[def]}
+&
+\textbf{Reflexivität und Endpunkttypisierung}
+\UebFormel{\begin{aligned}
+&\GraphStruct{V,E},\ u\in V\ \vdash\
+       u\GraphReach E u,\\
+&\GraphStruct{V,E},\ u\GraphReach E v\ \vdash\\
+&\qquad u\in V\land v\in V.
+\end{aligned}}
+\UebQuellen{\FormulaRefAuto{DirectedReachabilityReflexive}[thm];
+\FormulaRefAuto{DirectedReachabilityEndpointTyping}[thm]} \\
+\addlinespace[.8ex]
+\end{BandUebersicht}
+

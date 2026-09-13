@@ -1,16 +1,26 @@
 # Die Grundlagen der Mathematik
 
-**A German-language, 44-volume LaTeX manuscript that develops mathematics from
+**A German-language LaTeX manuscript with 48 subject volumes and an opening
+overview that develops mathematics from
 logic and set theory using explicit natural-deduction proof tables in the style
 of E. J. Lemmon.**
 
-**Ein deutschsprachiges LaTeX-Manuskript in 44 Bänden, das Mathematik aus Logik
+**Ein deutschsprachiges LaTeX-Manuskript in 48 Fachbänden mit vorangestelltem
+Überblick, das Mathematik aus Logik
 und Mengenlehre mithilfe expliziter Beweistabellen im Stil von E. J. Lemmon
 aufbaut.**
 
 [English](#english) · [Deutsch](#deutsch) ·
 [PDF catalogue / PDF-Verzeichnis](VOLUMES.md) · [Building](BUILDING.md) ·
 [Contributing](CONTRIBUTING.md) · [License / Lizenz](LICENSE.md)
+
+[Band 00: Überblick über die Bände](<output/Bd. 00 - Überblick über die Bände.pdf>)
+stellt Definitionen und Strukturaxiome den zentralen Resultaten gegenüber.
+Gruppen und Ringe sind ab Band 40 nach Strukturklassen auf eigene Bände verteilt. Die bisherige Übersicht
+„Band 27 auf einen Blick“ steht jetzt im Überblicksband.
+
+Ein [Ausbauvorschlag bis zu Gödels Unvollständigkeitssätzen](docs/goedel-ausbau.md)
+beschreibt mögliche zusätzliche Fachbände und ihre Voraussetzungen.
 
 ---
 
@@ -51,16 +61,19 @@ they do **not** certify mathematical correctness.
   foundational method on a substantial body of mathematics.
 - [Volume 26: Trees](<output/Bd. 26 - Bäume.pdf>) develops the axiomatic
   tree language used by the subsequent construction of bracketing trees.
-- [Volume 43: Frankl's Conjecture](<output/Bd. 43 - Frankls Vermutung.pdf>)
+- [Volume 46: Frankl's Conjecture](<output/Bd. 46 - Frankls Vermutung.pdf>)
   is a research-oriented application collecting set-theoretic, quotient, and
   semilattice formulations and proved special cases.
-- [Volume 44: Metric Spaces and Completeness](<output/Bd. 44 - Metrische Räume und Vollständigkeit.pdf>)
+- [Volume 47: Metric Spaces and Completeness](<output/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
   is a comparatively compact entry into the analytic branch.
+- [Volume 48: Axiomatic Set Theory II](<output/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
+  is a meta-methodological supplement for power set, cardinality, and continuum
+  arguments.
 - The [complete bilingual volume catalogue](VOLUMES.md) links all current PDFs.
 
-[![A page with Lemmon-style proof tables from Volume 43](docs/assets/lemmon-proof-example.png)](<output/Bd. 43 - Frankls Vermutung.pdf>)
+[![A page with Lemmon-style proof tables from Volume 46](docs/assets/lemmon-proof-example.png)](<output/Bd. 46 - Frankls Vermutung.pdf>)
 
-*Example: explicit proof tables in Volume 43. Click the image to open the
+*Example: explicit proof tables in Volume 46. Click the image to open the
 volume.*
 
 ### Intended audience
@@ -142,11 +155,14 @@ Korrektheit.
 - [Band 26: Bäume](<output/Bd. 26 - Bäume.pdf>) entwickelt die
   axiomatische Baumsprache für die anschließende Konstruktion der
   Klammerungsbäume.
-- [Band 43: Frankls Vermutung](<output/Bd. 43 - Frankls Vermutung.pdf>) ist
+- [Band 46: Frankls Vermutung](<output/Bd. 46 - Frankls Vermutung.pdf>) ist
   eine forschungsnahe Anwendung mit Mengen-, Quotienten- und
   Halbverbandsfassungen sowie bewiesenen Spezialfällen.
-- [Band 44: Metrische Räume und Vollständigkeit](<output/Bd. 44 - Metrische Räume und Vollständigkeit.pdf>)
+- [Band 47: Metrische Räume und Vollständigkeit](<output/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
   bietet einen vergleichsweise kompakten Einstieg in den analytischen Zweig.
+- [Band 48: Axiomatische Mengenlehre II](<output/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
+  ergänzt die formale Methodik für Aussagen zu Potenzmengen, Kardinalität und
+  Kontinuum.
 - Das [vollständige zweisprachige Bandverzeichnis](VOLUMES.md) verlinkt alle
   aktuellen PDFs.
 

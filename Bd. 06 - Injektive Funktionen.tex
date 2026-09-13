@@ -85,9 +85,11 @@ Eigenschaft die Injektivität ist.
   \proofstep{1}{C\subseteq A}{\rA}
   \proofstep{2}{F\colon A\inj B}{\rA}
   \proofstep{3}{x\in C}{\rA}
+  \proofstep{2}{F \colon A \to B}{%
+      \FormulaRefAuto{Injektive Funktion}{2}}
   \proofstep{1,2,3}{F(x)\in F[C]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep x\in C\vdash F(x)\in F[C]}{%
-      1,\FormulaRefAuto{Injektive Funktion}{2},3}}
+      1,4,3}}
 \end{tabproof}
 
 \FormulaThmDelta[Elemente des Definitionsbereichs liegen im Bild unter injektiven Funktionen]{%
@@ -200,10 +202,8 @@ Eigenschaft die Injektivität ist.
     \proofstepwidestar[1,2,3,4,7]{x\in Y}{%
       \FormulaRefAuto{F\colon A\inj B \dsep Y\in\powerset(A)\dsep x\in A\dsep F(x)\in F[Y] \vdash x\in Y}{1,3,8,10}}
 
-    \proofstepwidestar[1,2,3,4]{x\in X\rightarrow x\in Y}{\rRI{7,11}}
-    \proofstepwidestar[1,2,3,4]{\forall x\,(x\in X\rightarrow x\in Y)}{\rUI{\rRI{7,12}}}
     \proofstepwidestar[1,2,3,4]{X\subseteq Y}{%
-      \FormulaRefAuto{A\subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{13}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[7]\vdots 11}}
   \closeproofpartwideindR
 
   \proofpartwideindR[Teilmengenrichtung \(Y\subseteq X\)]{%
@@ -283,13 +283,17 @@ Eigenschaft die Injektivität ist.
       1,2,3,\rAEa{9},\rAEa{10},\rAEb{9},\rAEb{10}}}
   \proofstep{1,2,3,9,10}{\exists x\in A\cap B\,y=F(x)}{%
     \rEI{\rAI{11,\rAEb{9}}}}
+  \proofstep{}{A \cap B \subseteq A}{%
+      \FormulaRefAuto{A\cap B\subseteq A}}
+  \proofstep{2}{A \cap B \subseteq M}{%
+      \FormulaRefAuto{A\subseteq B,\, B\subseteq C \vdash A\subseteq C}{%
+        13,2}}
   \proofstep{1,2,3,9,10}{y\in F[A\cap B]}{%
     \FormulaRefAuto{C\subseteq A\dsep F\colon A\to B\dsep \exists x\in C\,y=F(x)\vdash y\in F[C]}{%
-      \FormulaRefAuto{A\subseteq B,\, B\subseteq C \vdash A\subseteq C}{%
-        \FormulaRefAuto{A\cap B\subseteq A},2},%
+      14,%
       6,12}}
-  \proofstep{1,2,3,5,9}{y\in F[A\cap B]}{\rEE{8,10,13}}
-  \proofstep{1,2,3,4,5}{y\in F[A\cap B]}{\rEE{7,9,14}}
+  \proofstep{1,2,3,5,9}{y\in F[A\cap B]}{\rEE{8,10,15}}
+  \proofstep{1,2,3,4,5}{y\in F[A\cap B]}{\rEE{7,9,16}}
 \end{tabproof}
 
 
@@ -329,9 +333,8 @@ Eigenschaft die Injektivität ist.
     \proofstepwidestar[4]{y\in F[B]}{\rAEb{5}}
     \proofstepwidestar[1,2,3,6,7]{y\in F[A\cap B]}{%
       \FormulaRefAuto{F\colon M\inj N \dsep A\subseteq M \dsep B\subseteq M \dsep y\in F[A] \dsep y\in F[B] \vdash y\in F[A\cap B]}{1,2,3,6,7}}
-    \proofstepwidestar[1]{\forall y\,\bigl(y\in F[A]\cap F[B]\rightarrow y\in F[A\cap B]\bigr)}{\rUI{\rRI{4,8}}}
     \proofstepwidestar[1]{F[A]\cap F[B]\subseteq F[A\cap B]}{%
-      \FormulaRefAuto{A\subseteq B \coloneq \forall x\,(x\in A \rightarrow x\in B)}{9}}
+      \FormulaRefAuto{SubsetIntroductionRule}[thm]{[4]\vdots 8}}
   \closeproofpartwideind
 
   \proofpartwide{Zusammenfassung}
@@ -381,15 +384,28 @@ Eigenschaft die Injektivität ist.
   \DeltaDecl{Mengen}{A\dsep B\dsep C}%
   \DeltaDecl{Funktionen}{F}%
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\inj B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp im kleineren Zielbereich}
+\proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{\forall x\in A\,F(x)\in C}{\rA}
   \proofstep{1}{F\colon A\to B}{\FormulaRefAuto{Injektive Funktion}{1}}
   \proofstep{1,2}{F\colon A\to C}{\FormulaRefAuto{F\colon A\to B\dsep \forall x\in A\,F(x)\in C\vdash F\colon A\to C}{3,2}}
-  \proofstep{1}{x\in A\land y\in A\land F(x)=F(y)\rightarrow x=y}{%
+
+\closeproofpart
+
+\proofpart{Injektivität}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{x\in A\land y\in A\land F(x)=F(y)\rightarrow x=y}{%
     \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep F(x)=F(y)\vdash x=y}{1}}
-  \proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \FormulaThmDeltaK[Erweiterung der Zielmenge erhält Injektivität]{%
@@ -398,17 +414,30 @@ Eigenschaft die Injektivität ist.
   \DeltaDecl{Mengen}{A\dsep B\dsep C}%
   \DeltaDecl{Funktionen}{F}%
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\inj B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp im größeren Zielbereich}
+\proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{B\subseteq C}{\rA}
   \proofstep{1}{F\colon A\to B}{\FormulaRefAuto{Injektive Funktion}{1}}
   \proofstep{1,2}{F\colon A\to C}{%
     \FormulaRefAuto{F\colon A\to B\dsep B\subseteq C\vdash F\colon A\to C}{3,2}}
-  \proofstep{1}{x\in A\land y\in A\land F(x)=F(y)\rightarrow x=y}{%
+
+\closeproofpart
+
+\proofpart{Injektivität}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1}{x\in A\land y\in A\land F(x)=F(y)\rightarrow x=y}{%
     \FormulaRefAuto{F\colon A\inj B\dsep x\in A\dsep y\in A\dsep
     F(x)=F(y)\vdash x=y}{1}}
-  \proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
-\end{tabproof}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{5}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{F\colon A\inj C}{\FormulaRefAuto{Injektive Funktion}{4,5}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 \subsection{Einschränkungen}
 
@@ -442,17 +471,30 @@ F\restriction_C(x)=F\restriction_C(y) \vdash x=y
   \DeltaRow{Mengen}{A\dsep B\dsep C}
   \DeltaRow{Funktionen}{F}
 }
-\begin{tabproof}
-  \proofstep{1}{F\colon A\inj B}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{F\colon A\inj B}{\rA}
   \proofstep{2}{C\subseteq A}{\rA}
   \proofstep{2}{F\restriction_C\colon C\to B}{%
     \FormulaRefAuto{C\subseteq A \vdash F\restriction_C\colon C\to B}{2}}
-  \proofstep{1,2}{\forall x,y\in C\,(F\restriction_C(x)=F\restriction_C(y)\rightarrow x=y)}{%
+
+\closeproofpart
+
+\proofpart{Injektivität}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\forall x,y\in C\,(F\restriction_C(x)=F\restriction_C(y)\rightarrow x=y)}{%
     \FormulaRefAuto{F\colon A\inj B\dsep C\subseteq A \dsep x\in C \dsep y\in C \dsep
 F\restriction_C(x)=F\restriction_C(y) \vdash x=y}{1,2}}
-  \proofstep{1,2}{F\restriction_C\colon C\inj B}{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{4}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{F\restriction_C\colon C\inj B}{%
     \FormulaRefAuto{Injektive Funktion}{3,4}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \subsection{Einschränkung auf Urbilder}
@@ -986,9 +1028,11 @@ x\in A \dsep y\in A \dsep (G\circ F)(x)=(G\circ F)(y) \vdash x=y
   \proofstep{3}{y\in A}{\rA}
   \proofstep{2}{F(x)\in B}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2}}
   \proofstep{3}{F(y)\in B}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{3}}
-  \proofstep{1}{G(F(x))=G(F(y))}{\rIE{\FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))},1}}
-  \proofstep{1,2,3}{F(x)=F(y)}{\FormulaRefAuto{Injektivität}{4,5,6}}
-  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{Injektivität}{2,3,7}}
+  \proofstep{}{\forall t\in A\,((G\circ F)(t)=G(F(t)))}{%
+      \FormulaRefAuto{x\in A \vdash (G\circ F)(x)=G(F(x))}}
+  \proofstep{1}{G(F(x))=G(F(y))}{\rIE{6,1}}
+  \proofstep{1,2,3}{F(x)=F(y)}{\FormulaRefAuto{Injektivität}{4,5,7}}
+  \proofstep{1,2,3}{x=y}{\FormulaRefAuto{Injektivität}{2,3,8}}
 \end{tabproof}
 
 
@@ -1072,20 +1116,33 @@ A\subseteq B\vdash F\restriction_A = F\circ \iota_{A,B}%
 }{%
   \DeltaDecl{Mengen}{M\dsep x\dsep y}%
 }
-\begin{tabproof}
-  \proofstep{}{ \varnothing\colon \varnothing\to M }{%
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{}{ \varnothing\colon \varnothing\to M }{%
     \FormulaRefAuto{\varnothing\colon \varnothing\to M}}
 
-  \proofstep{2}{x\in \varnothing \land y\in \varnothing \land \varnothing(x)=\varnothing(y)}{\rA}
+
+\closeproofpart
+
+\proofpart{Injektivität}
+  \setcounter{proofstepnr}{1}% Fortlaufende Schritte dieses Beweises.
+\proofstep{2}{x\in \varnothing \land y\in \varnothing \land \varnothing(x)=\varnothing(y)}{\rA}
   \proofstep{2}{x\in \varnothing}{\rAEa{2}}
   \proofstep{}{x\notin \varnothing}{\FormulaRefAuto{x \not\in \varnothing}}
   \proofstep{2}{\bot}{\rBI{3,4}}
   \proofstep{2}{x=y}{\FormulaRefAuto{P\dsep \neg P \vdash Q}{3,4}}
   \proofstep{}{(x\in \varnothing \land y\in \varnothing \land \varnothing(x)=\varnothing(y))\rightarrow x=y}{\rRI{2,6}}
 
-  \proofstep{}{ \varnothing\colon \varnothing\inj M }{%
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{}{ \varnothing\colon \varnothing\inj M }{%
     \FormulaRefAuto{Injektive Funktion}{1,7}}
-\end{tabproof}
+
+\closeproofpart
+\end{tabproofsplit}
 
 
 \section{Adjunktionsabbildung einer Mengenfamilie}
@@ -1196,8 +1253,9 @@ Funktion zwischen diesen Teilfamilien.
   \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a}
   \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
 }
-\begin{tabproof}
-  \proofstep{1}{\UnionClosedFam(M)}{\rA}
+\begin{tabproofsplit}
+\proofpart{Funktionstyp}
+\proofstep{1}{\UnionClosedFam(M)}{\rA}
   \proofstep{2}{\{a\}\in M}{\rA}
   \proofstep{1,2}{\FranklAdj{M}{a}\colon
     \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{%
@@ -1205,7 +1263,12 @@ Funktion zwischen diesen Teilfamilien.
     \vdash \FranklAdj{M}{a}\colon
     \FamAvoiding{M}{a}\to \FamContaining{M}{a}}{1,2}}
 
-  \proofstep{4}{X\in \FamAvoiding{M}{a}}{\rA}
+
+\closeproofpart
+
+\proofpart{Injektivität}
+  \setcounter{proofstepnr}{3}% Fortlaufende Schritte dieses Beweises.
+\proofstep{4}{X\in \FamAvoiding{M}{a}}{\rA}
   \proofstep{5}{Y\in \FamAvoiding{M}{a}}{\rA}
   \proofstep{6}{\FranklAdj{M}{a}(X)=\FranklAdj{M}{a}(Y)}{\rA}
   \proofstep{1,2,4}{\FranklAdj{M}{a}(X)=X\cup\{a\}}{%
@@ -1222,21 +1285,32 @@ Funktion zwischen diesen Teilfamilien.
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{9,6}}
   \proofstep{1,2,4,5,6}{X\cup\{a\}=Y\cup\{a\}}{%
     \FormulaRefAuto{a = b,\, b = c \vdash a = c}{10,8}}
+  \proofstep{4}{X\in M\land a\notin X}{%
+      \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{4}}
   \proofstep{4}{a\notin X}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{4}}}
+    \rAEb{12}}
+  \proofstep{5}{Y\in M\land a\notin Y}{%
+      \FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
+    \{X\in M\mid a\notin X\}}{5}}
   \proofstep{5}{a\notin Y}{%
-    \rAEb{\FormulaRefAuto{\FamAvoiding{M}{a}\coloneqq
-    \{X\in M\mid a\notin X\}}{5}}}
+    \rAEb{14}}
   \proofstep{1,2,4,5,6}{X=Y}{%
     \FormulaRefAuto{a\notin X\dsep a\notin Y\dsep
-    X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{12,13,11}}
+    X\cup\{a\}=Y\cup\{a\}\vdash X=Y}{13,15,11}}
 
-  \proofstep{1,2}{\FranklAdj{M}{a}\colon
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{16}% Fortlaufende Schritte dieses Beweises.
+\proofstep{1,2}{\FranklAdj{M}{a}\colon
     \FamAvoiding{M}{a}\inj \FamContaining{M}{a}}{%
     \FormulaRefAuto{Injektive Funktion}{%
-      3,\rUI{\rRI{4,\rRI{5,\rRI{6,14}}}}}}
-\end{tabproof}
+      3,\rUI{\rRI{4,\rRI{5,\rRI{6,16}}}}}}
+
+\closeproofpart
+\end{tabproofsplit}
 
 Die Adjunktionsabbildung ist im Allgemeinen nicht surjektiv. Für
 \(M=\{\{a\},\{a,b\}\}\) mit \(a\neq b\) ist \(M\)

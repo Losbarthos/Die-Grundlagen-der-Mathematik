@@ -8,6 +8,7 @@ sind beschreibende Übersetzungen und keine eigenständigen englischen Ausgaben.
 
 | Volume | Deutscher Titel | English title | PDF |
 | ---: | --- | --- | :---: |
+| 00 | Überblick über die Bände | Overview of the Volumes | [PDF](<output/Bd. 00 - Überblick über die Bände.pdf>) |
 | 01 | Grundlagen der Logik | Foundations of Logic | [PDF](<output/Bd. 01 - Grundlagen der Logik.pdf>) |
 | 02 | Theoreme der Logik | Theorems of Logic | [PDF](<output/Bd. 02 - Theoreme der Logik.pdf>) |
 | 03 | Mengenlehre | Set Theory | [PDF](<output/Bd. 03 - Mengenlehre.pdf>) |
@@ -47,10 +48,14 @@ sind beschreibende Übersetzungen und keine eigenständigen englischen Ausgaben.
 | 37 | Endliche Halbgruppen | Finite Semigroups | [PDF](<output/Bd. 37 - Endliche Halbgruppen.pdf>) |
 | 38 | Monoide | Monoids | [PDF](<output/Bd. 38 - Monoide.pdf>) |
 | 39 | Halbringe | Semirings | [PDF](<output/Bd. 39 - Halbringe.pdf>) |
-| 40 | Gruppen und Ringe | Groups and Rings | [PDF](<output/Bd. 40 - Gruppen und Ringe.pdf>) |
-| 41 | Endliche Gruppen | Finite Groups | [PDF](<output/Bd. 41 - Endliche Gruppen.pdf>) |
-| 42 | Halbverbände und Verbände | Semilattices and Lattices | [PDF](<output/Bd. 42 - Halbverbände und Verbände.pdf>) |
-| 43 | Frankls Vermutung | Frankl's Conjecture | [PDF](<output/Bd. 43 - Frankls Vermutung.pdf>) |
-| 44 | Metrische Räume und Vollständigkeit | Metric Spaces and Completeness | [PDF](<output/Bd. 44 - Metrische Räume und Vollständigkeit.pdf>) |
+| 40 | Gruppen | Groups | [PDF](<output/Bd. 40 - Gruppen.pdf>) |
+| 41 | Abelsche Gruppen | Abelian Groups | [PDF](<output/Bd. 41 - Abelsche Gruppen.pdf>) |
+| 42 | Endliche Gruppen | Finite Groups | [PDF](<output/Bd. 42 - Endliche Gruppen.pdf>) |
+| 43 | Ringe mit Eins | Rings with Identity | [PDF](<output/Bd. 43 - Ringe mit Eins.pdf>) |
+| 44 | Kommutative Ringe mit Eins | Commutative Rings with Identity | [PDF](<output/Bd. 44 - Kommutative Ringe mit Eins.pdf>) |
+| 45 | Halbverbände und Verbände | Semilattices and Lattices | [PDF](<output/Bd. 45 - Halbverbände und Verbände.pdf>) |
+| 46 | Frankls Vermutung | Frankl's Conjecture | [PDF](<output/Bd. 46 - Frankls Vermutung.pdf>) |
+| 47 | Metrische Räume und Vollständigkeit | Metric Spaces and Completeness | [PDF](<output/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>) |
+| 48 | Axiomatische Mengenlehre II | Axiomatic Set Theory II | [PDF](<output/Bd. 48 - Axiomatische Mengenlehre II.pdf>) |
 
 [Back to the README / Zurück zur README](README.md)

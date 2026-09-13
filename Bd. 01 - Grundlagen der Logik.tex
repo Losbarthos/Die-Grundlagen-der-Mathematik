@@ -516,21 +516,21 @@ diese besondere Situation, keine neue Art von Formel.
 \end{example}
 
 \begin{definition}[Eigenvariablenbedingung \(P(x)\mid_x\)]
-Sei \(P(x)\) eine Formel mit einer freien Variable \(x\). Wir schreiben
-\[
-  P_1,\dots,P_{j-1},\,P(x)\mid_x,\,P_{j+1},\dots,P_n \vdash R,
-\]
-wenn
+Sei \(P(x)\) die Formel einer bereits hergeleiteten Zeile mit
+Abhaengigkeitsmenge \(I\). Die Markierung \(P(x)\mid_x\) in einem
+Regelschema bedeutet:
 \begin{itemize}
-  \item die zugrunde liegende Formel an der \(j\)-ten Stelle genau \(P(x)\)
-        ist und
-  \item es eine Beweistabelle mit letzter Zeile \(R\) gibt, deren offene
-        Annahmen genau \(P_1,\dots,P_n\) sind und in der \(x\) in keiner
-        der Annahmen \(P_i\) mit \(i\neq j\) frei vorkommt.
+  \item Die betreffende Schema-Praemisse wird durch diese Zeile
+        mit Formel \(P(x)\) belegt.
+  \item Fuer jeden Index \(k\in I\) kommt \(x\) in der Formel der
+        Annahmezeile \(k\) nicht frei vor.
 \end{itemize}
-Die Schreibweise \(P(x)\mid_x\) ist damit eine Kurzform für die übliche
-Eigenvariablenbedingung; sie verändert die Liste der Annahmen
-\(P_1,\dots,P_n\) nicht, sondern markiert nur den Eintrag \(P(x)\).
+Die Markierung fuehrt keine Annahme \(P(x)\) ein und entlaedt
+keine Annahme. Insbesondere gibt es fuer eine etwaige offene
+Annahme \(P(x)\) keine Ausnahme: Eine bloss angenommene Formel
+mit freiem \(x\) darf nicht durch \(\forall I\) verallgemeinert
+werden. Bei der All-Einfuehrung bleibt die Abhaengigkeitsmenge
+\(I\) unveraendert.
 \end{definition}
 
 \begin{definition}[Subbeweis mit Eigenvariablenbedingung \(P(x)\vdots Q\mid_x\)]
@@ -726,8 +726,8 @@ tabellarisch:
         Formel nicht frei vor.
 \end{itemize}
 Mit anderen Worten: In allen offenen Annahmen, von denen die Zeile
-\(m_{i_j}\) abhängt, ist \(x\) (abgesehen von der Formel \(P(x)\)
-selbst) nicht frei. Dies ist genau die Eigenvariablenbedingung, die
+\(m_{i_j}\) abhängt, ist \(x\) nicht frei. Die hergeleitete
+Formel \(P(x)\) darf \(x\) dagegen frei enthalten. Dies ist die Eigenvariablenbedingung, die
 bei der Allquantor-Einführung \(\forall I\) verwendet wird.
 
 \medskip
@@ -898,6 +898,16 @@ Schlussaussage in einem eigenen Beweisteil unabhängig bewiesen werden; eine
 abschließende Konjunktionseinführung ist nicht erforderlich. Soll hingegen
 die Konjunktion selbst die Schlussformel sein, so wird sie im formalen Kern
 ausdrücklich mit \(\land\) notiert und entsprechend bewiesen.
+
+Die aufgezählten Hauptaussagen erhalten die Teilnummern
+\textup{(i)}, \textup{(ii)}, \dots. Gesondert registrierte Hilfssätze
+innerhalb eines Beweises tragen hinter der Nummer des zugehörigen
+Theorems die Zusätze \textup{(H1)}, \textup{(H2)}, \dots.
+So bezeichnet etwa \textup{28.2.15.3(H1)} den ersten registrierten
+Hilfssatz im Beweis zu Theorem~\textup{28.2.15.3}; die erste
+Hauptaussage wird als Teil~\textup{(i)} dieses Theorems bezeichnet.
+Damit sind beide Nummerierungen auch bei zusätzlichen Hilfssätzen
+eindeutig unterscheidbar.
 \end{remark}
 
 \begin{definition}[Axiom]
@@ -1245,6 +1255,9 @@ eine Eigenschaft eindeutig charakterisiert ist. Dazu verwenden wir
 ein spezielles Bindungssymbol.
 
 \begin{definition}[Iota-Symbol]
+\label{def:iota-symbol}
+\ThmLookupRegister{def:iota-symbol}{definition}{\theformulaDef}{IotaSymbolDef}{Iota-Symbol}
+\ThmLookupRegisterId{IotaSymbolDef}{definition}{def:iota-symbol}
 Sei \(P(x)\) eine Aussage über \(x\). Falls es \emph{genau ein}
 Objekt mit dieser Eigenschaft gibt, schreiben wir
 \[
@@ -1260,6 +1273,9 @@ vorausgesetzt ist.
 \end{definition}
 
 \begin{definition}[Iota-Definition]
+\label{def:iota-definition}
+\ThmLookupRegister{def:iota-definition}{definition}{\theformulaDef}{IotaDefinitionDef}{Iota-Definition}
+\ThmLookupRegisterId{IotaDefinitionDef}{definition}{def:iota-definition}
 Sei \(P(x)\) eine wohldefinierte Eigenschaft und \(\sigma\) ein
 neues Konstantensymbol. Wenn \(\exists! x\,P(x)\) gilt, können wir
 \[
@@ -1415,7 +1431,7 @@ durch das schematische \(\vdash\) mitabgedeckt.
         \([P]\vdots \bot \;\vdash_{\neg I}\; \neg P\) \\[0.6ex]
       & Eliminierung von \(\neg\)
       & \label{rule:CE}%
-        \(\neg P,\; \bot \;\vdash_{\neg E}\; P\) \\[0.9ex]
+        \([\neg P]\vdots \bot \;\vdash_{\neg E}\; P\) \\[0.9ex]
 
     % --- Allquantor ---
     $\forall$
@@ -1447,6 +1463,13 @@ durch das schematische \(\vdash\) mitabgedeckt.
     \bottomrule
   \end{tabularx}
 \end{center}
+
+Die klassische Regel \(\neg E\) entlaedt die fuer den
+Widerspruchsbeweis angenommene Negation. Ihre Abhaengigkeitsmenge
+ist diejenige der Widerspruchszeile ohne den Index dieser Annahme.
+Bei \(\forall E\), \(\exists I\) und \(=E\) sind Einsetzungen
+stets kollisionsfrei: Kein freies Vorkommen einer Variable des
+eingesetzten Terms darf durch einen Quantor eingefangen werden.
 
 \subsection{Kurznotation für iterierte Gleichheitselimination}
 

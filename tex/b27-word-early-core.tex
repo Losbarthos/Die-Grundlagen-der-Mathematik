@@ -1,0 +1,211 @@
+% Früh einfügen: nach Leerwort/Buchstabenwörtern, vor Konkatenation.
+% Benötigt nur die Wortmenge, ihre Länge und die Bände 03--20.
+\section{Die primitive Anfügung und ihre Grundgesetze}
+
+Bevor zwei beliebige Wörter miteinander verknüpft werden, betrachten wir
+die bereits durch \(J(u,a)\) beschriebene Anfügung eines einzelnen
+Buchstabens. Für die anschließende Axiomatik benötigen wir diesen
+Erzeugungsschritt als Funktion auf der Wortmenge. Wir fassen ihn deshalb
+zu einer Abbildung \(\sigma_A:\FiniteWords A\times A\to\FiniteWords A\)
+zusammen und weisen ihre Grundgesetze nach. Sie übernimmt im konkreten
+Wortmodell die Rolle der späteren abstrakten Anfügungsfunktion \(s\).
+Die Minimalität ist durch die Anfangskonstruktion bereits gesichert.
+
+\Needspace{18\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Die primitive Anfügung bleibt in der Wortmenge]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+    u\cup\{(\WordLength u,a)\}\in\FiniteWords A
+}{EarlyWordAdjunctionClosed}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{u\in\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordInUniverse}[thm]{1}}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction u a\in\FiniteWords A}{\FormulaRefAuto{GeneratedWordClosed}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction u a=u\cup\{(\FiniteCard(u),a)\}}{\FormulaRefAuto{OccurrenceCardinalAdjunctionDef}[def]{3,2}}
+  \proofstepwidestar[1]{\WordLength u=\FiniteCard(u)}{\FormulaRefAuto{FiniteWordLengthCardinality}[thm]{1}}
+  \proofstepwidestar[1,2]{u\cup\{(\WordLength u,a)\}\in\FiniteWords A}{\rIE{5,6,4}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaDefDeltaK[Anfügungsfunktion des Wortmodells]{%
+  \begin{aligned}[t]
+    &\sigma_A\coloneqq\bigl\{(p,z)\in
+      (\FiniteWords A\times A)\times\FiniteWords A\bigm|{}\\[-2pt]
+    &\qquad z=\pi_1(p)\cup\{(\WordLength{\pi_1(p)},\pi_2(p))\}\bigr\}
+  \end{aligned}
+}{WordModelSuccessorDef}{%
+  \DeltaRow{Mengen}{A\dsep p\dsep z}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Anfügungsfunktion}{\sigma_A}
+}
+\end{minipage}\par
+Die Projektionen beziehen sich hier auf \(\FiniteWords A\times A\).
+Wir schreiben \(\sigma_A(u,a)\) für den Wert am geordneten Paar \((u,a)\).
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[W0: Typisierung des konkreten Wortmodells]{%
+  \EmptyWord A\in\FiniteWords A\land
+    \sigma_A\colon\FiniteWords A\times A\to\FiniteWords A
+}{EarlyWordSuccessorTyping}{\DeltaRow{Mengen}{A\dsep p\dsep u\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[]{\EmptyWord A\in\FiniteWords A}{\FormulaRefAuto{EmptyWordFinite}[thm]}
+  \proofstepwidestar[2]{p\in\FiniteWords A\times A}{\rA}
+  \proofstepwidestar[2]{\pi_1(p)\in\FiniteWords A\land\pi_2(p)\in A}{%
+    \rAI{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{\FormulaRefAuto{FirstProjectionDef}[def],2},\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{\FormulaRefAuto{SecondProjectionDef}[def],2}}}
+  \proofstepwidestar[2]{\pi_1(p)\cup\{(\WordLength{\pi_1(p)},\pi_2(p))\}\in\FiniteWords A}{\FormulaRefAuto{EarlyWordAdjunctionClosed}[thm]{\rAEa{3},\rAEb{3}}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall p\in\FiniteWords A\times A\\[-2pt]
+    &\quad\pi_1(p)\cup\{(\WordLength{\pi_1(p)},\pi_2(p))\}\in\FiniteWords A
+  \end{aligned}}{\rUI{\rRI{2,4}}}
+  \proofstepwidestar[]{\sigma_A\colon\FiniteWords A\times A\to\FiniteWords A}{%
+    \rIE{\FormulaRefAuto{WordModelSuccessorDef}[def],\FormulaRefAuto{TypedTermGraphFunction}[thm]{5}}}
+  \proofstepwidestar[]{\EmptyWord A\in\FiniteWords A\land
+    \sigma_A\colon\FiniteWords A\times A\to\FiniteWords A}{\rAI{1,6}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Grundgleichung der primitiven Anfügung]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+    \sigma_A(u,a)=u\cup\{(\WordLength u,a)\}
+}{EarlyWordSuccessorEquation}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1,2]{(u,a)\in\FiniteWords A\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{1,2}}}
+  \proofstepwidestar[1,2]{u\cup\{(\WordLength u,a)\}\in\FiniteWords A}{\FormulaRefAuto{EarlyWordAdjunctionClosed}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &((u,a),u\cup\{(\WordLength u,a)\})\\[-2pt]
+    &\quad\in(\FiniteWords A\times A)\times\FiniteWords A
+  \end{aligned}}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{3,4}}}
+  \proofstepwidestar[1,2]{\pi_1(u,a)=u}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_1(x,y)=x}[thm]{3}}
+  \proofstepwidestar[1,2]{\pi_2(u,a)=a}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_2(x,y)=y}[thm]{3}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &u\cup\{(\WordLength u,a)\}=\pi_1(u,a)\cup{}\\[-2pt]
+    &\qquad\{(\WordLength{\pi_1(u,a)},\pi_2(u,a))\}
+  \end{aligned}}{\rIE{6,7,\rII}}
+  \proofstepwidestar[1,2]{((u,a),u\cup\{(\WordLength u,a)\})\in\sigma_A}{%
+    \rIE{\FormulaRefAuto{WordModelSuccessorDef}[def],\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]{\rAI{5,8}}}}
+  \proofstepwidestar[]{\sigma_A\colon\FiniteWords A\times A\to\FiniteWords A}{\rAEb{\FormulaRefAuto{EarlyWordSuccessorTyping}[thm]}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)=u\cup\{(\WordLength u,a)\}}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{10,9}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Die Anfügungsfunktion führt die Erzeugungsregel aus]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+    \sigma_A(u,a)=\OccurrenceAdjunction u a
+}{EarlyWordSuccessorGenerationEquation}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{u\in\FiniteOccurrenceSets A}{\FormulaRefAuto{FiniteWordInUniverse}[thm]{1}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)=u\cup\{(\WordLength u,a)\}}{\FormulaRefAuto{EarlyWordSuccessorEquation}[thm]{1,2}}
+  \proofstepwidestar[1]{\WordLength u=\FiniteCard(u)}{\FormulaRefAuto{FiniteWordLengthCardinality}[thm]{1}}
+  \proofstepwidestar[1,2]{\OccurrenceAdjunction u a=u\cup\{(\FiniteCard(u),a)\}}{\FormulaRefAuto{OccurrenceCardinalAdjunctionDef}[def]{3,2}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)=\OccurrenceAdjunction u a}{\rIE{5,6,4}}
+\end{tabproofwide}
+
+\end{minipage}\par
+\Needspace{16\baselineskip}
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Wortzugehörigkeit und Länge eines primitiven Nachfolgers]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+  \begin{aligned}[t]
+    &\sigma_A(u,a)\in\FiniteWords A\land{}\\[-2pt]
+    &\WordLength{\sigma_A(u,a)}=\WordLength u+1
+  \end{aligned}
+}{EarlyWordSuccessorLength}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1]{\WordLength u\in\mathbb N}{\FormulaRefAuto{FiniteWordLengthNatural}[thm]{1}}
+  \proofstepwidestar[1]{u\colon\NatSeg{\WordLength u}\to A}{\FormulaRefAuto{FiniteWordTypingAtLength}[thm]{1}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)=u\cup\{(\WordLength u,a)\}}{\FormulaRefAuto{EarlyWordSuccessorEquation}[thm]{1,2}}
+  \proofstepwidestar[1,2]{u\cup\{(\WordLength u,a)\}\colon\NatSeg{\WordLength u+1}\to A}{\FormulaRefAuto{EarlyWordAdjunctionGraphTyping}[thm]{3,4,2}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\colon\NatSeg{\WordLength u+1}\to A}{\rIE{5,6}}
+  \proofstepwidestar[1]{\WordLength u+1\in\mathbb N}{\FormulaRefAuto{PeanoAddOneClosure}[thm]{3}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\in\FiniteWords A}{\FormulaRefAuto{FiniteWordFromTyping}[thm]{8,7}}
+  \proofstepwidestar[1,2]{\WordLength{\sigma_A(u,a)}=\WordLength u+1}{\FormulaRefAuto{FiniteWordLengthFromTyping}[thm]{9,8,7}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\in\FiniteWords A\land\WordLength{\sigma_A(u,a)}=\WordLength u+1}{\rAI{9,10}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[W1: Das Leerwort ist kein primitiver Nachfolger]{%
+  u\in\FiniteWords A\dsep a\in A\vdash\sigma_A(u,a)\ne\EmptyWord A
+}{EarlyWordSuccessorNonempty}{\DeltaRow{Mengen}{A\dsep u\dsep a}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\in\FiniteWords A\land\WordLength{\sigma_A(u,a)}=\WordLength u+1}{\FormulaRefAuto{EarlyWordSuccessorLength}[thm]{1,2}}
+  \proofstepwidestar[1]{\WordLength u\in\mathbb N}{\FormulaRefAuto{FiniteWordLengthNatural}[thm]{1}}
+  \proofstepwidestar[1]{\WordLength u+1\ne0}{\FormulaRefAuto{PeanoAddOneNonzero}[thm]{4}}
+  \proofstepwidestar[1,2]{\WordLength{\sigma_A(u,a)}\ne0}{\rIE{\rAEb{3},5}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\ne\EmptyWord A}{%
+    \FormulaRefAuto{FiniteWordLengthNonzeroIffNonempty}[thm]{\rAEa{3},6}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[Werte vor und an der neuen letzten Position]{%
+  u\in\FiniteWords A\dsep a\in A\vdash
+  \begin{aligned}[t]
+    &(\forall i\in\NatSeg{\WordLength u}\,
+      \sigma_A(u,a)(i)=u(i))\land{}\\[-2pt]
+    &\sigma_A(u,a)(\WordLength u)=a
+  \end{aligned}
+}{EarlyWordSuccessorValues}{\DeltaRow{Mengen}{A\dsep u\dsep a\dsep i}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a\in A}{\rA}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\in\FiniteWords A}{\rAEa{\FormulaRefAuto{EarlyWordSuccessorLength}[thm]{1,2}}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)\colon\NatSeg{\WordLength{\sigma_A(u,a)}}\to A}{\FormulaRefAuto{FiniteWordTypingAtLength}[thm]{3}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)=u\cup\{(\WordLength u,a)\}}{\FormulaRefAuto{EarlyWordSuccessorEquation}[thm]{1,2}}
+  \proofstepwidestar[6]{i\in\NatSeg{\WordLength u}}{\rA}
+  \proofstepwidestar[1,6]{(i,u(i))\in u}{%
+    \FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash(x,F(x))\in F}[thm]{\FormulaRefAuto{FiniteWordTypingAtLength}[thm]{1},6}}
+  \proofstepwidestar[1,2,6]{(i,u(i))\in\sigma_A(u,a)}{\rIE{5,\FormulaRefAuto{z\in A\vdash z\in A\cup B}[thm]{7}}}
+  \proofstepwidestar[1,2,6]{\sigma_A(u,a)(i)=u(i)}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,8}}
+  \proofstepwidestar[1,2]{\forall i\in\NatSeg{\WordLength u}\,\sigma_A(u,a)(i)=u(i)}{\rUI{\rRI{6,9}}}
+  \proofstepwidestar[1,2]{(\WordLength u,a)\in\sigma_A(u,a)}{\rIE{5,\FormulaRefAuto{z\in B\vdash z\in A\cup B}[thm]{\FormulaRefAuto{a\in\{a\}}[thm]}}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)(\WordLength u)=a}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,11}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]
+    &(\forall i\in\NatSeg{\WordLength u}\,\sigma_A(u,a)(i)=u(i))\land{}\\[-2pt]
+    &\sigma_A(u,a)(\WordLength u)=a
+  \end{aligned}}{\rAI{10,12}}
+\end{tabproofwide}
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaThmDeltaK[W2: Gemeinsame Injektivität der primitiven Anfügung]{%
+  u,v\in\FiniteWords A\dsep a,b\in A\dsep
+    \sigma_A(u,a)=\sigma_A(v,b)\vdash u=v\land a=b
+}{EarlyWordSuccessorInjective}{\DeltaRow{Mengen}{A\dsep u\dsep v\dsep a\dsep b\dsep i}}
+\end{minipage}\par
+\begin{tabproofwide}
+  \proofstepwidestar[1]{u,v\in\FiniteWords A}{\rA}
+  \proofstepwidestar[2]{a,b\in A}{\rA}
+  \proofstepwidestar[3]{\sigma_A(u,a)=\sigma_A(v,b)}{\rA}
+  \proofstepwidestar[1]{\WordLength u,\WordLength v\in\mathbb N}{\rAI{\FormulaRefAuto{FiniteWordLengthNatural}[thm]{\rAEa{1}},\FormulaRefAuto{FiniteWordLengthNatural}[thm]{\rAEb{1}}}}
+  \proofstepwidestar[1,2]{\WordLength{\sigma_A(u,a)}=\WordLength u+1}{\rAEb{\FormulaRefAuto{EarlyWordSuccessorLength}[thm]{\rAEa{1},\rAEa{2}}}}
+  \proofstepwidestar[1,2]{\WordLength{\sigma_A(v,b)}=\WordLength v+1}{\rAEb{\FormulaRefAuto{EarlyWordSuccessorLength}[thm]{\rAEb{1},\rAEb{2}}}}
+  \proofstepwidestar[1,2,3]{\WordLength u+1=\WordLength v+1}{\rIE{3,5,6}}
+  \proofstepwidestar[1,2,3]{\WordLength u=\WordLength v}{\FormulaRefAuto{PeanoAddOneInjective}[thm]{\rAEa{4},\rAEb{4},7}}
+  \proofstepwidestar[1,2]{\sigma_A(u,a)(\WordLength u)=a}{\rAEb{\FormulaRefAuto{EarlyWordSuccessorValues}[thm]{\rAEa{1},\rAEa{2}}}}
+  \proofstepwidestar[1,2]{\sigma_A(v,b)(\WordLength v)=b}{\rAEb{\FormulaRefAuto{EarlyWordSuccessorValues}[thm]{\rAEb{1},\rAEb{2}}}}
+  \proofstepwidestar[1,2,3]{a=b}{\rIE{3,8,9,10}}
+  \proofstepwidestar[12]{i\in\NatSeg{\WordLength u}}{\rA}
+  \proofstepwidestar[1,2,12]{\sigma_A(u,a)(i)=u(i)}{\rRE{12,\rUE{\rAEa{\FormulaRefAuto{EarlyWordSuccessorValues}[thm]{\rAEa{1},\rAEa{2}}}}}}
+  \proofstepwidestar[1,2,3,12]{i\in\NatSeg{\WordLength v}}{\rIE{8,12}}
+  \proofstepwidestar[1,2,3,12]{\sigma_A(v,b)(i)=v(i)}{\rRE{14,\rUE{\rAEa{\FormulaRefAuto{EarlyWordSuccessorValues}[thm]{\rAEb{1},\rAEb{2}}}}}}
+  \proofstepwidestar[1,2,3,12]{u(i)=v(i)}{\rIE{3,13,15}}
+  \proofstepwidestar[1,2,3]{\forall i\in\NatSeg{\WordLength u}\,u(i)=v(i)}{\rUI{\rRI{12,16}}}
+  \proofstepwidestar[1,2,3]{u\colon\NatSeg{\WordLength u}\to A\land v\colon\NatSeg{\WordLength u}\to A}{%
+    \rAI{\FormulaRefAuto{FiniteWordTypingAtLength}[thm]{\rAEa{1}},\rIE{8,\FormulaRefAuto{FiniteWordTypingAtLength}[thm]{\rAEb{1}}}}}
+  \proofstepwidestar[1,2,3]{u=v}{\FormulaRefAuto{FunctionExtensionality}[thm]{\rAEa{18},\rAEb{18},17}}
+  \proofstepwidestar[1,2,3]{u=v\land a=b}{\rAI{19,11}}
+\end{tabproofwide}
