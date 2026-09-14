@@ -33,7 +33,7 @@ build products and are ignored by Git. Curated per-volume PDF snapshots under
 
 ## Rebuild every PDF / Alle PDFs neu bauen
 
-For the opening overview (B00), all 47 subject volumes, and the complete manuscript, run:
+For the opening overview (B00), all 48 subject volumes, and the complete manuscript, run:
 
 ```powershell
 pwsh -NoProfile -File ./scripts/build-all.ps1
@@ -47,8 +47,8 @@ filenames and verifies that every linked result destination exists.
 Each current PDF is stored directly in `output/` once. Build logs and
 temporary files belong in `tmp/`, outside the publication directory.
 
-Der Gesamtlauf baut den Überblicksband B00, alle 47 Fachbände und den Gesamtband.
-B00 steht im Buch zuerst, wird wegen seiner Verweise aber nach B01 bis B47
+Der Gesamtlauf baut den Überblicksband B00, alle 48 Fachbände und den Gesamtband.
+B00 steht im Buch zuerst, wird wegen seiner Verweise aber nach B01 bis B48
 gebaut. Kein Fachband importiert B00; die vorhandene Nummerierung bleibt erhalten.
 Jeder Band wird nach seinem Build geprüft. Der Gesamtband verwendet eigene
 Registries unter `registry/main/`; dadurch überschreibt er keine
@@ -98,7 +98,7 @@ given at least one LuaLaTeX run even when artifacts already exist.
 
 The explicit source-to-registry mapping is intentional. Visible filenames
 follow the document titles. Internal identifiers are `B00` for the overview
-and `B01` through `B47` for the subject volumes.
+and `B01` through `B48` for the subject volumes.
 
 ### Audited PowerShell build
 
@@ -108,7 +108,7 @@ For a clean standalone build with the full reference audit, use:
 pwsh -NoProfile -File ./scripts/build-b03.ps1 -Target B46
 ```
 
-Valid targets are `B01` through `B47`; omitting `-Target` keeps `B03` as the
+Valid targets are `B01` through `B48`; omitting `-Target` keeps `B03` as the
 default. On Windows PowerShell 5.1, replace `pwsh` with `powershell` and add
 `-ExecutionPolicy Bypass` if required.
 

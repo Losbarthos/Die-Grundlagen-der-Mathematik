@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [ValidatePattern('^B[0-9]{2}$')][string]$From = 'B00',
-    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B47',
+    [ValidatePattern('^B[0-9]{2}$')][string]$To = 'B48',
     [switch]$SkipMain,
     [switch]$SkipPublish,
     [string]$Python = 'python'
