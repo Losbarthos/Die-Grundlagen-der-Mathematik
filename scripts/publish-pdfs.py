@@ -10,6 +10,7 @@ import csv
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -29,8 +30,22 @@ def audit_reference_markers(reader, path):
         r"|Mehrdeutig:\s*bitte",
         re.IGNORECASE,
     )
-    for number, page in enumerate(reader.pages, 1):
-        content = " ".join((page.extract_text() or "").split())
+    pdftotext = shutil.which("pdftotext")
+    if pdftotext is None:
+        page_texts = (page.extract_text() or "" for page in reader.pages)
+    else:
+        # Keep content-stream order: physical layout can interleave a wrapped
+        # reference error with formulas from the neighbouring proof column.
+        result = subprocess.run(
+            [pdftotext, "-raw", "-enc", "UTF-8", str(path), "-"],
+            stdout=subprocess.PIPE, encoding="utf-8", check=True,
+        )
+        pages = result.stdout.split("\f")
+        if len(pages) != len(reader.pages) + 1 or pages[-1].strip():
+            raise ValueError(f"{path.name}: pdftotext returned an unexpected page count")
+        page_texts = pages[:-1]
+    for number, text in enumerate(page_texts, 1):
+        content = " ".join(text.split())
         match = pattern.search(content)
         if match:
             raise ValueError(

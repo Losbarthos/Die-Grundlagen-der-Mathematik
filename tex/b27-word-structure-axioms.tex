@@ -1,8 +1,10 @@
 \section{Das Axiomsystem der Wortstrukturen}
 
-Die Axiomatik beschreibt, welche Eigenschaften eine Menge von Wörtern
-mit einem Anfangswort und einer Anfügungsfunktion besitzt. Dabei haben
-die Symbole folgende Bedeutung:
+Wie bei den natürlichen Zahlen in Band~10 gehen wir vom konkreten
+Aufbau zu den Eigenschaften über, die für Induktion und Rekursion
+benötigt werden. Der Null entspricht das Anfangswort \(e\); dem
+Übergang von \(n\) zu \(\Succ(n)\) entspricht das Anfügen eines
+Buchstabens an ein Wort. Dabei haben die Symbole folgende Bedeutung:
 
 \begingroup
 \renewcommand{\arraystretch}{1.15}
@@ -14,7 +16,7 @@ die Symbole folgende Bedeutung:
 \(s\) & Die Anfügungsfunktion: \(s(u,a)\) entsteht aus dem Wort \(u\), indem rechts der Buchstabe \(a\) angefügt wird. \\
 \(u,v\) & Beliebige Wörter, also Elemente von \(W\). \\
 \(a,b\) & Beliebige Buchstaben, also Elemente von \(A\). \\
-\(U\) & Eine beliebige Teilmenge von \(W\), an der die Minimalitätsbedingung geprüft wird.
+\(U\) & Eine beliebige Teilmenge von \(W\), auf die das Induktionsaxiom in Mengenform angewendet wird.
 \end{tabular}\par
 \endgroup
 
@@ -24,6 +26,22 @@ Eingaben: ein bisheriges Wort und einen einzelnen Buchstaben.
 Beispielsweise stellt \(s(e,a)\) das aus \(a\) bestehende Wort dar;
 \(s(s(e,a),b)\) stellt das Wort mit den aufeinanderfolgenden Buchstaben
 \(a,b\) dar. Die Buchstaben dürfen dabei gleich sein.
+
+Der Unterschied zum Zahlennachfolger liegt in der Wahl des Buchstabens.
+Halten wir \(a\in A\) fest, so schreiben wir
+\[
+ s_a(u)=s(u,a).
+\]
+Für jeden Buchstaben haben wir somit eine eigene Nachfolgerfunktion
+\(s_a\colon W\to W\). Jeder dieser Nachfolger ist eindeutig bestimmt;
+verschiedene Buchstaben sollen jedoch verschiedene Fortsetzungen
+erzeugen. Bei \(A=\{a\}\) bleibt nur eine Nachfolgerfunktion, und die
+folgenden Axiome entsprechen genau dem Peano-Aufbau. Bei mehreren
+Buchstaben verzweigt sich der Aufbau. Schon die Wörter \(s(e,a)\) und
+\(s(e,b)\) sollen für \(a\ne b\) verschieden sein, obwohl beide durch
+einen Anfügungsschritt entstehen. Die Anzahl der Schritte allein
+bestimmt dann kein Wort. Im konkreten Modell ist sie die Wortlänge;
+die Wortlänge allein legt die Buchstabenfolge nicht fest.
 
 Im zuvor aufgebauten Anfügungsmodell werden die Symbole durch
 \[
@@ -56,7 +74,7 @@ Für eine Menge \(A\) heißt \((W,e,s)\) eine \emph{freie Wortstruktur über
       &\forall u,v\in W\,\forall a,b\in A\\[-2pt]
       &\quad(s(u,a)=s(v,b)\rightarrow u=v\land a=b)
     \end{aligned}}
-  \DeltaRow{W3: Minimalität}{%
+  \DeltaRow{\makecell[l]{W3: Induktion\\(Mengenform)}}{%
     \begin{aligned}[t]
       &\forall U\subseteq W\,\Bigl(\bigl(e\in U\land{}\\[-2pt]
       &\quad(\forall u\in U\,\forall a\in A\;s(u,a)\in U)\bigr)
@@ -71,7 +89,11 @@ jeweilige Eigenschaft für das Anfügungsmodell. Für beliebige Daten
 \((W,e,s)\) werden diese Eigenschaften in
 \FormulaRefAuto{WordStructureDef}[def] gefordert. Unter der Annahme
 \(\mathsf{WortStr}_A(W,e,s)\) geben die folgenden nummerierten Axiome
-jeweils die entsprechende Bedingung dieser Definition wieder.
+die Bedingungen dieser Definition zur direkten Verwendung in Beweisen
+wieder. Bei W3 registrieren wir außerdem die gleichwertige Prädikatsform
+und die Induktionsregel, genauso wie bei den Peano-Axiomen in Band~10.
+Dies sind drei Formen desselben Induktionsprinzips, keine zusätzlichen
+unabhängigen Annahmen. Ihre Gleichwertigkeit wird im Anschluss begründet.
 
 \noindent\begin{minipage}{\linewidth}
 \FormulaAxiomDeltaK[Typisierung einer Wortstruktur]{%
@@ -93,8 +115,10 @@ definiert und liefert wieder ein Wort. Für
   \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a}\DeltaRow{Funktionen}{s}}
 
 \smallskip\noindent\textit{Zu W1.} Durch das Anfügen eines Buchstabens
-entsteht niemals das Anfangswort. Im Anfügungsmodell ist diese Aussage
-durch \FormulaRefAuto{EarlyWordSuccessorNonempty}[thm] bewiesen.
+entsteht niemals das Anfangswort. Dies überträgt die Eigenschaft, dass
+Null kein Zahlennachfolger ist, auf alle Buchstabennachfolger zugleich.
+Im Anfügungsmodell ist diese Aussage durch
+\FormulaRefAuto{EarlyWordSuccessorNonempty}[thm] bewiesen.
 \end{minipage}\par
 
 \noindent\begin{minipage}{\linewidth}
@@ -110,13 +134,18 @@ durch \FormulaRefAuto{EarlyWordSuccessorNonempty}[thm] bewiesen.
 \smallskip\noindent\textit{Zu W2.} Gleiche angefügte Wörter haben sowohl
 denselben bisherigen Wortteil als auch denselben letzten Buchstaben.
 Die beiden Eingaben lassen sich also eindeutig zurückgewinnen.
-Injektivität nur bei festgehaltenem Buchstaben würde dafür nicht
-genügen. Der konkrete Nachweis ist
+Wie beim Zahlennachfolger muss zunächst jede einzelne Funktion \(s_a\)
+injektiv sein. Zusätzlich dürfen sich die Nachfolgerbilder
+verschiedener Buchstaben nicht überschneiden: Aus
+\(s_a(u)=s_b(v)\) folgt auch \(a=b\). Injektivität nur bei
+festgehaltenem Buchstaben würde diese Trennung nicht sichern.
+Deshalb verlangt W2 die Injektivität auf den ganzen Paaren \((u,a)\).
+Der konkrete Nachweis ist
 \FormulaRefAuto{EarlyWordSuccessorInjective}[thm].
 \end{minipage}\par
 
 \noindent\begin{minipage}{\linewidth}
-\FormulaAxiomDeltaK[Minimalität einer Wortstruktur]{%
+\FormulaAxiomDeltaK[W3: Induktionsaxiom in Mengenform]{%
   \begin{aligned}[t]
     &\mathsf{WortStr}_A(W,e,s)\dsep U\subseteq W\dsep e\in U\dsep{}\\[-2pt]
     &\forall u\in U\,\forall a\in A\;s(u,a)\in U\vdash U=W
@@ -131,4 +160,91 @@ sie bereits ganz \(W\). Damit gibt es keine echte Teilmenge von \(W\),
 die unter diesen Erzeugungsregeln abgeschlossen ist und den Anfang
 enthält. Im Anfügungsmodell liefert
 \FormulaRefAuto{EarlyWordModelMinimality}[thm] genau diese Aussage.
+Diese auch \emph{Minimalität} genannte Aussage ist bereits das
+Induktionsprinzip: Die Wörter, für die eine Eigenschaft gilt, bilden eine
+solche Teilmenge, sobald Anfang und alle Anfügungsschritte bewiesen sind.
+W3 schließt damit zusätzliche Wörter aus, die vom Anfang durch die
+Anfügungsschritte nicht erreicht werden.
 \end{minipage}\par
+
+In der vertrauten Prädikatsschreibweise entspricht \(P(e)\) dem
+Induktionsanfang \(P(0)\). An die Stelle des einen Schritts
+\(P(n)\rightarrow P(\Succ(n))\) treten die Schritte
+\(P(u)\rightarrow P(s(u,a))\) für \emph{alle} \(a\in A\).
+Nur einem fest gewählten Buchstaben zu folgen würde bei mehreren
+Buchstaben nicht alle Wörter erfassen.
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[W3: Induktionsaxiom in Prädikatsform]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]
+    &\forall u\in W\,\forall a\in A\,
+      (P(u)\rightarrow P(s(u,a)))\vdash\forall w\in W\,P(w)
+  \end{aligned}
+}{WordStructureInduction}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep w}
+  \DeltaRow{Funktionen}{s}\DeltaRow{Einstelliges Prädikat}{P}}
+
+\smallskip\noindent\textit{Zu W3 in Prädikatsform.}
+Wie \FormulaRefAuto{PeanoInductionAxiom}[ax] erlaubt dieses Axiom den
+Schluss vom Anfang und dem allgemeinen Schritt auf alle Elemente des
+Trägers. Für eine Formel \(P\) der zugrunde liegenden Mengenlehre bilden
+wir dazu \(U=\{w\in W\mid P(w)\}\). Umgekehrt erhält man die Mengenform
+mit \(P(w)\coloneqq w\in U\). Dabei sind Mengenparameter in \(P\)
+zugelassen; die Mengenform quantifiziert über jede Teilmenge von \(W\).
+\end{minipage}\par
+
+\noindent\begin{minipage}{\linewidth}
+\FormulaAxiomDeltaK[W3: Axiomatische Induktionsregel]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]
+    &[u\in W,a\in A,P(u)]\vdots P(s(u,a))\dsep{}\\[-2pt]
+    &v\in W\vdash P(v)
+  \end{aligned}
+}{WordStructureInductionRule}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep v}
+  \DeltaRow{Funktionen}{s}\DeltaRow{Einstelliges Prädikat}{P}}
+
+\smallskip\noindent\textit{Zu W3 als Beweisregel.}
+Wie bei \FormulaRefAuto{PeanoInductionRule}[ax] genügt ein lokaler
+Schrittbeweis unter den angegebenen Annahmen. Die Variablen \(u,a\)
+sind beliebig und dürfen in den übrigen offenen Annahmen nicht frei
+vorkommen. Die Notation \([i,j,k]\vdots l\) in einem Regelverweis nennt
+die entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
+Eine nicht benötigte Induktionsannahme darf dabei entfallen.
+\end{minipage}\par
+
+\medskip\noindent\textit{Vergleich mit der vollständigen Peano-Schnittstelle.}
+Die folgenden Entsprechungen zeigen auch, welche in Band~10 einzeln
+aufgeführten Aussagen hier bereits in einem Grundaxiom enthalten sind
+oder daraus folgen.
+
+\begingroup
+\renewcommand{\arraystretch}{1.2}
+\noindent\begin{tabular}{@{}p{.37\linewidth}p{.58\linewidth}@{}}
+\textbf{Natürliche Zahlen (Band 10)} & \textbf{Wörter über \(A\)} \\
+\(0\in\mathbb N\) & \(e\in W\), enthalten in W0. \\
+\(\Succ\colon\mathbb N\to\mathbb N\) und Nachfolgerabschluss &
+\(s\colon W\times A\to W\) in W0; daraus folgt
+\(s(u,a)\in W\) für \(u\in W,a\in A\). \\
+Kein Nachfolger ist Null & W1: Kein Buchstabennachfolger ist \(e\). \\
+Injektivität des Nachfolgers & W2: gemeinsame Injektivität;
+auch verschiedene letzte Buchstaben werden getrennt. \\
+Induktionsaxiom und Induktionsregel & W3 mit Anfang \(e\) und einem
+Schritt für jeden Buchstaben. \\
+Jede Nichtnullzahl ist Nachfolger & Jedes Wort außer \(e\) besitzt eine
+Endzerlegung. Ihre Existenz folgt aus W3, ihre Eindeutigkeit aus W2.
+\end{tabular}\par
+\endgroup
+
+Die in Band~10 eigens registrierte Vorgängerexistenz
+\FormulaRefAuto{PeanoNonzeroIsSucc}[ax] ist selbst eine Folge der
+Induktion. Das Wortgegenstück beweisen wir unten als
+\FormulaRefAuto{WordStructureDecomposition}[thm]; ein zusätzliches W4
+ist dafür nicht nötig. Auch \(W\ne\varnothing\) folgt schon aus
+\(e\in W\). Das Alphabet \(A\) darf dagegen leer sein: Dann fordert W3
+\(W=\{e\}\), weil es keinen Anfügungsschritt gibt. Für \(A=\{a\}\)
+erhalten wir die Peano-Struktur mit dem Nachfolger \(s_a\); für mehrere
+Buchstaben deren verzweigte Verallgemeinerung. Die Existenz rekursiv
+definierter Funktionen wird anschließend aus diesen Axiomen bewiesen,
+ebenso wie im Zahlenband.

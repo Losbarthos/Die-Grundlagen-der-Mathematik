@@ -1,0 +1,748 @@
+\subsubsection{Eine Aufbauphase als gewöhnliche Funktion}
+
+Ein Paar \((u,x)\) hält zunächst nur fest, dass dem Wort \(u\) der
+Wert \(x\) zugeordnet wird. Alle solchen Paare liegen in
+\(B=W\times X\). Zu einer vorliegenden Zuordnung \(H\subseteq B\)
+bilden wir das Anfangspaar und sämtliche Fortsetzungen:
+\[
+  T(H)=\{(e,x_0)\}\cup
+  \{(s(u,a),r(x,a))\mid (u,x)\in H,\ a\in A\}.
+\]
+Dies ist eine gewöhnliche Mengenbildung aus den gegebenen Funktionen
+\(s,r\). Insbesondere wird auf der rechten Seite kein gesuchter
+Rekursionswert vorausgesetzt. Die folgenden Definitionen schreiben diese
+Mengenbildung mit der Aussonderung und der Termgraphkonstruktion aus
+Band~5 aus.
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Umgebungsmenge der Wort-Wert-Paare]{%
+  B\coloneqq W\times X
+}{WordRecursionAmbientDef}{\DeltaRow{Mengen}{W\dsep X}
+  \DeltaRow{Neues Symbol}{B}}
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Fortsetzung einer vorliegenden Zuordnung]{%
+  \begin{aligned}[t]
+    \tau(H)\coloneqq\{(e,x_0)\}\cup\{p\in B\mid
+      &\exists u\in W\,\exists x\in X\,\exists a\in A\;\\[-2pt]
+      &((u,x)\in H\land p=(s(u,a),r(x,a)))\}
+  \end{aligned}
+}{WordRecursionStageTermDef}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep X\dsep e\dsep x_0\dsep H\dsep p\dsep u\dsep x\dsep a}
+  \DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Neues Symbol}{\tau(H)}}
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Die Funktion für eine Aufbauphase]{%
+  T\coloneqq\{(H,K)\in\powerset(B)\times\powerset(B)\mid K=\tau(H)\}
+}{WordRecursionStageOperatorDef}{%
+  \DeltaRow{Mengen}{H\dsep K}\DeltaRow{Neues Symbol}{T}}
+
+Die Hilfsschreibweise \(\tau(H)\) bezeichnet den Mengenterm;
+\(T\) ist dessen Funktionsgraph. Der nächste Nachweis stellt sicher,
+dass wir \(T\) als Schrittfunktion einer Zahlenrekursion verwenden
+dürfen. Die Beschränkung des Schrittbilds auf \(B\) verliert keine
+Fortsetzung: W0 und die Typisierung von \(r\) liefern gerade die
+benötigte Zugehörigkeit zu \(W\times X\).
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Aufbauphase ist eine Funktion auf der Potenzmenge]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash{}\\[-2pt]
+    &T\colon\powerset(B)\to\powerset(B)\land
+      \forall H\in\powerset(B)\;T(H)=\tau(H)
+  \end{aligned}
+}{WordRecursionStageOperatorFunction}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[1]{e\in W}{\rAEa{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}}
+  \proofstepwidestar[1,2]{(e,x_0)\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{3,2}}}}
+  \proofstepwidestar[1,2]{\{(e,x_0)\}\subseteq B}{\FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{4}}
+  \proofstepwidestar[]{\{p\in B\mid\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))\}\subseteq B}{\FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}
+  \proofstepwidestar[1,2]{\tau(H)\subseteq B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStageTermDef}[def]},\FormulaRefAuto{A\subseteq C\dsep B\subseteq C\vdash A\cup B\subseteq C}[thm]{5,6}}}
+  \proofstepwidestar[1,2]{\tau(H)\in\powerset(B)}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{7}}
+  \proofstepwidestar[9]{H\in\powerset(B)}{\rA}
+  \proofstepwidestar[1,2]{\forall H\in\powerset(B)\;\tau(H)\in\powerset(B)}{\rUI{\rRI{9,8}}}
+  \proofstepwidestar[1,2]{T\colon\powerset(B)\to\powerset(B)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStageOperatorDef}[def]},\FormulaRefAuto{TypedTermGraphFunction}[thm]{10}}}
+  \proofstepwidestar[1,2]{\forall H\in\powerset(B)\;T(H)=\tau(H)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStageOperatorDef}[def]},\FormulaRefAuto{TypedTermGraphValues}[thm]{10}}}
+  \proofstepwidestar[1,2]{T\colon\powerset(B)\to\powerset(B)\land\forall H\in\powerset(B)\;T(H)=\tau(H)}{\rAI{11,12}}
+\end{tabproofwide}
+
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Zulässigkeit eines Fortsetzungspaars]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep r\colon X\times A\to X\dsep
+      u\in W\dsep x\in X\dsep a\in A\vdash{}\\[-2pt]
+    &(s(u,a),r(x,a))\in B
+  \end{aligned}
+}{WordRecursionStagePairTyping}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep u\dsep x\dsep a}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[3]{u\in W}{\rA}
+  \proofstepwidestar[4]{x\in X}{\rA}
+  \proofstepwidestar[5]{a\in A}{\rA}
+  \proofstepwidestar[1,3,5]{s(u,a)\in W}{\FormulaRefAuto{WordStructureStepTyping}[thm]{1,3,5}}
+  \proofstepwidestar[4,5]{(x,a)\in X\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{4,5}}}
+  \proofstepwidestar[2,4,5]{r(x,a)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{2,7}}
+  \proofstepwidestar[1,2,3,4,5]{(s(u,a),r(x,a))\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{6,8}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Ein Paar entsteht am Anfang oder durch einen Schritt]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep H\subseteq B\vdash{}\\[-2pt]
+    &p\in T(H)\leftrightarrow
+      \bigl(p=(e,x_0)\lor\exists u\in W\,\exists x\in X\,\exists a\in A\;\\[-2pt]
+    &\hspace{40mm}((u,x)\in H\land p=(s(u,a),r(x,a)))\bigr)
+  \end{aligned}
+}{WordRecursionStageMembership}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep p\dsep u\dsep x\dsep a}
+  \DeltaRow{Funktionen}{s\dsep r}
+  \DeltaRow{Abkürzung}{\begin{aligned}[t]
+    E(H,p)\coloneqq{}&\exists u\in W\,\exists x\in X\,\exists a\in A\;\\[-2pt]
+    &((u,x)\in H\land p=(s(u,a),r(x,a)))
+  \end{aligned}}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[4]{H\in\powerset(B)}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{4}}
+  \proofstepwidestar[1,2,4]{T(H)=\tau(H)}{\rRE{5,\rUE{\rAEb{\FormulaRefAuto{WordRecursionStageOperatorFunction}[thm]{1,2}}}}}
+  \proofstepwidestar[1,2,4]{p\in T(H)\leftrightarrow\bigl(p=(e,x_0)\lor(p\in B\land E(H,p))\bigr)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{6},\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStageTermDef}[def]},\rLRS{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm],\rLRS{\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm],\FormulaRefAuto{x\in A\cup B\eqvdash x\in A\lor x\in B}[thm]}}}}}
+  \proofstepwidestar[8]{E(H,p)}{\rA}
+  \proofstepwidestar[9]{u\in W\land\exists x\in X\,\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[10]{x\in X\land\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[11]{a\in A\land((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[1,3,9,10,11]{(s(u,a),r(x,a))\in B}{\FormulaRefAuto{WordRecursionStagePairTyping}[thm]{1,3,\rAEa{9},\rAEa{10},\rAEa{11}}}
+  \proofstepwidestar[1,3,9,10,11]{p\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{\rAEb{11}}},12}}
+  \proofstepwidestar[1,3,9,10]{p\in B}{\rEE{\rAEb{10},11,13}}
+  \proofstepwidestar[1,3,9]{p\in B}{\rEE{\rAEb{9},10,14}}
+  \proofstepwidestar[1,3,8]{p\in B}{\rEE{8,9,15}}
+  \proofstepwidestar[1,3]{E(H,p)\rightarrow(p\in B\land E(H,p))}{\rRI{8,\rAI{16,8}}}
+  \proofstepwidestar[18]{p\in B\land E(H,p)}{\rA}
+  \proofstepwidestar[]{(p\in B\land E(H,p))\rightarrow E(H,p)}{\rRI{18,\rAEb{18}}}
+  \proofstepwidestar[1,3]{(p\in B\land E(H,p))\leftrightarrow E(H,p)}{\rLRI{19,17}}
+  \proofstepwidestar[1,2,3,4]{p\in T(H)\leftrightarrow\bigl(p=(e,x_0)\lor E(H,p)\bigr)}{\rLRS{20,7}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Anfang und Fortsetzung gehören zur nächsten Phase]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep H\subseteq B\vdash{}\\[-2pt]
+    &(e,x_0)\in T(H)\land
+      \forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]
+    &\qquad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in T(H))
+  \end{aligned}
+}{WordRecursionStageBaseAndStep}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep u\dsep x\dsep a}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[1,2,3,4]{(e,x_0)\in T(H)}{\rRE{\rLREb{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}},\rOIa{\rII}}}
+  \proofstepwidestar[6]{u\in W}{\rA}
+  \proofstepwidestar[7]{x\in X}{\rA}
+  \proofstepwidestar[8]{a\in A}{\rA}
+  \proofstepwidestar[9]{(u,x)\in H}{\rA}
+  \proofstepwidestar[6,7,8,9]{\exists v\in W\,\exists y\in X\,\exists b\in A\;((v,y)\in H\land(s(u,a),r(x,a))=(s(v,b),r(y,b)))}{\rEI{\rAI{6,\rEI{\rAI{7,\rEI{\rAI{8,\rAI{9,\rII}}}}}}}}
+  \proofstepwidestar[1,2,3,4,6,7,8,9]{(s(u,a),r(x,a))\in T(H)}{\rRE{\rLREb{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}},\rOIb{10}}}
+  \proofstepwidestar[1,2,3,4]{\forall u\in W\,\forall x\in X\,\forall a\in A\;((u,x)\in H\rightarrow(s(u,a),r(x,a))\in T(H))}{\rUI{\rRI{6,\rUI{\rRI{7,\rUI{\rRI{8,\rRI{9,11}}}}}}}}
+  \proofstepwidestar[1,2,3,4]{\begin{aligned}[t]&(e,x_0)\in T(H)\land{}\\[-2pt]&\forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]&\quad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in T(H))\end{aligned}}{\rAI{5,12}}
+\end{tabproofwide}
+
+\subsubsection{Die natürlichen Zahlen zählen die Stufen}
+
+Nun erfolgt genau die Übersetzung in die Zahlenrekursion aus Band~10:
+Die dortige Wertemenge \(M\) ist hier \(\powerset(B)\), der Anfangswert
+\(m_0\) ist \(\{(e,x_0)\}\), und die Schrittfunktion \(f\) ist
+\(T\). Der Dedekindsche Rekursionssatz
+\FormulaRefAuto{DedekindRecursionTheorem}[thm] liefert deshalb eine
+Folge von Zuordnungen. Wir nennen ihre Werte \(H_n\).
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Die Folge der Auswertungsstufen]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash{}\\[-2pt]
+    &h\coloneqq\RecFun{\{(e,x_0)\}}{T}
+  \end{aligned}
+}{WordRecursionStagesDef}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep n}
+  \DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Neues Symbol}{h}}
+
+Für \(n\in\mathbb N\) verwenden wir im Folgenden die Abkürzung
+\(H_n\coloneqq h(n)\).
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Typisierung und Gleichungen der Stufenfolge]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash{}\\[-2pt]
+    &h\colon\mathbb N\to\powerset(B)\land H_0=\{(e,x_0)\}\land{}\\[-2pt]
+    &\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))
+  \end{aligned}
+}{WordRecursionStagesEquations}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep n}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[1]{e\in W}{\rAEa{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}}
+  \proofstepwidestar[1,2]{(e,x_0)\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{3,2}}}}
+  \proofstepwidestar[1,2]{\{(e,x_0)\}\in\powerset(B)}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{\FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{4}}}
+  \proofstepwidestar[1,2]{T\colon\powerset(B)\to\powerset(B)}{\rAEa{\FormulaRefAuto{WordRecursionStageOperatorFunction}[thm]{1,2}}}
+  \proofstepwidestar[1,2]{h\colon\mathbb N\to\powerset(B)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStagesDef}[def]{1,2}},\FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash\RecFun{m_0}{f}\colon\mathbb{N}\to M}[thm]{5,6}}}
+  \proofstepwidestar[1,2]{H_0=\{(e,x_0)\}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStagesDef}[def]{1,2}},\FormulaRefAuto{m_0\in M\dsep f\colon M\to M\vdash\RecFun{m_0}{f}(0)=m_0}[thm]{5,6}}}
+  \proofstepwidestar[9]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[1,2,9]{H_n\in\powerset(B)}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{7,9}}
+  \proofstepwidestar[1,2,9]{H_n\subseteq B}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{10}}
+  \proofstepwidestar[1,2,9]{H_{\Succ(n)}=T(H_n)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStagesDef}[def]{1,2}},\FormulaRefAuto{m_0\in M\dsep f\colon M\to M\dsep n\in\mathbb{N}\vdash\RecFun{m_0}{f}(\Succ(n))=f(\RecFun{m_0}{f}(n))}[thm]{5,6,9}}}
+  \proofstepwidestar[1,2]{\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))}{\rUI{\rRI{9,\rAI{11,12}}}}
+  \proofstepwidestar[1,2]{\begin{aligned}[t]&h\colon\mathbb N\to\powerset(B)\land H_0=\{(e,x_0)\}\land{}\\[-2pt]&\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))\end{aligned}}{\rAI{7,\rAI{8,13}}}
+\end{tabproofwide}
+
+\(H_0\) ordnet dem Anfangswort seinen Wert zu. \(H_1\) enthält
+zusätzlich die Werte der Einbuchstabenwörter, \(H_2\) die der nächsten
+Fortsetzungen. Diese Beschreibung dient der Anschauung; im Beweis
+arbeiten wir allein mit den beiden Stufengleichungen. Bei unendlichem
+Alphabet kann bereits \(H_1\) unendlich sein. Bis zu jeder festen
+Stufe sind nur endlich viele Aufbauphasen nötig; die Zahl ihrer
+Paare muss dagegen nicht endlich sein.
+
+\subsubsection{Spätere Stufen bewahren frühere Zuordnungen}
+
+Obwohl \(T(H)\) nur das Anfangspaar und die Fortsetzungen enthält,
+gehen in der konstruierten Folge keine Paare verloren. Der Grund ist
+derselbe Induktionsgedanke wie bei wachsenden Folgen natürlicher
+Anfangsabschnitte: Die erste Stufe ist in der zweiten enthalten, und
+ein Einschluss bleibt unter einem weiteren Aufbau erhalten.
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Aufbauphase erhält Einschlüsse]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+    &H\subseteq B\dsep K\subseteq B\dsep H\subseteq K\vdash T(H)\subseteq T(K)
+  \end{aligned}
+}{WordRecursionStageMonotone}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep p\dsep u\dsep x\dsep a}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[5]{K\subseteq B}{\rA}
+  \proofstepwidestar[6]{H\subseteq K}{\rA}
+  \proofstepwidestar[7]{p\in T(H)}{\rA}
+  \proofstepwidestar[1,2,3,4,7]{p=(e,x_0)\lor\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rRE{7,\rLREa{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}}}}
+  \proofstepwidestar[9]{p=(e,x_0)}{\rA}
+  \proofstepwidestar[1,2,3,5,9]{p\in T(K)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{9},\rAEa{\FormulaRefAuto{WordRecursionStageBaseAndStep}[thm]{1,2,3,5}}}}
+  \proofstepwidestar[11]{\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[12]{u\in W\land\exists x\in X\,\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[13]{x\in X\land\exists a\in A\;((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[14]{a\in A\land((u,x)\in H\land p=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[6,14]{(u,x)\in K}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,\rAEa{\rAEb{14}}}}
+  \proofstepwidestar[6,12,13,14]{\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in K\land p=(s(u,a),r(x,a)))}{\rEI{\rAI{\rAEa{12},\rEI{\rAI{\rAEa{13},\rEI{\rAI{\rAEa{14},\rAI{15,\rAEb{\rAEb{14}}}}}}}}}}
+  \proofstepwidestar[1,2,3,5,6,12,13,14]{p\in T(K)}{\rRE{\rLREb{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,5}},\rOIb{16}}}
+  \proofstepwidestar[1,2,3,5,6,12,13]{p\in T(K)}{\rEE{\rAEb{13},14,17}}
+  \proofstepwidestar[1,2,3,5,6,12]{p\in T(K)}{\rEE{\rAEb{12},13,18}}
+  \proofstepwidestar[1,2,3,5,6,11]{p\in T(K)}{\rEE{11,12,19}}
+  \proofstepwidestar[1,2,3,4,5,6,7]{p\in T(K)}{\rOE{8,9,10,11,20}}
+  \proofstepwidestar[1,2,3,4,5,6]{T(H)\subseteq T(K)}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[7]\vdots21}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Jede Stufe liegt in der nächsten]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &\forall n\in\mathbb N\;H_n\subseteq H_{\Succ(n)}
+  \end{aligned}
+}{WordRecursionStagesIncreasing}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep n\dsep k}
+  \DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Abkürzung}{P(n)\coloneqq H_n\subseteq H_{\Succ(n)}}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2]{H_0=\{(e,x_0)\}\land\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1,2]{H_0\subseteq B\land H_{\Succ(0)}=T(H_0)}{\rRE{5,\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,3]{(e,x_0)\in T(H_0)}{\rAEa{\FormulaRefAuto{WordRecursionStageBaseAndStep}[thm]{1,2,3,\rAEa{6}}}}
+  \proofstepwidestar[1,2,3]{P(0)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{4}},\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{6}},\FormulaRefAuto{a\in A\vdash\{a\}\subseteq A}[thm]{7}}}
+  \proofstepwidestar[9]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[10]{P(n)}{\rA}
+  \proofstepwidestar[9]{\Succ(n)\in\mathbb N}{\FormulaRefAuto{PeanoSuccClosure}[ax]{9}}
+  \proofstepwidestar[1,2,9]{H_n\subseteq B\land H_{\Succ(n)}=T(H_n)}{\rRE{9,\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,9]{H_{\Succ(n)}\subseteq B\land H_{\Succ(\Succ(n))}=T(H_{\Succ(n)})}{\rRE{11,\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,3,9,10]{T(H_n)\subseteq T(H_{\Succ(n)})}{\FormulaRefAuto{WordRecursionStageMonotone}[thm]{1,2,3,\rAEa{12},\rAEa{13},10}}
+  \proofstepwidestar[1,2,3,9,10]{P(\Succ(n))}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{12}},\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{13}},14}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;(P(n)\rightarrow P(\Succ(n)))}{\rUI{\rRI{9,\rRI{10,15}}}}
+  \proofstepwidestar[17]{k\in\mathbb N}{\rA}
+  \proofstepwidestar[1,2,3,17]{P(k)}{\FormulaRefAuto{PeanoInductionRule}[ax]{8,[9,10]\vdots15,17}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;H_n\subseteq H_{\Succ(n)}}{\rUI{\rRI{17,18}}}
+\end{tabproofwide}
+
+Der Monotoniesatz aus Band~10 ist in der Schreibweise \(n+1\)
+formuliert. Mit \(n+1=\Succ(n)\) übersetzen wir zunächst den
+soeben bewiesenen Stufeneinschluss in diese Schreibweise. Die
+Aufbauphase selbst bleibt dabei dieselbe.
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Frühere Stufen liegen in allen späteren]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+    &n\in\mathbb N\dsep m\in\mathbb N\dsep n\leq m\vdash H_n\subseteq H_m
+  \end{aligned}
+}{WordRecursionStagesChain}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep n\dsep m\dsep k}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[5]{m\in\mathbb N}{\rA}
+  \proofstepwidestar[6]{n\leq m}{\rA}
+  \proofstepwidestar[1,2,3]{\forall k\in\mathbb N\;H_k\subseteq H_{\Succ(k)}}{\FormulaRefAuto{WordRecursionStagesIncreasing}[thm]{1,2,3}}
+  \proofstepwidestar[8]{k\in\mathbb N}{\rA}
+  \proofstepwidestar[1,2,3,8]{H_k\subseteq H_{\Succ(k)}}{\rRE{8,\rUE{7}}}
+  \proofstepwidestar[8]{k+1=\Succ(k)}{\FormulaRefAuto{PeanoAddOneSucc}[thm]{8}}
+  \proofstepwidestar[1,2,3,8]{H_k\subseteq H_{k+1}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{10},9}}
+  \proofstepwidestar[1,2,3]{\forall k\in\mathbb N\;H_k\subseteq H_{k+1}}{\rUI{\rRI{8,11}}}
+  \proofstepwidestar[4,5,6]{n<m\lor n=m}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\dsep m\leq n\vdash m<n\lor m=n}[thm]{4,5,6}}
+  \proofstepwidestar[14]{n<m}{\rA}
+  \proofstepwidestar[1,2,3,4]{H_n\subseteq H_{n+1}}{\rRE{4,\rUE{12}}}
+  \proofstepwidestar[1,2,3,4,5,14]{H_{n+1}\subseteq H_m}{\FormulaRefAuto{B04PeanoStrictMonotoneAddOne}[thm]{12,4,5,14}}
+  \proofstepwidestar[1,2,3,4,5,14]{H_n\subseteq H_m}{\FormulaRefAuto{A\subseteq B,B\subseteq C\vdash A\subseteq C}[thm]{15,16}}
+  \proofstepwidestar[18]{n=m}{\rA}
+  \proofstepwidestar[18]{H_n\subseteq H_m}{\rIE{18,\FormulaRefAuto{A\subseteq A}[thm]}}
+  \proofstepwidestar[1,2,3,4,5,6]{H_n\subseteq H_m}{\rOE{13,14,17,18,19}}
+\end{tabproofwide}
+
+\subsubsection{Jedes erfasste Wort erhält nur einen Wert}
+
+Nun treten die Unterschiede zwischen Zahlen und Wörtern im Beweis
+ausdrücklich hervor. Bei Zahlen verhindert das Nullaxiom eine Kollision
+zwischen Anfang und Nachfolger; hier leistet W1 dasselbe für das
+Anfangswort. Die Injektivität des Zahlennachfolgers gewinnt den Vorgänger
+zurück. W2 gewinnt hier sowohl den Vorgänger als auch den angefügten
+Buchstaben zurück. Deshalb können verschiedene Berechnungswege einem
+Wort keinen widersprüchlichen Wert geben.
+
+Wir kürzen lediglich die gewöhnliche Rechtseindeutigkeit einer Relation
+ab. Sie fordert noch nicht, dass jedes Wort einen Wert besitzt.
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Ein Wert je erfasstem Argument]{%
+  R(H)\coloneqq\forall t\,\forall y\,\forall z\;
+    (((t,y)\in H\land(t,z)\in H)\rightarrow y=z)
+}{WordRecursionRightUniqueDef}{%
+  \DeltaRow{Mengen}{H\dsep t\dsep y\dsep z}\DeltaRow{Neues Symbol}{R(H)}}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Anfangszuordnung ist rechtseindeutig]{%
+  R(\{(e,x_0)\})
+}{WordRecursionSingletonRightUnique}{%
+  \DeltaRow{Mengen}{e\dsep x_0\dsep t\dsep y\dsep z}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{(t,y)\in\{(e,x_0)\}\land(t,z)\in\{(e,x_0)\}}{\rA}
+  \proofstepwidestar[1]{(t,y)=(e,x_0)}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rAEa{1}}}
+  \proofstepwidestar[1]{(t,z)=(e,x_0)}{\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm]{\rAEb{1}}}
+  \proofstepwidestar[1]{y=x_0}{\rAEb{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{2}}}
+  \proofstepwidestar[1]{z=x_0}{\rAEb{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{3}}}
+  \proofstepwidestar[1]{y=z}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{4,5}}
+  \proofstepwidestar[]{R(\{(e,x_0)\})}{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{\rUI{\rUI{\rUI{\rRI{1,6}}}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Ein Schritt kann den Anfangswert nicht verändern]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+    &H\subseteq B\dsep(e,z)\in T(H)\vdash z=x_0
+  \end{aligned}
+}{WordRecursionStageZeroValue}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep z\dsep u\dsep x\dsep a}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[5]{(e,z)\in T(H)}{\rA}
+  \proofstepwidestar[1,2,3,4,5]{(e,z)=(e,x_0)\lor\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land(e,z)=(s(u,a),r(x,a)))}{\rRE{5,\rLREa{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}}}}
+  \proofstepwidestar[7]{(e,z)=(e,x_0)}{\rA}
+  \proofstepwidestar[7]{z=x_0}{\rAEb{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{7}}}
+  \proofstepwidestar[9]{\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land(e,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[10]{u\in W\land\exists x\in X\,\exists a\in A\;((u,x)\in H\land(e,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[11]{x\in X\land\exists a\in A\;((u,x)\in H\land(e,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[12]{a\in A\land((u,x)\in H\land(e,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[12]{e=s(u,a)}{\rAEa{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{\rAEb{\rAEb{12}}}}}
+  \proofstepwidestar[1,10,12]{s(u,a)\ne e}{\FormulaRefAuto{WordStructureZeroAxiom}[ax]{1,\rAEa{10},\rAEa{12}}}
+  \proofstepwidestar[1,10,12]{\bot}{\rBI{\FormulaRefAuto{a=b\vdash b=a}[thm]{13},14}}
+  \proofstepwidestar[1,10,12]{z=x_0}{\FormulaRefAuto{\bot\vdash P}[thm]{15}}
+  \proofstepwidestar[1,10,11]{z=x_0}{\rEE{\rAEb{11},12,16}}
+  \proofstepwidestar[1,10]{z=x_0}{\rEE{\rAEb{10},11,17}}
+  \proofstepwidestar[1,9]{z=x_0}{\rEE{9,10,18}}
+  \proofstepwidestar[1,2,3,4,5]{z=x_0}{\rOE{6,7,8,9,19}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Ein Nachfolgerwert wird vom Vorgänger eindeutig festgelegt]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+    &H\subseteq B\dsep R(H)\dsep u\in W\dsep x\in X\dsep a\in A\dsep{}\\[-2pt]
+    &(u,x)\in H\dsep(s(u,a),z)\in T(H)\vdash z=r(x,a)
+  \end{aligned}
+}{WordRecursionStageSuccessorValue}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep u\dsep x\dsep a\dsep z\dsep v\dsep y\dsep b}
+  \DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[5]{R(H)}{\rA}
+  \proofstepwidestar[6]{u\in W}{\rA}
+  \proofstepwidestar[7]{x\in X}{\rA}
+  \proofstepwidestar[8]{a\in A}{\rA}
+  \proofstepwidestar[9]{(u,x)\in H}{\rA}
+  \proofstepwidestar[10]{(s(u,a),z)\in T(H)}{\rA}
+  \proofstepwidestar[1,2,3,4,10]{\begin{aligned}[t]&(s(u,a),z)=(e,x_0)\lor{}\\[-2pt]&\exists v\in W\,\exists y\in X\,\exists b\in A\;\\[-2pt]&\quad((v,y)\in H\land(s(u,a),z)=(s(v,b),r(y,b)))\end{aligned}}{\rRE{10,\rLREa{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}}}}
+  \proofstepwidestar[12]{(s(u,a),z)=(e,x_0)}{\rA}
+  \proofstepwidestar[12]{s(u,a)=e}{\rAEa{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{12}}}
+  \proofstepwidestar[1,6,8]{s(u,a)\ne e}{\FormulaRefAuto{WordStructureZeroAxiom}[ax]{1,6,8}}
+  \proofstepwidestar[1,6,8,12]{z=r(x,a)}{\FormulaRefAuto{\bot\vdash P}[thm]{\rBI{13,14}}}
+  \proofstepwidestar[16]{\exists v\in W\,\exists y\in X\,\exists b\in A\;((v,y)\in H\land(s(u,a),z)=(s(v,b),r(y,b)))}{\rA}
+  \proofstepwidestar[17]{v\in W\land\exists y\in X\,\exists b\in A\;((v,y)\in H\land(s(u,a),z)=(s(v,b),r(y,b)))}{\rA}
+  \proofstepwidestar[18]{y\in X\land\exists b\in A\;((v,y)\in H\land(s(u,a),z)=(s(v,b),r(y,b)))}{\rA}
+  \proofstepwidestar[19]{b\in A\land((v,y)\in H\land(s(u,a),z)=(s(v,b),r(y,b)))}{\rA}
+  \proofstepwidestar[19]{s(u,a)=s(v,b)\land z=r(y,b)}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{\rAEb{\rAEb{19}}}}
+  \proofstepwidestar[1,6,8,17,19]{u=v\land a=b}{\FormulaRefAuto{WordStructureInjectivityAxiom}[ax]{1,6,\rAEa{17},8,\rAEa{19},\rAEa{20}}}
+  \proofstepwidestar[1,6,8,17,19]{(u,y)\in H}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{21}},\rAEa{\rAEb{19}}}}
+  \proofstepwidestar[1,5,6,8,9,17,19]{x=y}{\rRE{\rAI{9,22},\rUE{\rUE{\rUE{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{5}}}}}}
+  \proofstepwidestar[1,5,6,8,9,17,19]{z=r(x,a)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{23},\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{21}},\rAEb{20}}}
+  \proofstepwidestar[1,5,6,8,9,17,18]{z=r(x,a)}{\rEE{\rAEb{18},19,24}}
+  \proofstepwidestar[1,5,6,8,9,17]{z=r(x,a)}{\rEE{\rAEb{17},18,25}}
+  \proofstepwidestar[1,5,6,8,9,16]{z=r(x,a)}{\rEE{16,17,26}}
+  \proofstepwidestar[1,2,3,4,5,6,8,9,10]{z=r(x,a)}{\rOE{11,12,15,16,27}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Rechtseindeutigkeit bleibt in der nächsten Phase erhalten]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+    &H\subseteq B\dsep R(H)\vdash R(T(H))
+  \end{aligned}
+}{WordRecursionStageRightUnique}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep t\dsep z\dsep c\dsep u\dsep x\dsep a}
+  \DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{H\subseteq B}{\rA}
+  \proofstepwidestar[5]{R(H)}{\rA}
+  \proofstepwidestar[6]{(t,z)\in T(H)\land(t,c)\in T(H)}{\rA}
+  \proofstepwidestar[1,2,3,4,6]{(t,z)=(e,x_0)\lor\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land(t,z)=(s(u,a),r(x,a)))}{\rRE{\rAEa{6},\rLREa{\FormulaRefAuto{WordRecursionStageMembership}[thm]{1,2,3,4}}}}
+  \proofstepwidestar[8]{(t,z)=(e,x_0)}{\rA}
+  \proofstepwidestar[8]{t=e\land z=x_0}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{8}}
+  \proofstepwidestar[6,8]{(e,c)\in T(H)}{\rIE{\rAEa{9},\rAEb{6}}}
+  \proofstepwidestar[1,2,3,4,6,8]{c=x_0}{\FormulaRefAuto{WordRecursionStageZeroValue}[thm]{1,2,3,4,10}}
+  \proofstepwidestar[1,2,3,4,6,8]{z=c}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEb{9},11}}
+  \proofstepwidestar[13]{\exists u\in W\,\exists x\in X\,\exists a\in A\;((u,x)\in H\land(t,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[14]{u\in W\land\exists x\in X\,\exists a\in A\;((u,x)\in H\land(t,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[15]{x\in X\land\exists a\in A\;((u,x)\in H\land(t,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[16]{a\in A\land((u,x)\in H\land(t,z)=(s(u,a),r(x,a)))}{\rA}
+  \proofstepwidestar[16]{t=s(u,a)\land z=r(x,a)}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{\rAEb{\rAEb{16}}}}
+  \proofstepwidestar[6,16]{(s(u,a),c)\in T(H)}{\rIE{\rAEa{17},\rAEb{6}}}
+  \proofstepwidestar[1,2,3,4,5,6,14,15,16]{c=r(x,a)}{\FormulaRefAuto{WordRecursionStageSuccessorValue}[thm]{1,2,3,4,5,\rAEa{14},\rAEa{15},\rAEa{16},\rAEa{\rAEb{16}},18}}
+  \proofstepwidestar[1,2,3,4,5,6,14,15,16]{z=c}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEb{17},19}}
+  \proofstepwidestar[1,2,3,4,5,6,14,15]{z=c}{\rEE{\rAEb{15},16,20}}
+  \proofstepwidestar[1,2,3,4,5,6,14]{z=c}{\rEE{\rAEb{14},15,21}}
+  \proofstepwidestar[1,2,3,4,5,6,13]{z=c}{\rEE{13,14,22}}
+  \proofstepwidestar[1,2,3,4,5,6]{z=c}{\rOE{7,8,12,13,23}}
+  \proofstepwidestar[1,2,3,4,5]{R(T(H))}{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{\rUI{\rUI{\rUI{\rRI{6,24}}}}}}
+\end{tabproofwide}
+
+Damit sind Anfang und Schritt einer gewöhnlichen Zahleninduktion
+bewiesen. Sie zeigt die Rechtseindeutigkeit aller Stufen. Die
+Wortinduktion brauchen wir erst anschließend für die andere Frage,
+ob jedes Wort überhaupt in einer Stufe vorkommt.
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Alle Stufen sind rechtseindeutig]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &\forall n\in\mathbb N\;R(H_n)
+  \end{aligned}
+}{WordRecursionStagesRightUnique}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep n\dsep k}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2]{H_0=\{(e,x_0)\}\land\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}
+  \proofstepwidestar[1,2]{R(H_0)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{4}},\FormulaRefAuto{WordRecursionSingletonRightUnique}[thm]}}
+  \proofstepwidestar[6]{n\in\mathbb N}{\rA}
+  \proofstepwidestar[7]{R(H_n)}{\rA}
+  \proofstepwidestar[1,2,6]{H_n\subseteq B\land H_{\Succ(n)}=T(H_n)}{\rRE{6,\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,3,6,7]{R(T(H_n))}{\FormulaRefAuto{WordRecursionStageRightUnique}[thm]{1,2,3,\rAEa{8},7}}
+  \proofstepwidestar[1,2,3,6,7]{R(H_{\Succ(n)})}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{8}},9}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;(R(H_n)\rightarrow R(H_{\Succ(n)}))}{\rUI{\rRI{6,\rRI{7,10}}}}
+  \proofstepwidestar[12]{k\in\mathbb N}{\rA}
+  \proofstepwidestar[1,2,3,12]{R(H_k)}{\FormulaRefAuto{PeanoInductionRule}[ax]{5,[6,7]\vdots10,12}}
+  \proofstepwidestar[1,2,3]{\forall n\in\mathbb N\;R(H_n)}{\rUI{\rRI{12,13}}}
+\end{tabproofwide}
+
+\subsubsection{Die Vereinigung erfasst alle Wörter}
+
+Wir fassen jetzt alle Stufen zusammen. Ein Paar gehört zur Vereinigung,
+sobald es in irgendeiner Stufe vorkommt. Zwei Stufen sind nach ihren
+natürlichen Indizes vergleichbar; deshalb liegen zwei zu prüfende Paare
+immer gemeinsam in einer späteren Stufe. Deren Rechtseindeutigkeit
+überträgt sich auf die Vereinigung.
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Vereinigung der Auswertungsstufen]{%
+  \mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash
+  G\coloneqq\bigcup h[\mathbb N]
+}{WordRecursionStageUnionDef}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0}\DeltaRow{Funktionen}{s\dsep r}
+  \DeltaRow{Neues Symbol}{G}}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Zugehörigkeit zur Vereinigung der Stufen]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash{}\\[-2pt]
+    &p\in G\leftrightarrow\exists n\in\mathbb N\;p\in H_n
+  \end{aligned}
+}{WordRecursionStageUnionMembership}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep p\dsep K\dsep n}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[1,2]{h\colon\mathbb N\to\powerset(B)}{\rAEa{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}
+  \proofstepwidestar[4]{p\in G}{\rA}
+  \proofstepwidestar[1,2,4]{\exists K\in h[\mathbb N]\;p\in K}{\FormulaRefAuto{x\in\bigcup A\eqvdash\exists B\in A\;(x\in B)}[thm]{\rIE{\FormulaRefAuto{WordRecursionStageUnionDef}[def]{1,2},4}}}
+  \proofstepwidestar[6]{K\in h[\mathbb N]\land p\in K}{\rA}
+  \proofstepwidestar[1,2,6]{\exists n\in\mathbb N\;K=H_n}{\FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash\exists x\in A\,y=F(x)}[thm]{3,\rAEa{6}}}
+  \proofstepwidestar[8]{n\in\mathbb N\land K=H_n}{\rA}
+  \proofstepwidestar[6,8]{p\in H_n}{\rIE{\rAEb{8},\rAEb{6}}}
+  \proofstepwidestar[6,8]{\exists n\in\mathbb N\;p\in H_n}{\rEI{\rAI{\rAEa{8},9}}}
+  \proofstepwidestar[1,2,6]{\exists n\in\mathbb N\;p\in H_n}{\rEE{7,8,10}}
+  \proofstepwidestar[1,2,4]{\exists n\in\mathbb N\;p\in H_n}{\rEE{5,6,11}}
+  \proofstepwidestar[13]{\exists n\in\mathbb N\;p\in H_n}{\rA}
+  \proofstepwidestar[14]{n\in\mathbb N\land p\in H_n}{\rA}
+  \proofstepwidestar[14]{\exists k\in\mathbb N\;H_n=H_k}{\rEI{\rAI{\rAEa{14},\rII}}}
+  \proofstepwidestar[1,2,14]{H_n\in h[\mathbb N]}{\FormulaRefAuto{F\colon A\to B\dsep\exists x\in A\,y=F(x)\vdash y\in F[A]}[thm]{3,15}}
+  \proofstepwidestar[1,2,14]{p\in\bigcup h[\mathbb N]}{\FormulaRefAuto{x\in\bigcup A\eqvdash\exists B\in A\;(x\in B)}[thm]{\rEI{\rAI{16,\rAEb{14}}}}}
+  \proofstepwidestar[1,2,14]{p\in G}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionStageUnionDef}[def]{1,2}},17}}
+  \proofstepwidestar[1,2,13]{p\in G}{\rEE{13,14,18}}
+  \proofstepwidestar[1,2]{p\in G\leftrightarrow\exists n\in\mathbb N\;p\in H_n}{\rLRI{\rRI{4,12},\rRI{13,19}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Vereinigung bleibt eine Relation auf den gegebenen Mengen]{%
+  \mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\vdash G\subseteq W\times X
+}{WordRecursionStageUnionSubset}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep p\dsep n}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{p\in G}{\rA}
+  \proofstepwidestar[1,2,3]{\exists n\in\mathbb N\;p\in H_n}{\rRE{3,\rLREa{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[5]{n\in\mathbb N\land p\in H_n}{\rA}
+  \proofstepwidestar[1,2,5]{H_n\subseteq B}{\rAEa{\rRE{\rAEa{5},\rUE{\rAEb{\rAEb{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}}}}}
+  \proofstepwidestar[1,2,5]{p\in B}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{6,\rAEb{5}}}
+  \proofstepwidestar[1,2,3]{p\in B}{\rEE{4,5,7}}
+  \proofstepwidestar[1,2]{G\subseteq B}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[3]\vdots8}}
+  \proofstepwidestar[1,2]{G\subseteq W\times X}{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],9}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Vereinigung ist rechtseindeutig]{%
+  \mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash R(G)
+}{WordRecursionStageUnionRightUnique}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep t\dsep y\dsep z\dsep n\dsep m}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[4]{(t,y)\in G\land(t,z)\in G}{\rA}
+  \proofstepwidestar[1,2,4]{\exists n\in\mathbb N\;(t,y)\in H_n}{\rRE{\rAEa{4},\rLREa{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[1,2,4]{\exists m\in\mathbb N\;(t,z)\in H_m}{\rRE{\rAEb{4},\rLREa{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[7]{n\in\mathbb N\land(t,y)\in H_n}{\rA}
+  \proofstepwidestar[8]{m\in\mathbb N\land(t,z)\in H_m}{\rA}
+  \proofstepwidestar[7,8]{n\leq m\lor m\leq n}{\FormulaRefAuto{m\in\mathbb{N}\dsep n\in\mathbb{N}\vdash m\leq n\lor n\leq m}[thm]{\rAEa{7},\rAEa{8}}}
+  \proofstepwidestar[10]{n\leq m}{\rA}
+  \proofstepwidestar[1,2,3,7,8,10]{H_n\subseteq H_m}{\FormulaRefAuto{WordRecursionStagesChain}[thm]{1,2,3,\rAEa{7},\rAEa{8},10}}
+  \proofstepwidestar[1,2,3,7,8,10]{(t,y)\in H_m}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{11,\rAEb{7}}}
+  \proofstepwidestar[1,2,3,8]{R(H_m)}{\rRE{\rAEa{8},\rUE{\FormulaRefAuto{WordRecursionStagesRightUnique}[thm]{1,2,3}}}}
+  \proofstepwidestar[1,2,3,7,8,10]{y=z}{\rRE{\rAI{12,\rAEb{8}},\rUE{\rUE{\rUE{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{13}}}}}}
+  \proofstepwidestar[15]{m\leq n}{\rA}
+  \proofstepwidestar[1,2,3,7,8,15]{H_m\subseteq H_n}{\FormulaRefAuto{WordRecursionStagesChain}[thm]{1,2,3,\rAEa{8},\rAEa{7},15}}
+  \proofstepwidestar[1,2,3,7,8,15]{(t,z)\in H_n}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{16,\rAEb{8}}}
+  \proofstepwidestar[1,2,3,7]{R(H_n)}{\rRE{\rAEa{7},\rUE{\FormulaRefAuto{WordRecursionStagesRightUnique}[thm]{1,2,3}}}}
+  \proofstepwidestar[1,2,3,7,8,15]{y=z}{\rRE{\rAI{\rAEb{7},17},\rUE{\rUE{\rUE{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{18}}}}}}
+  \proofstepwidestar[1,2,3,7,8]{y=z}{\rOE{9,10,14,15,19}}
+  \proofstepwidestar[1,2,3,4,7]{y=z}{\rEE{6,8,20}}
+  \proofstepwidestar[1,2,3,4]{y=z}{\rEE{5,7,21}}
+  \proofstepwidestar[1,2,3]{R(G)}{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{\rUI{\rUI{\rUI{\rRI{4,22}}}}}}
+\end{tabproofwide}
+
+Für die Vollständigkeit wechseln wir nun von der Zahleninduktion zum
+axiomatischen Wortinduktionsprinzip W3. Die Aussage lautet:
+\emph{Dieses Wort wird in irgendeiner
+Stufe erfasst.} Das Anfangswort wird in Stufe~\(0\) erfasst. Wird
+\(u\) in Stufe~\(n\) erfasst, so wird jede Fortsetzung \(s(u,a)\)
+in Stufe~\(\Succ(n)\) erfasst. Anders als bei einer einzelnen
+Zahlenfolge kann es viele solche Fortsetzungen geben; der Schritt
+verlangt die Aussage deshalb für jeden Buchstaben \(a\in A\).
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Jedes Wort erhält in einer Stufe einen Wert]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &\forall u\in W\,\exists n\in\mathbb N\,\exists x\in X\;(u,x)\in H_n
+  \end{aligned}
+}{WordRecursionStagesTotal}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep u\dsep v\dsep a\dsep n\dsep x}
+  \DeltaRow{Funktionen}{s\dsep r}
+  \DeltaRow{Abkürzung}{P(u)\coloneqq\exists n\in\mathbb N\,\exists x\in X\;(u,x)\in H_n}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2]{H_0=\{(e,x_0)\}\land\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1,2]{(e,x_0)\in H_0}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{4}},\FormulaRefAuto{a\in\{a\}}[thm]}}
+  \proofstepwidestar[1,2]{P(e)}{\rEI{\rAI{5,\rEI{\rAI{2,6}}}}}
+  \proofstepwidestar[8]{u\in W}{\rA}
+  \proofstepwidestar[9]{a\in A}{\rA}
+  \proofstepwidestar[10]{P(u)}{\rA}
+  \proofstepwidestar[11]{n\in\mathbb N\land\exists x\in X\;(u,x)\in H_n}{\rA}
+  \proofstepwidestar[12]{x\in X\land(u,x)\in H_n}{\rA}
+  \proofstepwidestar[1,2,11]{H_n\subseteq B\land H_{\Succ(n)}=T(H_n)}{\rRE{\rAEa{11},\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,3,11]{\forall v\in W\,\forall y\in X\,\forall b\in A\;((v,y)\in H_n\rightarrow(s(v,b),r(y,b))\in T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStageBaseAndStep}[thm]{1,2,3,\rAEa{13}}}}
+  \proofstepwidestar[1,2,3,8,9,11,12]{(s(u,a),r(x,a))\in T(H_n)}{\rRE{\rAEb{12},\rRE{9,\rUE{\rRE{\rAEa{12},\rUE{\rRE{8,\rUE{14}}}}}}}}
+  \proofstepwidestar[1,2,3,8,9,11,12]{(s(u,a),r(x,a))\in H_{\Succ(n)}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{13}},15}}
+  \proofstepwidestar[9,12]{(x,a)\in X\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{\rAEa{12},9}}}
+  \proofstepwidestar[3,9,12]{r(x,a)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,17}}
+  \proofstepwidestar[11]{\Succ(n)\in\mathbb N}{\FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{11}}}
+  \proofstepwidestar[1,2,3,8,9,11,12]{P(s(u,a))}{\rEI{\rAI{19,\rEI{\rAI{18,16}}}}}
+  \proofstepwidestar[1,2,3,8,9,11]{P(s(u,a))}{\rEE{\rAEb{11},12,20}}
+  \proofstepwidestar[1,2,3,8,9,10]{P(s(u,a))}{\rEE{10,11,21}}
+  \proofstepwidestar[23]{v\in W}{\rA}
+  \proofstepwidestar[1,2,3,23]{P(v)}{\FormulaRefAuto{WordStructureInductionRule}[ax]{1,7,[8,9,10]\vdots22,23}}
+  \proofstepwidestar[1,2,3]{\forall u\in W\,\exists n\in\mathbb N\,\exists x\in X\;(u,x)\in H_n}{\rUI{\rRI{23,24}}}
+\end{tabproofwide}
+
+Nun sind beide benötigten Aussagen vorhanden: Jedes Wort besitzt einen
+Wert, und zwei Werte desselben Worts sind gleich. Das Funktionskriterium
+aus Band~5 macht die Vereinigung damit zu einer Funktion auf ganz \(W\).
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die Vereinigung der Stufen ist eine Funktion]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &G\colon W\to X
+  \end{aligned}
+}{WordStructureRecursionGraphFunction}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep u\dsep n\dsep x\dsep y\dsep z}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2]{G\subseteq W\times X}{\FormulaRefAuto{WordRecursionStageUnionSubset}[thm]{1,2}}
+  \proofstepwidestar[1,2,3]{R(G)}{\FormulaRefAuto{WordRecursionStageUnionRightUnique}[thm]{1,2,3}}
+  \proofstepwidestar[6]{u\in W}{\rA}
+  \proofstepwidestar[1,2,3,6]{\exists n\in\mathbb N\,\exists x\in X\;(u,x)\in H_n}{\rRE{6,\rUE{\FormulaRefAuto{WordRecursionStagesTotal}[thm]{1,2,3}}}}
+  \proofstepwidestar[8]{n\in\mathbb N\land\exists x\in X\;(u,x)\in H_n}{\rA}
+  \proofstepwidestar[9]{x\in X\land(u,x)\in H_n}{\rA}
+  \proofstepwidestar[8,9]{\exists k\in\mathbb N\;(u,x)\in H_k}{\rEI{\rAI{\rAEa{8},\rAEb{9}}}}
+  \proofstepwidestar[1,2,8,9]{(u,x)\in G}{\rRE{10,\rLREb{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[1,2,8,9]{\exists x\in X\;(u,x)\in G}{\rEI{\rAI{\rAEa{9},11}}}
+  \proofstepwidestar[1,2,8]{\exists x\in X\;(u,x)\in G}{\rEE{\rAEb{8},9,12}}
+  \proofstepwidestar[1,2,3,6]{\exists x\in X\;(u,x)\in G}{\rEE{7,8,13}}
+  \proofstepwidestar[15]{y\in X\land(u,y)\in G}{\rA}
+  \proofstepwidestar[16]{z\in X\land(u,z)\in G}{\rA}
+  \proofstepwidestar[1,2,3,15,16]{y=z}{\rRE{\rAI{\rAEb{15},\rAEb{16}},\rUE{\rUE{\rUE{\FormulaRefAuto{WordRecursionRightUniqueDef}[def]{5}}}}}}
+  \proofstepwidestar[1,2,3,6]{\exists!x\in X\;(u,x)\in G}{\UEI{14,15,16,17}}
+  \proofstepwidestar[1,2,3]{\forall u\in W\,\exists!x\in X\;(u,x)\in G}{\rUI{\rRI{6,18}}}
+  \proofstepwidestar[1,2,3]{G\colon W\to X}{\FormulaRefAuto{UniqueValuedGraphFunction}[thm]{4,19}}
+\end{tabproofwide}
+
+\subsubsection{Die Stufen liefern die Rekursionsgleichungen}
+
+Zum Schluss lesen wir die Stufenkonstruktion als Funktionsgleichungen.
+Das Anfangspaar liegt bereits in \(H_0\). Liegt \((u,x)\) in einer
+Stufe, so liegt \((s(u,a),r(x,a))\) in der nächsten. Beide Paare
+gehören deshalb zu \(G\). Dieser Übergang entspricht genau dem
+Nachfolgerschritt der Zahlenrekursion; der zusätzliche Parameter \(a\)
+hält fest, welche Fortsetzung des Worts ausgewertet wird.
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Anfang und Fortsetzung liegen in der vereinigten Zuordnung]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &(e,x_0)\in G\land\forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]
+    &\qquad((u,x)\in G\rightarrow(s(u,a),r(x,a))\in G)
+  \end{aligned}
+}{WordRecursionStageUnionBaseAndStep}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep u\dsep x\dsep a\dsep n}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2]{H_0=\{(e,x_0)\}\land\forall n\in\mathbb N\;(H_n\subseteq B\land H_{\Succ(n)}=T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStagesEquations}[thm]{1,2}}}
+  \proofstepwidestar[]{0\in\mathbb N}{\FormulaRefAuto{PeanoZero}[ax]}
+  \proofstepwidestar[1,2]{(e,x_0)\in H_0}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{4}},\FormulaRefAuto{a\in\{a\}}[thm]}}
+  \proofstepwidestar[1,2]{(e,x_0)\in G}{\rRE{\rLREb{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}},\rEI{\rAI{5,6}}}}
+  \proofstepwidestar[8]{u\in W}{\rA}
+  \proofstepwidestar[9]{x\in X}{\rA}
+  \proofstepwidestar[10]{a\in A}{\rA}
+  \proofstepwidestar[11]{(u,x)\in G}{\rA}
+  \proofstepwidestar[1,2,11]{\exists n\in\mathbb N\;(u,x)\in H_n}{\rRE{11,\rLREa{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[13]{n\in\mathbb N\land(u,x)\in H_n}{\rA}
+  \proofstepwidestar[1,2,13]{H_n\subseteq B\land H_{\Succ(n)}=T(H_n)}{\rRE{\rAEa{13},\rUE{\rAEb{4}}}}
+  \proofstepwidestar[1,2,3,13]{\forall v\in W\,\forall y\in X\,\forall b\in A\;((v,y)\in H_n\rightarrow(s(v,b),r(y,b))\in T(H_n))}{\rAEb{\FormulaRefAuto{WordRecursionStageBaseAndStep}[thm]{1,2,3,\rAEa{14}}}}
+  \proofstepwidestar[1,2,3,8,9,10,13]{(s(u,a),r(x,a))\in T(H_n)}{\rRE{\rAEb{13},\rRE{10,\rUE{\rRE{9,\rUE{\rRE{8,\rUE{15}}}}}}}}
+  \proofstepwidestar[1,2,3,8,9,10,13]{(s(u,a),r(x,a))\in H_{\Succ(n)}}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{14}},16}}
+  \proofstepwidestar[13]{\Succ(n)\in\mathbb N}{\FormulaRefAuto{PeanoSuccClosure}[ax]{\rAEa{13}}}
+  \proofstepwidestar[1,2,3,8,9,10,13]{\exists k\in\mathbb N\;(s(u,a),r(x,a))\in H_k}{\rEI{\rAI{18,17}}}
+  \proofstepwidestar[1,2,3,8,9,10,13]{(s(u,a),r(x,a))\in G}{\rRE{19,\rLREb{\FormulaRefAuto{WordRecursionStageUnionMembership}[thm]{1,2}}}}
+  \proofstepwidestar[1,2,3,8,9,10,11]{(s(u,a),r(x,a))\in G}{\rEE{12,13,20}}
+  \proofstepwidestar[1,2,3]{\forall u\in W\,\forall x\in X\,\forall a\in A\;((u,x)\in G\rightarrow(s(u,a),r(x,a))\in G)}{\rUI{\rRI{8,\rUI{\rRI{9,\rUI{\rRI{10,\rRI{11,21}}}}}}}}
+  \proofstepwidestar[1,2,3]{\begin{aligned}[t]&(e,x_0)\in G\land{}\\[-2pt]&\forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]&\quad((u,x)\in G\rightarrow(s(u,a),r(x,a))\in G)\end{aligned}}{\rAI{7,22}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die vereinigte Funktion erfüllt die Wortrekursion]{%
+  \begin{aligned}[t]
+    &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]
+    &\mathsf{WRec}_A(G;W,e,s;X,x_0,r)
+  \end{aligned}
+}{WordStructureRecursionGraphEquations}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep u\dsep a}\DeltaRow{Funktionen}{s\dsep r}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
+  \proofstepwidestar[2]{x_0\in X}{\rA}
+  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
+  \proofstepwidestar[1,2,3]{G\colon W\to X}{\FormulaRefAuto{WordStructureRecursionGraphFunction}[thm]{1,2,3}}
+  \proofstepwidestar[1,2,3]{\begin{aligned}[t]&(e,x_0)\in G\land{}\\[-2pt]&\forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]&\quad((u,x)\in G\rightarrow(s(u,a),r(x,a))\in G)\end{aligned}}{\FormulaRefAuto{WordRecursionStageUnionBaseAndStep}[thm]{1,2,3}}
+  \proofstepwidestar[1,2,3]{G(e)=x_0}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,\rAEa{5}}}
+  \proofstepwidestar[7]{u\in W}{\rA}
+  \proofstepwidestar[8]{a\in A}{\rA}
+  \proofstepwidestar[1,2,3,7]{G(u)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,7}}
+  \proofstepwidestar[1,2,3,7]{(u,G(u))\in G}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash(x,F(x))\in F}[thm]{4,7}}
+  \proofstepwidestar[1,2,3,7,8]{(s(u,a),r(G(u),a))\in G}{\rRE{10,\rRE{8,\rUE{\rRE{9,\rUE{\rRE{7,\rUE{\rAEb{5}}}}}}}}}
+  \proofstepwidestar[1,2,3,7,8]{G(s(u,a))=r(G(u),a)}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,11}}
+  \proofstepwidestar[1,2,3]{\forall u\in W\,\forall a\in A\;G(s(u,a))=r(G(u),a)}{\rUI{\rRI{7,\rUI{\rRI{8,12}}}}}
+  \proofstepwidestar[1,2,3]{\mathsf{WRec}_A(G;W,e,s;X,x_0,r)}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{\rAI{4,\rAI{6,13}}}}
+\end{tabproofwide}
+
+Damit ist die Existenz bewiesen: Die Rekursion auf \(\mathbb N\)
+konstruiert die Stufen, die Wortaxiome sichern ihre widerspruchsfreie
+Fortsetzung, und die Wortinduktion zeigt, dass kein Wort ausgelassen
+wird. Zusammen mit der vorher bewiesenen Eindeutigkeit ergibt dies
+den angekündigten Wortrekursionssatz.

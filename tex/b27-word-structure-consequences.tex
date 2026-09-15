@@ -1,6 +1,11 @@
-\subsection{Induktion und Zerlegung aus den Wortaxiomen}
+\subsection{Formen des Induktionsaxioms und eindeutige Endzerlegung}
 
-Die folgenden Hilfssätze machen die Typisierung und die Behandlung eines geordneten Paars als Funktionsargument ausdrücklich verfügbar.
+Das Induktionsaxiom W3 steht nun wie das Peano-Induktionsaxiom direkt
+für Beweise zur Verfügung. Zunächst begründen wir, warum seine drei
+registrierten Formen dasselbe Prinzip ausdrücken. Anschließend wenden
+wir die axiomatische Regel auf die Zerlegung in Anfang oder Nachfolger
+an. Zwei kurze Hilfssätze stellen dafür die Typisierung und die
+Behandlung des Paars \((u,a)\) als Funktionsargument bereit.
 
 \noindent\begin{minipage}{\linewidth}
 \FormulaThmDeltaK[Typisierung eines Anfügungsschritts]{%
@@ -41,11 +46,15 @@ Die folgenden Hilfssätze machen die Typisierung und die Behandlung eines geordn
 
 
 
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Induktion in einer Wortstruktur]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]&\forall u\in W\,\forall a\in A\,(P(u)\rightarrow P(s(u,a)))\vdash\forall w\in W\,P(w)\end{aligned}
-}{WordStructureInduction}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep w}\DeltaRow{Funktionen}{s}\DeltaRow{Prädikat}{P}\DeltaRow{Abkürzung}{U=\{w\in W\mid P(w)\}}}
-\end{minipage}\par
+Die folgende Herleitung rechtfertigt die Prädikatsform
+\FormulaRefAuto{WordStructureInduction}[ax] allein aus der Mengenform
+von W3. Sie führt kein weiteres Strukturaxiom ein. Der Beweis entspricht
+der Herleitung der Zahleninduktion aus der Minimalität:
+Wir bilden \(U=\{w\in W\mid P(w)\}\).
+Der Anfang zeigt \(e\in U\), der Schritt den Abschluss unter jeder
+Anfügung. W3 liefert dann \(U=W\).
+
+\noindent\textit{Begründung der Prädikatsform von W3.}
 \begin{tabproofwide}
   \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
   \proofstepwidestar[2]{P(e)}{\rA}
@@ -69,29 +78,25 @@ Die folgenden Hilfssätze machen die Typisierung und die Behandlung eines geordn
 \end{tabproofwide}
 
 
-Die Mengenform und die Prädikatsform der Induktion sind gleichwertig: In der Rückrichtung setzt man \(P(w)\coloneqq w\in U\) und benutzt die Teilmengendefinition.
+Die Mengenform und die Prädikatsform der Induktion sind gleichwertig:
+In der Rückrichtung setzt man \(P(w)\coloneqq w\in U\) und benutzt
+die Teilmengendefinition. Wortinduktion beweist damit eine Eigenschaft
+für alle Wörter. Davon unterscheiden wir im folgenden Rekursionsbeweis
+die Zahleninduktion: Sie wird Eigenschaften der mit natürlichen Zahlen
+nummerierten Aufbaustufen beweisen. Eine solche Stufe kann viele
+verschiedene Wörter zugleich erfassen.
 
 
-\Needspace{32\baselineskip}
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Induktionsregel in einer Wortstruktur]{%
-  \begin{aligned}[t]
-    &\mathsf{WortStr}_A(W,e,s)\dsep P(e)\dsep{}\\[-2pt]
-    &[u\in W,a\in A,P(u)]\vdots P(s(u,a))\dsep{}\\[-2pt]
-    &v\in W\vdash P(v)
-  \end{aligned}
-}{WordStructureInductionRule}{%
-  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep u\dsep a\dsep v}
-  \DeltaRow{Funktionen}{s}
-  \DeltaRow{Einstelliges Prädikat}{P}
-}
-\end{minipage}\par
-Diese Regel wird aus der durch W3 begründeten Induktion abgeleitet und
-gilt für jede Wortstruktur. Wie bei der konkreten Wortregel sind
-\(u,a\) beliebig und kommen in den übrigen offenen Annahmen nicht frei
-vor. Die Notation \([i,j,k]\vdots l\) in einem Regelverweis nennt die
-entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
-\Needspace{9\baselineskip}
+\Needspace{24\baselineskip}
+\noindent\textit{Begründung der Regelform von W3.}
+Der folgende Beweis rechtfertigt die registrierte axiomatische Regel
+\FormulaRefAuto{WordStructureInductionRule}[ax]: Der lokale
+Schrittbeweis lässt sich durch Implikations- und Allquantoreinführung
+als allgemeine Schrittaussage schreiben. Umgekehrt liefert diese
+Schrittaussage unter den lokalen Annahmen unmittelbar den geforderten
+Schrittbeweis. Es gelten die bei der Regel genannten
+Variablenbedingungen.
+\Needspace{20\baselineskip}
 \begin{tabproofwide}
   \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
   \proofstepwidestar[2]{P(e)}{\rA}
@@ -101,15 +106,33 @@ entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
   \proofstepwidestar[6]{P(u)}{\rA}
   \proofstepwidestar[4,5,6]{P(s(u,a))}{%
     \begin{aligned}[t]
-      &\text{Schrittprämisse}\\[-2pt]
-      &(4,5,6)
+      &[u\in W,a\in A,P(u)]\\[-2pt]
+      &\vdots P(s(u,a))(4,5,6)
     \end{aligned}}
+  \proofstepwidestar[4,5]{P(u)\rightarrow P(s(u,a))}{\rRI{6,7}}
+  \proofstepwidestar[4]{a\in A\rightarrow
+    (P(u)\rightarrow P(s(u,a)))}{\rRI{5,8}}
+  \proofstepwidestar[4]{\forall a\in A\,
+    (P(u)\rightarrow P(s(u,a)))}{\rUI{9}}
+  \proofstepwidestar[]{u\in W\rightarrow
+    \forall a\in A\,(P(u)\rightarrow P(s(u,a)))}{\rRI{4,10}}
   \proofstepwidestar[]{\forall u\in W\,\forall a\in A\,
-    (P(u)\rightarrow P(s(u,a)))}{%
-    \rUI{\rRI{4,\rUI{\rRI{5,\rRI{6,7}}}}}}
-  \proofstepwidestar[1,2,3]{P(v)}{%
-    \rRE{3,\rUE{\FormulaRefAuto{WordStructureInduction}[thm]{1,2,8}}}}
+    (P(u)\rightarrow P(s(u,a)))}{\rUI{11}}
+  \proofstepwidestar[1,2]{\forall v\in W\,P(v)}{%
+    \FormulaRefAuto{WordStructureInduction}[ax]{1,2,12}}
+  \proofstepwidestar[1,2]{v\in W\rightarrow P(v)}{\rUE{13}}
+  \proofstepwidestar[1,2,3]{P(v)}{\rRE{3,14}}
 \end{tabproofwide}
+
+Die nächste Aussage überträgt die bekannte Alternative: Eine natürliche
+Zahl ist Null oder besitzt genau einen Vorgänger. Bei einem Wort
+gewinnen wir dabei nicht nur das vorherige Wort, sondern auch den
+letzten Buchstaben zurück. Die Existenz dieser Zerlegung folgt aus
+dem Induktionsaxiom W3, ihre Eindeutigkeit aus W2. Wie bei der
+Peano-Induktionsregel beginnen wir mit dem Anfang und führen dann einen
+beliebigen Nachfolgerschritt aus. Hier muss im Schritt zusätzlich ein
+beliebiger Buchstabe zugelassen werden. Die Induktionsannahme wird für
+diese einfache Eigenschaft nicht benötigt.
 
 \Needspace{16\baselineskip}
 \noindent\begin{minipage}{\linewidth}
@@ -129,7 +152,7 @@ entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
   \proofstepwidestar[5,6]{\exists p\in W\times A\;s(u,a)=s(p)}{\rEI{\rAI{7,8}}}
   \proofstepwidestar[5,6]{P(s(u,a))}{\rOIb{9}}
   \proofstepwidestar[1,2]{w=e\lor\exists p\in W\times A\;w=s(p)}{%
-    \FormulaRefAuto{WordStructureInductionRule}[thm]{1,4,[5,6]\vdots10,2}}
+    \FormulaRefAuto{WordStructureInductionRule}[ax]{1,4,[5,6]\vdots10,2}}
   \proofstepwidestar[12]{w=e}{\rA}
   \proofstepwidestar[12]{w=e\lor\exists!p\in W\times A\;w=s(p)}{\rOIa{12}}
   \proofstepwidestar[14]{\exists p\in W\times A\;w=s(p)}{\rA}
@@ -145,4 +168,12 @@ entlassenen lokalen Annahmen und die Endzeile des Schrittbeweises.
 \end{tabproofwide}
 
 
-Die beiden Fälle schließen einander nach \FormulaRefAuto{WordStructureZeroAxiom}[ax] aus. Für ein einelementiges Alphabet ist die Anfügung ein einzelner Nachfolger; die Bedingungen W0 bis W3 entsprechen damit Anfangselement, Nachfolgerabbildung, Injektivität und Induktion der Peano-Struktur.
+Die beiden Fälle schließen einander nach
+\FormulaRefAuto{WordStructureZeroAxiom}[ax] aus. Trotz der verschiedenen
+möglichen Fortsetzungen hat jedes Wort außer \(e\) also genau einen
+letzten Erzeugungsschritt. Dies ist die Grundlage der folgenden
+Rekursionsgleichungen: Am Anfangswort geben wir einen Anfangswert vor;
+an \(s(u,a)\) bestimmen wir den Wert aus dem Wert bei \(u\) und dem
+Buchstaben \(a\). Dass diese Vorgaben eine Funktion auf ganz \(W\)
+ergeben, muss anschließend ebenso wie bei den natürlichen Zahlen
+bewiesen werden.

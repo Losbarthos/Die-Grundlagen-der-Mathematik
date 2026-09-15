@@ -1,7 +1,98 @@
-\subsection{Rekursion unmittelbar aus den Wortaxiomen}
-Die Wortaxiome liefern Rekursion, indem aus allen abgeschlossenen Relationsgraphen ein kleinster ausgewählt wird. Die folgenden Definitionen halten die dafür benutzten Mengen und ihre Elementkriterien ausdrücklich fest. Ihre Parameter \(A,W,e,s,X,x_0,r\) bleiben in diesem Abschnitt fest.
+\subsection{Wortrekursion als Verallgemeinerung der Zahlenrekursion}
 
-\FormulaDefDeltaK[Rekursionsgleichungen einer Wortstruktur]{%
+Die Wortaxiome erlauben dieselbe Unterscheidung wie die Peano-Axiome:
+Induktion beweist eine Eigenschaft für alle Elemente; Rekursion legt
+ihre Funktionswerte durch Anfang und Fortsetzung fest. Aus Band~10
+kennen wir den Dedekindschen Rekursionssatz
+(\FormulaRefAuto{DedekindRecursionTheorem}[thm]). Wir übersetzen zunächst
+seine Daten in die Sprache der Wörter.
+
+\Needspace{14\baselineskip}
+\begingroup
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{4pt}
+\noindent\begin{tabular}{@{}p{.21\linewidth}p{.32\linewidth}p{.41\linewidth}@{}}
+ & \textbf{Natürliche Zahlen} & \textbf{Wörter} \\
+Anfang & \(0\) & \(e\) \\
+Nachfolger & \(\Succ(n)\) & \(s(u,a)\) für \(a\in A\) \\
+Anfangswert & \(f(0)=x_0\) & \(F(e)=x_0\) \\
+Fortsetzung & \(f(\Succ(n))=q(f(n))\)
+  & \(F(s(u,a))=r(F(u),a)\)
+\end{tabular}\par
+\endgroup
+
+Bei den Zahlen ist der nächste Schritt durch den Nachfolger festgelegt.
+Bei Wörtern geben wir zusätzlich den angefügten Buchstaben an. Für
+jeden festgehaltenen Buchstaben ist \(s_a(u)=s(u,a)\) eine eindeutig
+bestimmte Nachfolgerfunktion. Deshalb erhält auch die Schrittfunktion
+für die Werte diesen Buchstaben als weiteres Argument. Über einem
+einelementigen Alphabet bleibt nur ein solcher Nachfolger übrig.
+
+Die Übersetzung einer Zahlenkette in die Wortstruktur ist damit bereits
+eine Anwendung von Band~10: Für festes \(a\in A\) liefert der
+Dedekindsche Rekursionssatz mit \(M=W\), \(m_0=e\) und \(f=s_a\)
+die eindeutig bestimmte Abbildung
+\(j_a\colon\mathbb N\to W\) mit
+\[
+  j_a(0)=e,\qquad j_a(\Succ(n))=s_a(j_a(n))
+  \quad(n\in\mathbb N).
+\]
+Die Voraussetzungen \(e\in W\) und \(s_a\colon W\to W\) liefert W0.
+Die Abbildung \(j_a\) übersetzt \(0,1,2,3\) in
+\(e,s(e,a),s(s(e,a),a),s(s(s(e,a),a),a)\).
+Bei mehreren Buchstaben beschreibt diese Zahlenkette nur die
+Fortsetzungen mit dem gewählten Buchstaben. Die Wortrekursion muss
+dagegen auch den Wechsel der Buchstaben zulassen. Darin liegt die
+Verallgemeinerung des einzelnen Zahlennachfolgers.
+
+\paragraph{Die gesuchte Funktion.}
+Gegeben seien eine freie Wortstruktur \((W,e,s)\) über \(A\), eine
+Wertemenge \(X\), ein Anfangswert \(x_0\in X\) und eine bereits
+definierte Funktion \(r\colon X\times A\to X\). Gesucht ist eine
+Funktion \(F\colon W\to X\) mit
+\[
+  F(e)=x_0,\qquad F(s(u,a))=r(F(u),a)
+  \quad(u\in W,\ a\in A).
+\]
+Der \emph{Wortrekursionssatz} wird zeigen, dass genau eine solche
+Funktion existiert. Die Menge \(X\) muss selbst keine Wortstruktur
+sein. Auch die Werte müssen die Wörter nicht unterscheiden: Verschiedene
+Wörter dürfen denselben Wert besitzen.
+
+Für \(a,b\in A\) schreibt diese Regel beispielsweise vor:
+\[
+  \begin{aligned}
+    F(s(e,a))&=r(x_0,a),\\[-2pt]
+    F(s(s(e,a),b))&=r(r(x_0,a),b).
+  \end{aligned}
+\]
+Die Buchstaben dürfen gleich sein. Wählen wir \(X=\mathbb N\),
+\(x_0=0\) und \(r(k,a)=\Succ(k)\), so zählt jeder Anfügungsschritt
+eins weiter. Im konkreten Wortmodell ergeben sich damit die bereits
+bekannten Längenwerte. Bei einem größeren Alphabet beschreibt die
+Anzahl der Schritte jedoch nicht, welche Buchstaben angefügt wurden.
+
+\paragraph{Die formale Abkürzung.}
+Die Daten \(A,W,e,s,X,x_0,r\) bleiben im Folgenden fest; \(F\) ist
+die gesuchte Funktion. Die Schreibweise \(\mathsf{WRec}_A\) fasst
+nur ihre Typisierung und die beiden Gleichungen zusammen. Sie führt
+keine weitere Art des Wortaufbaus ein.
+
+\Needspace{19\baselineskip}
+\FormulaDefDeltaKR[Rekursionsgleichungen einer Wortstruktur]{%
+  \begin{aligned}[t]
+    &\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\coloneqq{}\\[2pt]
+    &\begin{aligned}[t]
+      &F\colon W\to X
+        &&\text{(R0: Typisierung)}\\[-2pt]
+      &{}\land F(e)=x_0
+        &&\text{(R1: Anfang)}\\[-2pt]
+      &{}\land\forall u\in W\,\forall a\in A\;
+        F(s(u,a))=r(F(u),a)
+        &&\text{(R2: Fortsetzung)}
+    \end{aligned}
+  \end{aligned}
+}{%
 \begin{aligned}[t]&\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\coloneqq{}\\[-2pt]
 &F\colon W\to X\land F(e)=x_0\land{}\\[-2pt]
 &\forall u\in W\,\forall a\in A\;F(s(u,a))=r(F(u),a)
@@ -10,292 +101,29 @@ Die Wortaxiome liefern Rekursion, indem aus allen abgeschlossenen Relationsgraph
 \DeltaRow{Funktionen}{F\dsep s\dsep r}
 \DeltaRow{Neues Symbol}{\mathsf{WRec}_A(F;W,e,s;X,x_0,r)}}
 
-\FormulaDefDeltaK[Umgebungsmenge der Rekursionsgraphen]{B\coloneqq W\times X}{WordRecursionAmbientDef}{\DeltaRow{Mengen}{W\dsep X}\DeltaRow{Neues Symbol}{B}}
-\FormulaDefDeltaK[Abgeschlossenheit eines Rekursionsgraphen]{%
-\begin{aligned}[t]&C(H)\coloneqq H\subseteq B\land(e,x_0)\in H\land{}\\[-2pt]
-&\forall u\in W\,\forall x\in X\,\forall a\in A\;\\[-2pt]
-&\qquad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in H)
-\end{aligned}}{WordRecursionClosedGraphDef}{\DeltaRow{Mengen}{A\dsep W\dsep X\dsep e\dsep x_0\dsep H\dsep u\dsep x\dsep a}\DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Neues Symbol}{C(H)}}
-\FormulaDefDeltaK[Familie der abgeschlossenen Graphen]{\mathcal C\coloneqq\{H\in\powerset B\mid C(H)\}}{WordRecursionGraphFamilyDef}{\DeltaRow{Mengen}{H}\DeltaRow{Neues Symbol}{\mathcal C}}
-\FormulaDefDeltaK[Der gemeinsame Teil aller abgeschlossenen Graphen]{G\coloneqq\{p\in B\mid\forall H\in\mathcal C\;p\in H\}}{WordRecursionLeastGraphDef}{\DeltaRow{Mengen}{p\dsep H}\DeltaRow{Neues Symbol}{G}}
+\subsubsection{Eindeutigkeit durch Wortinduktion}
 
+Wie bei der Zahlenrekursion stimmen zwei Lösungen am Anfang überein.
+Stimmen sie bei einem Wort überein, so auch bei jeder seiner
+Fortsetzungen: Beide verwenden denselben bisherigen Wert und denselben
+Buchstaben. Der Induktionsschritt wird deshalb für jedes \(a\in A\)
+geführt. Die axiomatische Wortinduktion
+\FormulaRefAuto{WordStructureInductionRule}[ax] durchläuft dabei die
+Wörter selbst.
+Sie setzt noch keine Konstruktion einer Rekursionslösung voraus.
 
-Die Mengen in diesen Definitionen sind Aussonderungen aus vorhandenen Mengen. Ihre Existenz und Eindeutigkeit liegen in
-\FormulaRefAuto{\{x\in A\,\mid\,P(x)\}\coloneq\iota B\bigl(\forall x\,(x\in B\leftrightarrow(x\in A\land P(x)))\bigr)}[def]. Ein Graph muss hier noch keine Funktion sein.
-Für \(B=W\times X\) verwenden wir den allgemeinen Faserfilter
-\(\Phi^{W,X}_{t,c}(K)\) aus
-\FormulaRefAuto{WordRecursionFiberFilterDef}[def].
-
-
+\Needspace{19\baselineskip}
 \noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Mitgliedschaft in der Familie abgeschlossener Graphen]{%
-H\in\mathcal C\eqvdash C(H)
-}{WordRecursionFamilyMembership}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[]{\mathcal C=\{H\in\powerset B\mid C(H)\}}{\FormulaRefAuto{WordRecursionGraphFamilyDef}[def]}
-  \proofstepwidestar[]{H\in\mathcal C\leftrightarrow H\in\powerset B\land C(H)}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{1},\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]}}
-  \proofstepwidestar[3]{C(H)}{\rA}
-  \proofstepwidestar[3]{H\subseteq B}{\rAEa{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{3}}}
-  \proofstepwidestar[3]{H\in\powerset B}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{4}}
-  \proofstepwidestar[]{C(H)\rightarrow H\in\powerset B}{\rRI{3,5}}
-  \proofstepwidestar[]{H\in\mathcal C\leftrightarrow C(H)}{%
-    \rLRS{\FormulaRefAuto{P\rightarrow Q\vdash
-      (Q\land P)\leftrightarrow P}[thm]{6},2}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Elementkriterium des kleinsten Rekursionsgraphen]{%
-p\in G\eqvdash p\in B\land\forall H\in\mathcal C\;p\in H
-}{WordRecursionLeastMembership}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[]{G=\{p\in B\mid\forall H\in\mathcal C\;p\in H\}}{\FormulaRefAuto{WordRecursionLeastGraphDef}[def]}
-  \proofstepwidestar[]{p\in G\leftrightarrow p\in B\land\forall H\in\mathcal C\;p\in H}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{1},\FormulaRefAuto{x\in\{u\in A\mid P(u)\}\eqvdash x\in A\land P(x)}[thm]}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Trägermenge eines abgeschlossenen Graphen]{%
-C(H)\vdash H\subseteq B
-}{WordRecursionClosedGraphSubset}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{C(H)}{\rA}
-  \proofstepwidestar[1]{\begin{aligned}[t]&H\subseteq B\land(e,x_0)\in H\land{}\\&\begin{aligned}[t]&\forall u\in W\,\forall x\in X\,\forall a\in A\\[-2pt]&\quad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in H)\end{aligned}\end{aligned}}{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{1}}
-  \proofstepwidestar[1]{ H\subseteq B}{\rAEa{2}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Anfangspunkt eines abgeschlossenen Graphen]{%
-C(H)\vdash(e,x_0)\in H
-}{WordRecursionClosedGraphBase}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{C(H)}{\rA}
-  \proofstepwidestar[1]{\begin{aligned}[t]&H\subseteq B\land(e,x_0)\in H\land{}\\&\begin{aligned}[t]&\forall u\in W\,\forall x\in X\,\forall a\in A\\[-2pt]&\quad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in H)\end{aligned}\end{aligned}}{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{1}}
-  \proofstepwidestar[1]{(e,x_0)\in H}{\rAEa{\rAEb{2}}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Einzelner Schritt in einem abgeschlossenen Graphen]{%
-\begin{aligned}[t]&C(H)\dsep u\in W\dsep x\in X\dsep a\in A\dsep{}\\[-2pt]&(u,x)\in H\vdash(s(u,a),r(x,a))\in H\end{aligned}
-}{WordRecursionClosedGraphStep}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{C(H)}{\rA}
-  \proofstepwidestar[2]{u\in W}{\rA}
-  \proofstepwidestar[3]{x\in X}{\rA}
-  \proofstepwidestar[4]{a\in A}{\rA}
-  \proofstepwidestar[5]{(u,x)\in H}{\rA}
-  \proofstepwidestar[1]{\begin{aligned}[t]&\forall u\in W\,\forall x\in X\,\forall a\in A\\[-2pt]&\quad((u,x)\in H\rightarrow(s(u,a),r(x,a))\in H)\end{aligned}}{\rAEb{\rAEb{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{1}}}}
-  \proofstepwidestar[1,2,3,4]{(u,x)\in H\rightarrow(s(u,a),r(x,a))\in H}{\rRE{4,\rUE{\rRE{3,\rUE{\rRE{2,\rUE{6}}}}}}}
-  \proofstepwidestar[1,2,3,4,5]{(s(u,a),r(x,a))\in H}{\rRE{5,7}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Kleinster abgeschlossener Rekursionsgraph]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&C(G)\land\forall H\,(C(H)\rightarrow G\subseteq H)\end{aligned}
-}{WordStructureRecursionLeastGraph}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
-  \proofstepwidestar[2]{x_0\in X}{\rA}
-  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
-  \proofstepwidestar[1]{e\in W\land s\colon W\times A\to W}{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}
-  \proofstepwidestar[]{G\subseteq B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionLeastGraphDef}[def]},\FormulaRefAuto{\{x\in A\mid P(x)\}\subseteq A}[thm]}}
-  \proofstepwidestar[1,2]{(e,x_0)\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{\rAEa{4},2}}}}
-  \proofstepwidestar[7]{H\in\mathcal C}{\rA}
-  \proofstepwidestar[7]{C(H)}{\FormulaRefAuto{WordRecursionFamilyMembership}[thm]{7}}
-  \proofstepwidestar[7]{(e,x_0)\in H}{\FormulaRefAuto{WordRecursionClosedGraphBase}[thm]{8}}
-  \proofstepwidestar[]{\forall H\in\mathcal C\;(e,x_0)\in H}{\rUI{\rRI{7,9}}}
-  \proofstepwidestar[1,2]{(e,x_0)\in G}{\FormulaRefAuto{WordRecursionLeastMembership}[thm]{\rAI{6,10}}}
-  \proofstepwidestar[12]{u\in W}{\rA}
-  \proofstepwidestar[13]{y\in X}{\rA}
-  \proofstepwidestar[14]{a\in A}{\rA}
-  \proofstepwidestar[15]{(u,y)\in G}{\rA}
-  \proofstepwidestar[1,12,14]{s(u,a)\in W}{\FormulaRefAuto{WordStructureStepTyping}[thm]{1,12,14}}
-  \proofstepwidestar[13,14]{(y,a)\in X\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{13,14}}}
-  \proofstepwidestar[3,13,14]{r(y,a)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,17}}
-  \proofstepwidestar[1,3,12,13,14]{(s(u,a),r(y,a))\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{16,18}}}}
-  \proofstepwidestar[15]{(u,y)\in B\land\forall H\in\mathcal C\;(u,y)\in H}{\FormulaRefAuto{WordRecursionLeastMembership}[thm]{15}}
-  \proofstepwidestar[21]{H\in\mathcal C}{\rA}
-  \proofstepwidestar[21]{C(H)}{\FormulaRefAuto{WordRecursionFamilyMembership}[thm]{21}}
-  \proofstepwidestar[15,21]{(u,y)\in H}{\rRE{21,\rUE{\rAEb{20}}}}
-  \proofstepwidestar[12,13,14,15,21]{(s(u,a),r(y,a))\in H}{\FormulaRefAuto{WordRecursionClosedGraphStep}[thm]{22,12,13,14,23}}
-  \proofstepwidestar[12,13,14,15]{\forall H\in\mathcal C\;(s(u,a),r(y,a))\in H}{\rUI{\rRI{21,24}}}
-  \proofstepwidestar[1,3,12,13,14,15]{(s(u,a),r(y,a))\in G}{\FormulaRefAuto{WordRecursionLeastMembership}[thm]{\rAI{19,25}}}
-  \proofstepwidestar[1,3]{\begin{aligned}[t]&\forall u\in W\,\forall y\in X\,\forall a\in A\\[-2pt]&\quad((u,y)\in G\rightarrow(s(u,a),r(y,a))\in G)\end{aligned}}{\rUI{\rRI{12,\rUI{\rRI{13,\rUI{\rRI{14,\rRI{15,26}}}}}}}}
-  \proofstepwidestar[1,2,3]{C(G)}{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{\rAI{5,\rAI{11,27}}}}
-  \proofstepwidestar[29]{C(H)}{\rA}
-  \proofstepwidestar[29]{H\in\mathcal C}{\FormulaRefAuto{WordRecursionFamilyMembership}[thm]{29}}
-  \proofstepwidestar[31]{p\in G}{\rA}
-  \proofstepwidestar[31]{p\in B\land\forall H\in\mathcal C\;p\in H}{\FormulaRefAuto{WordRecursionLeastMembership}[thm]{31}}
-  \proofstepwidestar[29,31]{p\in H}{\rRE{30,\rUE{\rAEb{32}}}}
-  \proofstepwidestar[29]{G\subseteq H}{\FormulaRefAuto{SubsetIntroductionRule}[thm]{[31]\vdots 33}}
-  \proofstepwidestar[]{\forall H\,(C(H)\rightarrow G\subseteq H)}{\rUI{\rRI{29,34}}}
-  \proofstepwidestar[1,2,3]{C(G)\land\forall H\,(C(H)\rightarrow G\subseteq H)}{\rAI{28,35}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Eindeutiger Anfangswert des kleinsten Graphen]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&\exists!x\in X\;(e,x)\in G\end{aligned}
-}{WordStructureRecursionBaseFiber}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Abkürzung}{H_0=\Phi^{W,X}_{e,x_0}(B)}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
-  \proofstepwidestar[2]{x_0\in X}{\rA}
-  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
-  \proofstepwidestar[1,2,3]{C(G)\land\forall H\,(C(H)\rightarrow G\subseteq H)}{\FormulaRefAuto{WordStructureRecursionLeastGraph}[thm]{1,2,3}}
-  \proofstepwidestar[1]{e\in W\land s\colon W\times A\to W}{\FormulaRefAuto{WordStructureTypingAxiom}[ax]{1}}
-  \proofstepwidestar[]{H_0\subseteq B}{\FormulaRefAuto{WordRecursionFilterSubset}[thm]}
-  \proofstepwidestar[]{B\subseteq B}{\FormulaRefAuto{A\subseteq A}[thm]}
-  \proofstepwidestar[1,2]{(e,x_0)\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{\rAEa{5},2}}}}
-  \proofstepwidestar[]{x_0=x_0}{\rII}
-  \proofstepwidestar[]{e\ne e\lor x_0=x_0}{\rOIb{9}}
-  \proofstepwidestar[1,2]{(e,x_0)\in H_0}{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],7},\rAI{8,10}}}
-  \proofstepwidestar[12]{u\in W}{\rA}
-  \proofstepwidestar[13]{y\in X}{\rA}
-  \proofstepwidestar[14]{a\in A}{\rA}
-  \proofstepwidestar[1,12,14]{s(u,a)\in W}{\FormulaRefAuto{WordStructureStepTyping}[thm]{1,12,14}}
-  \proofstepwidestar[13,14]{(y,a)\in X\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{13,14}}}
-  \proofstepwidestar[3,13,14]{r(y,a)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,16}}
-  \proofstepwidestar[1,3,12,13,14]{(s(u,a),r(y,a))\in B}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\FormulaRefAuto{WordRecursionAmbientDef}[def]},\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{15,17}}}}
-  \proofstepwidestar[1,12,14]{s(u,a)\ne e}{\FormulaRefAuto{WordStructureZeroAxiom}[ax]{1,12,14}}
-  \proofstepwidestar[1,12,14]{s(u,a)\ne e\lor r(y,a)=x_0}{\rOIa{19}}
-  \proofstepwidestar[1,3,12,13,14]{(s(u,a),r(y,a))\in H_0}{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],7},\rAI{18,20}}}
-  \proofstepwidestar[1,3,12,13,14]{(u,y)\in H_0\rightarrow(s(u,a),r(y,a))\in H_0}{\FormulaRefAuto{Q\vdash P\rightarrow Q}[thm]{21}}
-  \proofstepwidestar[1,3]{\begin{aligned}[t]&\forall u\in W\,\forall y\in X\,\forall a\in A\\[-2pt]&\quad((u,y)\in H_0\rightarrow(s(u,a),r(y,a))\in H_0)\end{aligned}}{\rUI{\rRI{12,\rUI{\rRI{13,\rUI{\rRI{14,22}}}}}}}
-  \proofstepwidestar[1,2,3]{C(H_0)}{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{\rAI{6,\rAI{11,23}}}}
-  \proofstepwidestar[1,2,3]{G\subseteq H_0}{\rRE{24,\rUE{\rAEb{4}}}}
-  \proofstepwidestar[1,2,3]{(e,x_0)\in G}{\FormulaRefAuto{WordRecursionClosedGraphBase}[thm]{\rAEa{4}}}
-  \proofstepwidestar[27]{z\in X\land(e,z)\in G}{\rA}
-  \proofstepwidestar[1,2,3,27]{(e,z)\in H_0}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{25,\rAEb{27}}}
-  \proofstepwidestar[1,2,3,27]{z=x_0}{\FormulaRefAuto{WordRecursionFilterOwnFiber}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],7},28}}
-  \proofstepwidestar[1,2,3]{\forall z\,((z\in X\land(e,z)\in G)\rightarrow z=x_0)}{\rUI{\rRI{27,29}}}
-  \proofstepwidestar[1,2,3]{\exists!x\in X\;(e,x)\in G}{\FormulaRefAuto{WordUniqueExistenceFromWitness}[thm]{\rAI{2,26},30}}
-\end{tabproofwide}
-
-
-Für den Induktionsschritt wird die Faser über \(s(u,a)\) gefiltert. Der folgende Beweis führt die dabei benötigte Injektivität und Faser-Eindeutigkeit getrennt aus.
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Eindeutige Werte bleiben beim Anfügen eindeutig]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]&u\in W\dsep a\in A\dsep\exists!x\in X\;(u,x)\in G\vdash{}\\[-2pt]&\exists!z\in X\;(s(u,a),z)\in G\end{aligned}
-}{WordStructureRecursionStepFiber}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Abkürzungen}{x=\iota y\in X\;(u,y)\in G\dsep t=s(u,a)\dsep c=r(x,a)}\DeltaRow{Abkürzung}{H=\Phi^{W,X}_{t,c}(G)}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
-  \proofstepwidestar[2]{x_0\in X}{\rA}
-  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
-  \proofstepwidestar[4]{u\in W}{\rA}
-  \proofstepwidestar[5]{a\in A}{\rA}
-  \proofstepwidestar[6]{\exists!x\in X\;(u,x)\in G}{\rA}
-  \proofstepwidestar[6]{x\in X\land(u,x)\in G}{\FormulaRefAuto{IotaSymbolDef}[def]{6}}
-  \proofstepwidestar[1,2,3]{C(G)\land\forall K\,(C(K)\rightarrow G\subseteq K)}{\FormulaRefAuto{WordStructureRecursionLeastGraph}[thm]{1,2,3}}
-  \proofstepwidestar[1,2,3]{G\subseteq B}{\FormulaRefAuto{WordRecursionClosedGraphSubset}[thm]{\rAEa{8}}}
-  \proofstepwidestar[]{H\subseteq G}{\FormulaRefAuto{WordRecursionFilterSubset}[thm]}
-  \proofstepwidestar[1,2,3]{H\subseteq B}{\FormulaRefAuto{A\subseteq B,B\subseteq C\vdash A\subseteq C}[thm]{10,9}}
-  \proofstepwidestar[1,4,5]{t\in W}{\FormulaRefAuto{WordStructureStepTyping}[thm]{1,4,5}}
-  \proofstepwidestar[6,5]{(x,a)\in X\times A}{\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm]{\rAI{\rAEa{7},5}}}
-  \proofstepwidestar[3,6,5]{c\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{3,13}}
-  \proofstepwidestar[1,2,3]{(e,x_0)\in G}{\FormulaRefAuto{WordRecursionClosedGraphBase}[thm]{\rAEa{8}}}
-  \proofstepwidestar[1,4,5]{t\ne e}{\FormulaRefAuto{WordStructureZeroAxiom}[ax]{1,4,5}}
-  \proofstepwidestar[1,4,5]{e\ne t}{\FormulaRefAuto{a\neq b\vdash b\neq a}[thm]{16}}
-  \proofstepwidestar[1,4,5]{e\ne t\lor x_0=c}{\rOIa{17}}
-  \proofstepwidestar[1,2,3,4,5]{(e,x_0)\in H}{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],9},\rAI{15,18}}}
-  \proofstepwidestar[20]{v\in W}{\rA}
-  \proofstepwidestar[21]{y\in X}{\rA}
-  \proofstepwidestar[22]{b\in A}{\rA}
-  \proofstepwidestar[23]{(v,y)\in H}{\rA}
-  \proofstepwidestar[23]{(v,y)\in G}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{10,23}}
-  \proofstepwidestar[1,2,3,20,21,22,23]{(s(v,b),r(y,b))\in G}{\FormulaRefAuto{WordRecursionClosedGraphStep}[thm]{\rAEa{8},20,21,22,24}}
-  \proofstepwidestar[26]{s(v,b)=t}{\rA}
-  \proofstepwidestar[1,4,5,20,22,26]{v=u\land b=a}{\FormulaRefAuto{WordStructureInjectivityAxiom}[ax]{1,20,4,22,5,26}}
-  \proofstepwidestar[1,4,5,20,22,26,23]{(u,y)\in G}{\rIE{\rAEa{27},24}}
-  \proofstepwidestar[1,4,5,20,21,22,26,23,6]{y=x}{\FormulaRefAuto{\exists! x\,P(x),\; P(a),\; P(b) \vdash a = b}[thm]{6,\rAI{21,28},7}}
-  \proofstepwidestar[]{r(x,a)=c}{\rII}
-  \proofstepwidestar[1,4,5,20,21,22,26,23,6]{r(y,b)=c}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{29},\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{27}},30}}
-  \proofstepwidestar[1,4,5,20,21,22,23,6]{s(v,b)=t\rightarrow r(y,b)=c}{\rRI{26,31}}
-  \proofstepwidestar[1,4,5,20,21,22,23,6]{s(v,b)\ne t\lor r(y,b)=c}{\FormulaRefAuto{P\rightarrow Q\eqvdash\neg P\lor Q}[thm]{32}}
-  \proofstepwidestar[1,2,3,4,5,20,21,22,23,6]{(s(v,b),r(y,b))\in H}{\FormulaRefAuto{WordRecursionFilterMembership}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],9},\rAI{25,33}}}
-  \proofstepwidestar[1,2,3,4,5,6]{\begin{aligned}[t]&\forall v\in W\,\forall y\in X\,\forall b\in A\\&\quad((v,y)\in H\rightarrow(s(v,b),r(y,b))\in H)\end{aligned}}{\rUI{\rRI{20,\rUI{\rRI{21,\rUI{\rRI{22,\rRI{23,34}}}}}}}}
-  \proofstepwidestar[1,2,3,4,5,6]{C(H)}{\FormulaRefAuto{WordRecursionClosedGraphDef}[def]{\rAI{11,\rAI{19,35}}}}
-  \proofstepwidestar[1,2,3,4,5,6]{G\subseteq H}{\rRE{36,\rUE{\rAEb{8}}}}
-  \proofstepwidestar[1,2,3,4,5,6]{(t,c)\in G}{\FormulaRefAuto{WordRecursionClosedGraphStep}[thm]{\rAEa{8},4,\rAEa{7},5,\rAEb{7}}}
-  \proofstepwidestar[39]{z\in X\land(t,z)\in G}{\rA}
-  \proofstepwidestar[1,2,3,4,5,6,39]{(t,z)\in H}{\FormulaRefAuto{A\subseteq B\dsep x\in A\vdash x\in B}[thm]{37,\rAEb{39}}}
-  \proofstepwidestar[1,2,3,4,5,6,39]{z=c}{\FormulaRefAuto{WordRecursionFilterOwnFiber}[thm]{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],9},40}}
-  \proofstepwidestar[1,2,3,4,5,6]{\forall z\,((z\in X\land(t,z)\in G)\rightarrow z=c)}{\rUI{\rRI{39,41}}}
-  \proofstepwidestar[1,2,3,4,5,6]{\exists!z\in X\;(s(u,a),z)\in G}{\FormulaRefAuto{WordUniqueExistenceFromWitness}[thm]{\rAI{14,38},42}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Der kleinste Rekursionsgraph ist eine Funktion]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&G\colon W\to X\end{aligned}
-}{WordStructureRecursionGraphFunction}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Abkürzung}{P(u)\coloneqq\exists!x\in X\;(u,x)\in G}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
-  \proofstepwidestar[2]{x_0\in X}{\rA}
-  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
-  \proofstepwidestar[1,2,3]{P(e)}{\FormulaRefAuto{WordStructureRecursionBaseFiber}[thm]{1,2,3}}
-  \proofstepwidestar[5]{u\in W}{\rA}
-  \proofstepwidestar[6]{a\in A}{\rA}
-  \proofstepwidestar[7]{P(u)}{\rA}
-  \proofstepwidestar[1,2,3,5,6,7]{P(s(u,a))}{\FormulaRefAuto{WordStructureRecursionStepFiber}[thm]{1,2,3,5,6,7}}
-  \proofstepwidestar[1,2,3]{\forall u\in W\,\forall a\in A\;(P(u)\rightarrow P(s(u,a)))}{\rUI{\rRI{5,\rUI{\rRI{6,\rRI{7,8}}}}}}
-  \proofstepwidestar[1,2,3]{\forall u\in W\,\exists!x\in X\;(u,x)\in G}{\FormulaRefAuto{WordStructureInduction}[thm]{1,4,9}}
-  \proofstepwidestar[1,2,3]{C(G)\land\forall H\,(C(H)\rightarrow G\subseteq H)}{\FormulaRefAuto{WordStructureRecursionLeastGraph}[thm]{1,2,3}}
-  \proofstepwidestar[1,2,3]{G\subseteq W\times X}{\rIE{\FormulaRefAuto{WordRecursionAmbientDef}[def],\FormulaRefAuto{WordRecursionClosedGraphSubset}[thm]{\rAEa{11}}}}
-  \proofstepwidestar[1,2,3]{G\colon W\to X}{\FormulaRefAuto{UniqueValuedGraphFunction}[thm]{12,10}}
-\end{tabproofwide}
-
-
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Rekursionsgleichungen des kleinsten Graphen]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&\mathsf{WRec}_A(G;W,e,s;X,x_0,r)\end{aligned}
-}{WordStructureRecursionGraphEquations}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}}
-\end{minipage}\par
-\begin{tabproofwide}
-  \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
-  \proofstepwidestar[2]{x_0\in X}{\rA}
-  \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
-  \proofstepwidestar[1,2,3]{G\colon W\to X}{\FormulaRefAuto{WordStructureRecursionGraphFunction}[thm]{1,2,3}}
-  \proofstepwidestar[1,2,3]{C(G)\land\forall H\,(C(H)\rightarrow G\subseteq H)}{\FormulaRefAuto{WordStructureRecursionLeastGraph}[thm]{1,2,3}}
-  \proofstepwidestar[1,2,3]{(e,x_0)\in G}{\FormulaRefAuto{WordRecursionClosedGraphBase}[thm]{\rAEa{5}}}
-  \proofstepwidestar[1,2,3]{G(e)=x_0}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,6}}
-  \proofstepwidestar[8]{u\in W}{\rA}
-  \proofstepwidestar[9]{a\in A}{\rA}
-  \proofstepwidestar[1,2,3,8]{G(u)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,8}}
-  \proofstepwidestar[1,2,3,8]{(u,G(u))\in G}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash(x,F(x))\in F}[thm]{4,8}}
-  \proofstepwidestar[1,2,3,8,9]{(s(u,a),r(G(u),a))\in G}{\FormulaRefAuto{WordRecursionClosedGraphStep}[thm]{\rAEa{5},8,10,9,11}}
-  \proofstepwidestar[1,2,3,8,9]{G(s(u,a))=r(G(u),a)}{\FormulaRefAuto{F\colon A\to B\dsep(x,y)\in F\vdash F(x)=y}[thm]{4,12}}
-  \proofstepwidestar[1,2,3]{\forall u\in W\,\forall a\in A\;G(s(u,a))=r(G(u),a)}{\rUI{\rRI{8,\rUI{\rRI{9,13}}}}}
-  \proofstepwidestar[1,2,3]{\mathsf{WRec}_A(G;W,e,s;X,x_0,r)}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{\rAI{4,\rAI{7,14}}}}
-\end{tabproofwide}
-
-
-Die Rekursionsgleichungen bestimmen denselben Anfangswert. Stimmen zwei
-Lösungen an einer Stelle überein, so stimmen sie auch nach jedem
-Anfügungsschritt überein. Die Wortinduktion überträgt diese Gleichheit
-auf den ganzen Strukturträger.
-
-\Needspace{40\baselineskip}
-\noindent\begin{minipage}{\linewidth}
-\FormulaThmDeltaK[Eindeutigkeit der Wortrekursion]{%
-\begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]&\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\vdash F=G\end{aligned}
-}{WordStructureRecursionUniqueness}{%
+\FormulaThmDeltaK[Zwei Lösungen derselben Wortrekursion sind gleich]{%
+\begin{aligned}[t]
+ &\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\dsep{}\\[-2pt]
+ &\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\dsep
+   \mathsf{WRec}_A(H;W,e,s;X,x_0,r)\vdash F=H
+\end{aligned}
+}{WordRecursionTwoSolutionsEqual}{%
   \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep u\dsep v\dsep a}
-  \DeltaRow{Funktionen}{s\dsep r}
-  \DeltaRow{Funktion}{F}
-  \DeltaRow{Prädikatsabkürzung}{P(u)\coloneqq F(u)=G(u)}
+  \DeltaRow{Funktionen}{s\dsep r\dsep F\dsep H}
+  \DeltaRow{Prädikatsabkürzung}{P(u)\coloneqq F(u)=H(u)}
 }
 \end{minipage}\par
 \begin{tabproofwide}
@@ -303,27 +131,60 @@ auf den ganzen Strukturträger.
   \proofstepwidestar[2]{x_0\in X}{\rA}
   \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
   \proofstepwidestar[4]{\mathsf{WRec}_A(F;W,e,s;X,x_0,r)}{\rA}
-  \proofstepwidestar[4]{\begin{aligned}[t]&F\colon W\to X\land F(e)=x_0\land{}\\&\forall u\in W\,\forall a\in A\;F(s(u,a))=r(F(u),a)\end{aligned}}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{4}}
-  \proofstepwidestar[1,2,3]{\begin{aligned}[t]&G\colon W\to X\land G(e)=x_0\land{}\\&\forall u\in W\,\forall a\in A\;G(s(u,a))=r(G(u),a)\end{aligned}}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{\FormulaRefAuto{WordStructureRecursionGraphEquations}[thm]{1,2,3}}}
-  \proofstepwidestar[1,2,3,4]{P(e)}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEa{\rAEb{5}},\rAEa{\rAEb{6}}}}
-  \proofstepwidestar[8]{u\in W}{\rA}
-  \proofstepwidestar[9]{a\in A}{\rA}
-  \proofstepwidestar[10]{P(u)}{\rA}
-  \proofstepwidestar[4,8,9]{F(s(u,a))=r(F(u),a)}{\rRE{9,\rUE{\rRE{8,\rUE{\rAEb{\rAEb{5}}}}}}}
-  \proofstepwidestar[1,2,3,8,9]{G(s(u,a))=r(G(u),a)}{\rRE{9,\rUE{\rRE{8,\rUE{\rAEb{\rAEb{6}}}}}}}
-  \proofstepwidestar[4,8,9,10]{F(s(u,a))=r(G(u),a)}{\rIE{10,11}}
-  \proofstepwidestar[1,2,3,4,8,9,10]{P(s(u,a))}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{13,12}}
-  \proofstepwidestar[15]{v\in W}{\rA}
-  \proofstepwidestar[1,2,3,4,15]{P(v)}{\FormulaRefAuto{WordStructureInductionRule}[thm]{1,7,[8,9,10]\vdots14,15}}
-  \proofstepwidestar[1,2,3,4]{\forall v\in W\;F(v)=G(v)}{\rUI{\rRI{15,16}}}
-  \proofstepwidestar[1,2,3,4]{F=G}{\FormulaRefAuto{FunctionExtensionality}[thm]{\rAEa{5},\rAEa{6},17}}
+  \proofstepwidestar[5]{\mathsf{WRec}_A(H;W,e,s;X,x_0,r)}{\rA}
+  \proofstepwidestar[4]{\begin{aligned}[t]&F\colon W\to X\land F(e)=x_0\land{}\\[-2pt]&\forall u\in W\,\forall a\in A\;F(s(u,a))=r(F(u),a)\end{aligned}}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{4}}
+  \proofstepwidestar[5]{\begin{aligned}[t]&H\colon W\to X\land H(e)=x_0\land{}\\[-2pt]&\forall u\in W\,\forall a\in A\;H(s(u,a))=r(H(u),a)\end{aligned}}{\FormulaRefAuto{WordRecursionSpecificationDef}[def]{5}}
+  \proofstepwidestar[4,5]{P(e)}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{\rAEa{\rAEb{6}},\rAEa{\rAEb{7}}}}
+  \proofstepwidestar[9]{u\in W}{\rA}
+  \proofstepwidestar[10]{a\in A}{\rA}
+  \proofstepwidestar[11]{P(u)}{\rA}
+  \proofstepwidestar[4,9,10]{F(s(u,a))=r(F(u),a)}{\rRE{10,\rUE{\rRE{9,\rUE{\rAEb{\rAEb{6}}}}}}}
+  \proofstepwidestar[5,9,10]{H(s(u,a))=r(H(u),a)}{\rRE{10,\rUE{\rRE{9,\rUE{\rAEb{\rAEb{7}}}}}}}
+  \proofstepwidestar[4,9,10,11]{F(s(u,a))=r(H(u),a)}{\rIE{11,12}}
+  \proofstepwidestar[4,5,9,10,11]{P(s(u,a))}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}[thm]{14,13}}
+  \proofstepwidestar[16]{v\in W}{\rA}
+  \proofstepwidestar[1,4,5,16]{P(v)}{\FormulaRefAuto{WordStructureInductionRule}[ax]{1,8,[9,10,11]\vdots15,16}}
+  \proofstepwidestar[1,4,5]{\forall v\in W\;F(v)=H(v)}{\rUI{\rRI{16,17}}}
+  \proofstepwidestar[1,4,5]{F=H}{\FormulaRefAuto{FunctionExtensionality}[thm]{\rAEa{6},\rAEa{7},18}}
 \end{tabproofwide}
 
+Damit ist gezeigt: Falls zwei Lösungen vorliegen, sind sie gleich.
+Dass überhaupt eine Lösung vorliegt, ist die Aufgabe der folgenden
+Konstruktion.
 
+\subsection{Existenz durch Rekursion über die natürlichen Zahlen}
+
+Wir bauen die Wertzuordnungen in Stufen auf. Am Anfang steht nur der
+Wert des Anfangsworts. Eine weitere Aufbauphase fügt die Werte aller
+Fortsetzungen der bisher erfassten Wörter hinzu. Die natürlichen Zahlen
+zählen diese Phasen; in einer Phase werden sämtliche Buchstaben des
+Alphabets berücksichtigt. Bei einem unendlichen Alphabet kann deshalb
+schon eine einzelne Stufe unendlich viele Wörter erfassen.
+
+Der Existenzbeweis für die Zahlenrekursion wurde in Band~10 mit
+abgeschlossenen Relationen geführt. Hier wenden wir den dort bewiesenen
+Rekursionssatz auf die Folge der Stufen an. Wir müssen noch zeigen,
+dass die Stufen eindeutige Werte besitzen, einander erweitern und
+zusammen alle Wörter erfassen. Für die ersten beiden Aufgaben benutzen
+wir Zahleninduktion, für die letzte Wortinduktion.
+
+\input{tex/b27-word-recursion-stages}
+
+\subsubsection{Der Wortrekursionssatz und seine Anwendung}
+
+Die Vereinigung der Stufen liefert nun eine Funktion mit den beiden
+Rekursionsgleichungen. Der zuvor bewiesene Eindeutigkeitssatz zeigt,
+dass jede andere Lösung mit ihr übereinstimmt. Damit ist die
+Übersetzung des Dedekindschen Rekursionssatzes auf Wörter vollständig.
+
+\Needspace{18\baselineskip}
 \noindent\begin{minipage}{\linewidth}
 \FormulaThmDeltaK[Rekursion in jeder freien Wortstruktur]{%
 \begin{aligned}[t]&\mathsf{WortStr}_A(W,e,s)\dsep x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&\exists!F\;\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\end{aligned}
-}{WordStructureRecursion}{\DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0\dsep H\dsep K\dsep u\dsep v\dsep x\dsep y\dsep a\dsep b\dsep p\dsep z\dsep t\dsep c}\DeltaRow{Funktionen}{s\dsep r}\DeltaRow{Funktion}{F}}
+}{WordStructureRecursion}{%
+  \DeltaRow{Mengen}{A\dsep W\dsep e\dsep X\dsep x_0}
+  \DeltaRow{Funktionen}{s\dsep r\dsep F}
+}
 \end{minipage}\par
 \begin{tabproofwide}
   \proofstepwidestar[1]{\mathsf{WortStr}_A(W,e,s)}{\rA}
@@ -331,14 +192,18 @@ auf den ganzen Strukturträger.
   \proofstepwidestar[3]{r\colon X\times A\to X}{\rA}
   \proofstepwidestar[1,2,3]{\mathsf{WRec}_A(G;W,e,s;X,x_0,r)}{\FormulaRefAuto{WordStructureRecursionGraphEquations}[thm]{1,2,3}}
   \proofstepwidestar[5]{\mathsf{WRec}_A(F;W,e,s;X,x_0,r)}{\rA}
-  \proofstepwidestar[1,2,3,5]{F=G}{\FormulaRefAuto{WordStructureRecursionUniqueness}[thm]{1,2,3,5}}
+  \proofstepwidestar[1,2,3,5]{F=G}{\FormulaRefAuto{WordRecursionTwoSolutionsEqual}[thm]{1,2,3,5,4}}
   \proofstepwidestar[1,2,3]{\forall F\;(\mathsf{WRec}_A(F;W,e,s;X,x_0,r)\rightarrow F=G)}{\rUI{\rRI{5,6}}}
   \proofstepwidestar[1,2,3]{\exists!F\;\mathsf{WRec}_A(F;W,e,s;X,x_0,r)}{\FormulaRefAuto{WordUniqueExistenceFromWitness}[thm]{4,7}}
 \end{tabproofwide}
 
+Für das konkrete Wortmodell setzen wir \(W=\FiniteWords A\),
+\(e=\EmptyWord A\) und \(s=\sigma_A\). Wie nach dem Rekursionssatz
+in Band~10 dürfen Anfangswert und Fortschreibung jetzt zur Definition
+einer Funktion verwendet werden: Ihre Existenz und Eindeutigkeit sind
+bereits gesichert.
 
-Dieser Beweis verwendet die Wortaxiome sowie die Mengen- und Funktionentheorie der früheren Bände. Für ein leeres Alphabet sind alle Schrittbedingungen leer; derselbe Beweis liefert die eindeutige Funktion mit Anfangswert \(x_0\).
-
+\Needspace{16\baselineskip}
 \noindent\begin{minipage}{\linewidth}
 \FormulaThmDeltaK[Rekursion vom Leerwort aus]{%
 \begin{aligned}[t]&x_0\in X\dsep r\colon X\times A\to X\vdash{}\\[-2pt]&\exists!F\;\mathsf{WRec}_A(F;\FiniteWords A,\EmptyWord A,\sigma_A;X,x_0,r)\end{aligned}
@@ -350,3 +215,8 @@ Dieser Beweis verwendet die Wortaxiome sowie die Mengen- und Funktionentheorie d
   \proofstepwidestar[]{\mathsf{WortStr}_A(\FiniteWords A,\EmptyWord A,\sigma_A)}{\FormulaRefAuto{WordStructureConcreteModel}[thm]}
   \proofstepwidestar[1,2]{\exists!F\;\mathsf{WRec}_A(F;\FiniteWords A,\EmptyWord A,\sigma_A;X,x_0,r)}{\FormulaRefAuto{WordStructureRecursion}[thm]{3,1,2}}
 \end{tabproofwide}
+
+Für ein leeres Alphabet entfallen alle Fortsetzungsschritte. Nach W3
+besteht \(W\) dann nur aus \(e\); jede Stufe enthält genau das
+Anfangspaar. Der Satz liefert auch in diesem Fall die eindeutige
+Funktion mit dem Wert \(x_0\).
