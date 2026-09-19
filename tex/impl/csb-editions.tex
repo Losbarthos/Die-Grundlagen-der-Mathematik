@@ -1,0 +1,40 @@
+% Darstellungen des begrenzten Cantor--Bernstein-Piloten.
+% Die regulären Fachbände enthalten Aussagen und Verweise auf die Begleitbeweise.
+\newif\ifCSBReferenz
+\newif\ifCSBLesetext
+\newif\ifCSBTabellen
+\CSBReferenztrue
+\CSBLesetextfalse
+\CSBTabellenfalse
+\NewDocumentCommand{\CSBProof}{+m}{\ifCSBTabellen#1\fi}
+% Textüberschriften ohne neue Hyperref-Zähler: bestehende Satzziele im
+% integrierten Band bleiben auch nach Einfügen des Lesetexts unverändert.
+\newcommand{\CSBHeading}[1]{\par\Needspace{5\baselineskip}\medskip\noindent\textbf{#1}\par\smallskip}
+
+% Pfade gelten zunächst für die Build-Produkte. publish-pdfs.py ersetzt sie
+% bei der Veröffentlichung durch die lesbaren benachbarten PDF-Dateinamen.
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory = "registry/csb/"
+  if job:match("^_B[0-9][0-9]$") then directory = "csb/" end
+  if job:match("^_B08%-csb%-") then directory = "" end
+  tex.sprint("\\gdef\\CSBEditionDirectory{" .. directory .. "}")
+\end{luacode*}
+\newcommand{\CSBReadingLink}{%
+  \href{\CSBEditionDirectory_B08-csb-reading.pdf\#csb.reading}{Lesefassung}%
+}
+\newcommand{\CSBProofsLink}{%
+  \href{\CSBEditionDirectory_B08-csb-proofs.pdf\#csb.proofs}{Beweistabellen}%
+}
+
+% Die drei vorhandenen H-Identitäten bleiben im Fachband als Beweisverweise
+% erreichbar. Die eigentlichen Hilfsbeweise stehen nur in der Tabellenfassung.
+\newcommand{\CSBAuxReference}[1]{%
+  \refstepcounter{proofpartnr}%
+  \edef\mxPPLbl{thm:pp:\mxProofPartParent:\arabic{proofpartnr}}%
+  \label{\mxPPLbl}%
+  \ThmLookupRegisterId{#1}{theorem}{\mxPPLbl}%
+  \noindent Hilfsresultat \ThmLookupEmitRef{theorem}{\mxPPLbl}: %
+  \href{\CSBEditionDirectory_B08-csb-proofs.pdf\#csb.helper.#1}{%
+    Aussage und Beweis in den Beweistabellen}.\par
+}

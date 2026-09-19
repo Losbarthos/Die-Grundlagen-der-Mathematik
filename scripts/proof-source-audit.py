@@ -134,7 +134,7 @@ def rows(text):
 def inventory(path):
     original = path.read_text(encoding="utf-8-sig")
     text = mask_comments(original)
-    data = {"file": path.name, "lines": text.count("\n") + 1,
+    data = {"file": path.resolve().relative_to(ROOT).as_posix(), "lines": text.count("\n") + 1,
             "environments": dict(Counter(re.findall(r"\\begin\{(tabproof\w*|proof)\}", text))),
             "rows": 0, "nested_theorems": [], "inline_rows": [],
             "control_characters": [
@@ -173,13 +173,16 @@ def main():
     examples = ROOT / "tex/B28-isomorphism-examples.tex"
     if examples.exists():
         sources.append(examples)
+    # Scan the extracted CSB sources as physical files, without expanding TeX
+    # inputs or macros: each row appears once and keeps its source line number.
+    sources.extend(sorted((ROOT / "tex/b08/cantor-bernstein").glob("*.tex")))
     data = [inventory(p) for p in sources]
     target = ROOT / args.output
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-    print("band rows nested nested-in-theorem inline")
+    print("file rows nested nested-in-theorem inline")
     for d in data:
-        print(d["file"][4:6], d["rows"], len(d["nested_theorems"]),
+        print(d["file"], d["rows"], len(d["nested_theorems"]),
               sum(x["in_theorem"] for x in d["nested_theorems"]), len(d["inline_rows"]))
     print("TOTAL", sum(d["rows"] for d in data),
           sum(len(d["nested_theorems"]) for d in data))

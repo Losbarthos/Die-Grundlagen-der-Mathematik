@@ -33,6 +33,19 @@ foreach ($target in $selected) {
     }
 }
 $bands = @($buildOrder)
+# The pilot editions read canonical B08/B11 results, while those volumes link
+# back to the editions. Build the editions after the last selected source
+# volume or required predecessor, then audit the source volumes' remote links.
+# A partial range ending at B08 requires existing B11 artifacts for the pilot's
+# application section; the pilot builder checks this without extending the range.
+$needsCsbPilot = (-not $SkipMain) -or (@($bands | Where-Object { $_ -in @('B00', 'B08', 'B11') }).Count -gt 0)
+$pilotTriggerBand = $null
+if ($needsCsbPilot) {
+    $pilotDependencies = @('B08', 'B11') + @($graph['B08'].Predecessors) + @($graph['B11'].Predecessors)
+    $pilotTriggerBand = $bands | Where-Object { $_ -in $pilotDependencies } | Select-Object -Last 1
+}
+$deferredPilotAudits = [System.Collections.Generic.List[string]]::new()
+$pilotsBuilt = $false
 
 function Invoke-LoggedBuild {
     param([string]$Source, [string]$JobName, [string]$OutDir = 'registry')
@@ -49,6 +62,10 @@ function Invoke-LoggedBuild {
 
 Push-Location $repoRoot
 try {
+    if ($needsCsbPilot -and -not $pilotTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-csb-pilot.ps1') -EditionsOnly -Python $Python
+        $pilotsBuilt = $true
+    }
     foreach ($band in $bands) {
         # Each volume is rebuilt once. A resumed range uses already audited
         # predecessors and never recursively rebuilds the same prefix.
@@ -62,7 +79,18 @@ try {
         Invoke-LoggedBuild -Source $record.Source -JobName "_$band"
         $stage = New-BuildStage -Record $record -Started $started
         Assert-BuildStageArtifacts -Stage $stage
-        & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($band)
+        if ($band -eq $pilotTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-csb-pilot.ps1') -EditionsOnly -Python $Python
+            $pilotsBuilt = $true
+            foreach ($deferredBand in $deferredPilotAudits) {
+                & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
+            }
+        }
+        if ($band -in @('B08', 'B11') -and -not $pilotsBuilt) {
+            $deferredPilotAudits.Add($band)
+        } else {
+            & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($band)
+        }
     }
     if (-not $SkipMain) {
         Invoke-LoggedBuild -Source 'main.tex' -JobName 'main' -OutDir '.'

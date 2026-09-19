@@ -385,6 +385,212 @@ Gleichmächtigkeitsfolgen gewonnen.
   \closeproofpartindR
 \end{tabproofsplit}
 
+\subsection{Kardinaler Größenvergleich}
+
+Der funktionale Satz von Cantor--Schröder--Bernstein wurde in Band~08
+bewiesen. Wir übersetzen ihn nun in die Sprache der Gleichmächtigkeit
+und des durch Injektionen gegebenen Größenvergleichs.
+
+\FormulaDefDeltaK[Höchstens gleichmächtig]{%
+  A\CardLeq B \coloneqq \exists F\colon A\inj B%
+}{CardLeqDef}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Kardinaler Vergleich}{\CardLeq}
+}
+
+\FormulaDefDeltaK[Strikt weniger mächtig]{%
+  A\CardLt B \coloneqq
+  \bigl(A\CardLeq B\land\neg(A\EqCard B)\bigr)%
+}{CardLtDef}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaRow{Strikter kardinaler Vergleich}{\CardLt}
+}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Reflexivität des kardinalen Vergleichs]{%
+  A\CardLeq A%
+}{CardLeqReflexive}{%
+  \DeltaRow{Mengen}{A}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproof}
+  \proofstep{}{\Id_A\colon A\bij A}{%
+    \FormulaRefAuto{\Id_A\colon A\bij A}}
+  \proofstep{}{\Id_A\colon A\inj A}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{1}}
+  \proofstep{}{\exists F\colon A\inj A}{\rEI{2}}
+  \proofstep{}{A\CardLeq A}{\FormulaRefAuto{CardLeqDef}[def]{3}}
+\end{tabproof}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Transitivität des kardinalen Vergleichs]{%
+  A\CardLeq B\dsep B\CardLeq C\vdash A\CardLeq C%
+}{CardLeqTransitive}{%
+  \DeltaRow{Mengen}{A\dsep B\dsep C}
+  \DeltaRow{Funktionen}{F\dsep G\dsep H}
+}
+\begin{tabproofsplitwide}
+  \proofpartwideindR[Komposition fester Injektionen]{%
+    F\colon A\inj B\dsep G\colon B\inj C
+    \vdash \exists H\colon A\inj C%
+  }{%
+    F\colon A\inj B\dsep G\colon B\inj C
+    \vdash \exists H\colon A\inj C%
+  }[CardLeqTransitiveFixedInjections]
+    \proofstepwidestar[1]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[2]{G\colon B\inj C}{\rA}
+    \proofstepwidestar[1,2]{G\circ F\colon A\inj C}{%
+      \FormulaRefAuto{F\colon A\inj B\dsep G\colon B\inj C
+        \vdash G\circ F\colon A\inj C}{1,2}}
+    \proofstepwidestar[1,2]{\exists H\colon A\inj C}{\rEI{3}}
+  \closeproofpartwideindR
+
+  \proofpartwide{Schluss}
+    \proofstepwidestar[1]{A\CardLeq B}{\rA}
+    \proofstepwidestar[2]{B\CardLeq C}{\rA}
+    \proofstepwidestar[1]{\exists F\colon A\inj B}{%
+      \FormulaRefAuto{CardLeqDef}[def]{1}}
+    \proofstepwidestar[2]{\exists G\colon B\inj C}{%
+      \FormulaRefAuto{CardLeqDef}[def]{2}}
+    \proofstepwidestar[5]{F\colon A\inj B}{\rA}
+    \proofstepwidestar[6]{G\colon B\inj C}{\rA}
+    \proofstepwidestar[5,6]{\exists H\colon A\inj C}{%
+      \FormulaRefAuto{CardLeqTransitiveFixedInjections}[thm]{5,6}}
+    \proofstepwidestar[2,5]{\exists H\colon A\inj C}{\rEE{4,6,7}}
+    \proofstepwidestar[1,2]{\exists H\colon A\inj C}{\rEE{3,5,8}}
+    \proofstepwidestar[1,2]{A\CardLeq C}{%
+      \FormulaRefAuto{CardLeqDef}[def]{9}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Gleichmächtigkeit liefert Vergleiche in beide Richtungen]{%
+  A\EqCard B\vdash A\CardLeq B\land B\CardLeq A%
+}{EqCardImpliesMutualCardLeq}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F}
+}
+\begin{tabproofsplit}
+\proofpart{Bijektionszeuge und Injektionen}
+\proofstep{1}{A\EqCard B}{\rA}
+  \proofstep{1}{\exists F\colon A\bij B}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{1}}
+  \proofstep{3}{F\colon A\bij B}{\rA}
+  \proofstep{3}{F\colon A\inj B}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{3}}
+  \proofstep{3}{F^{-1}\colon B\bij A}{%
+    \FormulaRefAuto{InverseFunctionBijection}{3}}
+  \proofstep{3}{F^{-1}\colon B\inj A}{%
+    \FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}{5}}
+
+\closeproofpart
+
+\proofpart{Vergleich in Hinrichtung}
+  \setcounter{proofstepnr}{6}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{\exists G\colon A\inj B}{\rEI{4}}
+
+\closeproofpart
+
+\proofpart{Vergleich in Rückrichtung}
+  \setcounter{proofstepnr}{7}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{\exists G\colon B\inj A}{\rEI{6}}
+  \proofstep{3}{A\CardLeq B}{\FormulaRefAuto{CardLeqDef}[def]{7}}
+  \proofstep{3}{B\CardLeq A}{\FormulaRefAuto{CardLeqDef}[def]{8}}
+
+\closeproofpart
+
+\proofpart{Zusammenführung}
+  \setcounter{proofstepnr}{10}% Fortlaufende Schritte dieses Beweises.
+\proofstep{3}{A\CardLeq B\land B\CardLeq A}{\rAI{9,10}}
+  \proofstep{1}{A\CardLeq B\land B\CardLeq A}{\rEE{2,3,11}}
+
+\closeproofpart
+\end{tabproofsplit}
+
+\noindent\emph{Lesebeweis der Übertragung.}
+Es gelte \(A\CardLeq B\) und \(B\CardLeq A\). Nach
+\FormulaRefAuto{CardLeqDef}[def] gibt es dann eine Injektion
+\(F\colon A\inj B\) und eine Injektion \(G\colon B\inj A\).
+Für solche \(F\) und \(G\) liefert
+\FormulaRefAuto{CantorBernsteinFixedInjections}[thm] aus Band~08
+eine Bijektion \(H\colon A\bij B\). Damit gilt nach
+\FormulaRefAuto{Gleichmächtigkeit}[def] bereits \(A\EqCard B\).
+Da der Schluss für beliebige Zeugen der beiden Existenzannahmen gilt,
+folgt er aus den beiden ursprünglichen Vergleichsaussagen.
+Das Auswahlaxiom wird dafür nicht benötigt.
+
+Die Konstruktion der Bijektion wird hier als bereits bewiesenes Resultat
+aus Band~08 verwendet. Die \CSBReadingLink{} erklärt diese Konstruktion
+und ihre Anwendung auf Gleichmächtigkeit im Zusammenhang; die
+\CSBProofsLink{} enthalten die Ableitungen dieser Konstruktion. Die folgende
+Tabelle führt die eben beschriebene Übertragung aus.
+
+\Needspace{20\baselineskip}
+\FormulaThmDeltaK[Satz von Cantor--Schröder--Bernstein]{%
+  A\CardLeq B\dsep B\CardLeq A\vdash A\EqCard B%
+}{CantorSchroederBernstein}{%
+  \DeltaRow{Mengen}{A\dsep B}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{A\CardLeq B}{\rA}
+  \proofstepwidestar[2]{B\CardLeq A}{\rA}
+  \proofstepwidestar[1]{\exists F\colon A\inj B}{%
+    \FormulaRefAuto{CardLeqDef}[def]{1}}
+  \proofstepwidestar[2]{\exists G\colon B\inj A}{%
+    \FormulaRefAuto{CardLeqDef}[def]{2}}
+  \proofstepwidestar[5]{F\colon A\inj B}{\rA}
+  \proofstepwidestar[6]{G\colon B\inj A}{\rA}
+  \proofstepwidestar[5,6]{\exists H\colon A\bij B}{%
+    \FormulaRefAuto{CantorBernsteinFixedInjections}[thm]{5,6}}
+  \proofstepwidestar[5,6]{A\EqCard B}{%
+    \FormulaRefAuto{Gleichmächtigkeit}[def]{7}}
+  \proofstepwidestar[2,5]{A\EqCard B}{\rEE{4,6,8}}
+  \proofstepwidestar[1,2]{A\EqCard B}{\rEE{3,5,9}}
+\end{tabproofwide}
+
+\Needspace{20\baselineskip}
+\FormulaThmDeltaK[Charakterisierung der Gleichmächtigkeit durch Vergleich]{%
+  A\EqCard B\eqvdash A\CardLeq B\land B\CardLeq A%
+}{EqCardMutualCardLeqEquiv}{%
+  \DeltaRow{Mengen}{A\dsep B}
+}
+\begin{tabproofsplit}
+  \proofpart{\(\vdash\)}
+    \proofstep{1}{A\EqCard B}{\rA}
+    \proofstep{1}{A\CardLeq B\land B\CardLeq A}{%
+      \FormulaRefAuto{EqCardImpliesMutualCardLeq}[thm]{1}}
+  \closeproofpart
+
+  \proofpart{\(\dashv\)}
+    \proofstep{1}{A\CardLeq B\land B\CardLeq A}{\rA}
+    \proofstep{1}{A\CardLeq B}{\rAEa{1}}
+    \proofstep{1}{B\CardLeq A}{\rAEb{1}}
+    \proofstep{1}{A\EqCard B}{%
+      \FormulaRefAuto{CantorSchroederBernstein}[thm]{2,3}}
+  \closeproofpart
+\end{tabproofsplit}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Strikter kardinaler Vergleich ist irreflexiv]{%
+  \neg(A\CardLt A)%
+}{CardLtIrreflexive}{%
+  \DeltaRow{Mengen}{A}
+}
+\begin{tabproof}
+  \proofstep{1}{A\CardLt A}{\rA}
+  \proofstep{1}{A\CardLeq A\land\neg(A\EqCard A)}{%
+    \FormulaRefAuto{CardLtDef}[def]{1}}
+  \proofstep{1}{\neg(A\EqCard A)}{\rAEb{2}}
+  \proofstep{}{A\EqCard A}{\FormulaRefAuto{EqCardReflexive}[thm]}
+  \proofstep{1}{\bot}{\rBI{4,3}}
+  \proofstep{}{\neg(A\CardLt A)}{\rCI{1,5}}
+\end{tabproof}
+
+\Needspace{12\baselineskip}
 \input{tex/b11-migrated-graph-cardinality}
 
 \subsection{Gleichmächtigkeit als Äquivalenzrelation}

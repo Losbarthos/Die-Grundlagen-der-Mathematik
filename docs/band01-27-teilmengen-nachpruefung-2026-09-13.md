@@ -38,33 +38,33 @@ wurden gesondert geprüft. Band 0 ist eine Übersicht ohne eigene Beweistabellen
 
 | Band | Bestehende Regelanwendungen | Ergebnis der Nachprüfung |
 |---|---:|---|
-| [1: Grundlagen der Logik](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 01 - Grundlagen der Logik.pdf>) | 0 | Die Teilmengensprache ist hier noch nicht eingeführt. |
-| [2: Theoreme der Logik](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 02 - Theoreme der Logik.pdf>) | 0 | Allgemeine Eindeutigkeitslogik aus Band 27 bereits aufgenommen; Teilmengenregel erst ab Band 3. |
-| [3: Mengenlehre](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 03 - Mengenlehre.pdf>) | 54 | Weitere Kürzungen und Korrekturen gefunden; siehe Prüfdetails. |
-| [4: Totale Relationen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 04 - Totale Relationen.pdf>) | 1 | Typisierung der strikten Obermengenrelation zusätzlich von sechs auf drei Zeilen verkürzbar. |
-| [5: Funktionen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 05 - Funktionen.pdf>) | 32 | Weitere Kürzung; bei zwei Abschlüssen fehlt eine Existenzelimination. |
-| [6: Injektive Funktionen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 06 - Injektive Funktionen.pdf>) | 2 | Bei einer Regelanwendung sind die Abhängigkeiten zu berichtigen. |
-| [7: Surjektive Funktionen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 07 - Surjektive Funktionen.pdf>) | 2 | Allgemeine Operator- und Filterregeln aus Band 27 bereits aufgenommen. |
-| [8: Bijektive Funktionen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 08 - Bijektive Funktionen.pdf>) | 8 | Zwei weitere Kürzungen durch Surjektivitäts- und Aussonderungssatz. |
-| [9: Auswahlprinzip](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 09 - Auswahlprinzip.pdf>) | 0 | Direkte Mengen-/Funktionssätze; keine zusätzliche Regelkürzung bestätigt. |
-| [10: Natürliche Zahlen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 10 - Natürliche Zahlen.pdf>) | 10 | Vier weitere Kürzungen durch frühere Mengenregeln; historische inaktive Beweise ausgeschlossen. |
-| [11: Äquivalenzrelationen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 11 - Äquivalenzrelationen.pdf>) | 6 | Trägerinklusion einer Äquivalenzklasse zusätzlich verkürzbar; Graphkorrespondenz bereits aufgenommen. |
-| [12: Halbordnungen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 12 - Halbordnungen.pdf>) | 1 | Trägerinklusion eines Hauptfilters von vier auf zwei Zeilen verkürzbar. |
-| [13: Schranken, Infima und Suprema](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 13 - Schranken, Infima und Suprema.pdf>) | 2 | Obere und untere Schrankenmenge jeweils von fünf auf drei Zeilen verkürzbar. |
-| [14: Paarinfima und Paarsuprema](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 14 - Paarinfima und Paarsuprema.pdf>) | 0 | Teilmengen als Schrankenrelation; passende Schnitt-/Vereinigungssätze sind schon kürzer. |
-| [15: Totale Ordnungen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 15 - Totale Ordnungen.pdf>) | 0 | Paarmengen liegen bereits durch den Paarmengensatz im Grundbereich. |
-| [16: Wohlordnungen und Auswahlaxiom](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 16 - Wohlordnungen und Auswahlaxiom.pdf>) | 0 | Aussonderungs- und Bildsätze; Potenzmengenzugehörigkeit wird eliminiert. |
-| [17: Ganze Zahlen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 17 - Ganze Zahlen.pdf>) | 0 | Typisierung der natürlichen Kopie durch den Bildsatz. |
-| [18: Rationale Zahlen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 18 - Rationale Zahlen.pdf>) | 0 | Bildmonotonie, Typisierung und Transitivität. |
-| [19: Reelle Zahlen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 19 - Reelle Zahlen.pdf>) | 21 | Drei bisher zusammengefasst begründete Schnittinklusionen müssen explizit hergeleitet werden. |
-| [20: Endliche Mengen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 20 - Endliche Mengen.pdf>) | 14 | Zwei übersprungene Elementabschlüsse; zusätzlich eine Kürzung durch den Aussonderungssatz. |
-| [21: Folgen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 21 - Folgen.pdf>) | 0 | Allgemeine Folgengraphsätze bereits aufgenommen; guter Zielort für das gemeinsame-Stufe-Lemma. |
-| [22: Gerichtete Graphen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 22 - Gerichtete Graphen.pdf>) | 0 | Graphinklusionen folgen direkt aus Aussonderung oder Durchschnitt. |
-| [23: Ungerichtete Graphen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 23 - Ungerichtete Graphen.pdf>) | 0 | Die verbleibenden Quantorabschlüsse betreffen die Kantensymmetrie. |
-| [24: Schlichte ungerichtete Graphen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 24 - Schlichte ungerichtete Graphen.pdf>) | 0 | Teilmengenformeln stehen nur in Annahmen. |
-| [25: Zusammenhängende Graphen](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 25 - Zusammenhängende Graphen.pdf>) | 0 | Keine Teilmengenformel in einer Beweiszeile. |
-| [26: Bäume](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 26 - Bäume.pdf>) | 2 | Allgemeine Weg-/Elternsystemsätze bereits aufgenommen; übrige Inklusionen durch bestehende Sätze. |
-| [27: Endliche Wörter und Klammerungsbäume](<C:/Latex/Die-Grundlagen-der-Mathematik/output/Bd. 27 - Endliche Wörter und Klammerungsbäume.pdf>) | 10 | Zwei weitere Kürzungen durch schon ausgelagerte Sätze; ein sinnvoller allgemeiner Beweiskern für Band 21. |
+| [1: Grundlagen der Logik](<../output/01 Logik/Bd. 01 - Grundlagen der Logik.pdf>) | 0 | Die Teilmengensprache ist hier noch nicht eingeführt. |
+| [2: Theoreme der Logik](<../output/01 Logik/Bd. 02 - Theoreme der Logik.pdf>) | 0 | Allgemeine Eindeutigkeitslogik aus Band 27 bereits aufgenommen; Teilmengenregel erst ab Band 3. |
+| [3: Mengenlehre](<../output/02 Mengenlehre und Mengenfamilien/Bd. 03 - Mengenlehre.pdf>) | 54 | Weitere Kürzungen und Korrekturen gefunden; siehe Prüfdetails. |
+| [4: Totale Relationen](<../output/03 Relationen und Funktionen/Bd. 04 - Totale Relationen.pdf>) | 1 | Typisierung der strikten Obermengenrelation zusätzlich von sechs auf drei Zeilen verkürzbar. |
+| [5: Funktionen](<../output/03 Relationen und Funktionen/Bd. 05 - Funktionen.pdf>) | 32 | Weitere Kürzung; bei zwei Abschlüssen fehlt eine Existenzelimination. |
+| [6: Injektive Funktionen](<../output/03 Relationen und Funktionen/Bd. 06 - Injektive Funktionen.pdf>) | 2 | Bei einer Regelanwendung sind die Abhängigkeiten zu berichtigen. |
+| [7: Surjektive Funktionen](<../output/03 Relationen und Funktionen/Bd. 07 - Surjektive Funktionen.pdf>) | 2 | Allgemeine Operator- und Filterregeln aus Band 27 bereits aufgenommen. |
+| [8: Bijektive Funktionen](<../output/03 Relationen und Funktionen/Bd. 08 - Bijektive Funktionen.pdf>) | 8 | Zwei weitere Kürzungen durch Surjektivitäts- und Aussonderungssatz. |
+| [9: Auswahlprinzip](<../output/02 Mengenlehre und Mengenfamilien/Bd. 09 - Auswahlprinzip.pdf>) | 0 | Direkte Mengen-/Funktionssätze; keine zusätzliche Regelkürzung bestätigt. |
+| [10: Natürliche Zahlen](<../output/04 Zahlen und Folgen/Bd. 10 - Natürliche Zahlen.pdf>) | 10 | Vier weitere Kürzungen durch frühere Mengenregeln; historische inaktive Beweise ausgeschlossen. |
+| [11: Äquivalenzrelationen](<../output/03 Relationen und Funktionen/Bd. 11 - Äquivalenzrelationen.pdf>) | 6 | Trägerinklusion einer Äquivalenzklasse zusätzlich verkürzbar; Graphkorrespondenz bereits aufgenommen. |
+| [12: Halbordnungen](<../output/05 Ordnungen und Verbände/Bd. 12 - Halbordnungen.pdf>) | 1 | Trägerinklusion eines Hauptfilters von vier auf zwei Zeilen verkürzbar. |
+| [13: Schranken, Infima und Suprema](<../output/05 Ordnungen und Verbände/Bd. 13 - Schranken, Infima und Suprema.pdf>) | 2 | Obere und untere Schrankenmenge jeweils von fünf auf drei Zeilen verkürzbar. |
+| [14: Paarinfima und Paarsuprema](<../output/05 Ordnungen und Verbände/Bd. 14 - Paarinfima und Paarsuprema.pdf>) | 0 | Teilmengen als Schrankenrelation; passende Schnitt-/Vereinigungssätze sind schon kürzer. |
+| [15: Totale Ordnungen](<../output/05 Ordnungen und Verbände/Bd. 15 - Totale Ordnungen.pdf>) | 0 | Paarmengen liegen bereits durch den Paarmengensatz im Grundbereich. |
+| [16: Wohlordnungen und Auswahlaxiom](<../output/05 Ordnungen und Verbände/Bd. 16 - Wohlordnungen und Auswahlaxiom.pdf>) | 0 | Aussonderungs- und Bildsätze; Potenzmengenzugehörigkeit wird eliminiert. |
+| [17: Ganze Zahlen](<../output/04 Zahlen und Folgen/Bd. 17 - Ganze Zahlen.pdf>) | 0 | Typisierung der natürlichen Kopie durch den Bildsatz. |
+| [18: Rationale Zahlen](<../output/04 Zahlen und Folgen/Bd. 18 - Rationale Zahlen.pdf>) | 0 | Bildmonotonie, Typisierung und Transitivität. |
+| [19: Reelle Zahlen](<../output/04 Zahlen und Folgen/Bd. 19 - Reelle Zahlen.pdf>) | 21 | Drei bisher zusammengefasst begründete Schnittinklusionen müssen explizit hergeleitet werden. |
+| [20: Endliche Mengen](<../output/02 Mengenlehre und Mengenfamilien/Bd. 20 - Endliche Mengen.pdf>) | 14 | Zwei übersprungene Elementabschlüsse; zusätzlich eine Kürzung durch den Aussonderungssatz. |
+| [21: Folgen](<../output/04 Zahlen und Folgen/Bd. 21 - Folgen.pdf>) | 0 | Allgemeine Folgengraphsätze bereits aufgenommen; guter Zielort für das gemeinsame-Stufe-Lemma. |
+| [22: Gerichtete Graphen](<../output/06 Graphen, Bäume und Wörter/Bd. 22 - Gerichtete Graphen.pdf>) | 0 | Graphinklusionen folgen direkt aus Aussonderung oder Durchschnitt. |
+| [23: Ungerichtete Graphen](<../output/06 Graphen, Bäume und Wörter/Bd. 23 - Ungerichtete Graphen.pdf>) | 0 | Die verbleibenden Quantorabschlüsse betreffen die Kantensymmetrie. |
+| [24: Schlichte ungerichtete Graphen](<../output/06 Graphen, Bäume und Wörter/Bd. 24 - Schlichte ungerichtete Graphen.pdf>) | 0 | Teilmengenformeln stehen nur in Annahmen. |
+| [25: Zusammenhängende Graphen](<../output/06 Graphen, Bäume und Wörter/Bd. 25 - Zusammenhängende Graphen.pdf>) | 0 | Keine Teilmengenformel in einer Beweiszeile. |
+| [26: Bäume](<../output/06 Graphen, Bäume und Wörter/Bd. 26 - Bäume.pdf>) | 2 | Allgemeine Weg-/Elternsystemsätze bereits aufgenommen; übrige Inklusionen durch bestehende Sätze. |
+| [27: Endliche Wörter und Klammerungsbäume](<../output/06 Graphen, Bäume und Wörter/Bd. 27 - Endliche Wörter und Klammerungsbäume.pdf>) | 10 | Zwei weitere Kürzungen durch schon ausgelagerte Sätze; ein sinnvoller allgemeiner Beweiskern für Band 21. |
 
 ## Konkrete zusätzliche Kürzungen
 

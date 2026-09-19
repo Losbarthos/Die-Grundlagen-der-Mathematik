@@ -14,10 +14,30 @@ aufbaut.**
 [PDF catalogue / PDF-Verzeichnis](VOLUMES.md) · [Building](BUILDING.md) ·
 [Contributing](CONTRIBUTING.md) · [License / Lizenz](LICENSE.md)
 
-[Band 00: Überblick über die Bände](<output/Bd. 00 - Überblick über die Bände.pdf>)
+Die PDFs unter `output/` sind in elf nummerierte Themenordner gegliedert.
+Die Hauptbände stehen direkt im jeweiligen Themenordner; ergänzende
+Ausarbeitungen liegen darunter in `Ergänzungen/<Thema>/`.
+Die Bandnummern bleiben erhalten; die Ordnerzuordnung und Hinweise für
+reMarkable stehen im [Bandverzeichnis](VOLUMES.md).
+
+[Band 00: Überblick über die Bände](<output/00 Einstieg und Gesamtband/Bd. 00 - Überblick über die Bände.pdf>)
 stellt Definitionen und Strukturaxiome den zentralen Resultaten gegenüber.
 Gruppen und Ringe sind ab Band 40 nach Strukturklassen auf eigene Bände verteilt. Die bisherige Übersicht
 „Band 27 auf einen Blick“ steht jetzt im Überblicksband.
+
+Als Pilot einer zusätzlichen Lesefassung ist der Satz von Cantor–Bernstein
+aus Band 08 in zwei verknüpften Auszügen verfügbar:
+[Lesefassung](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) und
+[Beweistabellen](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>).
+Die reguläre Band- und Gesamtausgabe enthält die Aussagen und verweist für
+die Beweise auf diese beiden Begleitfassungen. Die bisherigen Kennungen,
+Satznummern und Sprungziele einschließlich der Hilfsresultate bleiben erhalten.
+Der Pilot umfasst diesen Abschnitt und den Anschluss an die
+Gleichmächtigkeit in Band 11; er ist keine Lesefassung aller Fachbände.
+Die Lesefassung enthält einen zusammenhängenden Beweis, eine knappe
+Konstruktionsübersicht und einen Vergleich mit historischen Originalbeweisen.
+Die ausführlichen formalen Aussagen und Ableitungstabellen stehen in den
+verknüpften Fach- und Beweisfassungen.
 
 Ein [Ausbauvorschlag bis zu Gödels Unvollständigkeitssätzen](docs/goedel-ausbau.md)
 beschreibt mögliche zusätzliche Fachbände und ihre Voraussetzungen.
@@ -55,23 +75,23 @@ they do **not** certify mathematical correctness.
 
 ### Where to start
 
-- [Volume 01: Foundations of Logic](<output/Bd. 01 - Grundlagen der Logik.pdf>)
+- [Volume 01: Foundations of Logic](<output/01 Logik/Bd. 01 - Grundlagen der Logik.pdf>)
   introduces the formal language and explains how to read the proof tables.
-- [Volume 03: Set Theory](<output/Bd. 03 - Mengenlehre.pdf>) shows the
+- [Volume 03: Set Theory](<output/02 Mengenlehre und Mengenfamilien/Bd. 03 - Mengenlehre.pdf>) shows the
   foundational method on a substantial body of mathematics.
-- [Volume 26: Trees](<output/Bd. 26 - Bäume.pdf>) develops the axiomatic
+- [Volume 26: Trees](<output/06 Graphen, Bäume und Wörter/Bd. 26 - Bäume.pdf>) develops the axiomatic
   tree language used by the subsequent construction of bracketing trees.
-- [Volume 46: Frankl's Conjecture](<output/Bd. 46 - Frankls Vermutung.pdf>)
+- [Volume 46: Frankl's Conjecture](<output/02 Mengenlehre und Mengenfamilien/Bd. 46 - Frankls Vermutung.pdf>)
   is a research-oriented application collecting set-theoretic, quotient, and
   semilattice formulations and proved special cases.
-- [Volume 47: Metric Spaces and Completeness](<output/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
+- [Volume 47: Metric Spaces and Completeness](<output/10 Metrische Räume/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
   is a comparatively compact entry into the analytic branch.
-- [Volume 48: Axiomatic Set Theory II](<output/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
+- [Volume 48: Axiomatic Set Theory II](<output/02 Mengenlehre und Mengenfamilien/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
   is a meta-methodological supplement for power set, cardinality, and continuum
   arguments.
 - The [complete bilingual volume catalogue](VOLUMES.md) links all current PDFs.
 
-[![A page with Lemmon-style proof tables from Volume 46](docs/assets/lemmon-proof-example.png)](<output/Bd. 46 - Frankls Vermutung.pdf>)
+[![A page with Lemmon-style proof tables from Volume 46](docs/assets/lemmon-proof-example.png)](<output/02 Mengenlehre und Mengenfamilien/Bd. 46 - Frankls Vermutung.pdf>)
 
 *Example: explicit proof tables in Volume 46. Click the image to open the
 volume.*
@@ -148,19 +168,19 @@ Korrektheit.
 
 ### Empfohlene Einstiege
 
-- [Band 01: Grundlagen der Logik](<output/Bd. 01 - Grundlagen der Logik.pdf>)
+- [Band 01: Grundlagen der Logik](<output/01 Logik/Bd. 01 - Grundlagen der Logik.pdf>)
   führt die formale Sprache ein und erklärt die Beweistabellen.
-- [Band 03: Mengenlehre](<output/Bd. 03 - Mengenlehre.pdf>) zeigt die
+- [Band 03: Mengenlehre](<output/02 Mengenlehre und Mengenfamilien/Bd. 03 - Mengenlehre.pdf>) zeigt die
   Methode an einem umfangreichen mathematischen Gebiet.
-- [Band 26: Bäume](<output/Bd. 26 - Bäume.pdf>) entwickelt die
+- [Band 26: Bäume](<output/06 Graphen, Bäume und Wörter/Bd. 26 - Bäume.pdf>) entwickelt die
   axiomatische Baumsprache für die anschließende Konstruktion der
   Klammerungsbäume.
-- [Band 46: Frankls Vermutung](<output/Bd. 46 - Frankls Vermutung.pdf>) ist
+- [Band 46: Frankls Vermutung](<output/02 Mengenlehre und Mengenfamilien/Bd. 46 - Frankls Vermutung.pdf>) ist
   eine forschungsnahe Anwendung mit Mengen-, Quotienten- und
   Halbverbandsfassungen sowie bewiesenen Spezialfällen.
-- [Band 47: Metrische Räume und Vollständigkeit](<output/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
+- [Band 47: Metrische Räume und Vollständigkeit](<output/10 Metrische Räume/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>)
   bietet einen vergleichsweise kompakten Einstieg in den analytischen Zweig.
-- [Band 48: Axiomatische Mengenlehre II](<output/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
+- [Band 48: Axiomatische Mengenlehre II](<output/02 Mengenlehre und Mengenfamilien/Bd. 48 - Axiomatische Mengenlehre II.pdf>)
   ergänzt die formale Methodik für Aussagen zu Potenzmengen, Kardinalität und
   Kontinuum.
 - Das [vollständige zweisprachige Bandverzeichnis](VOLUMES.md) verlinkt alle

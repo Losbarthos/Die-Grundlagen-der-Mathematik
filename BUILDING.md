@@ -40,12 +40,32 @@ pwsh -NoProfile -File ./scripts/build-all.ps1
 ```
 
 This builds the volumes in dependency order, audits their result registries,
-and publishes the PDFs under `output/`. Python with `pypdf` is required
+and publishes the PDFs in the numbered thematic subfolders of `output/`.
+Python with `pypdf` is required
 for publication; pass `-Python /path/to/python` to select its interpreter.
-The publication step updates external PDF links to the visible neighbouring
-filenames and verifies that every linked result destination exists.
-Each current PDF is stored directly in `output/` once. Build logs and
-temporary files belong in `tmp/`, outside the publication directory.
+The publication step updates external PDF links to relative paths between
+the published files and verifies that every linked result destination exists.
+Each current PDF is stored once, with its existing filename and volume
+number. Main volumes sit directly in their thematic folder; companion editions
+sit below `Ergänzungen/<topic>/`. `scripts/publish-pdfs.py` centrally defines
+these publication paths. See [VOLUMES.md](VOLUMES.md) for the folder mapping.
+Build logs and temporary files belong in `tmp/`, outside the publication
+directory.
+
+To organize existing published PDFs into this structure without a new build,
+run once:
+
+```powershell
+python ./scripts/publish-pdfs.py --organize-existing
+```
+
+The command stages and audits the relative PDF links before moving the files.
+It retains the original PDFs under `tmp/pdf-organization-*/originals` for recovery.
+Normal publication
+uses the thematic structure automatically. Both Cantor–Bernstein companion
+editions are published under
+`output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/`;
+B08 remains directly in `03 Relationen und Funktionen`.
 
 Der Gesamtlauf baut den Überblicksband B00, alle 48 Fachbände und den Gesamtband.
 B00 steht im Buch zuerst, wird wegen seiner Verweise aber nach B01 bis B48
@@ -144,6 +164,63 @@ Most volumes follow the main chain. Volume B47 deliberately opens an analytic
 branch and depends only on B01 through B21. Later specialist volumes may use
 examples of structures introduced earlier, while general constructions remain
 in the earliest volume that can define them without a dependency cycle.
+
+## Cantor–Bernstein pilot / Lesefassung und Beweistabellen
+
+The CSB section has a shared source package under
+`tex/b08/cantor-bernstein/`. The regular B08 volume, the complete manuscript,
+and the proof wrapper in `editions/` use the same main statements, contexts,
+and IDs. B08 and the complete manuscript retain all nine main declarations
+and the three registered auxiliary statements as compact notes with links
+to the proofs in the companion editions. Their statement numbers and
+destinations remain unchanged.
+
+The reading edition contains the complete prose proof, the later application
+in B11, and historical sources with a comparison of the proof constructions.
+It starts directly with the mathematical content, without a separate usage
+chapter. It imports B08 references but declares no local numbered statements;
+the formal statement appendix and detailed reference list are omitted.
+The proof edition
+contains all proof tables, including the three auxiliary statements with H
+numbers. The CSB prose proof and proof tables appear only in these companion
+editions.
+
+With the predecessor volumes already built, run:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-csb-pilot.ps1 -Python /path/to/python
+```
+
+This rebuilds B08, B11, both companion editions, B00 and the complete manuscript;
+audits the results; and publishes six PDFs. `-SkipMain` omits the combined
+manuscript, and `-SkipPublish` leaves the PDFs as build products.
+`-EditionsOnly` builds and audits only the two companions from existing B08/B11
+artifacts. This is also used by `build-all.ps1` in dependency order.
+For a clean repository, run `build-all.ps1` first; the targeted script deliberately
+requires the other predecessor registries and PDFs instead of rebuilding them.
+For a partial build ending at B08, existing B11 artifacts are also required for
+the reading edition's later application. Ranges without B00/B08/B11 and with
+`-SkipMain -SkipPublish` do not build or require the companions.
+
+The independent build products and generated filtered imports live under
+`registry/csb/`. They never replace the canonical B08 registry.
+`scripts/csb-pilot.py` derives the excerpt's section position from the current
+B08 AUX and verifies the proof edition's full registry records and printed
+numbers against B08. It also verifies that the reading edition has no local
+statement declarations or removed editorial sections. The PDF audit checks
+all result destinations, the reading entry point, and external links.
+
+To publish already audited build products:
+
+```powershell
+python ./scripts/publish-pdfs.py --bands B00 B08 B11 --csb-pilot
+```
+
+The two companion filenames are mapped explicitly during publication. Existing
+companion PDFs participate in every publication link audit. Full publication
+includes the companion pair when its build products are present. The band
+dependency graph continues to describe the mathematical volumes, not the
+mutual navigation links between alternate editions.
 
 ## Verified B05 registry cache
 

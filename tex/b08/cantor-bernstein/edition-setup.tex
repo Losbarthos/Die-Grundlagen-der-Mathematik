@@ -1,0 +1,21 @@
+% Eigene Register: niemals die kanonischen B08-Artefakte überschreiben.
+% Die gefilterten Importdateien erzeugt scripts/csb-pilot.py aus Band 08.
+\begin{luacode*}
+  local directory = "registry/csb/"
+  local b08_import = "b08-external"
+  if tex.jobname == "_B08-csb-reading" then b08_import = "b08-reading" end
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B08.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. b08_import .. "}[../_B08.pdf]")
+  tex.sprint("\\externaldocument{registry/csb/b11-application}[../_B11.pdf]")
+  banddeps.load_predecessor_registries("B08")
+  thmlookup.load_registry_file(directory .. b08_import .. ".registry.tsv")
+  thmlookup.load_registry_file("registry/csb/b11-application.registry.tsv")
+\end{luacode*}
+\renewcommand{\theHtable}{\FormulaBandID.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{\FormulaBandID.\arabic{chapter}.\arabic{figure}}
