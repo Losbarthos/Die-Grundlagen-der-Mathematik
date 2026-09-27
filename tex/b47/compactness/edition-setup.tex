@@ -1,0 +1,22 @@
+% Öffentliche Aussagen gehören Band 47; private Hilfssätze der Beweisfassung.
+\begin{luacode*}
+  local directory = "registry/compactness/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B47.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b47-external}[../_B47.pdf]")
+  banddeps.load_predecessor_registries("B47")
+  thmlookup.load_registry_file(directory .. "b47-external.registry.tsv")
+  if tex.jobname == "_B47-compactness-reading" then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B47-compactness-proofs.pdf]")
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\FormulaBandID}{47E}
+\setcounter{file}{47}
+\renewcommand{\theHtable}{compactness.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{compactness.\arabic{chapter}.\arabic{figure}}

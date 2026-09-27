@@ -40,7 +40,60 @@ CSB_PILOT_NAMES = {
     "_B08-csb-reading.pdf": "Bd. 08 - Cantor-Bernstein - Lesefassung.pdf",
     "_B08-csb-proofs.pdf": "Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf",
 }
-SUPPLEMENT_TOPICS = {name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()}
+MOGILJANSKAJA_NAMES = {
+    "_B28-mog-reading.pdf": "Bd. 28 - Mogiljanskaja-Gegenbeispiel - Lesefassung.pdf",
+    "_B28-mog-proofs.pdf": "Bd. 28 - Mogiljanskaja-Gegenbeispiel - Beweistabellen.pdf",
+}
+DEDEKIND_NAMES = {
+    "_B10-dedekind-reading.pdf": "Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf",
+    "_B10-dedekind-proofs.pdf": "Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf",
+}
+BRACKETING_NAMES = {
+    "_B28-bracketing-reading.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf",
+    "_B28-bracketing-proofs.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf",
+}
+DIFFERENCES_NAMES = {
+    "_B41-differences-reading.pdf": "Bd. 41 - Formale Differenzen - Lesefassung.pdf",
+    "_B41-differences-proofs.pdf": "Bd. 41 - Formale Differenzen - Beweistabellen.pdf",
+}
+INTEGERS_NAMES = {
+    "_B17-integers-reading.pdf": "Bd. 17 - Ganze Zahlen - Lesefassung.pdf",
+    "_B17-integers-proofs.pdf": "Bd. 17 - Ganze Zahlen - Beweistabellen.pdf",
+}
+SEMILATTICE_NAMES = {
+    "_B45-semilattice-reading.pdf": "Bd. 45 - Halbverbände und Ordnung - Lesefassung.pdf",
+    "_B45-semilattice-proofs.pdf": "Bd. 45 - Halbverbände und Ordnung - Beweistabellen.pdf",
+}
+FRANKL_NAMES = {
+    "_B46-frankl-reading.pdf": "Bd. 46 - Frankls Spezialfälle - Lesefassung.pdf",
+    "_B46-frankl-proofs.pdf": "Bd. 46 - Frankls Spezialfälle - Beweistabellen.pdf",
+}
+RECONSTRUCTION_NAMES = {
+    "_B40-reconstruction-reading.pdf": "Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf",
+    "_B40-reconstruction-proofs.pdf": "Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf",
+}
+NULLPRODUCTS_NAMES = {
+    "_B37-nullproducts-reading.pdf": "Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf",
+    "_B37-nullproducts-proofs.pdf": "Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf",
+}
+COMPACTNESS_NAMES = {
+    "_B47-compactness-reading.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf",
+    "_B47-compactness-proofs.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf",
+}
+SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **COMPACTNESS_NAMES}
+SUPPLEMENT_TOPICS = {
+    **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
+    **{name: "Mogiljanskaja-Gegenbeispiel" for name in MOGILJANSKAJA_NAMES.values()},
+    **{name: "Dedekindscher Rekursionssatz" for name in DEDEKIND_NAMES.values()},
+    **{name: "Klammerungsunabhängigkeit" for name in BRACKETING_NAMES.values()},
+    **{name: "Formale Differenzen" for name in DIFFERENCES_NAMES.values()},
+    **{name: "Ganze Zahlen" for name in INTEGERS_NAMES.values()},
+    **{name: "Halbverbände und Ordnung" for name in SEMILATTICE_NAMES.values()},
+    **{name: "Frankls Spezialfälle" for name in FRANKL_NAMES.values()},
+    **{name: "Gruppenrekonstruktion" for name in RECONSTRUCTION_NAMES.values()},
+    **{name: "Nullprodukt-Rekonstruktion" for name in NULLPRODUCTS_NAMES.values()},
+    **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
+}
 
 
 def publication_path(name):
@@ -226,7 +279,7 @@ def audit_reference_markers(reader, path):
 
 def assert_build_ready(source, reader):
     """Reject failed formula lookups before replacing a published volume."""
-    if re.fullmatch(r"_B\d{2}", source.stem) or source.name in CSB_PILOT_NAMES:
+    if re.fullmatch(r"_B\d{2}", source.stem) or source.name in SUPPLEMENT_NAMES:
         debug = source.with_suffix(".debug.log")
         log = source.with_suffix(".log")
         for required in (debug, log):
@@ -331,15 +384,35 @@ def main():
     parser.add_argument("--skip-main", action="store_true")
     parser.add_argument("--csb-pilot", action="store_true",
                         help="Also publish both Cantor-Bernstein pilot editions; require both build artifacts.")
+    parser.add_argument("--mogiljanskaja", action="store_true",
+                        help="Also publish both Mogiljanskaja companion editions; require both build artifacts.")
+    parser.add_argument("--dedekind", action="store_true",
+                        help="Also publish both Dedekind recursion companion editions; require both build artifacts.")
+    parser.add_argument("--bracketing-editions", action="store_true",
+                        help="Also publish both bracketing-independence editions; require both build artifacts.")
+    parser.add_argument("--differences", action="store_true",
+                        help="Also publish both formal-difference companion editions; require both build artifacts.")
+    parser.add_argument("--integers", action="store_true",
+                        help="Also publish both integer-construction companion editions; require both build artifacts.")
+    parser.add_argument("--semilattice", action="store_true",
+                        help="Also publish both semilattice/order companion editions; require both build artifacts.")
+    parser.add_argument("--frankl", action="store_true",
+                        help="Also publish both Frankl special-case companion editions; require both build artifacts.")
+    parser.add_argument("--reconstruction", action="store_true",
+                        help="Also publish both group-reconstruction companion editions; require both build artifacts.")
+    parser.add_argument("--nullproducts", action="store_true",
+                        help="Also publish both null-product reconstruction editions; require both build artifacts.")
+    parser.add_argument("--compactness", action="store_true",
+                        help="Also publish both compactness editions; require both build artifacts.")
     parser.add_argument("--bands", nargs="+", metavar="Bnn",
                         help="Publish only these standalone volumes; still audit all current PDF links.")
     args = parser.parse_args()
     with (ROOT / "band-dependencies.tsv").open(encoding="utf-8-sig", newline="") as file:
         graph = list(csv.DictReader(file, delimiter="\t"))
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
-    names.update(CSB_PILOT_NAMES)
+    names.update(SUPPLEMENT_NAMES)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.bands:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.compactness or args.bands:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
@@ -371,6 +444,136 @@ def main():
     # Restricted band runs and audits still check any already published pilots.
     all_publications.extend(publication for publication in pilot_publications
                             if publish_pilot or publication[1].is_file())
+
+    mogiljanskaja_publications = [
+        (ROOT / "registry" / "mogiljanskaja" / source, publication_path(destination))
+        for source, destination in MOGILJANSKAJA_NAMES.items()
+    ]
+    publish_mogiljanskaja = args.mogiljanskaja or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in mogiljanskaja_publications)
+    )
+    if publish_mogiljanskaja:
+        publications.extend(mogiljanskaja_publications)
+    all_publications.extend(publication for publication in mogiljanskaja_publications
+                            if publish_mogiljanskaja or publication[1].is_file())
+
+    dedekind_publications = [
+        (ROOT / "registry" / "dedekind" / source, publication_path(destination))
+        for source, destination in DEDEKIND_NAMES.items()
+    ]
+    publish_dedekind = args.dedekind or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in dedekind_publications)
+    )
+    if publish_dedekind:
+        publications.extend(dedekind_publications)
+    all_publications.extend(publication for publication in dedekind_publications
+                            if publish_dedekind or publication[1].is_file())
+
+    bracketing_publications = [
+        (ROOT / "registry" / "bracketing" / source, publication_path(destination))
+        for source, destination in BRACKETING_NAMES.items()
+    ]
+    publish_bracketing = args.bracketing_editions or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in bracketing_publications)
+    )
+    if publish_bracketing:
+        publications.extend(bracketing_publications)
+    all_publications.extend(publication for publication in bracketing_publications
+                            if publish_bracketing or publication[1].is_file())
+
+    differences_publications = [
+        (ROOT / "registry" / "differences" / source, publication_path(destination))
+        for source, destination in DIFFERENCES_NAMES.items()
+    ]
+    publish_differences = args.differences or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in differences_publications)
+    )
+    if publish_differences:
+        publications.extend(differences_publications)
+    all_publications.extend(publication for publication in differences_publications
+                            if publish_differences or publication[1].is_file())
+
+    integers_publications = [
+        (ROOT / "registry" / "integers" / source, publication_path(destination))
+        for source, destination in INTEGERS_NAMES.items()
+    ]
+    publish_integers = args.integers or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in integers_publications)
+    )
+    if publish_integers:
+        publications.extend(integers_publications)
+    all_publications.extend(publication for publication in integers_publications
+                            if publish_integers or publication[1].is_file())
+
+    semilattice_publications = [
+        (ROOT / "registry" / "semilattice" / source, publication_path(destination))
+        for source, destination in SEMILATTICE_NAMES.items()
+    ]
+    publish_semilattice = args.semilattice or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in semilattice_publications)
+    )
+    if publish_semilattice:
+        publications.extend(semilattice_publications)
+    all_publications.extend(publication for publication in semilattice_publications
+                            if publish_semilattice or publication[1].is_file())
+
+    frankl_publications = [
+        (ROOT / "registry" / "frankl" / source, publication_path(destination))
+        for source, destination in FRANKL_NAMES.items()
+    ]
+    publish_frankl = args.frankl or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in frankl_publications)
+    )
+    if publish_frankl:
+        publications.extend(frankl_publications)
+    all_publications.extend(publication for publication in frankl_publications
+                            if publish_frankl or publication[1].is_file())
+
+    reconstruction_publications = [
+        (ROOT / "registry" / "reconstruction" / source, publication_path(destination))
+        for source, destination in RECONSTRUCTION_NAMES.items()
+    ]
+    publish_reconstruction = args.reconstruction or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in reconstruction_publications)
+    )
+    if publish_reconstruction:
+        publications.extend(reconstruction_publications)
+    all_publications.extend(publication for publication in reconstruction_publications
+                            if publish_reconstruction or publication[1].is_file())
+
+    nullproducts_publications = [
+        (ROOT / "registry" / "nullproducts" / source, publication_path(destination))
+        for source, destination in NULLPRODUCTS_NAMES.items()
+    ]
+    publish_nullproducts = args.nullproducts or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in nullproducts_publications)
+    )
+    if publish_nullproducts:
+        publications.extend(nullproducts_publications)
+    all_publications.extend(publication for publication in nullproducts_publications
+                            if publish_nullproducts or publication[1].is_file())
+
+    compactness_publications = [
+        (ROOT / "registry" / "compactness" / source, publication_path(destination))
+        for source, destination in COMPACTNESS_NAMES.items()
+    ]
+    publish_compactness = args.compactness or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in compactness_publications)
+    )
+    if publish_compactness:
+        publications.extend(compactness_publications)
+    all_publications.extend(publication for publication in compactness_publications
+                            if publish_compactness or publication[1].is_file())
 
     if not args.audit_only:
         missing = [str(source.relative_to(ROOT)) for source, _ in publications if not source.is_file()]

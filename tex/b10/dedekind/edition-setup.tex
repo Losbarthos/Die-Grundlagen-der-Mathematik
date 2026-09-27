@@ -1,0 +1,24 @@
+% Der Fachband besitzt Hauptsatz und Rekursionsabbildung; die Ergänzung den Kern.
+\begin{luacode*}
+  local directory = "registry/dedekind/"
+  local b10_import = "b10-external"
+  if tex.jobname == "_B10-dedekind-reading" then b10_import = "b10-reading" end
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B10.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. b10_import .. "}[../_B10.pdf]")
+  if tex.jobname == "_B10-dedekind-reading" then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B10-dedekind-proofs.pdf]")
+  end
+  banddeps.load_predecessor_registries("B10")
+  thmlookup.load_registry_file(directory .. b10_import .. ".registry.tsv")
+  if tex.jobname == "_B10-dedekind-reading" then
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\theHtable}{\FormulaBandID.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{\FormulaBandID.\arabic{chapter}.\arabic{figure}}

@@ -1,0 +1,18 @@
+% Beide Ergänzungen beziehen sämtliche nummerierten Aussagen aus den Fachbänden.
+\begin{luacode*}
+  local directory = "registry/reconstruction/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B40.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b40-external}[../_B40.pdf]")
+  banddeps.load_predecessor_registries("B40")
+  thmlookup.load_registry_file(directory .. "b40-external.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{40}
+\setcounter{file}{40}
+\renewcommand{\theHtable}{reconstruction.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{reconstruction.\arabic{chapter}.\arabic{figure}}

@@ -1,0 +1,983 @@
+\chapter{Zwei unabhängige Differenzenrichtungen}
+
+Die Produktkonstruktion wird zunächst für ein beliebiges kommutatives
+kürzbares Monoid durchgeführt. Dadurch werden die im Zahlenbeispiel
+benötigten Struktur- und Abbildungsschritte getrennt sichtbar.
+Mit \(p_X\) und \(q_X\) bezeichnen wir die beiden Projektionen auf
+\(X\times X\) aus \FormulaRefAuto{FirstProjectionDef}[def] und
+\FormulaRefAuto{SecondProjectionDef}[def].
+Die Operation \(\odot_\star\) auf \(M\times M\) ist das binäre
+Produkt der Operation \(\star\) mit sich selbst nach
+\FormulaRefAuto{SemigroupBinaryProductDef}[def].
+Diese Indizes unterscheiden die verschiedenen Instanzen der bereits
+definierten Projektionen und Produktoperationen.
+
+\section{Projektionen und Produktstruktur}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductCoordinates}{}
+\FormulaThmDeltaK[Typisierte Koordinaten und Rekonstruktion]{%
+ x\in X\times X\vdash
+ p_X(x)\in X\land q_X(x)\in X\land (p_X(x),q_X(x))=x
+}{FDProductCoordinates}{%
+ \DeltaRow{Mengen}{X\dsep x}
+ \DeltaRow{Projektionen}{p_X\dsep q_X}
+}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{x\in X\times X}{\rA}
+ \proofstepwidestar[]{p_X\colon X\times X\to X}{\FormulaRefAuto{FirstProjectionDef}[def]}
+ \proofstepwidestar[]{q_X\colon X\times X\to X}{\FormulaRefAuto{SecondProjectionDef}[def]}
+ \proofstepwidestar[1]{p_X(x)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{2,1}}
+ \proofstepwidestar[1]{q_X(x)\in X}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}{3,1}}
+ \proofstepwidestar[1]{\exists a\in X\,\exists b\in X\,x=(a,b)}{\FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}{1}}
+ \proofstepwidestar[7]{a\in X\land\exists b\in X\,x=(a,b)}{\rA}
+ \proofstepwidestar[7]{\exists b\in X\,x=(a,b)}{\rAEb{7}}
+ \proofstepwidestar[9]{b\in X\land x=(a,b)}{\rA}
+ \proofstepwidestar[7,9]{(a,b)\in X\times X}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{7},\rAEa{9}}}
+ \proofstepwidestar[7,9]{p_X(a,b)=a}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_1(x,y)=x}{10}}
+ \proofstepwidestar[7,9]{q_X(a,b)=b}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_2(x,y)=y}{10}}
+ \proofstepwidestar[9]{x=(a,b)}{\rAEb{9}}
+ \proofstepwidestar[9]{(a,b)=x}{\FormulaRefAuto{a=b\vdash b=a}{13}}
+ \proofstepwidestar[7,9]{p_X(x)=a}{\rIE{14,11}}
+ \proofstepwidestar[7,9]{q_X(x)=b}{\rIE{14,12}}
+ \proofstepwidestar[]{(p_X(x),q_X(x))=(p_X(x),q_X(x))}{\rII}
+ \proofstepwidestar[7,9]{(p_X(x),q_X(x))=(a,b)}{\rIE{15,16,17}}
+ \proofstepwidestar[7,9]{(p_X(x),q_X(x))=x}{\rIE{14,18}}
+ \proofstepwidestar[7]{(p_X(x),q_X(x))=x}{\rEE{8,9,19}}
+ \proofstepwidestar[1]{(p_X(x),q_X(x))=x}{\rEE{6,7,20}}
+ \proofstepwidestar[1]{p_X(x)\in X\land q_X(x)\in X\land(p_X(x),q_X(x))=x}{\rAI{4,\rAI{5,21}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductPairCoordinates}{}
+\FormulaThmDeltaK[Koordinaten eines vorgegebenen Paares]{%
+ a,b\in X\vdash p_X(a,b)=a\land q_X(a,b)=b
+}{FDProductPairCoordinates}{\DeltaRow{Mengen}{X\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{a,b\in X}{\rA}
+ \proofstepwidestar[1]{(a,b)\in X\times X}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{1},\rAEb{1}}}
+ \proofstepwidestar[1]{p_X(a,b)=a}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_1(x,y)=x}{2}}
+ \proofstepwidestar[1]{q_X(a,b)=b}{\FormulaRefAuto{(x,y)\in A\times B\vdash\pi_2(x,y)=y}{2}}
+ \proofstepwidestar[1]{p_X(a,b)=a\land q_X(a,b)=b}{\rAI{3,4}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductCoordinateEquality}{}
+\FormulaThmDeltaK[Gleichheit wird durch beide Koordinaten bestimmt]{%
+ \begin{aligned}[t]
+ &x,y\in X\times X\vdash{}\\[-2pt]
+ &x=y\leftrightarrow
+   \bigl(p_X(x)=p_X(y)\land q_X(x)=q_X(y)\bigr)
+ \end{aligned}
+}{FDProductCoordinateEquality}{\DeltaRow{Mengen}{X\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{x,y\in X\times X}{\rA}
+ \proofstepwidestar[2]{x=y}{\rA}
+ \proofstepwidestar[]{p_X(x)=p_X(x)}{\rII}
+ \proofstepwidestar[2]{p_X(x)=p_X(y)}{\rIE{2,3}}
+ \proofstepwidestar[]{q_X(x)=q_X(x)}{\rII}
+ \proofstepwidestar[2]{q_X(x)=q_X(y)}{\rIE{2,5}}
+ \proofstepwidestar[2]{p_X(x)=p_X(y)\land q_X(x)=q_X(y)}{\rAI{4,6}}
+ \proofstepwidestar[]{x=y\rightarrow(p_X(x)=p_X(y)\land q_X(x)=q_X(y))}{\rRI{2,7}}
+ \proofstepwidestar[9]{p_X(x)=p_X(y)\land q_X(x)=q_X(y)}{\rA}
+ \proofstepwidestar[1]{(p_X(x),q_X(x))=x}{\rAEb{\rAEb{\FormulaRefAuto{FDProductCoordinates}{\rAEa{1}}}}}
+ \proofstepwidestar[1]{x=(p_X(x),q_X(x))}{\FormulaRefAuto{a=b\vdash b=a}{10}}
+ \proofstepwidestar[1]{(p_X(y),q_X(y))=y}{\rAEb{\rAEb{\FormulaRefAuto{FDProductCoordinates}{\rAEb{1}}}}}
+ \proofstepwidestar[1,9]{x=(p_X(y),q_X(y))}{\rIE{\rAEa{9},\rAEb{9},11}}
+ \proofstepwidestar[1,9]{x=y}{\rIE{12,13}}
+ \proofstepwidestar[1]{(p_X(x)=p_X(y)\land q_X(x)=q_X(y))\rightarrow x=y}{\rRI{9,14}}
+ \proofstepwidestar[1]{x=y\leftrightarrow(p_X(x)=p_X(y)\land q_X(x)=q_X(y))}{\rLRI{8,15}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductOperationValue}{}
+\FormulaThmDeltaK[Produktoperation an typisierten Elementen]{%
+ \begin{aligned}[t]
+ &\SemigroupAlg{M}{\star}\dsep x,y\in M\times M\vdash{}\\[-2pt]
+ &x\odot_\star y=(p_M(x)\star p_M(y),q_M(x)\star q_M(y))
+ \end{aligned}
+}{FDProductOperationValue}{\DeltaRow{Mengen}{M\dsep x\dsep y}\DeltaRow{Operation}{\star}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\rA}
+ \proofstepwidestar[2]{x,y\in M\times M}{\rA}
+ \proofstepwidestar[2]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{2}}}
+ \proofstepwidestar[2]{p_M(y)\in M\land q_M(y)\in M\land(p_M(y),q_M(y))=y}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{2}}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &(p_M(x),q_M(x))\odot_\star(p_M(y),q_M(y))\\[-2pt]
+ &\quad=(p_M(x)\star p_M(y),q_M(x)\star q_M(y))
+ \end{aligned}}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{1,1,\rAEa{3},\rAEa{\rAEb{3}},\rAEa{4},\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{x\odot_\star y=(p_M(x)\star p_M(y),q_M(x)\star q_M(y))}{\rIE{\rAEb{\rAEb{3}},\rAEb{\rAEb{4}},5}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMonoid}{}
+\FormulaThmDeltaK[Das Quadrat eines Monoids ist ein Monoid]{%
+ \MonoidAlg{M}{\star}{e}\vdash
+ \MonoidAlg{M\times M}{\odot_\star}{(e,e)}
+}{FDProductMonoid}{\DeltaRow{Mengen}{M\dsep e\dsep x}\DeltaRow{Operationen}{\star\dsep\odot_\star}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\SemigroupAlg{M\times M}{\odot_\star}}{\FormulaRefAuto{SemigroupBinaryProductIsSemigroup}{2,2}}
+ \proofstepwidestar[1]{e\in M}{\FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{1}}
+ \proofstepwidestar[1]{(e,e)\in M\times M}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{4,4}}
+ \proofstepwidestar[6]{x\in M\times M}{\rA}
+ \proofstepwidestar[6]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{6}}
+ \proofstepwidestar[1,6]{e\star p_M(x)=p_M(x)}{\FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,\rAEa{7}}}
+ \proofstepwidestar[1,6]{e\star q_M(x)=q_M(x)}{\FormulaRefAuto{MonoidLeftIdentityAxiom}[ax]{1,\rAEa{\rAEb{7}}}}
+ \proofstepwidestar[1,6]{(e,e)\odot_\star(p_M(x),q_M(x))=(e\star p_M(x),e\star q_M(x))}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{2,2,4,4,\rAEa{7},\rAEa{\rAEb{7}}}}
+ \proofstepwidestar[1,6]{(e,e)\odot_\star x=x}{\rIE{8,9,\rAEb{\rAEb{7}},10}}
+ \proofstepwidestar[1]{\forall x\in M\times M\,((e,e)\odot_\star x=x)}{\rUI{\rRI{6,11}}}
+ \proofstepwidestar[13]{x\in M\times M}{\rA}
+ \proofstepwidestar[13]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{13}}
+ \proofstepwidestar[1,13]{p_M(x)\star e=p_M(x)}{\FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,\rAEa{14}}}
+ \proofstepwidestar[1,13]{q_M(x)\star e=q_M(x)}{\FormulaRefAuto{MonoidRightIdentityAxiom}[ax]{1,\rAEa{\rAEb{14}}}}
+ \proofstepwidestar[1,13]{(p_M(x),q_M(x))\odot_\star(e,e)=(p_M(x)\star e,q_M(x)\star e)}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{2,2,\rAEa{14},\rAEa{\rAEb{14}},4,4}}
+ \proofstepwidestar[1,13]{x\odot_\star(e,e)=x}{\rIE{15,16,\rAEb{\rAEb{14}},17}}
+ \proofstepwidestar[1]{\forall x\in M\times M\,(x\odot_\star(e,e)=x)}{\rUI{\rRI{13,18}}}
+ \proofstepwidestar[1]{\MonoidAlg{M\times M}{\odot_\star}{(e,e)}}{\FormulaRefAuto{MonoidDef}[def]{3,5,12,19}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductCommutativity}{}
+\FormulaThmDeltaK[Vertauschen der beiden Produktfaktoren]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep x,y\in M\times M\vdash{}\\[-2pt]
+ &x\odot_\star y=y\odot_\star x
+ \end{aligned}
+}{FDProductCommutativity}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{x,y\in M\times M}{\rA}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{3}}
+ \proofstepwidestar[2]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{2}}}
+ \proofstepwidestar[2]{p_M(y)\in M\land q_M(y)\in M\land(p_M(y),q_M(y))=y}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{2}}}
+ \proofstepwidestar[1,2]{p_M(x)\star p_M(y)=p_M(y)\star p_M(x)}{\FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,\rAEa{5},\rAEa{6}}}
+ \proofstepwidestar[1,2]{q_M(x)\star q_M(y)=q_M(y)\star q_M(x)}{\FormulaRefAuto{CommutativeMonoidCommutativityAxiom}[ax]{1,\rAEa{\rAEb{5}},\rAEa{\rAEb{6}}}}
+ \proofstepwidestar[1,2]{x\odot_\star y=(p_M(x)\star p_M(y),q_M(x)\star q_M(y))}{\FormulaRefAuto{FDProductOperationValue}{4,2}}
+ \proofstepwidestar[1,2]{x\odot_\star y=(p_M(y)\star p_M(x),q_M(y)\star q_M(x))}{\rIE{7,8,9}}
+ \proofstepwidestar[1,2]{y\odot_\star x=(p_M(y)\star p_M(x),q_M(y)\star q_M(x))}{\FormulaRefAuto{FDProductOperationValue}{4,\rAI{\rAEb{2},\rAEa{2}}}}
+ \proofstepwidestar[1,2]{(p_M(y)\star p_M(x),q_M(y)\star q_M(x))=y\odot_\star x}{\FormulaRefAuto{a=b\vdash b=a}{11}}
+ \proofstepwidestar[1,2]{x\odot_\star y=y\odot_\star x}{\rIE{12,10}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductCommutativeMonoid}{}
+\FormulaThmDeltaK[Das Quadrat eines kommutativen Monoids]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\vdash
+ \CommutativeMonoidAlg{M\times M}{\odot_\star}{(e,e)}
+}{FDProductCommutativeMonoid}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\MonoidAlg{M\times M}{\odot_\star}{(e,e)}}{\FormulaRefAuto{FDProductMonoid}{2}}
+ \proofstepwidestar[4]{x\in M\times M}{\rA}
+ \proofstepwidestar[5]{y\in M\times M}{\rA}
+ \proofstepwidestar[1,4,5]{x\odot_\star y=y\odot_\star x}{\FormulaRefAuto{FDProductCommutativity}{1,\rAI{4,5}}}
+ \proofstepwidestar[1,4]{\forall y\in M\times M\,(x\odot_\star y=y\odot_\star x)}{\rUI{\rRI{5,6}}}
+ \proofstepwidestar[1]{\forall x\in M\times M\,\forall y\in M\times M\,(x\odot_\star y=y\odot_\star x)}{\rUI{\rRI{4,7}}}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M\times M}{\odot_\star}{(e,e)}}{\FormulaRefAuto{CommutativeMonoidDef}[def]{3,8}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductOperationCoordinates}{}
+\FormulaThmDeltaK[Beide Koordinaten eines Produkts]{%
+ \begin{aligned}[t]
+ &\SemigroupAlg{M}{\star}\dsep x,y\in M\times M\vdash{}\\[-2pt]
+ &p_M(x\odot_\star y)=p_M(x)\star p_M(y)\ \land{}\\[-2pt]
+ &q_M(x\odot_\star y)=q_M(x)\star q_M(y)
+ \end{aligned}
+}{FDProductOperationCoordinates}{\DeltaRow{Mengen}{M\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\rA}
+ \proofstepwidestar[2]{x,y\in M\times M}{\rA}
+ \proofstepwidestar[2]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{2}}}
+ \proofstepwidestar[2]{p_M(y)\in M\land q_M(y)\in M\land(p_M(y),q_M(y))=y}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{2}}}
+ \proofstepwidestar[1,2]{p_M(x)\star p_M(y)\in M}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,\rAEa{3},\rAEa{4}}}
+ \proofstepwidestar[1,2]{q_M(x)\star q_M(y)\in M}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{1,\rAEa{\rAEb{3}},\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &p_M(p_M(x)\star p_M(y),q_M(x)\star q_M(y))\\[-2pt]
+ &\quad=p_M(x)\star p_M(y)\ \land{}\\[-2pt]
+ &q_M(p_M(x)\star p_M(y),q_M(x)\star q_M(y))\\[-2pt]
+ &\quad=q_M(x)\star q_M(y)
+ \end{aligned}}{\FormulaRefAuto{FDProductPairCoordinates}{\rAI{5,6}}}
+ \proofstepwidestar[1,2]{x\odot_\star y=(p_M(x)\star p_M(y),q_M(x)\star q_M(y))}{\FormulaRefAuto{FDProductOperationValue}{1,2}}
+ \noalign{\penalty10000}
+ \proofstepwidestar[1,2]{(p_M(x)\star p_M(y),q_M(x)\star q_M(y))=x\odot_\star y}{\FormulaRefAuto{a=b\vdash b=a}{8}}
+ \noalign{\penalty10000}
+ \proofstepwidestar[1,2]{p_M(x\odot_\star y)=p_M(x)\star p_M(y)\land q_M(x\odot_\star y)=q_M(x)\star q_M(y)}{\rIE{9,7}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductRightCancellation}{}
+\FormulaThmDeltaK[Rechtskürzung im Produkt]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\dsep{}\\
+ &x,y,z\in M\times M\dsep x\odot_\star z=y\odot_\star z\vdash x=y
+ \end{aligned}
+}{FDProductRightCancellation}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y\dsep z}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{x,y,z\in M\times M}{\rA}
+ \proofstepwidestar[4]{x\odot_\star z=y\odot_\star z}{\rA}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{5}}
+ \proofstepwidestar[2]{\mathsf{RK\ddot{u}rz}(M,\star)}{\FormulaRefAuto{CancellativeRightAxiom}[ax]{2}}
+ \proofstepwidestar[3]{p_M(x)\in M\land q_M(x)\in M\land(p_M(x),q_M(x))=x}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{3}}}
+ \proofstepwidestar[3]{p_M(y)\in M\land q_M(y)\in M\land(p_M(y),q_M(y))=y}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{\rAEb{3}}}}
+ \proofstepwidestar[3]{p_M(z)\in M\land q_M(z)\in M\land(p_M(z),q_M(z))=z}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{\rAEb{3}}}}
+ \proofstepwidestar[1,3]{p_M(x\odot_\star z)=p_M(x)\star p_M(z)\land q_M(x\odot_\star z)=q_M(x)\star q_M(z)}{\FormulaRefAuto{FDProductOperationCoordinates}{6,\rAI{\rAEa{3},\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,3]{p_M(y\odot_\star z)=p_M(y)\star p_M(z)\land q_M(y\odot_\star z)=q_M(y)\star q_M(z)}{\FormulaRefAuto{FDProductOperationCoordinates}{6,\rAI{\rAEa{\rAEb{3}},\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,3,4]{p_M(y\odot_\star z)=p_M(x)\star p_M(z)}{\rIE{4,\rAEa{11}}}
+ \proofstepwidestar[1,3,4]{p_M(y)\star p_M(z)=p_M(x)\star p_M(z)}{\rIE{\rAEa{12},13}}
+ \proofstepwidestar[1,2,3,4]{p_M(y)=p_M(x)}{\FormulaRefAuto{RightCancellationAxiom}[ax]{7,\rAEa{10},\rAEa{9},\rAEa{8},14}}
+ \proofstepwidestar[1,3,4]{q_M(y\odot_\star z)=q_M(x)\star q_M(z)}{\rIE{4,\rAEb{11}}}
+ \proofstepwidestar[1,3,4]{q_M(y)\star q_M(z)=q_M(x)\star q_M(z)}{\rIE{\rAEb{12},16}}
+ \proofstepwidestar[1,2,3,4]{q_M(y)=q_M(x)}{\FormulaRefAuto{RightCancellationAxiom}[ax]{7,\rAEa{\rAEb{10}},\rAEa{\rAEb{9}},\rAEa{\rAEb{8}},17}}
+ \proofstepwidestar[3]{y=x\leftrightarrow(p_M(y)=p_M(x)\land q_M(y)=q_M(x))}{\FormulaRefAuto{FDProductCoordinateEquality}{\rAI{\rAEa{\rAEb{3}},\rAEa{3}}}}
+ \proofstepwidestar[1,2,3,4]{y=x}{\rRE{\rLREb{19},\rAI{15,18}}}
+ \proofstepwidestar[1,2,3,4]{x=y}{\FormulaRefAuto{a=b\vdash b=a}{20}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductCancellation}{}
+\FormulaThmDeltaK[Kürzbarkeit des Produktmonoides]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\mathsf{K\ddot{u}rz}(M\times M,\odot_\star)
+}{FDProductCancellation}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y\dsep z}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{x\in M\times M}{\rA}
+ \proofstepwidestar[4]{y\in M\times M}{\rA}
+ \proofstepwidestar[5]{z\in M\times M}{\rA}
+ \proofstepwidestar[6]{x\odot_\star z=y\odot_\star z}{\rA}
+ \proofstepwidestar[1,2,3,4,5,6]{x=y}{\FormulaRefAuto{FDProductRightCancellation}{1,2,\rAI{3,\rAI{4,5}},6}}
+ \proofstepwidestar[1,2,3,4,5]{x\odot_\star z=y\odot_\star z\rightarrow x=y}{\rRI{6,7}}
+ \proofstepwidestar[1,2,3,4]{\forall z\in M\times M\,(x\odot_\star z=y\odot_\star z\rightarrow x=y)}{\rUI{\rRI{5,8}}}
+ \proofstepwidestar[1,2,3]{\forall y\in M\times M\,\forall z\in M\times M\,(x\odot_\star z=y\odot_\star z\rightarrow x=y)}{\rUI{\rRI{4,9}}}
+ \proofstepwidestar[1,2]{\forall x\in M\times M\,\forall y\in M\times M\,\forall z\in M\times M\,(x\odot_\star z=y\odot_\star z\rightarrow x=y)}{\rUI{\rRI{3,10}}}
+ \proofstepwidestar[1,2]{\mathsf{RK\ddot{u}rz}(M\times M,\odot_\star)}{\FormulaRefAuto{RightCancellativeDef}[def]{11}}
+ \proofstepwidestar[13]{x\in M\times M}{\rA}
+ \proofstepwidestar[14]{y\in M\times M}{\rA}
+ \proofstepwidestar[15]{z\in M\times M}{\rA}
+ \proofstepwidestar[16]{z\odot_\star x=z\odot_\star y}{\rA}
+ \proofstepwidestar[1,13,15]{z\odot_\star x=x\odot_\star z}{\FormulaRefAuto{FDProductCommutativity}{1,\rAI{15,13}}}
+ \proofstepwidestar[1,14,15]{z\odot_\star y=y\odot_\star z}{\FormulaRefAuto{FDProductCommutativity}{1,\rAI{15,14}}}
+ \proofstepwidestar[1,13,14,15,16]{x\odot_\star z=y\odot_\star z}{\rIE{17,18,16}}
+ \proofstepwidestar[1,2,13,14,15,16]{x=y}{\FormulaRefAuto{FDProductRightCancellation}{1,2,\rAI{13,\rAI{14,15}},19}}
+ \proofstepwidestar[1,2,13,14,15]{z\odot_\star x=z\odot_\star y\rightarrow x=y}{\rRI{16,20}}
+ \proofstepwidestar[1,2,13,14]{\forall z\in M\times M\,(z\odot_\star x=z\odot_\star y\rightarrow x=y)}{\rUI{\rRI{15,21}}}
+ \proofstepwidestar[1,2,13]{\forall y\in M\times M\,\forall z\in M\times M\,(z\odot_\star x=z\odot_\star y\rightarrow x=y)}{\rUI{\rRI{14,22}}}
+ \proofstepwidestar[1,2]{\forall x\in M\times M\,\forall y\in M\times M\,\forall z\in M\times M\,(z\odot_\star x=z\odot_\star y\rightarrow x=y)}{\rUI{\rRI{13,23}}}
+ \proofstepwidestar[1,2]{\mathsf{LK\ddot{u}rz}(M\times M,\odot_\star)}{\FormulaRefAuto{LeftCancellativeDef}[def]{24}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(M\times M,\odot_\star)}{\FormulaRefAuto{CancellativeOperationDef}[def]{25,12}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductGroupInverse}{}
+\FormulaThmDeltaK[Ein beidseitiges Inverses im Gruppenprodukt]{%
+ \begin{aligned}[t]
+ &\GroupAlg{G}{\star}{e}\dsep x\in G\times G\vdash{}\\[-2pt]
+ &\exists y\in G\times G\,
+   (x\odot_\star y=(e,e)\land y\odot_\star x=(e,e))
+ \end{aligned}
+}{FDProductGroupInverse}{\DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\GroupAlg{G}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{x\in G\times G}{\rA}
+ \proofstepwidestar[1]{\SemigroupAlg{G}{\star}}{\FormulaRefAuto{GroupBaseSemigroup}{1}}
+ \proofstepwidestar[2]{p_G(x)\in G\land q_G(x)\in G\land(p_G(x),q_G(x))=x}{\FormulaRefAuto{FDProductCoordinates}{2}}
+ \proofstepwidestar[1,2]{p_G(x)^{-1}\in G}{\FormulaRefAuto{GroupInverseCarrier}{1,\rAEa{4}}}
+ \proofstepwidestar[1,2]{q_G(x)^{-1}\in G}{\FormulaRefAuto{GroupInverseCarrier}{1,\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{(p_G(x)^{-1},q_G(x)^{-1})\in G\times G}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{5,6}}
+ \proofstepwidestar[1,2]{p_G(x)\star p_G(x)^{-1}=e}{\FormulaRefAuto{GroupInverseRight}{1,\rAEa{4}}}
+ \proofstepwidestar[1,2]{q_G(x)\star q_G(x)^{-1}=e}{\FormulaRefAuto{GroupInverseRight}{1,\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{(p_G(x),q_G(x))\odot_\star(p_G(x)^{-1},q_G(x)^{-1})=(p_G(x)\star p_G(x)^{-1},q_G(x)\star q_G(x)^{-1})}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{3,3,\rAEa{4},\rAEa{\rAEb{4}},5,6}}
+ \proofstepwidestar[1,2]{x\odot_\star(p_G(x)^{-1},q_G(x)^{-1})=(e,e)}{\rIE{\rAEb{\rAEb{4}},8,9,10}}
+ \proofstepwidestar[1,2]{p_G(x)^{-1}\star p_G(x)=e}{\FormulaRefAuto{GroupInverseLeft}{1,\rAEa{4}}}
+ \proofstepwidestar[1,2]{q_G(x)^{-1}\star q_G(x)=e}{\FormulaRefAuto{GroupInverseLeft}{1,\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{(p_G(x)^{-1},q_G(x)^{-1})\odot_\star(p_G(x),q_G(x))=(p_G(x)^{-1}\star p_G(x),q_G(x)^{-1}\star q_G(x))}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{3,3,5,6,\rAEa{4},\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[1,2]{(p_G(x)^{-1},q_G(x)^{-1})\odot_\star x=(e,e)}{\rIE{\rAEb{\rAEb{4}},12,13,14}}
+ \proofstepwidestar[1,2]{\exists y\in G\times G\,(x\odot_\star y=(e,e)\land y\odot_\star x=(e,e))}{\rEI{\rAI{7,\rAI{11,15}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductAbelianGroup}{}
+\FormulaThmDeltaK[Das Quadrat einer abelschen Gruppe]{%
+ \AbelianGroupAlg{G}{\star}{e}\vdash
+ \AbelianGroupAlg{G\times G}{\odot_\star}{(e,e)}
+}{FDProductAbelianGroup}{\DeltaRow{Mengen}{G\dsep e\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\AbelianGroupAlg{G}{\star}{e}}{\rA}
+ \proofstepwidestar[1]{\GroupAlg{G}{\star}{e}}{\FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{G}{\star}{e}}{\FormulaRefAuto{AbelianGroupIsCommutativeMonoid}{1}}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{G\times G}{\odot_\star}{(e,e)}}{\FormulaRefAuto{FDProductCommutativeMonoid}{3}}
+ \proofstepwidestar[1]{\MonoidAlg{G\times G}{\odot_\star}{(e,e)}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{4}}
+ \proofstepwidestar[6]{x\in G\times G}{\rA}
+ \proofstepwidestar[1,6]{\exists y\in G\times G\,(x\odot_\star y=(e,e)\land y\odot_\star x=(e,e))}{\FormulaRefAuto{FDProductGroupInverse}{2,6}}
+ \proofstepwidestar[1]{\forall x\in G\times G\,\exists y\in G\times G\,(x\odot_\star y=(e,e)\land y\odot_\star x=(e,e))}{\rUI{\rRI{6,7}}}
+ \proofstepwidestar[1]{\GroupAlg{G\times G}{\odot_\star}{(e,e)}}{\FormulaRefAuto{GroupDef}[def]{5,8}}
+ \proofstepwidestar[10]{x\in G\times G}{\rA}
+ \proofstepwidestar[11]{y\in G\times G}{\rA}
+ \proofstepwidestar[1,10,11]{x\odot_\star y=y\odot_\star x}{\FormulaRefAuto{FDProductCommutativity}{3,\rAI{10,11}}}
+ \proofstepwidestar[1,10]{\forall y\in G\times G\,(x\odot_\star y=y\odot_\star x)}{\rUI{\rRI{11,12}}}
+ \proofstepwidestar[1]{\forall x\in G\times G\,\forall y\in G\times G\,(x\odot_\star y=y\odot_\star x)}{\rUI{\rRI{10,13}}}
+ \proofstepwidestar[1]{\AbelianGroupAlg{G\times G}{\odot_\star}{(e,e)}}{\FormulaRefAuto{AbelianGroupDef}[def]{9,14}}
+\end{tabproofwide}
+
+\section{Die Abbildung auf den Differenzenklassen}
+
+In diesem Abschnitt sind die folgenden Zeichen ausschließlich
+Abkürzungen für die bereits konstruierten Mengen, Terme und Operationen:
+\[
+\begin{aligned}
+ P&=M\times M,& E&=(e,e),\\
+ K&=\GroupCompletionCarrier{M,\star,e},&
+ \alpha&=\GroupCompletionOp{M,\star,e},\\
+ L&=\GroupCompletionCarrier{P,\odot_\star,E},&
+ \beta&=\GroupCompletionOp{P,\odot_\star,E},\\
+ u&=\GroupCompletionZero{M,\star,e},&
+ v&=\GroupCompletionZero{P,\odot_\star,E},\\
+ \kappa(a,b)&=\FormalDifferenceClass{M,\star,e}{a}{b},&
+ \lambda(x,y)&=\FormalDifferenceClass{P,\odot_\star,E}{x}{y}.
+\end{aligned}
+\]
+Dabei werden \(\kappa(a,b)\) nur für \(a,b\in M\) und
+\(\lambda(x,y)\) nur für \(x,y\in P\) verwendet.
+Das Termpaar
+\[
+ T(a,b)=\bigl(\kappa(p_M(a),p_M(b)),
+                 \kappa(q_M(a),q_M(b))\bigr)
+ \qquad(a,b\in P)
+\]
+ist ebenfalls eine Abkürzung, keine vorausgesetzte Funktion.
+Der Funktionsgraph der gesuchten Abbildung wird erst nach dem
+Verträglichkeitsnachweis eingeführt.
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductCompletionStructures}{}
+\FormulaThmDeltaK[Quellgruppe und Zielgruppe der Klassenabbildung]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\AbelianGroupAlg{K}{\alpha}{u}\land
+   \AbelianGroupAlg{L}{\beta}{v}\land
+   \AbelianGroupAlg{K\times K}{\odot_\alpha}{(u,u)}
+ \end{aligned}
+}{FDProductCompletionStructures}{\DeltaRow{Mengen}{M\dsep e\dsep P\dsep K\dsep L}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{K}{\alpha}{u}}{\FormulaRefAuto{GroupCompletionAbelianGroup}{1,2}}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{L}{\beta}{v}}{\FormulaRefAuto{GroupCompletionAbelianGroup}{3,4}}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{K\times K}{\odot_\alpha}{(u,u)}}{\FormulaRefAuto{FDProductAbelianGroup}{5}}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{K}{\alpha}{u}\land\AbelianGroupAlg{L}{\beta}{v}\land\AbelianGroupAlg{K\times K}{\odot_\alpha}{(u,u)}}{\rAI{5,\rAI{6,7}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductTargetValue}{}
+\FormulaThmDeltaK[Der vorgeschlagene Bildwert liegt im Zielprodukt]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b\in P\vdash T(a,b)\in K\times K
+}{FDProductTargetValue}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b\in P}{\rA}
+ \proofstepwidestar[3]{p_M(a)\in M\land q_M(a)\in M\land(p_M(a),q_M(a))=a}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{3}}}
+ \proofstepwidestar[3]{p_M(b)\in M\land q_M(b)\in M\land(p_M(b),q_M(b))=b}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{3}}}
+ \proofstepwidestar[1,2,3]{\kappa(p_M(a),p_M(b))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{4},\rAEa{5}}}
+ \proofstepwidestar[1,2,3]{\kappa(q_M(a),q_M(b))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{\rAEb{4}},\rAEa{\rAEb{5}}}}
+ \proofstepwidestar[1,2,3]{T(a,b)\in K\times K}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{6,7}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductClassCriterion}{}
+\FormulaThmDeltaK[Gleichheit der Produktklassen und ihrer Bildwerte]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b,c,d\in P\vdash{}\\
+ &\lambda(a,b)=\lambda(c,d)\leftrightarrow T(a,b)=T(c,d)
+ \end{aligned}
+}{FDProductClassCriterion}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b,c,d\in P}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{6}}
+ \proofstepwidestar[3]{p_M(a)\in M\land q_M(a)\in M\land(p_M(a),q_M(a))=a}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{3}}}
+ \proofstepwidestar[3]{p_M(b)\in M\land q_M(b)\in M\land(p_M(b),q_M(b))=b}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{\rAEb{3}}}}
+ \proofstepwidestar[3]{p_M(c)\in M\land q_M(c)\in M\land(p_M(c),q_M(c))=c}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[3]{p_M(d)\in M\land q_M(d)\in M\land(p_M(d),q_M(d))=d}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,2,3]{\lambda(a,b)=\lambda(c,d)\leftrightarrow a\odot_\star d=b\odot_\star c}{\FormulaRefAuto{GroupCompletionClassEquality}{4,5,3}}
+ \proofstepwidestar[1,3]{a\odot_\star d=(p_M(a)\star p_M(d),q_M(a)\star q_M(d))}{\FormulaRefAuto{FDProductOperationValue}{7,\rAI{\rAEa{3},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[1,3]{b\odot_\star c=(p_M(b)\star p_M(c),q_M(b)\star q_M(c))}{\FormulaRefAuto{FDProductOperationValue}{7,\rAI{\rAEa{\rAEb{3}},\rAEa{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\lambda(a,b)=\lambda(c,d)\leftrightarrow{}\\
+ &(p_M(a)\star p_M(d),q_M(a)\star q_M(d))\\[-2pt]
+ &\quad=(p_M(b)\star p_M(c),q_M(b)\star q_M(c))
+ \end{aligned}}{\rIE{13,14,12}}
+ \proofstepwidestar[]{\begin{aligned}[t]
+ &(p_M(a)\star p_M(d),q_M(a)\star q_M(d))\\[-2pt]
+ &\quad=(p_M(b)\star p_M(c),q_M(b)\star q_M(c))\\[-2pt]
+ &\leftrightarrow
+ \bigl(p_M(a)\star p_M(d)=p_M(b)\star p_M(c)\\[-2pt]
+ &\qquad\land q_M(a)\star q_M(d)=q_M(b)\star q_M(c)\bigr)
+ \end{aligned}}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\lambda(a,b)=\lambda(c,d)\leftrightarrow{}\\
+ &\bigl(p_M(a)\star p_M(d)=p_M(b)\star p_M(c)\\[-2pt]
+ &\qquad\land q_M(a)\star q_M(d)=q_M(b)\star q_M(c)\bigr)
+ \end{aligned}}{\rLRS{16,15}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\kappa(p_M(a),p_M(b))=\kappa(p_M(c),p_M(d))\\[-2pt]
+ &\quad\leftrightarrow p_M(a)\star p_M(d)=p_M(b)\star p_M(c)
+ \end{aligned}}{\FormulaRefAuto{GroupCompletionClassEquality}{1,2,\rAEa{8},\rAEa{9},\rAEa{10},\rAEa{11}}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\kappa(q_M(a),q_M(b))=\kappa(q_M(c),q_M(d))\\[-2pt]
+ &\quad\leftrightarrow q_M(a)\star q_M(d)=q_M(b)\star q_M(c)
+ \end{aligned}}{\FormulaRefAuto{GroupCompletionClassEquality}{1,2,\rAEa{\rAEb{8}},\rAEa{\rAEb{9}},\rAEa{\rAEb{10}},\rAEa{\rAEb{11}}}}
+ \proofstepwidestar[]{\begin{aligned}[t]
+ &T(a,b)=T(c,d)\leftrightarrow{}\\
+ &\bigl(\kappa(p_M(a),p_M(b))=\kappa(p_M(c),p_M(d))\\[-2pt]
+ &\qquad\land \kappa(q_M(a),q_M(b))=\kappa(q_M(c),q_M(d))\bigr)
+ \end{aligned}}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &T(a,b)=T(c,d)\leftrightarrow{}\\
+ &\bigl(p_M(a)\star p_M(d)=p_M(b)\star p_M(c)\\[-2pt]
+ &\qquad\land q_M(a)\star q_M(d)=q_M(b)\star q_M(c)\bigr)
+ \end{aligned}}{\rLRS{18,19,20}}
+ \proofstepwidestar[22]{\lambda(a,b)=\lambda(c,d)}{\rA}
+ \proofstepwidestar[1,2,3,22]{\begin{aligned}[t]
+ &p_M(a)\star p_M(d)=p_M(b)\star p_M(c)\\[-2pt]
+ &\quad\land q_M(a)\star q_M(d)=q_M(b)\star q_M(c)
+ \end{aligned}}{\rRE{\rLREa{17},22}}
+ \proofstepwidestar[1,2,3,22]{T(a,b)=T(c,d)}{\rRE{\rLREb{21},23}}
+ \proofstepwidestar[1,2,3]{\lambda(a,b)=\lambda(c,d)\rightarrow T(a,b)=T(c,d)}{\rRI{22,24}}
+ \proofstepwidestar[26]{T(a,b)=T(c,d)}{\rA}
+ \proofstepwidestar[1,2,3,26]{\begin{aligned}[t]
+ &p_M(a)\star p_M(d)=p_M(b)\star p_M(c)\\[-2pt]
+ &\quad\land q_M(a)\star q_M(d)=q_M(b)\star q_M(c)
+ \end{aligned}}{\rRE{\rLREa{21},26}}
+ \proofstepwidestar[1,2,3,26]{\lambda(a,b)=\lambda(c,d)}{\rRE{\rLREb{17},27}}
+ \proofstepwidestar[1,2,3]{T(a,b)=T(c,d)\rightarrow\lambda(a,b)=\lambda(c,d)}{\rRI{26,28}}
+ \proofstepwidestar[1,2,3]{\lambda(a,b)=\lambda(c,d)\leftrightarrow T(a,b)=T(c,d)}{\rLRI{25,29}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductSourceTyping}{}
+\FormulaThmDeltaK[Universelle Typisierung der Produktklassen]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\forall a\forall b\,((a\in P\land b\in P)\rightarrow\lambda(a,b)\in L)
+}{FDProductSourceTyping}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[5]{a\in P\land b\in P}{\rA}
+ \proofstepwidestar[1,2,5]{\lambda(a,b)\in L}{\FormulaRefAuto{GroupCompletionClassInCarrier}{3,4,5}}
+ \proofstepwidestar[1,2]{(a\in P\land b\in P)\rightarrow\lambda(a,b)\in L}{\rRI{5,6}}
+ \proofstepwidestar[1,2]{\forall a\forall b\,((a\in P\land b\in P)\rightarrow\lambda(a,b)\in L)}{\rUI{\rUI{7}}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductSourceRepresentation}{}
+\FormulaThmDeltaK[Universelle Paardarstellung im Quellquotienten]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\forall z\in L\,\exists a\exists b\,
+   ((a\in P\land b\in P)\land z=\lambda(a,b))
+ \end{aligned}
+}{FDProductSourceRepresentation}{\DeltaRow{Mengen}{M\dsep e\dsep z\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[5]{z\in L}{\rA}
+ \proofstepwidestar[1,2,5]{\exists a\in P\,\exists b\in P\,z=\lambda(a,b)}{\FormulaRefAuto{GroupCompletionRepresentative}{3,4,5}}
+ \proofstepwidestar[7]{a\in P\land\exists b\in P\,z=\lambda(a,b)}{\rA}
+ \proofstepwidestar[7]{\exists b\in P\,z=\lambda(a,b)}{\rAEb{7}}
+ \proofstepwidestar[9]{b\in P\land z=\lambda(a,b)}{\rA}
+ \proofstepwidestar[7,9]{(a\in P\land b\in P)\land z=\lambda(a,b)}{\rAI{\rAI{\rAEa{7},\rAEa{9}},\rAEb{9}}}
+ \proofstepwidestar[7,9]{\exists a\exists b\,((a\in P\land b\in P)\land z=\lambda(a,b))}{\rEI{\rEI{10}}}
+ \proofstepwidestar[7]{\exists a\exists b\,((a\in P\land b\in P)\land z=\lambda(a,b))}{\rEE{8,9,11}}
+ \proofstepwidestar[1,2,5]{\exists a\exists b\,((a\in P\land b\in P)\land z=\lambda(a,b))}{\rEE{6,7,12}}
+ \proofstepwidestar[1,2]{\forall z\in L\,\exists a\exists b\,((a\in P\land b\in P)\land z=\lambda(a,b))}{\rUI{\rRI{5,13}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductTargetTyping}{}
+\FormulaThmDeltaK[Universelle Typisierung der Bildvorschrift]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\forall a\forall b\,((a\in P\land b\in P)\rightarrow T(a,b)\in K\times K)
+}{FDProductTargetTyping}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a\in P\land b\in P}{\rA}
+ \proofstepwidestar[1,2,3]{T(a,b)\in K\times K}{\FormulaRefAuto{FDProductTargetValue}{1,2,3}}
+ \proofstepwidestar[1,2]{(a\in P\land b\in P)\rightarrow T(a,b)\in K\times K}{\rRI{3,4}}
+ \proofstepwidestar[1,2]{\forall a\forall b\,((a\in P\land b\in P)\rightarrow T(a,b)\in K\times K)}{\rUI{\rUI{5}}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductCompatibility}{}
+\FormulaThmDeltaK[Universelle Repräsentantenunabhängigkeit]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\forall a\forall b\forall c\forall d\,\bigl(
+ ((a\in P\land b\in P)\land(c\in P\land d\in P)\\
+ &\qquad\land\lambda(a,b)=\lambda(c,d))
+ \rightarrow T(a,b)=T(c,d)\bigr)
+ \end{aligned}
+}{FDProductCompatibility}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{(a\in P\land b\in P)\land(c\in P\land d\in P)\land\lambda(a,b)=\lambda(c,d)}{\rA}
+ \proofstepwidestar[3]{a,b,c,d\in P}{\rAI{\rAEa{\rAEa{3}},\rAI{\rAEb{\rAEa{3}},\rAI{\rAEa{\rAEa{\rAEb{3}}},\rAEb{\rAEa{\rAEb{3}}}}}}}
+ \proofstepwidestar[1,2,3]{\lambda(a,b)=\lambda(c,d)\leftrightarrow T(a,b)=T(c,d)}{\FormulaRefAuto{FDProductClassCriterion}{1,2,4}}
+ \proofstepwidestar[1,2,3]{T(a,b)=T(c,d)}{\rRE{\rLREa{5},\rAEb{\rAEb{3}}}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &((a\in P\land b\in P)\land(c\in P\land d\in P)\\
+ &\quad\land\lambda(a,b)=\lambda(c,d))\rightarrow T(a,b)=T(c,d)
+ \end{aligned}}{\rRI{3,6}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &\forall a\forall b\forall c\forall d\,\bigl(
+ ((a\in P\land b\in P)\land(c\in P\land d\in P)\\
+ &\quad\land\lambda(a,b)=\lambda(c,d))\rightarrow T(a,b)=T(c,d)\bigr)
+ \end{aligned}}{\rUI{\rUI{\rUI{\rUI{7}}}}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapUnique}{}
+\FormulaThmDeltaK[Eindeutige Existenz der Klassenabbildung]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\exists!F\,\bigl(F\colon L\to K\times K\land
+  \forall a\forall b\,((a\in P\land b\in P)\\
+ &\qquad\rightarrow F(\lambda(a,b))=T(a,b))\bigr)
+ \end{aligned}
+}{FDProductMapUnique}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}\DeltaRow{Funktion}{F}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1,2]{\forall a\forall b\,((a\in P\land b\in P)\rightarrow\lambda(a,b)\in L)}{\FormulaRefAuto{FDProductSourceTyping}{1,2}}
+ \proofstepwidestar[1,2]{\forall z\in L\,\exists a\exists b\,((a\in P\land b\in P)\land z=\lambda(a,b))}{\FormulaRefAuto{FDProductSourceRepresentation}{1,2}}
+ \proofstepwidestar[1,2]{\forall a\forall b\,((a\in P\land b\in P)\rightarrow T(a,b)\in K\times K)}{\FormulaRefAuto{FDProductTargetTyping}{1,2}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &\forall a\forall b\forall c\forall d\,\bigl(
+ ((a\in P\land b\in P)\land(c\in P\land d\in P)\\
+ &\quad\land\lambda(a,b)=\lambda(c,d))\rightarrow T(a,b)=T(c,d)\bigr)
+ \end{aligned}}{\FormulaRefAuto{FDProductCompatibility}{1,2}}
+ \proofstepwidestar[1,2]{\begin{aligned}[t]
+ &\exists!F\,\bigl(F\colon L\to K\times K\land
+ \forall a\forall b\,((a\in P\land b\in P)\\
+ &\quad\rightarrow F(\lambda(a,b))=T(a,b))\bigr)
+ \end{aligned}}{\FormulaRefAuto{RepresentativePairFactorization}{3,4,5,6}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductMapDef}{}
+\FormulaDefDeltaK[Klassenabbildung auf das Produkt der Differenzengruppen]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\Phi_M\colon L\to K\times K,\\
+ &\forall a\forall b\,\bigl((a\in P\land b\in P)
+   \rightarrow\Phi_M(\lambda(a,b))\coloneqq T(a,b)\bigr)
+ \end{aligned}
+}{FDProductMapDef}{%
+ \DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}
+ \DeltaRow{Neue Funktion}{\Phi_M}
+ \DeltaRow{Eindeutige Existenz}{\FormulaRefAuto{FDProductMapUnique}}
+}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductMapFunction}{}
+\FormulaThmDeltaK[Funktionstyp der Klassenabbildung]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\Phi_M\colon L\to K\times K
+}{FDProductMapFunction}{\DeltaRow{Mengen}{M\dsep e}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\to K\times K}{\FormulaRefAuto{FDProductMapDef}[def]{1,2}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\hypertarget{differences.statement.FDProductMapValue}{}
+\FormulaThmDeltaK[Auswertung an einer Produktklasse]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b\in P\vdash\Phi_M(\lambda(a,b))=T(a,b)
+}{FDProductMapValue}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b\in P}{\rA}
+ \proofstepwidestar[1,2]{\forall a\forall b\,((a\in P\land b\in P)\rightarrow\Phi_M(\lambda(a,b))=T(a,b))}{\FormulaRefAuto{FDProductMapDef}[def]{1,2}}
+ \proofstepwidestar[1,2]{(a\in P\land b\in P)\rightarrow\Phi_M(\lambda(a,b))=T(a,b)}{\rUE{\rUE{4}}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b))=T(a,b)}{\rRE{5,3}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapPairValue}{}
+\FormulaThmDeltaK[Die konkrete Vierkoordinatenformel]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b,c,d\in M\vdash{}\\
+ &\Phi_M(\lambda((a,c),(b,d)))=(\kappa(a,b),\kappa(c,d))
+ \end{aligned}
+}{FDProductMapPairValue}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b,c,d\in M}{\rA}
+ \proofstepwidestar[3]{(a,c)\in P}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{3},\rAEa{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[3]{(b,d)\in P}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{\rAEb{3}},\rAEb{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[3]{p_M(a,c)=a\land q_M(a,c)=c}{\FormulaRefAuto{FDProductPairCoordinates}{\rAI{\rAEa{3},\rAEa{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[3]{p_M(b,d)=b\land q_M(b,d)=d}{\FormulaRefAuto{FDProductPairCoordinates}{\rAI{\rAEa{\rAEb{3}},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda((a,c),(b,d)))=T((a,c),(b,d))}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{4,5}}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda((a,c),(b,d)))=(\kappa(a,b),\kappa(c,d))}{\rIE{\rAEa{6},\rAEa{7},\rAEb{6},\rAEb{7},8}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapInjectiveCriterion}{}
+\FormulaThmDeltaK[Gleiche Bilder erzwingen gleiche Klassen]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep x,y\in L\\
+ &\dsep\Phi_M(x)=\Phi_M(y)\vdash x=y
+ \end{aligned}
+}{FDProductMapInjectiveCriterion}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{x,y\in L}{\rA}
+ \proofstepwidestar[4]{\Phi_M(x)=\Phi_M(y)}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1,2,3]{\exists a\in P\,\exists b\in P\,x=\lambda(a,b)}{\FormulaRefAuto{GroupCompletionRepresentative}{5,6,\rAEa{3}}}
+ \proofstepwidestar[8]{a\in P\land\exists b\in P\,x=\lambda(a,b)}{\rA}
+ \proofstepwidestar[8]{\exists b\in P\,x=\lambda(a,b)}{\rAEb{8}}
+ \proofstepwidestar[10]{b\in P\land x=\lambda(a,b)}{\rA}
+ \proofstepwidestar[1,2,3]{\exists c\in P\,\exists d\in P\,y=\lambda(c,d)}{\FormulaRefAuto{GroupCompletionRepresentative}{5,6,\rAEb{3}}}
+ \proofstepwidestar[12]{c\in P\land\exists d\in P\,y=\lambda(c,d)}{\rA}
+ \proofstepwidestar[12]{\exists d\in P\,y=\lambda(c,d)}{\rAEb{12}}
+ \proofstepwidestar[14]{d\in P\land y=\lambda(c,d)}{\rA}
+ \proofstepwidestar[1,2,8,10]{\Phi_M(\lambda(a,b))=T(a,b)}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{\rAEa{8},\rAEa{10}}}}
+ \proofstepwidestar[1,2,12,14]{\Phi_M(\lambda(c,d))=T(c,d)}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{\rAEa{12},\rAEa{14}}}}
+ \proofstepwidestar[4,10,14]{\Phi_M(\lambda(a,b))=\Phi_M(\lambda(c,d))}{\rIE{\rAEb{10},\rAEb{14},4}}
+ \proofstepwidestar[1,2,4,8,10,12,14]{T(a,b)=T(c,d)}{\rIE{15,16,17}}
+ \proofstepwidestar[1,2,8,10,12,14]{\lambda(a,b)=\lambda(c,d)\leftrightarrow T(a,b)=T(c,d)}{\FormulaRefAuto{FDProductClassCriterion}{1,2,\rAI{\rAEa{8},\rAI{\rAEa{10},\rAI{\rAEa{12},\rAEa{14}}}}}}
+ \proofstepwidestar[1,2,4,8,10,12,14]{\lambda(a,b)=\lambda(c,d)}{\rRE{\rLREb{19},18}}
+ \proofstepwidestar[10]{\lambda(a,b)=x}{\FormulaRefAuto{a=b\vdash b=a}{\rAEb{10}}}
+ \proofstepwidestar[14]{\lambda(c,d)=y}{\FormulaRefAuto{a=b\vdash b=a}{\rAEb{14}}}
+ \proofstepwidestar[1,2,4,8,10,12,14]{x=y}{\rIE{21,22,20}}
+ \proofstepwidestar[1,2,4,8,10,12]{x=y}{\rEE{13,14,23}}
+ \proofstepwidestar[1,2,3,4,8,10]{x=y}{\rEE{11,12,24}}
+ \proofstepwidestar[1,2,3,4,8]{x=y}{\rEE{9,10,25}}
+ \proofstepwidestar[1,2,3,4]{x=y}{\rEE{7,8,26}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapSurjectiveCriterion}{}
+\FormulaThmDeltaK[Jedes Paar von Differenzenklassen wird getroffen]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep w\in K\times K\\
+ &\vdash\exists z\in L\,\Phi_M(z)=w
+ \end{aligned}
+}{FDProductMapSurjectiveCriterion}{\DeltaRow{Mengen}{M\dsep e\dsep w\dsep z\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{w\in K\times K}{\rA}
+ \proofstepwidestar[3]{p_K(w)\in K\land q_K(w)\in K\land(p_K(w),q_K(w))=w}{\FormulaRefAuto{FDProductCoordinates}{3}}
+ \proofstepwidestar[1,2,3]{\exists a\in M\,\exists b\in M\,p_K(w)=\kappa(a,b)}{\FormulaRefAuto{GroupCompletionRepresentative}{1,2,\rAEa{4}}}
+ \proofstepwidestar[6]{a\in M\land\exists b\in M\,p_K(w)=\kappa(a,b)}{\rA}
+ \proofstepwidestar[6]{\exists b\in M\,p_K(w)=\kappa(a,b)}{\rAEb{6}}
+ \proofstepwidestar[8]{b\in M\land p_K(w)=\kappa(a,b)}{\rA}
+ \proofstepwidestar[1,2,3]{\exists c\in M\,\exists d\in M\,q_K(w)=\kappa(c,d)}{\FormulaRefAuto{GroupCompletionRepresentative}{1,2,\rAEa{\rAEb{4}}}}
+ \proofstepwidestar[10]{c\in M\land\exists d\in M\,q_K(w)=\kappa(c,d)}{\rA}
+ \proofstepwidestar[10]{\exists d\in M\,q_K(w)=\kappa(c,d)}{\rAEb{10}}
+ \proofstepwidestar[12]{d\in M\land q_K(w)=\kappa(c,d)}{\rA}
+ \proofstepwidestar[6,10]{(a,c)\in P}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{6},\rAEa{10}}}
+ \proofstepwidestar[8,12]{(b,d)\in P}{\FormulaRefAuto{a\in A\dsep b\in B\vdash(a,b)\in A\times B}{\rAEa{8},\rAEa{12}}}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1,2,6,8,10,12]{\lambda((a,c),(b,d))\in L}{\FormulaRefAuto{GroupCompletionClassInCarrier}{15,16,\rAI{13,14}}}
+ \proofstepwidestar[1,2,6,8,10,12]{\Phi_M(\lambda((a,c),(b,d)))=(\kappa(a,b),\kappa(c,d))}{\FormulaRefAuto{FDProductMapPairValue}{1,2,\rAI{\rAEa{6},\rAI{\rAEa{8},\rAI{\rAEa{10},\rAEa{12}}}}}}
+ \proofstepwidestar[3,8,12]{(\kappa(a,b),\kappa(c,d))=w}{\rIE{\rAEb{8},\rAEb{12},\rAEb{\rAEb{4}}}}
+ \proofstepwidestar[1,2,3,6,8,10,12]{\Phi_M(\lambda((a,c),(b,d)))=w}{\rIE{19,18}}
+ \proofstepwidestar[1,2,3,6,8,10,12]{\exists z\in L\,\Phi_M(z)=w}{\rEI{\rAI{17,20}}}
+ \proofstepwidestar[1,2,3,6,8,10]{\exists z\in L\,\Phi_M(z)=w}{\rEE{11,12,21}}
+ \proofstepwidestar[1,2,3,6,8]{\exists z\in L\,\Phi_M(z)=w}{\rEE{9,10,22}}
+ \proofstepwidestar[1,2,3,6]{\exists z\in L\,\Phi_M(z)=w}{\rEE{7,8,23}}
+ \proofstepwidestar[1,2,3]{\exists z\in L\,\Phi_M(z)=w}{\rEE{5,6,24}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapBijective}{}
+\FormulaThmDeltaK[Bijektivität der Klassenabbildung]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\Phi_M\colon L\bij K\times K
+}{FDProductMapBijective}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y\dsep w}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\to K\times K}{\FormulaRefAuto{FDProductMapFunction}{1,2}}
+ \proofstepwidestar[4]{x\in L}{\rA}
+ \proofstepwidestar[5]{y\in L}{\rA}
+ \proofstepwidestar[6]{\Phi_M(x)=\Phi_M(y)}{\rA}
+ \proofstepwidestar[1,2,4,5,6]{x=y}{\FormulaRefAuto{FDProductMapInjectiveCriterion}{1,2,\rAI{4,5},6}}
+ \proofstepwidestar[1,2,4,5]{\Phi_M(x)=\Phi_M(y)\rightarrow x=y}{\rRI{6,7}}
+ \proofstepwidestar[1,2,4]{\forall y\in L\,(\Phi_M(x)=\Phi_M(y)\rightarrow x=y)}{\rUI{\rRI{5,8}}}
+ \proofstepwidestar[1,2]{\forall x\in L\,\forall y\in L\,(\Phi_M(x)=\Phi_M(y)\rightarrow x=y)}{\rUI{\rRI{4,9}}}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\inj K\times K}{\FormulaRefAuto{Injektive Funktion}[def]{3,10}}
+ \proofstepwidestar[12]{w\in K\times K}{\rA}
+ \proofstepwidestar[1,2,12]{\exists z\in L\,\Phi_M(z)=w}{\FormulaRefAuto{FDProductMapSurjectiveCriterion}{1,2,12}}
+ \proofstepwidestar[1,2]{\forall w\in K\times K\,\exists z\in L\,\Phi_M(z)=w}{\rUI{\rRI{12,13}}}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\sur K\times K}{\FormulaRefAuto{Surjektive Funktion}[def]{3,14}}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\bij K\times K}{\FormulaRefAuto{F\colon A\inj B\dsep F\colon A\sur B\vdash F\colon A\bij B}{11,15}}
+\end{tabproofwide}
+
+\par\Needspace{22\baselineskip}
+\section{Operation, Null und Isomorphie}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductTargetMultiplication}{}
+\FormulaThmDeltaK[Die Bildvorschrift erhält Produkte der Repräsentanten]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b,c,d\in P\vdash{}\\
+ &T(a\odot_\star c,b\odot_\star d)=T(a,b)\odot_\alpha T(c,d)
+ \end{aligned}
+}{FDProductTargetMultiplication}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b,c,d\in P}{\rA}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\SemigroupAlg{M}{\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{4}}
+ \proofstepwidestar[1]{\SemigroupAlg{P}{\odot_\star}}{\FormulaRefAuto{SemigroupBinaryProductIsSemigroup}{5,5}}
+ \proofstepwidestar[1,3]{a\odot_\star c\in P}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{6,\rAEa{3},\rAEa{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,3]{b\odot_\star d\in P}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{6,\rAEa{\rAEb{3}},\rAEb{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[3]{p_M(a)\in M\land q_M(a)\in M\land(p_M(a),q_M(a))=a}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{3}}}
+ \proofstepwidestar[3]{p_M(b)\in M\land q_M(b)\in M\land(p_M(b),q_M(b))=b}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{\rAEb{3}}}}
+ \proofstepwidestar[3]{p_M(c)\in M\land q_M(c)\in M\land(p_M(c),q_M(c))=c}{\FormulaRefAuto{FDProductCoordinates}{\rAEa{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[3]{p_M(d)\in M\land q_M(d)\in M\land(p_M(d),q_M(d))=d}{\FormulaRefAuto{FDProductCoordinates}{\rAEb{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,2,3]{\kappa(p_M(a),p_M(b))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{9},\rAEa{10}}}
+ \proofstepwidestar[1,2,3]{\kappa(q_M(a),q_M(b))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{\rAEb{9}},\rAEa{\rAEb{10}}}}
+ \proofstepwidestar[1,2,3]{\kappa(p_M(c),p_M(d))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{11},\rAEa{12}}}
+ \proofstepwidestar[1,2,3]{\kappa(q_M(c),q_M(d))\in K}{\FormulaRefAuto{GroupCompletionClassInCarrier}{1,2,\rAEa{\rAEb{11}},\rAEa{\rAEb{12}}}}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{K}{\alpha}{u}}{\FormulaRefAuto{GroupCompletionAbelianGroup}{1,2}}
+ \proofstepwidestar[1,2]{\GroupAlg{K}{\alpha}{u}}{\FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{17}}
+ \proofstepwidestar[1,2]{\SemigroupAlg{K}{\alpha}}{\FormulaRefAuto{GroupBaseSemigroup}{18}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &T(a,b)\odot_\alpha T(c,d)\\
+ &\quad=\bigl(\kappa(p_M(a),p_M(b))\mathbin{\alpha}\kappa(p_M(c),p_M(d)),\\[-2pt]
+ &\qquad\kappa(q_M(a),q_M(b))\mathbin{\alpha}\kappa(q_M(c),q_M(d))\bigr)
+ \end{aligned}}{\FormulaRefAuto{SemigroupBinaryProductDef}[def]{19,19,13,14,15,16}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\kappa(p_M(a),p_M(b))\mathbin{\alpha}\kappa(p_M(c),p_M(d))\\
+ &\quad=\kappa(p_M(a)\star p_M(c),p_M(b)\star p_M(d))
+ \end{aligned}}{\FormulaRefAuto{GroupCompletionOperationDef}[def]{1,2,\rAEa{9},\rAEa{10},\rAEa{11},\rAEa{12}}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &\kappa(q_M(a),q_M(b))\mathbin{\alpha}\kappa(q_M(c),q_M(d))\\
+ &\quad=\kappa(q_M(a)\star q_M(c),q_M(b)\star q_M(d))
+ \end{aligned}}{\FormulaRefAuto{GroupCompletionOperationDef}[def]{1,2,\rAEa{\rAEb{9}},\rAEa{\rAEb{10}},\rAEa{\rAEb{11}},\rAEa{\rAEb{12}}}}
+ \proofstepwidestar[1,2,3]{\begin{aligned}[t]
+ &T(a,b)\odot_\alpha T(c,d)\\
+ &\quad=\bigl(\kappa(p_M(a)\star p_M(c),p_M(b)\star p_M(d)),\\[-2pt]
+ &\qquad\kappa(q_M(a)\star q_M(c),q_M(b)\star q_M(d))\bigr)
+ \end{aligned}}{\rIE{21,22,20}}
+ \proofstepwidestar[1,3]{p_M(a\odot_\star c)=p_M(a)\star p_M(c)\land q_M(a\odot_\star c)=q_M(a)\star q_M(c)}{\FormulaRefAuto{FDProductOperationCoordinates}{5,\rAI{\rAEa{3},\rAEa{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[1,3]{p_M(b\odot_\star d)=p_M(b)\star p_M(d)\land q_M(b\odot_\star d)=q_M(b)\star q_M(d)}{\FormulaRefAuto{FDProductOperationCoordinates}{5,\rAI{\rAEa{\rAEb{3}},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[]{T(a\odot_\star c,b\odot_\star d)=T(a\odot_\star c,b\odot_\star d)}{\rII}
+ \proofstepwidestar[1,3]{\begin{aligned}[t]
+ &T(a\odot_\star c,b\odot_\star d)\\
+ &\quad=\bigl(\kappa(p_M(a)\star p_M(c),p_M(b)\star p_M(d)),\\[-2pt]
+ &\qquad\kappa(q_M(a)\star q_M(c),q_M(b)\star q_M(d))\bigr)
+ \end{aligned}}{\rIE{\rAEa{24},\rAEa{25},\rAEb{24},\rAEb{25},26}}
+ \proofstepwidestar[1,2,3]{T(a\odot_\star c,b\odot_\star d)=T(a,b)\odot_\alpha T(c,d)}{\FormulaRefAuto{a=b\dsep c=b\vdash a=c}{27,23}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapRepresentativeHomomorphism}{}
+\FormulaThmDeltaK[Operationserhaltung auf Paarrepräsentanten]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep a,b,c,d\in P\vdash{}\\
+ &\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))
+   =\Phi_M(\lambda(a,b))\odot_\alpha\Phi_M(\lambda(c,d))
+ \end{aligned}
+}{FDProductMapRepresentativeHomomorphism}{\DeltaRow{Mengen}{M\dsep e\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{a,b,c,d\in P}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1]{\MonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{4}}
+ \proofstepwidestar[1]{\SemigroupAlg{P}{\odot_\star}}{\FormulaRefAuto{MonoidBaseSemigroupAxiom}[ax]{6}}
+ \proofstepwidestar[1,3]{a\odot_\star c\in P}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{7,\rAEa{3},\rAEa{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,3]{b\odot_\star d\in P}{\FormulaRefAuto{SemigroupClosureAxiom}[ax]{7,\rAEa{\rAEb{3}},\rAEb{\rAEb{\rAEb{3}}}}}
+ \proofstepwidestar[1,2,3]{\lambda(a,b)\mathbin{\beta}\lambda(c,d)=\lambda(a\odot_\star c,b\odot_\star d)}{\FormulaRefAuto{GroupCompletionOperationDef}[def]{4,5,3}}
+ \proofstepwidestar[]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))}{\rII}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=\Phi_M(\lambda(a\odot_\star c,b\odot_\star d))}{\rIE{10,11}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a\odot_\star c,b\odot_\star d))=T(a\odot_\star c,b\odot_\star d)}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{8,9}}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=T(a\odot_\star c,b\odot_\star d)}{\rIE{13,12}}
+ \proofstepwidestar[1,2,3]{T(a\odot_\star c,b\odot_\star d)=T(a,b)\odot_\alpha T(c,d)}{\FormulaRefAuto{FDProductTargetMultiplication}{1,2,3}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=T(a,b)\odot_\alpha T(c,d)}{\rIE{15,14}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b))=T(a,b)}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{\rAEa{3},\rAEa{\rAEb{3}}}}}
+ \proofstepwidestar[1,2,3]{T(a,b)=\Phi_M(\lambda(a,b))}{\FormulaRefAuto{a=b\vdash b=a}{17}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(c,d))=T(c,d)}{\FormulaRefAuto{FDProductMapValue}{1,2,\rAI{\rAEa{\rAEb{\rAEb{3}}},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[1,2,3]{T(c,d)=\Phi_M(\lambda(c,d))}{\FormulaRefAuto{a=b\vdash b=a}{19}}
+ \proofstepwidestar[1,2,3]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=\Phi_M(\lambda(a,b))\odot_\alpha\Phi_M(\lambda(c,d))}{\rIE{18,20,16}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapOperation}{}
+\FormulaThmDeltaK[Operationserhaltung auf dem ganzen Quotienten]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \dsep x,y\in L\vdash{}\\
+ &\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)
+ \end{aligned}
+}{FDProductMapOperation}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y\dsep a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[3]{x,y\in L}{\rA}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1,2,3]{\exists a\in P\,\exists b\in P\,x=\lambda(a,b)}{\FormulaRefAuto{GroupCompletionRepresentative}{4,5,\rAEa{3}}}
+ \proofstepwidestar[7]{a\in P\land\exists b\in P\,x=\lambda(a,b)}{\rA}
+ \proofstepwidestar[7]{\exists b\in P\,x=\lambda(a,b)}{\rAEb{7}}
+ \proofstepwidestar[9]{b\in P\land x=\lambda(a,b)}{\rA}
+ \proofstepwidestar[1,2,3]{\exists c\in P\,\exists d\in P\,y=\lambda(c,d)}{\FormulaRefAuto{GroupCompletionRepresentative}{4,5,\rAEb{3}}}
+ \proofstepwidestar[11]{c\in P\land\exists d\in P\,y=\lambda(c,d)}{\rA}
+ \proofstepwidestar[11]{\exists d\in P\,y=\lambda(c,d)}{\rAEb{11}}
+ \proofstepwidestar[13]{d\in P\land y=\lambda(c,d)}{\rA}
+ \proofstepwidestar[1,2,7,9,11,13]{\Phi_M(\lambda(a,b)\mathbin{\beta}\lambda(c,d))=\Phi_M(\lambda(a,b))\odot_\alpha\Phi_M(\lambda(c,d))}{\FormulaRefAuto{FDProductMapRepresentativeHomomorphism}{1,2,\rAI{\rAEa{7},\rAI{\rAEa{9},\rAI{\rAEa{11},\rAEa{13}}}}}}
+ \proofstepwidestar[9]{\lambda(a,b)=x}{\FormulaRefAuto{a=b\vdash b=a}{\rAEb{9}}}
+ \proofstepwidestar[13]{\lambda(c,d)=y}{\FormulaRefAuto{a=b\vdash b=a}{\rAEb{13}}}
+ \proofstepwidestar[1,2,7,9,11,13]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\rIE{15,16,14}}
+ \proofstepwidestar[1,2,7,9,11]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\rEE{12,13,17}}
+ \proofstepwidestar[1,2,3,7,9]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\rEE{10,11,18}}
+ \proofstepwidestar[1,2,3,7]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\rEE{8,9,19}}
+ \proofstepwidestar[1,2,3]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\rEE{6,7,20}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapZero}{}
+\FormulaThmDeltaK[Das Bild des neutralen Elements]{%
+ \CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)
+ \vdash\Phi_M(v)=(u,u)
+}{FDProductMapZero}{\DeltaRow{Mengen}{M\dsep e\dsep u\dsep v}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1]{\MonoidAlg{M}{\star}{e}}{\FormulaRefAuto{CommutativeMonoidBaseMonoidAxiom}[ax]{1}}
+ \proofstepwidestar[1]{e\in M}{\FormulaRefAuto{MonoidIdentityCarrierAxiom}[ax]{3}}
+ \proofstepwidestar[1,2]{\Phi_M(\lambda((e,e),(e,e)))=(\kappa(e,e),\kappa(e,e))}{\FormulaRefAuto{FDProductMapPairValue}{1,2,\rAI{4,\rAI{4,\rAI{4,4}}}}}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{P}{\odot_\star}{E}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[1,2]{\mathsf{K\ddot{u}rz}(P,\odot_\star)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[1,2]{v=\lambda((e,e),(e,e))}{\FormulaRefAuto{GroupCompletionZeroDef}[def]{6,7}}
+ \proofstepwidestar[1,2]{\lambda((e,e),(e,e))=v}{\FormulaRefAuto{a=b\vdash b=a}{8}}
+ \proofstepwidestar[1,2]{u=\kappa(e,e)}{\FormulaRefAuto{GroupCompletionZeroDef}[def]{1,2}}
+ \proofstepwidestar[1,2]{\kappa(e,e)=u}{\FormulaRefAuto{a=b\vdash b=a}{10}}
+ \proofstepwidestar[1,2]{\Phi_M(v)=(u,u)}{\rIE{9,11,5}}
+\end{tabproofwide}
+
+\Needspace{18\baselineskip}
+\hypertarget{differences.statement.FDProductMapIsomorphism}{}
+\FormulaThmDeltaK[Differenzenbildung und binäres Quadrat sind verträglich]{%
+ \begin{aligned}[t]
+ &\CommutativeMonoidAlg{M}{\star}{e}\dsep\mathsf{K\ddot{u}rz}(M,\star)\vdash{}\\
+ &\AbelianGroupIso{\Phi_M}{L,\beta,v}{K\times K,\odot_\alpha,(u,u)}
+ \end{aligned}
+}{FDProductMapIsomorphism}{\DeltaRow{Mengen}{M\dsep e\dsep x\dsep y}\DeltaRow{Funktion}{\Phi_M}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\CommutativeMonoidAlg{M}{\star}{e}}{\rA}
+ \proofstepwidestar[2]{\mathsf{K\ddot{u}rz}(M,\star)}{\rA}
+ \proofstepwidestar[1,2]{\AbelianGroupAlg{K}{\alpha}{u}\land\AbelianGroupAlg{L}{\beta}{v}\land\AbelianGroupAlg{K\times K}{\odot_\alpha}{(u,u)}}{\FormulaRefAuto{FDProductCompletionStructures}{1,2}}
+ \proofstepwidestar[1,2]{\GroupAlg{L}{\beta}{v}}{\FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{\rAEa{\rAEb{3}}}}
+ \proofstepwidestar[1,2]{\GroupAlg{K\times K}{\odot_\alpha}{(u,u)}}{\FormulaRefAuto{AbelianGroupBaseGroupAxiom}[ax]{\rAEb{\rAEb{3}}}}
+ \proofstepwidestar[1,2]{\SemigroupAlg{L}{\beta}}{\FormulaRefAuto{GroupBaseSemigroup}{4}}
+ \proofstepwidestar[1,2]{\SemigroupAlg{K\times K}{\odot_\alpha}}{\FormulaRefAuto{GroupBaseSemigroup}{5}}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\to K\times K}{\FormulaRefAuto{FDProductMapFunction}{1,2}}
+ \proofstepwidestar[9]{x\in L}{\rA}
+ \proofstepwidestar[10]{y\in L}{\rA}
+ \proofstepwidestar[1,2,9,10]{\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y)}{\FormulaRefAuto{FDProductMapOperation}{1,2,\rAI{9,10}}}
+ \proofstepwidestar[1,2,9]{\forall y\in L\,(\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y))}{\rUI{\rRI{10,11}}}
+ \proofstepwidestar[1,2]{\forall x\in L\,\forall y\in L\,(\Phi_M(x\mathbin{\beta}y)=\Phi_M(x)\odot_\alpha\Phi_M(y))}{\rUI{\rRI{9,12}}}
+ \proofstepwidestar[1,2]{\SemigroupHom{\Phi_M}{L,\beta}{K\times K,\odot_\alpha}}{\FormulaRefAuto{SemigroupHomDef}[def]{6,7,8,13}}
+ \proofstepwidestar[1,2]{\GroupHom{\Phi_M}{L,\beta,v}{K\times K,\odot_\alpha,(u,u)}}{\FormulaRefAuto{GroupHomDef}[def]{4,5,14}}
+ \proofstepwidestar[1,2]{\AbelianGroupHom{\Phi_M}{L,\beta,v}{K\times K,\odot_\alpha,(u,u)}}{\FormulaRefAuto{AbelianGroupHomDef}[def]{\rAEa{\rAEb{3}},\rAEb{\rAEb{3}},15}}
+ \proofstepwidestar[1,2]{\Phi_M\colon L\bij K\times K}{\FormulaRefAuto{FDProductMapBijective}{1,2}}
+ \proofstepwidestar[1,2]{\AbelianGroupIso{\Phi_M}{L,\beta,v}{K\times K,\odot_\alpha,(u,u)}}{\FormulaRefAuto{AbelianGroupIsoDef}[def]{16,17}}
+\end{tabproofwide}
+
+\section{Das natürliche Zahlenpaar}
+
+Für \(M=\mathbb N\), \(\star=+\) und \(e=0\) tragen die obigen
+Abkürzungen den Index \(\mathbb N\). Insbesondere ist
+\(P_{\mathbb N}=\mathbb N\times\mathbb N=\mathbb N^2\), während
+\(L_{\mathbb N}=K(\mathbb N^2,\odot_+,(0,0))\) und
+\(K_{\mathbb N}=K(\mathbb N,+,0)\) die beiden konkret konstruierten
+Differenzenträger bezeichnen.
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductNaturalSquareMonoid}{}
+\FormulaThmDeltaK[Das kommutative kürzbare Monoid der natürlichen Zahlenpaare]{%
+ \CommutativeMonoidAlg{\mathbb N^2}{\odot_+}{(0,0)}
+ \land\mathsf{K\ddot{u}rz}(\mathbb N^2,\odot_+)
+}{FDProductNaturalSquareMonoid}{\DeltaRow{Operation}{\odot_+}}
+\begin{tabproofwide}
+ \proofstepwidestar[]{\CommutativeMonoidAlg{\mathbb N}{+}{0}}{\FormulaRefAuto{NaturalAdditiveCommutativeMonoid}}
+ \proofstepwidestar[]{\mathsf{K\ddot{u}rz}(\mathbb N,+)}{\FormulaRefAuto{NaturalAdditionCancellative}}
+ \proofstepwidestar[]{\CommutativeMonoidAlg{\mathbb N^2}{\odot_+}{(0,0)}}{\FormulaRefAuto{FDProductCommutativeMonoid}{1}}
+ \proofstepwidestar[]{\mathsf{K\ddot{u}rz}(\mathbb N^2,\odot_+)}{\FormulaRefAuto{FDProductCancellation}{1,2}}
+ \proofstepwidestar[]{\CommutativeMonoidAlg{\mathbb N^2}{\odot_+}{(0,0)}\land\mathsf{K\ddot{u}rz}(\mathbb N^2,\odot_+)}{\rAI{3,4}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductNaturalSquareIsomorphism}{}
+\FormulaThmDeltaK[Die Differenzen natürlicher Paare bilden das Quadrat der Zahlendifferenzen]{%
+ \AbelianGroupIso{\Phi_{\mathbb N}}
+ {L_{\mathbb N},\beta_{\mathbb N},v_{\mathbb N}}
+ {K_{\mathbb N}\times K_{\mathbb N},\odot_{\alpha_{\mathbb N}},(u_{\mathbb N},u_{\mathbb N})}
+}{FDProductNaturalSquareIsomorphism}{\DeltaRow{Funktion}{\Phi_{\mathbb N}}}
+\begin{tabproofwide}
+ \proofstepwidestar[]{\CommutativeMonoidAlg{\mathbb N}{+}{0}}{\FormulaRefAuto{NaturalAdditiveCommutativeMonoid}}
+ \proofstepwidestar[]{\mathsf{K\ddot{u}rz}(\mathbb N,+)}{\FormulaRefAuto{NaturalAdditionCancellative}}
+ \proofstepwidestar[]{\AbelianGroupIso{\Phi_{\mathbb N}}
+ {L_{\mathbb N},\beta_{\mathbb N},v_{\mathbb N}}
+ {K_{\mathbb N}\times K_{\mathbb N},\odot_{\alpha_{\mathbb N}},(u_{\mathbb N},u_{\mathbb N})}}{\FormulaRefAuto{FDProductMapIsomorphism}{1,2}}
+\end{tabproofwide}
+
+\Needspace{16\baselineskip}
+\hypertarget{differences.statement.FDProductNaturalSquareValue}{}
+\FormulaThmDeltaK[Konkrete Formel des natürlichen Produktisomorphismus]{%
+ \begin{aligned}[t]
+ &a,b,c,d\in\mathbb N\vdash{}\\
+ &\Phi_{\mathbb N}(\lambda_{\mathbb N}((a,c),(b,d)))
+  =(\kappa_{\mathbb N}(a,b),\kappa_{\mathbb N}(c,d))
+ \end{aligned}
+}{FDProductNaturalSquareValue}{\DeltaRow{Mengen}{a\dsep b\dsep c\dsep d}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{a,b,c,d\in\mathbb N}{\rA}
+ \proofstepwidestar[]{\CommutativeMonoidAlg{\mathbb N}{+}{0}}{\FormulaRefAuto{NaturalAdditiveCommutativeMonoid}}
+ \proofstepwidestar[]{\mathsf{K\ddot{u}rz}(\mathbb N,+)}{\FormulaRefAuto{NaturalAdditionCancellative}}
+ \proofstepwidestar[1]{\Phi_{\mathbb N}(\lambda_{\mathbb N}((a,c),(b,d)))=(\kappa_{\mathbb N}(a,b),\kappa_{\mathbb N}(c,d))}{\FormulaRefAuto{FDProductMapPairValue}{2,3,1}}
+\end{tabproofwide}

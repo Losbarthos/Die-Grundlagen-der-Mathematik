@@ -1,0 +1,29 @@
+% B28 besitzt den Existenzsatz; die Tabellenfassung besitzt die Konstruktion.
+\begin{luacode*}
+  local directory = "registry/mogiljanskaja/"
+  local b28_import = "b28-external"
+  if tex.jobname == "_B28-mog-reading" then b28_import = "b28-reading" end
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B28.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    if predecessor == "B21" then base = directory .. "b21-external" end
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. b28_import .. "}[../_B28.pdf]")
+  if tex.jobname == "_B28-mog-reading" then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B28-mog-proofs.pdf]")
+  end
+  for _, predecessor in ipairs(banddeps.graph.B28.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    if predecessor == "B21" then base = directory .. "b21-external" end
+    thmlookup.load_registry_file(base .. ".registry.tsv")
+  end
+  thmlookup.load_registry_file(directory .. b28_import .. ".registry.tsv")
+  if tex.jobname == "_B28-mog-reading" then
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\theHtable}{\FormulaBandID.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{\FormulaBandID.\arabic{chapter}.\arabic{figure}}

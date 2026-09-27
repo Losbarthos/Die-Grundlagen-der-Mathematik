@@ -1,0 +1,27 @@
+% Isolierte Register: Hauptsatz aus B41, Konstruktion aus der Ergänzung 41E.
+% Die Hauptaussage wird in keiner Ergänzung erneut deklariert.
+\begin{luacode*}
+  local directory = "registry/differences/"
+  local reading = tex.jobname == "_B41-differences-reading"
+  local b41_import = reading and "b41-reading" or "b41-external"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B41.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. b41_import .. "}[../_B41.pdf]")
+  if reading then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B41-differences-proofs.pdf]")
+  end
+  banddeps.load_predecessor_registries("B41")
+  thmlookup.load_registry_file(directory .. b41_import .. ".registry.tsv")
+  if reading then
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\providecommand{\BandXXIXProofRefStack}[1]{%
+  \ensuremath{\begin{gathered}[t]#1\end{gathered}}}
+\renewcommand{\theHtable}{\FormulaBandID.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{\FormulaBandID.\arabic{chapter}.\arabic{figure}}

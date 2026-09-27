@@ -1,0 +1,22 @@
+% Der Hauptsatz gehört Band 37; private Hilfssätze gehören der Tabellenfassung.
+\begin{luacode*}
+  local directory = "registry/nullproducts/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B37.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b37-external}[../_B37.pdf]")
+  banddeps.load_predecessor_registries("B37")
+  thmlookup.load_registry_file(directory .. "b37-external.registry.tsv")
+  if tex.jobname == "_B37-nullproducts-reading" then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B37-nullproducts-proofs.pdf]")
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\FormulaBandID}{37E}
+\setcounter{file}{37}
+\renewcommand{\theHtable}{nullproducts.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{nullproducts.\arabic{chapter}.\arabic{figure}}

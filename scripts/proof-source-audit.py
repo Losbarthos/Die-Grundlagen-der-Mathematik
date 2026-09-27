@@ -170,12 +170,23 @@ def main():
     ap.add_argument("--output", default="tmp/proof-audit/source-inventory.json")
     args = ap.parse_args()
     sources = sorted(ROOT.glob("Bd. *.tex"))
+    for band in ("03", "05", "08", "09", "12", "20", "28", "33"):
+        sources.extend(sorted((ROOT / "tex").glob(f"b{band}-*.tex")))
     examples = ROOT / "tex/B28-isomorphism-examples.tex"
     if examples.exists():
         sources.append(examples)
-    # Scan the extracted CSB sources as physical files, without expanding TeX
+    # Scan extracted companion sources as physical files, without expanding TeX
     # inputs or macros: each row appears once and keeps its source line number.
     sources.extend(sorted((ROOT / "tex/b08/cantor-bernstein").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b10/dedekind").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b17/integers").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b28/mogiljanskaja").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b28/bracketing").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b41/differences").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b45/semilattice").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b46/frankl").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b40/reconstruction").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b37/nullproducts").glob("*.tex")))
     data = [inventory(p) for p in sources]
     target = ROOT / args.output
     target.parent.mkdir(parents=True, exist_ok=True)

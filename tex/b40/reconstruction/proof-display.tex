@@ -1,0 +1,79 @@
+% Gemeinsame Originalaussagen anzeigen, ohne sie erneut zu registrieren.
+\newcommand{\ReconstructionProofStatement}[1]{%
+  \par\Needspace{26\baselineskip}%
+  \hypertarget{reconstruction.proof.#1}{}%
+  \begingroup
+  \RenewDocumentCommand{\FormulaThmDeltaK}{o m m +m}{%
+    \noindent\textbf{Beweis zu \FormulaRefAuto{##3}[thm]}%
+    \IfNoValueF{##1}{\space(##1)}\par
+    {\small\begin{DeltaContext}{ }##4\end{DeltaContext}}%
+    {\ifcsname ReconstructionCompactStatement@##3\endcsname\small\fi
+      \[##2\]}%
+  }%
+  \ReconstructionStatement{#1}%
+  \endgroup
+}
+
+% Diese lange Originalaussage braucht etwas kleineren Formelsatz.
+\expandafter\newcommand\csname ReconstructionCompactStatement@LargePowerUnitSubsetImage\endcsname{}
+
+% Die einzige zu breite Tabellenzeile wird an ihrer vorhandenen Konjunktion
+% umbrochen. Ihr Originalkörper und sämtliche Ableitungsdaten bleiben gleich.
+\long\def\ReconstructionAlignedConjunction#1\land#2\ReconstructionConjunctionEnd{%
+  \begin{aligned}[t]& #1\\& {}\land #2\end{aligned}%
+}
+\newcommand{\ReconstructionConjoinedStatementRow}[3]{%
+  \ReconstructionOriginalStatementRow{#1}{%
+    \ReconstructionAlignedConjunction#2\ReconstructionConjunctionEnd}{#3}%
+}
+\newcommand{\ReconstructionUnitSetImageLayout}{%
+  \let\ReconstructionOriginalStatementRow\mxProofStatementRow
+  \renewcommand{\mxProofStatementRow}[3]{%
+    \ifnum\value{proofstepnr}=20\relax
+      \expandafter\ReconstructionConjoinedStatementRow
+    \else
+      \expandafter\ReconstructionOriginalStatementRow
+    \fi{##1}{##2}{##3}%
+  }%
+}
+
+% Die lange quantifizierte Äquivalenz erhält einen eigenen Quantorkopf.
+\long\def\ReconstructionAlignedQuantifier#1\,(#2\ReconstructionQuantifierEnd{%
+  \begin{aligned}[t]& #1\\& \quad(#2\end{aligned}%
+}
+\newcommand{\ReconstructionQuantifiedStatementRow}[3]{%
+  \ReconstructionOriginalStatementRow{#1}{%
+    \ReconstructionAlignedQuantifier#2\ReconstructionQuantifierEnd}{#3}%
+}
+\newcommand{\ReconstructionUnitFamilyLayout}{%
+  \let\ReconstructionOriginalStatementRow\mxProofStatementRow
+  \renewcommand{\mxProofStatementRow}[3]{%
+    \ifnum\value{proofstepnr}=19\relax
+      \expandafter\ReconstructionQuantifiedStatementRow
+    \else
+      \expandafter\ReconstructionOriginalStatementRow
+    \fi{##1}{##2}{##3}%
+  }%
+}
+
+% Teilüberschrift und die ersten Zeilen der folgenden Tabelle zusammenhalten.
+\let\ReconstructionOriginalProofPartWide\proofpartwide
+\renewcommand{\proofpartwide}[1]{%
+  \par\Needspace{6\baselineskip}%
+  \ReconstructionOriginalProofPartWide{#1}%
+}
+
+% Auch der intern benannte Produktzeuge bleibt ausschließlich in Band 40
+% registriert. Die unveränderte Tabellenquelle benutzt hier nur die Anzeige.
+\RenewDocumentCommand{\mxProofPartOpen}{m o m o o}{%
+  \par\medskip
+  \noindent
+  \IfNoValueTF{#2}{\textbf{Teil}}{\textbf{#2}}%
+  \IfNoValueF{#5}{\hfill\FormulaRefAuto{#5}[thm]}\par
+  \[#3\]
+  \par\small
+  \setcounter{proofstepnr}{0}%
+  \setlength{\tabcolsep}{2pt}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{#1}%
+}

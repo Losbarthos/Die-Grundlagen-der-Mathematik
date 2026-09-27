@@ -1,0 +1,41 @@
+% Verweise zwischen Fachband, Lesefassung und Beweistabellen.
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory, main_directory = "registry/bracketing/", "registry/"
+  if job:match("^_B[0-9][0-9]$") then
+    directory, main_directory = "bracketing/", ""
+  end
+  if job:match("^_B28%-bracketing%-") then
+    directory, main_directory = "", "../"
+  end
+  tex.sprint("\\gdef\\BracketingEditionDirectory{" .. directory .. "}")
+  tex.sprint("\\gdef\\BracketingMainDirectory{" .. main_directory .. "}")
+\end{luacode*}
+\newcommand{\BracketingReadingLink}{%
+  \href{\BracketingEditionDirectory_B28-bracketing-reading.pdf\#bracketing.reading}{Lesefassung}%
+}
+\newcommand{\BracketingProofsLink}{%
+  \href{\BracketingEditionDirectory_B28-bracketing-proofs.pdf\#bracketing.proofs}{Beweistabellen}%
+}
+\newcommand{\BracketingProofLink}[1]{%
+  \href{\BracketingEditionDirectory_B28-bracketing-proofs.pdf\#bracketing.statement.#1}{Zugehörige Beweistabelle}%
+}
+\newcommand{\BracketingReadingSectionLink}[1]{%
+  \href{\BracketingEditionDirectory_B28-bracketing-reading.pdf\#bracketing.reading.#1}{Erläuterung in der Lesefassung}%
+}
+% Hilfsresultate im Beweisband; der Hauptsatz hat sein Ziel allein in Band 28.
+\expandafter\def\csname BracketingMainResult@SemigroupBracketingIndependence\endcsname{}
+\newcommand{\BracketingResultLink}[2]{%
+  \ifcsname BracketingMainResult@#1\endcsname
+    \href{\BracketingMainDirectory_B28.pdf\#bracketing.main.independence}{#2}%
+  \else
+    \href{\BracketingEditionDirectory_B28-bracketing-proofs.pdf\#bracketing.statement.#1}{#2}%
+  \fi
+}
+\newcommand{\BracketingIndependenceProofLink}{%
+  \href{\BracketingEditionDirectory_B28-bracketing-proofs.pdf\#bracketing.proof.independence}{Schlussbeweises zum Hauptsatz}%
+}
+\newcommand{\BracketingNotationLink}{%
+  \href{\BracketingMainDirectory_B28.pdf\#bracketing.notation}%
+    {Anmerkung zur Produktschreibweise in Band~28}%
+}

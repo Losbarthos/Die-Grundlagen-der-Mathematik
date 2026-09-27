@@ -288,11 +288,20 @@ function Assert-Artifact {
 function Assert-RegistryLabelsInAux {
     param(
         [Parameter(Mandatory)][string]$RegistryPath,
-        [Parameter(Mandatory)][string]$AuxPath
+        [Parameter(Mandatory)][string]$AuxPath,
+        # Companion editions can explicitly select an independent namespace.
+        # Ordinary volume callers retain the prefix inferred from their path.
+        [ValidatePattern('^[0-9]+[A-Z]?$')][string]$ExpectedNumberPrefix
     )
 
     $registry = Join-Path $repoRoot $RegistryPath
     $aux = Join-Path $repoRoot $AuxPath
+    $expectedPrefix = $null
+    if ($ExpectedNumberPrefix) {
+        $expectedPrefix = $ExpectedNumberPrefix + '.'
+    } elseif ($RegistryPath -match '_B([0-9]{2})(?:[.-]|$)') {
+        $expectedPrefix = ([int]$Matches[1]).ToString() + '.'
+    }
     $auxLabels = [System.Collections.Generic.HashSet[string]]::new(
         [System.StringComparer]::Ordinal
     )
@@ -329,8 +338,7 @@ function Assert-RegistryLabelsInAux {
             if ($auxNumbers.ContainsKey($label) -and $auxNumbers[$label] -ne $number) {
                 throw "$RegistryPath number '$number' differs from AUX number '$($auxNumbers[$label])' for $label."
             }
-            if ($RegistryPath -match '_B([0-9]{2})(?:[.-]|$)') {
-                $expectedPrefix = ([int]$Matches[1]).ToString() + '.'
+            if ($expectedPrefix) {
                 if (-not $number.StartsWith($expectedPrefix, [System.StringComparison]::Ordinal)) {
                     throw "$RegistryPath contains a result from the wrong volume: $label ($number)."
                 }

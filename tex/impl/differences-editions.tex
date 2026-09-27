@@ -1,0 +1,33 @@
+% Verweise zwischen Fachband, Lesefassung und Beweistabellen.
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory, main_directory = "registry/differences/", "registry/"
+  if job:match("^_B[0-9][0-9]$") then
+    directory, main_directory = "differences/", ""
+  elseif job:match("^_B[0-9][0-9]%-") then
+    directory, main_directory = "../differences/", "../"
+  end
+  if job:match("^_B41%-differences%-") then
+    directory, main_directory = "", "../"
+  end
+  tex.sprint("\\gdef\\DifferencesEditionDirectory{" .. directory .. "}")
+  tex.sprint("\\gdef\\DifferencesMainDirectory{" .. main_directory .. "}")
+\end{luacode*}
+\newcommand{\DifferencesReadingLink}{%
+  \href{\DifferencesEditionDirectory_B41-differences-reading.pdf\#differences.reading}{Lesefassung}%
+}
+\newcommand{\DifferencesProofsLink}{%
+  \href{\DifferencesEditionDirectory_B41-differences-proofs.pdf\#differences.proofs}{Beweistabellen}%
+}
+\newcommand{\DifferencesMainLink}{%
+  \href{\DifferencesMainDirectory_B41.pdf\#differences.main}{Einbettungssatz in Band~41}%
+}
+% Lokale Resultate gehören zu 41E; der Hauptsatz bleibt ausschließlich in B41.
+\expandafter\def\csname DifferencesMainResult@GroupCompletionEmbeddingTheorem\endcsname{}
+\newcommand{\DifferencesResultLink}[2]{%
+  \ifcsname DifferencesMainResult@#1\endcsname
+    \href{\DifferencesMainDirectory_B41.pdf\#differences.main}{#2}%
+  \else
+    \href{\DifferencesEditionDirectory_B41-differences-proofs.pdf\#differences.statement.#1}{#2}%
+  \fi
+}

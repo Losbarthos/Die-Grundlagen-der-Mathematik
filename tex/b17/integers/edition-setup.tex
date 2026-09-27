@@ -1,0 +1,42 @@
+% Öffentliche B17-Schnittstelle und lokale Konstruktion haben getrennte Besitzer.
+\begin{luacode*}
+  local directory = "registry/integers/"
+  local reading = tex.jobname == "_B17-integers-reading"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B17.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b17-external}[../_B17.pdf]")
+  if reading then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B17-integers-proofs.pdf]")
+  end
+  banddeps.load_predecessor_registries("B17")
+  thmlookup.load_registry_file(directory .. "b17-external.registry.tsv")
+  if reading then thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv") end
+\end{luacode*}
+\renewcommand{\theHtable}{\FormulaBandID.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{\FormulaBandID.\arabic{chapter}.\arabic{figure}}
+
+% Eine öffentliche Aussage wird hier lesbar wiederholt, aber weder neu
+% registriert noch lokal beschriftet. Ihre Referenzen führen weiter zu B17.
+\NewDocumentCommand{\IntegersPublicStatement}{+m}{%
+  \begingroup
+  \renewcommand{\FormulaBandID}{17}%
+  \csname @fileswfalse\endcsname
+  \RenewDocumentCommand{\ThmLookupRegister}{m m m m g}{}%
+  \RenewDocumentCommand{\ThmLookupRegisterId}{m m m}{}%
+  \RenewDocumentCommand{\MxPushFormula}{m m m}{}%
+  \renewcommand{\label}[1]{}%
+  % Die KR-Minipage setzt intern die ursprüngliche Label-Funktion wieder ein.
+  % Eine unregistrierte Wiederholung verwendet deshalb die normale Deltaform.
+  \RenewDocumentCommand{\FormulaThmDeltaKR}{o m m m +m}{%
+    \IfNoValueTF{##1}
+      {\FormulaThmDeltaK{##2}{##4}{##5}}%
+      {\FormulaThmDeltaK[##1]{##2}{##4}{##5}}%
+  }%
+  #1%
+  \endgroup
+}

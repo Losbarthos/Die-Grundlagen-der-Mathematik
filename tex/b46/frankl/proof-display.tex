@@ -1,0 +1,51 @@
+% Originalaussagen anzeigen, ohne Formelschlüssel oder IDs erneut zu registrieren.
+% Die drei FormulaThmDelta-Aussagen behalten ihre formelbasierten Schlüssel.
+\newsavebox{\FranklProofFormulaBox}
+% Nur die Injektivitätstabelle benötigt Raum für die verschachtelte
+% Schlussbegründung; ihr unveränderter Tabellenkörper bleibt getrennt.
+\newcommand{\FranklInjectionProofColumns}{%
+  \renewenvironment{tabproof}{%
+    \par\small
+    \setcounter{proofstepnr}{0}%
+    \setlength{\tabcolsep}{2pt}%
+    \renewcommand{\arraystretch}{1.15}%
+    \begin{longtable}{%
+      @{}>{\scriptsize\raggedleft\arraybackslash}p{.09\linewidth}%
+      @{\hspace{.01\linewidth}}>{\raggedleft\arraybackslash}p{.04\linewidth}%
+      @{\hspace{.01\linewidth}}>{\raggedright\arraybackslash}p{.41\linewidth}%
+      @{\hspace{.01\linewidth}}>{\footnotesize\raggedright\arraybackslash}p{.41\linewidth}@{}}%
+  }{\end{longtable}\par}%
+}
+\newcommand{\FranklProofFormula}[1]{%
+  \sbox{\FranklProofFormulaBox}{\(\displaystyle #1\)}%
+  \[\ifdim\wd\FranklProofFormulaBox>\linewidth
+    \resizebox{\linewidth}{!}{\usebox{\FranklProofFormulaBox}}%
+  \else
+    \usebox{\FranklProofFormulaBox}%
+  \fi\]
+}
+\newcommand{\FranklProofStatement}[1]{%
+  \par\Needspace{26\baselineskip}%
+  \hypertarget{frankl.proof.#1}{}%
+  \begingroup
+  \RenewDocumentCommand{\FormulaThmDelta}{o m +G{}}{%
+    \noindent\textbf{Beweis zu \FormulaRefAuto{##2}[thm]}%
+    \IfNoValueF{##1}{\space(##1)}\par
+    {\small\begin{DeltaContext}{ }##3\end{DeltaContext}}%
+    \FranklProofFormula{##2}%
+  }%
+  \RenewDocumentCommand{\FormulaThmDeltaK}{o m m +m}{%
+    \noindent\textbf{Beweis zu \FormulaRefAuto{##3}[thm]}%
+    \IfNoValueF{##1}{\space(##1)}\par
+    {\small\begin{DeltaContext}{ }##4\end{DeltaContext}}%
+    \FranklProofFormula{##2}%
+  }%
+  \RenewDocumentCommand{\FormulaDefDeltaK}{o m m +m}{%
+    \noindent\textbf{Definitionsnachweis zu \FormulaRefAuto{##3}[def]}%
+    \IfNoValueF{##1}{\space(##1)}\par
+    {\small\begin{DeltaContext}{ }##4\end{DeltaContext}}%
+    \FranklProofFormula{##2}%
+  }%
+  \FranklStatement{#1}%
+  \endgroup
+}

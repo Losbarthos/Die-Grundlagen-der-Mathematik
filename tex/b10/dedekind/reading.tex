@@ -1,0 +1,368 @@
+% Eigenständiger Prosabeweis ohne lokale nummerierte Deklarationen.
+\section*{Fragestellung und Beispiel}
+
+Wir beginnen mit zwei verschiedenen Zuständen \(a\) und \(b\).
+Der Anfangszustand sei \(a\); die Übergangsregel schickt \(a\)
+nach \(b\) und lässt \(b\) fest. In Zeichen:
+\[
+  M=\{a,b\},\qquad m_0=a,\qquad f(a)=b,\quad f(b)=b.
+\]
+Die Regel \(f\colon M\to M\) ist damit vollständig gegeben.
+Gesucht ist eine Funktion \(F\colon\mathbb N\to M\), die jeder
+natürlichen Stelle den dort erreichten Zustand zuordnet. Dabei
+bezeichnet \(\Succ(n)\) den Nachfolger von \(n\). Die ersten
+Werte sind durch Anfangszustand und Übergangsregel festgelegt:
+\[
+  F(0)=a,\qquad F(\Succ(0))=b,\qquad
+  F(\Succ(\Succ(0)))=b.
+\]
+Auch jeder weitere Übergang von \(b\) führt wieder nach \(b\).
+Die natürlichen Stellen bleiben verschieden, obwohl sich ihre
+zugeordneten Werte wiederholen dürfen.
+
+\DedekindRecursionDiagram
+
+Was bedeutet es aber, diese Vorschrift an \emph{allen} natürlichen
+Stellen auszuführen? Das Hinschreiben weiterer Werte zeigt zunächst
+nur, wie eine passende Funktion aussehen müsste. Zu begründen ist,
+dass eine einzige Funktion auf ganz \(\mathbb N\) existiert und
+dass keine andere Funktion dieselben Vorgaben erfüllt. Genau dies
+leistet der Dedekindsche Rekursionssatz für jede Menge von Zuständen
+und jede vorgegebene Übergangsabbildung.
+
+\par\Needspace{16\baselineskip}
+\section*{Aussage und Beweisidee}
+
+Eine Rekursionsvorschrift gibt einen Anfangswert und eine Regel für den
+Übergang zum nächsten Wert vor. Der Dedekindsche Rekursionssatz zeigt,
+dass diese Angaben eine Funktion auf allen natürlichen Zahlen eindeutig
+bestimmen. Genauer: Ist \(M\) eine Menge, \(m_0\in M\) und
+\(f\colon M\to M\), so gibt es genau eine Funktion
+\(F\colon\mathbb N\to M\) mit
+\[
+  F(0)=m_0,
+  \qquad
+  F(\Succ(n))=f(F(n))
+  \quad(n\in\mathbb N).
+\]
+Dies ist die Aussage von
+\FormulaRefAuto{DedekindRecursionTheorem}[thm] in Band~10.
+Die Abbildung \(f\) ist bereits gegeben; zu konstruieren ist die
+Funktion \(F\), welche die aufeinanderfolgenden Werte erfasst.
+Weder Injektivität noch Surjektivität von \(f\) werden vorausgesetzt.
+
+Für den Beweis werden die Peano-Eigenschaften verwendet:
+\(0\in\mathbb N\), jeder natürliche Nachfolger liegt wieder in
+\(\mathbb N\), kein Nachfolger ist \(0\), und die
+Nachfolgerabbildung ist injektiv. Hinzu kommt das Induktionsprinzip:
+Gilt eine Aussage für \(0\), und folgt aus ihrer Gültigkeit für
+\(n\) stets ihre Gültigkeit für \(\Succ(n)\), so gilt sie für
+alle \(n\in\mathbb N\).
+Addition und eine Ordnung auf \(\mathbb N\) werden nicht benötigt.
+
+Die Gleichungen legen nahe, zunächst \(m_0\), dann \(f(m_0)\)
+und danach \(f(f(m_0))\) zu betrachten. Damit ist aber die Existenz
+einer einzigen Funktion auf ganz \(\mathbb N\) noch nicht bewiesen.
+Wir konstruieren deshalb ihren Graphen als Menge geordneter Paare.
+Dazu betrachten wir alle Teilmengen von \(\mathbb N\times M\),
+die das Startpaar enthalten und unter dem gewünschten Übergang
+abgeschlossen sind. Ihr Schnitt ist die kleinste solche Menge.
+
+Diese Schnittmenge heißt \emph{Rekursionskern}. Dass sie bei jedem
+\(n\) genau einen Wert enthält, ist der entscheidende Schritt.
+Eine unter der Übergangsregel abgeschlossene Relation kann zunächst
+mehrere Werte an derselben Stelle enthalten. Auch beim kleinsten
+solchen Objekt dürfen wir die Funktionseigenschaft daher noch nicht
+voraussetzen.
+Der Rekursionsabschluss liefert jeweils einen Wert in der
+Nachfolgerstufe. Geeignete Fixierungsmengen schließen weitere Werte
+aus. Erst danach lesen wir den Kern als Funktion und weisen die
+Eindeutigkeit unter allen Funktionen mit den vorgegebenen
+Rekursionsgleichungen nach.
+
+Die Fixierungsmengen nutzen die Minimalität auf folgende Weise:
+Wir beschränken
+die an einer bestimmten Stelle zugelassenen Werte und zeigen, dass
+die eingeschränkte Menge die Abschlussbedingungen weiterhin erfüllt.
+Dann muss sie den kleinsten Kern enthalten. Die ausgeschlossenen
+Paare können folglich schon vorher nicht zum Kern gehört haben.
+So gewinnt man aus der Minimalität die Eindeutigkeit der Werte.
+
+\par\Needspace{9\baselineskip}
+\section*{Konstruktion und Beweis}
+\begin{proof}[Beweis]
+\textbf{Der Rekursionskern.}
+
+Wir halten \(M\), \(m_0\in M\) und \(f\colon M\to M\)
+für den gesamten Beweis fest. Eine Menge \(H\) heißt bezüglich
+dieser Daten \emph{rekursionsadmissibel}, wenn sie die folgenden
+drei Bedingungen erfüllt:
+\[
+  \begin{aligned}
+    &H\subseteq\mathbb N\times M,\\
+    &(0,m_0)\in H,\\
+    &\forall n\in\mathbb N\,\forall a\in M\,
+      \bigl((n,a)\in H
+        \ \Longrightarrow\ (\Succ(n),f(a))\in H\bigr).
+  \end{aligned}
+\]
+Wir schreiben dafür \(\AdmRec{m_0}{f}(H)\).
+Admissibilität fordert zunächst keine Eindeutigkeit des Werts
+\(a\) zu einem gegebenen \(n\). Es dürfen also verschiedene
+Paare mit derselben ersten Koordinate in \(H\) liegen.
+Im Eingangsbeispiel erfüllt etwa die gesamte Relation
+\(\mathbb N\times\{a,b\}\) die Bedingungen. Sie enthält sowohl
+\((0,a)\) als auch \((0,b)\), obwohl der Anfangswert nur \(a\)
+sein soll. Die Abschlussbedingungen allein reichen also noch nicht
+aus, um einen Funktionsgraphen auszuzeichnen.
+
+Der volle Produktraum \(\mathbb N\times M\) ist admissibel:
+Das Startpaar liegt darin, weil \(0\in\mathbb N\) und
+\(m_0\in M\). Gehört \((n,a)\) zum Produktraum, so liegen
+\(\Succ(n)\) in \(\mathbb N\) und \(f(a)\) in \(M\).
+Also liegt auch \((\Succ(n),f(a))\) darin.
+Somit ist die Menge
+\[
+  \mathcal A
+    :=\{H\in\powerset(\mathbb N\times M)
+         \mid \AdmRec{m_0}{f}(H)\}
+\]
+nichtleer. Als Teilmenge einer Potenzmenge ist \(\mathcal A\)
+eine Menge. Wir können ihren Schnitt bilden und setzen
+\[
+  K:=\RecCore{m_0}{f}:=\bigcap_{H\in\mathcal A}H.
+\]
+Ein Paar liegt genau dann in \(K\), wenn es in jeder admissiblen
+Menge liegt.
+
+Der Kern ist selbst admissibel. Zunächst gilt
+\(K\subseteq\mathbb N\times M\), weil der Produktraum ein
+Mitglied von \(\mathcal A\) ist. Ferner liegt \((0,m_0)\)
+in jedem \(H\in\mathcal A\), also auch in deren Schnitt.
+Ist schließlich \((n,a)\in K\), so liegt dieses Paar in jedem
+\(H\in\mathcal A\). Dessen Rekursionsabschluss liefert
+\((\Succ(n),f(a))\in H\). Da dies für jedes solche \(H\)
+gilt, folgt
+\[
+  (n,a)\in K
+  \quad\Longrightarrow\quad
+  (\Succ(n),f(a))\in K.
+\]
+
+Außerdem ist \(K\) in jeder admissiblen Menge enthalten:
+\[
+  \AdmRec{m_0}{f}(H)\quad\Longrightarrow\quad K\subseteq H.
+\]
+Zusammen mit seiner eigenen Admissibilität macht dies \(K\) zur
+\emph{kleinsten} admissiblen Menge bezüglich der Inklusion.
+Diese Minimalität wird nun benutzt, um die Werte des Kerns
+festzulegen. In den Beweistabellen ist sie als
+\FormulaRefAuto{RecCoreLeastAdmissible}[thm] festgehalten.
+
+\par\Needspace{7\baselineskip}
+\medskip\noindent\textbf{Genau ein Wert in jeder Stufe.}
+
+Für ein \(n\in\mathbb N\) nennen wir die Paare \((n,a)\in K\)
+die \emph{Stufe bei \(n\)}. Wir zeigen durch Induktion
+\[
+  U(n)\;:\Longleftrightarrow\;
+  \exists!a\in M\,\bigl((n,a)\in K\bigr).
+\]
+Existenz und Eindeutigkeit werden dabei gemeinsam bewiesen.
+
+\medskip\noindent
+\textbf{Die Nullstufe.}
+Die Existenz ist bereits bekannt: \((0,m_0)\in K\).
+Um andere Werte bei \(0\) auszuschließen, betrachten wir
+\[
+  Z:=\{(n,a)\in\mathbb N\times M
+         \mid n=0\ \Longrightarrow\ a=m_0\}.
+\]
+Die Menge \(Z\) enthält im Produktraum alle Paare, deren erste
+Koordinate von \(0\) verschieden ist; bei \(0\) lässt sie nur
+das Paar \((0,m_0)\) zu.
+
+Die Menge \(Z\) ist admissibel. Sie ist eine Teilmenge des
+Produktraums und enthält das Startpaar. Ist \((n,a)\in Z\),
+so liegt \((\Succ(n),f(a))\) im Produktraum. Weil
+\(\Succ(n)\neq0\), erfüllt dieses Nachfolgerpaar auch die
+zusätzliche Bedingung in der Definition von \(Z\).
+Es gehört somit zu \(Z\).
+
+Aus der Minimalität des Kerns folgt \(K\subseteq Z\).
+Für jedes \((0,a)\in K\) gilt daher \((0,a)\in Z\) und
+folglich \(a=m_0\). Zusammen mit dem vorhandenen Startpaar
+ergibt das \(U(0)\).
+Im Eingangsbeispiel schließt dieser Schritt insbesondere das
+zusätzliche Paar \((0,b)\) aus, das im vollen Produktraum
+noch enthalten war.
+
+\medskip\noindent
+\textbf{Die Nachfolgerstufe.}
+Sei \(x\in\mathbb N\), und es gelte \(U(x)\).
+Dann gibt es ein \(u\in M\) mit
+\[
+  (x,u)\in K,
+  \qquad
+  \forall c\in M\,
+    \bigl((x,c)\in K\ \Longrightarrow\ c=u\bigr).
+\]
+Der Rekursionsabschluss von \(K\) liefert das Paar
+\((\Succ(x),f(u))\in K\). Sein zweiter Eintrag liegt in
+\(M\), weil \(f\colon M\to M\). Damit besitzt die Stufe
+bei \(\Succ(x)\) mindestens einen Wert.
+
+Zur Eindeutigkeit definieren wir die Fixierungsmenge
+\[
+  \Phi_{x,u}
+    :=\{(y,d)\in K
+          \mid y=\Succ(x)\ \Longrightarrow\ d=f(u)\}.
+\]
+Diese Bedingung würde nur solche Paare der Stufe \(\Succ(x)\)
+ausschließen, deren zweiter Eintrag nicht \(f(u)\) ist.
+An allen anderen Stufen bleiben die Paare des Kerns erhalten.
+Wir zeigen, dass diese eingeschränkte Menge weiterhin admissibel
+ist. Dann zwingt die Minimalität \(K\) dazu, schon in
+\(\Phi_{x,u}\) enthalten zu sein.
+
+Zunächst gilt
+\(\Phi_{x,u}\subseteq K\subseteq\mathbb N\times M\).
+Auch das Startpaar bleibt erhalten: Es liegt in \(K\), und
+\(0\neq\Succ(x)\). Die Bedingung
+\(0=\Succ(x)\Longrightarrow m_0=f(u)\) ist daher erfüllt.
+Also ist \((0,m_0)\in\Phi_{x,u}\).
+
+Für den Rekursionsabschluss sei \((y,d)\in\Phi_{x,u}\).
+Dann ist \((y,d)\in K\); insbesondere liegen \(y\) in
+\(\mathbb N\) und \(d\) in \(M\). Der Abschluss von
+\(K\) gibt
+\[
+  (\Succ(y),f(d))\in K.
+\]
+Für die Zugehörigkeit zu \(\Phi_{x,u}\) müssen wir zusätzlich
+die Implikation
+\[
+  \Succ(y)=\Succ(x)\quad\Longrightarrow\quad f(d)=f(u)
+\]
+nachweisen. Nehmen wir dazu \(\Succ(y)=\Succ(x)\) an.
+Die Injektivität der Nachfolgerabbildung liefert \(y=x\).
+Aus \((y,d)\in K\) folgt somit \((x,d)\in K\).
+Wegen der Eindeutigkeit in der Stufe bei \(x\) ist \(d=u\),
+also \(f(d)=f(u)\). Die erforderliche Implikation ist bewiesen,
+und damit liegt \((\Succ(y),f(d))\) in \(\Phi_{x,u}\).
+
+Folglich ist \(\Phi_{x,u}\) admissibel. Aus der Minimalität
+des Kerns folgt \(K\subseteq\Phi_{x,u}\). Nach ihrer Definition
+gilt zugleich \(\Phi_{x,u}\subseteq K\), also
+\(\Phi_{x,u}=K\). Die Einschränkung hat somit tatsächlich kein
+Paar des Kerns entfernt.
+Ist nun \((\Succ(x),b)\in K\), so liegt dieses Paar auch
+in \(\Phi_{x,u}\), und deren definierende Bedingung ergibt
+\(b=f(u)\). Jeder Wert der Nachfolgerstufe ist also der bereits
+gefundene Wert \(f(u)\). Damit gilt \(U(\Succ(x))\).
+
+\DedekindFixingDiagram
+
+Das Induktionsprinzip liefert insgesamt
+\[
+  \forall n\in\mathbb N\,
+    \exists!a\in M\,\bigl((n,a)\in K\bigr).
+\]
+An jeder natürlichen Stelle ist der Kern somit vorhanden und
+eindeutig. Im Nachfolgerschritt wurde nur der eindeutige Wert an
+einer fest gewählten Stelle verwendet; eine gleichzeitige Auswahl
+von Werten an allen Stellen war nicht nötig.
+Die eindeutige Existenz an jeder Stelle ist die Aussage von
+\FormulaRefAuto{RecCoreStageUnique}[thm] in den Beweistabellen.
+
+\par\Needspace{6\baselineskip}
+\medskip\noindent\textbf{Die Funktion und ihre Eindeutigkeit.}
+
+Eine Teilmenge von \(\mathbb N\times M\), die jedem
+\(n\in\mathbb N\) genau ein \(a\in M\) zuordnet, ist
+der Graph einer Funktion \(\mathbb N\to M\).
+Diese Voraussetzungen haben wir für \(K\) nachgewiesen.
+Wir können daher den Kern selbst als Funktion lesen und setzen
+\(F:=K\). Dabei bedeutet \(F(n)=a\) genau, dass
+\((n,a)\in K\).
+
+Das Startpaar ergibt sofort \(F(0)=m_0\).
+Für ein beliebiges \(n\in\mathbb N\) gilt
+\((n,F(n))\in K\). Der Rekursionsabschluss liefert
+\[
+  (\Succ(n),f(F(n)))\in K.
+\]
+Weil \(K\) der Graph von \(F\) ist, folgt
+\[
+  F(\Succ(n))=f(F(n)).
+\]
+Damit ist die Existenz einer Funktion mit den verlangten
+Eigenschaften bewiesen.
+
+Zur Eindeutigkeit sei \(G\colon\mathbb N\to M\) eine weitere
+Funktion mit
+\[
+  G(0)=m_0,
+  \qquad
+  G(\Succ(n))=f(G(n))
+  \quad(n\in\mathbb N).
+\]
+Wir beweisen \(G(n)=F(n)\) durch Induktion.
+Bei \(0\) stimmen beide Funktionen mit \(m_0\) überein.
+Gilt \(G(n)=F(n)\), so ergibt sich
+\[
+  \begin{aligned}
+    G(\Succ(n))
+      &=f(G(n))\\
+      &=f(F(n))\\
+      &=F(\Succ(n)).
+  \end{aligned}
+\]
+Also stimmen \(G\) und \(F\) an jeder natürlichen Stelle
+überein. Da sie denselben Definitionsbereich haben, sind sie
+als Funktionen gleich. Damit ist der Dedekindsche Rekursionssatz
+vollständig bewiesen.
+\end{proof}
+
+\par\Needspace{38\baselineskip}
+\section*{Was die Konstruktion sichtbar macht}
+
+Im Beweis treten zwei verschiedene Eindeutigkeitsaussagen auf.
+Zuerst wird innerhalb der Relation \(K\) für jede natürliche
+Stelle genau ein Wert nachgewiesen. Erst dadurch ist \(K\)
+eine Funktion. Anschließend wird diese Funktion mit jeder anderen
+Funktion verglichen, die denselben Anfangswert und dieselbe
+Übergangsregel besitzt. Die zweite Induktion zeigt, dass auch
+die gesamte Lösung eindeutig bestimmt ist.
+
+Induktion und Rekursion erfüllen dabei unterschiedliche Aufgaben.
+Mit dem Induktionsprinzip weisen wir Aussagen an allen natürlichen
+Stellen nach. Der Rekursionssatz sichert die Existenz und
+Eindeutigkeit einer Funktion mit den vorgeschriebenen Werten.
+In unserem Beweis greifen beide zusammen: Die Schnittkonstruktion
+liefert eine Relation, und Induktion weist deren Funktionseigenschaft
+sowie die Eindeutigkeit der Lösung nach.
+
+Das Eingangsbeispiel zeigt außerdem, dass Eindeutigkeit eines Werts
+keine Injektivität bedeutet. An verschiedenen Stellen darf derselbe
+Wert stehen: Hier erhalten alle Nachfolger den Wert \(b\),
+während an der Stelle \(0\) der Wert \(a\) steht. Weder die
+gegebene Übergangsabbildung \(f\) noch die daraus gewonnene
+Funktion \(F\) muss injektiv sein.
+
+Im Hauptwerk bezeichnet \(\RecFun{m_0}{f}\) die durch den Satz
+eindeutig bestimmte Funktion
+(\FormulaRefAuto{RecFunDef}[def]). Ihre Definition benötigt nur
+den Satz und seine Rekursionsgleichungen. Der hier konstruierte Kern
+erfüllt diese Gleichungen und ist deshalb genau diese Funktion:
+\[
+  \RecFun{m_0}{f}=\RecCore{m_0}{f}.
+\]
+Der Satz rechtfertigt so die späteren rekursiven Definitionen in
+Band~10, insbesondere den anschließenden Aufbau der Addition und
+Multiplikation. Diese Operationen werden im vorstehenden Beweis
+noch nicht vorausgesetzt. Wie beim Lesebeweis zu Cantor--Bernstein
+wird ein kleinstes abgeschlossenes Objekt durch einen Schnitt
+gewonnen; hier ist dieses Objekt ein Graph von Zahlen und Werten.
+Die Definitionen der Hilfsmengen und sämtliche formalen
+Ableitungen stehen in den zugehörigen \DedekindProofsLink{}.

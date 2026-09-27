@@ -5,6 +5,10 @@ kommentierte PDF „Band 08 - Cantor-Bernstein - Lesefassung.pdf“ mit sieben
 PDF-Seiten. Die Markierungen sind in die Seiten eingebettet; deshalb wurden
 alle Seiten visuell gelesen und die Anmerkungen unabhängig gegengeprüft.
 
+Die beiden Anmerkungsrunden und ihre Prüfzahlen dokumentieren diesen
+historischen Stand. Die spätere Neuaufteilung von Fach- und Beweisband
+ist am Ende unter „Fortschreibung vom 21. September 2026“ festgehalten.
+
 ## Erste Runde: übernommene Korrekturen
 
 - Die unverständliche Pfeilketten-Einleitung wurde durch eine direkte
@@ -24,9 +28,9 @@ alle Seiten visuell gelesen und die Anmerkungen unabhängig gegengeprüft.
   Abschnitte erläutern Dedekinds Konstruktion, vergleichen sie mit der
   vorliegenden Ausarbeitung und ordnen Bernsteins bei Borel veröffentlichte
   Fassung ein. Beide Originalquellen sind direkt verlinkt.
-- Ein kurzer Verweis führt zu den formalen Aussagen in B08 und zu den
-  ausführlichen Beweistabellen; die gestrichene Aussagenliste wird dadurch
-  nicht nochmals abgedruckt.
+- Ein kurzer Verweis führte zu den damals in B08 gesammelten formalen
+  Aussagen und zu den ausführlichen Beweistabellen; die gestrichene
+  Aussagenliste wurde dadurch nicht nochmals abgedruckt.
 
 ## Historische Quellen
 
@@ -45,11 +49,12 @@ Beweisen.
 
 ## Technische Umsetzung und Prüfstand der ersten Runde
 
-Die Lesefassung enthält keine eigenen nummerierten Deklarationen mehr.
-Ihr gesonderter Import `b08-reading` übernimmt die kanonischen B08-Verweise.
-Die Beweistabellen verwenden weiterhin ihren bisherigen gefilterten Import
-und behalten alle zwölf Identitäten. B08 und Gesamtband sind von den
-inhaltlichen Änderungen der Lesefassung nicht betroffen.
+Die Lesefassung enthielt nach dieser Runde keine eigenen nummerierten
+Deklarationen mehr. Ihr gesonderter Import `b08-reading` übernahm die
+damals vollständig in B08 geführten Verweise. Die Beweistabellen verwendeten
+ihren bisherigen gefilterten Import und behielten alle zwölf Identitäten.
+B08 und Gesamtband waren von den inhaltlichen Änderungen der Lesefassung
+nicht betroffen.
 
 Die Prüfung der 52 vorhandenen Ausgabedateien fand 13 eingehende Links zur
 Lesefassung. Alle verwenden das erhaltene Sprungziel `csb.reading`; keiner
@@ -93,3 +98,19 @@ Build-Produkt überein.
 Alle acht bisherigen benannten Sprungziele der Lesefassung bleiben erhalten.
 Der gezielte Ausgabeaudit prüft erfolgreich ihre sechs dateiübergreifenden
 Projektverweise. Die übrigen PDFs wurden in dieser Runde nicht verändert.
+
+## Fortschreibung vom 21. September 2026
+
+Im Fachband B08 und im Gesamtband steht jetzt nur der Hauptsatz.
+Die Definition, sieben Hilfssätze und drei H-Hilfsresultate sind dem
+Beweisband mit eigenem Nummernraum `8E` zugeordnet. Dort stehen alle acht
+Tabellenbeweise; beim Schlussbeweis verweist der Text auf den Hauptsatz
+in B08, ohne ihn erneut zu deklarieren. Der direkte Beweislink aus dem
+Fachband führt zum Ziel `csb.proof`.
+
+Die Lesefassung bleibt ohne eigene nummerierte Aussagen und verknüpft den
+Hauptsatz in B08 mit den Hilfsaussagen und Beweisen im Beweisband. Ihre
+Importe berücksichtigen beide Quellen. Der gezielte Build umfasst nun
+auch B48, das den Hauptsatz verwendet. Diese Fortschreibung ersetzt die
+oben beschriebene frühere Zuordnung aller formalen Aussagen zu B08;
+die dortigen Prüfzahlen bleiben historische Befunde.

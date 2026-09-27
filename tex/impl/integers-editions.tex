@@ -1,0 +1,34 @@
+% Navigation zwischen der Ganzzahlaxiomatik und ihren beiden Ergänzungen.
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory, main_directory = "registry/integers/", "registry/"
+  if job:match("^_B[0-9][0-9]$") then
+    directory, main_directory = "integers/", ""
+  elseif job:match("^_B[0-9][0-9]%-") then
+    directory, main_directory = "../integers/", "../"
+  end
+  if job:match("^_B17%-integers%-") then directory = "" end
+  tex.sprint("\\gdef\\IntegersEditionDirectory{" .. directory .. "}")
+  tex.sprint("\\gdef\\IntegersMainDirectory{" .. main_directory .. "}")
+\end{luacode*}
+\input{tex/b17/integers/private-links.tex}
+\newcommand{\IntegersReadingLink}{%
+  \href{\IntegersEditionDirectory_B17-integers-reading.pdf\#integers.reading}{Lesefassung zu den ganzen Zahlen}%
+}
+\newcommand{\IntegersProofsLink}{%
+  \href{\IntegersEditionDirectory_B17-integers-proofs.pdf\#integers.proofs}{Beweistabellen zu den ganzen Zahlen}%
+}
+\newcommand{\IntegersMainLink}{%
+  \href{\IntegersMainDirectory_B17.pdf\#integers.main}{Modellnachweis in Band~17}%
+}
+\newcommand{\IntegersProofFor}[1]{%
+  \href{\IntegersEditionDirectory_B17-integers-proofs.pdf\#integers.proof.#1}{vollständige Ableitung im Ergänzungsband}%
+}
+\NewDocumentCommand{\IntegersResultRef}{m o}{%
+  \ifcsname IntegersPrivate@#1\endcsname
+    \href{\IntegersEditionDirectory_B17-integers-proofs.pdf\#integers.statement.#1}%
+      {\csname IntegersPrivate@#1\endcsname}%
+  \else
+    \IfNoValueTF{#2}{\FormulaRefAuto{#1}}{\FormulaRefAuto{#1}[#2]}%
+  \fi
+}

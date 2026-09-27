@@ -98,6 +98,13 @@ Hauptbände liegen direkt im Themenordner, Begleitfassungen im Unterordner
 | B37 | [Bd. 37 - Endliche Halbgruppen](<../output/07 Halbgruppen und Monoide/Bd. 37 - Endliche Halbgruppen.pdf>) |
 | B38 | [Bd. 38 - Monoide](<../output/07 Halbgruppen und Monoide/Bd. 38 - Monoide.pdf>) |
 
+### Ergänzungen / Nullprodukt-Rekonstruktion
+
+| Darstellung | PDF |
+|---|---|
+| B37 Beweistabellen | [Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen](<../output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf>) |
+| B37 Lesefassung | [Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) |
+
 ## 08 Gruppen
 
 | Band | PDF |
@@ -119,3 +126,10 @@ Hauptbände liegen direkt im Themenordner, Begleitfassungen im Unterordner
 | Band | PDF |
 |---|---|
 | B47 | [Bd. 47 - Metrische Räume und Vollständigkeit](<../output/10 Metrische Räume/Bd. 47 - Metrische Räume und Vollständigkeit.pdf>) |
+
+### Ergänzungen / Totale Beschränktheit und Kompaktheit
+
+| Darstellung | PDF |
+|---|---|
+| B47 Lesefassung | [Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung](<../output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf>) |
+| B47 Beweise | [Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise](<../output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf>) |

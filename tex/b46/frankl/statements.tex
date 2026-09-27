@@ -1,0 +1,245 @@
+% Gemeinsame Originalaussagen; nur Band 46 registriert sie.
+\newcommand{\FranklStatement}[1]{\csname FranklStatement@#1\endcsname}
+
+% Rein typographische Anpassung der langen Definitionsformel im Fachband.
+% FormulaDefDeltaKR registriert weiterhin die unveränderte Originalformel.
+\newsavebox{\FranklCanonicalFormulaBox}
+\newcommand{\FranklCanonicalFittedFormula}[1]{%
+  \sbox{\FranklCanonicalFormulaBox}{\(\displaystyle #1\)}%
+  \ifdim\wd\FranklCanonicalFormulaBox>\linewidth
+    \resizebox{\linewidth}{!}{\usebox{\FranklCanonicalFormulaBox}}%
+  \else
+    \usebox{\FranklCanonicalFormulaBox}%
+  \fi
+}
+\newcommand{\FranklCanonicalDefinitionDisplay}{%
+  \RenewDocumentCommand{\FormulaDefDeltaK}{o m m +m}{%
+    \IfNoValueTF{##1}{%
+      \FormulaDefDeltaKR{\FranklCanonicalFittedFormula{##2}}{##2}{##3}{##4}%
+    }{%
+      \FormulaDefDeltaKR[##1]{\FranklCanonicalFittedFormula{##2}}{##2}{##3}{##4}%
+    }%
+  }%
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklSingletonMember\endcsname{%
+\FormulaThmDelta[Frankl-Vermutung bei enthaltener Einermenge]{%
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep \{a\}\in M\vdash \Frankl{M}
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Funktionen}{\FranklAdj{M}{a}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklAvoidingEmpty\endcsname{%
+\FormulaThmDelta[Leere vermeidende Teilfamilie liefert Frankl]{%
+  a\in\bigcup M\dsep \FamAvoiding{M}{a}=\varnothing
+  \vdash \Frankl{M}
+}{%
+  \DeltaRow{Mengen}{M\dsep a}
+  \DeltaRow{Funktionen}{F}
+  \DeltaRow{Teilmengenfamilien}{%
+    \FamAvoiding{M}{a}\dsep \FamContaining{M}{a}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklNonemptyIntersection\endcsname{%
+\FormulaThmDelta[Frankl-Vermutung bei nichtleerem Durchschnitt]{%
+  \FranklFam{M}\dsep
+  \bigcap M\neq\varnothing\vdash \Frankl{M}
+}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a}
+  \DeltaRow{Funktionen}{F}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAvoidADecomp\endcsname{%
+\FormulaThmDeltaK[Zerlegung der \(a\)-vermeidenden Klassen im Zweierfall]{%
+  \begin{aligned}[t]
+  \FamAvoiding{M}{a}
+  &=
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cup
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairAvoidADecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAvoidADisjoint\endcsname{%
+\FormulaThmDeltaK[Disjunktheit der \(a\)-vermeidenden Zweige]{%
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \cap
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  =\varnothing
+}{FranklPairAvoidADisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairContainADecomp\endcsname{%
+\FormulaThmDeltaK[Zerlegung der \(a\)-enthaltenden Zielklassen]{%
+  \begin{aligned}[t]
+  \FamContaining{M}{a}
+  &=
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cup
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairContainADecomp}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairContainADisjoint\endcsname{%
+\FormulaThmDeltaK[Disjunktheit der \(a\)-enthaltenden Zielzweige]{%
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \cap
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  =\varnothing
+}{FranklPairContainADisjoint}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairMixed01Finite\endcsname{%
+\FormulaThmDeltaK[Endlichkeit der Klasse \(M_{01}\)]{%
+  \Finite{M}\vdash
+  \Finite{\FamAvoiding{M}{a}\cap\FamContaining{M}{b}}
+}{FranklPairMixed01Finite}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairMixedReverseInjection\endcsname{%
+\FormulaThmDeltaK[Gegeninjektion im negativen Mischklassenfall]{%
+  \begin{aligned}[t]
+  &\Finite{M}\dsep
+  \neg\exists F\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \vdash{}\\
+  &\exists G\colon
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \inj
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \end{aligned}
+}{FranklPairMixedReverseInjection}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAdjDef\endcsname{%
+\FormulaDefDeltaK[Zweieradjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\vdash
+  \begin{aligned}[t]
+    &U_{M,a,b}\colon
+      \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+      \\[-2pt]
+    &\hspace{4em}\to
+      \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr),\\[-2pt]
+    &\forall X\in\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\,
+      \bigl(U_{M,a,b}(X)\coloneqq X\cup\{a,b\}\bigr)
+  \end{aligned}
+}{FranklPairAdjDef}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+  \DeltaRow{\textbf{Neues Symbol}}{}
+  \DeltaPrem{Zweieradjunktionsabbildung}{U_{M,a,b}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAdjFunction\endcsname{%
+\FormulaThmDeltaK[Zweieradjunktionsabbildung ist Funktion]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\vdash
+  U_{M,a,b}\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \to
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+}{FranklPairAdjFunction}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAdjEval\endcsname{%
+\FormulaThmDeltaK[Auswertung der Zweieradjunktionsabbildung]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M\dsep
+  X\in \FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}
+  \vdash U_{M,a,b}(X)=X\cup\{a,b\}
+}{FranklPairAdjEval}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairAdjInjection\endcsname{%
+\FormulaThmDeltaK[Zweieradjunktionsabbildung ist injektiv]{%
+  \UnionClosedFam(M)\dsep \{a,b\}\in M
+  \vdash
+  U_{M,a,b}\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamContaining{M}{b}\bigr)
+}{FranklPairAdjInjection}{%
+  \DeltaRow{Mengen}{M\dsep X\dsep Y\dsep a\dsep b}
+  \DeltaRow{Funktionen}{U_{M,a,b}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairPositiveBranch\endcsname{%
+\FormulaThmDeltaK[Positiver Mischklassenfall liefert Frankl]{%
+  \begin{aligned}[t]
+  &\UnionClosedFam(M)\dsep \{a,b\}\in M\dsep a\in\bigcup M\dsep{}\\
+  &\exists F\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \vdash \Frankl{M}
+  \end{aligned}
+}{FranklPairPositiveBranch}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F\dsep H\dsep U_{M,a,b}}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairNegativeBranch\endcsname{%
+\FormulaThmDeltaK[Negativer Mischklassenfall liefert Frankl]{%
+  \begin{aligned}[t]
+  &\Finite{M}\dsep \UnionClosedFam(M)\dsep
+  \{a,b\}\in M\dsep b\in\bigcup M\dsep{}\\
+  &\neg\exists F\colon
+  \bigl(\FamAvoiding{M}{a}\cap\FamContaining{M}{b}\bigr)
+  \inj
+  \bigl(\FamContaining{M}{a}\cap\FamAvoiding{M}{b}\bigr)
+  \vdash \Frankl{M}
+  \end{aligned}
+}{FranklPairNegativeBranch}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F\dsep G}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklPairMemberFrankl\endcsname{%
+\FormulaThmDeltaK[Frankl-Vermutung bei enthaltener Zweiermenge]{%
+  \Finite{M}\dsep \UnionClosedFam(M)\dsep a\neq b\dsep \{a,b\}\in M
+  \vdash \Frankl{M}
+}{FranklPairMemberFrankl}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+  \DeltaRow{Funktionen}{F}
+}
+}
+
+\expandafter\newcommand\csname FranklStatement@FranklFamPairMemberFrankl\endcsname{%
+\FormulaThmDeltaK[Frankl-Familie mit enthaltener Zweiermenge erfüllt Frankl]{%
+  \FranklFam{M}\dsep
+  \exists a\,\exists b\,(a\neq b\land \{a,b\}\in M)
+  \vdash \Frankl{M}
+}{FranklFamPairMemberFrankl}{%
+  \DeltaRow{Mengen}{M\dsep a\dsep b}
+}
+}
+

@@ -1,0 +1,18 @@
+% Beide Ergänzungen beziehen sämtliche nummerierten Aussagen aus den Fachbänden.
+\begin{luacode*}
+  local directory = "registry/semilattice/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B45.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b45-external}[../_B45.pdf]")
+  banddeps.load_predecessor_registries("B45")
+  thmlookup.load_registry_file(directory .. "b45-external.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{45}
+\setcounter{file}{45}
+\renewcommand{\theHtable}{semilattice.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{semilattice.\arabic{chapter}.\arabic{figure}}

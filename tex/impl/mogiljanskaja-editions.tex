@@ -1,0 +1,39 @@
+% Verweise auf die Ergänzungen; deren Aussagen und Beweise sind eigenständig.
+\newif\ifMogTabellen
+\MogTabellenfalse
+\newcommand{\MogStar}{\mathbin{\ast}}
+\newcommand{\MogDiamond}{\mathbin{\diamond}}
+\newcommand{\MogRule}[3]{\mathsf R_{\mathrm M}(#1,#2,#3)}
+\newcommand{\MogProofStepWideStarKeep}[3][]{%
+  \proofstepwidestar[#1]{#2}{#3}%
+}
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory = "registry/mogiljanskaja/"
+  if job:match("^_B[0-9][0-9]$") then directory = "mogiljanskaja/" end
+  if job:match("^_B28%-mog%-") then directory = "" end
+  tex.sprint("\\gdef\\MogEditionDirectory{" .. directory .. "}")
+\end{luacode*}
+\newcommand{\MogReadingLink}{%
+  \href{\MogEditionDirectory_B28-mog-reading.pdf\#mog.reading}{Lesefassung}%
+}
+\newcommand{\MogProofsLink}{%
+  \href{\MogEditionDirectory_B28-mog-proofs.pdf\#mog.proofs}{Beweistabellen}%
+}
+\newcommand{\MogStatementTarget}[1]{%
+  \ifMogTabellen
+    \par\Needspace{14\baselineskip}%
+    \hypertarget{mog.statement.#1}{}%
+  \fi
+}
+\NewDocumentCommand{\MogProof}{m +m}{%
+  \ifMogTabellen
+    \par\Needspace{6\baselineskip}\medskip
+    \noindent\textit{Beweis.}\par\nobreak\smallskip\nobreak
+    #2%
+  \else
+    \noindent\emph{Beweis:}
+    \href{\MogEditionDirectory_B28-mog-proofs.pdf\#mog.statement.#1}%
+      {Zugehörige Beweistabelle}.\par\smallskip
+  \fi
+}

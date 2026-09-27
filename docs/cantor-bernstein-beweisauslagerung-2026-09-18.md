@@ -1,56 +1,69 @@
 # Cantor–Bernstein: Beweise in den Begleitfassungen
 
-Stand: 18. September 2026. Fortschreibung des
+Erstauslagerung: 18. September 2026; Aufteilung aktualisiert am
+21. September 2026. Fortschreibung des
 [ersten Piloten](lesefassung-und-beweise-umsetzung-2026-09-18.md) auf Wunsch
 des Autors.
 
 Die anschließende Überarbeitung der Lesefassung anhand der handschriftlichen
 PDF-Anmerkungen ist separat dokumentiert:
 [Korrekturen vom 19. September 2026](csb-lesefassung-anmerkungen-2026-09-19.md).
-Die folgenden Seitenzahlen und Angaben zum Aussagenanhang beschreiben den
-Stand der Auslagerung am 18. September.
+Der unten dokumentierte Prüfstand mit seinen Seitenzahlen beschreibt die
+Auslagerung am 18. September. Die aktuelle Verteilung der Aussagen wird in
+den beiden folgenden Abschnitten beschrieben.
+Die Nummerierung und Prüfung der jüngsten Änderung stehen im
+[Bericht zum Hauptsatz vom 21. September](cantor-bernstein-hauptsatz-2026-09-21.md).
 
 ## Redaktionelle Entscheidung
 
 Die Auslagerung ist sinnvoll, weil die beiden Begleitfassungen bereits die
 vollständigen Beweise enthalten. Die erneute Wiedergabe in Band 08 und im
 Gesamtband verlängerte den Haupttext, ohne einen zusätzlichen Nachweis
-bereitzustellen. Im Hauptwerk bleiben die mathematischen Aussagen erhalten;
-sichtbare Links führen zu beiden Beweisdarstellungen.
-Diese Links stehen sowohl am Abschnittsanfang als auch unmittelbar unter
-dem Hauptsatz, damit sie nach einem direkten Sprung aus einem anderen Band
-sofort erreichbar sind.
+bereitzustellen. Im Hauptwerk bleibt der Hauptsatz erhalten;
+sichtbare Links führen zur Lesefassung und direkt zu seinem Tabellenbeweis.
+Diese Links stehen unmittelbar unter dem Hauptsatz, damit sie nach einem
+direkten Sprung aus einem anderen Band sofort erreichbar sind.
 
-Der Abschnitt in Band 08 enthält nun eine kurze Einordnung, die unveränderten
-neun Hauptdeklarationen und drei knappe Verweise auf die Hilfsresultate.
-Die Prosabeweise und Tabellen stehen ausschließlich in den Begleitfassungen.
+Der Abschnitt in Band 08 enthält eine kurze Einordnung und den Hauptsatz.
+Der Beweisband enthält eine Definition, sieben Hilfssätze und drei
+H-Hilfsresultate im eigenen Nummernraum `8E` sowie alle acht Tabellenbeweise.
+Beim Schlussbeweis wird der Hauptsatz aus Band 08 referenziert und nicht
+erneut deklariert. Sein direkter Beweisanker lautet `csb.proof`.
+Die Prosabeweise und Tabellen stehen ausschließlich in den Begleitfassungen;
+die Lesefassung verknüpft den Hauptsatz mit den ausgelagerten Hilfsaussagen.
 Die Übertragung auf Gleichmächtigkeit in Band 11 bleibt an ihrem bisherigen Ort.
 
 Die Lesefassung beginnt nach der Titelseite unmittelbar mit der mathematischen
 Motivation. Das Kapitel „Zur Benutzung“ und der redundante Absatz „Lesepfad“
-sind entfernt. Vollständiger Lesebeweis, Aussagen und Anschluss an Band 11
-bleiben erhalten.
+sind entfernt. Vollständiger Lesebeweis und Anschluss an Band 11 bleiben
+erhalten; die Lesefassung enthält keine eigenen nummerierten Deklarationen.
 
 ## Quellen und Verweise
 
 - `referenzabschnitt.tex` enthält die kompakte Darstellung für B08 und den
-  Gesamtband. Die gemeinsame Datei `aussagen.tex` bleibt unverändert.
-- Der neue Schalter `CSBReferenz` wählt diese Darstellung. Beide
+  Gesamtband. Die gemeinsame Datei `aussagen.tex` enthält die Deklarationen;
+  ihre Ausgabe erfolgt im jeweils zuständigen Band.
+- Der Schalter `CSBReferenz` wählt diese Darstellung. Beide
   Begleit-Einstiegspunkte deaktivieren ihn ausdrücklich.
-- Die drei H-Identitäten behalten im Hauptwerk ihre alten Nummern, Labels
-  und PDF-Anker. Die dortigen Hinweise führen zu eigenen semantischen
-  Sprungzielen bei den jeweiligen Hilfsbeweisen in der Tabellenfassung.
+- Die Definition, sieben Hilfssätze und drei H-Resultate stehen ausschließlich
+  im Beweisband. Ihre semantischen Kennungen bleiben erhalten; ihre Nummern
+  gehören zum eigenen Nummernraum `8E`.
+- Der Link unmittelbar beim Hauptsatz führt zum Schlussbeweis `csb.proof`;
+  dort führt ein Rückverweis zum Hauptsatz in B08.
 - Die thematische Ordnerstruktur unter `output/` und die relative
   Verlinkung zwischen diesen Ordnern bleiben erhalten.
 
-Die neun Hauptdeklarationen müssen in derselben Reihenfolge bleiben, weil
-B00, B11 und B48 bereits darauf verweisen. Die drei H-Resultate werden
-außerhalb des Beweispakets derzeit nicht verwendet; ihre bisherigen
-Identitäten bleiben dennoch vollständig erreichbar.
+B00 verweist im Überblick auf den Hauptsatz. B11 und B48 verwenden
+ebenfalls den Hauptsatz aus B08. Der gezielte
+CSB-Build aktualisiert deshalb B08, B11, B48, beide Begleitfassungen, B00
+und den Gesamtband. Die drei H-Resultate werden außerhalb des Beweispakets
+derzeit nicht verwendet.
 
-## Prüfstand
+## Historischer Prüfstand vom 18. September 2026
 
-Die Prüfungen der Einzel- und Begleitfassungen bestätigen:
+Die folgenden Befunde betreffen die damalige Aufteilung mit sämtlichen
+Deklarationen in B08, nicht die Neuzuordnung vom 21. September.
+Die damaligen Prüfungen der Einzel- und Begleitfassungen bestätigten:
 
 - Alle 248 Zeilen des B08-Registers sowie Drucknummern und Sprunganker
   aller 154 registrierten Aussagen stimmen mit dem Stand vor der

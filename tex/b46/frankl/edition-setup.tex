@@ -1,0 +1,18 @@
+% Kanonische Aussagen aus den Fachbänden; neue Beweis-Hilfssätze nur lokal in 46E.
+\begin{luacode*}
+  local directory = "registry/frankl/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B46.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b46-external}[../_B46.pdf]")
+  banddeps.load_predecessor_registries("B46")
+  thmlookup.load_registry_file(directory .. "b46-external.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{46}
+\setcounter{file}{46}
+\renewcommand{\theHtable}{frankl.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{frankl.\arabic{chapter}.\arabic{figure}}
