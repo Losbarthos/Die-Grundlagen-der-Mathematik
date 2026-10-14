@@ -147,6 +147,22 @@ if ($needsNullproducts) {
 $deferredNullproductsAudits = [System.Collections.Generic.List[string]]::new()
 $nullproductsBuilt = $false
 
+# Although catalogued with B28, the zero-transport supplement imports the
+# zero-element interface from B33. Its pair must precede B37's reading edition.
+$needsZeroTransport = $needsNullproducts -or (@($bands | Where-Object { $_ -in @('B00', 'B28', 'B33') }).Count -gt 0)
+$zeroTransportTriggerBand = $null
+if ($needsZeroTransport) {
+    $zeroTransportDependencies = @('B33') + @($graph['B33'].Predecessors)
+    $zeroTransportTriggerBand = $bands | Where-Object { $_ -in $zeroTransportDependencies } | Select-Object -Last 1
+}
+$deferredZeroTransportAudits = [System.Collections.Generic.List[string]]::new()
+$zeroTransportBuilt = $false
+# Bracketing audits every outgoing B28 link, including the later supplement.
+# Defer its build/audit together with that supplement on a fresh full build.
+if ($needsBracketing -and $needsZeroTransport) {
+    $bracketingTriggerBand = $zeroTransportTriggerBand
+}
+
 # B47 owns the public compactness statements; its private proof lemmas
 # use 47E in the companion. Build both editions before checking outgoing links.
 $needsCompactness = (-not $SkipMain) -or (@($bands | Where-Object { $_ -in @('B00', 'B47') }).Count -gt 0)
@@ -173,6 +189,10 @@ function Invoke-LoggedBuild {
 
 Push-Location $repoRoot
 try {
+    if ($needsZeroTransport -and -not $zeroTransportTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-zero-transport-editions.ps1') -EditionsOnly -Python $Python
+        $zeroTransportBuilt = $true
+    }
     if ($needsCsbPilot -and -not $pilotTriggerBand) {
         & (Join-Path $PSScriptRoot 'build-csb-pilot.ps1') -EditionsOnly -Python $Python
         $pilotsBuilt = $true
@@ -212,7 +232,8 @@ try {
         $reconstructionBuilt = $true
     }
     if ($needsNullproducts -and -not $nullproductsTriggerBand) {
-        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -Python $Python
+        if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
+        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -Python $Python
         $nullproductsBuilt = $true
     }
     if ($needsCompactness -and -not $compactnessTriggerBand) {
@@ -232,6 +253,13 @@ try {
         Invoke-LoggedBuild -Source $record.Source -JobName "_$band"
         $stage = New-BuildStage -Record $record -Started $started
         Assert-BuildStageArtifacts -Stage $stage
+        if ($band -eq $zeroTransportTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-zero-transport-editions.ps1') -EditionsOnly -Python $Python
+            $zeroTransportBuilt = $true
+            foreach ($deferredBand in $deferredZeroTransportAudits) {
+                & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
+            }
+        }
         if ($band -eq $pilotTriggerBand) {
             & (Join-Path $PSScriptRoot 'build-csb-pilot.ps1') -EditionsOnly -Python $Python
             $pilotsBuilt = $true
@@ -298,7 +326,8 @@ try {
             }
         }
         if ($band -eq $nullproductsTriggerBand) {
-            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -Python $Python
+            if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
+            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -Python $Python
             $nullproductsBuilt = $true
             foreach ($deferredBand in $deferredNullproductsAudits) {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
@@ -319,6 +348,8 @@ try {
             $deferredDedekindAudits.Add($band)
         } elseif ($band -eq 'B28' -and -not $bracketingBuilt) {
             $deferredBracketingAudits.Add($band)
+        } elseif ($band -eq 'B28' -and $needsZeroTransport -and -not $zeroTransportBuilt) {
+            $deferredZeroTransportAudits.Add($band)
         } elseif ($band -eq 'B17' -and -not $integersBuilt) {
             $deferredIntegersAudits.Add($band)
         } elseif ($band -eq 'B41' -and -not $differencesBuilt) {

@@ -1,0 +1,27 @@
+\documentclass[a4paper,11pt]{article}
+\input{tests/symbol-legend/common.tex}
+% Annotation borders are not text ink; keep this test focused on text color.
+\hypersetup{hidelinks}
+\SymbolLegendEnabledtrue
+% The two pages have identical content and legend positions. Only the body
+% color differs: shipout of page two happens inside the still-white group.
+\newcommand{\FixtureColorBody}{%
+  \noindent COLORBODY
+  \(\FixtureIntro{beta}+\FixtureIntro{gamma}
+    +\FixtureUse{alpha}+\FixtureUse{beta}+\FixtureUse{gamma}\)\par}
+\AddToHook{shipout/foreground}[fixture-color-probe]{%
+  \ifnum\value{page}=2
+    \convertcolorspec{named}{.}{rgb}\FixtureShipoutRGB
+    \typeout{FIXTURE WHITE SHIPOUT RGB=\FixtureShipoutRGB}%
+  \fi}
+\DeclareHookRule{shipout/foreground}{fixture-color-probe}{before}{symbol-legend}
+\begin{document}
+\FixtureTargets
+\FixtureColorBody
+\newpage
+\begingroup
+  \color{white}% Keep this color active throughout the actual shipout.
+  \FixtureColorBody
+  \newpage
+\endgroup
+\end{document}

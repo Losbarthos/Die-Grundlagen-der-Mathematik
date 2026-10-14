@@ -1,0 +1,26 @@
+% Eigenständige Ergänzung: ältere Nummern und Register bleiben unverändert.
+% Die Nullnotation wird aus Band 33 übernommen; im Hauptband 28 steht
+% ausschließlich ein weiterführender Lesehinweis auf diese Ergänzung.
+\begin{luacode*}
+  local directory = "registry/zero-transport/"
+  local reading = tex.jobname == "_B28-zero-transport-reading"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B33.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{registry/_B33}[../_B33.pdf]")
+  banddeps.load_predecessor_registries("B33")
+  thmlookup.load_registry_file("registry/_B33.registry.tsv")
+  if reading then
+    local base = directory .. "_B28-zero-transport-proofs"
+    tex.sprint("\\externaldocument{" .. base .. "}[_B28-zero-transport-proofs.pdf]")
+    thmlookup.load_registry_file(base .. ".registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\FormulaBandID}{28Z}
+\setcounter{file}{28}
+\renewcommand{\theHtable}{zero-transport.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{zero-transport.\arabic{chapter}.\arabic{figure}}

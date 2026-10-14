@@ -1,0 +1,49 @@
+\documentclass[a4paper,11pt]{article}
+\input{tests/symbol-legend/common.tex}
+\hypersetup{hidelinks}
+\SymbolLegendEnabledtrue
+\ifdefined\FixtureCompact\SymbolLegendCompacttrue\fi
+\SymbolLegendDeclareReading{ra}{\(A\)}{SLENTRYRA}
+\SymbolLegendDeclareReading{rb}{\(B\)}{SLENTRYRB}
+\SymbolLegendDeclareReading{rm}{\(M\)}{SLENTRYRM}
+\SymbolLegendDeclareReading{rc}{\(C\)}{SLENTRYRC}
+\SymbolLegendDeclareReading{rd}{\(D\)}{SLENTRYRD}
+\SymbolLegendDeclareReading{rg}{\(G\)}{SLENTRYRG}
+\newsavebox{\ReadingDiscardedBox}
+\newsavebox{\ReadingMovedBox}
+\newcommand{\ReadingIntro}[1]{%
+  \mathord{\SymbolLegendIntroduce{#1}\SymbolLegendUse{#1}\mathrm{x}}}
+\begin{document}
+\FixtureTargets
+\noindent BEFOREINTRO \(\FixtureUse{ra}+\FixtureUse{rb}\).
+\sbox{\ReadingDiscardedBox}{\(\ReadingIntro{rg}\)}
+\(\mathchoice{\ReadingIntro{rb}}{\mathrm{x}}{\ReadingIntro{rg}}{\ReadingIntro{rg}}\)
+\newpage
+\noindent ALPHAINTRO \(\ReadingIntro{ra}\).
+Repeated introductions must not duplicate the destination:
+\(\ReadingIntro{ra}+\FixtureUse{ra}\).
+\newpage
+\noindent BETAINTROROW
+\begin{tabular}{ll}
+  RETAINEDTABLE & \(\ReadingIntro{rb}+\FixtureUse{ra}\)
+\end{tabular}
+\newpage
+\noindent AUTOBEFORE \(\FixtureUse{rm}\)\par
+% Constructed on page four, but introduced only on its eventual page five.
+\setbox\ReadingMovedBox=\vbox to 4\baselineskip{%
+  \hsize=\linewidth\noindent MOVEDINTRO \(\ReadingIntro{rm}\)\par\vfil}
+\vskip\dimexpr\textheight-3\baselineskip\relax
+\penalty0
+\box\ReadingMovedBox
+\noindent CHOSENINTRO
+\(\mathchoice{\ReadingIntro{rg}}{\ReadingIntro{rc}}{\ReadingIntro{rg}}{\ReadingIntro{rg}}\).
+\newpage
+\AddToHookNext{shipout/before}{\DiscardShipoutBox}
+\noindent DISCARDEDWHOLEPAGE \(\ReadingIntro{rd}\).
+\newpage
+\noindent STILLUNINTRODUCED \(\FixtureUse{rd}+\FixtureUse{rm}\).
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{7}
+\noindent RETAINEDINTRO \(\ReadingIntro{rd}\).
+\end{document}

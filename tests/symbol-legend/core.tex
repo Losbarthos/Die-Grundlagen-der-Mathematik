@@ -1,0 +1,41 @@
+\documentclass[a4paper,11pt]{article}
+\input{tests/symbol-legend/common.tex}
+\input{tex/impl/proof-tables.tex}
+\SymbolLegendEnabledtrue
+\newsavebox{\DiscardedFixtureBox}
+\newsavebox{\MovedFixtureBox}
+\begin{document}
+\FixtureTargets
+\noindent PAGEONE
+\(\FixtureUse{alpha}+\FixtureUse{alpha}+\FixtureUse{alpha}\).
+Unintroduced: \(\FixtureUse{beta}\).
+Same-page introduction after use:
+\(\FixtureUse{gamma}+\FixtureIntro{gamma}+\FixtureUse{gamma}\).
+\sbox{\DiscardedFixtureBox}{\(\FixtureIntro{delta}+\FixtureUse{ghost}\)}
+\SymbolLegendWithoutRecording{\(\FixtureUse{suppressed}\)}
+\newpage
+\noindent PAGETWO No registered notation is used here.
+\newpage
+\noindent PAGETHREE
+\(\FixtureUse{beta}+\FixtureIntro{beta}\).
+\newpage
+\noindent PAGEFOUR
+\(\mathchoice{\FixtureUse{ghost}}{\FixtureUse{beta}}{\FixtureUse{alpha}}{\FixtureUse{gamma}}\).
+The discarded introduction is still unavailable: \(\FixtureUse{delta}\).
+\newpage
+\noindent PAGEFIVE
+\begin{tabular}{ll}
+  Ordinary table & \(\FixtureUse{alpha}\) \\
+\end{tabular}
+\begin{tabproof}
+  \proofstep{1}{\FixtureUse{beta}=\mathrm{x}}{\text{Fixture premise}}
+\end{tabproof}
+\newpage
+\noindent AUTOBEFORE \(\FixtureUse{gamma}\)\par
+% This box is typeset on the preceding page, but must ship on the next one.
+\setbox\MovedFixtureBox=\vbox to 4\baselineskip{%
+  \hsize=\linewidth\noindent AUTOAFTER \(\FixtureUse{alpha}\)\par\vfil}
+\vskip\dimexpr\textheight-3\baselineskip\relax
+\penalty0
+\box\MovedFixtureBox
+\end{document}

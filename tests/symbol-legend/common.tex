@@ -1,0 +1,34 @@
+% Isolated fixtures: these labels are deliberately local test definitions.
+% Never import main.tex or write a manuscript theorem registry here.
+\usepackage{amsmath,amssymb}
+\input{tex/impl/symbol-legend.tex}
+\hypersetup{hypertexnames=false}
+\pagestyle{empty}
+\setlength{\textheight}{130mm}
+\newcommand{\FixtureUse}[1]{\mathord{\SymbolLegendUse{#1}\mathrm{x}}}
+\newcommand{\FixtureIntro}[1]{\mathord{\SymbolLegendIntroduce{#1}\mathrm{i}}}
+\makeatletter
+\newlabel{sl:fixture-definition}{{1}{1}{Local fixture definition}{sl.fixture-definition}{}}
+\makeatother
+\directlua{thmlookup={by_id={FixtureDefinition={env='definition',label='sl:fixture-definition'}}}}
+\SymbolLegendDeclare[prior]{ghost}{\(G\)}{SLENTRYGHOST}{sl:fixture-definition}
+\SymbolLegendDeclareID[prior]{alpha}{\(\FixtureUse{ghost}\alpha\)}{SLENTRYALPHA}{FixtureDefinition}
+\SymbolLegendDeclare{beta}{\(\beta\)}{SLENTRYBETA}{sl:fixture-definition}
+\SymbolLegendDeclare{gamma}{\(\gamma\)}{SLENTRYGAMMA}{sl:fixture-definition}
+\SymbolLegendDeclare{delta}{\(\delta\)}{SLENTRYDELTA}{sl:fixture-definition}
+\SymbolLegendDeclare[prior]{suppressed}{\(Z\)}{SLENTRYSUPPRESSED}{sl:fixture-definition}
+\newcommand{\FixtureTargets}{\hypertarget{sl.fixture-definition}{}}
+% Probe the public suppression contract, independently of the page audit:
+% metadata deliberately contains a use, and mark must not be called for it.
+\directlua{
+  local original_mark = symbollegend.mark
+  symbollegend.mark = function(id, intro)
+    if fixture_rendering_legend then error('FIXTURE SELF REGISTRATION') end
+    return original_mark(id, intro)
+  end
+}
+\let\FixtureOriginalEntry\SymbolLegendEntry
+\renewcommand{\SymbolLegendEntry}[1]{%
+  \directlua{fixture_rendering_legend=true}%
+  \FixtureOriginalEntry{#1}%
+  \directlua{fixture_rendering_legend=false}}

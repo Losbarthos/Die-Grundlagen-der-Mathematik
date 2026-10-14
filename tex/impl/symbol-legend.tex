@@ -1,0 +1,189 @@
+% Opt-in, LuaLaTeX-only page-local notation legend. Load in a reading edition.
+\RequirePackage{iftex}
+\RequireLuaTeX
+\RequirePackage{luacode}
+\RequirePackage{hyperref}
+\RequirePackage{xcolor}
+\makeatletter
+\newif\ifSymbolLegendEnabled
+\newif\ifSymbolLegendCompact
+\newif\ifSL@recording
+\SL@recordingtrue
+\newlength\SymbolLegendWidth
+\newlength\SymbolLegendGap
+\newlength\SymbolLegendInnerMargin
+\newlength\SymbolLegendEdgeMargin
+\setlength\SymbolLegendWidth{42mm}
+\setlength\SymbolLegendGap{7mm}
+\setlength\SymbolLegendInnerMargin{20mm}
+\setlength\SymbolLegendEdgeMargin{10mm}
+\newbox\SL@box
+\newbox\SL@symbolbox
+\newbox\SL@entrybox
+\newdimen\SL@x
+\newdimen\SL@y
+\newdimen\SL@available
+\def\SLPageEntries{}
+\directlua{symbollegend = dofile('tex/impl/symbol-legend.lua')}
+
+% Register once: [prior] means introduced in an earlier volume.
+% Otherwise use an introduction marker in the actual defining notation.
+% The last argument is an existing local or xr-hyper definition label.
+\NewDocumentCommand\SymbolLegendDeclare{O{local} m m m m}{%
+  \@ifundefined{SL@symbol@#2}{}{%
+    \PackageError{symbol-legend}{Duplicate symbol ID #2}{Use a unique ID.}}%
+  \expandafter\gdef\csname SL@symbol@#2\endcsname{#3}%
+  \expandafter\gdef\csname SL@meaning@#2\endcsname{#4}%
+  \expandafter\gdef\csname SL@label@#2\endcsname{#5}%
+  \directlua{
+    local mode = '\luaescapestring{#1}'
+    if not (mode == 'prior' or mode == 'local') then
+      tex.error('symbol-legend: introduction mode must be prior or local')
+    end
+    symbollegend.declare('\luaescapestring{#2}', mode == 'prior')
+  }%
+}
+% Resolve semantic definition IDs with the manuscript's existing registry.
+\NewDocumentCommand\SymbolLegendDeclareID{O{local} m m m m}{%
+  \directlua{
+    local r = thmlookup and thmlookup.by_id['\luaescapestring{#5}']
+    if not r or not (r.env == 'definition') then
+      tex.error('symbol-legend: missing definition ID #5')
+    else
+      token.set_macro('SLResolvedLabel', r.label, 'global')
+    end
+  }%
+  \begingroup
+  \edef\SL@next{\endgroup
+    \noexpand\SymbolLegendDeclare[#1]{#2}{\unexpanded{#3}}%
+      {\unexpanded{#4}}{\SLResolvedLabel}}%
+  \SL@next
+}
+% A local reading introduction has no theorem/definition number. Its label and
+% destination are created only when the first introduction marker really ships.
+\NewDocumentCommand\SymbolLegendDeclareReading{m m m}{%
+  \@ifundefined{SL@symbol@#1}{}{%
+    \PackageError{symbol-legend}{Duplicate symbol ID #1}{Use a unique ID.}}%
+  \expandafter\gdef\csname SL@symbol@#1\endcsname{#2}%
+  \expandafter\gdef\csname SL@meaning@#1\endcsname{#3}%
+  \expandafter\gdef\csname SL@label@#1\endcsname{slreading:#1}%
+  \expandafter\gdef\csname SL@reading@#1\endcsname{1}%
+  \directlua{symbollegend.declare('\luaescapestring{#1}', false, true)}%
+}
+% Internal shipout callback. The Lua collector inserts the actual PDF anchor
+% at the first retained introduction node; the page is expanded here, never at
+% box construction. Immediate AUX writing avoids a second delayed shipout.
+\newcommand\SLReadingIntroduction[4]{%
+  \begingroup
+  \protected@edef\SL@readingpage{#2}%
+  \expandafter\xdef\csname r@slreading:#1\endcsname{%
+    {}{\SL@readingpage}{Einführung}{#3}{}}%
+  \if@filesw
+    \immediate\write\@auxout{\string\newlabel{slreading:#1}%
+      {{}{\SL@readingpage}{Einführung}{#3}{}}}%
+  \fi
+  \endgroup
+}
+% Put markers INSIDE the math atom that renders the registered symbol.
+% An introduction marker is not a use; the two operations are separate.
+\NewDocumentCommand\SymbolLegendUse{m}{%
+  \ifSymbolLegendEnabled\ifSL@recording
+    \directlua{symbollegend.mark('\luaescapestring{#1}', false)}%
+  \fi\fi
+}
+\NewDocumentCommand\SymbolLegendIntroduce{m}{%
+  \ifSymbolLegendEnabled\ifSL@recording
+    \directlua{symbollegend.mark('\luaescapestring{#1}', true)}%
+  \fi\fi
+}
+\NewDocumentCommand\SymbolLegendWithoutRecording{m}{%
+  \begingroup\SL@recordingfalse #1\endgroup
+}
+\pdfstringdefDisableCommands{%
+  \def\SymbolLegendUse#1{}\def\SymbolLegendIntroduce#1{}%
+}
+
+\newcommand\SymbolLegendEntry[1]{%
+  \edef\SL@label{\csname SL@label@#1\endcsname}%
+  \@ifundefined{r@\SL@label}{%
+    \PackageWarning{symbol-legend}{Unresolved definition label \SL@label.
+      Build/import the definition and rerun before publishing}}{}%
+  \setbox\SL@symbolbox=\hbox{\csname SL@symbol@#1\endcsname}%
+  \ifdim\wd\SL@symbolbox>\linewidth
+    \PackageError{symbol-legend}{Symbol #1 exceeds the legend width}%
+      {Increase SymbolLegendWidth or shorten its display notation.}%
+  \fi
+  % Link the complete entry, including the symbol and explanation. A single
+  % fixed-width box gives PDF readers one generous, non-overlapping tap area.
+  \setbox\SL@entrybox=\vbox{%
+    \hsize=\linewidth
+    \ifSymbolLegendCompact
+      \noindent\box\SL@symbolbox\enspace
+      \csname SL@meaning@#1\endcsname\par\nobreak
+    \else
+      \noindent\box\SL@symbolbox\par\nobreak
+      \noindent\csname SL@meaning@#1\endcsname\par\nobreak
+    \fi
+    \noindent
+    \ifcsname SL@reading@#1\endcsname
+      Einführung, S.~\pageref*{\SL@label}%
+    \else
+      Def.~\ref*{\SL@label}, S.~\pageref*{\SL@label}%
+    \fi\par}%
+  \directlua{symbollegend.assert_box_fits(\number\SL@entrybox,
+    \number\linewidth, '\luaescapestring{#1}')}%
+  \noindent\hyperref[\SL@label]{\box\SL@entrybox}\par
+  \ifSymbolLegendCompact\vskip4pt\else\vskip7pt\fi
+}
+\newcommand\SL@render{%
+  \ifx\SLPageEntries\@empty\else
+    \begingroup
+    \SL@recordingfalse
+    \setbox\SL@box=\vbox{%
+      % Shipout may interrupt a colored box; never inherit that color state.
+      \color{black}%
+      \hsize=\SymbolLegendWidth\linewidth=\hsize
+      \parindent=0pt\parskip=0pt
+      \normalfont\fontsize{9}{11}\selectfont\raggedright
+      \textbf{Symbole dieser Seite}\par\vskip6pt
+      \SLPageEntries
+    }%
+    \directlua{symbollegend.assert_box_fits(\number\SL@box,
+      \number\SymbolLegendWidth)}%
+    \ifdim\dimexpr\ht\SL@box+\dp\SL@box\relax>\textheight
+      \PackageError{symbol-legend}{Legend too tall on page \thepage}%
+        {Increase the reserved space or shorten the registered meanings.
+         No entries may be silently clipped or moved to another page.}%
+    \fi
+    \SL@x=\dimexpr1in+\hoffset+\oddsidemargin+\textwidth+\SymbolLegendGap\relax
+    \if@twoside\ifodd\c@page\else
+      \SL@x=\dimexpr1in+\hoffset+\evensidemargin-\SymbolLegendGap-\SymbolLegendWidth\relax
+    \fi\fi
+    \SL@y=\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax
+    \put(\strip@pt\SL@x,-\strip@pt\SL@y){%
+      \makebox(0,0)[lt]{\box\SL@box}}%
+    \endgroup
+  \fi
+}
+\AtBeginDocument{%
+  \ifSymbolLegendEnabled
+    % Reserve outer space, preserving the body width when it already fits.
+    \SL@available=\dimexpr\paperwidth-\SymbolLegendInnerMargin
+      -\SymbolLegendEdgeMargin-\SymbolLegendWidth-\SymbolLegendGap\relax
+    \ifdim\SL@available<60mm
+      \PackageError{symbol-legend}{Insufficient room for text and legend}%
+        {Adjust the page size or the legend dimensions.}%
+    \fi
+    \ifdim\textwidth>\SL@available\textwidth=\SL@available\fi
+    \oddsidemargin=\dimexpr\SymbolLegendInnerMargin-1in-\hoffset\relax
+    \evensidemargin=\dimexpr\paperwidth-\SymbolLegendInnerMargin
+      -\textwidth-1in-\hoffset\relax
+    \hsize=\textwidth\linewidth=\textwidth\columnwidth=\textwidth
+    % Foreground runs after the kernel's DiscardShipoutBox decision. Collect
+    % the original page before typesetting this hook's legend material.
+    \AddToHook{shipout/foreground}[symbol-legend]{%
+      \directlua{symbollegend.collect(\number\ShipoutBox)}%
+      \SL@render}%
+  \fi
+}
+\makeatother

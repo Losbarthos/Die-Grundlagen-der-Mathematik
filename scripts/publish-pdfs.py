@@ -1,7 +1,9 @@
 """Publish PDFs in subject folders with working relative links between volumes.
 
-Only remote PDF paths change; pages, named destinations and metadata are
-cloned from LuaLaTeX. --audit-only checks the published set without compiling.
+Remote PDF paths are adjusted, and local reading-legend links use explicit
+whole-page destinations for reader compatibility. Pages, named destinations
+and metadata are cloned from LuaLaTeX. --audit-only checks the published set
+without compiling.
 --organize-existing sorts the current publications without rebuilding them.
 """
 from __future__ import annotations
@@ -18,7 +20,7 @@ import tempfile
 from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
-from pypdf.generic import DictionaryObject, NameObject, TextStringObject
+from pypdf.generic import ArrayObject, DictionaryObject, IndirectObject, NameObject, TextStringObject
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "output"
@@ -76,11 +78,15 @@ NULLPRODUCTS_NAMES = {
     "_B37-nullproducts-reading.pdf": "Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf",
     "_B37-nullproducts-proofs.pdf": "Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf",
 }
+ZERO_TRANSPORT_NAMES = {
+    "_B28-zero-transport-reading.pdf": "Bd. 28 - Nullelement-Transport - Lesefassung.pdf",
+    "_B28-zero-transport-proofs.pdf": "Bd. 28 - Nullelement-Transport - Beweistabellen.pdf",
+}
 COMPACTNESS_NAMES = {
     "_B47-compactness-reading.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf",
     "_B47-compactness-proofs.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf",
 }
-SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **COMPACTNESS_NAMES}
+SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **ZERO_TRANSPORT_NAMES, **COMPACTNESS_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
     **{name: "Mogiljanskaja-Gegenbeispiel" for name in MOGILJANSKAJA_NAMES.values()},
@@ -92,6 +98,7 @@ SUPPLEMENT_TOPICS = {
     **{name: "Frankls Spezialfälle" for name in FRANKL_NAMES.values()},
     **{name: "Gruppenrekonstruktion" for name in RECONSTRUCTION_NAMES.values()},
     **{name: "Nullprodukt-Rekonstruktion" for name in NULLPRODUCTS_NAMES.values()},
+    **{name: "Nullelement-Transport" for name in ZERO_TRANSPORT_NAMES.values()},
     **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
 }
 
@@ -125,6 +132,49 @@ def rewrite_remote_links(writer, source, destination, names):
             NameObject("/F"): TextStringObject(relative),
             NameObject("/UF"): TextStringObject(relative),
         })
+
+
+def rewrite_reading_legend_links(writer):
+    """Use explicit Fit destinations for slreading links in this cloned PDF.
+
+    The destination names remain available for other references. Resolve the
+    cloned destination against the writer's actual page tree: source-reader
+    object numbers need not survive cloning. Other local/remote links retain
+    their original destination and zoom behavior.
+    """
+    destinations = writer.named_destinations
+    pages = {(page.indirect_reference.idnum, page.indirect_reference.generation):
+             page.indirect_reference for page in writer.pages}
+    replacements = []
+    for page in writer.pages:
+        for reference in page.get("/Annots", []):
+            annotation = reference.get_object()
+            action = annotation.get("/A")
+            if action is not None:
+                action = action.get_object()
+                if action.get("/S") != "/GoTo":
+                    continue
+                container, key = action, NameObject("/D")
+            else:
+                container, key = annotation, NameObject("/Dest")
+            destination = container.get(key)
+            if not isinstance(destination, str) or not destination.startswith("slreading:"):
+                continue
+            if destination not in destinations:
+                raise ValueError(f"Missing reading introduction destination {destination!r}")
+            target = destinations[destination].page
+            if not isinstance(target, IndirectObject) or target.pdf is not writer:
+                raise ValueError(f"Reading introduction has no document page: {destination!r}")
+            page_reference = pages.get((target.idnum, target.generation))
+            if page_reference is None:
+                raise ValueError(f"Reading introduction is not in the page tree: {destination!r}")
+            replacements.append((container, key, ArrayObject([
+                page_reference, NameObject("/Fit"),
+            ])))
+    # Validate every target before changing any action in the cloned writer.
+    for container, key, destination in replacements:
+        container[key] = destination
+    return len(replacements)
 
 
 def install_organized(sources, staged_paths, backup_root):
@@ -226,6 +276,7 @@ def organize_existing(names):
         if needs_update:
             writer = PdfWriter(clone_from=reader)
             rewrite_remote_links(writer, source, destination, aliases)
+            rewrite_reading_legend_links(writer)
             with staged.open("wb") as file:
                 writer.write(file)
             writer.close()
@@ -326,6 +377,8 @@ def file_name(action):
 
 def audit_local_targets(reader, path):
     names = set(reader.named_destinations)
+    page_references = {(page.indirect_reference.idnum, page.indirect_reference.generation)
+                       for page in reader.pages}
     total = 0
     for page in reader.pages:
         for reference in page.get("/Annots", []):
@@ -339,6 +392,15 @@ def audit_local_targets(reader, path):
             if isinstance(destination, str):
                 if str(destination) not in names:
                     raise ValueError(f"{path.name}: missing local destination {destination!r}")
+                total += 1
+            elif isinstance(destination, ArrayObject):
+                if len(destination) < 2 or not isinstance(destination[0], IndirectObject):
+                    raise ValueError(f"{path.name}: malformed explicit local destination {destination!r}")
+                reference = destination[0]
+                if (reference.idnum, reference.generation) not in page_references:
+                    raise ValueError(f"{path.name}: explicit local destination is not a document page")
+                if destination[1] not in {"/XYZ", "/Fit", "/FitH", "/FitV", "/FitR", "/FitB", "/FitBH", "/FitBV"}:
+                    raise ValueError(f"{path.name}: invalid explicit local view {destination[1]!r}")
                 total += 1
     return total
 
@@ -402,6 +464,8 @@ def main():
                         help="Also publish both group-reconstruction companion editions; require both build artifacts.")
     parser.add_argument("--nullproducts", action="store_true",
                         help="Also publish both null-product reconstruction editions; require both build artifacts.")
+    parser.add_argument("--zero-transport", action="store_true",
+                        help="Also publish both general zero-transport editions; require both build artifacts.")
     parser.add_argument("--compactness", action="store_true",
                         help="Also publish both compactness editions; require both build artifacts.")
     parser.add_argument("--bands", nargs="+", metavar="Bnn",
@@ -412,7 +476,7 @@ def main():
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     names.update(SUPPLEMENT_NAMES)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.compactness or args.bands:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.zero_transport or args.compactness or args.bands:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
@@ -562,6 +626,19 @@ def main():
     all_publications.extend(publication for publication in nullproducts_publications
                             if publish_nullproducts or publication[1].is_file())
 
+    zero_transport_publications = [
+        (ROOT / "registry" / "zero-transport" / source, publication_path(destination))
+        for source, destination in ZERO_TRANSPORT_NAMES.items()
+    ]
+    publish_zero_transport = args.zero_transport or (
+        not args.bands and not args.audit_only
+        and any(source.is_file() for source, _ in zero_transport_publications)
+    )
+    if publish_zero_transport:
+        publications.extend(zero_transport_publications)
+    all_publications.extend(publication for publication in zero_transport_publications
+                            if publish_zero_transport or publication[1].is_file())
+
     compactness_publications = [
         (ROOT / "registry" / "compactness" / source, publication_path(destination))
         for source, destination in COMPACTNESS_NAMES.items()
@@ -590,6 +667,7 @@ def main():
             reader = readers[source]
             writer = PdfWriter(clone_from=reader)
             rewrite_remote_links(writer, source, destination, names)
+            rewrite_reading_legend_links(writer)
             destination.parent.mkdir(parents=True, exist_ok=True)
             temporary = destination.with_suffix(".pdf.tmp")
             with temporary.open("wb") as file:

@@ -3,6 +3,7 @@ param(
     [string]$Python = 'python',
     [switch]$EditionsOnly,
     [switch]$SkipVolumeBuild,
+    [switch]$SkipZeroTransportBuild,
     [switch]$SkipMain,
     [switch]$SkipPublish
 )
@@ -45,6 +46,17 @@ try {
             }
         }
     }
+    if ($SkipZeroTransportBuild) {
+        # build-all has just built the prerequisite pair. A manual skip must
+        # still provide every imported artifact, including the reading target.
+        foreach ($edition in @('proofs', 'reading')) {
+            foreach ($extension in @('aux', 'pdf', 'registry.tsv')) {
+                Assert-Artifact -RelativePath "registry/zero-transport/_B28-zero-transport-$edition.$extension" -NotBefore ([datetime]::MinValue) -AllowEmpty:($edition -eq 'reading' -and $extension -eq 'registry.tsv')
+            }
+        }
+    } else {
+        & (Join-Path $PSScriptRoot 'build-zero-transport-editions.ps1') -EditionsOnly -Python $Python
+    }
     if (-not $SkipVolumeBuild) {
         Invoke-NullproductsLatexmk -Source $graph['B37'].Source -Job '_B37'
     }
@@ -72,7 +84,7 @@ try {
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B00', 'B37')
     }
     if (-not $SkipPublish) {
-        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts')
+        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport')
         if ($SkipMain) { $arguments += '--skip-main' }
         & $Python @arguments
         if ($LASTEXITCODE -ne 0) { throw 'Nullproducts publication or link audit failed.' }
