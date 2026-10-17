@@ -66,6 +66,7 @@ try {
     & $Python (Join-Path $PSScriptRoot 'nullproducts-editions.py') prepare-reading
     if ($LASTEXITCODE -ne 0) { throw 'Null-product reading import preparation failed.' }
     Invoke-NullproductsLatexmk -Source 'editions/b37-nullproducts-reading.tex' -Job '_B37-nullproducts-reading' -Directory 'registry/nullproducts'
+    & (Join-Path $PSScriptRoot 'build-finite-semigroups-reading.ps1') -Python $Python
     & $Python (Join-Path $PSScriptRoot 'nullproducts-editions.py') audit
     if ($LASTEXITCODE -ne 0) { throw 'Nullproducts source, identity or PDF audit failed.' }
     if (-not $SkipVolumeBuild) {
@@ -84,7 +85,7 @@ try {
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B00', 'B37')
     }
     if (-not $SkipPublish) {
-        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport')
+        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport', '--finite-semigroups')
         if ($SkipMain) { $arguments += '--skip-main' }
         & $Python @arguments
         if ($LASTEXITCODE -ne 0) { throw 'Nullproducts publication or link audit failed.' }

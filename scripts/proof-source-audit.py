@@ -182,6 +182,7 @@ def main():
     sources.extend(sorted((ROOT / "tex/b17/integers").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b28/mogiljanskaja").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b28/bracketing").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b28/power").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b41/differences").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b45/semilattice").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b46/frankl").glob("*.tex")))

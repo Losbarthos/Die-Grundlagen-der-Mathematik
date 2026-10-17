@@ -14,9 +14,12 @@ aufbaut.**
 [PDF catalogue / PDF-Verzeichnis](VOLUMES.md) · [Building](BUILDING.md) ·
 [Contributing](CONTRIBUTING.md) · [License / Lizenz](LICENSE.md)
 
-Die PDFs unter `output/` sind in elf nummerierte Themenordner gegliedert.
+Die regulären PDFs unter `output/` sind in elf nummerierte Themenordner gegliedert.
 Die Hauptbände stehen direkt im jeweiligen Themenordner; ergänzende
-Ausarbeitungen liegen darunter in `Ergänzungen/<Thema>/`.
+Ausarbeitungen liegen darunter in `Ergänzungen/Bd. NN Titel/<Thema>/`.
+Der Bandordner trägt die zweistellige Nummer und den Titel des zugehörigen Hauptbands.
+Lesefassungen ohne Tabellenbeweis-Begleitband stehen mitsamt ihren
+Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweiligen Themenordner.
 Die Bandnummern bleiben erhalten; die Ordnerzuordnung und Hinweise für
 reMarkable stehen im [Bandverzeichnis](VOLUMES.md).
 
@@ -27,8 +30,8 @@ Gruppen und Ringe sind ab Band 40 nach Strukturklassen auf eigene Bände verteil
 
 Als Pilot einer zusätzlichen Lesefassung ist der Satz von Cantor–Bernstein
 aus Band 08 in zwei verknüpften Auszügen verfügbar:
-[Lesefassung](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) und
-[Beweistabellen](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>).
+[Lesefassung](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) und
+[Beweistabellen](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>).
 Die reguläre Band- und Gesamtausgabe enthält den Hauptsatz und verlinkt
 unmittelbar dessen Beweis in den Beweistabellen. Dort stehen eine Definition,
 sieben Hilfssätze, drei H-Hilfsresultate und alle acht Tabellenbeweise.
@@ -43,8 +46,8 @@ und Ableitungstabellen im Beweisband.
 
 Nach demselben Prinzip ist das Mogiljanskaja-Gegenbeispiel aus Band 28
 ausgelagert:
-[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Lesefassung.pdf>) und
-[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Beweistabellen.pdf>).
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Beweistabellen.pdf>).
 Die Lesefassung erklärt vollständig, warum nicht isomorphe Halbgruppen
 isomorphe Potenzhalbgruppen besitzen können. Die Beweistabellen enthalten
 die formalen Ableitungen einschließlich der Einzelargumente M1–M17 und
@@ -58,8 +61,8 @@ den Begleitwerken. Für formale Verweise sind die Beweistabellen mit dem
 eigenen Nummernpräfix `28E` maßgeblich.
 
 Auch der Dedekindsche Rekursionssatz aus Band 10 besitzt zwei Begleitfassungen:
-[Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf>) und
-[Beweistabellen](<output/04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf>).
+[Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf>) und
+[Beweistabellen](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf>).
 Band 10 und der Gesamtband enthalten die Hauptaussage, ihre Bedeutung und
 die Rekursionsabbildung mit den für Anwendungen nötigen Eigenschaften.
 Die Konstruktion über den kleinsten rekursionsadmissiblen Graphen und ihre
@@ -70,8 +73,8 @@ Ein [Ausbauvorschlag bis zu Gödels Unvollständigkeitssätzen](docs/goedel-ausb
 beschreibt mögliche zusätzliche Fachbände und ihre Voraussetzungen.
 
 Die Klammerungsunabhängigkeit endlicher Halbgruppenprodukte ist ebenfalls
-in einer [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf>)
-und einem [Beweisband](<output/07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf>) ausgearbeitet.
+in einer [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf>)
+und einem [Beweisband](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf>) ausgearbeitet.
 „Warum wir Klammern weglassen dürfen“ führt von den Wörtern und Bäumen
 aus Band 27 über das Blockgesetz zur Unabhängigkeit des Produktwerts
 von der Klammerung. Band 28 und der Gesamtband enthalten den Hauptsatz
@@ -81,8 +84,8 @@ ausschließlich im Beweisband. Dort stehen alle sieben Tabellenbeweise;
 der Schlussbeweis verweist auf den Hauptsatz in Band 28.
 
 Die Konstruktion der ganzen Zahlen aus Band 17 ist in einer
-[Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Lesefassung.pdf>)
-und einem [Beweisband](<output/04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Beweistabellen.pdf>) ausgearbeitet.
+[Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Lesefassung.pdf>)
+und einem [Beweisband](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Beweistabellen.pdf>) ausgearbeitet.
 Die Lesefassung führt von Differenzenpaaren über Negation, Addition und
 Multiplikation zu Ordnung, Normalformen, Diskretheit und zweiseitiger Induktion.
 Sie endet mit dem Nachweis der vollständigen Ganzzahlaxiomatik und erklärt
@@ -93,8 +96,8 @@ behalten die vollständige Axiomatik, den Modellsatz und die öffentlich
 benötigten Aussagen mit ihren bisherigen Nummern und Verweiszielen.
 
 Die formalen Differenzen und der Einbettungssatz aus Band 41 besitzen eine
-[Lesefassung](<output/08 Gruppen/Ergänzungen/Formale Differenzen/Bd. 41 - Formale Differenzen - Lesefassung.pdf>)
-und einen [Beweisband](<output/08 Gruppen/Ergänzungen/Formale Differenzen/Bd. 41 - Formale Differenzen - Beweistabellen.pdf>).
+[Lesefassung](<output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/Bd. 41 - Formale Differenzen - Lesefassung.pdf>)
+und einen [Beweisband](<output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/Bd. 41 - Formale Differenzen - Beweistabellen.pdf>).
 „Wie aus Monoiden Gruppen werden“ knüpft an die Zahlkonstruktion aus Band 17
 an und verallgemeinert ihr additives Bauprinzip: Jedes kommutative kürzbare
 Monoid lässt sich in eine abelsche Gruppe einbetten. Die Lesefassung erklärt
@@ -113,8 +116,8 @@ Die Hilfssätze werden jeweils vor ihrer ersten Verwendung hergeleitet.
 
 Die Entsprechung zwischen Halbverbandsoperationen und Ordnungen mit Paarsuprema
 aus Band 45 besitzt ebenfalls eine
-[Lesefassung](<output/05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Lesefassung.pdf>) und
-[Beweistabellen](<output/05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Beweistabellen.pdf>).
+[Lesefassung](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Lesefassung.pdf>) und
+[Beweistabellen](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Beweistabellen.pdf>).
 „Wie aus einer Rechenregel eine Ordnung wird“ führt am Vereinigungsbeispiel
 von den Rechengesetzen zur Ordnung und über Paarsuprema wieder zurück.
 Die 19 Kerntabellen und vier Beispieltabellen stehen im Ergänzungsband.
@@ -125,8 +128,8 @@ und im Gesamtband erhalten; die Ergänzungen verweisen auf diese Aussagen.
 
 Die Spezialfälle von Frankls Vermutung bei kleinen Mengengliedern aus Band 46
 besitzen eine
-[Lesefassung](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Lesefassung.pdf>) und
-[Beweistabellen](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Beweistabellen.pdf>).
+[Lesefassung](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Lesefassung.pdf>) und
+[Beweistabellen](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Beweistabellen.pdf>).
 „Warum ein Element in mindestens der Hälfte vorkommt“ führt von einem
 Mengenbeispiel über injektive Zuordnungen zum Einermengenfall und zur
 Vierfelderzerlegung für den Zweiermengenfall. Auch der Fall eines gemeinsamen
@@ -140,8 +143,8 @@ die Hilfssätze und Beweise stehen im ergänzenden Beweisband.
 Die allgemeine Frankl-Vermutung wird dabei nicht bewiesen.
 
 Die Gruppenrekonstruktion aus Band 40 besitzt eine
-[Lesefassung](<output/08 Gruppen/Ergänzungen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf>) und
-[Beweistabellen](<output/08 Gruppen/Ergänzungen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf>).
+[Lesefassung](<output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf>) und
+[Beweistabellen](<output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf>).
 „Wie man eine Gruppe in ihren Mengenprodukten wiedererkennt“ führt von der
 Multiplikationstafel einer Zweiergruppe über die Erkennung von Einermengen
 als Einheiten bis zum stärkeren Rekonstruktionssatz: Ist eine Grundstruktur
@@ -152,9 +155,43 @@ Zwölf Tabellen sind ausgelagert; alle Aussagen, Nummern und Verweisziele
 bleiben in Band 40 und im Gesamtband erhalten. Die allgemeinen Grundlagen
 der Einheitengruppentheorie bleiben im Fachband.
 
+Die [Ausgabe zur e-Koordinatenabbildung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf>)
+fasst den Originalabschnitt 28.2.13 aus Band 28 mit fünf Definitionen, vier Axiomen
+und sechzehn Sätzen zusammen. Sie enthält die unveränderten Beweise aus Band 28
+und die zentral erzeugten automatischen Nachschlagetabellen unter den Beweisen.
+
+Der Beweis, dass die Potenzhalbgruppe wieder eine Halbgruppe ist, besitzt eine
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Beweistabellen.pdf>).
+„Halbgruppenbeweis der Potenzhalbgruppe“ erklärt das Mengenprodukt und
+beweist seine Assoziativität mit einer kurzen Mengengleichheitskette.
+Die Auswertungssätze Th. 3.20.1.2 und Th. 3.20.1.3 aus Band 3 lösen
+verschachtelte Termbildmengen auf; Th. 3.18.1.6 begründet den
+Übergang von punktweise gleichen Termen zu gleichen Mengen.
+Die Lesefassung beschriftet die Gleichheitszeichen unmittelbar mit den
+Satzreferenzen. Sie enthält die vollständige Multiplikationstabelle des
+Dreierbeispiels und endet mit einem historischen Abriss samt Originalquellen.
+Die Beweistabellen
+führen die Assoziativität in einer kurzen gemeinsamen Tabelle aus.
+Die Inklusion des Mengenprodukts in den Träger (H3) wird zuvor in einer
+eigenen formalen Tabelle bewiesen und im Hauptbeweis unmittelbar verwendet.
+Die übrigen Hilfssätze sind an ihren Beweisergebnissen mit der vollständigen
+Satznummer gekennzeichnet.
+Die zehn nur hierfür benötigten Hilfsaussagen H7–H16 entfallen.
+Die später verwendeten H1–H6 und H17 sowie alle übrigen Aussagen behalten
+ihre Nummern und Verweisziele in Band 28 und im Gesamtband.
+Das Mengenprodukt ist in Def. 28.2.4.1 unmittelbar als Termbild definiert;
+H18 hält diese Definitionsanwendung unter seiner bisherigen Nummer fest.
+
+Die [Lesefassung „Endliche Halbgruppen erkennen“](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>)
+führt anhand einer Dreierhalbgruppe von wiederkehrenden Potenzen und Idealen
+über Multiplikationstafeln bis zur Rekonstruktionsfrage. Band 37 enthält
+die Aussagen und ihre Beweistabellen; die Lesefassung erklärt den Beweisweg
+und die Reichweite des endlichen Suchverfahrens.
+
 Die Nullprodukt-Rekonstruktion aus Band 37 besitzt eine
-[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) und
-[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf>).
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf>).
 „Was Nullprodukte verraten“ beweist den Spezialfall einer endlichen Halbgruppe
 mit Null und genau zwei Produktwerten. Die Lesefassung erklärt, wie
 Nullproduktprofile, ihre Ordnung und endliche Fasergrößen eine passende
@@ -162,13 +199,41 @@ Bijektion liefern. Der öffentliche Hauptsatz steht in Band 37; die privaten
 Hilfssätze stehen unter `37E` in den Beweistabellen. Die allgemeine endliche
 Potenzhalbgruppenvermutung wird damit nicht entschieden.
 
+Die aktuelle Nullprodukt-Lesefassung enthält eine Symbollegende mit Links
+zu den Einführungsstellen. Sie verwendet den allgemeinen Nullelement-Transport,
+der ohne Endlichkeitsvoraussetzung in einer eigenen
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/Bd. 28 - Nullelement-Transport - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/Bd. 28 - Nullelement-Transport - Beweistabellen.pdf>)
+zur Ergänzung von Band 28 bewiesen wird. Diese Ergänzung nutzt die
+Nullnotation aus Band 33.
+
+Die experimentelle [Lesefassung zur Kontextäquivalenz](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/experimentell/Kontextäquivalenz/Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf>)
+„Was zweiseitige Produkte verraten“ führt die Relation gleicher
+zweiseitiger Produktwerte ein. Ein durchgehendes Fünferbeispiel begleitet
+die Beweise für Äquivalenz, Kongruenz und Klassenmultiplikation; neue
+Symbole werden am rechten Seitenrand erklärt. Der eigenständige Text
+unterscheidet Kontextprofile von Nullproduktprofilen und behandelt den
+ungenutzten Parameterquantor der Ausgangsformel ausdrücklich. Ein
+historischer Ausblick mit Quellen ordnet die Relation in Kopamus
+Kongruenzfamilie ein und zeigt den Einfluss längerer Produktblöcke.
+
 Totale Beschränktheit und Kompaktheit aus Band 47 werden in einer
-[Lesefassung](<output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf>)
-und einem [Beweisband](<output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf>) ausgearbeitet.
+[Lesefassung](<output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf>)
+und einem [Beweisband](<output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf>) ausgearbeitet.
 Die Lesefassung führt von endlichen Epsilon-Netzen zur Gleichwertigkeit von
 Kompaktheit, Folgenkompaktheit sowie Vollständigkeit und totaler Beschränktheit.
 Die neuen Definitionen und Sätze stehen in Band 47; ihre vollständigen Beweise
 sind ausgelagert. Drei private Hilfssätze erhalten im Beweisband das Präfix `47E`.
+Beide Begleitfassungen stehen unter
+`Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/`, weil die Beweise in
+Prosa und ohne Tabellenbeweisteil ausgeführt sind.
+
+Unter `Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/` stehen die eigenständigen Lesefassungen zur
+[Zweiprodukt-Rekonstruktion](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Zweiprodukt-Rekonstruktion/Bd. 37 - Zweiprodukt-Rekonstruktion - Lesefassung.pdf>),
+[Dreiprodukt-Rekonstruktion](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Dreiprodukt-Rekonstruktion/Bd. 37 - Dreiprodukt-Rekonstruktion - Lesefassung.pdf>) und zu
+[Kontextprofilen und Induktion](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Kontextprofile und Induktion/Bd. 37 - Kontextprofile und Induktion - Lesefassung.pdf>).
+Ihre Herleitungen sind in Prosa ausgeführt; sie besitzen keinen zugehörigen
+Tabellenbeweisteil.
 
 ## English
 

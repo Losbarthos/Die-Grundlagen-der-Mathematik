@@ -1,0 +1,411 @@
+\chapter{Auswertung von Termbildmengen}
+\section{Einsetzung erzeugender Terme}
+
+Eine Zwischenmenge kann durch ihre erzeugenden Terme ausgewertet werden:
+Ein Zeuge aus dieser Menge wird durch die Indizes ersetzt, die ihn erzeugen.
+Der folgende Satz gilt für einen beliebigen Mengenterm \(s(i,j)\) und
+ein beliebiges Prädikat \(F(u)\), jeweils mit festen Parametern.
+Die verschiedenen Bindungsvariablen \(u,i,j\) kommen nicht in
+\(U,I,J\) oder in diesen festen Parametern frei vor; \(u\) kommt auch
+in \(s(i,j)\) nicht frei vor. Die Einsetzung \(u:=s(i,j)\) in \(F\)
+ist kollisionsfrei. Insbesondere werden gebundene Variablen in \(F\)
+nötigenfalls vorher umbenannt. Die Indexmengen dürfen leer sein.
+
+\FormulaThmDeltaK[Auswertung einer durch Terme dargestellten Zwischenmenge]{%
+  \begin{aligned}[t]
+    &\forall u\,\bigl(u\in U\leftrightarrow
+      \exists i\in I\,\exists j\in J\;u=s(i,j)\bigr)\vdash{}\\[-2pt]
+    &(\exists u\in U\;F(u))\leftrightarrow
+      (\exists i\in I\,\exists j\in J\;F(s(i,j)))
+  \end{aligned}
+}{TermImageWitnessSubstitution}{%
+  \DeltaRow{Mengen}{U\dsep I\dsep J\dsep u\dsep i\dsep j}
+  \DeltaRow{Mengenterm}{s(i,j)}
+  \DeltaRow{Prädikat}{F(u)}
+}
+
+Zum Beweis wird zunächst die Vertauschung zweier unbeschränkter
+Existenzquantoren in beiden Richtungen festgehalten. Dabei ist
+\(H(a,b)\) ein beliebiges Prädikat mit frischen Bindungsvariablen
+\(a,b\). In den anschließenden Zeilen steht
+\(G(i,j)\) als bloße Abkürzung für \(i\in I\land j\in J\).
+Beschränkte Quantoren werden durch ihre Mitgliedschaftsbedingungen
+entfaltet; die Konjunktionen dürfen dabei nach dem Kommutativ- und
+Assoziativgesetz umgeordnet werden.
+
+\begin{tabproofsplitwide}
+  \proofpartwide{Vertauschung der Existenzquantoren}
+  \proofstepwidestar[1]{\exists a\,\exists b\;H(a,b)}{\rA}
+  \proofstepwidestar[1]{\exists b\,\exists a\;H(a,b)}{%
+    \FormulaRefAuto{\exists x\exists yF(x,y)\vdash
+      \exists y\exists x F(x,y)}[thm]{1}}
+  \proofstepwidestar[]{(\exists a\,\exists b\;H(a,b))\rightarrow
+    (\exists b\,\exists a\;H(a,b))}{\rRI{1,2}}
+  \proofstepwidestar[4]{\exists b\,\exists a\;H(a,b)}{\rA}
+  \proofstepwidestar[4]{\exists a\,\exists b\;H(a,b)}{%
+    \FormulaRefAuto{\exists x\exists yF(x,y)\vdash
+      \exists y\exists x F(x,y)}[thm]{4}}
+  \proofstepwidestar[]{(\exists b\,\exists a\;H(a,b))\rightarrow
+    (\exists a\,\exists b\;H(a,b))}{\rRI{4,5}}
+  \proofstepwidestar[]{(\exists a\,\exists b\;H(a,b))\leftrightarrow
+    (\exists b\,\exists a\;H(a,b))}{\rLRI{3,6}}
+  \closeproofpartwide
+
+  \proofpartwide{Auswertung der Zwischenmenge}
+  \setcounter{proofstepnr}{7}
+  \proofstepwidestar[8]{\forall u\,\bigl(u\in U\leftrightarrow
+    \exists i\in I\,\exists j\in J\;u=s(i,j)\bigr)}{\rA}
+  \proofstepwidestar[8]{\begin{aligned}[t]
+    &(\exists u\in U\;F(u))\leftrightarrow{}\\[-2pt]
+    &\quad\exists u\,\bigl((\exists i\in I\,\exists j\in J\;
+      u=s(i,j))\land F(u)\bigr)
+  \end{aligned}}{\rLRS{\rUE{8},\FormulaRefAuto{P\leftrightarrow P}[thm]}}
+  \proofstepwidestar[8]{\begin{aligned}[t]
+    &(\exists u\in U\;F(u))\leftrightarrow{}\\[-2pt]
+    &\quad\exists u\,\exists i\,\exists j\;
+      (G(i,j)\land(u=s(i,j)\land F(u)))
+  \end{aligned}}{%
+    \rLRS{\FormulaRefAuto{\exists x(P \land Q(x))\eqvdash
+      P \land \exists x(Q(x))}[thm],
+      \FormulaRefAuto{P\land Q\eqvdash Q\land P}[thm],
+      \FormulaRefAuto{P \land (Q \land R)\eqvdash
+        (P \land Q) \land R}[thm],9}}
+  \proofstepwidestar[8]{\begin{aligned}[t]
+    &(\exists u\in U\;F(u))\leftrightarrow{}\\[-2pt]
+    &\quad\exists i\,\exists j\,\exists u\;
+      (G(i,j)\land(u=s(i,j)\land F(u)))
+  \end{aligned}}{\rLRS{7,10}}
+  \proofstepwidestar[]{F(s(i,j))\leftrightarrow
+    \exists u\,(u=s(i,j)\land F(u))}{%
+    \FormulaRefAuto{Fa \eqvdash \exists x(x=a \land Fx)}[thm]}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\exists u\,(G(i,j)\land(u=s(i,j)\land F(u)))\\[-2pt]
+    &\quad\leftrightarrow(G(i,j)\land F(s(i,j)))
+  \end{aligned}}{%
+    \rLRS{12,\FormulaRefAuto{\exists x(P \land Q(x))\eqvdash
+      P \land \exists x(Q(x))}[thm]}}
+  \proofstepwidestar[8]{(\exists u\in U\;F(u))\leftrightarrow
+    (\exists i\in I\,\exists j\in J\;F(s(i,j)))}{%
+    \rLRS{13,\FormulaRefAuto{\exists x(P \land Q(x))\eqvdash
+      P \land \exists x(Q(x))}[thm],11}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+Zeile 11 verwendet Zeile 7 zweimal: zunächst für \(u,i\), dann für
+\(u,j\) unter dem äußeren Quantor \(\exists i\). Zeile 10 verwendet
+\FormulaRefAuto{\exists x(P \land Q(x))\eqvdash
+  P \land \exists x(Q(x))}[thm] jeweils für die von der gebundenen
+Variablen unabhängigen Konjunkte. Damit ist auch die Umformung der
+beschränkten Quantoren begründet; eine eigene Vertauschungsregel für
+beschränkte Quantoren wird nicht vorausgesetzt.
+
+Die übliche Bildformel ist eine Instanz dieses Satzes:
+\[
+  \{t(u)\mid u\in\{s(j)\mid j\in J\}\}
+    =\{t(s(j))\mid j\in J\}.
+\]
+Hier wird \(U=\{s(j)\mid j\in J\}\) gewählt; der erste Index läuft
+über \(J\), der zweite über die Einermenge \(\{\varnothing\}\),
+und der erzeugende Term hängt nur vom ersten Index ab. Mit
+\(F(u)\) als \(w=t(u)\) liefert
+\FormulaRefAuto{TermImageWitnessSubstitution}[thm] die Äquivalenz der
+beiden Elementkriterien aus
+\FormulaRefAuto{B27TermImageMembership}[thm]. Der zusätzliche
+Einermengenindex entfällt nach
+\FormulaRefAuto{x\in\{a\}\eqvdash x=a}[thm] und
+\FormulaRefAuto{a\in\{a\}}[thm]. Extensionalität ergibt die
+angezeigte Gleichheit. Auch bei leerem \(J\) ist kein Zeuge zu wählen.
+
+\medskip
+Die beiden folgenden Sätze werten eine innere Termbildmenge unmittelbar
+im ersten oder zweiten Argument eines weiteren Terms aus.
+Dabei sind \(f(a,b)\) und \(g(a,b)\) Mengenterme mit festen Parametern.
+Die verschiedenen Bindungsvariablen \(x,y,z,u,v,w\) kommen weder in
+\(X,Y,Z\) noch in diesen Parametern frei vor; alle Einsetzungen sind
+kollisionsfrei. Die Indexmengen dürfen leer sein.
+Die Mehrfachindex- und Operatorschreibweise ist bei
+\FormulaRefAuto{B27TermImageDef}[def] eingeführt.
+Die zugehörigen Paarindizes liegen in den entsprechenden kartesischen
+Produkten. Nach
+\FormulaRefAuto{(a,b)\in A\times B\eqvdash a\in A\land b\in B}[thm],
+\FormulaRefAuto{((a,b),c)\in (A\times B)\times C\ \eqvdash\ a\in A\land b\in B\land c\in C}[thm]
+und den gebündelten Existenzregeln ist
+\FormulaRefAuto{B27TermImageMembership}[thm] dann mit den angezeigten
+einzelnen Indexvariablen lesbar. Die Termbildmengen existieren nach
+\FormulaRefAuto{TermImageSetUniqueExists}[thm].
+
+\FormulaThmDeltaK[Auswertung einer Termbildmenge im zweiten Argument]{%
+  \begin{aligned}[t]
+    &\{f(x,v)\mid x\in X,\,
+      v\in\{g(y,z)\mid y\in Y,z\in Z\}\}\\[-2pt]
+    &\qquad=\{f(x,g(y,z))\mid x\in X,y\in Y,z\in Z\}
+  \end{aligned}
+}{TermImageCompositionRight}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep Z\dsep x\dsep y\dsep z\dsep v\dsep w}
+  \DeltaRow{Mengenterme}{f(a,b)\dsep g(a,b)}
+}
+
+Im Beweis sei \(U=\{g(y,z)\mid y\in Y,z\in Z\}\);
+\(M\) und \(N\) bezeichnen die linke und die rechte Menge der Aussage.
+\begin{tabproofwide}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall v\,(v\in U\leftrightarrow{}\\[-2pt]
+    &\quad\exists y\in Y\,\exists z\in Z\;v=g(y,z))
+  \end{aligned}}{\rUI{\FormulaRefAuto{B27TermImageMembership}[thm]}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in M\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists v\in U\;w=f(x,v)
+  \end{aligned}}{\FormulaRefAuto{B27TermImageMembership}[thm]}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in M\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists y\in Y\,\exists z\in Z\;
+      w=f(x,g(y,z))
+  \end{aligned}}{\rLRS{%
+    \FormulaRefAuto{TermImageWitnessSubstitution}[thm]{1},2}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in N\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists y\in Y\,\exists z\in Z\;
+      w=f(x,g(y,z))
+  \end{aligned}}{\FormulaRefAuto{B27TermImageMembership}[thm]}
+  \proofstepwidestar[]{M=N}{%
+    \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)
+      \eqvdash A=B}[thm]{\rUI{\rLRS{4,3}}}}
+\end{tabproofwide}
+
+\Needspace{32\baselineskip}
+\FormulaThmDeltaK[Auswertung einer Termbildmenge im ersten Argument]{%
+  \begin{aligned}[t]
+    &\{f(u,z)\mid u\in\{g(x,y)\mid x\in X,y\in Y\},\,
+      z\in Z\}\\[-2pt]
+    &\qquad=\{f(g(x,y),z)\mid x\in X,y\in Y,z\in Z\}
+  \end{aligned}
+}{TermImageCompositionLeft}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep Z\dsep x\dsep y\dsep z\dsep u\dsep w}
+  \DeltaRow{Mengenterme}{f(a,b)\dsep g(a,b)}
+}
+
+Im Beweis sei \(U=\{g(x,y)\mid x\in X,y\in Y\}\);
+\(M\) und \(N\) bezeichnen wieder die linke und die rechte Menge.
+\begin{tabproofwide}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &\forall u\,(u\in U\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists y\in Y\;u=g(x,y))
+  \end{aligned}}{\rUI{\FormulaRefAuto{B27TermImageMembership}[thm]}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in M\leftrightarrow{}\\[-2pt]
+    &\quad\exists u\in U\,\exists z\in Z\;w=f(u,z)
+  \end{aligned}}{\FormulaRefAuto{B27TermImageMembership}[thm]}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in M\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists y\in Y\,\exists z\in Z\;
+      w=f(g(x,y),z)
+  \end{aligned}}{\rLRS{%
+    \FormulaRefAuto{TermImageWitnessSubstitution}[thm]{1},2}}
+  \proofstepwidestar[]{\begin{aligned}[t]
+    &w\in N\leftrightarrow{}\\[-2pt]
+    &\quad\exists x\in X\,\exists y\in Y\,\exists z\in Z\;
+      w=f(g(x,y),z)
+  \end{aligned}}{\FormulaRefAuto{B27TermImageMembership}[thm]}
+  \proofstepwidestar[]{M=N}{%
+    \FormulaRefAuto{\forall x\,(x\in A\leftrightarrow x\in B)
+      \eqvdash A=B}[thm]{\rUI{\rLRS{4,3}}}}
+\end{tabproofwide}
+
+Die folgenden Fassungen nehmen die Darstellung der Zwischenmenge als
+Gleichheitsprämisse auf. Dabei sind \(f(a,b)\) und \(g(a,b)\) beliebige
+Mengenterme mit festen Parametern. Die jeweils verwendeten
+Bindungsvariablen \(x,y,z,u,v\) sind paarweise verschieden und kommen
+weder in \(X,Y,Z,U,V\) noch in diesen festen Parametern frei vor.
+Alle Einsetzungen sind kollisionsfrei. Die Indexmengen dürfen leer sein.
+
+% Die neuen Deklarationen verwenden standalone ihre nativen Theorem-Anker,
+% damit die bestehenden externen section*-Verweisziele erhalten bleiben.
+\begingroup
+\ifSubfilesClassLoaded{\let\phantomsection\relax}{}
+\Needspace{24\baselineskip}
+\FormulaThmDeltaK[Auswertung einer dargestellten Zwischenmenge im ersten Argument]{%
+  \begin{aligned}[t]
+    &U=\{g(x,y)\mid x\in X,y\in Y\}\vdash{}\\[-2pt]
+    &\{f(u,z)\mid u\in U,z\in Z\}\\[-2pt]
+    &\qquad=\{f(g(x,y),z)\mid x\in X,y\in Y,z\in Z\}
+  \end{aligned}
+}{TermImageCompositionLeftFromEquality}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep Z\dsep U\dsep x\dsep y\dsep z\dsep u}
+  \DeltaRow{Mengenterme}{f(a,b)\dsep g(a,b)}
+}
+\endgroup
+\begin{tabproofwide}
+  \proofstepwidestar[1]{U=\{g(x,y)\mid x\in X,y\in Y\}}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\{f(u,z)\mid u\in U,z\in Z\}\\[-2pt]
+    &\qquad=\{f(g(x,y),z)\mid x\in X,y\in Y,z\in Z\}
+  \end{aligned}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{1},
+    \FormulaRefAuto{TermImageCompositionLeft}[thm]}}
+\end{tabproofwide}
+
+\begingroup
+\ifSubfilesClassLoaded{\let\phantomsection\relax}{}
+\Needspace{24\baselineskip}
+\FormulaThmDeltaK[Einsetzen einer dargestellten Zwischenmenge im zweiten Argument]{%
+  \begin{aligned}[t]
+    &V=\{g(y,z)\mid y\in Y,z\in Z\}\vdash{}\\[-2pt]
+    &\{f(x,g(y,z))\mid x\in X,y\in Y,z\in Z\}\\[-2pt]
+    &\qquad=\{f(x,v)\mid x\in X,v\in V\}
+  \end{aligned}
+}{TermImageCompositionRightFromEquality}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep Z\dsep V\dsep x\dsep y\dsep z\dsep v}
+  \DeltaRow{Mengenterme}{f(a,b)\dsep g(a,b)}
+}
+\endgroup
+\begin{tabproofwide}
+  \proofstepwidestar[1]{V=\{g(y,z)\mid y\in Y,z\in Z\}}{\rA}
+  \proofstepwidestar[1]{\begin{aligned}[t]
+    &\{f(x,g(y,z))\mid x\in X,y\in Y,z\in Z\}\\[-2pt]
+    &\qquad=\{f(x,v)\mid x\in X,v\in V\}
+  \end{aligned}}{%
+    \rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{1},
+    \FormulaRefAuto{a=b\vdash b=a}[thm]{
+    \FormulaRefAuto{TermImageCompositionRight}[thm]}}}
+\end{tabproofwide}
+
+\clearpage
+\section{Zielmengen binärer Termbilder}
+
+Der folgende Satz gilt für beliebige Mengenterme \(t(x,y)\), auch für
+Funktionswerte \(F(x,y)\). Die Wertebedingung besagt dann, dass die
+betrachtete Abbildung auf \(U\times V\) Werte in \(Z\) annimmt.
+Die Teilmengen \(X\) und \(Y\) dürfen leer sein.
+
+\FormulaThmDeltaK[Zielmenge eines binären Termbildes auf Teilmengen]{%
+  \begin{aligned}[t]
+    &X\subseteq U\dsep Y\subseteq V\dsep
+      \forall x\in U\,\forall y\in V\;t(x,y)\in Z\vdash{}\\[-2pt]
+    &\{t(x,y)\mid x\in X,y\in Y\}\subseteq Z
+  \end{aligned}
+}{BinaryTermImageSubset}{%
+  \DeltaRow{Mengen}{U\dsep V\dsep X\dsep Y\dsep Z\dsep x\dsep y\dsep w}
+  \DeltaRow{Mengenterm}{t(x,y)}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\subseteq U}{\rA}
+  \proofstepwidestar[2]{Y\subseteq V}{\rA}
+  \proofstepwidestar[3]{\forall x\in U\,\forall y\in V\;t(x,y)\in Z}{\rA}
+  \proofstepwidestar[4]{x\in X}{\rA}
+  \proofstepwidestar[5]{y\in Y}{\rA}
+  \proofstepwidestar[1,4]{x\in U}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}[thm]{1,4}}
+  \proofstepwidestar[2,5]{y\in V}{%
+    \FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}[thm]{2,5}}
+  \proofstepwidestar[1,2,3,4,5]{t(x,y)\in Z}{%
+    \rRE{\rUE{\rRE{\rUE{3},6}},7}}
+  \proofstepwidestar[1,2,3]{\forall x\in X\,\forall y\in Y\;t(x,y)\in Z}{%
+    \rUI{\rRI{4,\rUI{\rRI{5,8}}}}}
+  \proofstepwidestar[1,2,3]{\{t(x,y)\mid x\in X,y\in Y\}\subseteq Z}{%
+    \FormulaRefAuto{B27TermImageSubset}[thm]{9}}
+\end{tabproofwide}
+
+In der letzten Zeile wird die Mehrfachindexschreibweise aus
+\FormulaRefAuto{B27TermImageDef}[def] als Paarindex gelesen.
+Für binäre Operatoren ergibt sich daraus die unmittelbar verwendbare Fassung:
+
+\Needspace{28\baselineskip}
+\FormulaThmDeltaK[Binäre Operatoren bilden Teilmengen in den Träger ab]{%
+  \begin{aligned}[t]
+    &\mathsf{BinOp}(A,\star)\dsep X\subseteq A\dsep Y\subseteq A\vdash{}\\[-2pt]
+    &\{x\star y\mid x\in X,y\in Y\}\subseteq A
+  \end{aligned}
+}{BinaryOperationImageSubset}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep Y\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+  \proofstepwidestar[2]{X\subseteq A\land Y\subseteq A}{\rA}
+  \proofstepwidestar[3]{x\in A}{\rA}
+  \proofstepwidestar[4]{y\in A}{\rA}
+  \proofstepwidestar[1,3,4]{x\star y\in A}{%
+    \FormulaRefAuto{BinaryOperationClosureAxiom}[ax]{1,3,4}}
+  \proofstepwidestar[1]{\forall x\in A\,\forall y\in A\;x\star y\in A}{%
+    \rUI{\rRI{3,\rUI{\rRI{4,5}}}}}
+  \proofstepwidestar[1,2]{\{x\star y\mid x\in X,y\in Y\}\subseteq A}{%
+    \FormulaRefAuto{BinaryTermImageSubset}[thm]{2,2,6}}
+\end{tabproofwide}
+
+\Needspace{22\baselineskip}
+\FormulaThmDeltaK[Binäre Termbilder gehören zur Potenzmenge des Trägers]{%
+  \begin{aligned}[t]
+    &\mathsf{BinOp}(A,\star)\dsep X\subseteq A\dsep Y\subseteq A\vdash{}\\[-2pt]
+    &\{x\star y\mid x\in X,y\in Y\}\in\powerset(A)
+  \end{aligned}
+}{BinaryOperationImagePowerset}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep Y\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+  \proofstepwidestar[2]{X\subseteq A\land Y\subseteq A}{\rA}
+  \proofstepwidestar[1,2]{\{x\star y\mid x\in X,y\in Y\}\subseteq A}{%
+    \FormulaRefAuto{BinaryOperationImageSubset}[thm]{1,2,2}}
+  \proofstepwidestar[1,2]{\{x\star y\mid x\in X,y\in Y\}\in\powerset(A)}{%
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}[thm]{3}}
+\end{tabproofwide}
+
+Nichtleerheit benötigt nur die Nichtleerheit der beiden Indexmengen.
+Der folgende Satz gilt deshalb allgemeiner für jeden Mengenterm \(t(x,y)\);
+für einen binären Operator wird \(t(x,y)=x\star y\) eingesetzt.
+
+\Needspace{28\baselineskip}
+\FormulaThmDeltaK[Nichtleerheit eines binären Termbildes]{%
+  X\neq\varnothing\dsep Y\neq\varnothing\vdash
+    \{t(x,y)\mid x\in X,y\in Y\}\neq\varnothing
+}{BinaryTermImageNonempty}{%
+  \DeltaRow{Mengen}{X\dsep Y\dsep x\dsep y}
+  \DeltaRow{Mengenterm}{t(x,y)}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{X\neq\varnothing}{\rA}
+  \proofstepwidestar[2]{Y\neq\varnothing}{\rA}
+  \proofstepwidestar[3]{x\in X}{\rA}
+  \proofstepwidestar[4]{y\in Y}{\rA}
+  \proofstepwidestar[3,4]{t(x,y)\in\{t(u,v)\mid u\in X,v\in Y\}}{%
+    \FormulaRefAuto{B27TermImageMembership}[thm]{\rEIStar{3,4,\rII}}}
+  \proofstepwidestar[3,4]{\{t(x,y)\mid x\in X,y\in Y\}\neq\varnothing}{%
+    \FormulaRefAuto{a\in A\vdash A\neq\varnothing}[thm]{5}}
+  \proofstepwidestar[1,2]{\{t(x,y)\mid x\in X,y\in Y\}\neq\varnothing}{\begin{gathered}
+    \RuleRef{EE}{\exists E}(\FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{1},3,\\[-2pt]
+    \RuleRef{EE}{\exists E}(\FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{2},4,6))
+  \end{gathered}}
+\end{tabproofwide}
+
+Die beiden Ergebnisse lassen sich für nichtleere Teilmengen zusammenfassen.
+
+\Needspace{30\baselineskip}
+\FormulaThmDeltaK[Binäre Operatoren bilden nichtleere Teilmengen auf nichtleere Teilmengen ab]{%
+  \begin{aligned}[t]
+    &\mathsf{BinOp}(A,\star)\dsep X,Y\in\PowNE{A}\vdash{}\\[-2pt]
+    &\{x\star y\mid x\in X,y\in Y\}\in\PowNE{A}
+  \end{aligned}
+}{BinaryOperationImageNonemptyPowerset}{%
+  \DeltaRow{Mengen}{A\dsep X\dsep Y\dsep x\dsep y}
+  \DeltaRow{Funktionen}{\star}
+}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\mathsf{BinOp}(A,\star)}{\rA}
+  \proofstepwidestar[2]{X\in\PowNE{A}\land Y\in\PowNE{A}}{\rA}
+  \proofstepwidestar[1,2]{\{x\star y\mid x\in X,y\in Y\}\in\powerset(A)}{\begin{gathered}
+    \FormulaRefAuto{BinaryOperationImagePowerset}[thm](1,\\[-2pt]
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2},\\[-2pt]
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2})
+  \end{gathered}}
+  \proofstepwidestar[2]{\{x\star y\mid x\in X,y\in Y\}\neq\varnothing}{\begin{gathered}
+    \FormulaRefAuto{BinaryTermImageNonempty}[thm](\\[-2pt]
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2},\\[-2pt]
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm]{2})
+  \end{gathered}}
+  \proofstepwidestar[1,2]{\{x\star y\mid x\in X,y\in Y\}\in\PowNE{A}}{\begin{gathered}
+    \FormulaRefAuto{NonemptyPowersetMembership}[thm](\\[-2pt]
+    \RuleRef{AI}{\land I}(\\[-2pt]
+    \FormulaRefAuto{x \in \powerset(A)\;\eqvdash\; x \subseteq A}[thm]{3},4))
+  \end{gathered}}
+\end{tabproofwide}

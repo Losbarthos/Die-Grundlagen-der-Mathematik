@@ -29,6 +29,7 @@ M.duplicate_policy = M.duplicate_policy or "error"       -- "error" | "warn" | "
 -- in-memory index (für Lookup im selben Compile)
 M.by_key = M.by_key or {}   -- key -> { record, record, ... }
 M.by_id  = M.by_id  or {}   -- id -> { env=..., label=... }
+M.by_label = M.by_label or {} -- label -> original statement and Delta context
 
 
 -- ---------- helpers ----------
@@ -37,9 +38,59 @@ local function escape_field(s)
   s = s or ""
   s = s:gsub("\\", "\\\\")
   s = s:gsub("\t", "\\t")
-  s = s:gsub("\r", "\\n")
+  s = s:gsub("\r", "\\r")
   s = s:gsub("\n", "\\n")
   return s
+end
+
+-- Fresh declarations outrank the previous local pass, which outranks imports.
+-- Keep this order identical for formula keys, IDs and statement metadata.
+local function source_rank(record)
+  if record.loaded == false then return 3 end
+  if record.self_loaded == true then return 2 end
+  return 1
+end
+
+local function remember_loaded_statement(record)
+  if not record.label or record.label == "" then return end
+  local existing = M.by_label[record.label]
+  if not existing or source_rank(record) > source_rank(existing) then
+    M.by_label[record.label] = record
+  elseif source_rank(record) == source_rank(existing)
+      and record.env == existing.env then
+    -- ID rows may precede structural rows, and legacy ID rows have no formula.
+    -- Enrich missing fields without letting a later import replace a winner.
+    for _, field in ipairs({"number", "display", "delta"}) do
+      if (existing[field] or "") == "" and (record[field] or "") ~= "" then
+        existing[field] = record[field]
+      end
+    end
+  end
+end
+
+-- Called by the declaration macros before register/register_id. The display
+-- formula is deliberately independent of the lookup key: normalized keys and
+-- symbolic IDs cannot reconstruct the statement that was printed for readers.
+function M.set_statement(label, env, number, display, delta)
+  label = label or ""
+  if label == "" then return end
+  local record = {
+    label = label, env = env or "", number = number or "",
+    display = display or "", delta = delta or "",
+    loaded = false, self_loaded = false,
+  }
+  M.by_label[label] = record
+  return record
+end
+
+local function fresh_statement(label, env, number)
+  local statement = M.by_label[label]
+  if not statement or statement.loaded ~= false or statement.env ~= env then
+    statement = M.set_statement(label, env, number, "", "")
+  elseif number and number ~= "" then
+    statement.number = number
+  end
+  return statement or {display = "", delta = "", number = number or ""}
 end
 
 local function join_tsv(fields)
@@ -415,10 +466,12 @@ function M.register(label, env, number, statement, title)
 
   local canon = alpha_normalize(statement)
   local key = make_key(canon)
+  local display = fresh_statement(label, env, number)
 
     local record = {
       label = label, env = env, number = number,
       key = key, canon = canon, title = title,
+      display = display.display, delta = display.delta,
       loaded = false,
       self_loaded = false, -- <--- ergänzen
     }
@@ -433,7 +486,9 @@ function M.register(label, env, number, statement, title)
     escape_field(number),
     escape_field(key),
     escape_field(canon),
-    escape_field(title)
+    escape_field(title),
+    escape_field(display.display),
+    escape_field(display.delta)
   })
 
   -- 1) gleicher (label,env) Eintrag vorhanden?
@@ -521,15 +576,22 @@ function M.register_id(id, env, label)
     end
   end
 
-  -- in-memory (fresh)
-  M.by_id[id] = { env = env, label = label, loaded = false, self_loaded = false }
+  local statement = fresh_statement(label, env)
+  -- in-memory (fresh); pure ID declarations also retain their printed number.
+  M.by_id[id] = {
+    env = env, label = label, number = statement.number,
+    loaded = false, self_loaded = false,
+  }
 
   -- persistieren in TSV
   local line = join_tsv({
     "ID",
     escape_field(id),
     escape_field(env),
-    escape_field(label)
+    escape_field(label),
+    escape_field(statement.number),
+    escape_field(statement.display),
+    escape_field(statement.delta)
   })
   append_line(M.registry_path, line)
 end
@@ -639,15 +701,17 @@ function M.reset_files()
 
   M.by_key = {}
   M.by_id  = {}
+  M.by_label = {}
 end
 
 -- --------- load previous registry (for forward references across runs) ---------
 local function unescape_field(s)
-  s = s or ""
-  s = s:gsub("\\n", "\n")
-  s = s:gsub("\\t", "\t")
-  s = s:gsub("\\\\", "\\")
-  return s
+  -- Decode each escape once. Chained substitutions would turn the encoded
+  -- TeX commands \\neg and \\triangleright into a newline/tab followed by text.
+  local escapes = {n = "\n", t = "\t", r = "\r", ["\\"] = "\\"}
+  return (s or ""):gsub("\\(.)", function(char)
+    return escapes[char] or ("\\" .. char)
+  end)
 end
 
 local function split_tsv(line)
@@ -670,8 +734,11 @@ local function insert_loaded_record_once(key, rec)
   if key == "" then return end
 
   M.by_key[key] = M.by_key[key] or {}
-  for _, r in ipairs(M.by_key[key]) do
+  for index, r in ipairs(M.by_key[key]) do
     if r.label == rec.label and r.env == rec.env and r.number == rec.number then
+      if source_rank(rec) > source_rank(r) then
+        M.by_key[key][index] = rec
+      end
       return
     end
   end
@@ -682,42 +749,46 @@ end
 local function find_loaded_number(label, env)
   if not label or label == "" then return "" end
 
+  local statement = M.by_label[label]
+  if statement and ((not env) or env == "" or statement.env == env)
+      and (statement.number or "") ~= "" then
+    return statement.number
+  end
+
+  local best
   for _, records in pairs(M.by_key or {}) do
     for _, r in ipairs(records or {}) do
       if r.label == label and ((not env) or env == "" or r.env == env) then
-        return r.number or ""
+        if not best or source_rank(r) > source_rank(best) then best = r end
       end
     end
   end
 
-  return ""
+  return best and best.number or ""
 end
 
-function M.load_registry()
-  local f = io.open(M.registry_path, "r")
-  if not f then return end
+local function load_registry_path(path, self_loaded, report_missing)
+  local f = io.open(path, "r")
+  if not f then
+    if report_missing then
+      texio.write_nl("thmlookup: cannot open registry file: " .. tostring(path))
+    end
+    return
+  end
 
+  local pending_ids = {}
   for line in f:lines() do
     if line ~= "" then
       local c = split_tsv(line)
       local tag = c[1] or ""
 
       if tag == "ID" then
-        local id    = unescape_field(c[2] or "")
-        local env   = unescape_field(c[3] or "")
-        local label = unescape_field(c[4] or "")
-        if id ~= "" then
-          -- self-registry => self_loaded = true
-          M.by_id[id] = {
-            env = env,
-            label = label,
-            number = find_loaded_number(label, env),
-            loaded = true,
-            self_loaded = true,
-          }
-        end
-
+        -- Resolve IDs after all structural rows, including legacy files whose
+        -- four-column ID row precedes the corresponding structural declaration.
+        pending_ids[#pending_ids + 1] = c
       else
+        -- v1 remains compatible: the original seven fields retain their meaning.
+        -- The two appended fields store the exact display and Delta source.
         local label  = unescape_field(c[2] or "")
         local env    = unescape_field(c[3] or "")
         local number = unescape_field(c[4] or "")
@@ -725,20 +796,58 @@ function M.load_registry()
         local canon  = unescape_field(c[6] or "")
         local title  = unescape_field(c[7] or "")
 
-        if key ~= "" then
-          M.by_key[key] = M.by_key[key] or {}
-          table.insert(M.by_key[key], {
-            label = label, env = env, number = number,
-            key = key, canon = canon, title = title,
-            loaded = true,
-            self_loaded = true, -- self-registry
-          })
+        local rec = {
+          label = label, env = env, number = number,
+          key = key, canon = canon, title = title,
+          display = unescape_field(c[8] or ""),
+          delta = unescape_field(c[9] or ""),
+          loaded = true, self_loaded = self_loaded,
+        }
+        remember_loaded_statement(rec)
+        insert_loaded_record_once(key, rec)
+
+        if not self_loaded then
+          -- Imported keys may have been generated by another available hash.
+          local key_now = make_key(canon)
+          if key_now ~= "" and key_now ~= key then
+            insert_loaded_record_once(key_now, rec)
+          end
         end
       end
     end
   end
 
   f:close()
+
+  for _, c in ipairs(pending_ids) do
+    -- ID, id, env, label [, number, original display, Delta context]
+    local id = unescape_field(c[2] or "")
+    if id ~= "" then
+      local env = unescape_field(c[3] or "")
+      local label = unescape_field(c[4] or "")
+      local number = unescape_field(c[5] or "")
+      if number == "" then number = find_loaded_number(label, env) end
+      local rec = {
+        label = label, env = env, number = number,
+        display = unescape_field(c[6] or ""),
+        delta = unescape_field(c[7] or ""),
+        loaded = true, self_loaded = self_loaded,
+      }
+      remember_loaded_statement(rec)
+      local existing = M.by_id[id]
+      if not existing or source_rank(rec) > source_rank(existing) then
+        M.by_id[id] = rec
+      elseif source_rank(rec) == source_rank(existing)
+          and existing.env == env and existing.label == label
+          and (existing.number or "") == "" then
+        existing.number = number
+      end
+    end
+  end
+end
+
+function M.load_registry()
+  load_registry_path(M.registry_path, true, false)
 end
 
 
@@ -748,6 +857,7 @@ end
 function M.prepare_run()
   M.by_key = {}
   M.by_id  = {}
+  M.by_label = {}
   M.load_registry()
 
   local f = io.open(M.registry_path, "w")
@@ -761,66 +871,7 @@ end
 
 -- Lädt eine Registry-Datei (TSV) in den aktuellen Speicherindex (M.by_key)
 function M.load_registry_file(path)
-  local f = io.open(path, "r")
-  if not f then
-    texio.write_nl("thmlookup: cannot open registry file: " .. tostring(path))
-    return
-  end
-
-  for line in f:lines() do
-    if line ~= "" then
-      local cols = split_tsv(line)
-      local tag = cols[1] or ""
-
-      if tag == "ID" then
-        -- Format: ID, id, env, label
-        local id    = unescape_field(cols[2] or "")
-        local env   = unescape_field(cols[3] or "")
-        local label = unescape_field(cols[4] or "")
-
-        if id ~= "" then
-          local existing = M.by_id[id]
-          -- Cross-band darf self-loaded überschreiben; echte Konflikte nicht
-          if (not existing) or (existing.self_loaded == true) then
-            M.by_id[id] = {
-              env = env,
-              label = label,
-              number = find_loaded_number(label, env),
-              loaded = true,
-              self_loaded = false,
-            }
-          end
-        end
-
-      else
-        -- erwartetes Format: ver, label, env, number, key, canon, title
-        local label  = unescape_field(cols[2] or "")
-        local env    = unescape_field(cols[3] or "")
-        local number = unescape_field(cols[4] or "")
-        local key_in = unescape_field(cols[5] or "")
-        local canon  = unescape_field(cols[6] or "")
-        local title  = unescape_field(cols[7] or "")
-
-        local rec = {
-          label = label, env = env, number = number,
-          canon = canon, title = title,
-          loaded = true,
-          self_loaded = false,
-        }
-
-        -- 1) unter dem Key aus der TSV ablegen (falls vorhanden)
-        insert_loaded_record_once(key_in, rec)
-
-        -- 2) zusätzlich unter dem *aktuell* berechneten Key ablegen
-        local key_now = make_key(canon)
-        if key_now ~= "" and key_now ~= key_in then
-          insert_loaded_record_once(key_now, rec)
-        end
-      end
-    end
-  end
-
-  f:close()
+  load_registry_path(path, false, true)
 end
 
 

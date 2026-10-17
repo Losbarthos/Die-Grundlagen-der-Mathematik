@@ -1,0 +1,18 @@
+% Import external statements; the generated section retains B28's own numbering.
+\begin{luacode*}
+  local directory = "registry/e-coordinates/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B28.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b28-external}[../_B28.pdf]")
+  banddeps.load_predecessor_registries("B28")
+  thmlookup.load_registry_file(directory .. "b28-external.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{28}
+\setcounter{file}{28}
+\renewcommand{\theHtable}{coordinates.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{coordinates.\arabic{chapter}.\arabic{figure}}

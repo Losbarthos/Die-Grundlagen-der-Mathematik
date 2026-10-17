@@ -16,6 +16,7 @@ import re
 import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
+registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
 DIRECTORY = ROOT / "registry/frankl"
 SOURCE_DIRECTORY = ROOT / "tex/b46/frankl"
 MAIN_SOURCE = ROOT / "Bd. 46 - Frankls Vermutung.tex"
@@ -46,9 +47,9 @@ def row_label(row):
     return row[3] if row[0] == "ID" else row[1]
 
 
-def records_equal(actual, expected, owner):
-    # The first structural field is an insertion index, not an identity.
-    a, b = Counter(tuple(row[1:]) for row in actual), Counter(tuple(row[1:]) for row in expected)
+def records_equal(actual, expected, owner, *, legacy_manifest=False):
+    a = registry_records(actual, legacy_manifest=legacy_manifest)
+    b = registry_records(expected, legacy_manifest=legacy_manifest)
     if a != b:
         raise ValueError(f"{owner}: registry differs from manifest; "
                          f"missing={list((b-a).elements())}, extra={list((a-b).elements())}")
@@ -91,7 +92,7 @@ def main_records(data):
         raise ValueError("B46: missing new rare-triple existence theorem")
     triple_label = ids[TRIPLE_ID]
     original_rows = [row for row in rows if row_label(row) != triple_label]
-    records_equal(original_rows, data["canonical_registry"], "B46 original results")
+    records_equal(original_rows, data["canonical_registry"], "B46 original results", legacy_manifest=True)
     additions = [row for row in rows if row_label(row) == triple_label]
     if len(additions) != 2 or sum(row[0] == "ID" for row in additions) != 1:
         raise ValueError("B46: exactly one new canonical theorem and its ID are permitted")

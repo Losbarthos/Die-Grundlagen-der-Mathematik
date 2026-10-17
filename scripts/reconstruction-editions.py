@@ -14,6 +14,7 @@ import re
 import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
+registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
 DIRECTORY = ROOT / "registry/reconstruction"
 SOURCE_DIRECTORY = ROOT / "tex/b40/reconstruction"
 MAIN_SOURCE = ROOT / "Bd. 40 - Gruppen.tex"
@@ -45,9 +46,9 @@ def row_label(row):
     return row[3] if row[0] == "ID" else row[1]
 
 
-def records_equal(actual, expected, owner):
-    # The first structural field is an insertion index, not an identity.
-    a, b = Counter(tuple(row[1:]) for row in actual), Counter(tuple(row[1:]) for row in expected)
+def records_equal(actual, expected, owner, *, legacy_manifest=False):
+    a = registry_records(actual, legacy_manifest=legacy_manifest)
+    b = registry_records(expected, legacy_manifest=legacy_manifest)
     if a != b:
         raise ValueError(f"{owner}: registry differs from manifest; "
                          f"missing={list((b-a).elements())}, extra={list((a-b).elements())}")
@@ -85,7 +86,7 @@ def aux_labels(path):
 def main_records(data):
     base = ROOT / "registry/_B40"
     rows = registry(base.with_suffix(".registry.tsv"))
-    records_equal(rows, data["canonical_registry"] + data.get("additional_registry", []), "B40")
+    records_equal(rows, data["canonical_registry"] + data.get("additional_registry", []), "B40", legacy_manifest=True)
     ids = id_map(rows)
     aux = aux_labels(base.with_suffix(".aux"))
     for label, expected in (data["canonical_aux"] | data.get("additional_aux", {})).items():

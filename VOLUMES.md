@@ -8,45 +8,57 @@ sind beschreibende Übersetzungen und keine eigenständigen englischen Ausgaben.
 
 ## Themenordner und reMarkable
 
-Die PDFs liegen unter `output/` in elf nummerierten Themenordnern.
+Die regulären PDFs liegen unter `output/` in elf nummerierten Themenordnern.
 Bandnummern und Dateinamen bleiben erhalten; die Tabelle darunter führt die
 Fachbände weiterhin in ihrer ursprünglichen Reihenfolge auf.
 Die Hauptbände liegen direkt im Themenordner, Begleitfassungen unter
-`Ergänzungen/<Thema>/`. Für Cantor–Bernstein ist dies
-`03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/`, für das
+`Ergänzungen/Bd. NN Titel/<Thema>/`. Die Bandordner tragen die zweistellige
+Bandnummer und den Titel des zugehörigen Hauptbands. Für Cantor–Bernstein ist dies
+`03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/`, für das
 Mogiljanskaja-Gegenbeispiel
-`07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/`.
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/`.
 Die Begleitfassungen zum Dedekindschen Rekursionssatz liegen unter
-`04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/`.
+`04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/`.
 Die vollständige Konstruktion der ganzen Zahlen steht in den Begleitfassungen
-unter `04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/`.
+unter `04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/`.
 Die Begleitfassungen zur Klammerungsunabhängigkeit liegen neben der
 Mogiljanskaja-Ergänzung unter
-`07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/`.
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/`.
+Die Begleitfassungen zum Halbgruppenbeweis für die Potenzhalbgruppe stehen unter
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/`.
+Die Ausgabe zur e-Koordinatenabbildung steht unter
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/`.
 Die Begleitfassungen zu den formalen Differenzen stehen unter
-`08 Gruppen/Ergänzungen/Formale Differenzen/`.
+`08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/`.
 Die Begleitfassungen zur Gruppenrekonstruktion stehen unter
-`08 Gruppen/Ergänzungen/Gruppenrekonstruktion/`.
+`08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/`.
 Die Begleitfassungen zur Nullprodukt-Rekonstruktion stehen unter
-`07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/`.
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/`.
+Die Begleitfassungen zum allgemeinen Nullelement-Transport stehen unter
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/`.
 Die Begleitfassungen zu Halbverbänden und Ordnung stehen unter
-`05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/`.
+`05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/`.
 Die Begleitfassungen zu Frankls Spezialfällen stehen unter
-`02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/`.
+`02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/`.
+Lesefassungen ohne Tabellenbeweis-Begleitband stehen gemeinsam mit ihren
+Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweiligen Themenordner. Dies betrifft derzeit die
+Begleitfassungen zu totaler Beschränktheit und Kompaktheit aus Band 47 sowie
+die eigenständigen Lesefassungen zur Zweiprodukt-Rekonstruktion,
+Dreiprodukt-Rekonstruktion und zu Kontextprofilen und Induktion aus Band 37.
 
 | Ordner | Inhalt |
 | --- | --- |
 | `00 Einstieg und Gesamtband` | Bd. 00 und [Gesamtband](<output/00 Einstieg und Gesamtband/Die Grundlagen der Mathematik - Gesamtband.pdf>) |
 | `01 Logik` | Bd. 01–02 |
-| `02 Mengenlehre und Mengenfamilien` | Bd. 03, 09, 20, 46, 48; Begleitfassungen unter `Ergänzungen/Frankls Spezialfälle` |
-| `03 Relationen und Funktionen` | Bd. 04–08, 11; Cantor–Bernstein-Begleitfassungen unter `Ergänzungen/Cantor-Bernstein` |
-| `04 Zahlen und Folgen` | Bd. 10, 17–19, 21; Begleitfassungen unter `Ergänzungen/Dedekindscher Rekursionssatz` und `Ergänzungen/Ganze Zahlen` |
-| `05 Ordnungen und Verbände` | Bd. 12–16, 45; Begleitfassungen unter `Ergänzungen/Halbverbände und Ordnung` |
+| `02 Mengenlehre und Mengenfamilien` | Bd. 03, 09, 20, 46, 48; Begleitfassungen unter `Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle` |
+| `03 Relationen und Funktionen` | Bd. 04–08, 11; Cantor–Bernstein-Begleitfassungen unter `Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein` |
+| `04 Zahlen und Folgen` | Bd. 10, 17–19, 21; Begleitfassungen unter `Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz` und `Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen` |
+| `05 Ordnungen und Verbände` | Bd. 12–16, 45; Begleitfassungen unter `Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung` |
 | `06 Graphen, Bäume und Wörter` | Bd. 22–27 |
-| `07 Halbgruppen und Monoide` | Bd. 28–38; Mogiljanskaja-Begleitfassungen unter `Ergänzungen/Mogiljanskaja-Gegenbeispiel` |
-| `08 Gruppen` | Bd. 40–42; Begleitfassungen unter `Ergänzungen/Gruppenrekonstruktion` und `Ergänzungen/Formale Differenzen` |
+| `07 Halbgruppen und Monoide` | Bd. 28–38; Mogiljanskaja-Begleitfassungen unter `Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel`; drei experimentelle Rekonstruktions-Lesefassungen unter `Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell` |
+| `08 Gruppen` | Bd. 40–42; Begleitfassungen unter `Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion` und `Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen` |
 | `09 Halbringe und Ringe` | Bd. 39, 43–44 |
-| `10 Metrische Räume` | Bd. 47 |
+| `10 Metrische Räume` | Bd. 47; experimentelle Begleitfassungen unter `Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit` |
 
 Für reMarkable die entsprechenden Ordner auf dem Gerät oder in der App
 anlegen, die PDFs importieren und in die passenden Ordner verschieben.
@@ -122,22 +134,87 @@ Die beiden Begleitfassungen sind ein begrenzter Pilot und keine zusätzlichen Fa
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>) |
+
+## e-Koordinatenabbildung: Definitionen und Beweise
+
+Die Ausgabe übernimmt den vollständigen Originalabschnitt 28.2.13 aus Band 28:
+fünf Definitionen, vier Axiome und sechzehn Sätze mit ihren unveränderten Beweisen.
+Nummern und Aussagen bleiben kanonisch in Band 28. Die gemeinsame Konfiguration
+ergänzt die verwendeten Aussagen automatisch als Nachschlagetabellen unter den Beweisen.
+
+| Darstellung / Edition | PDF |
+| --- | --- |
+| Definitionen und Beweise / Definitions and proofs | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf>) |
+
+## Potenzhalbgruppe: ergänzende Darstellungen / Companion editions
+
+Die Lesefassung „Halbgruppenbeweis der Potenzhalbgruppe“ beweist nach der
+Abgeschlossenheit die Assoziativität auf nichtleeren Teilmengen mit einer
+kurzen Mengengleichheitskette, den Auswertungssätzen Th. 3.20.1.2 und
+Th. 3.20.1.3 sowie Th. 3.18.1.6 aus Band 3 direkt über den Gleichheitszeichen.
+Sie enthält die vollständige Multiplikationstabelle des Dreierbeispiels
+und einen historischen Abriss mit Originalquellen.
+Die Beweistabellen führen die Assoziativität
+in einer kurzen gemeinsamen Tabelle aus. Die Inklusion des Mengenprodukts
+in den Träger (H3) erhält eine eigene formale Tabelle vor dem Hauptbeweis.
+Die übrigen Hilfssätze tragen ihre vollständige Satznummer direkt am
+jeweiligen Beweisergebnis.
+Die zehn hierfür entbehrlichen
+Hilfsaussagen H7–H16 entfallen; die später verwendeten H1–H6 und H17
+sowie alle übrigen Aussagen behalten ihre Nummern und Verweisziele.
+Def. 28.2.4.1 definiert das Mengenprodukt unmittelbar als Termbild;
+H18 hält die Definitionsanwendung unter seiner bisherigen Nummer fest.
+Beide Begleitfassungen importieren die aktiven kanonischen Aussagen.
+
+| Darstellung / Edition | PDF |
+| --- | --- |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Beweistabellen.pdf>) |
+
+## Endliche Halbgruppen: Lesefassung / Reading edition
+
+„Endliche Halbgruppen erkennen“ führt an einer monogenen Dreierhalbgruppe
+von Index und Periode über idempotente Potenzen und das kleinste Ideal zur
+Klassifikation von Multiplikationstafeln. Sie erklärt anschließend die
+Potenzhalbgruppe, den Rekonstruktionsfall der Ordnung zwei und den endlichen
+Suchweg. Die zugehörigen Aussagen und Beweistabellen bleiben in Band 37;
+die Nullprodukt-Rekonstruktion vertieft einen weiteren Spezialfall.
+
+| Darstellung / Edition | PDF |
+| --- | --- |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>) |
 
 ## Nullprodukt-Rekonstruktion: ergänzende Darstellungen / Companion editions
 
 Die Lesefassung „Was Nullprodukte verraten“ rekonstruiert eine endliche
 Halbgruppe mit Null und genau zwei Produktwerten aus ihrer Potenzhalbgruppe.
 Sie erklärt die Nullproduktprofile, die Quotientenordnung und die Rückgewinnung
-der Fasergrößen. Band 37 enthält den öffentlichen Hauptsatz; die
+der Fasergrößen. Die aktuelle Fassung verwendet den allgemeinen
+Nullelement-Transport und enthält eine seitenbezogene Symbollegende mit
+Links zu den Einführungsstellen. Band 37 enthält den öffentlichen Hauptsatz; die
 Beweistabellen enthalten die speziellen Hilfsaussagen mit Nummernpräfix `37E`
 und den vollständigen Beweis. Allgemeine Grundlagen bleiben in früheren Bänden.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Beweistabellen.pdf>) |
+
+## Nullelement-Transport: ergänzende Darstellungen / Companion editions
+
+„Nullelemente aus Potenzhalbgruppen erkennen“ beweist, dass ein Isomorphismus
+nichtleerer Potenzhalbgruppen die Existenz eines Nullelements erhält.
+Die Aussage benötigt keine Endlichkeit. Die Ergänzung gehört zu Band 28
+und verwendet die Nullnotation aus Band 33; ihre Beweistabellen tragen
+den Nummernpräfix `28Z`. Die Nullprodukt-Rekonstruktion greift auf diesen
+allgemeinen Satz zurück.
+
+| Darstellung / Edition | PDF |
+| --- | --- |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/Bd. 28 - Nullelement-Transport - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/Bd. 28 - Nullelement-Transport - Beweistabellen.pdf>) |
 
 ## Mogiljanskaja-Gegenbeispiel: ergänzende Darstellungen / Companion editions
 
@@ -154,8 +231,8 @@ Bedeutung und Verweise auf beide Begleitfassungen.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/Bd. 28 - Mogiljanskaja-Gegenbeispiel - Beweistabellen.pdf>) |
 
 ## Dedekindscher Rekursionssatz: ergänzende Darstellungen / Companion editions
 
@@ -167,8 +244,8 @@ Anwendungen nötigen Eigenschaften der Rekursionsabbildung.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf>) |
 
 ## Klammerungsunabhängigkeit: ergänzende Darstellungen / Companion editions
 
@@ -184,8 +261,8 @@ Die allgemeinen Wort- und Baumgrundlagen bleiben in Band 27.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf>) |
 
 ## Ganze Zahlen: ergänzende Darstellungen / Companion editions
 
@@ -200,8 +277,8 @@ benötigten Aussagen mit ihren bisherigen Nummern und Verweiszielen.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Beweistabellen.pdf>) |
 
 ## Formale Differenzen: ergänzende Darstellungen / Companion editions
 
@@ -221,8 +298,8 @@ gleichen Tabellenformat aus.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/08 Gruppen/Ergänzungen/Formale Differenzen/Bd. 41 - Formale Differenzen - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/08 Gruppen/Ergänzungen/Formale Differenzen/Bd. 41 - Formale Differenzen - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/Bd. 41 - Formale Differenzen - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/Bd. 41 - Formale Differenzen - Beweistabellen.pdf>) |
 
 ## Halbverbände und Ordnung: ergänzende Darstellungen / Companion editions
 
@@ -241,8 +318,8 @@ Quellen, ohne neue oder konkurrierende Satzregistrierungen anzulegen.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/Bd. 45 - Halbverbände und Ordnung - Beweistabellen.pdf>) |
 
 ## Frankls Spezialfälle: ergänzende Darstellungen / Companion editions
 
@@ -270,8 +347,8 @@ Hilfssätze und Beweise erhalten im Beweisband eigene Nummern mit Präfix `46E`.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/Bd. 46 - Frankls Spezialfälle - Beweistabellen.pdf>) |
 
 ## Gruppenrekonstruktion: ergänzende Darstellungen / Companion editions
 
@@ -292,10 +369,10 @@ ohne konkurrierende Registrierungen anzulegen.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/08 Gruppen/Ergänzungen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf>) |
-| Beweistabellen / Proof tables | [PDF](<output/08 Gruppen/Ergänzungen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf>) |
 
-## Totale Beschränktheit und Kompaktheit: ergänzende Darstellungen / Companion editions
+## Totale Beschränktheit und Kompaktheit: experimentelle Darstellungen / Experimental editions
 
 Band 47 ergänzt endliche Epsilon-Netze, totale Beschränktheit und die
 Charakterisierung kompakter metrischer Teilräume. Die Lesefassung entwickelt
@@ -303,10 +380,32 @@ die Begriffe anhand von Beispielen und erklärt die Beweisideen. Die vollständi
 Beweise stehen in einem eigenen Beweisband. Alle sieben neuen öffentlichen
 Definitionen und Sätze gehören Band 47; drei private Hilfssätze verwenden `47E`.
 Die bisherigen Aussagen behalten ihre Nummern und Verweisziele.
+Die Begleitfassungen stehen unter
+`Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/`, weil der Beweisband
+Prosabeweise enthält und keinen Tabellenbeweisteil besitzt.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Lesefassung / Reading edition | [PDF](<output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf>) |
-| Beweise / Proofs | [PDF](<output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf>) |
+| Beweise / Proofs | [PDF](<output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit/Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf>) |
+
+## Experimentelle Rekonstruktions-Lesefassungen zu Band 37
+
+Diese drei eigenständigen Artikel führen ihre Argumente in Prosa aus und
+besitzen keinen Tabellenbeweisteil. Sie stehen unter
+`Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/` im Themenordner für Halbgruppen und Monoide.
+
+| Thema | Lesefassung |
+| --- | --- |
+| Zweiprodukt-Rekonstruktion | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Zweiprodukt-Rekonstruktion/Bd. 37 - Zweiprodukt-Rekonstruktion - Lesefassung.pdf>) |
+| Dreiprodukt-Rekonstruktion | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Dreiprodukt-Rekonstruktion/Bd. 37 - Dreiprodukt-Rekonstruktion - Lesefassung.pdf>) |
+| Kontextprofile und Induktion | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/Kontextprofile und Induktion/Bd. 37 - Kontextprofile und Induktion - Lesefassung.pdf>) |
 
 [Back to the README / Zurück zur README](README.md)
+
+## Kontextäquivalenz: experimentelle Lesefassung
+
+Die eigenständige Lesefassung „Was zweiseitige Produkte verraten“ vom 7. Oktober
+führt über zweiseitige Kontextprofile zu Kongruenz und Klassenmultiplikation.
+
+[PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/experimentell/Kontextäquivalenz/Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf>)

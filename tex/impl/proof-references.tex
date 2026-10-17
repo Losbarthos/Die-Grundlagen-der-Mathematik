@@ -1,0 +1,254 @@
+% Automatic statement index at the end of a complete table proof.
+\RequirePackage{graphicx}
+\newif\ifProofReferencesEnabled
+\ProofReferencesEnabledtrue
+\newif\ifProofReferencesRecording
+\ProofReferencesRecordingtrue
+\newcommand{\ProofReferencesOn}{\ProofReferencesEnabledtrue}
+\newcommand{\ProofReferencesOff}{\ProofReferencesEnabledfalse}
+\newcommand{\ProofReferencesTitle}{Verwendete Sätze und Definitionen}
+\directlua{proofreferences = dofile('tex/impl/proof-references.lua')}
+\directlua{proofreferenceflow = dofile('tex/impl/proof-reference-flow.lua')}
+
+\newcommand{\ProofReferencesRecord}[1]{%
+  \ifProofReferencesRecording
+    \directlua{proofreferences.record('\luaescapestring{#1}')}%
+  \fi
+}
+\newcommand{\ProofReferencesWithoutRecording}[1]{%
+  \begingroup\ProofReferencesRecordingfalse #1\endgroup
+}
+\newcommand{\ProofReferencesBegin}{%
+  \directlua{proofreferences.begin_proof()}%
+}
+\newcommand{\ProofReferencesEnd}{%
+  \ifProofReferencesEnabled
+    \directlua{proofreferences.end_proof()}%
+  \else
+    \directlua{proofreferences.end_proof(false)}%
+  \fi
+}
+% Nesting is intentional: a split proof has one shared index, and a tabproof
+% inside an amsthm proof does not print an extra copy before the QED.
+\AddToHook{env/proof/begin}{\ProofReferencesBegin}
+\AddToHook{env/proof/after}{\ProofReferencesEnd}
+\AddToHook{env/tabproof/begin}{\ProofReferencesBegin}
+\AddToHook{env/tabproof/after}{\ProofReferencesEnd}
+\AddToHook{env/tabproofwide/begin}{\ProofReferencesBegin}
+\AddToHook{env/tabproofwide/after}{\ProofReferencesEnd}
+\AddToHook{env/tabproofpaired/begin}{\ProofReferencesBegin}
+\AddToHook{env/tabproofpaired/after}{\ProofReferencesEnd}
+\AddToHook{env/longtable/after}{%
+  \ifProofReferencesEnabled
+    \directlua{proofreferences.end_table()}%
+  \else
+    \directlua{proofreferences.end_table(false)}%
+  \fi
+}
+\newcommand{\ProofReferencesEnsureProof}{\directlua{proofreferences.ensure_proof()}}
+\AddToHook{cmd/proofstep/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/proofstepstar/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/proofstepstarwide/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/proofsteppaired/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/proofstepwide/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/mxProofStatementStep/before}{\ProofReferencesEnsureProof}
+\AddToHook{cmd/proofaxline/before}{\ProofReferencesEnsureProof}
+
+\newsavebox{\ProofReferenceBox}
+\newsavebox{\ProofReferenceFlowOutputBox}
+\newdimen\ProofReferencesPageTop
+\newdimen\ProofReferencesPageBottom
+\newdimen\ProofReferencesOddLeft
+\newdimen\ProofReferencesEvenLeft
+\newdimen\ProofReferencesTableWidth
+\newdimen\ProofReferencePadding
+\newdimen\ProofReferenceFlowWidth
+\newdimen\ProofReferenceMaxHeight
+\newdimen\ProofReferencePageReserve
+\newcommand{\ProofReferenceMarkStart}[2]{%
+  \leavevmode
+  \begingroup
+  \edef\ProofReferenceMarkNext{\endgroup
+    \noexpand\latelua{proofreferences.begin_cell("#1",\number\dimexpr#2\relax,
+      \number\ProofReferencesPageTop,\number\ProofReferencesPageBottom,
+      \number\ProofReferencesOddLeft,\number\ProofReferencesEvenLeft,\number\textwidth)}}%
+  \ProofReferenceMarkNext
+}
+\newcommand{\ProofReferenceMarkEnd}{\latelua{proofreferences.end_cell()}}
+% Reflow the already typeset mathematical nodes: no formula token or premise is
+% replaced. Each resulting line becomes a separate, page-breakable table row.
+\NewDocumentCommand{\ProofReferenceMathRows}{+m +m}{%
+  \ProofReferenceFlowWidth=\dimexpr\linewidth-2\ProofReferencePadding\relax
+  % Do not add LaTeX's artificial color scope around the entire formula: real
+  % local graphic/color scopes remain in the nodes and are kept together.
+  \setbox\ProofReferenceBox=\hbox{$\displaystyle #1$}%
+  \directlua{proofreferenceflow.prepare(\number\ProofReferenceBox,
+    \number\ProofReferenceFlowWidth,\number\ProofReferenceMaxHeight,
+    "\luaescapestring{\detokenize{#2}}")}%
+}
+\NewDocumentCommand{\ProofReferenceParagraphRows}{+m +m}{%
+  \ProofReferenceFlowWidth=\dimexpr\linewidth-2\ProofReferencePadding\relax
+  \setbox\ProofReferenceBox=\vbox{%
+    \hsize=\ProofReferenceFlowWidth\linewidth=\hsize
+    \parindent=0pt\leftskip=0pt\rightskip=0pt plus 1fil
+    \parfillskip=0pt\emergencystretch=1em
+    \noindent #1\par
+  }%
+  \directlua{proofreferenceflow.prepare_text(\number\ProofReferenceBox,
+    \number\ProofReferenceFlowWidth,\number\ProofReferenceMaxHeight,
+    "\luaescapestring{\detokenize{#2}}")}%
+}
+\NewDocumentCommand{\ProofReferenceFlowLine}{m +m}{%
+  \directlua{proofreferenceflow.take(#1,\number\ProofReferenceFlowOutputBox)}%
+  \ProofReferenceFlowWidth=\dimexpr\linewidth-2\ProofReferencePadding\relax
+  % A genuinely indivisible atom (for example one fraction) is the only
+  % fallback case. Bound both dimensions, including the depth below baseline.
+  \ifdim\wd\ProofReferenceFlowOutputBox>\ProofReferenceFlowWidth
+    \sbox{\ProofReferenceFlowOutputBox}{%
+      \resizebox{\ProofReferenceFlowWidth}{!}{\usebox{\ProofReferenceFlowOutputBox}}}%
+  \fi
+  \ifdim\dimexpr\ht\ProofReferenceFlowOutputBox+\dp\ProofReferenceFlowOutputBox\relax>\ProofReferenceMaxHeight
+    \sbox{\ProofReferenceFlowOutputBox}{%
+      \resizebox*{!}{\ProofReferenceMaxHeight}{\usebox{\ProofReferenceFlowOutputBox}}}%
+  \fi
+  \leavevmode\ProofReferenceMarkStart{ProofReferenceCell}{\linewidth}%
+  \begin{minipage}[t]{\linewidth}%
+    \noindent\hspace*{\ProofReferencePadding}\usebox{\ProofReferenceFlowOutputBox}%
+    \par\kern.6ex
+  \end{minipage}%
+  \ProofReferenceMarkEnd & #2\\[.6ex]
+}
+\newcommand{\ProofReferenceLink}[3]{%
+  \sbox{\ProofReferenceBox}{\ThmLookupEmitRefResolved{#1}{#2}{#3}}%
+  \ProofReferenceMarkStart{ProofReferenceCell}{\linewidth}%
+  \ifdim\wd\ProofReferenceBox>\linewidth
+    \resizebox{\linewidth}{!}{\usebox{\ProofReferenceBox}}%
+  \else
+    \usebox{\ProofReferenceBox}%
+  \fi
+  \ProofReferenceMarkEnd
+}
+\NewDocumentCommand{\ProofReferenceEntry}{+m +m m m m}{%
+  \directlua{proofreferences.emit_entry(
+    "\luaescapestring{\detokenize{#1}}",
+    "\luaescapestring{\detokenize{#2}}",
+    "\luaescapestring{#3}", "\luaescapestring{#4}", "\luaescapestring{#5}")}%
+}
+% Context labels, formulas and notes can all continue across table/page rows.
+\NewDocumentCommand{\ProofReferenceContextRow}{+m +m +m +m}{%
+  \IfBlankTF{#1}{}{\ProofReferenceParagraphRows{\textbf{#1:}}{#4}}%
+  \ProofReferenceMathRows{#2}{#4}%
+  \IfBlankTF{#3}{}{\ProofReferenceParagraphRows{#3}{#4}}%
+}
+\NewDocumentCommand{\ProofReferenceContextHeading}{+m +m}{%
+  \ProofReferenceParagraphRows{\textbf{#1}}{#2}%
+}
+\NewDocumentCommand{\ProofReferenceFormulaRow}{+m +m}{%
+  \ProofReferenceMathRows{#1}{#2}%
+}
+\newcommand{\ProofReferenceMissing}[3]{%
+  \ProofReferenceMarkStart{ProofReferenceCell}{\linewidth}%
+  \textit{Originalaussage fehlt. Quellband mit aktueller Konfiguration neu kompilieren.}%
+  \ProofReferenceMarkEnd
+  & \ProofReferenceLink{#1}{#2}{#3}\\[.6ex]
+}
+\newcommand{\ProofReferenceHeaderRule}{%
+  \noalign{\hbox{%
+    \ProofReferenceMarkStart{ProofReferenceHeader}{\ProofReferencesTableWidth}%
+    \vrule width\ProofReferencesTableWidth height\arrayrulewidth depth0pt
+    \ProofReferenceMarkEnd}}%
+}
+\NewDocumentCommand{\ProofReferencesTable}{+m}{%
+  \par\begingroup
+  \ProofReferencesRecordingfalse
+  \normalfont\small
+  \ProofReferencesTableWidth=\linewidth
+  \ProofReferencePadding=.4em
+  \ProofReferenceMaxHeight=.65\textheight
+  \ProofReferencePageReserve=.5\baselineskip
+  \ProofReferencesPageTop=\dimexpr1in+\voffset+\topmargin+\headheight+\headsep\relax
+  \ProofReferencesPageBottom=\dimexpr\ProofReferencesPageTop+\textheight\relax
+  \ProofReferencesOddLeft=\dimexpr1in+\hoffset+\oddsidemargin\relax
+  \ProofReferencesEvenLeft=\ProofReferencesOddLeft
+  \csname if@twoside\endcsname
+    \ProofReferencesEvenLeft=\dimexpr1in+\hoffset+\evensidemargin\relax
+  \fi
+  \setlength{\LTleft}{0pt}\setlength{\LTright}{0pt}%
+  \setlength{\LTpre}{.5\baselineskip}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{@{}p{.77\linewidth}@{\hspace{.02\linewidth}}%
+    >{\raggedright\arraybackslash}p{.21\linewidth}@{}}
+    \multicolumn{2}{@{}p{\ProofReferencesTableWidth}@{}}{%
+      \ProofReferenceMarkStart{ProofReferenceHeader}{\ProofReferencesTableWidth}%
+      \textbf{\ProofReferencesTitle}\ProofReferenceMarkEnd}\\[.4ex]
+    \ProofReferenceMarkStart{ProofReferenceHeader}{\linewidth}%
+    \textbf{Aussage mit Voraussetzungen}\ProofReferenceMarkEnd &
+    \ProofReferenceMarkStart{ProofReferenceHeader}{\linewidth}%
+    \textbf{Verweis}\ProofReferenceMarkEnd\\\ProofReferenceHeaderRule
+    \endfirsthead
+    \multicolumn{2}{@{}p{\ProofReferencesTableWidth}@{}}{%
+      \ProofReferenceMarkStart{ProofReferenceHeader}{\ProofReferencesTableWidth}%
+      \textbf{\ProofReferencesTitle{} (Fortsetzung)}\ProofReferenceMarkEnd}\\[.4ex]
+    \ProofReferenceMarkStart{ProofReferenceHeader}{\linewidth}%
+    \textbf{Aussage mit Voraussetzungen}\ProofReferenceMarkEnd &
+    \ProofReferenceMarkStart{ProofReferenceHeader}{\linewidth}%
+    \textbf{Verweis}\ProofReferenceMarkEnd\\\ProofReferenceHeaderRule
+    \endhead
+    % Font bounding boxes can extend beyond TeX's visible glyph depth. Keep
+    % a small reserve on every page, including the final table page.
+    \noalign{\kern\ProofReferencePageReserve}
+    \endfoot
+    #1%
+    % Flush the depth of a tall final row while longtable's output routine is
+    % still active; otherwise it can move to a new page without its header.
+    \noalign{\penalty0\vskip0pt}%
+  \end{longtable}
+  \endgroup
+}
+
+% Classical statements may include prose premises as well as display math.
+% Capture their complete body once; replay it without labels/registrations.
+\makeatletter
+\newcommand{\ProofReferencesCapturePending}[3]{%
+  \ifdefined\ProofReferencesPendingBody
+    \expandafter\ProofReferencesCaptureBody\expandafter
+      {\ProofReferencesPendingBody}{#1}{#2}{#3}%
+  \fi
+}
+\newcommand{\ProofReferencesCaptureBody}[4]{%
+  \ThmLookupStatement{#2}{#3}{#4}{\ProofReferenceText{#1}}{}%
+}
+\NewDocumentCommand{\ProofReferenceText}{+m}{%
+  \vcenter{\hbox{\begin{minipage}{\ProofReferenceFlowWidth}%
+    \normalfont\small
+    \let\label\@gobble
+    \RenewDocumentCommand{\ThmLookupRegister}{m m m m g}{}%
+    \RenewDocumentCommand{\ThmLookupRegisterId}{m m m}{}%
+    \RenewDocumentCommand{\ThmLookupStatement}{m m m +m +m}{}%
+    #1%
+  \end{minipage}}}%
+}
+\makeatother
+\ExplSyntaxOn
+\cs_new_protected:Npn \proofreferences_wrap_environment:n #1
+  {
+    \cs_if_exist:cT {#1}
+      {
+        \cs_new_eq:cc {ProofReferencesOriginal#1} {#1}
+        \cs_new_eq:cc {ProofReferencesOriginalEnd#1} {end#1}
+        \RenewDocumentEnvironment{#1}{o +b}
+          {
+            \def\ProofReferencesPendingBody{##2}
+            \IfNoValueTF{##1}
+              {\use:c {ProofReferencesOriginal#1}}
+              {\use:c {ProofReferencesOriginal#1}[##1]}
+            ##2
+            \use:c {ProofReferencesOriginalEnd#1}
+          }
+          {}
+      }
+  }
+\proofreferences_wrap_environment:n {definition}
+\proofreferences_wrap_environment:n {theorem}
+\proofreferences_wrap_environment:n {axiom}
+\ExplSyntaxOff

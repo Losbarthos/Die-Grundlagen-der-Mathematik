@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from functools import lru_cache
 import hashlib
 import os
 import re
@@ -54,6 +55,17 @@ BRACKETING_NAMES = {
     "_B28-bracketing-reading.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf",
     "_B28-bracketing-proofs.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf",
 }
+POWER_NAMES = {
+    "_B28-power-reading.pdf": "Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Lesefassung.pdf",
+    "_B28-power-proofs.pdf": "Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Beweistabellen.pdf",
+}
+COORDINATES_NAMES = {
+    "_B28-e-coordinates.pdf": "Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf",
+}
+PUBLICATION_ALIASES = {
+    "Bd. 28 - Potenzhalbgruppe - Lesefassung.pdf": POWER_NAMES["_B28-power-reading.pdf"],
+    "Bd. 28 - Potenzhalbgruppe - Beweistabellen.pdf": POWER_NAMES["_B28-power-proofs.pdf"],
+}
 DIFFERENCES_NAMES = {
     "_B41-differences-reading.pdf": "Bd. 41 - Formale Differenzen - Lesefassung.pdf",
     "_B41-differences-proofs.pdf": "Bd. 41 - Formale Differenzen - Beweistabellen.pdf",
@@ -86,12 +98,36 @@ COMPACTNESS_NAMES = {
     "_B47-compactness-reading.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Lesefassung.pdf",
     "_B47-compactness-proofs.pdf": "Bd. 47 - Totale Beschränktheit und Kompaktheit - Beweise.pdf",
 }
-SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **ZERO_TRANSPORT_NAMES, **COMPACTNESS_NAMES}
+FINITE_SEMIGROUPS_NAMES = {
+    "_B37-finite-reading.pdf": "Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf",
+}
+THREE_PRODUCTS_NAMES = {
+    "_B37-three-products-reading.pdf": "Bd. 37 - Dreiprodukt-Rekonstruktion - Lesefassung.pdf",
+}
+TWO_PRODUCTS_NAMES = {
+    "_B37-two-products-reading.pdf": "Bd. 37 - Zweiprodukt-Rekonstruktion - Lesefassung.pdf",
+}
+CONTEXT_PROFILES_NAMES = {
+    "_B37-context-profiles-reading.pdf": "Bd. 37 - Kontextprofile und Induktion - Lesefassung.pdf",
+}
+INDEPENDENT_READINGS = {
+    "three-products": THREE_PRODUCTS_NAMES,
+    "two-products": TWO_PRODUCTS_NAMES,
+    "context-profiles": CONTEXT_PROFILES_NAMES,
+}
+INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES}
+MANUAL_READING_NAMES = {
+    "context-equivalence-reading.pdf": "Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf",
+}
+EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(INDEPENDENT_READING_NAMES.values()) | set(MANUAL_READING_NAMES.values())
+SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
     **{name: "Mogiljanskaja-Gegenbeispiel" for name in MOGILJANSKAJA_NAMES.values()},
     **{name: "Dedekindscher Rekursionssatz" for name in DEDEKIND_NAMES.values()},
     **{name: "Klammerungsunabhängigkeit" for name in BRACKETING_NAMES.values()},
+    **{name: "Halbgruppenbeweis der Potenzhalbgruppe" for name in POWER_NAMES.values()},
+    **{name: "e-Koordinatenabbildung" for name in COORDINATES_NAMES.values()},
     **{name: "Formale Differenzen" for name in DIFFERENCES_NAMES.values()},
     **{name: "Ganze Zahlen" for name in INTEGERS_NAMES.values()},
     **{name: "Halbverbände und Ordnung" for name in SEMILATTICE_NAMES.values()},
@@ -99,12 +135,34 @@ SUPPLEMENT_TOPICS = {
     **{name: "Gruppenrekonstruktion" for name in RECONSTRUCTION_NAMES.values()},
     **{name: "Nullprodukt-Rekonstruktion" for name in NULLPRODUCTS_NAMES.values()},
     **{name: "Nullelement-Transport" for name in ZERO_TRANSPORT_NAMES.values()},
+    **{name: "Endliche Halbgruppen" for name in FINITE_SEMIGROUPS_NAMES.values()},
+    **{name: "Dreiprodukt-Rekonstruktion" for name in THREE_PRODUCTS_NAMES.values()},
+    **{name: "Zweiprodukt-Rekonstruktion" for name in TWO_PRODUCTS_NAMES.values()},
+    **{name: "Kontextprofile und Induktion" for name in CONTEXT_PROFILES_NAMES.values()},
+    **{name: "Kontextäquivalenz" for name in MANUAL_READING_NAMES.values()},
     **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
 }
 
 
+@lru_cache(maxsize=None)
+def publication_band_folders(root):
+    """Use the canonical volume titles for companion directories."""
+    with (root / "band-dependencies.tsv").open(encoding="utf-8-sig", newline="") as file:
+        rows = csv.DictReader(file, delimiter="\t")
+        folders = {}
+        for row in rows:
+            band = int(row["band"][1:])
+            title = Path(row["source"]).stem
+            prefix = f"Bd. {band:02d} - "
+            if not title.startswith(prefix):
+                raise ValueError(f"Volume source has no canonical title: {row['source']!r}")
+            folders[band] = f"Bd. {band:02d} {title[len(prefix):]}"
+    return folders
+
+
 def publication_path(name):
     """Keep visible filenames stable; use the same layout for every publisher."""
+    name = PUBLICATION_ALIASES.get(name, name)
     match = re.fullmatch(r"Bd\. (\d{2}) - .+\.pdf", name)
     band = 0 if name == MAIN_NAME else int(match[1]) if match else None
     groups = [group for group, bands in PUBLICATION_GROUPS.items() if band in bands]
@@ -112,7 +170,10 @@ def publication_path(name):
         raise ValueError(f"No unique publication folder for {name!r}")
     directory = OUTPUT / groups[0]
     if name in SUPPLEMENT_TOPICS:
-        directory = directory / "Ergänzungen" / SUPPLEMENT_TOPICS[name]
+        directory = directory / "Ergänzungen" / publication_band_folders(ROOT)[band]
+        if name in EXPERIMENTAL_NAMES:
+            directory = directory / "experimentell"
+        directory = directory / SUPPLEMENT_TOPICS[name]
     return directory / name
 
 
@@ -229,9 +290,27 @@ def install_organized(sources, staged_paths, backup_root):
         raise RuntimeError(f"PDF organization failed. {status} Originals: {backup_root}") from error
 
 
+def remove_empty_publication_folders(sources):
+    """Remove only empty former parents, never content or the output root."""
+    output = OUTPUT.resolve()
+    for source in sources:
+        if source == publication_path(source.name):
+            continue
+        directory = source.parent.resolve()
+        while directory != output:
+            if not directory.is_relative_to(output):
+                raise ValueError(f"Former publication directory outside output: {directory}")
+            try:
+                directory.rmdir()
+            except OSError:
+                # A nonempty, locked or already removed directory is retained.
+                break
+            directory = directory.parent
+
+
 def organize_existing(names):
-    """Stage and audit all current files, retaining originals for recovery."""
-    known = set(names.values()) | {MAIN_NAME}
+    """Stage and audit all current files, keeping originals only during recovery."""
+    known = set(names.values()) | {MAIN_NAME} | set(PUBLICATION_ALIASES)
     sources = sorted(OUTPUT.rglob("*.pdf"))
     if not sources:
         raise FileNotFoundError("No published PDFs found in output")
@@ -252,10 +331,12 @@ def organize_existing(names):
     workspace = ROOT / "tmp"
     workspace.mkdir(exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix="pdf-organization-", dir=workspace))
+    if not stage.resolve().is_relative_to(workspace.resolve()):
+        raise ValueError(f"Staging directory outside workspace: {stage}")
     backup_root = stage / "originals"
     staged_root = stage / "organized"
-    print(f"Staging {len(sources)} PDFs; original snapshots: {backup_root}", flush=True)
-    aliases = {**names, **{name: name for name in known}}
+    print(f"Staging {len(sources)} PDFs with temporary recovery copies.", flush=True)
+    aliases = {**names, **{name: name for name in known}, **PUBLICATION_ALIASES}
     hashes = {}
     staged_paths = []
     changed_sources = []
@@ -291,9 +372,15 @@ def organize_existing(names):
         if hashlib.sha256(source.read_bytes()).digest() != hashes[source]:
             raise ValueError(f"Publication changed during organization: {source}")
     install_organized(changed_sources, changed_staged_paths, backup_root)
+    audit([publication_path(source.name) for source in sources])
+    remove_empty_publication_folders(changed_sources)
+    # Recovery copies are temporary; successful organization creates no archive.
+    if not stage.resolve().is_relative_to(workspace.resolve()):
+        raise ValueError(f"Staging directory outside workspace: {stage}")
+    shutil.rmtree(stage)
     print(f"Organized {len(sources)} PDFs in {len(PUBLICATION_GROUPS)} subject folders; "
           f"updated {len(changed_sources)} files.", flush=True)
-    print(f"Original PDFs retained in: {backup_root}", flush=True)
+    print("Temporary recovery copies removed.", flush=True)
 
 
 def audit_reference_markers(reader, path):
@@ -310,10 +397,13 @@ def audit_reference_markers(reader, path):
     else:
         # Keep content-stream order: physical layout can interleave a wrapped
         # reference error with formulas from the neighbouring proof column.
-        result = subprocess.run(
-            [pdftotext, "-raw", "-enc", "UTF-8", str(path), "-"],
-            stdout=subprocess.PIPE, encoding="utf-8", check=True,
-        )
+        # Pass an open stream so Poppler does not need to open deep Windows
+        # staging paths beyond its legacy path-length limit.
+        with path.open("rb") as pdf:
+            result = subprocess.run(
+                [pdftotext, "-raw", "-enc", "UTF-8", "-", "-"],
+                stdin=pdf, stdout=subprocess.PIPE, encoding="utf-8", check=True,
+            )
         pages = result.stdout.split("\f")
         if len(pages) != len(reader.pages) + 1 or pages[-1].strip():
             raise ValueError(f"{path.name}: pdftotext returned an unexpected page count")
@@ -333,12 +423,13 @@ def assert_build_ready(source, reader):
     if re.fullmatch(r"_B\d{2}", source.stem) or source.name in SUPPLEMENT_NAMES:
         debug = source.with_suffix(".debug.log")
         log = source.with_suffix(".log")
-        for required in (debug, log):
+        required_logs = (log,) if source.name in INDEPENDENT_READING_NAMES else (debug, log)
+        for required in required_logs:
             if not required.is_file():
                 raise FileNotFoundError(f"Missing build diagnostic: {required}")
         failed = re.search(
             r"^status:\s*(?:none|ambiguous[^\r\n]*|duplicate-register)\s*$",
-            debug.read_text(encoding="utf-8", errors="replace"),
+            debug.read_text(encoding="utf-8", errors="replace") if debug in required_logs else "",
             re.MULTILINE | re.IGNORECASE,
         )
         if failed:
@@ -442,7 +533,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--audit-only", action="store_true")
     parser.add_argument("--organize-existing", action="store_true",
-                        help="Sort current output PDFs and repair their links without rebuilding; keep originals in tmp.")
+                        help="Sort current output PDFs and repair their links without rebuilding; remove recovery copies after success.")
     parser.add_argument("--skip-main", action="store_true")
     parser.add_argument("--csb-pilot", action="store_true",
                         help="Also publish both Cantor-Bernstein pilot editions; require both build artifacts.")
@@ -452,6 +543,10 @@ def main():
                         help="Also publish both Dedekind recursion companion editions; require both build artifacts.")
     parser.add_argument("--bracketing-editions", action="store_true",
                         help="Also publish both bracketing-independence editions; require both build artifacts.")
+    parser.add_argument("--power", action="store_true",
+                        help="Also publish both power-semigroup editions; require both build artifacts.")
+    parser.add_argument("--e-coordinates", action="store_true",
+                        help="Also publish the e-coordinate definitions and proofs; require its build artifact.")
     parser.add_argument("--differences", action="store_true",
                         help="Also publish both formal-difference companion editions; require both build artifacts.")
     parser.add_argument("--integers", action="store_true",
@@ -464,10 +559,18 @@ def main():
                         help="Also publish both group-reconstruction companion editions; require both build artifacts.")
     parser.add_argument("--nullproducts", action="store_true",
                         help="Also publish both null-product reconstruction editions; require both build artifacts.")
+    parser.add_argument("--finite-semigroups", action="store_true",
+                        help="Also publish the finite-semigroups reading edition; require its build artifact.")
     parser.add_argument("--zero-transport", action="store_true",
                         help="Also publish both general zero-transport editions; require both build artifacts.")
     parser.add_argument("--compactness", action="store_true",
                         help="Also publish both compactness editions; require both build artifacts.")
+    edition_only = parser.add_mutually_exclusive_group()
+    for directory in INDEPENDENT_READINGS:
+        edition_only.add_argument(f"--{directory}-only", action="store_true",
+                                  help=f"Publish only the independent {directory} reading; audit all current PDFs.")
+    edition_only.add_argument("--e-coordinates-only", action="store_true",
+                              help="Publish only the e-coordinate definitions and proofs; audit all current PDFs.")
     parser.add_argument("--bands", nargs="+", metavar="Bnn",
                         help="Publish only these standalone volumes; still audit all current PDF links.")
     args = parser.parse_args()
@@ -475,11 +578,21 @@ def main():
         graph = list(csv.DictReader(file, delimiter="\t"))
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     names.update(SUPPLEMENT_NAMES)
+    names.update(PUBLICATION_ALIASES)
+    only_edition = args.e_coordinates_only or any(
+        getattr(args, directory.replace("-", "_") + "_only") for directory in INDEPENDENT_READINGS)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.zero_transport or args.compactness or args.bands:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power or args.e_coordinates or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.bands or only_edition:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
+    if only_edition and (
+        args.skip_main or args.bands or args.csb_pilot or args.mogiljanskaja
+        or args.dedekind or args.bracketing_editions or args.power or args.e_coordinates or args.differences
+        or args.integers or args.semilattice or args.frankl
+        or args.reconstruction or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
+    ):
+        parser.error("Single-edition publication cannot be combined with other publication selections")
     flat = [path for path in OUTPUT.glob("*.pdf") if path.name in set(names.values()) | {MAIN_NAME}]
     if flat:
         parser.error("Flat output PDFs remain; run --organize-existing first")
@@ -490,9 +603,13 @@ def main():
     all_publications = [(ROOT / (row["artifact_base"] + ".pdf"), publication_path(names[f"_{row['band']}.pdf"])) for row in graph]
     publications = [publication for row, publication in zip(graph, all_publications)
                     if not args.bands or row["band"] in args.bands]
+    if only_edition:
+        publications = []
     if not args.skip_main:
-        publications.append((ROOT / "main.pdf", publication_path(MAIN_NAME)))
+        if not only_edition:
+            publications.append((ROOT / "main.pdf", publication_path(MAIN_NAME)))
         all_publications.append((ROOT / "main.pdf", publication_path(MAIN_NAME)))
+    full_publish = not args.bands and not args.audit_only and not only_edition
 
     pilot_publications = [(ROOT / "registry" / "csb" / source, publication_path(destination))
                           for source, destination in CSB_PILOT_NAMES.items()]
@@ -500,7 +617,7 @@ def main():
     # exists. The ordinary missing-artifact preflight then rejects a partial
     # pair before replacing any PDF. An audit-only run needs no build artifacts.
     publish_pilot = args.csb_pilot or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in pilot_publications)
     )
     if publish_pilot:
@@ -514,7 +631,7 @@ def main():
         for source, destination in MOGILJANSKAJA_NAMES.items()
     ]
     publish_mogiljanskaja = args.mogiljanskaja or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in mogiljanskaja_publications)
     )
     if publish_mogiljanskaja:
@@ -527,7 +644,7 @@ def main():
         for source, destination in DEDEKIND_NAMES.items()
     ]
     publish_dedekind = args.dedekind or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in dedekind_publications)
     )
     if publish_dedekind:
@@ -540,7 +657,7 @@ def main():
         for source, destination in BRACKETING_NAMES.items()
     ]
     publish_bracketing = args.bracketing_editions or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in bracketing_publications)
     )
     if publish_bracketing:
@@ -548,12 +665,37 @@ def main():
     all_publications.extend(publication for publication in bracketing_publications
                             if publish_bracketing or publication[1].is_file())
 
+    power_publications = [
+        (ROOT / "registry" / "power" / source, publication_path(destination))
+        for source, destination in POWER_NAMES.items()
+    ]
+    publish_power = args.power or (
+        full_publish
+        and any(source.is_file() for source, _ in power_publications)
+    )
+    if publish_power:
+        publications.extend(power_publications)
+    all_publications.extend(publication for publication in power_publications
+                            if publish_power or publication[1].is_file())
+
+    coordinates_publications = [
+        (ROOT / "registry" / "e-coordinates" / source, publication_path(destination))
+        for source, destination in COORDINATES_NAMES.items()
+    ]
+    publish_coordinates = args.e_coordinates or args.e_coordinates_only or (
+        full_publish and any(source.is_file() for source, _ in coordinates_publications)
+    )
+    if publish_coordinates:
+        publications.extend(coordinates_publications)
+    all_publications.extend(publication for publication in coordinates_publications
+                            if publish_coordinates or publication[1].is_file())
+
     differences_publications = [
         (ROOT / "registry" / "differences" / source, publication_path(destination))
         for source, destination in DIFFERENCES_NAMES.items()
     ]
     publish_differences = args.differences or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in differences_publications)
     )
     if publish_differences:
@@ -566,7 +708,7 @@ def main():
         for source, destination in INTEGERS_NAMES.items()
     ]
     publish_integers = args.integers or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in integers_publications)
     )
     if publish_integers:
@@ -579,7 +721,7 @@ def main():
         for source, destination in SEMILATTICE_NAMES.items()
     ]
     publish_semilattice = args.semilattice or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in semilattice_publications)
     )
     if publish_semilattice:
@@ -592,7 +734,7 @@ def main():
         for source, destination in FRANKL_NAMES.items()
     ]
     publish_frankl = args.frankl or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in frankl_publications)
     )
     if publish_frankl:
@@ -605,7 +747,7 @@ def main():
         for source, destination in RECONSTRUCTION_NAMES.items()
     ]
     publish_reconstruction = args.reconstruction or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in reconstruction_publications)
     )
     if publish_reconstruction:
@@ -618,7 +760,7 @@ def main():
         for source, destination in NULLPRODUCTS_NAMES.items()
     ]
     publish_nullproducts = args.nullproducts or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in nullproducts_publications)
     )
     if publish_nullproducts:
@@ -631,7 +773,7 @@ def main():
         for source, destination in ZERO_TRANSPORT_NAMES.items()
     ]
     publish_zero_transport = args.zero_transport or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in zero_transport_publications)
     )
     if publish_zero_transport:
@@ -639,18 +781,51 @@ def main():
     all_publications.extend(publication for publication in zero_transport_publications
                             if publish_zero_transport or publication[1].is_file())
 
+    finite_publications = [
+        (ROOT / "registry" / "finite" / source, publication_path(destination))
+        for source, destination in FINITE_SEMIGROUPS_NAMES.items()
+    ]
+    publish_finite = args.finite_semigroups or (
+        full_publish
+        and any(source.is_file() for source, _ in finite_publications)
+    )
+    if publish_finite:
+        publications.extend(finite_publications)
+    all_publications.extend(publication for publication in finite_publications
+                            if publish_finite or publication[1].is_file())
+
     compactness_publications = [
         (ROOT / "registry" / "compactness" / source, publication_path(destination))
         for source, destination in COMPACTNESS_NAMES.items()
     ]
     publish_compactness = args.compactness or (
-        not args.bands and not args.audit_only
+        full_publish
         and any(source.is_file() for source, _ in compactness_publications)
     )
     if publish_compactness:
         publications.extend(compactness_publications)
     all_publications.extend(publication for publication in compactness_publications
                             if publish_compactness or publication[1].is_file())
+
+    for directory, edition_names in INDEPENDENT_READINGS.items():
+        independent_publications = [
+            (ROOT / "registry" / directory / source, publication_path(destination))
+            for source, destination in edition_names.items()
+        ]
+        selected = getattr(args, directory.replace("-", "_") + "_only")
+        publish_reading = selected or (full_publish and any(source.is_file()
+                                                           for source, _ in independent_publications))
+        if publish_reading:
+            publications.extend(independent_publications)
+        all_publications.extend(publication for publication in independent_publications
+                                if publish_reading or publication[1].is_file())
+
+    # Self-contained manual readings are curated snapshots, never rebuilt here.
+    all_publications.extend(
+        (ROOT / "tmp/pdfs/context-equivalence" / source, publication_path(destination))
+        for source, destination in MANUAL_READING_NAMES.items()
+        if publication_path(destination).is_file()
+    )
 
     if not args.audit_only:
         missing = [str(source.relative_to(ROOT)) for source, _ in publications if not source.is_file()]

@@ -47,8 +47,12 @@ The publication step updates external PDF links to relative paths between
 the published files and verifies that every linked result destination exists.
 Each current PDF is stored once, with its existing filename and volume
 number. Main volumes sit directly in their thematic folder; companion editions
-sit below `Ergänzungen/<topic>/`. `scripts/publish-pdfs.py` centrally defines
-these publication paths. See [VOLUMES.md](VOLUMES.md) for the folder mapping.
+sit below `Ergänzungen/Bd. NN Titel/<topic>/`. `scripts/publish-pdfs.py` centrally defines
+these publication paths. Each volume folder uses its two-digit number and canonical
+main-volume title from `band-dependencies.tsv`, for example `Bd. 28 Halbgruppen`.
+See [VOLUMES.md](VOLUMES.md) for the folder mapping.
+Reading editions without a proof-table companion and their prose proofs sit
+under `Ergänzungen/Bd. NN Titel/experimentell/<topic>/` within the corresponding subject folder.
 Build logs and temporary files belong in `tmp/`, outside the publication
 directory.
 
@@ -60,11 +64,13 @@ python ./scripts/publish-pdfs.py --organize-existing
 ```
 
 The command stages and audits the relative PDF links before moving the files.
-It retains the original PDFs under `tmp/pdf-organization-*/originals` for recovery.
+Temporary originals under `tmp/pdf-organization-*/originals` support recovery
+during the move; after successful installation and link verification the command
+removes this staging directory and creates no archive.
 Normal publication
 uses the thematic structure automatically. Both Cantor–Bernstein companion
 editions are published under
-`output/03 Relationen und Funktionen/Ergänzungen/Cantor-Bernstein/`;
+`output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/`;
 B08 remains directly in `03 Relationen und Funktionen`.
 
 Der Gesamtlauf baut den Überblicksband B00, alle 48 Fachbände und den Gesamtband.
@@ -100,6 +106,27 @@ Existing build products can also be audited without recompiling:
 pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain
 python ./scripts/publish-pdfs.py --audit-only
 ```
+
+## Endliche Halbgruppen: zusätzliche Lesefassung
+
+Die Quellen der Überblickslesefassung liegen unter `tex/b37/finite/`,
+der Einstiegspunkt ist `editions/b37-finite-reading.tex`. Die Fassung
+importiert die Aussagen aus Band 37 und besitzt keine eigenen nummerierten
+Sätze. Nach einem aktuellen Band-37-Build und dem Build der
+Nullprodukt-Ergänzungen:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-finite-semigroups-reading.ps1 -Python /path/to/python
+python ./scripts/check-finite-semigroups.py
+python ./scripts/publish-pdfs.py --bands B00 B37 --nullproducts --zero-transport --finite-semigroups
+```
+
+`build-nullproducts-editions.ps1` baut die Lesefassung nach den
+Nullprodukt-Ergänzungen; dadurch erfasst auch `build-all.ps1` sie automatisch.
+Das Importskript `finite-semigroups-edition.py` prüft mit `audit`
+Aussagenbesitz, Aktualität der Verweise und PDF-Zielmarken. Die kleine
+exhaustive Prüfung kontrolliert alle Tafeln der Ordnung zwei und das
+Dreierbeispiel; sie ist keine formale Prüfung der allgemeinen Beweise.
 
 ## Standalone volumes / Einzelbände
 
@@ -275,7 +302,7 @@ python ./scripts/publish-pdfs.py --bands B00 B28 --bracketing-editions
 ```
 
 The publication folder is
-`output/07 Halbgruppen und Monoide/Ergänzungen/Klammerungsunabhängigkeit/`.
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/`.
 Existing companion PDFs participate in every publication link audit.
 
 ## Mogiljanskaja counterexample / Lesefassung und Beweistabellen
@@ -342,7 +369,7 @@ python ./scripts/publish-pdfs.py --bands B00 B21 B28 B37 --mogiljanskaja
 ```
 
 The two companions are published under
-`output/07 Halbgruppen und Monoide/Ergänzungen/Mogiljanskaja-Gegenbeispiel/`.
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel/`.
 The main B28 PDF remains directly in the subject folder. The publisher
 rewrites relative links for this hierarchy and includes existing companion
 PDFs in every publication link audit. Full publication includes each
@@ -406,7 +433,7 @@ python ./scripts/publish-pdfs.py --bands B00 B10 B15 B16 B17 B19 B20 B21 B22 B26
 ```
 
 The companion PDFs are published under
-`output/04 Zahlen und Folgen/Ergänzungen/Dedekindscher Rekursionssatz/`.
+`output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/`.
 Existing Dedekind companions participate in every publication link audit;
 a full publication includes the pair once its build products are present,
 rejecting an incomplete pair before replacing any PDF.
@@ -456,7 +483,7 @@ python ./scripts/publish-pdfs.py --bands B00 B17 --integers --differences
 ```
 
 The new pair is published in
-`output/04 Zahlen und Folgen/Ergänzungen/Ganze Zahlen/`. A complete publishing
+`output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/`. A complete publishing
 run includes it automatically once either build artifact exists; an incomplete
 pair is rejected before output files are replaced. Restricted runs and
 `--audit-only` still check already published integer companions.
@@ -515,7 +542,7 @@ python ./scripts/publish-pdfs.py --bands B00 B41 --differences
 ```
 
 The companions are published in
-`output/08 Gruppen/Ergänzungen/Formale Differenzen/`. The publisher rewrites
+`output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/`. The publisher rewrites
 their relative links, includes existing companion PDFs in publication audits
 and rejects incomplete pairs before replacing output files.
 
@@ -588,7 +615,7 @@ The audit checks preservation of the 23 statements and table bodies,
 unchanged canonical numbering and destinations, empty local companion
 registries, and PDF navigation. These checks do not verify inference rules.
 The publisher places both companions under
-`output/05 Ordnungen und Verbände/Ergänzungen/Halbverbände und Ordnung/`
+`output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung/`
 and rewrites their relative links to the published files.
 
 ## Frankl special cases / Frankls Spezialfälle
@@ -629,7 +656,7 @@ Build artifacts are `registry/frankl/_B46-frankl-reading.pdf` and
 `registry/frankl/_B46-frankl-proofs.pdf`. The publisher requires both when
 `--frankl` is selected and includes the pair in a complete publication once
 either artifact exists. It publishes them under
-`output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Frankls Spezialfälle/`
+`output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle/`
 and rewrites remote links to the published filenames. The source audit also
 scans the extracted companion files. Structural audits and link checks do
 not verify mathematical inference rules.
@@ -668,10 +695,152 @@ explanatory proof, a historical account and a final concluding section.
 
 The jobs `_B40-reconstruction-reading` and `_B40-reconstruction-proofs` live
 under `registry/reconstruction/`. Both are published under
-`output/08 Gruppen/Ergänzungen/Gruppenrekonstruktion/`. Complete publication
+`output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/`. Complete publication
 includes the pair once either build artifact exists, rejecting an incomplete
 pair before replacing output files. Restricted runs still audit already
 published companions.
+
+## Power semigroup / Potenzhalbgruppe
+
+Build Band 28, both companions, the overview and the complete manuscript:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-power-editions.ps1 -Python /path/to/python
+```
+
+`-EditionsOnly` builds and audits only the companions using current Band 28
+and predecessor artifacts. `-SkipMain`, `-SkipPublish` and `-SkipVolumeBuild`
+follow the other companion builders. After changing prerequisites, rebuild the
+affected dependency range first. `build-all.ps1` schedules both companions
+after the last selected Band 28 dependency and before auditing outgoing links.
+
+The sources are in `tex/b28/power/`, with entry points under `editions/`.
+The product definition now uses the term-image set directly. The existing H3
+statement (the product is a subset of the carrier) has its own formal table
+before the main proof, displayed from the unchanged canonical formula.
+`separate_inner_proofs` pins that table's digest and required references.
+Every other retained helper is visibly identified at its proved conclusion
+by `PowerInnerProofResult`, without adding proof steps or changing justifications.
+The source audit requires each retained helper to have exactly one such result
+label or its own proof heading.
+The proof companion begins with the carrier and the complete canonical
+  product-definition formula, followed by a reference to the multi-index and
+  binary-operator notation introduced directly at Definition 3.18.1.1 in Band 3.
+  That notation uses nested term-image sets and their union; the official
+  product definition in Band 28 explains this construction for the product.
+  The reading edition retains only a short reference. The display-only macro
+`PowerProductDefinitionFormula` registers no new statement; the source audit
+checks that its body equals the canonical Band 28 formula and is used once.
+The bounded
+element-membership statement remains unchanged for its existing callers;
+its proof follows the independent carrier and closure proof. The continuous table proving
+`NonemptyPowerSemigroup` uses Band 03 theorems 3.20.1.2 and 3.20.1.3
+(`TermImageCompositionRight` and `TermImageCompositionLeft`) for the outer
+equalities, and theorem 3.18.1.6 (`B27TermImagePointwiseEquality`) for the
+middle equality of the associativity chain. H18 is a direct application of
+the product definition; the two inclusion proofs for that representation
+are no longer needed. The main proof has no preparatory subsection or row-mapping
+table. It reuses the element assumptions and applies the final universal closures
+directly within the semigroup-definition step; H6 is proved with the subsequent
+membership criterion. The ten redundant inner results H7–H16 are
+explicitly retired. The active H1–H6 and H17 and every other Band 28 statement
+retain their canonical ownership, numbers and named destinations; H18 is
+recorded separately as an addition in the manifest. The
+companions import Band 28 and register no
+local statements. The reading edition labels the equality signs with their
+canonical references, includes the complete seven-element multiplication
+table of the modulo-three example, and ends with a historical account
+linking Dubreil's 1953 paper and Tamura's 1967 report (Problem 10, p. 35).
+`PUBLICATION_ALIASES` maps the former generic filenames to the descriptive
+“Halbgruppenbeweis der Potenzhalbgruppe” names when repairing existing links.
+
+```powershell
+python ./scripts/power-editions.py prepare
+python ./scripts/power-editions.py audit-sources
+python ./scripts/power-editions.py audit
+python ./scripts/publish-pdfs.py --bands B00 B28 --power
+```
+
+The manifest snapshots the original statement formulas, table bodies and the
+complete Band 28 registry and AUX destinations. These original fields remain
+historical, including all 17 former helper declarations and 19 former direct
+proof targets. `retired_inner_statements` records exactly the removed ten
+statements, their registry rows, AUX labels and proof targets. Together with
+H18 the active pair has ten direct proof targets. `definition_revision`
+records the equivalent term-image definition and replaces only its structural
+registry row. Its alias, ID, number and PDF destination stay unchanged.
+The canonical audit retains every other registry row and AUX identity.
+
+The explicit `proof_revisions` metadata retains the original table, records the
+reason and required references, and pins both original and revised normalized
+SHA256 digests. `proof_revisions_history` preserves the preceding approved
+revision. Normalization
+masks TeX comments, removes whitespace and hashes the remaining UTF-8 text.
+The audits check the revised digest and required references alongside source
+preservation, canonical numbering, imports, empty companion registries and
+reciprocal PDF navigation. Integrated rows keep every incoming proof target;
+reverse links are checked for both displayed statements and all explicitly
+cited helpers, without requiring a separate helper-index table.
+The audits do not certify mathematical inference rules.
+
+The jobs `_B28-power-reading` and `_B28-power-proofs` keep their generated
+files under `registry/power/`. Publication writes both PDFs under
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/`.
+A complete publishing run includes the pair once either build artifact exists
+and rejects an incomplete pair before replacing output PDFs. Restricted
+publication and audit runs still check already published companions.
+
+## e-Koordinatenabbildung / Definitionen und Beweise
+
+Die einzelne Ergänzung übernimmt den Originalabschnitt 28.2.13 aus Band 28 mit
+fünf Definitionen, vier Axiomen und sechzehn Sätzen. Die Beweise bleiben unverändert;
+die gemeinsame Konfiguration erzeugt ihre automatischen Nachschlagetabellen.
+Die kanonischen Nummern und Aussagen gehören weiterhin Band 28.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-e-coordinates-edition.ps1 -Python /path/to/python
+```
+
+Mit `-SkipPublish` baut und prüft der Builder die Ausgabe ohne Veröffentlichung.
+`scripts/e-coordinates-edition.py prepare` bereitet die Ausgabe vor;
+`scripts/e-coordinates-edition.py audit` prüft sie gegen den kanonischen Abschnitt.
+Das Buildartefakt liegt unter `registry/e-coordinates/_B28-e-coordinates.pdf`.
+Zur gezielten Veröffentlichung einer bereits gebauten Ausgabe dient:
+
+```powershell
+python ./scripts/publish-pdfs.py --e-coordinates-only
+```
+
+Dieser Aufruf ersetzt ausschließlich die Ergänzungs-PDF und prüft anschließend
+alle veröffentlichten PDF-Verweise. `--e-coordinates` nimmt die Ausgabe in eine
+reguläre Auswahl auf, beispielsweise mit `--bands B28 --skip-main`.
+Ein vollständiger Veröffentlichungslauf berücksichtigt sie automatisch, sobald
+das Buildartefakt vorhanden ist. Der Publisher verlangt sowohl die `.log`- als auch
+die `.debug.log`-Datei. `--audit-only` und `--organize-existing` berücksichtigen
+eine bereits veröffentlichte Ausgabe ebenfalls.
+
+Das Veröffentlichungsziel ist
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf`.
+
+## General zero transport / Allgemeiner Nullelement-Transport
+
+The supplement sources are under `tex/b28/zero-transport/`, with entry points
+`editions/b28-zero-transport-proofs.tex` and
+`editions/b28-zero-transport-reading.tex`. The proof edition owns the general
+theorem `PowerSemigroupZeroTransport` and uses number prefix `28Z`; the reading
+edition imports its statements. Both editions require current B33 artifacts
+and B33's predecessors because they use its zero-element interface.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-zero-transport-editions.ps1 -Python /path/to/python
+python ./scripts/publish-pdfs.py --bands B28 B33 --zero-transport
+```
+
+The generated files stay under `registry/zero-transport/`, and the published
+pair is under `output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Nullelement-Transport/`.
+The full builder schedules this pair before the null-product companions;
+the targeted null-product builder also builds it unless
+`-SkipZeroTransportBuild` selects already available artifacts.
 
 ## Null-product reconstruction / Nullprodukt-Rekonstruktion
 
@@ -681,6 +850,9 @@ statement `FiniteTwoProductZeroReconstruction`; the proof companion owns its
 private auxiliary results with number prefix `37E`. The reading companion
 imports both sources and registers no local statements. General prerequisites
 remain in the earlier subject volumes.
+The current proof companion also imports the general zero-transport theorem.
+The reading edition's page-local symbol legend is implemented by
+`tex/b37/nullproducts/symbols.tex` and `tex/impl/symbol-legend.tex`/`.lua`.
 
 With current predecessor artifacts, build the companions and their referring
 volumes with:
@@ -706,17 +878,30 @@ private IDs and direct proof destinations are recorded separately.
 python ./scripts/nullproducts-editions.py prepare
 python ./scripts/nullproducts-editions.py prepare-reading
 python ./scripts/nullproducts-editions.py audit
-python ./scripts/publish-pdfs.py --bands B00 B37 --nullproducts
+python ./scripts/publish-pdfs.py --bands B00 B37 --nullproducts --zero-transport --finite-semigroups
 ```
 
 Run `prepare-reading` after the proof companion has been built, and `audit`
 after both builds. The audits check statement ownership, numbering, imports and
 PDF navigation. They do not certify mathematical inference rules. Both PDFs
 are published under
-`output/07 Halbgruppen und Monoide/Ergänzungen/Nullprodukt-Rekonstruktion/`.
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/`.
 Complete publication includes the pair once either build artifact exists;
 incomplete pairs are rejected before replacing PDFs. Restricted publication
 and audit runs also check already published null-product companions.
+
+The focused publisher tests and independent symbol-legend fixtures can be run
+without changing manuscript PDFs:
+
+```powershell
+python -B ./tests/test_publish_reading_links.py
+python -B ./scripts/check-symbol-legend.py
+```
+
+On Windows, long absolute source paths can wrap the expected messages of
+intentional-error fixtures in the middle of a word. Repeating these cases
+without the compiler's `-file-line-error` option keeps the diagnostic text
+intact; this changes only the log prefix.
 
 ## Total boundedness and compactness companions
 
@@ -752,10 +937,109 @@ python ./scripts/publish-pdfs.py --bands B00 B47 --compactness
 
 Run `prepare` after B47, `prepare-reading` after the proof companion, and `audit`
 after both companions have been built. The published pair appears under
-`output/10 Metrische Räume/Ergänzungen/Totale Beschränktheit und Kompaktheit/`.
+`output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/experimentell/Totale Beschränktheit und Kompaktheit/`, because this
+companion contains prose proofs without a proof-table section.
 Full publication includes both companions once either artifact exists; both
 must pass preflight before publication. Restricted runs also audit existing
 published companions.
+
+## Independent experimental readings
+
+The three standalone sources `editions/b37-two-products-reading.tex`,
+`editions/b37-three-products-reading.tex` and
+`editions/b37-context-profiles-reading.tex` need no volume registry or local
+TeX inputs. Build and publish each independently with:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-two-products-reading.ps1
+pwsh -NoProfile -File ./scripts/build-three-products-reading.ps1
+pwsh -NoProfile -File ./scripts/build-context-profiles-reading.ps1
+```
+
+The scripts create their artifacts under `registry/two-products/`,
+`registry/three-products/` and `registry/context-profiles/`. Their corresponding
+`--two-products-only`, `--three-products-only` and `--context-profiles-only`
+publisher options replace only the selected reading and audit the published
+collection. The publication paths are `output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell/<topic>/`.
+Full publication also includes each available reading artifact.
+Imported source and PDF provenance is recorded in
+`scripts/experimental-reading-provenance.json`; mathematical content is unchanged.
+
+## Experimental context-equivalence reading edition
+
+`editions/b28-context-equivalence-reading.tex` is a self-contained experimental
+reading text with right-margin notation. It uses LuaLaTeX and Unicode fonts,
+has no external project inputs, and registers no numbered project statements. The publisher catalogs and audits
+the reviewed snapshot without automatically rebuilding it. To reproduce its PDF:
+
+```powershell
+New-Item -ItemType Directory -Force -Path tmp/pdfs/context-equivalence | Out-Null
+lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=tmp/pdfs/context-equivalence -jobname=context-equivalence-reading editions/b28-context-equivalence-reading.tex
+```
+
+Run LuaLaTeX a second time to resolve internal equation references and bookmarks.
+The reviewed reader snapshot is stored under
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/experimentell/Kontextäquivalenz/`.
+
+## Automatische Nachschlagetabellen unter Beweisen
+
+Die gemeinsame Konfiguration ergänzt jeden Beweis mit verwendeten registrierten
+Sätzen, Definitionen oder Axiomen automatisch um eine Nachschlagetabelle.
+Einzelne Skripte und Beweiszeilen benötigen dafür keine zusätzlichen Befehle.
+Links steht die ursprüngliche Aussage einschließlich Prämissen, Konklusion und
+vollständigem Delta-Kontext; rechts steht derselbe nummerierte Verweis wie im
+Beweis. Die Einträge folgen ihrer ersten Verwendung. Mehrfache Verweise auf
+denselben Satz erscheinen nur einmal. Geteilte Beweise erhalten eine gemeinsame
+Tabelle am Ende des gesamten Beweises. Ohne verwendete registrierte Aussagen
+entsteht keine leere Tabelle.
+
+Breite Formeln werden innerhalb der linken Spalte an mathematischen Abständen
+auf mehrere Zeilen umgebrochen. Mehrzeilige Aussagen und Voraussetzungen können
+über Seiten fortgesetzt werden; der zugehörige Verweis bleibt dabei sichtbar.
+Brüche, Indizes und andere unteilbare mathematische Bestandteile bleiben
+zusammen. Nur ein einzelner Bestandteil, der selbst nicht in die verfügbare
+Breite oder Höhe passt, wird proportional eingepasst.
+
+Mit `\ProofReferencesOff` lässt sich die Ausgabe zentral oder innerhalb einer
+LaTeX-Gruppe ausschalten; `\ProofReferencesOn` schaltet sie wieder ein.
+Standardmäßig ist sie eingeschaltet. Die Originalaussagen werden zusammen mit
+den bisherigen Lookup-Daten in den Registry-Dateien gespeichert. Ältere
+Registries enthalten diese Angaben noch nicht: Deshalb die betroffenen Bände
+und ihre Vorgänger neu bauen, bevor ihre Formeln in Standalone-Ausgaben oder
+Ergänzungsbänden nachgeschlagen werden. Fehlende Originalaussagen werden im Log
+als `proof-references WARNING: missing original statement` gemeldet; normalisierte
+Suchschlüssel werden nicht als Ersatzformel gedruckt.
+
+Die isolierten Regressionstests bauen keine Bände und veröffentlichen keine PDFs:
+
+```powershell
+python ./scripts/check-proof-references.py
+texlua ./tests/proof-references/metadata.lua
+```
+
+Sie prüfen die Originalformeln, Kontexte, Nummerierung, Reihenfolge,
+Deduplikation, Imports und Beweisgrenzen sowie die Registry-Kodierung.
+Ihre Artefakte liegen unter `tmp/proof-references-tests/`.
+
+Nach einem Gesamtbau prüft der PDF-Geometrieaudit die tatsächlichen Zeichen und
+Grafikobjekte der Nachschlagetabellen gegen ihre Spalten und den Satzspiegel.
+Er prüft außerdem, dass fortgesetzte Tabellenseiten ihren Tabellenkopf behalten.
+Die unsichtbaren Bereichsmarkierungen gehören zur gemeinsamen Konfiguration;
+manuelle Markierungen in den Skripten sind nicht nötig. Der Audit benötigt
+`pypdf` und `pdfplumber` und meldet auch fehlende Markierungen in alten PDFs.
+
+```powershell
+./scripts/build-all.ps1 -SkipPublish
+python ./scripts/publish-pdfs.py
+python ./scripts/check-proof-reference-layout.py output --require-tags --tolerance 0.5 --jobs 3 --report tmp/proof-reference-layout-final.json
+python ./scripts/publish-pdfs.py --audit-only
+```
+
+Der Gesamtlauf aktualisiert alle 49 Bände, die regulär eingebundenen
+Ergänzungsbände und den Gesamtband unter `output/`. Eigenständige experimentelle
+Lesefassungen werden separat gebaut und veröffentlicht. Die Layoutprüfung
+erfasst die Nachschlagetabellen;
+sie ist keine allgemeine Randprüfung aller ursprünglichen Manuskriptseiten.
 
 ## PDF metadata
 

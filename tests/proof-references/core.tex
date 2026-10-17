@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{report}
+\input{tests/proof-references/common.tex}
+\begin{document}
+\chapter{Integration}
+\section{Statements}
+\FormulaThmAuto[Identity]{P\rightarrow P}[][FixtureIdentity]
+\FormulaThmDeltaKR[Original display, separate lookup key]{%
+  \begin{aligned}[t]
+    P\rightarrow Q,\ P\rightarrow R&\vdash{}\\
+    &P\rightarrow(Q\land R)
+  \end{aligned}%
+}{P\rightarrow Q\vdash R}{FixtureConjunction}{%
+  \DeltaRow{Declaration}{P,Q,R}%
+  \DeltaPrem{PREMISEMARKER}{S\rightarrow T}%
+  \DeltaRow{Side condition}{U=V}[\FormulaRefAuto{FixtureIdentity}]%
+}
+\FormulaDefDeltaK[Definition]{D\coloneqq P\land Q}{FixtureDefinition}{%
+  \DeltaDecl{Variables}{P,Q}%
+  \DeltaRow{DEFINITIONMARKER}{P\lor Q}%
+}
+\FormulaAxiomAutoR[Excluded middle]{P\lor\neg P}{FixtureAxiom}
+\begin{definition}[Classical]
+  \label{def:fixture-classical}
+  \ThmLookupRegister{def:fixture-classical}{definition}{\theformulaDef}{FixtureClassical}{Classical statement}
+  \ThmLookupRegisterId{FixtureClassical}{definition}{def:fixture-classical}
+  CLASSICPREMISE: Assume that there is exactly one object satisfying
+  \[\exists! x\,P(x).\]
+  CLASSICCONCLUSION: Define its name by
+  \[c\coloneqq\iota x\,P(x).\]
+\end{definition}
+\begin{theorem}[Classical]
+  \label{thm:fixture-classical}
+  \ThmLookupRegister{thm:fixture-classical}{theorem}{\theformulaThm}{FixtureClassicalTheorem}{Classical theorem}
+  \ThmLookupRegisterId{FixtureClassicalTheorem}{theorem}{thm:fixture-classical}
+  \par CLASSICTHEOREMPREMISE: Assume \(P\).
+  \[P\vdash P\lor P.\]
+  CLASSICTHEOREMCONCLUSION: The displayed conclusion follows.
+\end{theorem}
+\begin{axiom}[Classical]
+  \label{ax:fixture-classical}
+  \ThmLookupRegister{ax:fixture-classical}{axiom}{\theformulaAx}{FixtureClassicalAxiom}{Classical axiom}
+  \ThmLookupRegisterId{FixtureClassicalAxiom}{axiom}{ax:fixture-classical}
+  \par CLASSICAXIOMPREMISE: Assume
+  \[P\lor\neg P.\]
+  CLASSICAXIOMCONCLUSION: The stated disjunction holds.
+\end{axiom}
+
+\FixtureCase{normal}
+\begin{tabproof}
+  \proofstep{}{D}{\FormulaRefAuto{FixtureDefinition}[def]}
+  \proofstep{}{P\rightarrow P}{\FormulaRefAuto{P\rightarrow P}}
+  \proofstep{}{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+  \proofstep{}{D}{\FormulaRefAuto{FixtureDefinition}[def]}
+\end{tabproof}
+
+\FixtureCase{wide}
+\begin{tabproofwide}
+  \proofstepwidestar{P\rightarrow(Q\land R)}{\FormulaRefAuto{FixtureConjunction}}
+  \proofstepwide{P}{=}{P}{\FormulaRefAuto{FixtureConjunction}}
+  \proofstepwidestar{P\lor\neg P}{\FormulaRefAuto{FixtureAxiom}[ax]}
+\end{tabproofwide}
+
+\FixtureCase{paired}
+\begin{tabproofpaired}
+  \proofsteppaired{D}{\FormulaRefAuto{FixtureDefinition}[def]}
+\end{tabproofpaired}
+
+\FixtureCase{split}
+\begin{tabproofsplit}
+  \ProofPartSetParent{91.1.1.90}
+  \proofpartind[First helper]{\Gamma\vdash P}[\Gamma\vdash P][FixtureHelper]
+    \proofstep{}{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+  \closeproofpartind
+  \proofpartind[Second helper]{\Gamma\vdash P\land P}[\Gamma\vdash P\land P][UnusedHelper]
+    \proofstep{}{P}{\FormulaRefAuto{FixtureHelper}}
+    \proofstep{}{D}{\FormulaRefAuto{FixtureDefinition}}
+  \closeproofpartind
+\end{tabproofsplit}
+
+\FixtureCase{splitwide}
+\begin{tabproofsplitwide}
+  \ProofPartSetParent{91.1.1.91}
+  \proofpartwideindDelta[Delta helper]{\Gamma\vdash P\lor Q}{%
+    \DeltaPrem{HELPERPREMISE}{W\subseteq X}%
+  }[\Gamma\vdash P\lor Q][FixtureDeltaHelper]
+    \proofstepwidestar{P\rightarrow(Q\land R)}{\FormulaRefAuto{FixtureConjunction}}
+  \closeproofpartwideindDelta
+  \proofpartwide{Conclusion}
+    \proofstepwidestar{P\lor Q}{\FormulaRefAuto{FixtureDeltaHelper}}
+  \closeproofpartwide
+\end{tabproofsplitwide}
+
+\FixtureCase{nested}
+\begin{proof}
+  \begin{tabproof}
+    \proofstep{}{D}{\FormulaRefAuto{FixtureDefinition}}
+  \end{tabproof}
+  \begin{tabproofwide}
+    \proofstepwidestar{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+  \end{tabproofwide}
+\end{proof}
+
+\FixtureCase{classical}
+\begin{tabproof}
+  \proofstep{}{c\coloneqq\iota x\,P(x)}{\FormulaRefAuto{FixtureClassical}[def]}
+  \proofstep{}{P\lor P}{\FormulaRefAuto{FixtureClassicalTheorem}[thm]}
+  \proofstep{}{P\lor\neg P}{\FormulaRefAuto{FixtureClassicalAxiom}[ax]}
+\end{tabproof}
+
+\FixtureCase{bare}
+\begin{longtable}{J}
+  \proofsteppaired{D}{\FormulaRefAuto{FixtureDefinition}[def]}
+  \proofsteppaired{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+  \proofsteppaired{P\rightarrow P}{\FormulaRefAuto{P\rightarrow P}}
+\end{longtable}
+
+\FixtureCase{ordinary}
+\begin{longtable}{ll}
+  Plain table & \FormulaRefAuto{FixtureConjunction}\\
+  Another row & \FormulaRefAuto{FixtureDefinition}[def]\\
+\end{longtable}
+
+\FixtureCase{empty}
+\begin{tabproof}
+  \proofstep{1}{P}{\text{Assumption}}
+\end{tabproof}
+
+\FixtureCase{disabled}
+\ProofReferencesOff
+\begin{tabproof}
+  \proofstep{}{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+\end{tabproof}
+\ProofReferencesOn
+
+\FixtureCase{enabled}
+\begin{tabproof}
+  \proofstep{}{P\rightarrow P}{\FormulaRefAuto{FixtureIdentity}}
+\end{tabproof}
+
+\FixtureCase{forward}
+\begin{tabproof}
+  \proofstep{}{Q\lor P}{\FormulaRefAutoFwd{P\lor Q\vdash Q\lor P}}
+\end{tabproof}
+\FormulaThmAuto[Later statement]{P\lor Q\vdash Q\lor P}
+\end{document}

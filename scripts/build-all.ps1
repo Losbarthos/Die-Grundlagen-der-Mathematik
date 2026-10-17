@@ -81,6 +81,17 @@ if ($needsBracketing) {
 $deferredBracketingAudits = [System.Collections.Generic.List[string]]::new()
 $bracketingBuilt = $false
 
+# B28 keeps every power-semigroup statement and its original destination.
+# Build the two extracted tables and their reading before auditing B28 links.
+$needsPower = (-not $SkipMain) -or (@($bands | Where-Object { $_ -in @('B00', 'B28') }).Count -gt 0)
+$powerTriggerBand = $null
+if ($needsPower) {
+    $powerDependencies = @('B28') + @($graph['B28'].Predecessors)
+    $powerTriggerBand = $bands | Where-Object { $_ -in $powerDependencies } | Select-Object -Last 1
+}
+$deferredPowerAudits = [System.Collections.Generic.List[string]]::new()
+$powerBuilt = $false
+
 # B17 keeps the complete axiomatic interface and externally used statements.
 # Build its model companions before B41's reading, which links to their
 # private construction results, even when B17 itself is outside the range.
@@ -209,6 +220,10 @@ try {
         & (Join-Path $PSScriptRoot 'build-bracketing-editions.ps1') -EditionsOnly -Python $Python
         $bracketingBuilt = $true
     }
+    if ($needsPower -and -not $powerTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-power-editions.ps1') -EditionsOnly -Python $Python
+        $powerBuilt = $true
+    }
     if ($needsIntegers -and -not $integersTriggerBand) {
         & (Join-Path $PSScriptRoot 'build-integers-editions.ps1') -EditionsOnly -Python $Python
         $integersBuilt = $true
@@ -288,6 +303,13 @@ try {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
             }
         }
+        if ($band -eq $powerTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-power-editions.ps1') -EditionsOnly -Python $Python
+            $powerBuilt = $true
+            foreach ($deferredBand in $deferredPowerAudits) {
+                & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
+            }
+        }
         if ($band -eq $integersTriggerBand) {
             & (Join-Path $PSScriptRoot 'build-integers-editions.ps1') -EditionsOnly -Python $Python
             $integersBuilt = $true
@@ -348,6 +370,8 @@ try {
             $deferredDedekindAudits.Add($band)
         } elseif ($band -eq 'B28' -and -not $bracketingBuilt) {
             $deferredBracketingAudits.Add($band)
+        } elseif ($band -eq 'B28' -and -not $powerBuilt) {
+            $deferredPowerAudits.Add($band)
         } elseif ($band -eq 'B28' -and $needsZeroTransport -and -not $zeroTransportBuilt) {
             $deferredZeroTransportAudits.Add($band)
         } elseif ($band -eq 'B17' -and -not $integersBuilt) {
@@ -367,6 +391,11 @@ try {
         } else {
             & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($band)
         }
+    }
+    # The coordinate extract imports B28 without adding reverse links. Build
+    # it after all selected canonical artifacts are stable, before main.
+    if ((-not $SkipMain) -or ('B00' -in $bands) -or ('B28' -in $bands)) {
+        & (Join-Path $PSScriptRoot 'build-e-coordinates-edition.ps1') -SkipVolumeBuild -SkipPublish -Python $Python
     }
     if (-not $SkipMain) {
         Invoke-LoggedBuild -Source 'main.tex' -JobName 'main' -OutDir '.'

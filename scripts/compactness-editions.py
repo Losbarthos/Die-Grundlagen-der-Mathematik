@@ -14,6 +14,7 @@ import re
 import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
+registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
 DIRECTORY = ROOT / "registry/compactness"
 SOURCE = ROOT / "tex/b47/compactness"
 MANIFEST = ROOT / "scripts/compactness-manifest.json"
@@ -70,8 +71,8 @@ def main_records():
     public_ids = set(data["public_ids"])
     if missing := public_ids - set(ids):
         raise ValueError(f"B47: canonical compactness statements are missing: {sorted(missing)}")
-    expected = Counter(tuple(row[1:]) for row in data["canonical_registry"])
-    current = Counter(tuple(row[1:]) for row in rows)
+    expected = registry_records(data["canonical_registry"], legacy_manifest=True)
+    current = registry_records(rows, legacy_manifest=True)
     if missing := expected - current:
         raise ValueError(f"B47: previous canonical records changed: {list(missing.elements())}")
     for label, expected_value in data["canonical_aux"].items():

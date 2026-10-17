@@ -13,6 +13,7 @@ import re
 import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
+registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
 DIRECTORY = ROOT / "registry/differences"
 MANIFEST = json.loads((ROOT / "scripts/differences-manifest.json").read_text(encoding="utf-8"))
 MAIN_ID = MANIFEST["main_id"]
@@ -71,9 +72,9 @@ PRIVATE_IDS = set(id_map(EXPECTED_PROOF))
 SUPPLEMENTS = runpy.run_path(str(ROOT / "scripts/differences-supplements.py"))
 
 
-def records_equal(actual, expected, owner):
-    # The first structural field is an insertion index, not an identity.
-    a, b = Counter(tuple(row[1:]) for row in actual), Counter(tuple(row[1:]) for row in expected)
+def records_equal(actual, expected, owner, *, legacy_manifest=False):
+    a = registry_records(actual, legacy_manifest=legacy_manifest)
+    b = registry_records(expected, legacy_manifest=legacy_manifest)
     if a != b:
         raise ValueError(f"{owner}: statement migration differs from manifest; "
                          f"missing={list((b-a).elements())}, extra={list((a-b).elements())}")
@@ -83,7 +84,7 @@ def main_records():
     base = ROOT / "registry/_B41"
     rows = registry(base.with_suffix(".registry.tsv"))
     ids = id_map(rows)
-    records_equal(rows, MANIFEST["public_records"], "B41")
+    records_equal(rows, MANIFEST["public_records"], "B41", legacy_manifest=True)
     if PRIVATE_IDS & set(ids) or ids.get(MAIN_ID) != MAIN_LABEL:
         raise ValueError("B41 must own the canonical main theorem and no private construction IDs")
     aux = aux_labels(base.with_suffix(".aux"))
@@ -102,7 +103,7 @@ def proof_records():
     ids = id_map(rows)
     original_labels = {row_label(row) for row in EXPECTED_PROOF}
     original = [row for row in rows if row_label(row) in original_labels]
-    records_equal(original, EXPECTED_PROOF, "original construction proofs")
+    records_equal(original, EXPECTED_PROOF, "original construction proofs", legacy_manifest=True)
     additions = SUPPLEMENTS["declarations"]()
     if set(ids) != PRIVATE_IDS | set(additions) or MAIN_ID in ids:
         raise ValueError("proofs: missing private IDs or duplicate public theorem")

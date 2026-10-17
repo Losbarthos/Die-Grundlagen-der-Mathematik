@@ -45,7 +45,7 @@ EXPECTED_PROOF = [moved_record(row) for row in MANIFEST["private_records"]]
 def main_records():
     base = ROOT / "registry/_B17"
     rows = registry(base.with_suffix(".registry.tsv"))
-    records_equal(rows, MANIFEST["public_records"], "B17")
+    records_equal(rows, MANIFEST["public_records"], "B17", legacy_manifest=True)
     if set(id_map(rows)) != PUBLIC_IDS:
         raise ValueError("B17: public statement ownership differs")
     aux = aux_labels(base.with_suffix(".aux"))
@@ -60,7 +60,7 @@ def main_records():
 def proof_records():
     base = DIRECTORY / "_B17-integers-proofs"
     rows = registry(base.with_suffix(".registry.tsv"))
-    records_equal(rows, EXPECTED_PROOF, "integer proofs")
+    records_equal(rows, EXPECTED_PROOF, "integer proofs", legacy_manifest=True)
     if set(id_map(rows)) != PRIVATE_IDS:
         raise ValueError("Proof volume: missing private IDs or duplicate public ownership")
     aux = aux_labels(base.with_suffix(".aux"))

@@ -20,6 +20,7 @@
 
 % \ThmLookupEmitRef{<env>}{<label>} -> "Th. 1.1" (verlinkt via \ref)
 \NewDocumentCommand{\ThmLookupEmitRef}{m m}{%
+  \ifcsname ProofReferencesRecord\endcsname\ProofReferencesRecord{#2}\fi
   \ifcsname ThmLookupPrefix@#1\endcsname
     \csname ThmLookupPrefix@#1\endcsname
   \else
@@ -31,6 +32,7 @@
 % Wie \ThmLookupEmitRef, aber mit Registry-Nummer als Fallback, falls das
 % zugehörige .aux-Label noch fehlt oder aus einem älteren Label-Schema stammt.
 \NewDocumentCommand{\ThmLookupEmitRefResolved}{m m m}{%
+  \ifcsname ProofReferencesRecord\endcsname\ProofReferencesRecord{#2}\fi
   \ifcsname ThmLookupPrefix@#1\endcsname
     \csname ThmLookupPrefix@#1\endcsname
   \else
@@ -44,8 +46,24 @@
   \fi
 }
 
+% Preserve the original display separately from normalized lookup keys.
+\NewDocumentCommand{\ThmLookupStatement}{m m m +m +m}{%
+  \begingroup
+  \csname protected@edef\endcsname\mxStatementLabel{#1}%
+  \csname protected@edef\endcsname\mxStatementNumber{#3}%
+  \directlua{thmlookup.set_statement(
+    "\luaescapestring{\mxStatementLabel}", "\luaescapestring{#2}",
+    "\luaescapestring{\mxStatementNumber}",
+    "\luaescapestring{\detokenize{#4}}",
+    "\luaescapestring{\detokenize{#5}}")}%
+  \endgroup
+}
+
 % \ThmLookupRegister{<label>}{<env>}{<number>}{<statement>}{<title>}
 \NewDocumentCommand{\ThmLookupRegister}{m m m m g}{%
+  \ifcsname ProofReferencesCapturePending\endcsname
+    \ProofReferencesCapturePending{#1}{#2}{#3}%
+  \fi
   \begingroup
     \def\mxTitle{}%
     \IfNoValueF{#5}{\def\mxTitle{#5}}%

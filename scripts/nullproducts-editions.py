@@ -6,16 +6,27 @@ The pre-existing B37 registry baseline is immutable; additions have separate IDs
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import json
 from pathlib import Path
 import re
 import runpy
 
 ROOT = Path(__file__).resolve().parents[1]
+registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
 DIRECTORY = ROOT / "registry/nullproducts"
 SOURCE = ROOT / "tex/b37/nullproducts"
 MAIN_ID = "FiniteTwoProductZeroReconstruction"
+# Registered proof parts added in the 2026-10-02 B37 revision. The original
+# baseline stays immutable; only these explicit additions are permitted.
+B37_PROOF_ADDITIONS = {
+    "B37TableTransportEvaluation",
+    "B37TableTransportSemigroup",
+    "B37RelabelledOperationAssociative",
+    "B37TableCodeIsomorphismTransport",
+    "B37TableCodeCommonTableIsomorphism",
+    "B37TableCodeIsomorphismInvariant",
+    "B37TableCodeEqualCodesIsomorphism",
+}
 MANIFEST = ROOT / "scripts/nullproducts-manifest.json"
 HELPERS = runpy.run_path(str(ROOT / "scripts/proof-source-audit.py"))
 group, mask_comments = HELPERS["group"], HELPERS["mask_comments"]
@@ -69,14 +80,14 @@ def main_records():
     ids = id_map(rows)
     if MAIN_ID not in ids:
         raise ValueError("B37: canonical reconstruction theorem is missing")
-    expected = Counter(tuple(row[1:]) for row in data["canonical_registry"])
-    current = Counter(tuple(row[1:]) for row in rows)
+    expected = registry_records(data["canonical_registry"], legacy_manifest=True)
+    current = registry_records(rows, legacy_manifest=True)
     if missing := expected - current:
         raise ValueError(f"B37: previous canonical records changed: {list(missing.elements())}")
     for label, expected_value in data["canonical_aux"].items():
         if labels.get(label) != tuple(expected_value):
             raise ValueError(f"B37: previous number/destination changed: {label}")
-    if extra := set(ids) - set(id_map(data["canonical_registry"])) - {MAIN_ID}:
+    if extra := set(ids) - set(id_map(data["canonical_registry"])) - {MAIN_ID} - B37_PROOF_ADDITIONS:
         raise ValueError(f"B37: unexpected new public identities: {sorted(extra)}")
     return rows, ids, labels
 

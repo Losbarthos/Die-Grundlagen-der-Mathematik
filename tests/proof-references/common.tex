@@ -1,0 +1,41 @@
+% Standalone integration fixtures: no main.tex or manuscript registry.
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{hyperref}
+\usepackage{xparse}
+\directlua{
+  thmlookup = dofile("tex/impl/thmlookup.lua")
+  fixture_output = assert(os.getenv("PROOF_REFERENCES_TEST_OUTPUT"))
+  thmlookup.registry_path = fixture_output .. "/" .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = fixture_output .. "/" .. tex.jobname .. ".debug.log"
+  fixture_events = assert(io.open(fixture_output .. "/" .. tex.jobname .. ".events.tsv", "w"))
+  function fixture_event(...)
+    local values = {...}
+    for i, value in ipairs(values) do
+      if i > 1 then fixture_events:write(string.char(9)) end
+      local normalized = value:gsub(string.char(10), " "):gsub(string.char(13), " "):gsub(string.char(9), " ")
+      fixture_events:write(normalized)
+    end
+    fixture_events:write(string.char(10))
+    fixture_events:flush()
+  end
+}
+\input{tex/impl/thmlookup.tex}
+\input{tex/impl/formula-envs.tex}
+\input{tex/impl/proof-tables.tex}
+\renewcommand{\FormulaBandID}{91}
+\hypersetup{hypertexnames=false,hidelinks}
+\newcommand{\ProofFixtureCase}{declarations}
+\newcommand{\FixtureCase}[1]{\gdef\ProofFixtureCase{#1}\par\medskip\noindent\textbf{CASE #1}\par}
+% Observe the actual renderer, while retaining its complete normal PDF output.
+\NewCommandCopy\FixtureOriginalReferenceEntry\ProofReferenceEntry
+\RenewDocumentCommand{\ProofReferenceEntry}{+m +m m m m}{%
+  \directlua{fixture_event(
+    "\luaescapestring{\ProofFixtureCase}",
+    "\luaescapestring{\detokenize{#3}}",
+    "\luaescapestring{\detokenize{#4}}",
+    "\luaescapestring{\detokenize{#5}}",
+    "\luaescapestring{\detokenize{#1}}",
+    "\luaescapestring{\detokenize{#2}}")}%
+  \FixtureOriginalReferenceEntry{#1}{#2}{#3}{#4}{#5}%
+}
+\AtEndDocument{\directlua{fixture_events:close()}}

@@ -1,0 +1,196 @@
+% Graphicx/color scopes must remain inside one reference-table cell. In
+% particular, a resizebox around outer premises plus aligned conclusions used
+% to be flattened across rows and transform the reference in the right column.
+\documentclass[a4paper,11pt]{report}
+\usepackage{xcolor}
+\input{tests/proof-references/common.tex}
+\directlua{
+  fixture_graphics_seen = {}
+  local watched = {}
+  for _, name in ipairs({"pdf_save", "pdf_setmatrix", "pdf_restore", "pdf_colorstack",
+                        "pdf_start_link", "pdf_end_link"}) do
+    watched[node.subtype(name)] = name
+  end
+  local function inspect(head)
+    for item in node.traverse(head) do
+      if item.id == node.id("whatsit") and watched[item.subtype] then
+        local name = watched[item.subtype]
+        fixture_graphics_seen[name] = (fixture_graphics_seen[name] or 0) + 1
+      end
+      if item.list then inspect(item.list) end
+    end
+  end
+  local original_prepare = proofreferenceflow.prepare
+  proofreferenceflow.prepare = function(boxnum, ...)
+    inspect(tex.box[boxnum].list)
+    return original_prepare(boxnum, ...)
+  end
+}
+\AtEndDocument{\directlua{
+  local output = assert(io.open(fixture_output .. "/graphics-state.graphics.tsv", "w"))
+  for _, name in ipairs({"pdf_save", "pdf_setmatrix", "pdf_restore", "pdf_colorstack",
+                        "pdf_start_link", "pdf_end_link"}) do
+    output:write(name, string.char(9), tostring(fixture_graphics_seen[name] or 0), string.char(10))
+  end
+  output:close()
+}}
+\begin{document}
+{\small\noindent REFERENCECONTROL\quad Th. 91.10.0\par}
+
+\ThmLookupStatement{thm:graphics:scaled}{theorem}{91.10.1}{%
+  \resizebox{\linewidth}{!}{$\displaystyle
+    \text{SCALEDBEGIN}\quad U(M)\land\{a,b\}\in M\vdash
+    \begin{aligned}[t]
+      X_1&=Y_1+\text{SCALEDROWONE}\\
+      X_2&=Y_2+\text{SCALEDROWTWO}\\
+      X_3&=Y_3+\text{SCALEDROWTHREE}
+    \end{aligned}\quad\text{SCALEDEND}
+  $}%
+}{}
+\ThmLookupRegisterId{GraphicsScaled}{theorem}{thm:graphics:scaled}
+\ThmLookupStatement{thm:graphics:scaled-follow}{theorem}{91.10.2}{%
+  \text{SCALEDFOLLOW}\quad A\vdash A
+}{}
+\ThmLookupRegisterId{GraphicsScaledFollow}{theorem}{thm:graphics:scaled-follow}
+\FixtureCase{scaled}
+\begin{tabproof}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsScaled}}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsScaledFollow}}
+\end{tabproof}
+\noindent AFTERSCALED
+
+\clearpage
+\ThmLookupStatement{thm:graphics:rotated}{theorem}{91.10.3}{%
+  \rotatebox{12}{\resizebox{1.2\linewidth}{!}{$\displaystyle
+    \text{ROTATEDBEGIN}\quad U(M)\land\{a,b\}\in M\vdash
+    \begin{aligned}[t]
+      X_1&=Y_1+\text{ROTATEDROWONE}\\
+      X_2&=Y_2+\text{ROTATEDROWTWO}\\
+      X_3&=Y_3+\text{ROTATEDROWTHREE}
+    \end{aligned}\quad\text{ROTATEDEND}
+  $}}%
+}{}
+\ThmLookupRegisterId{GraphicsRotated}{theorem}{thm:graphics:rotated}
+\ThmLookupStatement{thm:graphics:rotated-follow}{theorem}{91.10.4}{%
+  \text{ROTATEDFOLLOW}\quad A\vdash A
+}{}
+\ThmLookupRegisterId{GraphicsRotatedFollow}{theorem}{thm:graphics:rotated-follow}
+\FixtureCase{rotated}
+\begin{tabproof}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsRotated}}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsRotatedFollow}}
+\end{tabproof}
+\noindent AFTERROTATED
+
+\clearpage
+\ThmLookupStatement{thm:graphics:color}{theorem}{91.10.5}{%
+  {\color{red}\text{COLORBEGIN}\quad
+    C_{01}\lor C_{02}\lor C_{03}\lor C_{04}\lor C_{05}\lor C_{06}\lor
+    C_{07}\lor C_{08}\lor C_{09}\lor C_{10}\lor C_{11}\lor C_{12}\lor
+    C_{13}\lor C_{14}\lor C_{15}\lor C_{16}\lor C_{17}\lor C_{18}\lor
+    C_{19}\lor C_{20}\lor C_{21}\lor C_{22}\lor C_{23}\lor C_{24}
+    \quad\text{COLOREND}}
+}{}
+\ThmLookupRegisterId{GraphicsColor}{theorem}{thm:graphics:color}
+\ThmLookupStatement{thm:graphics:color-follow}{theorem}{91.10.6}{%
+  \text{COLORFOLLOW}\quad A\vdash A
+}{}
+\ThmLookupRegisterId{GraphicsColorFollow}{theorem}{thm:graphics:color-follow}
+\FixtureCase{color}
+\begin{tabproof}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsColor}}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsColorFollow}}
+\end{tabproof}
+\noindent AFTERCOLOR
+
+\clearpage
+\ThmLookupStatement{thm:graphics:linked-context}{theorem}{91.10.7}{%
+  \text{LINKCONCLUSION}\quad A\vdash A
+}{%
+  \DeltaRow{LINKCONTEXT}{\begin{aligned}[t]
+    \text{LINKROW01}&=A_{1}\\[2pt]
+    \text{LINKROW02}&=A_{2}\\[2pt]
+    \text{LINKROW03}&=A_{3}\\[2pt]
+    \text{LINKROW04}&=A_{4}\\[2pt]
+    \text{LINKROW05}&=A_{5}\\[2pt]
+    \text{LINKROW06}&=A_{6}\\[2pt]
+    \text{LINKROW07}&=A_{7}\\[2pt]
+    \text{LINKROW08}&=A_{8}\\[2pt]
+    \text{LINKROW09}&=A_{9}\\[2pt]
+    \text{LINKROW10}&=A_{10}\\[2pt]
+    \text{LINKROW11}&=A_{11}\\[2pt]
+    \text{LINKROW12}&=A_{12}\\[2pt]
+    \text{LINKROW13}&=A_{13}\\[2pt]
+    \text{LINKROW14}&=A_{14}\\[2pt]
+    \text{LINKROW15}&=A_{15}\\[2pt]
+    \text{LINKROW16}&=A_{16}\\[2pt]
+    \text{LINKROW17}&=A_{17}\\[2pt]
+    \text{LINKROW18}&=A_{18}\\[2pt]
+    \text{LINKROW19}&=A_{19}\\[2pt]
+    \text{LINKROW20}&=A_{20}\\[2pt]
+    \text{LINKROW21}&=A_{21}\\[2pt]
+    \text{LINKROW22}&=A_{22}\\[2pt]
+    \text{LINKROW23}&=A_{23}\\[2pt]
+    \text{LINKROW24}&=A_{24}\\[2pt]
+    \text{LINKROW25}&=A_{25}\\[2pt]
+    \text{LINKROW26}&=A_{26}\\[2pt]
+    \text{LINKROW27}&=A_{27}\\[2pt]
+    \text{LINKROW28}&=A_{28}\\[2pt]
+    \text{LINKROW29}&=A_{29}\\[2pt]
+    \text{LINKROW30}&=A_{30}\\[2pt]
+    \text{LINKROW31}&=A_{31}\\[2pt]
+    \text{LINKROW32}&=A_{32}\\[2pt]
+    \text{LINKROW33}&=A_{33}\\[2pt]
+    \text{LINKROW34}&=A_{34}\\[2pt]
+    \text{LINKROW35}&=A_{35}\\[2pt]
+    \href{https://example.invalid/proof-reference-fixture}{\text{LINKROW36}}&=A_{36}\\[2pt]
+    \text{LINKROW37}&=A_{37}\\[2pt]
+    \text{LINKROW38}&=A_{38}\\[2pt]
+    \text{LINKROW39}&=A_{39}\\[2pt]
+    \text{LINKROW40}&=A_{40}\\[2pt]
+    \text{LINKROW41}&=A_{41}\\[2pt]
+    \text{LINKROW42}&=A_{42}\\[2pt]
+    \text{LINKROW43}&=A_{43}\\[2pt]
+    \text{LINKROW44}&=A_{44}\\[2pt]
+    \text{LINKROW45}&=A_{45}\\[2pt]
+    \text{LINKROW46}&=A_{46}\\[2pt]
+    \text{LINKROW47}&=A_{47}\\[2pt]
+    \text{LINKROW48}&=A_{48}\\[2pt]
+    \text{LINKROW49}&=A_{49}\\[2pt]
+    \text{LINKROW50}&=A_{50}\\[2pt]
+    \text{LINKROW51}&=A_{51}\\[2pt]
+    \text{LINKROW52}&=A_{52}\\[2pt]
+    \text{LINKROW53}&=A_{53}\\[2pt]
+    \text{LINKROW54}&=A_{54}\\[2pt]
+    \text{LINKROW55}&=A_{55}\\[2pt]
+    \text{LINKROW56}&=A_{56}\\[2pt]
+    \text{LINKROW57}&=A_{57}\\[2pt]
+    \text{LINKROW58}&=A_{58}\\[2pt]
+    \text{LINKROW59}&=A_{59}\\[2pt]
+    \text{LINKROW60}&=A_{60}\\[2pt]
+    \text{LINKROW61}&=A_{61}\\[2pt]
+    \text{LINKROW62}&=A_{62}\\[2pt]
+    \text{LINKROW63}&=A_{63}\\[2pt]
+    \text{LINKROW64}&=A_{64}\\[2pt]
+    \text{LINKROW65}&=A_{65}\\[2pt]
+    \text{LINKROW66}&=A_{66}\\[2pt]
+    \text{LINKROW67}&=A_{67}\\[2pt]
+    \text{LINKROW68}&=A_{68}\\[2pt]
+    \text{LINKROW69}&=A_{69}\\[2pt]
+    \text{LINKROW70}&=A_{70}\\[2pt]
+    \text{LINKROW71}&=A_{71}\\[2pt]
+    \text{LINKROW72}&=A_{72}
+  \end{aligned}}%
+}
+\ThmLookupRegisterId{GraphicsLinkedContext}{theorem}{thm:graphics:linked-context}
+\ThmLookupStatement{thm:graphics:linked-follow}{theorem}{91.10.8}{%
+  \text{LINKFOLLOW}\quad A\vdash A
+}{}
+\ThmLookupRegisterId{GraphicsLinkedFollow}{theorem}{thm:graphics:linked-follow}
+\FixtureCase{linked-context}
+\begin{tabproof}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsLinkedContext}}
+  \proofstep{}{P}{\FormulaRefAuto{GraphicsLinkedFollow}}
+\end{tabproof}
+\noindent AFTERLINK
+\end{document}
