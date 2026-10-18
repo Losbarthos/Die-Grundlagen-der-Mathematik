@@ -1,8 +1,8 @@
 # PDF-Übersicht
 
-Stand: 17. Oktober 2026.
+Stand: 18. Oktober 2026.
 
-Die Sammlung unter `output/` umfasst 82 PDF-Dateien. Diese Übersicht verlinkt die Bände B00 bis B48, den Gesamtband und ausgewählte Begleitfassungen; alle aktuellen PDFs sind im [Bandverzeichnis](../VOLUMES.md) verlinkt. Die Bandnummern und Dateinamen bleiben erhalten; die Ordnernummern legen die Reihenfolge der Themen fest.
+Diese Übersicht verlinkt die Bände B00 bis B48, den Gesamtband und ausgewählte Begleitfassungen; alle aktuellen PDFs sind im [Bandverzeichnis](../VOLUMES.md) verlinkt. Die Bandnummern und Dateinamen bleiben erhalten; die Ordnernummern legen die Reihenfolge der Themen fest.
 
 Hauptbände liegen direkt im Themenordner, Begleitfassungen im Unterordner
 `Ergänzungen/Bd. NN Titel/<Thema>/`. Die Veröffentlichungspfade werden zentral in
@@ -101,20 +101,29 @@ Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweil
 | B37 | [Bd. 37 - Endliche Halbgruppen](<../output/07 Halbgruppen und Monoide/Bd. 37 - Endliche Halbgruppen.pdf>) |
 | B38 | [Bd. 38 - Monoide](<../output/07 Halbgruppen und Monoide/Bd. 38 - Monoide.pdf>) |
 
-### Ergänzungen / Bd. 28 Halbgruppen / e-Koordinatenabbildung
+### Ergänzungen / Bd. 31 Rechtecksbänder / e-Koordinatenabbildung
 
-Originalabschnitt 28.2.13 mit fünf Definitionen, vier Axiomen und sechzehn Sätzen,
-unveränderten Beweisen und automatischen Nachschlagetabellen.
+Lesefassung zu Abschnitt 31.2.2 mit Beispielen, sprachlichen Beweisen,
+Symbolverweisen am Rand und historischem Abriss; vollständige Beweistabellen
+zu allen sechzehn Sätzen.
 
 | Darstellung | PDF |
 |---|---|
-| B28 Definitionen und Beweise | [Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf>) |
+| B31 Lesefassung | [Bd. 31 - e-Koordinatenabbildung - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Lesefassung.pdf>) |
+| B31 Beweistabellen | [Bd. 31 - e-Koordinatenabbildung - Beweistabellen](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Beweistabellen.pdf>) |
 
 ### Ergänzungen / Bd. 37 Endliche Halbgruppen / Endliche Halbgruppen
 
 | Darstellung | PDF |
 |---|---|
 | B37 Lesefassung | [Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>) |
+
+### Ergänzungen / Bd. 37 Endliche Halbgruppen / Multiplikationstafeln und Isomorphie
+
+| Darstellung | PDF |
+|---|---|
+| B37 Lesefassung | [Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf>) |
+| B37 Beweistabellen | [Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen.pdf>) |
 
 ### Ergänzungen / Bd. 37 Endliche Halbgruppen / Nullprodukt-Rekonstruktion
 

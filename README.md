@@ -155,10 +155,13 @@ Zwölf Tabellen sind ausgelagert; alle Aussagen, Nummern und Verweisziele
 bleiben in Band 40 und im Gesamtband erhalten. Die allgemeinen Grundlagen
 der Einheitengruppentheorie bleiben im Fachband.
 
-Die [Ausgabe zur e-Koordinatenabbildung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf>)
-fasst den Originalabschnitt 28.2.13 aus Band 28 mit fünf Definitionen, vier Axiomen
-und sechzehn Sätzen zusammen. Sie enthält die unveränderten Beweise aus Band 28
-und die zentral erzeugten automatischen Nachschlagetabellen unter den Beweisen.
+Zur e-Koordinatenabbildung gibt es eine
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Beweistabellen.pdf>).
+Die Lesefassung erläutert Abschnitt 31.2.2 aus Band 31 mit Beispielen,
+sprachlichen Beweisen, Symbolverweisen am Rand und einem historischen Abriss.
+Die Beweistabellen enthalten die vollständigen formalen Ableitungen aller
+sechzehn Sätze. Ihre Aussagen und Nummern werden kanonisch in Band 31 geführt.
 
 Der Beweis, dass die Potenzhalbgruppe wieder eine Halbgruppe ist, besitzt eine
 [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Lesefassung.pdf>) und
@@ -188,6 +191,16 @@ führt anhand einer Dreierhalbgruppe von wiederkehrenden Potenzen und Idealen
 über Multiplikationstafeln bis zur Rekonstruktionsfrage. Band 37 enthält
 die Aussagen und ihre Beweistabellen; die Lesefassung erklärt den Beweisweg
 und die Reichweite des endlichen Suchverfahrens.
+
+Die Multiplikationstafeln und die Isomorphie endlicher Halbgruppen aus
+Band 37 sind in einer eigenen [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen.pdf>) ausgearbeitet.
+Das Paar führt von nummerierten Tafeln über Umbenennungen, Orbits und
+Automorphismen zum vollständigen kanonischen Tafelcode und zum endlichen
+Isomorphietest. Definitionen und zentrale Sätze bleiben in Band 37;
+die Beweistabellen enthalten die sieben bisherigen H-Hilfsresultate
+unter ihren unveränderten Nummern. Die Überblickslesefassung verlinkt
+diese ausführliche Behandlung.
 
 Die Nullprodukt-Rekonstruktion aus Band 37 besitzt eine
 [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf>) und

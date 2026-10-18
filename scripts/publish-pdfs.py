@@ -14,6 +14,7 @@ from functools import lru_cache
 import hashlib
 import os
 import re
+import runpy
 import shutil
 import subprocess
 import sys
@@ -55,12 +56,23 @@ BRACKETING_NAMES = {
     "_B28-bracketing-reading.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Lesefassung.pdf",
     "_B28-bracketing-proofs.pdf": "Bd. 28 - Klammerungsunabhängigkeit - Beweistabellen.pdf",
 }
+POWER_ISOMORPHISMS_NAMES = {
+    "_B28-power-isomorphisms-reading.pdf": "Bd. 28 - Isomorphismen von Potenzhalbgruppen - Lesefassung.pdf",
+    "_B28-power-isomorphisms-proofs.pdf": "Bd. 28 - Isomorphismen von Potenzhalbgruppen - Beweistabellen.pdf",
+}
 POWER_NAMES = {
     "_B28-power-reading.pdf": "Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Lesefassung.pdf",
     "_B28-power-proofs.pdf": "Bd. 28 - Halbgruppenbeweis der Potenzhalbgruppe - Beweistabellen.pdf",
 }
+LEGACY_COORDINATE_NAMES = {
+    "Bd. 28 - e-Koordinatenabbildung - Lesefassung.pdf",
+    "Bd. 28 - e-Koordinatenabbildung - Beweistabellen.pdf",
+    "_B28-coordinates-reading.pdf",
+    "_B28-coordinates-proofs.pdf",
+}
 COORDINATES_NAMES = {
-    "_B28-e-coordinates.pdf": "Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf",
+    "_B31-coordinates-reading.pdf": "Bd. 31 - e-Koordinatenabbildung - Lesefassung.pdf",
+    "_B31-coordinates-proofs.pdf": "Bd. 31 - e-Koordinatenabbildung - Beweistabellen.pdf",
 }
 PUBLICATION_ALIASES = {
     "Bd. 28 - Potenzhalbgruppe - Lesefassung.pdf": POWER_NAMES["_B28-power-reading.pdf"],
@@ -85,6 +97,10 @@ FRANKL_NAMES = {
 RECONSTRUCTION_NAMES = {
     "_B40-reconstruction-reading.pdf": "Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf",
     "_B40-reconstruction-proofs.pdf": "Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf",
+}
+TABLE_ISOMORPHISMS_NAMES = {
+    "_B37-table-isomorphisms-reading.pdf": "Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf",
+    "_B37-table-isomorphisms-proofs.pdf": "Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen.pdf",
 }
 NULLPRODUCTS_NAMES = {
     "_B37-nullproducts-reading.pdf": "Bd. 37 - Nullprodukt-Rekonstruktion - Lesefassung.pdf",
@@ -120,12 +136,13 @@ MANUAL_READING_NAMES = {
     "context-equivalence-reading.pdf": "Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf",
 }
 EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(INDEPENDENT_READING_NAMES.values()) | set(MANUAL_READING_NAMES.values())
-SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
+SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_ISOMORPHISMS_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **TABLE_ISOMORPHISMS_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
     **{name: "Mogiljanskaja-Gegenbeispiel" for name in MOGILJANSKAJA_NAMES.values()},
     **{name: "Dedekindscher Rekursionssatz" for name in DEDEKIND_NAMES.values()},
     **{name: "Klammerungsunabhängigkeit" for name in BRACKETING_NAMES.values()},
+    **{name: "Isomorphismen von Potenzhalbgruppen" for name in POWER_ISOMORPHISMS_NAMES.values()},
     **{name: "Halbgruppenbeweis der Potenzhalbgruppe" for name in POWER_NAMES.values()},
     **{name: "e-Koordinatenabbildung" for name in COORDINATES_NAMES.values()},
     **{name: "Formale Differenzen" for name in DIFFERENCES_NAMES.values()},
@@ -134,6 +151,7 @@ SUPPLEMENT_TOPICS = {
     **{name: "Frankls Spezialfälle" for name in FRANKL_NAMES.values()},
     **{name: "Gruppenrekonstruktion" for name in RECONSTRUCTION_NAMES.values()},
     **{name: "Nullprodukt-Rekonstruktion" for name in NULLPRODUCTS_NAMES.values()},
+    **{name: "Multiplikationstafeln und Isomorphie" for name in TABLE_ISOMORPHISMS_NAMES.values()},
     **{name: "Nullelement-Transport" for name in ZERO_TRANSPORT_NAMES.values()},
     **{name: "Endliche Halbgruppen" for name in FINITE_SEMIGROUPS_NAMES.values()},
     **{name: "Dreiprodukt-Rekonstruktion" for name in THREE_PRODUCTS_NAMES.values()},
@@ -508,6 +526,8 @@ def audit(paths, root=OUTPUT):
         total = 0
         for action in remote_actions(reader):
             target = (path.parent / file_name(action)).resolve()
+            if target.name in LEGACY_COORDINATE_NAMES:
+                raise ValueError(f"{path.name}: obsolete B28 coordinate link: {target.name}")
             if not target.is_relative_to(root.resolve()):
                 raise ValueError(f"{path.name}: link outside output: {target}")
             if not target.is_file():
@@ -528,6 +548,24 @@ def audit(paths, root=OUTPUT):
           f"{local_link_total} local links, {external_link_total} external links.", flush=True)
 
 
+def remove_legacy_coordinate_publications():
+    """Called only after both new editions and the complete published set pass."""
+    for name in COORDINATES_NAMES.values():
+        if not publication_path(name).is_file():
+            raise FileNotFoundError(f"Missing new coordinate publication: {name}")
+    directory = (OUTPUT / "07 Halbgruppen und Monoide" / "Ergänzungen" /
+                 "Bd. 28 Halbgruppen" / "e-Koordinatenabbildung")
+    if not directory.resolve().is_relative_to(OUTPUT.resolve()):
+        raise ValueError(f"Legacy coordinate directory outside output: {directory}")
+    for name in LEGACY_COORDINATE_NAMES:
+        path = directory / name
+        if path.is_file():
+            path.unlink()
+            print(f"Removed replaced publication: {name}", flush=True)
+    if directory.is_dir() and not any(directory.iterdir()):
+        directory.rmdir()
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
@@ -543,10 +581,12 @@ def main():
                         help="Also publish both Dedekind recursion companion editions; require both build artifacts.")
     parser.add_argument("--bracketing-editions", action="store_true",
                         help="Also publish both bracketing-independence editions; require both build artifacts.")
+    parser.add_argument("--power-isomorphisms-editions", action="store_true",
+                        help="Also publish both power-isomorphism editions; require both build artifacts.")
     parser.add_argument("--power", action="store_true",
                         help="Also publish both power-semigroup editions; require both build artifacts.")
-    parser.add_argument("--e-coordinates", action="store_true",
-                        help="Also publish the e-coordinate definitions and proofs; require its build artifact.")
+    parser.add_argument("--coordinates", "--coordinates-proofs", dest="coordinates", action="store_true",
+                        help="Also publish both B31 coordinate editions, including sixteen proof-reference overviews.")
     parser.add_argument("--differences", action="store_true",
                         help="Also publish both formal-difference companion editions; require both build artifacts.")
     parser.add_argument("--integers", action="store_true",
@@ -557,6 +597,8 @@ def main():
                         help="Also publish both Frankl special-case companion editions; require both build artifacts.")
     parser.add_argument("--reconstruction", action="store_true",
                         help="Also publish both group-reconstruction companion editions; require both build artifacts.")
+    parser.add_argument("--table-isomorphisms-editions", action="store_true",
+                        help="Also publish both B37 table-isomorphism editions; require both build artifacts.")
     parser.add_argument("--nullproducts", action="store_true",
                         help="Also publish both null-product reconstruction editions; require both build artifacts.")
     parser.add_argument("--finite-semigroups", action="store_true",
@@ -566,11 +608,11 @@ def main():
     parser.add_argument("--compactness", action="store_true",
                         help="Also publish both compactness editions; require both build artifacts.")
     edition_only = parser.add_mutually_exclusive_group()
+    edition_only.add_argument("--coordinates-only", "--coordinates-proofs-only", dest="coordinates_only", action="store_true",
+                              help="Publish only both B31 coordinate editions; audit all current PDFs.")
     for directory in INDEPENDENT_READINGS:
         edition_only.add_argument(f"--{directory}-only", action="store_true",
                                   help=f"Publish only the independent {directory} reading; audit all current PDFs.")
-    edition_only.add_argument("--e-coordinates-only", action="store_true",
-                              help="Publish only the e-coordinate definitions and proofs; audit all current PDFs.")
     parser.add_argument("--bands", nargs="+", metavar="Bnn",
                         help="Publish only these standalone volumes; still audit all current PDF links.")
     args = parser.parse_args()
@@ -579,18 +621,19 @@ def main():
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     names.update(SUPPLEMENT_NAMES)
     names.update(PUBLICATION_ALIASES)
-    only_edition = args.e_coordinates_only or any(
+    only_edition = args.coordinates_only or any(
         getattr(args, directory.replace("-", "_") + "_only") for directory in INDEPENDENT_READINGS)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power or args.e_coordinates or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.bands or only_edition:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.bands or only_edition:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
     if only_edition and (
         args.skip_main or args.bands or args.csb_pilot or args.mogiljanskaja
-        or args.dedekind or args.bracketing_editions or args.power or args.e_coordinates or args.differences
+        or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences
         or args.integers or args.semilattice or args.frankl
-        or args.reconstruction or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
+        or args.reconstruction or args.table_isomorphisms_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
+        or args.coordinates
     ):
         parser.error("Single-edition publication cannot be combined with other publication selections")
     flat = [path for path in OUTPUT.glob("*.pdf") if path.name in set(names.values()) | {MAIN_NAME}]
@@ -665,6 +708,18 @@ def main():
     all_publications.extend(publication for publication in bracketing_publications
                             if publish_bracketing or publication[1].is_file())
 
+    power_isomorphisms_publications = [
+        (ROOT / "registry" / "power-isomorphisms" / source, publication_path(destination))
+        for source, destination in POWER_ISOMORPHISMS_NAMES.items()
+    ]
+    publish_power_isomorphisms = args.power_isomorphisms_editions or (
+        full_publish and any(source.is_file() for source, _ in power_isomorphisms_publications)
+    )
+    if publish_power_isomorphisms:
+        publications.extend(power_isomorphisms_publications)
+    all_publications.extend(publication for publication in power_isomorphisms_publications
+                            if publish_power_isomorphisms or publication[1].is_file())
+
     power_publications = [
         (ROOT / "registry" / "power" / source, publication_path(destination))
         for source, destination in POWER_NAMES.items()
@@ -679,10 +734,10 @@ def main():
                             if publish_power or publication[1].is_file())
 
     coordinates_publications = [
-        (ROOT / "registry" / "e-coordinates" / source, publication_path(destination))
+        (ROOT / "registry" / "coordinates" / source, publication_path(destination))
         for source, destination in COORDINATES_NAMES.items()
     ]
-    publish_coordinates = args.e_coordinates or args.e_coordinates_only or (
+    publish_coordinates = args.coordinates or args.coordinates_only or (
         full_publish and any(source.is_file() for source, _ in coordinates_publications)
     )
     if publish_coordinates:
@@ -754,6 +809,18 @@ def main():
         publications.extend(reconstruction_publications)
     all_publications.extend(publication for publication in reconstruction_publications
                             if publish_reconstruction or publication[1].is_file())
+
+    table_isomorphisms_publications = [
+        (ROOT / "registry" / "table-isomorphisms" / source, publication_path(destination))
+        for source, destination in TABLE_ISOMORPHISMS_NAMES.items()
+    ]
+    publish_table_isomorphisms = args.table_isomorphisms_editions or (
+        full_publish and any(source.is_file() for source, _ in table_isomorphisms_publications)
+    )
+    if publish_table_isomorphisms:
+        publications.extend(table_isomorphisms_publications)
+    all_publications.extend(publication for publication in table_isomorphisms_publications
+                            if publish_table_isomorphisms or publication[1].is_file())
 
     nullproducts_publications = [
         (ROOT / "registry" / "nullproducts" / source, publication_path(destination))
@@ -831,6 +898,8 @@ def main():
         missing = [str(source.relative_to(ROOT)) for source, _ in publications if not source.is_file()]
         if missing:
             raise FileNotFoundError("Missing build artifacts: " + ", ".join(missing))
+        if publish_coordinates:
+            runpy.run_path(str(ROOT / "scripts/coordinates-proofs.py"))["audit"]()
         OUTPUT.mkdir(parents=True, exist_ok=True)
         # Preflight every selected source before changing any publication.
         readers = {}
@@ -876,6 +945,8 @@ def main():
             writer.close()
             print(f"Published: {destination.name}", flush=True)
     audit([destination for _, destination in all_publications])
+    if not args.audit_only and publish_coordinates:
+        remove_legacy_coordinate_publications()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+% Öffentliche Aussagen aus B37; die sieben ursprünglichen H-Resultate
+% werden ausschließlich in der Tabellenfassung deklariert.
+\begin{luacode*}
+  local directory = "registry/table-isomorphisms/"
+  local reading = tex.jobname == "_B37-table-isomorphisms-reading"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B37.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. "b37-external}[../_B37.pdf]")
+  banddeps.load_predecessor_registries("B37")
+  thmlookup.load_registry_file(directory .. "b37-external.registry.tsv")
+  if reading then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B37-table-isomorphisms-proofs.pdf]")
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\FormulaBandID}{37T}
+\setcounter{file}{37}
+\renewcommand{\theHtable}{table-isomorphisms.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{table-isomorphisms.\arabic{chapter}.\arabic{figure}}

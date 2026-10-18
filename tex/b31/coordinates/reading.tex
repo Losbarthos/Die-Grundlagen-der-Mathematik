@@ -1,0 +1,930 @@
+% Lesefassung ohne eigene nummerierte Deklarationen. Alle Aussage-IDs gehören B31.
+% symbol-legend.tex wird im Vorspann der Ausgabe geladen.
+\NewDocumentCommand\CROrd{s m m}{%
+  \mathord{\IfBooleanT{#1}{\SymbolLegendIntroduce{#2}}%
+    \SymbolLegendUse{#2}#3}}
+\NewDocumentCommand\CRBin{s m m}{%
+  \mathbin{\IfBooleanT{#1}{\SymbolLegendIntroduce{#2}}%
+    \SymbolLegendUse{#2}#3}}
+\NewDocumentCommand\CRRel{s m m}{%
+  \mathrel{\IfBooleanT{#1}{\SymbolLegendIntroduce{#2}}%
+    \SymbolLegendUse{#2}#3}}
+\newcommand\CRK{\CROrd{coordinates-carrier}{\mathcal K_e}}
+\newcommand\CRChi{\CROrd{coordinates-map}{\chi_e}}
+\newcommand\CRMu{\CROrd{coordinates-multiply}{\mu_e}}
+\newcommand\CRLeft{\CROrd{coordinates-left}{Ae}}
+\newcommand\CRRight{\CROrd{coordinates-right}{eA}}
+\newcommand\CRSquare{\CRBin{coordinates-product}{\square_e}}
+\newcommand\CRStar{\CRBin{coordinates-star}{\star}}
+\newcommand\CRTimes{\CRBin{coordinates-cartesian}{\times}}
+\newcommand\CRComp{\CRBin{coordinates-composition}{\circ}}
+\newcommand\CRBij{\CRRel{coordinates-bijection}{\bij}}
+\newcommand\CRId[1]{\CROrd{coordinates-identity}{\Id_{#1}}}
+\newcommand\CRProof[1]{%
+  \href{_B31-coordinates-proofs.pdf\#coordinates.proof.#1}{Beweistabelle}}
+\newcommand\CRStatement[3]{%
+  \par\Needspace{5\baselineskip}\medskip\noindent
+  \textbf{\FormulaRefAuto{#1}[#2]: #3.}\par\smallskip\noindent}
+
+\SymbolLegendDeclareReading{coordinates-cartesian}{\(X\times Y\)}%
+  {Alle geordneten Paare \((x,y)\) mit \(x\in X\), \(y\in Y\).}
+\SymbolLegendDeclareReading{coordinates-left}{\(Ae\)}%
+  {Alle Werte \(x\star e\) mit \(x\in A\): mögliche erste Koordinaten.}
+\SymbolLegendDeclareReading{coordinates-right}{\(eA\)}%
+  {Alle Werte \(e\star x\) mit \(x\in A\): mögliche zweite Koordinaten.}
+\SymbolLegendDeclareReading{coordinates-carrier}{\(\mathcal K_e\)}%
+  {Der Koordinatenträger \(Ae\times eA\): alle Kombinationen.}
+\SymbolLegendDeclareReading{coordinates-map}{\(\chi_e\)}%
+  {Schickt \(x\) auf das Paar \((x\star e,e\star x)\).}
+\SymbolLegendDeclareReading{coordinates-multiply}{\(\mu_e\)}%
+  {Multipliziert ein Koordinatenpaar: \((p,q)\mapsto p\star q\).}
+\SymbolLegendDeclareReading{coordinates-product}{\(\square_e\)}%
+  {Paarprodukt: \((p,q)\square_e(r,s)=(p,s)\).}
+\SymbolLegendDeclareID[prior]{coordinates-star}{\(\star\)}%
+  {Gegebene assoziative Operation auf der Halbgruppe.}{SemigroupDef}
+\SymbolLegendDeclareID[prior]{coordinates-composition}{\(g\circ f\)}%
+  {Zuerst \(f\), dann \(g\): \((g\circ f)(x)=g(f(x))\).}{CompositionDef}
+\SymbolLegendDeclareID[prior]{coordinates-bijection}{\(f\colon X\bij Y\)}%
+  {Jedes Element von \(Y\) hat genau ein Urbild in \(X\).}{Bijektive Funktion}
+\SymbolLegendDeclareID[prior]{coordinates-identity}{\(\Id_X\)}%
+  {Identität auf \(X\): lässt jedes \(x\in X\) unverändert.}{IdentityFunctionDef}
+
+\chapter*{Eine Halbgruppe als Rechteck lesen}
+\hypertarget{coordinates.reading}{}
+
+In einer Tabelle mit mehreren Zeilen und Spalten bestimmen
+Zeile und Spalte gemeinsam ein Feld.
+Jede der beiden Angaben allein lässt mehrere Felder offen; zusammen
+legen sie genau eines fest. Wir möchten die Elemente einer Halbgruppe
+ähnlich beschreiben. Ihre beiden Angaben sollen sich aber aus der
+gegebenen Multiplikation gewinnen lassen, auch wenn die Elemente
+zunächst gar keine Zeilen- und Spaltennummern besitzen.
+
+Dazu wählen wir ein festes Element \(e\) als Bezugspunkt.
+Für ein beliebiges \(x\) bilden wir zwei Produkte: einmal steht
+\(e\) rechts, einmal links. Die
+\emph{\(e\)-Koordinatenabbildung} ordnet \(x\) das Paar
+\((x\CRStar e,e\CRStar x)\) zu. Der Buchstabe \(e\) erinnert
+hier an das gewählte Bezugselement; wir verlangen kein Einselement
+und keine neutrale Wirkung. Wie dieses Element eine Bezugszeile und
+eine Bezugsspalte festlegen kann, zeigt gleich unser erstes Beispiel.
+
+Zunächst ist das Paar nur ein Versuch, \(x\) durch zwei Angaben
+zu erfassen. Entscheidend sind drei Fragen: Lassen sich verschiedene
+Elemente unterscheiden? Kommt jede Kombination der möglichen Angaben
+vor? Und lässt sich das Produkt zweier Elemente aus ihren Angaben
+berechnen? Wir werden zeigen, dass zwei Gesetze dafür ausreichen.
+Für alle \(x,y,z\) der Halbgruppe sollen gelten:
+\[
+  x\CRStar x=x,
+  \qquad (x\CRStar y)\CRStar z=x\CRStar z.
+\]
+Das erste heißt \emph{Idempotenz}: Jedes Element bleibt beim
+Multiplizieren mit sich selbst unverändert. Im zweiten, dem
+\emph{Dreitermgesetz}, darf der mittlere Faktor aus jedem Produkt
+dreier Faktoren gestrichen werden. Das Ergebnis ist genau das
+Produkt des ersten mit dem letzten Faktor. Diese Gesetze gelten
+nicht in jeder Halbgruppe; wir prüfen später auch Gegenbeispiele.
+
+\section*{Ein Rechteck mit sechs Feldern}
+\hypertarget{coordinates.reading.rectangle}{}
+
+Wir beginnen mit zwei Zeilen und drei Spalten:
+\[
+  I=\{1,2\},\qquad J=\{a,b,c\},\qquad
+  A=I\CRBin*{coordinates-cartesian}{\times}J.
+\]
+Das \emph{kartesische Produkt} enthält alle geordneten Paare, deren
+erster Eintrag aus \(I\), deren zweiter aus \(J\) stammt.
+Ein Paar \((i,j)\) ist hier das Feld in Zeile \(i\), Spalte \(j\).
+Die Reihenfolge der Einträge gehört zur Information: Der erste
+Eintrag bezeichnet immer die Zeile.
+\[
+  \begin{array}{c|ccc}
+    &a&b&c\\\hline
+    1&(1,a)&(1,b)&(1,c)\\
+    2&(2,a)&(2,b)&(2,c)
+  \end{array}
+\]
+Wir multiplizieren zwei Felder, indem wir die Zeile des linken und
+die Spalte des rechten Feldes nehmen:
+\[
+  (i,j)\CRStar(k,\ell):=(i,\ell).
+\]
+Beispielsweise ist
+\[
+  (2,a)\CRStar(1,c)=(2,c),\qquad
+  (1,c)\CRStar(2,a)=(1,a).
+\]
+Die Operation ist also nicht kommutativ. Wohl aber ist sie
+assoziativ. Für drei beliebige Felder gilt
+\[
+ \begin{aligned}
+  ((i,j)\CRStar(k,\ell))\CRStar(m,n)&=(i,\ell)\CRStar(m,n)=(i,n),\\
+  (i,j)\CRStar((k,\ell)\CRStar(m,n))&=(i,j)\CRStar(k,n)=(i,n).
+ \end{aligned}
+\]
+Beide Klammerungen liefern dasselbe Feld. Außerdem bleibt jedes
+Produkt in \(A\). Damit ist dieses Rechteck eine Halbgruppe.
+
+Wählen wir nun das Feld \(e=(1,a)\) als Bezugspunkt. Für
+\(x=(2,c)\) erhalten wir
+\[
+  x\CRStar e=(2,a),\qquad e\CRStar x=(1,c).
+\]
+Die erste Rechnung bringt uns in die Bezugsspalte \(a\), behält aber
+die Zeile von \(x\). Die zweite bringt uns in die Bezugszeile~\(1\),
+behält aber die Spalte. Aus den beiden gefundenen Feldern lässt
+sich \(x\) wiederherstellen:
+\[
+  (2,a)\CRStar(1,c)=(2,c)=x.
+\]
+Die neuen Koordinaten sind hier also selbst \emph{Elemente der
+Halbgruppe}. Sie sind nicht einfach die ursprünglichen Einträge
+\(2\) und \(c\), sondern die beiden Felder \((2,a)\) und
+\((1,c)\). Zusammen enthalten sie dieselbe Information.
+
+Das Basiselement \(e\) ist dabei kein neutrales Element. Schon
+\((2,c)\CRStar e=(2,a)\ne(2,c)\) zeigt den Unterschied.
+Es legt die Bezugszeile und die Bezugsspalte fest. Genauer: Ist
+\(e=(i_0,j_0)\), dann gilt für jedes \(x=(i,j)\)
+\[
+  x\CRStar e=(i,j_0),\qquad e\CRStar x=(i_0,j).
+\]
+Die beiden Werte liegen also in der festen Spalte \(j_0\) und
+der festen Zeile \(i_0\). Darum nennen wir \(e\) ein
+\emph{Basiselement}: Es bestimmt die Bezugslinien, von denen aus
+wir die Elemente beschreiben. Gemeint ist keine Vektorraumbasis.
+Man könnte dasselbe gewählte Element auch \(b\) nennen und von
+\(b\)-Koordinaten sprechen. Der Name und die Buchstabenwahl sind
+hier Teil der Notation des Skripts; ihr mathematischer Hintergrund
+ist die am Schluss beschriebene Rechteckdarstellung.
+
+\section*{Welche Koordinaten gibt es in einer beliebigen Halbgruppe?}
+\hypertarget{coordinates.reading.construction}{}
+
+Jetzt sei \((A,\star)\) eine beliebige Halbgruppe und \(e\in A\).
+Die Halbgruppenvoraussetzung aus
+\FormulaRefAuto{SemigroupDef}[def] bedeutet: Jedes Produkt zweier
+Elemente von \(A\) ist eindeutig bestimmt und liegt wieder in \(A\);
+außerdem gilt das Assoziativgesetz. Die Wahl von \(e\) stellt hier
+insbesondere sicher, dass \(A\) nicht leer ist. Idempotenz oder das
+Dreitermgesetz nehmen wir zunächst noch nicht an.
+
+Die beiden Mengen der möglichen Koordinaten heißen kurz
+\[
+ \begin{aligned}
+  \CROrd*{coordinates-left}{Ae}&:=\{x\CRStar e\mid x\in A\},\\
+  \CROrd*{coordinates-right}{eA}&:=\{e\CRStar x\mid x\in A\}.
+ \end{aligned}
+\]
+Diese Schreibweise bezeichnet Mengen von Produktwerten.
+\(Ae\) ist beispielsweise die Menge aller Ergebnisse, die entstehen,
+wenn rechts immer dasselbe \(e\) steht. Beide Mengen liegen in \(A\),
+weil die Operation abgeschlossen ist. Sie sind nicht leer: Der Wert
+\(e\CRStar e\) gehört zu beiden.
+
+\CRStatement{SemigroupCoordinateCarrierDef}{def}{Koordinatenträger}
+Der \emph{Koordinatenträger} enthält jede Kombination einer
+möglichen ersten mit einer möglichen zweiten Koordinate:
+\[
+  \CROrd*{coordinates-carrier}{\mathcal K_e}
+    :=\CRLeft\CRTimes\CRRight.
+\]
+Dies ist die Schreibweise der vorstehenden Definition im Hauptband.
+Die beiden Koordinaten werden hier unabhängig gewählt. Die Menge enthält also
+auch Paare, deren erste und zweite Koordinate zunächst von
+verschiedenen Ausgangselementen stammen.
+
+\CRStatement{SemigroupCoordinateCarrierMembership}{thm}{Elementkriterium}
+Ein Paar \((p,q)\) gehört genau dann zu \(\CRK\), wenn
+\(p,q\in A\) sind und Elemente \(a,b\in A\) existieren mit
+\[
+  p=a\CRStar e,\qquad q=e\CRStar b.
+\]
+Zum Beweis lesen wir die Definition in beiden Richtungen.
+Aus \((p,q)\in\CRLeft\CRTimes\CRRight\) folgt
+\(p\in\CRLeft\), \(q\in\CRRight\); die Definitionen der
+beiden Mengen liefern genau die genannten Zeugen \(a,b\).
+Umgekehrt zeigen solche Zeugen, dass \(p\) in der ersten und
+\(q\) in der zweiten Menge liegt, also ihr Paar im Produkt.
+Das beweist \FormulaRefAuto{SemigroupCoordinateCarrierMembership}[thm]
+(\CRProof{SemigroupCoordinateCarrierMembership}).
+
+\CRStatement{SemigroupCoordinateCarrierNonempty}{thm}{Nichtleerer Koordinatenträger}
+Zu jeder Halbgruppe mit gewähltem \(e\in A\) gehört mindestens
+ein Koordinatenpaar. Zum Beweis liefern \(a=b=e\) das Paar
+\[
+  (e\CRStar e,e\CRStar e)\in\CRK.
+\]
+Damit ist auch der Koordinatenträger nicht leer. Dass
+\(e\CRStar e=e\) wäre, wurde hierfür nicht gebraucht.
+Dies ist \FormulaRefAuto{SemigroupCoordinateCarrierNonempty}[thm]
+(\CRProof{SemigroupCoordinateCarrierNonempty}).
+
+\section*{Das neue Produkt ist immer ein Rechteckprodukt}
+\hypertarget{coordinates.reading.product}{}
+
+\CRStatement{SemigroupCoordinateProductDef}{def}{Koordinatenprodukt}
+Das Produkt zweier Koordinatenpaare übernimmt die erste Koordinate
+des linken und die zweite Koordinate des rechten Paars:
+\[
+  (p,q)\CRBin*{coordinates-product}{\square_e}(r,s):=(p,s).
+\]
+Das Zeichen \(\CRSquare\) unterscheidet diese
+neue Operation von \(\CRStar\), der gegebenen Multiplikation in
+\(A\). Es handelt sich insbesondere nicht um das gewöhnliche
+komponentenweise Produkt \((p\star r,q\star s)\).
+
+\medskip\noindent\textbf{Warum ein Rechteck?}
+Der entscheidende Punkt ist die freie Kombination: Zu zwei möglichen
+Zeilen \(p,r\) und zwei möglichen Spalten \(q,s\) enthält
+\(\CRK=\CRLeft\CRTimes\CRRight\) alle vier Ecken.
+Für \(u=(p,q)\) und \(v=(r,s)\) sieht das so aus:
+\[
+ \begin{array}{c|cc}
+     &q&s\\\hline
+  p&u=(p,q)&u\CRSquare v=(p,s)\\
+  r&v\CRSquare u=(r,q)&v=(r,s)
+ \end{array}
+\]
+Das Produkt wählt die Ecke in der Zeile von \(u\) und der
+Spalte von \(v\). Die umgekehrte Reihenfolge wählt die andere
+gemischte Ecke. Fallen Zeilen oder Spalten zusammen, kann eine
+solche Ecke auch mit einem Ausgangspunkt übereinstimmen.
+Längen und Winkel spielen bei dieser Rechteckvorstellung keine Rolle.
+
+Die bloße Beschreibung durch Paare würde dafür nicht genügen.
+Bei den drei Paaren \((0,0),(0,1),(1,0)\) fehlt zum Beispiel
+die vierte Ecke \((1,1)\). Die Regel würde aus \((1,0)\) und
+\((0,1)\) gerade diese fehlende Ecke erzeugen und wäre auf der
+Dreipunktmenge keine abgeschlossene Operation. Das kartesische
+Produkt sichert, dass alle benötigten Ecken tatsächlich vorhanden sind.
+
+\CRStatement{SemigroupCoordinateProductEvaluation}{thm}{Auswertung des Koordinatenprodukts}
+Für zwei Paare \((p,q),(r,s)\) im Koordinatenträger ist
+ihr Produkt genau das Paar \((p,s)\).
+
+Warum ist die Regel auf ganz \(\CRK\) ausführbar? Liegen
+\((p,q),(r,s)\in\CRK\), so ist \(p\in\CRLeft\) und
+\(s\in\CRRight\). Folglich liegt auch \((p,s)\) im
+Koordinatenträger. Ein geordnetes Paar hat eindeutig bestimmte
+Einträge; das Ergebnis hängt daher nicht von einer Darstellung ab.
+Die Regel definiert eine binäre Operation. Ihre Auswertung ist
+gerade \FormulaRefAuto{SemigroupCoordinateProductEvaluation}[thm]
+aus \FormulaRefAuto{SemigroupCoordinateProductDef}[def]
+(\CRProof{SemigroupCoordinateProductEvaluation}).
+
+\CRStatement{SemigroupCoordinateProductSemigroup}{thm}{Die Koordinaten bilden eine Halbgruppe}
+Für jede Halbgruppe mit \(e\in A\) ist das Koordinatenprodukt
+auf \(\CRK\) abgeschlossen und assoziativ.
+Die Abgeschlossenheit haben wir gerade gezeigt; für die
+Assoziativität vergleichen wir die beiden Klammerungen.
+Jedes Element von \(\CRK=\CRLeft\CRTimes\CRRight\) ist ein
+geordnetes Paar. Drei beliebige Elemente können wir daher als
+\((p,q),(r,s),(t,u)\) schreiben. Die Zwischenprodukte
+\((p,s)\) und \((r,u)\) gehören ebenfalls zu \(\CRK\), weil
+ihre erste Koordinate in \(\CRLeft\), ihre zweite in
+\(\CRRight\) liegt. Damit sind beide folgenden Rechnungen zulässig:
+\[
+ \begin{aligned}
+  ((p,q)\CRSquare(r,s))\CRSquare(t,u)
+    &=(p,s)\CRSquare(t,u)=(p,u),\\
+  (p,q)\CRSquare((r,s)\CRSquare(t,u))
+    &=(p,q)\CRSquare(r,u)=(p,u).
+ \end{aligned}
+\]
+Die beiden Ergebnisse stimmen überein. Zusammen mit der eben
+gezeigten Abgeschlossenheit beweist dies, dass
+\((\CRK,\square_e)\) eine Halbgruppe ist:
+\FormulaRefAuto{SemigroupCoordinateProductSemigroup}[thm]
+(\CRProof{SemigroupCoordinateProductSemigroup}).
+
+\CRStatement{SemigroupCoordinateProductIdempotence}{thm}{Idempotenz}
+Jedes Koordinatenpaar ist bezüglich \(\CRSquare\) idempotent.
+Jedes \(u\in\CRK\) lässt sich als \((p,q)\) schreiben. Daher
+\[
+  u\CRSquare u=(p,q)\CRSquare(p,q)=(p,q)=u.
+\]
+Dies beweist \FormulaRefAuto{SemigroupCoordinateProductIdempotence}[thm]
+(\CRProof{SemigroupCoordinateProductIdempotence}).
+
+\CRStatement{SemigroupCoordinateProductThreeTermLaw}{thm}{Dreitermgesetz}
+Bei jedem Produkt dreier Koordinatenpaare darf der mittlere Faktor
+gestrichen werden.
+Für \(u=(p,q)\), \(v=(r,s)\) und \(w=(t,z)\) erhalten wir
+\[
+  (u\CRSquare v)\CRSquare w
+   =(p,s)\CRSquare(t,z)=(p,z)
+   =u\CRSquare w.
+\]
+Der mittlere Faktor \(v\) liefert keinen der beiden Einträge des
+Endergebnisses. Damit ist
+\FormulaRefAuto{SemigroupCoordinateProductThreeTermLaw}[thm]
+bewiesen (\CRProof{SemigroupCoordinateProductThreeTermLaw}).
+
+\CRStatement{SemigroupCoordinateProductRectangularIdentity}{thm}{Rechtecksidentität}
+Für beliebige Koordinatenpaare \(u,v\) gilt
+\((u\CRSquare v)\CRSquare u=u\).
+Setzen wir im Dreitermgesetz \(w=u\), so folgt mit der Idempotenz
+\[
+  (u\CRSquare v)\CRSquare u=u\CRSquare u=u.
+\]
+Das ist \FormulaRefAuto{SemigroupCoordinateProductRectangularIdentity}[thm]
+(\CRProof{SemigroupCoordinateProductRectangularIdentity}).
+Nach der Zwischenstation \(v\) nimmt das letzte \(u\) seine Spalte
+wieder mit, während die Zeile bereits vom ersten \(u\) stammt.
+So kehrt die Rechnung im eben gezeichneten Rechteck zur Ecke \(u\)
+zurück: \((p,q)\) geht zunächst nach \((p,s)\) und dann wieder
+nach \((p,q)\). Daher die Bezeichnung \emph{Rechtecksidentität}.
+Eine Identität bedeutet hier eine Gleichung, die für alle eingesetzten
+Elemente gilt.
+
+Alle vier Eigenschaften gelten für den Koordinatenträger jeder
+Halbgruppe mit gewähltem Basiselement. Sie sagen noch nichts darüber,
+ob die ursprüngliche Halbgruppe ebenfalls ein Rechteck ist.
+Diese Verbindung muss erst die Koordinatenabbildung herstellen.
+
+\par\Needspace{10\baselineskip}
+\section*{Zerlegen und Zusammensetzen: zwei wohldefinierte Abbildungen}
+\hypertarget{coordinates.reading.maps}{}
+
+\CRStatement{SemigroupCoordinateMapDef}{def}{Die \(e\)-Koordinatenabbildung}
+Die \emph{Koordinatenabbildung} ordnet jedem Element die beiden
+durch Multiplikation mit \(e\) gewonnenen Angaben zu:
+\[
+ \begin{aligned}
+  \CROrd*{coordinates-map}{\chi_e}&\colon A\longrightarrow\CRK,\\
+  \CRChi(x)&:=(x\CRStar e,e\CRStar x).
+ \end{aligned}
+\]
+\CRStatement{SemigroupCoordinateMapFunction}{thm}{Die Koordinatenabbildung ist eine Funktion}
+Für jede Halbgruppe mit \(e\in A\) ordnet \(\CRChi\) jedem
+Element von \(A\) genau ein Paar in \(\CRK\) zu.
+Zum Beweis liegt für jedes \(x\in A\) die erste Koordinate in \(\CRLeft\),
+die zweite in \(\CRRight\); in beiden Fällen dient \(x\) selbst
+als Zeuge. Die beiden Produkte sind eindeutig bestimmt. Deshalb
+gehört jedem \(x\) genau ein Paar im angegebenen Zielbereich.
+Die Definition enthält bereits den angegebenen Funktionstyp;
+unsere Überlegung überprüft zusätzlich seinen Zielbereich
+(\CRProof{SemigroupCoordinateMapFunction}).
+
+\CRStatement{SemigroupCoordinateMapEvaluation}{thm}{Auswertung der Koordinatenabbildung}
+Das Bild eines beliebigen \(x\in A\) ist das Paar
+\((x\CRStar e,e\CRStar x)\). Dies folgt unmittelbar aus der
+Definitionsvorschrift
+(\CRProof{SemigroupCoordinateMapEvaluation}).
+
+\CRStatement{SemigroupCoordinateMultiplicationMapDef}{def}{Multiplikationsabbildung}
+Für die entgegengesetzte Richtung bietet sich die
+\emph{Multiplikationsabbildung} an:
+\[
+ \begin{aligned}
+  \CROrd*{coordinates-multiply}{\mu_e}&\colon\CRK\longrightarrow A,\\
+  \CRMu(p,q)&:=p\CRStar q.
+ \end{aligned}
+\]
+\CRStatement{SemigroupCoordinateMultiplicationMapFunction}{thm}{Die Multiplikationsabbildung ist eine Funktion}
+Jedes Koordinatenpaar wird durch \(\CRMu\) auf genau ein Element
+der Ausgangshalbgruppe abgebildet.
+Bei jedem Paar \((p,q)\in\CRK\) liegen beide Einträge in \(A\).
+Die gegebene Operation liefert daher genau einen Wert \(p\CRStar q\)
+in \(A\). Weil die Einträge des Paars eindeutig sind, ist auch diese
+Vorschrift wohldefiniert
+(\CRProof{SemigroupCoordinateMultiplicationMapFunction}).
+Auch hier enthält die Definition bereits den Funktionstyp; die Rechnung
+erklärt, weshalb jedes Koordinatenpaar einen Wert in \(A\) liefert.
+\CRStatement{SemigroupCoordinateMultiplicationMapEvaluation}{thm}{Auswertung der Multiplikationsabbildung}
+Für jedes Koordinatenpaar \((p,q)\) ist das Bild unter
+\(\CRMu\) genau das ursprüngliche Produkt \(p\CRStar q\).
+Auch dies ist unmittelbar die Definitionsvorschrift
+(\CRProof{SemigroupCoordinateMultiplicationMapEvaluation}).
+
+\par\medskip\noindent\fbox{%
+\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\textbf{Beispiel: die sechs Felder mit \(e=(1,a)\).}\par\smallskip
+Wir verwenden wieder das Rechteck mit zwei Zeilen und drei Spalten
+und wählen ausdrücklich dasselbe Basiselement \(e=(1,a)\).
+Damit gilt
+\[
+ \begin{aligned}
+  \CRLeft&=\{(1,a),(2,a)\},\\
+  \CRRight&=\{(1,a),(1,b),(1,c)\},\\
+  \CRChi(i,j)&=((i,a),(1,j)),\\
+  \CRMu((i,a),(1,j))&=(i,j).
+ \end{aligned}
+\]
+Es gibt zwei mögliche erste und drei mögliche zweite Koordinaten,
+also sechs Koordinatenpaare. Jedes beschreibt genau ein Feld.
+Bei \(x=(2,b)\) und \(y=(1,c)\) lässt sich auch das Produkt
+vollständig in diesen neuen Koordinaten verfolgen. Die ursprüngliche
+Regel \((i,j)\CRStar(k,\ell)=(i,\ell)\) benötigt kein
+Basiselement. Deshalb steht \(x\CRStar y=(2,c)\) bereits fest,
+bevor wir \(e\) wählen. Für die Koordinaten dieses Produkts und
+der beiden Faktoren verwenden wir dagegen \(e=(1,a)\):
+\[
+ \begin{aligned}
+  x\CRStar y&=(2,c),\\
+  \CRChi(x\CRStar y)&=((2,a),(1,c)),\\
+  \CRChi(x)\CRSquare\CRChi(y)
+    &=((2,a),(1,b))\CRSquare((1,a),(1,c))\\
+    &=((2,a),(1,c)).
+ \end{aligned}
+\]
+Erst multiplizieren und dann Koordinaten nehmen liefert somit
+dasselbe Ergebnis wie erst Koordinaten nehmen und dann das
+Rechteckprodukt ausführen.
+Der Index \(e\) am Zeichen \(\CRSquare\) benennt den
+Koordinatenträger, auf dem gerechnet wird. Die Auswahlregel
+\emph{erste Koordinate von links, zweite von rechts} selbst verwendet
+keine zusätzliche Multiplikation mit \(e\).
+\end{minipage}}
+\par\medskip
+
+\section*{Wann ist die Koordinatenabbildung ein Isomorphismus?}
+\hypertarget{coordinates.reading.isomorphism}{}
+
+Eine Funktion heißt \emph{injektiv}, wenn gleiche Bilder nur von
+gleichen Ausgangselementen stammen. Sie heißt \emph{surjektiv}, wenn
+jedes Element ihres Zielbereichs als Bild vorkommt. Erfüllt sie
+beides, so ist sie \emph{bijektiv}: Jedes Zielelement besitzt genau
+ein Urbild. Die Schreibweise
+\[
+  \CRChi\colon A\CRBij\CRK
+\]
+drückt diese Eigenschaft aus; sie stammt aus
+\FormulaRefAuto{Bijektive Funktion}[def]. Für unsere Konstruktion
+bedeutet sie, dass die beiden Koordinaten kein Element verwechseln
+und keine mögliche Kombination auslassen.
+
+Eine Bijektion ist erst dann ein \emph{Halbgruppenisomorphismus},
+wenn sie außerdem die Multiplikation erhält:
+\[
+  \CRChi(x\CRStar y)
+     =\CRChi(x)\CRSquare\CRChi(y)
+       \qquad(x,y\in A).
+\]
+Beide Wege der Rechnung im vorigen Beispiel müssen also für
+\emph{alle} Faktoren übereinstimmen.
+
+\CRStatement{SemigroupCoordinateIsoDef}{def}{\(e\)-Koordinatenisomorphismus}
+Die Koordinatenabbildung \(\CRChi\) heißt ein
+\(e\)-Koordinatenisomorphismus, wenn \((A,\star)\) eine Halbgruppe
+ist, \(e\in A\) gilt, \(\CRChi\) bijektiv von \(A\) auf
+\(\CRK\) abbildet und die vorstehende Produktgleichung für alle
+\(x,y\in A\) erfüllt. Damit fasst die Definition genau vier
+Voraussetzungen zusammen.
+Die vier folgenden Zugriffsaxiome im Hauptband machen diese
+Bestandteile einzeln verfügbar; sie verlangen keine zusätzlichen
+Eigenschaften.
+
+\CRStatement{SemigroupCoordinateIsoIsSemigroupIso}{thm}{Ein Halbgruppenisomorphismus}
+Ist \(\CRChi\) ein \(e\)-Koordinatenisomorphismus, so ist
+\(\CRChi\) ein Halbgruppenisomorphismus von \((A,\star)\) auf
+\((\CRK,\CRSquare)\).
+
+\medskip\noindent\emph{Beweis.}
+Unter der genannten Voraussetzung sind Quelle und Ziel Halbgruppen:
+die Quelle nach Annahme, das Ziel nach
+\FormulaRefAuto{SemigroupCoordinateProductSemigroup}[thm]. Dort wurden
+Abgeschlossenheit und Assoziativität des Rechteckprodukts bewiesen.
+Die Koordinatenabbildung ist
+eine Funktion zwischen ihren Trägermengen und erhält die Operation.
+Damit ist sie nach \FormulaRefAuto{SemigroupHomDef}[def] ein
+Homomorphismus. Weil sie zusätzlich bijektiv ist, erfüllt sie
+\FormulaRefAuto{SemigroupIsoDef}[def]. Das beweist
+\FormulaRefAuto{SemigroupCoordinateIsoIsSemigroupIso}[thm]
+(\CRProof{SemigroupCoordinateIsoIsSemigroupIso}).
+Der Ausdruck \emph{\(e\)-Koordinatenisomorphismus} benennt in
+diesem Werk also einen ganz bestimmten Halbgruppenisomorphismus,
+nämlich den durch \(x\mapsto(x\star e,e\star x)\) gegebenen.
+
+\section*{Das Kriterium: Zwei Gesetze reichen aus}
+\hypertarget{coordinates.reading.criterion}{}
+
+\CRStatement{SemigroupCoordinateIsoCriterion}{thm}{Das \(e\)-Koordinatenisomorphiekriterium}
+Sei \((A,\star)\) eine Halbgruppe, \(e\in A\), und für alle
+\(x,y,z\in A\) gelte
+\[
+  x\CRStar x=x,
+  \qquad (x\CRStar y)\CRStar z=x\CRStar z.
+\]
+Dann ist \(\CRChi\) ein \(e\)-Koordinatenisomorphismus.
+Dies ist \FormulaRefAuto{SemigroupCoordinateIsoCriterion}[thm].
+
+\medskip\noindent\emph{Beweis.}
+Die bereits nachgewiesenen Funktionstypen
+\[
+  \CRChi\colon A\longrightarrow\CRK,
+  \qquad \CRMu\colon\CRK\longrightarrow A
+\]
+gelten schon für jede Halbgruppe mit \(e\in A\). Wir dürfen die
+beiden Funktionen also hintereinander anwenden. Erst jetzt verwenden
+wir die zusätzlichen Gesetze: Zunächst gewinnen wir jedes \(x\in A\)
+aus seinen Koordinaten zurück und beweisen damit die Injektivität.
+Dann konstruieren wir zu einem beliebigen Koordinatenpaar ein Urbild
+und erhalten die Surjektivität. Zuletzt prüfen wir die
+Produktverträglichkeit. Das ist auch die Reihenfolge der Beweistabelle.
+Bei jeder Rechnung liegen die Faktoren in \(A\); die Abgeschlossenheit
+sichert dies auch für ihre Zwischenprodukte. So sind die jeweiligen
+Anwendungen von Assoziativität, Idempotenz und Dreitermgesetz zulässig.
+
+\medskip\noindent\textbf{Erst zerlegen, dann zusammensetzen.}
+Für ein beliebiges \(x\in A\) liegt \(\CRChi(x)\) in
+\(\CRK\), also im Definitionsbereich von \(\CRMu\).
+Die beiden Auswertungsformeln ergeben
+\[
+ \begin{aligned}
+  \CRMu(\CRChi(x))
+    &=(x\CRStar e)\CRStar(e\CRStar x)\\
+    &=\bigl((x\CRStar e)\CRStar e\bigr)\CRStar x\\
+    &=(x\CRStar e)\CRStar x\\
+    &=x\CRStar x\\
+    &=x.
+ \end{aligned}
+\]
+Die erste Gleichheit setzt beide Definitionen ein. Die zweite ist
+die rückwärts gelesene Assoziativität für die drei Elemente
+\(x\CRStar e,e,x\), die sämtlich in \(A\) liegen.
+In der dritten wird das Dreitermgesetz auf \(x,e,e\) angewandt;
+in der vierten auf \(x,e,x\). Die letzte Gleichheit ist Idempotenz.
+Jedes Ausgangselement wird nach den beiden Schritten wiedergewonnen.
+
+\medskip\noindent\textbf{Warum die Rückgewinnung Injektivität liefert.}
+Seien \(x,y\in A\) mit \(\CRChi(x)=\CRChi(y)\).
+Beide Bilder gehören zum Definitionsbereich von \(\CRMu\).
+Wenden wir diese Funktion auf die gleichen Bilder an, erhalten wir
+gleiche Werte. Die eben für jedes Element bewiesene Rückrechnung ergibt
+\[
+  x=\CRMu(\CRChi(x))=\CRMu(\CRChi(y))=y.
+\]
+Weil \(x\) und \(y\) beliebig waren, ist \(\CRChi\) injektiv.
+Für diesen Schluss haben wir die Surjektivität noch nicht vorausgesetzt.
+
+\medskip\noindent\textbf{Ein beliebiges Koordinatenpaar und seine Zeugen.}
+Sei nun \(u\in\CRK\) beliebig. Weil
+\(\CRK=\CRLeft\CRTimes\CRRight\), lässt sich \(u=(p,q)\)
+mit \(p\in\CRLeft\) und \(q\in\CRRight\) schreiben.
+Das Elementkriterium liefert \(p,q\in A\) sowie Zeugen
+\(a,b\in A\) mit \(p=a\CRStar e\) und \(q=e\CRStar b\).
+Zuerst zeigen wir
+\[
+ \begin{aligned}
+  p\CRStar e&=(a\CRStar e)\CRStar e=a\CRStar e=p,\\
+  e\CRStar q&=e\CRStar(e\CRStar b)
+              =(e\CRStar e)\CRStar b=e\CRStar b=q.
+ \end{aligned}
+\]
+In der ersten Zeile wurde das Dreitermgesetz benutzt.
+In der zweiten klammern wir zunächst um und verwenden dann
+\(e\CRStar e=e\), die Idempotenz des Basiselements.
+Die erste Schlussgleichheit \(p\CRStar e=p\) enthält den
+Hilfszeugen \(a\) nicht mehr, die zweite \(e\CRStar q=q\)
+den Hilfszeugen \(b\) nicht mehr. Wir haben außer den genannten
+Darstellungen nichts über diese Zeugen angenommen. Die beiden
+Gleichheiten gelten daher für die vorgegebenen Koordinaten,
+unabhängig davon, welche passenden Zeugen wir gewählt haben.
+
+\medskip\noindent\textbf{Das Produkt der Komponenten ist ein Urbild.}
+Das sind genau die Vereinfachungen, die nach dem Zusammensetzen
+benötigt werden. Weil \(p,q\in A\) sind, ist
+\(p\CRStar q\in A\). Dieser Wert darf also in \(\CRChi\)
+eingesetzt werden. Für die erste zurückgewonnene Koordinate gilt
+\[
+  (p\CRStar q)\CRStar e=p\CRStar e=p.
+\]
+Für die zweite gilt
+\[
+  e\CRStar(p\CRStar q)=(e\CRStar p)\CRStar q
+                       =e\CRStar q=q.
+\]
+Die erste Rechnung benutzt das Dreitermgesetz für \(p,q,e\),
+die zweite nach dem Umklammern für \(e,p,q\). Damit folgt
+\[
+ \begin{aligned}
+  \CRChi(\CRMu(p,q))
+    &=\bigl((p\CRStar q)\CRStar e,
+                     e\CRStar(p\CRStar q)\bigr)\\
+    &=(p,q).
+ \end{aligned}
+\]
+Auch jedes beliebige Koordinatenpaar wird also wiedergewonnen.
+Hier mussten die beiden Einträge nicht vom selben Ausgangselement
+stammen: Gerade diese Freiheit ist für die Surjektivität entscheidend.
+
+Für das ursprünglich beliebige \(u=(p,q)\) haben wir damit das
+konkrete Urbild \(x=p\CRStar q\in A\) gefunden:
+\(\CRChi(x)=u\). Die Hilfszeugen \(a,b\) werden für das Urbild
+nicht mehr gebraucht. Jedes \(u\in\CRK\) besitzt folglich ein
+Urbild; dies ist die Surjektivität. Zusammen mit der zuvor bewiesenen
+Injektivität ergibt sie die Bijektivität.
+
+In der Sprache der Funktionstheorie lauten die beiden Rückrechnungen
+\[
+  \CRMu\CRComp\CRChi=\CRId A,
+  \qquad
+  \CRChi\CRComp\CRMu=\CRId{\mathcal K_e}.
+\]
+Die erste Komposition ist eine Funktion von \(A\) nach \(A\),
+die zweite von \(\CRK\) nach \(\CRK\). Die
+\emph{Komposition} \(g\CRComp f\) bedeutet: zuerst \(f\)
+anwenden, dann \(g\). Die \emph{Identität} \(\CRId X\) lässt
+jedes Element von \(X\) unverändert. Weil die Funktionen auf jeder
+Eingabe übereinstimmen, dürfen die punktweisen Gleichheiten als
+Funktionsgleichheiten geschrieben werden; dies ist
+\FormulaRefAuto{FunctionExtensionality}[thm].
+Die allgemeine Regel
+\FormulaRefAuto{MutuallyInverseCompanionBijection}[thm] fasst den
+soeben ausgeführten Bijektivitätsbeweis zusammen. Insbesondere ist
+\(\CRMu\) jetzt wirklich die Umkehrfunktion von \(\CRChi\).
+
+\medskip\noindent\textbf{Verträglichkeit mit der Multiplikation.}
+Seien schließlich \(x,y\in A\) beliebig. Wegen der Abgeschlossenheit
+liegt \(x\CRStar y\) in \(A\); zugleich gehören
+\(\CRChi(x)\) und \(\CRChi(y)\) zu \(\CRK\).
+Damit sind sowohl das Bild des Produkts als auch das Rechteckprodukt
+der beiden Bilder zulässig. Wir rechnen
+\[
+ \begin{aligned}
+  \CRChi(x\CRStar y)
+    &=\bigl((x\CRStar y)\CRStar e,
+                     e\CRStar(x\CRStar y)\bigr)\\
+    &=\bigl(x\CRStar e,(e\CRStar x)\CRStar y\bigr)\\
+    &=\bigl(x\CRStar e,e\CRStar y\bigr)\\
+    &=\bigl(x\CRStar e,e\CRStar x\bigr)
+          \CRSquare\bigl(y\CRStar e,e\CRStar y\bigr)\\
+    &=\CRChi(x)\CRSquare\CRChi(y).
+ \end{aligned}
+\]
+Der Übergang zur zweiten Zeile benutzt in der ersten Koordinate das
+Dreitermgesetz und in der zweiten Assoziativität. In der dritten
+Zeile wird dort ebenfalls das Dreitermgesetz angewandt. Die vierte
+Zeile ist die Definition des Rechteckprodukts.
+
+Die Quelle ist nach Voraussetzung eine Halbgruppe, \(e\) gehört
+zu ihr, und Bijektivität sowie Produktverträglichkeit sind bewiesen.
+Die letzte Rechnung galt für jedes \(x\in A\) und jedes \(y\in A\).
+Damit sind alle vier Bestandteile des Begriffs erfüllt. Das beweist
+das Kriterium vollständig; seine formale Ableitung steht in der
+\CRProof{SemigroupCoordinateIsoCriterion}.
+
+\section*{Die Umkehrungen: Was ein Koordinatenisomorphismus erzwingt}
+\hypertarget{coordinates.reading.converse}{}
+
+Jetzt setzen wir umgekehrt voraus, dass ein
+\(e\)-Koordinatenisomorphismus vorliegt. Seine Definition liefert
+eine Halbgruppe \((A,\star)\), ein Element \(e\in A\), die
+Bijektivität von \(\CRChi\) und die Operationserhaltung.
+Jede Bijektion ist injektiv, wie
+\FormulaRefAuto{F\colon A\bij B \vdash F\colon A\inj B}[thm]
+festhält. Die bereits bekannten Gesetze im
+Koordinatenträger können deshalb auf \(A\) zurückübertragen werden.
+Dabei braucht man nicht zu raten, wie \(\CRMu\) aussieht.
+
+\CRStatement{SemigroupCoordinateIsoIdempotence}{thm}{Idempotenz in der Ausgangshalbgruppe}
+Ist \(\CRChi\) ein \(e\)-Koordinatenisomorphismus, so ist jedes
+Element von \(A\) idempotent: Für alle \(x\in A\) gilt
+\(x\CRStar x=x\).
+
+\medskip\noindent\emph{Beweis.}
+Sei \(x\in A\). Sein Bild liegt in \(\CRK\), wo jedes Element
+idempotent ist. Produktverträglichkeit und dieses Zielgesetz ergeben
+\[
+  \CRChi(x\CRStar x)
+   =\CRChi(x)\CRSquare\CRChi(x)=\CRChi(x).
+\]
+Sowohl \(x\CRStar x\) als auch \(x\) gehören zu \(A\).
+Die Injektivität erzwingt daher \(x\CRStar x=x\).
+Weil \(x\) beliebig war, gilt die Idempotenz auf ganz \(A\).
+Das ist \FormulaRefAuto{SemigroupCoordinateIsoIdempotence}[thm]
+(\CRProof{SemigroupCoordinateIsoIdempotence}).
+
+\CRStatement{SemigroupCoordinateIsoThreeTermLaw}{thm}{Dreitermgesetz in der Ausgangshalbgruppe}
+Ist \(\CRChi\) ein \(e\)-Koordinatenisomorphismus, so gilt in
+\(A\) das Dreitermgesetz: Für alle \(x,y,z\in A\) ist
+\((x\CRStar y)\CRStar z=x\CRStar z\).
+
+\medskip\noindent\emph{Beweis.}
+Seien \(x,y,z\in A\). Durch Abgeschlossenheit gehören
+\(x\CRStar y\), \((x\CRStar y)\CRStar z\) und
+\(x\CRStar z\) zu \(A\); außerdem liegen alle drei Bilder
+\(\CRChi(x),\CRChi(y),\CRChi(z)\) in \(\CRK\).
+Zweimalige Produktverträglichkeit liefert
+\[
+ \begin{aligned}
+  \CRChi\bigl((x\CRStar y)\CRStar z\bigr)
+    &=\CRChi(x\CRStar y)\CRSquare\CRChi(z)\\
+    &=\bigl(\CRChi(x)\CRSquare\CRChi(y)\bigr)
+                                      \CRSquare\CRChi(z)\\
+    &=\CRChi(x)\CRSquare\CRChi(z)\\
+    &=\CRChi(x\CRStar z).
+ \end{aligned}
+\]
+In der dritten Zeile verwenden wir das Dreitermgesetz im
+Koordinatenträger. Die letzte Gleichheit ist die Produktverträglichkeit
+in umgekehrter Leserichtung. Beide Argumente der gleichen Bildwerte
+liegen in \(A\); durch Injektivität folgt
+\[
+  (x\CRStar y)\CRStar z=x\CRStar z.
+\]
+Die drei Elemente waren beliebig. Damit ist
+\FormulaRefAuto{SemigroupCoordinateIsoThreeTermLaw}[thm]
+bewiesen (\CRProof{SemigroupCoordinateIsoThreeTermLaw}).
+
+\CRStatement{SemigroupCoordinateIsoRectangularIdentity}{thm}{Rechtecksidentität in der Ausgangshalbgruppe}
+Ist \(\CRChi\) ein \(e\)-Koordinatenisomorphismus, so gilt in
+\(A\) die Rechtecksidentität: Für alle \(x,y\in A\) ist
+\((x\CRStar y)\CRStar x=x\).
+
+\medskip\noindent\emph{Beweis.}
+Setzen wir im gerade gewonnenen Gesetz \(z=x\), so folgt für
+alle \(x,y\in A\)
+\[
+  (x\CRStar y)\CRStar x=x\CRStar x=x.
+\]
+Die letzte Gleichheit benutzt die ebenfalls schon bewiesene
+Idempotenz. Das ist
+\FormulaRefAuto{SemigroupCoordinateIsoRectangularIdentity}[thm]
+(\CRProof{SemigroupCoordinateIsoRectangularIdentity}).
+
+Kriterium und Umkehrungen geben somit eine genaue Charakterisierung:
+Für eine Halbgruppe und ein Element \(e\in A\) ist die
+Koordinatenabbildung genau dann ein Isomorphismus, wenn Idempotenz
+und Dreitermgesetz gelten. In üblicher Terminologie heißt eine
+Halbgruppe mit diesen beiden Eigenschaften ein
+\emph{Rechtecksband}. Das Wort \glqq Band\grqq{} bezeichnet hier
+eine idempotente Halbgruppe, keinen Buchband.
+
+\section*{Was von der Wahl des Basiselements abhängt}
+\hypertarget{coordinates.reading.base}{}
+
+Die beiden Gesetze des Kriteriums enthalten \(e\) gar nicht.
+Liegt deshalb für ein Basiselement eine Koordinatenisomorphie vor,
+so liefern die Umkehrungen diese Gesetze. Das Kriterium gilt dann
+erneut für jedes andere \(f\in A\). Das Rechteck hängt als
+algebraische Struktur nicht an einem ausgezeichneten Bezugspunkt;
+die konkreten Koordinatenmengen ändern sich mit der Wahl.
+
+Im Sechsfelderbeispiel wählen wir statt \(e=(1,a)\) nun
+\(f=(2,b)\). Dann gilt für jedes \(x=(i,j)\)
+\[
+  x\CRStar f=(i,b),\qquad f\CRStar x=(2,j).
+\]
+Die neue Darstellung von \((2,c)\) lautet also
+\(((2,b),(2,c))\), die alte lautete \(((2,a),(1,c))\).
+Beide werden durch Multiplikation ihrer Einträge zu \((2,c)\).
+
+Die Umrechnung lässt sich auch ohne die ursprünglichen Zeilen- und
+Spaltennamen formulieren. Ein altes Koordinatenpaar \((p,q)\)
+stellt das Element \(p\CRStar q\) dar. Seine neuen Koordinaten
+bezüglich \(f\) sind daher
+\[
+ \begin{aligned}
+  \chi_f(\CRMu(p,q))
+    &=\bigl((p\CRStar q)\CRStar f,
+                         f\CRStar(p\CRStar q)\bigr)\\
+    &=\bigl(p\CRStar f,f\CRStar q\bigr).
+ \end{aligned}
+\]
+Die erste Vereinfachung ist das Dreitermgesetz. In der zweiten
+Koordinate klammern wir zuvor um. Die Rückumrechnung entsteht
+durch Vertauschen der Rollen von \(e\) und \(f\), weil beide
+Koordinatensysteme bijektiv dasselbe \(A\) darstellen.
+
+\medskip\noindent\textbf{Zeilen und Spalten dürfen entarten.}
+Es ist nicht erforderlich, dass es mindestens zwei von jeder Art gibt.
+Bei der Operation \(x\CRStar y=x\) auf einer nichtleeren Menge
+ist \(\CRLeft=A\), \(\CRRight=\{e\}\), und
+\(\CRChi(x)=(x,e)\). Das Rechteck hat nur eine Spalte.
+Die Rückrechnung lautet \(\CRMu(x,e)=x\CRStar e=x\).
+Bei \(x\CRStar y=y\) ist entsprechend
+\(\CRLeft=\{e\}\), \(\CRRight=A\),
+\(\CRChi(x)=(e,x)\) und \(\CRMu(e,x)=e\CRStar x=x\).
+Hier gibt es nur eine Zeile. Beide Operationen sind assoziativ,
+idempotent und erfüllen das Dreitermgesetz: Jede Klammerung liefert
+im ersten Fall den ersten, im zweiten den letzten Faktor.
+
+\section*{Warum eine allgemeine Halbgruppe nicht genügt}
+\hypertarget{coordinates.reading.counterexamples}{}
+
+Die Formeln für \(\CRChi\) und \(\CRMu\) sind immer
+wohldefiniert. Dass sie sich umkehren und das Produkt erhalten,
+ist dagegen eine echte Aussage. Die folgenden Beispiele trennen
+diese Fragen.
+
+\medskip\noindent\textbf{Addition: zwei gleiche Angaben sind keine freien Koordinaten.}
+Auf \(A=\mathbb N\) sei \(\star\) die Addition und \(e=0\).
+Dann ist \(\CRLeft=\mathbb N=\CRRight\) und
+\[
+  \CRK=\mathbb N\CRTimes\mathbb N,\qquad
+  \CRChi(n)=(n,n),\qquad \CRMu(p,q)=p+q.
+\]
+Die Abbildung ist injektiv, denn aus \((m,m)=(n,n)\) folgt
+\(m=n\). Sie ist nicht surjektiv: Das Paar \((1,2)\) liegt
+im Koordinatenträger, aber kein \((n,n)\) ist gleich \((1,2)\).
+Außerdem scheitert die Produktverträglichkeit bereits bei \(1,2\):
+\[
+  \CRChi(1+2)=(3,3),\qquad
+  \CRChi(1)\CRSquare\CRChi(2)=(1,1)\CRSquare(2,2)=(1,2).
+\]
+Auch die Rückrechnung misslingt: \(\CRMu(\CRChi(1))=2\ne1\).
+Das neutrale Element der Addition ist somit kein Ersatz für die
+Gesetze des Kriteriums.
+
+\medskip\noindent\textbf{Minimum: Idempotenz allein reicht nicht.}
+Sei \(A=\{0,1\}\) und \(x\star y=\min(x,y)\).
+Das Produkt dreier Elemente ist bei beiden Klammerungen ihr
+gemeinsames Minimum, also ist die Operation assoziativ.
+Auch gilt \(\min(x,x)=x\). Mit \(e=1\) erhält man jedoch
+\[
+  \CRLeft=\CRRight=A,\qquad
+  \CRChi(0)=(0,0),\quad\CRChi(1)=(1,1).
+\]
+Die beiden gemischten Paare \((0,1),(1,0)\) werden ausgelassen.
+Das Dreitermgesetz ist tatsächlich falsch:
+\[
+  \min(\min(1,0),1)=0\ne1=\min(1,1).
+\]
+Wählen wir stattdessen \(e=0\), werden sogar beide Elemente auf
+\((0,0)\) geschickt. Diese zweite Koordinatenabbildung ist surjektiv
+auf den nun einelementigen Träger, aber nicht injektiv. Kein
+Basiselement repariert das fehlende Dreitermgesetz.
+
+\par\Needspace{16\baselineskip}
+\medskip\noindent\textbf{Konstantes Produkt: Das Dreitermgesetz allein reicht nicht.}
+Auf \(A=\{0,a\}\) mit \(a\ne0\) sei jedes Produkt gleich~\(0\).
+Beide Klammerungen dreier Faktoren sind dann \(0\), und ebenso
+ist das Produkt des ersten mit dem letzten Faktor \(0\).
+Die Operation ist also assoziativ und erfüllt das Dreitermgesetz.
+Aber \(a\CRStar a=0\ne a\): Die Idempotenz fehlt.
+Für \(e=0\) gilt
+\[
+  \CRLeft=\{0\}=\CRRight,\qquad
+  \CRK=\{(0,0)\},\qquad
+  \CRChi(0)=\CRChi(a)=(0,0).
+\]
+Die Koordinatenabbildung erhält hier sogar die Operation und ist
+surjektiv. Sie verliert dennoch die Unterscheidung zwischen \(0\)
+und \(a\) und kann deshalb kein Isomorphismus sein.
+
+Die drei Beispiele erklären die Aufgaben im Beweis: Die Rückrechnung
+auf \(A\) verhindert das Zusammenfallen verschiedener Elemente;
+die Rückrechnung auf \(\CRK\) stellt jede Koordinatenkombination
+bereit; die Produktgleichung sichert schließlich, dass die neue
+Darstellung dieselbe Multiplikation beschreibt.
+
+\clearpage
+\section*{Historischer Abriss: Von Halbgruppen zu Rechteckskoordinaten}
+\hypertarget{coordinates.reading.history}{}
+
+Die Strukturtheorie der Halbgruppen untersucht, welche Formen eine
+assoziative Multiplikation ohne die zusätzlichen Forderungen einer
+Gruppe annehmen kann. Einen frühen grundlegenden Beitrag lieferte
+David Rees 1940 mit \emph{On semi-groups}. Er stellte die
+Untersuchung der Struktur solcher Systeme ausdrücklich in den
+Zusammenhang algebraischer Methoden.\footnote{D. Rees,
+\emph{On semi-groups}, Proceedings of the Cambridge Philosophical
+Society 36 (1940), S.~387--400.
+\href{https://doi.org/10.1017/S0305004100017436}{Originalveröffentlichung beim Verlag}.}
+Unser Rechteckmodell gehört zu diesem größeren Anliegen, konkrete
+Koordinaten für abstrakte Multiplikationsgesetze zu finden.
+
+1951 veröffentlichte J.~A. Green \emph{On the Structure of
+Semigroups}. Die nach ihm benannten Relationen vergleichen Elemente
+anhand der von ihnen erzeugten einseitigen Ideale. In einem
+Rechtecksband lassen sich diese Beziehungen als gemeinsame Zeilen
+und gemeinsame Spalten sehen.\footnote{J.~A. Green,
+\emph{On the Structure of Semigroups}, Annals of Mathematics,
+2.~Serie, 54 (1951), S.~163--172,
+\href{https://doi.org/10.2307/1969317}{Originalveröffentlichung}.
+Zur Zeilen- und Spaltendeutung siehe auch J.~E. Leech,
+\emph{Noncommutative Lattices}, 2020, Abschnitt~1.2, S.~21--22.}
+Die Koordinatenidee ist damit zugleich ein anschaulicher Einstieg in
+eine allgemeinere Beschreibung der inneren Struktur von Halbgruppen.
+
+In der heutigen Darstellung bezeichnet \emph{Rechtecksband} genau
+die hier behandelte idempotente Struktur mit Dreitermgesetz.
+Die Darstellung durch die Mengen \(\CRLeft\) und \(\CRRight\) ist ein
+bekannter Struktursatz. Jonathan E. Leech formuliert ihn in
+\emph{Noncommutative Lattices} als Satz~1.2.4: Die Multiplikation
+der beiden Koordinaten liefert den Isomorphismus zum ursprünglichen
+Rechtecksband.\footnote{Jonathan E. Leech,
+\emph{Noncommutative Lattices: Skew Lattices, Skew Boolean Algebras
+and Beyond}, University of Primorska Press, Koper 2020,
+Abschnitt~1.2, Satz~1.2.4, S.~21--22.
+\href{https://www.hippocampus.si/ISBN/978-961-293-027-1.pdf}{Frei zugängliche Verlagsausgabe},
+\href{https://doi.org/10.26493/978-961-293-027-1}{DOI}.}
+Auch Leech bezeichnet das beliebig gewählte Element mit \(e\).
+Weil er ein Rechtecksband betrachtet, gilt \(e\CRStar e=e\);
+das ist Idempotenz und fordert keine neutrale Wirkung auf andere
+Elemente.
+Die hier bewiesene Abbildung \(\CRChi\) ist die ausdrücklich
+angegebene Umkehrung dieser Multiplikationsabbildung.
+
+Der Name \emph{\(e\)-Koordinatenisomorphismus} und die gemeinsame
+Notation \(\CRK,\CRSquare,\CRChi,\CRMu\) sind die Bezeichnungen
+dieses Werks. Damit wird kein historisch eigenständiger Satz dieses
+Namens einem Autor zugeschrieben. Der mathematische Gehalt ist die
+Rechteckdarstellung: Zwei durch Multiplikation mit einem Basiselement
+gewonnene Angaben bestimmen jedes Element eindeutig, und beim Produkt
+bleiben die erste Angabe links und die zweite rechts erhalten.

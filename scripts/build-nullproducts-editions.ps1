@@ -4,6 +4,7 @@ param(
     [switch]$EditionsOnly,
     [switch]$SkipVolumeBuild,
     [switch]$SkipZeroTransportBuild,
+    [switch]$SkipTableIsomorphismsBuild,
     [switch]$SkipMain,
     [switch]$SkipPublish
 )
@@ -36,6 +37,10 @@ function Invoke-NullproductsLatexmk {
 Push-Location $repoRoot
 try {
     $graph = Read-BandDependencyGraph -Path $dependencyFile
+    if (-not $SkipTableIsomorphismsBuild) {
+        & $Python (Join-Path $PSScriptRoot 'table-isomorphisms-editions.py') prepare-main
+        if ($LASTEXITCODE -ne 0) { throw 'Table-isomorphism B37 import preparation failed.' }
+    }
     # build-all invokes -EditionsOnly after building the canonical dependencies.
     $requiredBands = if ($EditionsOnly) { @('B37') } else { @('B37', 'B00') }
     foreach ($band in $requiredBands) {
@@ -59,6 +64,15 @@ try {
     }
     if (-not $SkipVolumeBuild) {
         Invoke-NullproductsLatexmk -Source $graph['B37'].Source -Job '_B37'
+    }
+    if (-not $SkipTableIsomorphismsBuild) {
+        & (Join-Path $PSScriptRoot 'build-table-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
+    } else {
+        foreach ($edition in @('proofs', 'reading')) {
+            foreach ($extension in @('aux', 'pdf', 'registry.tsv')) {
+                Assert-Artifact -RelativePath "registry/table-isomorphisms/_B37-table-isomorphisms-$edition.$extension" -NotBefore ([datetime]::MinValue) -AllowEmpty:($edition -eq 'reading' -and $extension -eq 'registry.tsv')
+            }
+        }
     }
     & $Python (Join-Path $PSScriptRoot 'nullproducts-editions.py') prepare
     if ($LASTEXITCODE -ne 0) { throw 'Nullproducts import preparation failed.' }
@@ -85,7 +99,7 @@ try {
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B00', 'B37')
     }
     if (-not $SkipPublish) {
-        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport', '--finite-semigroups')
+        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport', '--finite-semigroups', '--table-isomorphisms-editions')
         if ($SkipMain) { $arguments += '--skip-main' }
         & $Python @arguments
         if ($LASTEXITCODE -ne 0) { throw 'Nullproducts publication or link audit failed.' }

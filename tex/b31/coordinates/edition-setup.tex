@@ -1,0 +1,19 @@
+% Beide Ergänzungen beziehen sämtliche nummerierten Aussagen aus den Fachbänden.
+% Sie deklarieren keine lokalen Resultate: Nummern und IDs bleiben in Band 31.
+\begin{luacode*}
+  local directory = "registry/coordinates/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B31.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{registry/_B31}[../_B31.pdf]")
+  banddeps.load_predecessor_registries("B31")
+  thmlookup.load_registry_file("registry/_B31.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{31}
+\setcounter{file}{31}
+\renewcommand{\theHtable}{coordinates.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{coordinates.\arabic{chapter}.\arabic{figure}}

@@ -107,6 +107,49 @@ pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain
 python ./scripts/publish-pdfs.py --audit-only
 ```
 
+## Multiplikationstafeln und Isomorphie endlicher Halbgruppen
+
+`tex/b37/table-isomorphisms/` contains the reading and proof companions for
+B37's multiplication-table section. All nine definitions and nine public
+theorems remain in B37. The proof edition owns exactly the seven original
+H-results, with their original semantic IDs, labels, numbers and destinations.
+The reading edition registers no statements. The immutable snapshot in
+`scripts/table-isomorphisms-manifest.json` protects the complete B37 baseline;
+only the seven H declarations change owner.
+
+With current predecessor artifacts:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-table-isomorphisms-editions.ps1 -Python /path/to/python
+```
+
+`-EditionsOnly` builds and audits just the pair from an already rebuilt B37.
+A normal targeted build first prepares the H imports, rebuilds B37, builds the
+proof edition and then the reading, refreshes the null-product editions and
+the finite-semigroup overview reading, and rebuilds B00 and the main volume.
+`-SkipMain`, `-SkipVolumeBuild` and `-SkipPublish` have their usual meanings.
+After changing earlier subject volumes, rebuild the affected dependency range
+with `build-all.ps1`; the targeted builder reuses predecessor artifacts.
+
+For an explicit staged build, prepare the bootstrap before rebuilding B37:
+
+```powershell
+python ./scripts/table-isomorphisms-editions.py prepare-main
+# Rebuild B37, then:
+pwsh -NoProfile -File ./scripts/build-table-isomorphisms-editions.ps1 -EditionsOnly -Python /path/to/python
+python -m unittest discover -s tests -p test_table_isomorphisms_editions.py
+```
+
+`build-all.ps1` bootstraps the imports before B37 and builds this pair before
+the null-product companions audit B37's outgoing links. The null-product
+builder does the same unless `-SkipTableIsomorphismsBuild` selects existing
+artifacts. PDF publication uses `--table-isomorphisms-editions`; full
+publication selects both editions when either artifact exists. Their folder is
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/`.
+The audit checks ownership, unchanged formulas and display metadata, original
+numbers and destinations, complete imports and all companion PDF links. It is
+not a formal proof checker.
+
 ## Endliche Halbgruppen: zusätzliche Lesefassung
 
 Die Quellen der Überblickslesefassung liegen unter `tex/b37/finite/`,
@@ -790,37 +833,91 @@ A complete publishing run includes the pair once either build artifact exists
 and rejects an incomplete pair before replacing output PDFs. Restricted
 publication and audit runs still check already published companions.
 
-## e-Koordinatenabbildung / Definitionen und Beweise
+## e-Koordinatenabbildung / Companion editions
 
-Die einzelne Ergänzung übernimmt den Originalabschnitt 28.2.13 aus Band 28 mit
-fünf Definitionen, vier Axiomen und sechzehn Sätzen. Die Beweise bleiben unverändert;
-die gemeinsame Konfiguration erzeugt ihre automatischen Nachschlagetabellen.
-Die kanonischen Nummern und Aussagen gehören weiterhin Band 28.
+Die e-Koordinatenabbildung steht in Abschnitt 31.2.2 von Band 31
+„Rechtecksbänder“, unmittelbar vor dem abschließenden Koordinatensatz.
+Die fünf Definitionen, vier Axiome und sechzehn Sätze verwenden dort ihre
+bisherigen Aussage-IDs mit den neuen kanonischen Nummern aus Band 31.
+Band 28 enthält einen kurzen Ausblick mit Verweis auf Band 31.
 
-```powershell
-pwsh -NoProfile -File ./scripts/build-e-coordinates-edition.ps1 -Python /path/to/python
-```
-
-Mit `-SkipPublish` baut und prüft der Builder die Ausgabe ohne Veröffentlichung.
-`scripts/e-coordinates-edition.py prepare` bereitet die Ausgabe vor;
-`scripts/e-coordinates-edition.py audit` prüft sie gegen den kanonischen Abschnitt.
-Das Buildartefakt liegt unter `registry/e-coordinates/_B28-e-coordinates.pdf`.
-Zur gezielten Veröffentlichung einer bereits gebauten Ausgabe dient:
+Beide Begleitfassungen werden aus `editions/b31-coordinates-{proofs,reading}.tex`
+und `tex/b31/coordinates/{proofs,reading}.tex` reproduzierbar gebaut.
+Sie importieren Band 31 und dessen Vorgänger; ihre eigenen Ergebnisregister
+bleiben leer. Zuerst werden die Beweistabellen gebaut, anschließend die
+Lesefassung mit ihren Links zu den vollständigen Beweisen.
 
 ```powershell
-python ./scripts/publish-pdfs.py --e-coordinates-only
+pwsh -NoProfile -File ./scripts/build-coordinates-editions.ps1 -SkipPublish
+python ./scripts/coordinates-proofs.py audit
+python ./scripts/check-proof-reference-layout.py registry/coordinates/_B31-coordinates-proofs.pdf --require-tags --tolerance 0.5 --report tmp/coordinates-editions/reference-layout.json
+python ./scripts/publish-pdfs.py --coordinates-only
 ```
 
-Dieser Aufruf ersetzt ausschließlich die Ergänzungs-PDF und prüft anschließend
-alle veröffentlichten PDF-Verweise. `--e-coordinates` nimmt die Ausgabe in eine
-reguläre Auswahl auf, beispielsweise mit `--bands B28 --skip-main`.
-Ein vollständiger Veröffentlichungslauf berücksichtigt sie automatisch, sobald
-das Buildartefakt vorhanden ist. Der Publisher verlangt sowohl die `.log`- als auch
-die `.debug.log`-Datei. `--audit-only` und `--organize-existing` berücksichtigen
-eine bereits veröffentlichte Ausgabe ebenfalls.
+Der isolierte Builder benutzt aktuelle PDF-, AUX- und Registry-Artefakte von
+Band 31 und seinen Vorgängern. Er baut weder Fachbände noch den Gesamtband.
+LuaLaTeX läuft für jede Begleitfassung mindestens zweimal und höchstens
+fünfmal mit abgeschalteter Paketinstallation und Shell-Ausführung, bis die
+Querverweise und Tabellen stabil sind. Ohne `-SkipPublish` veröffentlicht er
+anschließend beide Fassungen. `-Python PATH` wählt den Python-Interpreter
+für die Quell-, Ereignis- und PDF-Verweisprüfungen. Der frühere Aufruf
+`build-coordinates-proofs.ps1` bleibt als Weiterleitung auf diesen Builder
+erhalten. Auch die bisherigen Publisher-Optionen `--coordinates-proofs`
+und `--coordinates-proofs-only` sind Aliase für beide Begleitfassungen.
+Die gesonderte Geometrieprüfung benötigt zusätzlich `pdfplumber`; dafür einen
+entsprechend ausgestatteten Python-Interpreter verwenden.
 
-Das Veröffentlichungsziel ist
-`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf`.
+`--bands B00 B28 B31 --coordinates` veröffentlicht auf Wunsch auch die
+bereits gebauten Fachbände. `build-all.ps1` baut beide Begleitfassungen nach
+Band 31 und seinen Vorgängern vor dem Gesamtband und der abschließenden
+Veröffentlichung. Nach der Verschiebung müssen Band 28, Band 31, die Übersicht,
+die nachfolgenden Fachbände und die abhängigen Begleitfassungen neu gebaut
+werden, weil sich die gedruckten Nummern und Zielmarken geändert haben.
+
+Jeder der sechzehn Beweise endet mit einer gemeinsamen Nachschlagetabelle
+„Verwendete Sätze und Definitionen“. Sie enthält auch verwendete Axiome,
+jeweils mit ursprünglichen Voraussetzungen und verlinkter Nummer in der
+Reihenfolge der ersten Benutzung. Das Isomorphiekriterium hat einen gemeinsamen
+Index nach allen sieben Beweisteilen. Der Audit vergleicht die tatsächlich
+benutzten Labels mit den tatsächlich gedruckten Einträgen, kontrolliert Nummern,
+Deduplikation und Beweisgrenzen und verlangt sechzehn vollständige Übersichten
+im PDF. `scripts/coordinates-proofs-manifest.json` hält die überprüften
+397 Beweiszeilen fest; insbesondere bleiben die 102 Zeilen und sieben Teile
+des Isomorphiekriteriums unverändert. Die Prüfdateien stehen unter
+`registry/coordinates/`, die Konsolenprotokolle unter `tmp/coordinates-editions/`.
+Die Lesefassung muss alle sechzehn Beweisziele verlinken; beide PDFs werden
+auf konkurrierende Satzregister und auf gültige PDF-Verknüpfungen geprüft.
+
+Der historische Vollregister-Audit der Potenzhalbgruppe berücksichtigt die
+Verschiebung ausdrücklich: Genau die 25 Deklarationen aus dem früheren
+Abschnitt 28.2.13 werden in Band 31 nachgewiesen.
+`scripts/coordinates-relocation-manifest.json` schützt dort auch die erweiterten
+Anzeigedaten und ursprünglichen Delta-Voraussetzungen. Die mathematischen
+Registereinträge werden zusätzlich mit dem unveränderten historischen
+Band-28-Schnappschuss verglichen. Alle übrigen Aussagen, Arten, Nummern und IDs
+bleiben geschützt; anonyme PDF-Sprungziele stammen aus der aktuellen AUX-Datei.
+Die ausdrücklichen Beweisziele der Potenzhalbgruppe bleiben unverändert.
+Die Prüfung erfolgt in zwei Phasen: Beim früheren Bau von Band 28 schützt
+`scripts/coordinates-relocation-source.json` die vollständigen 25
+Deklarationsmakros in der Band-31-Quelle einschließlich Titel, Formeln, IDs
+und Delta-Voraussetzungen. Dafür werden keine Band-31-Artefakte benötigt.
+Nach dem Bau von Band 31 prüft der Koordinaten-Audit dessen tatsächlich
+erzeugtes erweitertes Register gegen den geschützten Register-Schnappschuss;
+dieselbe Prüfung läuft vor der Veröffentlichung beider Begleitfassungen.
+So entsteht durch die Verschiebung keine neue zyklische Build-Abhängigkeit.
+Der Potenzisomorphie-Audit gleicht das aktuelle anonyme Ziel seines Hauptsatzes
+zusätzlich mit dem dauerhaften semantischen Sprungziel im PDF ab.
+
+
+Beide veröffentlichten Fassungen liegen unter
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/`:
+
+- `Bd. 31 - e-Koordinatenabbildung - Lesefassung.pdf`
+- `Bd. 31 - e-Koordinatenabbildung - Beweistabellen.pdf`
+
+Der Publisher berücksichtigt beide Dateien bei `--audit-only` und
+`--organize-existing`. Die früheren Ausgaben im Ergänzungsordner von Band 28
+werden nach der geprüften Veröffentlichung der neuen Fassungen entfernt.
 
 ## General zero transport / Allgemeiner Nullelement-Transport
 

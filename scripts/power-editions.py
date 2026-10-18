@@ -37,6 +37,10 @@ DIRECTORY = ROOT / "registry/power"
 SOURCE_DIRECTORY = ROOT / "tex/b28/power"
 MAIN_SOURCE = ROOT / "Bd. 28 - Halbgruppen.tex"
 MANIFEST_PATH = ROOT / "scripts/power-manifest.json"
+COORDINATE_RELOCATION_PATH = ROOT / "scripts/coordinates-relocation-manifest.json"
+COORDINATE_RELOCATION_SHA256 = "4de4ed0f33df3300211e2fe57951b5c51a653abd1a98ff2244763b4d0d2fa394"
+COORDINATE_SOURCE_PATH = ROOT / "scripts/coordinates-relocation-source.json"
+COORDINATE_SOURCE_SHA256 = "c215d9f7e0fba339ee1b9eff4f6d1f56139d413cdb429e01e86c0309983b54ae"
 SOURCE_HELPERS = runpy.run_path(str(ROOT / "scripts/proof-source-audit.py"))
 group, mask_comments = SOURCE_HELPERS["group"], SOURCE_HELPERS["mask_comments"]
 PROOF_IDS = {"PowerSemigroupProductMembership", "NonemptyPowerSemigroup"}
@@ -252,9 +256,96 @@ def validate_helper_classification(data):
         raise ValueError("The reclassification must preserve both semantic direct-proof target IDs")
 
 
+def migrated_power_isomorphism_labels():
+    # The 2026-10-17 extraction keeps these original results in a separate
+    # canonical proof companion. Its protected snapshot and audit verify them;
+    # the complete historical power manifest remains untouched.
+    return runpy.run_path(str(ROOT / "scripts/power-isomorphisms-editions.py"))["PROOF_LABELS"]
+
+
+def migrated_coordinate_identities(data):
+    """Exactly the public declarations moved from former section 28.2.13."""
+    identities = {row[1]: row for row in data["canonical_registry"]
+                  if row[0] == "ID" and row[1].startswith("SemigroupCoordinate")
+                  and ":28.2.13." in row[3]}
+    if len(identities) != 25 or Counter(row[2] for row in identities.values()) != Counter(
+            definition=5, axiom=4, theorem=16):
+        raise ValueError("Coordinate relocation must contain exactly five definitions, four axioms and sixteen theorems")
+    return identities
+
+
+def migrated_coordinate_labels(data):
+    return {row[3] for row in migrated_coordinate_identities(data).values()}
+
+
+def verify_coordinate_relocation_source(data, source_text=None):
+    """Check exact target declarations without introducing a B31 build cycle."""
+    if hashlib.sha256(COORDINATE_SOURCE_PATH.read_bytes()).hexdigest() != COORDINATE_SOURCE_SHA256:
+        raise ValueError("The reviewed coordinate declaration source snapshot must remain unchanged")
+    snapshot = json.loads(COORDINATE_SOURCE_PATH.read_text(encoding="utf-8"))
+    if source_text is None:
+        source_text = (ROOT / snapshot["source"]).read_text(encoding="utf-8-sig")
+    source_text = mask_comments(source_text)
+    observed = {}
+    for match in re.finditer(r"\\Formula(?:Def|Axiom|Thm)DeltaK\b", source_text):
+        declaration = SOURCE_HELPERS["call"](source_text, match.start(), 3)
+        key = source_text[slice(*declaration.args[1])].strip()
+        if not key.startswith("SemigroupCoordinate"):
+            continue
+        if key in observed:
+            raise ValueError(f"B31 source: duplicate coordinate declaration: {key}")
+        normalized = re.sub(r"\s+", "", source_text[declaration.start:declaration.end])
+        observed[key] = hashlib.sha256(normalized.encode()).hexdigest()
+    if observed != snapshot["declarations_sha256"] or set(observed) != set(migrated_coordinate_identities(data)):
+        raise ValueError("B31 source: coordinate declaration formula/ID/title/premise differs from the reviewed relocation")
+    # Also compare the protected reviewed registry snapshot with the original
+    # historical declarations. The actual compiled B31 registry is checked by
+    # coordinates-proofs.py after B31 has been built and before publication.
+    reviewed = json.loads(COORDINATE_RELOCATION_PATH.read_text(encoding="utf-8"))
+    verify_coordinate_relocation(data, reviewed["relocated_registry"])
+
+
+def verify_coordinate_relocation(data, target_rows):
+    """Preserve historical formulas and the reviewed extended B31 premises."""
+    if hashlib.sha256(COORDINATE_RELOCATION_PATH.read_bytes()).hexdigest() != COORDINATE_RELOCATION_SHA256:
+        raise ValueError("The reviewed coordinate relocation snapshot must remain unchanged")
+    relocation = json.loads(COORDINATE_RELOCATION_PATH.read_text(encoding="utf-8"))
+    original = migrated_coordinate_identities(data)
+    expected = relocation["identities"]
+    if set(expected) != set(original):
+        raise ValueError("Coordinate relocation has unexpected or missing semantic identities")
+    target_ids = id_map(target_rows)
+    labels = {}
+    for key, old in original.items():
+        item = expected[key]
+        new_label = old[3].replace(":28.2.13.", ":31.2.2.", 1)
+        if item["old_label"] != old[3] or item["kind"] != old[2] or item["new_label"] != new_label:
+            raise ValueError(f"Coordinate relocation changed the historical identity/kind: {key}")
+        if target_ids.get(key) != new_label:
+            raise ValueError(f"B31: missing relocated coordinate identity: {key}")
+        labels[new_label] = old[3]
+    actual = [row for row in target_rows if row_label(row) in labels]
+    if registry_records(actual) != registry_records(relocation["relocated_registry"]):
+        raise ValueError("B31: relocated coordinate display/premise metadata changed from the reviewed snapshot")
+    restored = []
+    for row in actual:
+        item = list(row)
+        if item[0] == "ID":
+            item[3] = labels[item[3]]
+        else:
+            item[1] = labels[item[1]]
+            item[3] = item[3].replace("31.2.2.", "28.2.13.", 1)
+        restored.append(item)
+    historical = [row for row in data["canonical_registry"]
+                  if row_label(row) in set(labels.values())]
+    records_equal(restored, historical, "B31 coordinate relocation", legacy_manifest=True)
+
+
 def active_canonical_registry(data):
     retired_labels = {item["label"] for item in historical_inner_statements(data)
                       if item["id"] in all_retired_inner_ids()}
+    retired_labels |= migrated_power_isomorphism_labels()
+    retired_labels |= migrated_coordinate_labels(data)
     revision = data["definition_revision"]
     historical = (data["canonical_registry"]
                   + data.get("added_inner_statements", {}).get("canonical_registry_rows", [])
@@ -266,6 +357,8 @@ def active_canonical_registry(data):
 def active_canonical_aux(data):
     retired_labels = {item["label"] for item in historical_inner_statements(data)
                       if item["id"] in all_retired_inner_ids()}
+    retired_labels |= migrated_power_isomorphism_labels()
+    retired_labels |= migrated_coordinate_labels(data)
     historical = (data["canonical_aux"]
                   | data.get("added_inner_statements", {}).get("canonical_aux", {})
                   | data.get("helper_classification_revision", {}).get("canonical_aux", {}))
@@ -604,21 +697,28 @@ def aux_labels(path):
 def main_records(data):
     base = ROOT / "registry/_B28"
     rows = registry(base.with_suffix(".registry.tsv"))
+    verify_coordinate_relocation_source(data)
     records_equal(rows, active_canonical_registry(data), "B28", legacy_manifest=True)
     ids = id_map(rows)
     labels = aux_labels(base.with_suffix(".aux"))
     expected_labels = active_canonical_aux(data)
-    if labels != {label: tuple(value) for label, value in expected_labels.items()}:
-        missing = set(expected_labels) - set(labels)
-        extra = set(labels) - set(expected_labels)
-        changed = {label: (expected_labels[label], labels[label])
-                   for label in set(labels) & set(expected_labels)
-                   if labels[label] != tuple(expected_labels[label])}
-        raise ValueError(f"B28: AUX must equal the retained historical labels with the recorded numbering revision; "
-                         f"missing={sorted(missing)}, extra={sorted(extra)}, changed={changed}")
+    if set(labels) != set(expected_labels):
+        raise ValueError(f"B28: retained AUX label set changed after coordinate relocation; "
+                         f"missing={sorted(set(expected_labels)-set(labels))}, "
+                         f"extra={sorted(set(labels)-set(expected_labels))}")
     for label, expected in expected_labels.items():
-        if labels.get(label) != tuple(expected):
-            raise ValueError(f"B28: original number/destination changed: {label}, {labels.get(label)}")
+        actual = labels[label]
+        if actual[0] != expected[0]:
+            raise ValueError(f"B28: retained canonical number changed: {label}, {actual}")
+        # Current AUX maps each unchanged semantic label to its current PDF
+        # anchor. Removing the 25 moved declarations changes anonymous counters.
+        # Explicit proof/compatibility targets stay protected, and the actual
+        # power statements below retain both their original number and target.
+        if re.fullmatch(r"section\*\.\d+", expected[1]):
+            if not re.fullmatch(r"section\*\.\d+", actual[1]):
+                raise ValueError(f"B28: invalid canonical PDF destination: {label}, {actual}")
+        elif actual[1] != expected[1]:
+            raise ValueError(f"B28: retained explicit PDF destination changed: {label}, {actual}")
     for item in active_main_statements(data) + active_inner_statements(data):
         if ids.get(item["id"]) != item["label"]:
             raise ValueError(f"B28: canonical statement ownership changed: {item['id']}")
@@ -823,10 +923,12 @@ def audit():
     publisher = runpy.run_path(str(ROOT / "scripts/publish-pdfs.py"))
     cache = {}
 
-    def links(pdf, reader):
+    def links(pdf, reader, *, own_companions_only=False):
         result = set()
         for action in publisher["remote_actions"](reader):
             target = (pdf.parent / publisher["file_name"](action)).resolve()
+            if own_companions_only and target.parent != DIRECTORY.resolve():
+                continue
             if not target.is_relative_to(ROOT) or not target.is_file():
                 raise ValueError(f"{pdf.name}: missing/outside PDF target: {target}")
             if target not in cache:
@@ -900,9 +1002,9 @@ def audit():
     older_retired_targets = {item["destination"] for item in data["retired_inner_statements"]["statements"]}
     if stale := older_retired_targets & set(reader.named_destinations):
         raise ValueError(f"B28: original ten retired canonical targets reappeared: {sorted(stale)}")
-    expected_targets = {"power.main"} | {target for _, target in active_canonical_aux(data).values()}
+    expected_targets = {"power.main"} | {target for _, target in canonical_aux.values()}
     if missing := expected_targets - set(reader.named_destinations):
-        raise ValueError(f"B28: original PDF targets missing: {sorted(missing)}")
+        raise ValueError(f"B28: current canonical PDF targets missing: {sorted(missing)}")
     proof_pdf = (DIRECTORY / "_B28-power-proofs.pdf").resolve()
     expected_links = {
         ((DIRECTORY / "_B28-power-reading.pdf").resolve(), "power.reading"),
@@ -911,7 +1013,7 @@ def audit():
         *((proof_pdf, target) for target in proof_targets
           if target != "power.proof.NonemptyPowerSemigroup"),
     }
-    if missing := expected_links - links(main_pdf, reader):
+    if missing := expected_links - links(main_pdf, reader, own_companions_only=True):
         raise ValueError(f"B28: missing companion/proof navigation: {sorted(missing)}")
     print("B28: seven active H1-H7 helpers and both original official theorems verified; the complete former official outer-product extension remains historical with both native PDF targets preserved as compatibility anchors; the original ten-helper retirement and new three-helper retirement remain explicit and historical; the three newly retired identities retain only their approved canonical/proof compatibility anchors; all retained formulas, semantic identities, labels, destinations and direct proof links verified.")
 

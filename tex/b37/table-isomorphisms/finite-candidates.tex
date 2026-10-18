@@ -1,0 +1,127 @@
+% Ergänzende Endlichkeitsbeweise; öffentliche Tafeldefinitionen bleiben in B37.
+\FormulaThmDeltaK[Endliche kartesische Produkte]{%
+  \Finite U\dsep\Finite V\vdash\Finite{U\times V}
+}{B37TFiniteProduct}{\DeltaRow{Mengen}{U\dsep V\dsep z}}
+\begin{tabproofwide}
+  \proofstepwidestar[1]{\Finite U}{\rA}
+  \proofstepwidestar[2]{\Finite V}{\rA}
+  \proofstepwidestar[1,2]{\Finite{U\cup V}}{\FormulaRefAuto{FiniteUnion}[thm]{1,2}}
+  \proofstepwidestar[1,2]{\Finite{\powerset(U\cup V)}}{\FormulaRefAuto{FinitePowerSet}[thm]{3}}
+  \proofstepwidestar[1,2]{\Finite{\powerset(\powerset(U\cup V))}}{\FormulaRefAuto{FinitePowerSet}[thm]{4}}
+  \proofstepwidestar[6]{z\in U\times V}{\rA}
+  \proofstepwidestar[6]{\exists u\in U\,\exists v\in V\,z=(u,v)}{\FormulaRefAuto{x\in A\times B\eqvdash\exists a\in A\,\exists b\in B\,x=(a,b)}[thm]{6}}
+  \proofstepwidestar[6]{z\in\powerset(\powerset(U\cup V))}{\FormulaRefAuto{\exists a\in A\,\exists b\in B\,(x=(a,b))\vdash x\in\powerset(\powerset(A\cup B))}[thm]{7}}
+  \proofstepwidestar[]{U\times V\subseteq\powerset(\powerset(U\cup V))}{\FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\to x\in B)}[def]{\rUI{\rRI{6,8}}}}
+  \proofstepwidestar[1,2]{\Finite{U\times V}}{\FormulaRefAuto{FiniteSubset}[thm]{9,5}}
+\end{tabproofwide}
+
+Für einen endlichen Träger \(A\) setzen wir \(n=\FiniteCard(A)\) und
+\(S=\NatSeg n\). Die Nummerierungen werden als Funktionsgraphen aufgefasst.
+\FormulaDefDeltaK[Menge der Nummerierungen]{%
+ E_A\coloneqq\{e\in\powerset(S\times A)\mid e\colon S\bij A\}
+}{B37TNumberingsDef}{\DeltaRow{Mengen}{A\dsep n\dsep S}\DeltaRow{Funktionen}{e}}
+\FormulaThmDeltaK[Die Nummerierungsmenge ist endlich und nichtleer]{%
+ \Finite A\vdash\Finite{E_A}\land E_A\neq\varnothing
+}{B37TFiniteNumberings}{\DeltaRow{Mengen}{A\dsep n\dsep S}\DeltaRow{Funktionen}{e}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\Finite A}{\rA}
+ \proofstepwidestar[1]{n\in\mathbb N}{\FormulaRefAuto{FiniteCardNatural}[thm]{1}}
+ \proofstepwidestar[1]{\Finite S}{\FormulaRefAuto{PeanoNatSegFinite}[thm]{2}}
+ \proofstepwidestar[1]{\Finite{S\times A}}{\FormulaRefAuto{B37TFiniteProduct}[thm]{3,1}}
+ \proofstepwidestar[1]{\Finite{\powerset(S\times A)}}{\FormulaRefAuto{FinitePowerSet}[thm]{4}}
+ \proofstepwidestar[]{E_A\subseteq\powerset(S\times A)}{\FormulaRefAuto{B37TNumberingsDef}[def]}
+ \proofstepwidestar[1]{\Finite{E_A}}{\FormulaRefAuto{FiniteSubset}[thm]{6,5}}
+ \proofstepwidestar[1]{S\EqCard A}{\FormulaRefAuto{FiniteCardCounts}[thm]{1}}
+ \proofstepwidestar[1]{\exists e\,(e\colon S\bij A)}{\FormulaRefAuto{Gleichmächtigkeit}[def]{8}}
+ \proofstepwidestar[10]{e\colon S\bij A}{\rA}
+ \proofstepwidestar[10]{e\colon S\to A}{\FormulaRefAuto{Bijektive Funktion}[def]{10}}
+ \proofstepwidestar[10]{e\subseteq S\times A}{\FormulaRefAuto{FunctionGraphSubsetProduct}[thm]{11}}
+ \proofstepwidestar[10]{e\in\powerset(S\times A)}{\FormulaRefAuto{x\in\powerset(A)\eqvdash x\subseteq A}[thm]{12}}
+ \proofstepwidestar[10]{e\in E_A}{\FormulaRefAuto{B37TNumberingsDef}[def]{13,10}}
+ \proofstepwidestar[10]{\exists e\,(e\in E_A)}{\rEI{14}}
+ \proofstepwidestar[1]{\exists e\,(e\in E_A)}{\rEE{9,10,15}}
+ \proofstepwidestar[1]{E_A\neq\varnothing}{\FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{16}}
+ \proofstepwidestar[1]{\Finite{E_A}\land E_A\neq\varnothing}{\rAI{7,17}}
+\end{tabproofwide}
+
+\FormulaDefDeltaK[Kandidatenmenge des kanonischen Codes]{%
+ \FiniteSemigroupAlg{A}{\star}\vdash
+ W_A\coloneqq\{w_n(m_{\star,e})\mid e\in E_A\}
+}{B37TCodeCandidatesDef}{\DeltaRow{Mengen}{A\dsep E_A\dsep W_A}\DeltaRow{Funktionen}{\star\dsep e}}
+Dies ist dieselbe Menge wie in
+\FormulaRefAuto{FiniteSemigroupCanonicalTableCodeDef}[def], denn jeder
+bijektive Funktionsgraph gehört nach
+\FormulaRefAuto{FunctionGraphSubsetProduct}[thm] zu \(\powerset(S\times A)\).
+\FormulaDefDeltaK[Abbildung von Nummerierungen auf Tafeltupel]{%
+ \begin{aligned}[t]
+ &\FiniteSemigroupAlg{A}{\star}\vdash
+   \tau_A\colon E_A\to W_A,\\[-2pt]
+ &\tau_A(e)\coloneqq w_n(m_{\star,e})\qquad(e\in E_A)
+ \end{aligned}
+}{B37TTableTupleMapDef}{\DeltaRow{Mengen}{A\dsep E_A\dsep W_A}\DeltaRow{Funktionen}{\star\dsep e\dsep\tau_A}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[2]{e\in E_A}{\rA}
+ \proofstepwidestar[1]{\Finite A}{\FormulaRefAuto{FiniteSemigroupFinitenessAxiom}[ax]{1}}
+ \proofstepwidestar[1]{n\in\mathbb N}{\FormulaRefAuto{FiniteCardNatural}[thm]{3}}
+ \proofstepwidestar[2]{e\colon S\bij A}{\FormulaRefAuto{B37TNumberingsDef}[def]{2}}
+ \proofstepwidestar[1,2]{m_{\star,e}\colon S\times S\to S}{\FormulaRefAuto{FiniteSemigroupMultiplicationTableDef}[def]{1,4,5}}
+ \proofstepwidestar[1,2]{w_n(m_{\star,e})\in W_A}{\FormulaRefAuto{B37TCodeCandidatesDef}[def]{1,2}}
+ \proofstepwidestar[1]{\forall e\in E_A\,(w_n(m_{\star,e})\in W_A)}{\rUI{\rRI{2,7}}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Kandidatenmenge ist das Bild der Nummerierungen]{%
+ \FiniteSemigroupAlg{A}{\star}\vdash W_A=\tau_A[E_A]
+}{B37TCodeCandidateImage}{\DeltaRow{Mengen}{A\dsep E_A\dsep W_A\dsep z}\DeltaRow{Funktionen}{\star\dsep\tau_A}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[1]{\tau_A\colon E_A\to W_A}{\FormulaRefAuto{B37TTableTupleMapDef}[def]{1}}
+ \proofstepwidestar[3]{z\in W_A}{\rA}
+ \proofstepwidestar[1,3]{\exists e\in E_A\,(z=w_n(m_{\star,e}))}{\FormulaRefAuto{B37TCodeCandidatesDef}[def]{1,3}}
+ \proofstepwidestar[5]{e\in E_A\land z=w_n(m_{\star,e})}{\rA}
+ \proofstepwidestar[5]{e\in E_A}{\rAEa{5}}
+ \proofstepwidestar[5]{z=w_n(m_{\star,e})}{\rAEb{5}}
+ \proofstepwidestar[1,5]{\tau_A(e)=w_n(m_{\star,e})}{\FormulaRefAuto{B37TTableTupleMapDef}[def]{1,6}}
+ \proofstepwidestar[1,5]{z=\tau_A(e)}{\rIE{8,7}}
+ \proofstepwidestar[1,5]{\exists e\in E_A\,(z=\tau_A(e))}{\rEI{\rAI{6,9}}}
+ \proofstepwidestar[1,3]{\exists e\in E_A\,(z=\tau_A(e))}{\rEE{4,5,10}}
+ \proofstepwidestar[1,3]{z\in\tau_A[E_A]}{\FormulaRefAuto{F\colon A\to B\dsep\exists x\in A\,y=F(x)\vdash y\in F[A]}[thm]{2,11}}
+ \proofstepwidestar[1]{W_A\subseteq\tau_A[E_A]}{\FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\to x\in B)}[def]{\rUI{\rRI{3,12}}}}
+ \proofstepwidestar[14]{z\in\tau_A[E_A]}{\rA}
+ \proofstepwidestar[1,14]{\exists e\in E_A\,(z=\tau_A(e))}{\FormulaRefAuto{F\colon A\to B\dsep y\in F[A]\vdash\exists x\in A\,y=F(x)}[thm]{2,14}}
+ \proofstepwidestar[16]{e\in E_A\land z=\tau_A(e)}{\rA}
+ \proofstepwidestar[16]{e\in E_A}{\rAEa{16}}
+ \proofstepwidestar[16]{z=\tau_A(e)}{\rAEb{16}}
+ \proofstepwidestar[1,16]{\tau_A(e)=w_n(m_{\star,e})}{\FormulaRefAuto{B37TTableTupleMapDef}[def]{1,17}}
+ \proofstepwidestar[1,16]{z=w_n(m_{\star,e})}{\rChain{18,19}}
+ \proofstepwidestar[1,16]{\exists e\in E_A\,(z=w_n(m_{\star,e}))}{\rEI{\rAI{17,20}}}
+ \proofstepwidestar[1,16]{z\in W_A}{\FormulaRefAuto{B37TCodeCandidatesDef}[def]{1,21}}
+ \proofstepwidestar[1,14]{z\in W_A}{\rEE{15,16,22}}
+ \proofstepwidestar[1]{\tau_A[E_A]\subseteq W_A}{\FormulaRefAuto{A\subseteq B\coloneq\forall x\,(x\in A\to x\in B)}[def]{\rUI{\rRI{14,23}}}}
+ \proofstepwidestar[1]{W_A=\tau_A[E_A]}{\FormulaRefAuto{A\subseteq B\dsep B\subseteq A\vdash A=B}[thm]{13,24}}
+\end{tabproofwide}
+
+\FormulaThmDeltaK[Die Kandidatenmenge des Codes ist endlich und nichtleer]{%
+ \FiniteSemigroupAlg{A}{\star}\vdash\Finite{W_A}\land W_A\neq\varnothing
+}{B37TFiniteCodeCandidates}{\DeltaRow{Mengen}{A\dsep E_A\dsep W_A}\DeltaRow{Funktionen}{\star\dsep\tau_A}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[1]{\Finite A}{\FormulaRefAuto{FiniteSemigroupFinitenessAxiom}[ax]{1}}
+ \proofstepwidestar[1]{\Finite{E_A}\land E_A\neq\varnothing}{\FormulaRefAuto{B37TFiniteNumberings}[thm]{2}}
+ \proofstepwidestar[1]{\tau_A\colon E_A\to W_A}{\FormulaRefAuto{B37TTableTupleMapDef}[def]{1}}
+ \proofstepwidestar[]{E_A\subseteq E_A}{\FormulaRefAuto{A\subseteq A}[thm]}
+ \proofstepwidestar[1]{\Finite{\tau_A[E_A]}}{\FormulaRefAuto{FiniteImage}[thm]{5,4,\rAEa{3}}}
+ \proofstepwidestar[1]{W_A=\tau_A[E_A]}{\FormulaRefAuto{B37TCodeCandidateImage}[thm]{1}}
+ \proofstepwidestar[1]{\Finite{W_A}}{\rIE{7,6}}
+ \proofstepwidestar[1]{\exists e\,(e\in E_A)}{\FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{\rAEb{3}}}
+ \proofstepwidestar[10]{e\in E_A}{\rA}
+ \proofstepwidestar[1,10]{\tau_A(e)\in W_A}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,10}}
+ \proofstepwidestar[1,10]{\exists w\,(w\in W_A)}{\rEI{11}}
+ \proofstepwidestar[1]{\exists w\,(w\in W_A)}{\rEE{9,10,12}}
+ \proofstepwidestar[1]{W_A\neq\varnothing}{\FormulaRefAuto{A\neq\varnothing\eqvdash\exists x\,(x\in A)}[thm]{13}}
+ \proofstepwidestar[1]{\Finite{W_A}\land W_A\neq\varnothing}{\rAI{8,14}}
+\end{tabproofwide}
+
+Für \(A=\varnothing\) ist \(n=0\), die einzige Nummerierung die leere
+Abbildung und das einzige Tafeltupel das leere Tupel. Insbesondere ist
+\(W_A\) auch in diesem Randfall eine Einermenge, keine leere Menge.

@@ -183,11 +183,14 @@ def main():
     sources.extend(sorted((ROOT / "tex/b28/mogiljanskaja").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b28/bracketing").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b28/power").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b28/power-isomorphisms").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b41/differences").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b45/semilattice").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b46/frankl").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b40/reconstruction").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b37/nullproducts").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b37/table-isomorphisms").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b37/tables").glob("*.tex")))
     data = [inventory(p) for p in sources]
     target = ROOT / args.output
     target.parent.mkdir(parents=True, exist_ok=True)

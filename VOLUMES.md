@@ -26,12 +26,14 @@ Mogiljanskaja-Ergänzung unter
 `07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Klammerungsunabhängigkeit/`.
 Die Begleitfassungen zum Halbgruppenbeweis für die Potenzhalbgruppe stehen unter
 `07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Halbgruppenbeweis der Potenzhalbgruppe/`.
-Die Ausgabe zur e-Koordinatenabbildung steht unter
-`07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/`.
+Die Begleitfassungen zur e-Koordinatenabbildung stehen unter
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/`.
 Die Begleitfassungen zu den formalen Differenzen stehen unter
 `08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/`.
 Die Begleitfassungen zur Gruppenrekonstruktion stehen unter
 `08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Gruppenrekonstruktion/`.
+Die Begleitfassungen zu Multiplikationstafeln und Isomorphie stehen unter
+`07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/`.
 Die Begleitfassungen zur Nullprodukt-Rekonstruktion stehen unter
 `07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Nullprodukt-Rekonstruktion/`.
 Die Begleitfassungen zum allgemeinen Nullelement-Transport stehen unter
@@ -137,16 +139,25 @@ Die beiden Begleitfassungen sind ein begrenzter Pilot und keine zusätzlichen Fa
 | Lesefassung / Reading edition | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) |
 | Beweistabellen / Proof tables | [PDF](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>) |
 
-## e-Koordinatenabbildung: Definitionen und Beweise
+## e-Koordinatenabbildung: ergänzende Darstellungen / Companion editions
 
-Die Ausgabe übernimmt den vollständigen Originalabschnitt 28.2.13 aus Band 28:
-fünf Definitionen, vier Axiome und sechzehn Sätze mit ihren unveränderten Beweisen.
-Nummern und Aussagen bleiben kanonisch in Band 28. Die gemeinsame Konfiguration
-ergänzt die verwendeten Aussagen automatisch als Nachschlagetabellen unter den Beweisen.
+Die Begleitfassungen erläutern Abschnitt 31.2.2 aus Band 31 mit fünf Definitionen,
+vier Axiomen und sechzehn Sätzen. Ihre Aussagen und Nummern werden kanonisch in Band 31 geführt.
 
 | Darstellung / Edition | PDF |
 | --- | --- |
-| Definitionen und Beweise / Definitions and proofs | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/e-Koordinatenabbildung/Bd. 28 - e-Koordinatenabbildung - Definitionen und Beweise.pdf>) |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 31 Rechtecksbänder/e-Koordinatenabbildung/Bd. 31 - e-Koordinatenabbildung - Beweistabellen.pdf>) |
+
+Die separat ausgearbeitete Lesefassung bietet Beispiele, sprachliche Beweise,
+Symbolverweise am Rand und einen historischen Abriss. Die Beweistabellen enthalten
+die vollständigen formalen Ableitungen aller sechzehn Sätze mit insgesamt
+397 Beweiszeilen. Nach jedem Beweis folgt eine verlinkte Übersicht aller darin
+verwendeten Sätze, Definitionen und Axiome mit ihren ursprünglichen Voraussetzungen.
+Das siebengeteilte Isomorphiekriterium erhält eine gemeinsame Übersicht am Ende.
+Lesefassung und Beweistabellen werden im Hauptprojekt aus ihren gemeinsamen
+LaTeX-Quellen reproduzierbar gebaut. Beide Fassungen werden bei späteren
+PDF-Prüfungen und Neuordnungen berücksichtigt.
 
 ## Potenzhalbgruppe: ergänzende Darstellungen / Companion editions
 
@@ -185,6 +196,20 @@ die Nullprodukt-Rekonstruktion vertieft einen weiteren Spezialfall.
 | Darstellung / Edition | PDF |
 | --- | --- |
 | Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>) |
+
+## Multiplikationstafeln und Isomorphie endlicher Halbgruppen
+
+Die Lesefassung erklärt Tafeln, gemeinsame Umbenennung von Zeilen, Spalten
+und Einträgen, Orbits, Automorphismen und kanonische Codes an einem
+vollständigen Beispiel. Die Beweistabellen führen die Aussagen aus Band 37
+mit den sieben unverändert nummerierten H-Hilfsresultaten aus. Definitionen
+und zentrale Sätze bleiben im Hauptband. Die Endlichkeit des Verfahrens
+ist von seiner praktischen Laufzeit zu unterscheiden.
+
+| Darstellung | PDF |
+| --- | --- |
+| Lesefassung / Reading edition | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf>) |
+| Beweistabellen / Proof tables | [PDF](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen.pdf>) |
 
 ## Nullprodukt-Rekonstruktion: ergänzende Darstellungen / Companion editions
 

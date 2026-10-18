@@ -1,0 +1,26 @@
+% Isolierte Register: Hauptsatz aus B28, Hilfssätze aus dem Beweisband.
+\begin{luacode*}
+  local directory = "registry/power-isomorphisms/"
+  local reading = tex.jobname == "_B28-power-isomorphisms-reading"
+  local b28_import = reading and "b28-reading" or "b28-external"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B28.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{" .. directory .. b28_import .. "}[../_B28.pdf]")
+  if reading then
+    tex.sprint("\\externaldocument{" .. directory .. "proofs-reading}[_B28-power-isomorphisms-proofs.pdf]")
+  end
+  banddeps.load_predecessor_registries("B28")
+  thmlookup.load_registry_file(directory .. b28_import .. ".registry.tsv")
+  if reading then
+    thmlookup.load_registry_file(directory .. "proofs-reading.registry.tsv")
+  end
+\end{luacode*}
+\renewcommand{\FormulaBandID}{28}
+\setcounter{file}{28}
+\renewcommand{\theHtable}{power-isomorphisms.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{power-isomorphisms.\arabic{chapter}.\arabic{figure}}

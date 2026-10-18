@@ -92,6 +92,29 @@ if ($needsPower) {
 $deferredPowerAudits = [System.Collections.Generic.List[string]]::new()
 $powerBuilt = $false
 
+# The final power-isomorphism theorem stays in B28; the product lemmas and
+# their proof parts are owned by its companion. Bootstrap their imports before
+# B28, then build both editions before other B28 companions audit its links.
+$needsPowerIsomorphisms = (-not $SkipMain) -or (@($bands | Where-Object { $_ -in @('B00', 'B28') }).Count -gt 0)
+$powerIsomorphismsTriggerBand = $null
+if ($needsPowerIsomorphisms) {
+    $powerIsomorphismsDependencies = @('B28') + @($graph['B28'].Predecessors)
+    $powerIsomorphismsTriggerBand = $bands | Where-Object { $_ -in $powerIsomorphismsDependencies } | Select-Object -Last 1
+}
+$deferredPowerIsomorphismsAudits = [System.Collections.Generic.List[string]]::new()
+$powerIsomorphismsBuilt = $false
+
+# Both coordinate editions import the canonical statements from B31 and its
+# predecessors. Build the proof edition before its reading and after B31.
+$needsCoordinatesProofs = (-not $SkipMain) -or (@($bands | Where-Object { $_ -in @('B00', 'B28', 'B31') }).Count -gt 0)
+$coordinatesProofsTriggerBand = $null
+if ($needsCoordinatesProofs) {
+    $coordinatesProofsDependencies = @('B31') + @($graph['B31'].Predecessors)
+    $coordinatesProofsTriggerBand = $bands | Where-Object { $_ -in $coordinatesProofsDependencies } | Select-Object -Last 1
+}
+$coordinatesProofsBuilt = $false
+$deferredCoordinatesAudits = [System.Collections.Generic.List[string]]::new()
+
 # B17 keeps the complete axiomatic interface and externally used statements.
 # Build its model companions before B41's reading, which links to their
 # private construction results, even when B17 itself is outside the range.
@@ -157,6 +180,11 @@ if ($needsNullproducts) {
 }
 $deferredNullproductsAudits = [System.Collections.Generic.List[string]]::new()
 $nullproductsBuilt = $false
+# B37 keeps the public table statements; its seven H-results move to the
+# table companion. Build it before nullproducts audits the changed B37 links.
+$needsTableIsomorphisms = $needsNullproducts
+$tableIsomorphismsTriggerBand = $nullproductsTriggerBand
+$tableIsomorphismsBuilt = $false
 
 # Although catalogued with B28, the zero-transport supplement imports the
 # zero-element interface from B33. Its pair must precede B37's reading edition.
@@ -200,6 +228,18 @@ function Invoke-LoggedBuild {
 
 Push-Location $repoRoot
 try {
+    if ($needsTableIsomorphisms) {
+        & $Python (Join-Path $PSScriptRoot 'table-isomorphisms-editions.py') prepare-main
+        if ($LASTEXITCODE -ne 0) { throw 'Table-isomorphism B37 import preparation failed.' }
+    }
+    if ($needsPowerIsomorphisms) {
+        & $Python (Join-Path $PSScriptRoot 'power-isomorphisms-editions.py') prepare-main
+        if ($LASTEXITCODE -ne 0) { throw 'Power-isomorphism B28 import preparation failed.' }
+    }
+    if ($needsPowerIsomorphisms -and -not $powerIsomorphismsTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-power-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
+        $powerIsomorphismsBuilt = $true
+    }
     if ($needsZeroTransport -and -not $zeroTransportTriggerBand) {
         & (Join-Path $PSScriptRoot 'build-zero-transport-editions.ps1') -EditionsOnly -Python $Python
         $zeroTransportBuilt = $true
@@ -246,14 +286,23 @@ try {
         & (Join-Path $PSScriptRoot 'build-reconstruction-editions.ps1') -EditionsOnly -Python $Python
         $reconstructionBuilt = $true
     }
+    if ($needsTableIsomorphisms -and -not $tableIsomorphismsTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-table-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
+        $tableIsomorphismsBuilt = $true
+    }
     if ($needsNullproducts -and -not $nullproductsTriggerBand) {
         if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
-        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -Python $Python
+        if (-not $tableIsomorphismsBuilt) { throw 'Table isomorphisms must be built before null products.' }
+        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -Python $Python
         $nullproductsBuilt = $true
     }
     if ($needsCompactness -and -not $compactnessTriggerBand) {
         & (Join-Path $PSScriptRoot 'build-compactness-editions.ps1') -EditionsOnly -Python $Python
         $compactnessBuilt = $true
+    }
+    if ($needsCoordinatesProofs -and -not $coordinatesProofsTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-coordinates-editions.ps1') -SkipPublish -Python $Python
+        $coordinatesProofsBuilt = $true
     }
     foreach ($band in $bands) {
         # Each volume is rebuilt once. A resumed range uses already audited
@@ -268,6 +317,28 @@ try {
         Invoke-LoggedBuild -Source $record.Source -JobName "_$band"
         $stage = New-BuildStage -Record $record -Started $started
         Assert-BuildStageArtifacts -Stage $stage
+        if ($band -eq $coordinatesProofsTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-coordinates-editions.ps1') -SkipPublish -Python $Python
+            $coordinatesProofsBuilt = $true
+            foreach ($deferredBand in $deferredCoordinatesAudits) {
+                # B28 also links to later companions. A fresh full run must
+                # finish those builds before auditing every outgoing B28 link.
+                if ($deferredBand -eq 'B28' -and $needsBracketing -and -not $bracketingBuilt) {
+                    $deferredBracketingAudits.Add($deferredBand)
+                } elseif ($deferredBand -eq 'B28' -and $needsZeroTransport -and -not $zeroTransportBuilt) {
+                    $deferredZeroTransportAudits.Add($deferredBand)
+                } else {
+                    & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
+                }
+            }
+        }
+        if ($band -eq $powerIsomorphismsTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-power-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
+            $powerIsomorphismsBuilt = $true
+            foreach ($deferredBand in $deferredPowerIsomorphismsAudits) {
+                & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
+            }
+        }
         if ($band -eq $zeroTransportTriggerBand) {
             & (Join-Path $PSScriptRoot 'build-zero-transport-editions.ps1') -EditionsOnly -Python $Python
             $zeroTransportBuilt = $true
@@ -347,9 +418,14 @@ try {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
             }
         }
+        if ($band -eq $tableIsomorphismsTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-table-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
+            $tableIsomorphismsBuilt = $true
+        }
         if ($band -eq $nullproductsTriggerBand) {
             if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
-            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -Python $Python
+            if (-not $tableIsomorphismsBuilt) { throw 'Table isomorphisms must be built before null products.' }
+            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -Python $Python
             $nullproductsBuilt = $true
             foreach ($deferredBand in $deferredNullproductsAudits) {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
@@ -362,7 +438,9 @@ try {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
             }
         }
-        if ($band -in @('B08', 'B11') -and -not $pilotsBuilt) {
+        if ($band -in @('B28', 'B31') -and $needsCoordinatesProofs -and -not $coordinatesProofsBuilt) {
+            $deferredCoordinatesAudits.Add($band)
+        } elseif ($band -in @('B08', 'B11') -and -not $pilotsBuilt) {
             $deferredPilotAudits.Add($band)
         } elseif ($band -in @('B21', 'B28') -and -not $mogiljanskajaBuilt) {
             $deferredMogiljanskajaAudits.Add($band)
@@ -370,6 +448,8 @@ try {
             $deferredDedekindAudits.Add($band)
         } elseif ($band -eq 'B28' -and -not $bracketingBuilt) {
             $deferredBracketingAudits.Add($band)
+        } elseif ($band -eq 'B28' -and -not $powerIsomorphismsBuilt) {
+            $deferredPowerIsomorphismsAudits.Add($band)
         } elseif ($band -eq 'B28' -and -not $powerBuilt) {
             $deferredPowerAudits.Add($band)
         } elseif ($band -eq 'B28' -and $needsZeroTransport -and -not $zeroTransportBuilt) {
@@ -392,10 +472,8 @@ try {
             & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($band)
         }
     }
-    # The coordinate extract imports B28 without adding reverse links. Build
-    # it after all selected canonical artifacts are stable, before main.
-    if ((-not $SkipMain) -or ('B00' -in $bands) -or ('B28' -in $bands)) {
-        & (Join-Path $PSScriptRoot 'build-e-coordinates-edition.ps1') -SkipVolumeBuild -SkipPublish -Python $Python
+    if ($needsCoordinatesProofs -and -not $coordinatesProofsBuilt) {
+        throw 'Coordinate proof companion was not built after its canonical dependencies.'
     }
     if (-not $SkipMain) {
         Invoke-LoggedBuild -Source 'main.tex' -JobName 'main' -OutDir '.'
