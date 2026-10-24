@@ -23,12 +23,33 @@ MANIFEST = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 IDENTITIES = MANIFEST["identities"]
 PROOF_IDS = set(MANIFEST["proof_ids"])
 PROOF_LABELS = {IDENTITIES[key]["label"] for key in PROOF_IDS}
+PRIVATE_IDS = {
+    "B37TAutomorphismIdentity", "B37TAutomorphismComposition", "B37TAutomorphismInverse",
+    "B37TIsoBridge", "B37TArbitraryCarrierCriterion", "B37TDoubleInverse",
+    "B37TNumberingFactorization", "B37TRenumbering", "B37TOrbitTupleCandidatesDef",
+    "B37TCodeOrbitCandidates", "B37TFiniteProduct", "B37TNumberingsDef",
+    "B37TFiniteNumberings", "B37TCodeCandidatesDef", "B37TTableTupleMapDef",
+    "B37TCodeCandidateImage", "B37TFiniteCodeCandidates",
+    "B37TLexBaseOrderDef", "B37TLexBaseIrreflexive", "B37TLexBaseTransitive",
+    "B37TLexBaseTrichotomy", "B37TLexNaturalBase", "B37TLexIterationBase",
+    "B37TLexBoundedPair", "B37TLexBoundedTriple",
+    "B37TLexTupleDef", "B37TLexOrderDef", "B37TLexCoordinate",
+    "B37TLexFirstDifference", "B37TLexIrreflexive", "B37TLexTrichotomy",
+    "B37TLexEarlyWitness", "B37TLexEqualWitness", "B37TLexLateWitness",
+    "B37TLexTransitive", "B37TLexAsymmetric", "B37TLexWeakReflexive",
+    "B37TLexWeakAntisymmetric", "B37TLexWeakTransitive", "B37TLexTotalOrder",
+    "B37TLexFiniteMinimum", "B37TLexEmptyLength", "B37TLexCodeCandidatesTyped",
+    "B37TLexCodeMinimum", "B37TMinimalCodeDef", "B37TLexMinimumMembership",
+    "B37TMinimalCodeForward", "B37TMinimalCodeBackward", "B37TMinimalCodeCriterion",
+}
 PUBLIC_IDS = set(IDENTITIES) - PROOF_IDS
 PUBLIC_LABELS = {IDENTITIES[key]["label"] for key in PUBLIC_IDS}
 PROOF_TARGETS = set(MANIFEST["proof_targets"]) | {
+    "FiniteSemigroupMultiplicationTableDef", "FiniteSemigroupRelabelledOperationDef",
     "automorphisms", "arbitrary-carriers", "renumbering", "finite-candidates", "minimal-code",
 }
 registry_records = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["registry_records"]
+validate_private_registry = runpy.run_path(str(ROOT / "scripts/registry-editions.py"))["validate_private_registry"]
 group = runpy.run_path(str(ROOT / "scripts/proof-source-audit.py"))["group"]
 
 
@@ -94,7 +115,8 @@ def check_owner(rows, aux, *, proofs):
     owner = "proofs" if proofs else "B37"
     expected = baseline_rows(proofs=proofs)
     # Keep current display metadata as well as formulas, IDs and numbering.
-    if registry_records(rows) != registry_records(expected):
+    protected = [row for row in rows if row_label(row) in PROOF_LABELS] if proofs else rows
+    if registry_records(protected) != registry_records(expected):
         raise ValueError(f"{owner}: original declaration identities, formulas or metadata changed")
     identifiers = id_map(rows)
     expected_labels = {row_label(row) for row in expected}
@@ -104,8 +126,14 @@ def check_owner(rows, aux, *, proofs):
     for label in expected_labels:
         if aux.get(label) != tuple(MANIFEST["canonical_aux"][label]):
             raise ValueError(f"{owner}: original number or destination changed: {label}")
-    if proofs and set(identifiers) != PROOF_IDS:
-        raise ValueError("proofs: exactly the seven original H-results must be local")
+    if proofs:
+        if set(identifiers) != PROOF_IDS | PRIVATE_IDS:
+            raise ValueError(f"proofs: missing or unexpected local IDs: {set(identifiers) ^ (PROOF_IDS | PRIVATE_IDS)}")
+        private_labels = {identifiers[key] for key in PRIVATE_IDS}
+        if set(map(row_label, rows)) != PROOF_LABELS | private_labels:
+            raise ValueError("proofs: a local statement has no permitted semantic ID")
+        validate_private_registry(
+            [row for row in rows if row_label(row) in private_labels], aux, PRIVATE_IDS, "37T")
     return rows, identifiers, aux
 
 
@@ -220,7 +248,7 @@ def audit():
         (proof_pdf.resolve(), "table-isomorphisms.proofs"),
         *((proof_pdf.resolve(), "table-isomorphisms.proof." + key) for key in PROOF_TARGETS),
     }, "B37")
-    print("B37 owns every original public declaration; proofs owns exactly seven unchanged H-results.")
+    print(f"B37 owns every original public declaration; proofs owns seven unchanged H-results and {len(PRIVATE_IDS)} private 37T results.")
 
 
 if __name__ == "__main__":

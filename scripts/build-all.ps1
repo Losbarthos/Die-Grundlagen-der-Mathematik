@@ -185,6 +185,10 @@ $nullproductsBuilt = $false
 $needsTableIsomorphisms = $needsNullproducts
 $tableIsomorphismsTriggerBand = $nullproductsTriggerBand
 $tableIsomorphismsBuilt = $false
+# Index/period keeps all original statements in B37 and adds only private 37I results.
+$needsIndexPeriod = $needsNullproducts
+$indexPeriodTriggerBand = $nullproductsTriggerBand
+$indexPeriodBuilt = $false
 
 # Although catalogued with B28, the zero-transport supplement imports the
 # zero-element interface from B33. Its pair must precede B37's reading edition.
@@ -290,10 +294,15 @@ try {
         & (Join-Path $PSScriptRoot 'build-table-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
         $tableIsomorphismsBuilt = $true
     }
+    if ($needsIndexPeriod -and -not $indexPeriodTriggerBand) {
+        & (Join-Path $PSScriptRoot 'build-index-period-editions.ps1') -EditionsOnly -Python $Python
+        $indexPeriodBuilt = $true
+    }
     if ($needsNullproducts -and -not $nullproductsTriggerBand) {
         if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
         if (-not $tableIsomorphismsBuilt) { throw 'Table isomorphisms must be built before null products.' }
-        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -Python $Python
+        if (-not $indexPeriodBuilt) { throw 'Index and period must be built before null products.' }
+        & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -SkipIndexPeriodBuild -Python $Python
         $nullproductsBuilt = $true
     }
     if ($needsCompactness -and -not $compactnessTriggerBand) {
@@ -422,10 +431,15 @@ try {
             & (Join-Path $PSScriptRoot 'build-table-isomorphisms-editions.ps1') -EditionsOnly -Python $Python
             $tableIsomorphismsBuilt = $true
         }
+        if ($band -eq $indexPeriodTriggerBand) {
+            & (Join-Path $PSScriptRoot 'build-index-period-editions.ps1') -EditionsOnly -Python $Python
+            $indexPeriodBuilt = $true
+        }
         if ($band -eq $nullproductsTriggerBand) {
             if (-not $zeroTransportBuilt) { throw 'Zero transport must be built before null products.' }
             if (-not $tableIsomorphismsBuilt) { throw 'Table isomorphisms must be built before null products.' }
-            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -Python $Python
+            if (-not $indexPeriodBuilt) { throw 'Index and period must be built before null products.' }
+            & (Join-Path $PSScriptRoot 'build-nullproducts-editions.ps1') -EditionsOnly -SkipZeroTransportBuild -SkipTableIsomorphismsBuild -SkipIndexPeriodBuild -Python $Python
             $nullproductsBuilt = $true
             foreach ($deferredBand in $deferredNullproductsAudits) {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)

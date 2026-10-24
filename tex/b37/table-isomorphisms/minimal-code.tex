@@ -1,0 +1,686 @@
+% Zusätzliche Hilfssätze; öffentliche Tafelcodes bleiben in Band 37.
+\paragraph{Die lexikographische Ordnung endlicher Tupel.}
+Wir fassen ein Tupel der Länge \(r\) mit Werten in \(C\) als Funktion
+auf \(I_r=\NatSeg r\) auf und schreiben \(x_i=x(i)\). Als Basis genügt
+eine strikt total geordnete Wertemenge. Die folgenden Voraussetzungen
+werden in den Hilfssätzen ausdrücklich durch \(\mathcal L\) mitgeführt.
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Strikte Ordnungsannahmen für den Werteträger]{%
+ \begin{aligned}[t]
+ K(C,\triangleleft)\coloneqq{}&\bigl(\forall a\in C\,\neg(a\triangleleft a)\bigr)\\
+ &{}\land\Bigl(\bigl(\forall a,b,c\in C\,
+ ((a\triangleleft b\land b\triangleleft c)\to a\triangleleft c)\bigr)\\
+ &\qquad{}\land\bigl(\forall a,b\in C\,
+ (a\triangleleft b\lor(b\triangleleft a\lor a=b))\bigr)\Bigr)
+ \end{aligned}
+}{B37TLexBaseOrderDef}{\DeltaRow{Mengen}{C\dsep a\dsep b\dsep c}\DeltaRow{Relationsoperatoren}{\triangleleft}}
+Wir schreiben in den folgenden generischen Nachweisen
+\(\mathcal L\coloneqq r\in\mathbb N\land K(C,\triangleleft)\).
+Der Werteträger und sein strikter Relationsoperator bleiben dabei fest;
+bei der Anwendung werden beide ausdrücklich angegeben.
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Irreflexivität auf dem Werteträger]{%
+ K(C,\triangleleft)\dsep a\in C\vdash\neg(a\triangleleft a)
+}{B37TLexBaseIrreflexive}{\DeltaRow{Mengen}{C\dsep a}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{K(C,\triangleleft)}{\rA}
+ \proofstepwidestar[2]{a\in C}{\rA}
+ \proofstepwidestar[1]{\forall a\in C\,\neg(a\triangleleft a)}{\rAEa{\FormulaRefAuto{B37TLexBaseOrderDef}[def]{1}}}
+ \proofstepwidestar[1,2]{\neg(a\triangleleft a)}{\rRE{\rUE{3},2}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Transitivität auf dem Werteträger]{%
+ K(C,\triangleleft)\dsep a,b,c\in C\dsep a\triangleleft b\dsep b\triangleleft c\vdash a\triangleleft c
+}{B37TLexBaseTransitive}{\DeltaRow{Mengen}{C\dsep a\dsep b\dsep c}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{K(C,\triangleleft)}{\rA}
+ \proofstepwidestar[2]{a\in C}{\rA}
+ \proofstepwidestar[3]{b\in C}{\rA}
+ \proofstepwidestar[4]{c\in C}{\rA}
+ \proofstepwidestar[5]{a\triangleleft b}{\rA}
+ \proofstepwidestar[6]{b\triangleleft c}{\rA}
+ \proofstepwidestar[1]{\forall a,b,c\in C\,((a\triangleleft b\land b\triangleleft c)\to a\triangleleft c)}{\rAEa{\rAEb{\FormulaRefAuto{B37TLexBaseOrderDef}[def]{1}}}}
+ \proofstepwidestar[1,2,3,4]{(a\triangleleft b\land b\triangleleft c)\to a\triangleleft c}{\rRE{\rUE{\rRE{\rUE{\rRE{\rUE{7},2}},3}},4}}
+ \proofstepwidestar[1,2,3,4,5,6]{a\triangleleft c}{\rRE{8,\rAI{5,6}}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Vergleichbarkeit auf dem Werteträger]{%
+ K(C,\triangleleft)\dsep a,b\in C\vdash a\triangleleft b\lor(b\triangleleft a\lor a=b)
+}{B37TLexBaseTrichotomy}{\DeltaRow{Mengen}{C\dsep a\dsep b}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{K(C,\triangleleft)}{\rA}
+ \proofstepwidestar[2]{a\in C}{\rA}
+ \proofstepwidestar[3]{b\in C}{\rA}
+ \proofstepwidestar[1]{\forall a,b\in C\,(a\triangleleft b\lor(b\triangleleft a\lor a=b))}{\rAEb{\rAEb{\FormulaRefAuto{B37TLexBaseOrderDef}[def]{1}}}}
+ \proofstepwidestar[1,2,3]{a\triangleleft b\lor(b\triangleleft a\lor a=b)}{\rRE{\rUE{\rRE{\rUE{4},2}},3}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Tupel über einem Werteträger und gemeinsame Präfixe]{%
+ \begin{aligned}[t]
+ T_r(C)&\coloneqq\{x\in\powerset(I_r\times C)\mid x\colon I_r\to C\},\\
+ P_r(x,y;k)&\coloneqq\forall i\in I_r\,(i<k\to x_i=y_i),\\
+ D_r(x,y)&\coloneqq\{i\in I_r\mid x_i\ne y_i\}
+ \end{aligned}
+}{B37TLexTupleDef}{\DeltaRow{Mengen}{r\dsep I_r\dsep T_r(C)\dsep x\dsep y\dsep i\dsep k}}
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Strikte und nichtstrikte lexikographische Ordnung]{%
+ \begin{aligned}[t]
+ &x,y\in T_r(C)\vdash{}\\[-2pt]
+ &x\prec_{r,C} y\coloneqq\exists k\in I_r\,(P_r(x,y;k)\land x_k\triangleleft y_k),\\
+ &x\preceq_{r,C} y\coloneqq x=y\lor x\prec_{r,C} y
+ \end{aligned}
+}{B37TLexOrderDef}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep k}\DeltaRow{Relationsoperatoren}{\prec_{r,C}\dsep\preceq_{r,C}}}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Typen von Indizes und Koordinaten]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x\in T_r(C)\dsep k\in I_r\vdash{}\\
+ &k\in\mathbb N\land x_k\in C
+ \end{aligned}
+}{B37TLexCoordinate}{\DeltaRow{Mengen}{r\dsep x\dsep k}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{k\in I_r}{\rA}
+ \proofstepwidestar[2]{x\colon I_r\to C}{\FormulaRefAuto{B37TLexTupleDef}[def]{2}}
+ \proofstepwidestar[1,3]{k\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{1},3}}
+ \proofstepwidestar[2,3]{x_k\in C}{\FormulaRefAuto{F\colon A\to B\dsep x\in A\vdash F(x)\in B}[thm]{4,3}}
+ \proofstepwidestar[1,2,3]{k\in\mathbb N\land x_k\in C}{\rAI{5,6}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die erste abweichende Stelle existiert]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y\in T_r(C)\dsep x\ne y\vdash{}\\
+ &\exists k\in I_r\,(P_r(x,y;k)\land x_k\ne y_k)
+ \end{aligned}
+}{B37TLexFirstDifference}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep D=D_r(x,y)\dsep i\dsep k}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\ne y}{\rA}
+ \proofstepwidestar[]{D\subseteq I_r}{\FormulaRefAuto{B37TLexTupleDef}[def]}
+ \proofstepwidestar[1]{I_r\subseteq\mathbb N}{\FormulaRefAuto{PeanoNatSegSubsetN}[thm]{\rAEa{1}}}
+ \proofstepwidestar[1]{D\subseteq\mathbb N}{\FormulaRefAuto{A\subseteq B\dsep B\subseteq C\vdash A\subseteq C}[thm]{4,5}}
+ \proofstepwidestar[7]{D=\varnothing}{\rA}
+ \proofstepwidestar[8]{i\in I_r}{\rA}
+ \proofstepwidestar[9]{x_i\ne y_i}{\rA}
+ \proofstepwidestar[8,9]{i\in D}{\FormulaRefAuto{B37TLexTupleDef}[def]{8,9}}
+ \proofstepwidestar[7,8,9]{i\in\varnothing}{\rIE{7,10}}
+ \proofstepwidestar[]{i\not\in\varnothing}{\FormulaRefAuto{x\not\in\varnothing}[thm]}
+ \proofstepwidestar[7,8,9]{\bot}{\rBI{11,12}}
+ \proofstepwidestar[7,8]{x_i=y_i}{\rCE{9,13}}
+ \proofstepwidestar[7]{\forall i\in I_r\,(x_i=y_i)}{\rUI{\rRI{8,14}}}
+ \proofstepwidestar[2]{x\colon I_r\to C\land y\colon I_r\to C}{\FormulaRefAuto{B37TLexTupleDef}[def]{2}}
+ \proofstepwidestar[2,7]{x=y}{\FormulaRefAuto{FunctionExtensionality}[thm]{\rAEa{16},\rAEb{16},15}}
+ \proofstepwidestar[2,3,7]{\bot}{\rBI{3,17}}
+ \proofstepwidestar[2,3]{D\ne\varnothing}{\rCI{7,18}}
+ \proofstepwidestar[1,2,3]{\exists k\in D\,\forall i\in D\,(k\leq i)}{\FormulaRefAuto{NaturalWellOrderingPrinciple}[thm]{6,19}}
+ \proofstepwidestar[21]{k\in D\land\forall i\in D\,(k\leq i)}{\rA}
+ \proofstepwidestar[21]{k\in I_r\land x_k\ne y_k}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{21}}}
+ \proofstepwidestar[1,21]{k\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{1},\rAEa{22}}}
+ \proofstepwidestar[24]{i\in I_r}{\rA}
+ \proofstepwidestar[25]{i<k}{\rA}
+ \proofstepwidestar[26]{x_i\ne y_i}{\rA}
+ \proofstepwidestar[24,26]{i\in D}{\FormulaRefAuto{B37TLexTupleDef}[def]{24,26}}
+ \proofstepwidestar[21,24,26]{k\leq i}{\rRE{\rUE{\rAEb{21}},27}}
+ \proofstepwidestar[1,24]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{1},24}}
+ \proofstepwidestar[1,21,24,25,26]{\bot}{\FormulaRefAuto{PeanoOrderNoCycle}[thm]{29,23,25,28}}
+ \proofstepwidestar[1,21,24,25]{x_i=y_i}{\rCE{26,30}}
+ \proofstepwidestar[1,21]{P_r(x,y;k)}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rUI{\rRI{24,\rRI{25,31}}}}}
+ \proofstepwidestar[1,21]{\exists k\in I_r\,(P_r(x,y;k)\land x_k\ne y_k)}{\rEI{\rAI{\rAEa{22},\rAI{32,\rAEb{22}}}}}
+ \proofstepwidestar[1,2,3]{\exists k\in I_r\,(P_r(x,y;k)\land x_k\ne y_k)}{\rEE{20,21,33}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Irreflexivität der strikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x\in T_r(C)\vdash{}\\
+ &\neg(x\prec_{r,C} x)
+ \end{aligned}
+}{B37TLexIrreflexive}{\DeltaRow{Mengen}{r\dsep x\dsep k}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\prec_{r,C} x}{\rA}
+ \proofstepwidestar[2,3]{\exists k\in I_r\,(P_r(x,x;k)\land x_k\triangleleft x_k)}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,2,3}}
+ \proofstepwidestar[5]{k\in I_r\land(P_r(x,x;k)\land x_k\triangleleft x_k)}{\rA}
+ \proofstepwidestar[1,2,5]{x_k\in C}{\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{1,2,\rAEa{5}}}}
+ \proofstepwidestar[1,2,5]{\neg(x_k\triangleleft x_k)}{\FormulaRefAuto{B37TLexBaseIrreflexive}[thm]{\rAEb{1},6}}
+ \proofstepwidestar[1,2,5]{\bot}{\rBI{\rAEb{\rAEb{5}},7}}
+ \proofstepwidestar[1,2,3]{\bot}{\rEE{4,5,8}}
+ \proofstepwidestar[1,2]{\neg(x\prec_{r,C} x)}{\rCI{3,9}}
+\end{tabproofwide}
+
+
+\paragraph{Beschränkte Quantoren und gebündelte Voraussetzungen.}
+Die folgenden beiden logischen Hilfssätze erlauben, die gemeinsam
+notierten Trägerannahmen in den Ordnungsaxiomen ohne stillschweigende
+Quantorenumformung einzusetzen.
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Zwei beschränkte Quantoren aus einer gemeinsamen Trägerbedingung]{%
+ \begin{aligned}[t]
+ &\forall x\,\forall y\,((x\in A\land y\in A)\to R(x,y))\vdash{}\\
+ &\forall x\in A\,\forall y\in A\,R(x,y)
+ \end{aligned}
+}{B37TLexBoundedPair}{\DeltaRow{Mengen}{A\dsep x\dsep y}\DeltaRow{Prädikat}{R}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\forall x\,\forall y\,((x\in A\land y\in A)\to R(x,y))}{\rA}
+ \proofstepwidestar[2]{x\in A}{\rA}
+ \proofstepwidestar[3]{y\in A}{\rA}
+ \proofstepwidestar[1]{(x\in A\land y\in A)\to R(x,y)}{\rUE{\rUE{1}}}
+ \proofstepwidestar[1,2,3]{R(x,y)}{\rRE{4,\rAI{2,3}}}
+ \proofstepwidestar[1,2]{\forall y\in A\,R(x,y)}{\rUI{\rRI{3,5}}}
+ \proofstepwidestar[1]{\forall x\in A\,\forall y\in A\,R(x,y)}{\rUI{\rRI{2,6}}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Drei beschränkte Quantoren aus einer gemeinsamen Trägerbedingung]{%
+ \begin{aligned}[t]
+ &\forall x\,\forall y\,\forall z\,
+ ((x\in A\land(y\in A\land z\in A))\to R(x,y,z))\vdash{}\\
+ &\forall x\in A\,\forall y\in A\,\forall z\in A\,R(x,y,z)
+ \end{aligned}
+}{B37TLexBoundedTriple}{\DeltaRow{Mengen}{A\dsep x\dsep y\dsep z}\DeltaRow{Prädikat}{R}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\forall x\,\forall y\,\forall z\,((x\in A\land(y\in A\land z\in A))\to R(x,y,z))}{\rA}
+ \proofstepwidestar[2]{x\in A}{\rA}
+ \proofstepwidestar[3]{y\in A}{\rA}
+ \proofstepwidestar[4]{z\in A}{\rA}
+ \proofstepwidestar[1]{(x\in A\land(y\in A\land z\in A))\to R(x,y,z)}{\rUE{\rUE{\rUE{1}}}}
+ \proofstepwidestar[1,2,3,4]{R(x,y,z)}{\rRE{5,\rAI{2,\rAI{3,4}}}}
+ \proofstepwidestar[1,2,3]{\forall z\in A\,R(x,y,z)}{\rUI{\rRI{4,6}}}
+ \proofstepwidestar[1,2]{\forall y\in A\,\forall z\in A\,R(x,y,z)}{\rUI{\rRI{3,7}}}
+ \proofstepwidestar[1]{\forall x\in A\,\forall y\in A\,\forall z\in A\,R(x,y,z)}{\rUI{\rRI{2,8}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Vergleichbarkeit durch die erste abweichende Stelle]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y\in T_r(C)\vdash{}\\
+ &x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)
+ \end{aligned}
+}{B37TLexTrichotomy}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep k}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[]{x=y\lor x\ne y}{\FormulaRefAuto{P\lor\neg P}[thm]}
+ \proofstepwidestar[4]{x=y}{\rA}
+ \proofstepwidestar[4]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOIa{4}}
+ \proofstepwidestar[6]{x\ne y}{\rA}
+ \proofstepwidestar[1,2,6]{\exists k\in I_r\,(P_r(x,y;k)\land x_k\ne y_k)}{\FormulaRefAuto{B37TLexFirstDifference}[thm]{1,2,6}}
+ \proofstepwidestar[8]{k\in I_r\land(P_r(x,y;k)\land x_k\ne y_k)}{\rA}
+ \proofstepwidestar[1,2,8]{x_k\in C\land y_k\in C}{\rAI{\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{1,\rAEa{2},\rAEa{8}}},\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{1,\rAEb{2},\rAEa{8}}}}}
+ \proofstepwidestar[1,2,8]{x_k\triangleleft y_k\lor(y_k\triangleleft x_k\lor x_k=y_k)}{\FormulaRefAuto{B37TLexBaseTrichotomy}[thm]{\rAEb{1},\rAEa{9},\rAEb{9}}}
+ \proofstepwidestar[11]{x_k\triangleleft y_k}{\rA}
+ \proofstepwidestar[2,8,11]{x\prec_{r,C} y}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,\rEI{\rAI{\rAEa{8},\rAI{\rAEa{\rAEb{8}},11}}}}}
+ \proofstepwidestar[2,8,11]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOIb{\rOIa{12}}}
+ \proofstepwidestar[14]{y_k\triangleleft x_k\lor x_k=y_k}{\rA}
+ \proofstepwidestar[15]{y_k\triangleleft x_k}{\rA}
+ \proofstepwidestar[16]{i\in I_r\land i<k}{\rA}
+ \proofstepwidestar[8,16]{x_i=y_i}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{\rAEb{8}},\rAEa{16},\rAEb{16}}}
+ \proofstepwidestar[8,16]{y_i=x_i}{\FormulaRefAuto{a=b\vdash b=a}[thm]{17}}
+ \proofstepwidestar[8]{P_r(y,x;k)}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rUI{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}[thm]{\rRI{16,18}}}}}
+ \proofstepwidestar[2,8,15]{y\prec_{r,C} x}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,\rEI{\rAI{\rAEa{8},\rAI{19,15}}}}}
+ \proofstepwidestar[2,8,15]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOIb{\rOIb{20}}}
+ \proofstepwidestar[22]{x_k=y_k}{\rA}
+ \proofstepwidestar[8,22]{\bot}{\rBI{\rAEb{\rAEb{8}},22}}
+ \proofstepwidestar[8,22]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\FormulaRefAuto{\bot\vdash P}[thm]{23}}
+ \proofstepwidestar[2,8,14]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOE{14,15,21,22,24}}
+ \proofstepwidestar[1,2,8]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOE{10,11,13,14,25}}
+ \proofstepwidestar[1,2,6]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rEE{7,8,26}}
+ \proofstepwidestar[1,2]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\rOE{3,4,5,6,27}}
+\end{tabproofwide}
+
+\paragraph{Transitivität: die drei Lagen der ersten Unterschiede.}
+Für die nächsten drei Hilfssätze verwenden wir die reine Abkürzung
+\[
+\begin{aligned}
+ H\coloneqq{}&\bigl(\mathcal L\land(x,y,z\in T_r(C)\land k,l\in I_r)\bigr)\\
+ &{}\land\bigl(P_r(x,y;k)\land(P_r(y,z;l)\land(x_k\triangleleft y_k\land y_l\triangleleft z_l))\bigr).
+\end{aligned}
+\]
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Der erste Unterschied liegt links früher]{%
+ \begin{aligned}[t]
+ &r\in\mathbb N\dsep K(C,\triangleleft)\dsep x,y,z\in T_r(C)
+ \dsep k,l\in I_r\\
+ &\dsep P_r(x,y;k)\dsep P_r(y,z;l)\dsep
+ x_k\triangleleft y_k\dsep y_l\triangleleft z_l\\
+ &\dsep k<l\vdash x\prec_{r,C} z
+ \end{aligned}
+}{B37TLexEarlyWitness}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z\dsep i\dsep k\dsep l}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{H}{\rA}
+ \proofstepwidestar[2]{k<l}{\rA}
+ \proofstepwidestar[1]{\mathcal L\land(x,y,z\in T_r(C)\land k,l\in I_r)}{\rAEa{1}}
+ \proofstepwidestar[1]{P_r(x,y;k)\land(P_r(y,z;l)\land(x_k\triangleleft y_k\land y_l\triangleleft z_l))}{\rAEb{1}}
+ \proofstepwidestar[1]{k,l\in\mathbb N}{\rAI{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},\rAEa{\rAEb{\rAEb{3}}}},\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[6]{i\in I_r}{\rA}
+ \proofstepwidestar[7]{i<k}{\rA}
+ \proofstepwidestar[1,6]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},6}}
+ \proofstepwidestar[1,2,6,7]{i<l}{\FormulaRefAuto{PeanoLtTransitive}[thm]{8,\rAEa{5},\rAEb{5},7,2}}
+ \proofstepwidestar[1,6,7]{x_i=y_i}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{4},6,7}}
+ \proofstepwidestar[1,2,6,7]{y_i=z_i}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{\rAEb{4}},6,9}}
+ \proofstepwidestar[1,2,6,7]{x_i=z_i}{\rIE{11,10}}
+ \proofstepwidestar[1,2]{P_r(x,z;k)}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rUI{\rRI{6,\rRI{7,12}}}}}
+ \proofstepwidestar[1,2]{y_k=z_k}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{\rAEb{4}},\rAEa{\rAEb{\rAEb{3}}},2}}
+ \proofstepwidestar[1,2]{x_k\triangleleft z_k}{\rIE{14,\rAEa{\rAEb{\rAEb{4}}}}}
+ \proofstepwidestar[1,2]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{\rAEa{\rAEb{3}},\rEI{\rAI{\rAEa{\rAEb{\rAEb{3}}},\rAI{13,15}}}}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die ersten Unterschiede liegen an derselben Stelle]{%
+ \begin{aligned}[t]
+ &r\in\mathbb N\dsep K(C,\triangleleft)\dsep x,y,z\in T_r(C)
+ \dsep k,l\in I_r\\
+ &\dsep P_r(x,y;k)\dsep P_r(y,z;l)\dsep
+ x_k\triangleleft y_k\dsep y_l\triangleleft z_l\\
+ &\dsep k=l\vdash x\prec_{r,C} z
+ \end{aligned}
+}{B37TLexEqualWitness}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z\dsep i\dsep k\dsep l}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{H}{\rA}
+ \proofstepwidestar[2]{k=l}{\rA}
+ \proofstepwidestar[1]{\mathcal L\land(x,y,z\in T_r(C)\land k,l\in I_r)}{\rAEa{1}}
+ \proofstepwidestar[1,2]{P_r(x,y;k)\land(P_r(y,z;k)\land(x_k\triangleleft y_k\land y_k\triangleleft z_k))}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{2},\rAEb{1}}}
+ \proofstepwidestar[5]{i\in I_r}{\rA}
+ \proofstepwidestar[6]{i<k}{\rA}
+ \proofstepwidestar[1,2,5,6]{x_i=y_i\land y_i=z_i}{\rAI{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{4},5,6},\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{\rAEb{4}},5,6}}}
+ \proofstepwidestar[1,2,5,6]{x_i=z_i}{\rIE{\rAEb{7},\rAEa{7}}}
+ \proofstepwidestar[1,2]{P_r(x,z;k)}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rUI{\rRI{5,\rRI{6,8}}}}}
+ \proofstepwidestar[1]{x_k,y_k,z_k\in C}{\rAI{\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{\rAEa{3},\rAEa{\rAEa{\rAEb{3}}},\rAEa{\rAEb{\rAEb{3}}}}},\rAI{\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{\rAEa{3},\rAEa{\rAEb{\rAEa{\rAEb{3}}}},\rAEa{\rAEb{\rAEb{3}}}}},\rAEb{\FormulaRefAuto{B37TLexCoordinate}[thm]{\rAEa{3},\rAEb{\rAEb{\rAEa{\rAEb{3}}}},\rAEa{\rAEb{\rAEb{3}}}}}}}}
+ \proofstepwidestar[1,2]{x_k\triangleleft z_k}{\FormulaRefAuto{B37TLexBaseTransitive}[thm]{\rAEb{\rAEa{3}},\rAEa{10},\rAEa{\rAEb{10}},\rAEb{\rAEb{10}},\rAEa{\rAEb{\rAEb{4}}},\rAEb{\rAEb{\rAEb{4}}}}}
+ \proofstepwidestar[1,2]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{\rAEa{\rAEb{3}},\rEI{\rAI{\rAEa{\rAEb{\rAEb{3}}},\rAI{9,11}}}}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Der erste Unterschied liegt rechts früher]{%
+ \begin{aligned}[t]
+ &r\in\mathbb N\dsep K(C,\triangleleft)\dsep x,y,z\in T_r(C)
+ \dsep k,l\in I_r\\
+ &\dsep P_r(x,y;k)\dsep P_r(y,z;l)\dsep
+ x_k\triangleleft y_k\dsep y_l\triangleleft z_l\\
+ &\dsep l<k\vdash x\prec_{r,C} z
+ \end{aligned}
+}{B37TLexLateWitness}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z\dsep i\dsep k\dsep l}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{H}{\rA}
+ \proofstepwidestar[2]{l<k}{\rA}
+ \proofstepwidestar[1]{\mathcal L\land(x,y,z\in T_r(C)\land k,l\in I_r)}{\rAEa{1}}
+ \proofstepwidestar[1]{P_r(x,y;k)\land(P_r(y,z;l)\land(x_k\triangleleft y_k\land y_l\triangleleft z_l))}{\rAEb{1}}
+ \proofstepwidestar[1]{k,l\in\mathbb N}{\rAI{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},\rAEa{\rAEb{\rAEb{3}}}},\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},\rAEb{\rAEb{\rAEb{3}}}}}}
+ \proofstepwidestar[6]{i\in I_r}{\rA}
+ \proofstepwidestar[7]{i<l}{\rA}
+ \proofstepwidestar[1,6]{i\in\mathbb N}{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{\rAEa{3}},6}}
+ \proofstepwidestar[1,2,6,7]{i<k}{\FormulaRefAuto{PeanoLtTransitive}[thm]{8,\rAEb{5},\rAEa{5},7,2}}
+ \proofstepwidestar[1,2,6,7]{x_i=y_i}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{4},6,9}}
+ \proofstepwidestar[1,6,7]{y_i=z_i}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{\rAEb{4}},6,7}}
+ \proofstepwidestar[1,2,6,7]{x_i=z_i}{\rIE{11,10}}
+ \proofstepwidestar[1,2]{P_r(x,z;l)}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rUI{\rRI{6,\rRI{7,12}}}}}
+ \proofstepwidestar[1,2]{x_l=y_l}{\FormulaRefAuto{B37TLexTupleDef}[def]{\rAEa{4},\rAEb{\rAEb{\rAEb{3}}},2}}
+ \proofstepwidestar[1,2]{x_l\triangleleft z_l}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{14},\rAEb{\rAEb{\rAEb{4}}}}}
+ \proofstepwidestar[1,2]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{\rAEa{\rAEb{3}},\rEI{\rAI{\rAEb{\rAEb{\rAEb{3}}},\rAI{13,15}}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Transitivität der strikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y,z\in T_r(C)\\ &\dsep x\prec_{r,C} y\dsep y\prec_{r,C} z\vdash{}\\
+ &x\prec_{r,C} z
+ \end{aligned}
+}{B37TLexTransitive}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z\dsep k\dsep l}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y,z\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\prec_{r,C} y}{\rA}
+ \proofstepwidestar[4]{y\prec_{r,C} z}{\rA}
+ \proofstepwidestar[2,3]{\exists k\in I_r\,(P_r(x,y;k)\land x_k\triangleleft y_k)}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,3}}
+ \proofstepwidestar[6]{k\in I_r\land(P_r(x,y;k)\land x_k\triangleleft y_k)}{\rA}
+ \proofstepwidestar[2,4]{\exists l\in I_r\,(P_r(y,z;l)\land y_l\triangleleft z_l)}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,4}}
+ \proofstepwidestar[8]{l\in I_r\land(P_r(y,z;l)\land y_l\triangleleft z_l)}{\rA}
+ \proofstepwidestar[1,2,6,8]{H}{\rAI{\rAI{1,\rAI{2,\rAI{\rAEa{6},\rAEa{8}}}},\rAI{\rAEa{\rAEb{6}},\rAI{\rAEa{\rAEb{8}},\rAI{\rAEb{\rAEb{6}},\rAEb{\rAEb{8}}}}}}}
+ \proofstepwidestar[1,6,8]{k,l\in\mathbb N}{\rAI{\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{1},\rAEa{6}},\FormulaRefAuto{PeanoNatSegElementNatural}[thm]{\rAEa{1},\rAEa{8}}}}
+ \proofstepwidestar[1,6,8]{k<l\lor(l<k\lor k=l)}{\FormulaRefAuto{PeanoOrderTrichotomy}[thm]{\rAEa{10},\rAEb{10}}}
+ \proofstepwidestar[12]{k<l}{\rA}
+ \proofstepwidestar[1,2,6,8,12]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexEarlyWitness}[thm]{9,12}}
+ \proofstepwidestar[14]{l<k\lor k=l}{\rA}
+ \proofstepwidestar[15]{l<k}{\rA}
+ \proofstepwidestar[1,2,6,8,15]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexLateWitness}[thm]{9,15}}
+ \proofstepwidestar[17]{k=l}{\rA}
+ \proofstepwidestar[1,2,6,8,17]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexEqualWitness}[thm]{9,17}}
+ \proofstepwidestar[1,2,6,8,14]{x\prec_{r,C} z}{\rOE{14,15,16,17,18}}
+ \proofstepwidestar[1,2,6,8]{x\prec_{r,C} z}{\rOE{11,12,13,14,19}}
+ \proofstepwidestar[1,2,4,6]{x\prec_{r,C} z}{\rEE{7,8,20}}
+ \proofstepwidestar[1,2,3,4]{x\prec_{r,C} z}{\rEE{5,6,21}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Asymmetrie der strikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y\in T_r(C)\\ &\dsep x\prec_{r,C} y\vdash{}\\
+ &\neg(y\prec_{r,C} x)
+ \end{aligned}
+}{B37TLexAsymmetric}{\DeltaRow{Mengen}{r\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\prec_{r,C} y}{\rA}
+ \proofstepwidestar[4]{y\prec_{r,C} x}{\rA}
+ \proofstepwidestar[1,2,3,4]{x\prec_{r,C} x}{\FormulaRefAuto{B37TLexTransitive}[thm]{1,\rAI{\rAEa{2},\rAI{\rAEb{2},\rAEa{2}}},3,4}}
+ \proofstepwidestar[1,2]{\neg(x\prec_{r,C} x)}{\FormulaRefAuto{B37TLexIrreflexive}[thm]{1,\rAEa{2}}}
+ \proofstepwidestar[1,2,3,4]{\bot}{\rBI{5,6}}
+ \proofstepwidestar[1,2,3]{\neg(y\prec_{r,C} x)}{\rCI{4,7}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Reflexivität der nichtstrikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x\in T_r(C)\vdash{}\\
+ &x\preceq_{r,C} x
+ \end{aligned}
+}{B37TLexWeakReflexive}{\DeltaRow{Mengen}{r\dsep x}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x\in T_r(C)}{\rA}
+ \proofstepwidestar[]{x=x}{\rII}
+ \proofstepwidestar[]{x=x\lor x\prec_{r,C} x}{\rOIa{3}}
+ \proofstepwidestar[2]{x\preceq_{r,C} x}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,2,4}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Antisymmetrie der nichtstrikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y\in T_r(C)\\ &\dsep x\preceq_{r,C} y\dsep y\preceq_{r,C} x\vdash{}\\
+ &x=y
+ \end{aligned}
+}{B37TLexWeakAntisymmetric}{\DeltaRow{Mengen}{r\dsep x\dsep y}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\preceq_{r,C} y}{\rA}
+ \proofstepwidestar[4]{y\preceq_{r,C} x}{\rA}
+ \proofstepwidestar[2,3]{x=y\lor x\prec_{r,C} y}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,3}}
+ \proofstepwidestar[6]{x=y}{\rA}
+ \proofstepwidestar[7]{x\prec_{r,C} y}{\rA}
+ \proofstepwidestar[2,4]{y=x\lor y\prec_{r,C} x}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,4}}
+ \proofstepwidestar[9]{y=x}{\rA}
+ \proofstepwidestar[9]{x=y}{\FormulaRefAuto{a=b\vdash b=a}[thm]{9}}
+ \proofstepwidestar[11]{y\prec_{r,C} x}{\rA}
+ \proofstepwidestar[1,2,7]{\neg(y\prec_{r,C} x)}{\FormulaRefAuto{B37TLexAsymmetric}[thm]{1,2,7}}
+ \proofstepwidestar[1,2,7,11]{\bot}{\rBI{11,12}}
+ \proofstepwidestar[1,2,7,11]{x=y}{\FormulaRefAuto{\bot\vdash P}[thm]{13}}
+ \proofstepwidestar[1,2,4,7]{x=y}{\rOE{8,9,10,11,14}}
+ \proofstepwidestar[1,2,3,4]{x=y}{\rOE{5,6,6,7,15}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Transitivität der nichtstrikten Tupelordnung]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep x,y,z\in T_r(C)\\ &\dsep x\preceq_{r,C} y\dsep y\preceq_{r,C} z\vdash{}\\
+ &x\preceq_{r,C} z
+ \end{aligned}
+}{B37TLexWeakTransitive}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x,y,z\in T_r(C)}{\rA}
+ \proofstepwidestar[3]{x\preceq_{r,C} y}{\rA}
+ \proofstepwidestar[4]{y\preceq_{r,C} z}{\rA}
+ \proofstepwidestar[2,3]{x=y\lor x\prec_{r,C} y}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,3}}
+ \proofstepwidestar[6]{x=y}{\rA}
+ \proofstepwidestar[4,6]{x\preceq_{r,C} z}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{6},4}}
+ \proofstepwidestar[8]{x\prec_{r,C} y}{\rA}
+ \proofstepwidestar[2,4]{y=z\lor y\prec_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,4}}
+ \proofstepwidestar[10]{y=z}{\rA}
+ \proofstepwidestar[8,10]{x\prec_{r,C} z}{\rIE{10,8}}
+ \proofstepwidestar[2,8,10]{x\preceq_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,\rOIb{11}}}
+ \proofstepwidestar[13]{y\prec_{r,C} z}{\rA}
+ \proofstepwidestar[1,2,8,13]{x\prec_{r,C} z}{\FormulaRefAuto{B37TLexTransitive}[thm]{1,2,8,13}}
+ \proofstepwidestar[1,2,8,13]{x\preceq_{r,C} z}{\FormulaRefAuto{B37TLexOrderDef}[def]{2,\rOIb{14}}}
+ \proofstepwidestar[1,2,4,8]{x\preceq_{r,C} z}{\rOE{9,10,12,13,15}}
+ \proofstepwidestar[1,2,3,4]{x\preceq_{r,C} z}{\rOE{5,6,7,8,16}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die lexikographische Tupelordnung ist total]{%
+ (r\in\mathbb N\land K(C,\triangleleft))\vdash\TotOrd{T_r(C),\preceq_{r,C}}
+}{B37TLexTotalOrder}{\DeltaRow{Mengen}{r\dsep x\dsep y\dsep z}\DeltaRow{Relationsoperatoren}{\preceq_{r,C}}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x\in T_r(C)}{\rA}
+ \proofstepwidestar[1,2]{x\preceq_{r,C} x}{\FormulaRefAuto{B37TLexWeakReflexive}[thm]{1,2}}
+ \proofstepwidestar[1]{\forall x\in T_r(C)\,(x\preceq_{r,C} x)}{\rUI{\rRI{2,3}}}
+ \proofstepwidestar[5]{x,y,z\in T_r(C)\land(x\preceq_{r,C} y\land y\preceq_{r,C} z)}{\rA}
+ \proofstepwidestar[1,5]{x\preceq_{r,C} z}{\FormulaRefAuto{B37TLexWeakTransitive}[thm]{1,\rAEa{5},\rAEa{\rAEb{5}},\rAEb{\rAEb{5}}}}
+ \proofstepwidestar[1]{\forall x,y,z\in T_r(C)\,((x\preceq_{r,C} y\land y\preceq_{r,C} z)\to x\preceq_{r,C} z)}{\FormulaRefAuto{B37TLexBoundedTriple}[thm]{\rUI{\rUI{\rUI{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}[thm]{\rRI{5,6}}}}}}}
+ \proofstepwidestar[8]{x,y\in T_r(C)\land(x\preceq_{r,C} y\land y\preceq_{r,C} x)}{\rA}
+ \proofstepwidestar[1,8]{x=y}{\FormulaRefAuto{B37TLexWeakAntisymmetric}[thm]{1,\rAEa{8},\rAEa{\rAEb{8}},\rAEb{\rAEb{8}}}}
+ \proofstepwidestar[1]{\forall x,y\in T_r(C)\,((x\preceq_{r,C} y\land y\preceq_{r,C} x)\to x=y)}{\FormulaRefAuto{B37TLexBoundedPair}[thm]{\rUI{\rUI{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}[thm]{\rRI{8,9}}}}}}
+ \proofstepwidestar[1]{\PartOrd{T_r(C),\preceq_{r,C}}}{\FormulaRefAuto{Partielle Ordnung}[def]{4,7,10}}
+ \proofstepwidestar[12]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[1,12]{x=y\lor(x\prec_{r,C} y\lor y\prec_{r,C} x)}{\FormulaRefAuto{B37TLexTrichotomy}[thm]{1,12}}
+ \proofstepwidestar[14]{x=y}{\rA}
+ \proofstepwidestar[12,14]{x\preceq_{r,C} y\lor y\preceq_{r,C} x}{\rOIa{\FormulaRefAuto{B37TLexOrderDef}[def]{12,\rOIa{14}}}}
+ \proofstepwidestar[16]{x\prec_{r,C} y\lor y\prec_{r,C} x}{\rA}
+ \proofstepwidestar[17]{x\prec_{r,C} y}{\rA}
+ \proofstepwidestar[12,17]{x\preceq_{r,C} y\lor y\preceq_{r,C} x}{\rOIa{\FormulaRefAuto{B37TLexOrderDef}[def]{12,\rOIb{17}}}}
+ \proofstepwidestar[19]{y\prec_{r,C} x}{\rA}
+ \proofstepwidestar[12,19]{x\preceq_{r,C} y\lor y\preceq_{r,C} x}{\rOIb{\FormulaRefAuto{B37TLexOrderDef}[def]{12,\rOIb{19}}}}
+ \proofstepwidestar[12,16]{x\preceq_{r,C} y\lor y\preceq_{r,C} x}{\rOE{16,17,18,19,20}}
+ \proofstepwidestar[1,12]{x\preceq_{r,C} y\lor y\preceq_{r,C} x}{\rOE{13,14,15,16,21}}
+ \proofstepwidestar[1]{\forall x,y\in T_r(C)\,(x\preceq_{r,C} y\lor y\preceq_{r,C} x)}{\FormulaRefAuto{B37TLexBoundedPair}[thm]{\rUI{\rUI{\rRI{12,22}}}}}
+ \proofstepwidestar[1]{\TotOrd{T_r(C),\preceq_{r,C}}}{\FormulaRefAuto{Totale Ordnung}[def]{11,23}}
+\end{tabproofwide}
+
+\paragraph{Existenz und Eindeutigkeit des kleinsten Kandidaten.}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Endliche nichtleere Tupelmengen besitzen genau ein Minimum]{%
+ \begin{aligned}[t]
+ &(r\in\mathbb N\land K(C,\triangleleft))\dsep W\subseteq T_r(C)\dsep\Finite W\dsep W\ne\varnothing\vdash{}\\
+ &\exists!q\in W\,\forall w\in W\,(q\preceq_{r,C} w)
+ \end{aligned}
+}{B37TLexFiniteMinimum}{\DeltaRow{Mengen}{r\dsep W\dsep q\dsep w}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{W\subseteq T_r(C)}{\rA}
+ \proofstepwidestar[3]{\Finite W}{\rA}
+ \proofstepwidestar[4]{W\ne\varnothing}{\rA}
+ \proofstepwidestar[1]{\TotOrd{T_r(C),\preceq_{r,C}}}{\FormulaRefAuto{B37TLexTotalOrder}[thm]{1}}
+ \proofstepwidestar[1]{\PartOrd{T_r(C),\preceq_{r,C}}}{\FormulaRefAuto{Totale Ordnung}[def]{5}}
+ \proofstepwidestar[1,2,3,4]{\exists q\in W\,\forall w\in W\,(w\preceq_{r,C} q\to w=q)}{\FormulaRefAuto{FinitePosetMinimalElement}[thm]{6,3,4,2}}
+ \proofstepwidestar[8]{q\in W\land\forall w\in W\,(w\preceq_{r,C} q\to w=q)}{\rA}
+ \proofstepwidestar[2,8]{\operatorname{MinEl}_{T_r(C),\preceq_{r,C}}(q,W)}{\FormulaRefAuto{OrderMinimalElement}[def]{2,8}}
+ \proofstepwidestar[1,2,8]{q=\min_{T_r(C),\preceq_{r,C}}(W)}{\FormulaRefAuto{TotalOrderMinimalElementIsMinimum}[thm]{5,2,9}}
+ \proofstepwidestar[2,8]{q\in T_r(C)}{\FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}[thm]{2,\rAEa{8}}}
+ \proofstepwidestar[12]{w\in W}{\rA}
+ \proofstepwidestar[2,12]{w\in T_r(C)}{\FormulaRefAuto{A\subseteq B,\,x\in A\vdash x\in B}[thm]{2,12}}
+ \proofstepwidestar[1,2,8,12]{q\preceq_{r,C} w\lor w\preceq_{r,C} q}{\FormulaRefAuto{OrderComparability}[ax]{5,11,13}}
+ \proofstepwidestar[15]{q\preceq_{r,C} w}{\rA}
+ \proofstepwidestar[16]{w\preceq_{r,C} q}{\rA}
+ \proofstepwidestar[8,12,16]{w=q}{\rRE{\rRE{\rUE{\rAEb{8}},12},16}}
+ \proofstepwidestar[1,2,8]{q\preceq_{r,C} q}{\FormulaRefAuto{B37TLexWeakReflexive}[thm]{1,11}}
+ \proofstepwidestar[1,2,8,12,16]{q\preceq_{r,C} w}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{17},18}}
+ \proofstepwidestar[1,2,8,12]{q\preceq_{r,C} w}{\rOE{14,15,15,16,19}}
+ \proofstepwidestar[1,2,8]{\forall w\in W\,(q\preceq_{r,C} w)}{\rUI{\rRI{12,20}}}
+ \proofstepwidestar[1,2,8]{\exists q\in W\,\forall w\in W\,(q\preceq_{r,C} w)}{\rEI{\rAI{\rAEa{8},21}}}
+ \proofstepwidestar[1,2,3,4]{\exists q\in W\,\forall w\in W\,(q\preceq_{r,C} w)}{\rEE{7,8,22}}
+ \proofstepwidestar[1,2,3,4]{\exists!q\in W\,\forall w\in W\,(q\preceq_{r,C} w)}{\FormulaRefAuto{MinimumUnique}[thm]{6,2,23}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Der Randfall der Tupellänge null]{%
+ x,y\in T_0(C)\vdash x=y
+}{B37TLexEmptyLength}{\DeltaRow{Mengen}{x\dsep y\dsep i}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{x,y\in T_0(C)}{\rA}
+ \proofstepwidestar[1]{x\colon I_0\to C\land y\colon I_0\to C}{\FormulaRefAuto{B37TLexTupleDef}[def]{1}}
+ \proofstepwidestar[]{I_0=\varnothing}{\FormulaRefAuto{PeanoNatSegZero}[thm]}
+ \proofstepwidestar[4]{i\in I_0}{\rA}
+ \proofstepwidestar[4]{i\in\varnothing}{\rIE{3,4}}
+ \proofstepwidestar[]{i\not\in\varnothing}{\FormulaRefAuto{x\not\in\varnothing}[thm]}
+ \proofstepwidestar[4]{\bot}{\rBI{5,6}}
+ \proofstepwidestar[4]{x_i=y_i}{\FormulaRefAuto{\bot\vdash P}[thm]{7}}
+ \proofstepwidestar[]{\forall i\in I_0\,(x_i=y_i)}{\rUI{\rRI{4,8}}}
+ \proofstepwidestar[1]{x=y}{\FormulaRefAuto{FunctionExtensionality}[thm]{\rAEa{2},\rAEb{2},9}}
+\end{tabproofwide}
+\Needspace{5\baselineskip}
+Insbesondere bedarf die Minimumskonstruktion keiner Voraussetzung
+\mbox{\(r>0\)}. In einer nichtleeren Kandidatenmenge der Länge null sind
+alle Kandidaten gleich dem leeren Tupel.
+
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die natürlichen Zahlen erfüllen die strikten Ordnungsannahmen]{%
+ K(\mathbb N,<)
+}{B37TLexNaturalBase}{\DeltaRow{Mengen}{a\dsep b\dsep c}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{a\in\mathbb N}{\rA}
+ \proofstepwidestar[1]{a\leq a}{\FormulaRefAuto{PeanoLeqReflexive}[thm]{1}}
+ \proofstepwidestar[3]{a<a}{\rA}
+ \proofstepwidestar[1,3]{\bot}{\FormulaRefAuto{PeanoOrderNoCycle}[thm]{1,1,3,2}}
+ \proofstepwidestar[1]{\neg(a<a)}{\rCI{3,4}}
+ \proofstepwidestar[]{\forall a\in\mathbb N\,\neg(a<a)}{\rUI{\rRI{1,5}}}
+ \proofstepwidestar[7]{a,b,c\in\mathbb N\land(a<b\land b<c)}{\rA}
+ \proofstepwidestar[7]{a<c}{\FormulaRefAuto{PeanoLtTransitive}[thm]{\rAEa{\rAEa{7}},\rAEa{\rAEb{\rAEa{7}}},\rAEb{\rAEb{\rAEa{7}}},\rAEa{\rAEb{7}},\rAEb{\rAEb{7}}}}
+ \proofstepwidestar[]{\forall a,b,c\in\mathbb N\,((a<b\land b<c)\to a<c)}{\FormulaRefAuto{B37TLexBoundedTriple}[thm]{\rUI{\rUI{\rUI{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}[thm]{\rRI{7,8}}}}}}}
+ \proofstepwidestar[10]{a,b\in\mathbb N}{\rA}
+ \proofstepwidestar[10]{a<b\lor(b<a\lor a=b)}{\FormulaRefAuto{PeanoOrderTrichotomy}[thm]{\rAEa{10},\rAEb{10}}}
+ \proofstepwidestar[]{\forall a,b\in\mathbb N\,(a<b\lor(b<a\lor a=b))}{\FormulaRefAuto{B37TLexBoundedPair}[thm]{\rUI{\rUI{\rRI{10,11}}}}}
+ \proofstepwidestar[]{K(\mathbb N,<)}{\FormulaRefAuto{B37TLexBaseOrderDef}[def]{\rAI{6,\rAI{9,12}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Die strikten Ordnungsannahmen übertragen sich auf Tupel]{%
+ (r\in\mathbb N\land K(C,\triangleleft))\vdash K(T_r(C),\prec_{r,C})
+}{B37TLexIterationBase}{\DeltaRow{Mengen}{r\dsep C\dsep x\dsep y\dsep z}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\mathcal L}{\rA}
+ \proofstepwidestar[2]{x\in T_r(C)}{\rA}
+ \proofstepwidestar[1,2]{\neg(x\prec_{r,C}x)}{\FormulaRefAuto{B37TLexIrreflexive}[thm]{1,2}}
+ \proofstepwidestar[1]{\forall x\in T_r(C)\,\neg(x\prec_{r,C}x)}{\rUI{\rRI{2,3}}}
+ \proofstepwidestar[5]{x,y,z\in T_r(C)\land(x\prec_{r,C}y\land y\prec_{r,C}z)}{\rA}
+ \proofstepwidestar[1,5]{x\prec_{r,C}z}{\FormulaRefAuto{B37TLexTransitive}[thm]{1,\rAEa{5},\rAEa{\rAEb{5}},\rAEb{\rAEb{5}}}}
+ \proofstepwidestar[1]{\forall x,y,z\in T_r(C)\,((x\prec_{r,C}y\land y\prec_{r,C}z)\to x\prec_{r,C}z)}{\FormulaRefAuto{B37TLexBoundedTriple}[thm]{\rUI{\rUI{\rUI{\FormulaRefAuto{(P \land Q) \rightarrow R \eqvdash P \rightarrow (Q \rightarrow R)}[thm]{\rRI{5,6}}}}}}}
+ \proofstepwidestar[8]{x,y\in T_r(C)}{\rA}
+ \proofstepwidestar[1,8]{x=y\lor(x\prec_{r,C}y\lor y\prec_{r,C}x)}{\FormulaRefAuto{B37TLexTrichotomy}[thm]{1,8}}
+ \proofstepwidestar[10]{x=y}{\rA}
+ \proofstepwidestar[10]{x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y)}{\rOIb{\rOIb{10}}}
+ \proofstepwidestar[12]{x\prec_{r,C}y\lor y\prec_{r,C}x}{\rA}
+ \proofstepwidestar[13]{x\prec_{r,C}y}{\rA}
+ \proofstepwidestar[13]{x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y)}{\rOIa{13}}
+ \proofstepwidestar[15]{y\prec_{r,C}x}{\rA}
+ \proofstepwidestar[15]{x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y)}{\rOIb{\rOIa{15}}}
+ \proofstepwidestar[12]{x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y)}{\rOE{12,13,14,15,16}}
+ \proofstepwidestar[1,8]{x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y)}{\rOE{9,10,11,12,17}}
+ \proofstepwidestar[1]{\forall x,y\in T_r(C)\,(x\prec_{r,C}y\lor(y\prec_{r,C}x\lor x=y))}{\FormulaRefAuto{B37TLexBoundedPair}[thm]{\rUI{\rUI{\rRI{8,18}}}}}
+ \proofstepwidestar[1]{K(T_r(C),\prec_{r,C})}{\FormulaRefAuto{B37TLexBaseOrderDef}[def]{\rAI{4,\rAI{7,19}}}}
+\end{tabproofwide}
+
+\paragraph{Anwendung auf die Tafelkandidaten.}
+Wir ordnen die verschachtelten Tafeltupel direkt. Setze
+\(U_n=T_n(\mathbb N)\) und \(V_n=T_n(U_n)\). Auf \(U_n\) wird die
+lexikographische Ordnung der natürlichen Koordinaten verwendet, auf
+\(V_n\) anschließend die lexikographische Ordnung dieser Zeilen.
+\(W_A\) bleibt die zweite Komponente des öffentlichen Codes;
+\(n_A=\FiniteCard(A)\).
+\input{tex/b37/table-isomorphisms/lex-table-typing.tex}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Genau ein kleinster Tafelkandidat]{%
+ \FiniteSemigroupAlg{A}{\star}\vdash\exists!q\in W_A\,\forall w\in W_A\,(q\preceq_{n_A,U_{n_A}}w)
+}{B37TLexCodeMinimum}{\DeltaRow{Mengen}{A\dsep n_A\dsep W_A\dsep q\dsep w}\DeltaRow{Funktionen}{\star}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[1]{n_A\in\mathbb N\land W_A\subseteq V_{n_A}}{\FormulaRefAuto{B37TLexCodeCandidatesTyped}[thm]{1}}
+ \proofstepwidestar[]{K(\mathbb N,<)}{\FormulaRefAuto{B37TLexNaturalBase}[thm]}
+ \proofstepwidestar[1]{K(U_{n_A},\prec_{n_A,\mathbb N})}{\FormulaRefAuto{B37TLexIterationBase}[thm]{\rAI{\rAEa{2},3}}}
+ \proofstepwidestar[1]{n_A\in\mathbb N\land K(U_{n_A},\prec_{n_A,\mathbb N})}{\rAI{\rAEa{2},4}}
+ \proofstepwidestar[1]{\Finite{W_A}\land W_A\ne\varnothing}{\FormulaRefAuto{B37TFiniteCodeCandidates}[thm]{1}}
+ \proofstepwidestar[1]{\exists!q\in W_A\,\forall w\in W_A\,(q\preceq_{n_A,U_{n_A}}w)}{\FormulaRefAuto{B37TLexFiniteMinimum}[thm]{5,\rAEb{2},\rAEa{6},\rAEb{6}}}
+\end{tabproofwide}
+\Needspace{14\baselineskip}
+\FormulaDefDeltaK[Minimaler Tafelcode]{%
+ \begin{aligned}[t]
+ &\FiniteSemigroupAlg{A}{\star}\vdash{}\\
+ &\mu_A\coloneqq\min_{V_{n_A},\preceq_{n_A,U_{n_A}}}(W_A),\qquad
+ \operatorname{mcan}(A,\star)\coloneqq(n_A,\mu_A)
+ \end{aligned}
+}{B37TMinimalCodeDef}{\DeltaRow{Mengen}{A\dsep n_A\dsep W_A\dsep\mu_A}\DeltaRow{Funktionen}{\star}}
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Der gewählte minimale Code ist ein Kandidat]{%
+ \FiniteSemigroupAlg{A}{\star}\vdash\mu_A\in W_A\land\forall w\in W_A\,(\mu_A\preceq_{n_A,U_{n_A}}w)
+}{B37TLexMinimumMembership}{\DeltaRow{Mengen}{A\dsep\mu_A\dsep w}\DeltaRow{Funktionen}{\star}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[1]{\exists!q\in W_A\,\forall w\in W_A\,(q\preceq_{n_A,U_{n_A}}w)}{\FormulaRefAuto{B37TLexCodeMinimum}[thm]{1}}
+ \proofstepwidestar[1]{\mu_A\in W_A\land\forall w\in W_A\,(\mu_A\preceq_{n_A,U_{n_A}}w)}{\FormulaRefAuto{B37TMinimalCodeDef}[def]{1,\FormulaRefAuto{Minimum}[def]{2,\FormulaRefAuto{IotaSymbolDef}[def]{2}}}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Isomorphie erhält den minimalen Tafelcode]{%
+ \begin{aligned}[t]
+ &\FiniteSemigroupAlg{A}{\star}\dsep\FiniteSemigroupAlg{B}{\diamond}\dsep
+ \exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}\vdash{}\\
+ &\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)
+ \end{aligned}
+}{B37TMinimalCodeForward}{\DeltaRow{Mengen}{A\dsep B\dsep n_A\dsep n_B\dsep W_A\dsep W_B}\DeltaRow{Funktionen}{\star\dsep\diamond\dsep f}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[2]{\FiniteSemigroupAlg{B}{\diamond}}{\rA}
+ \proofstepwidestar[3]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rA}
+ \proofstepwidestar[1,2,3]{\operatorname{can}(A,\star)=\operatorname{can}(B,\diamond)}{\rRE{\rLREa{\FormulaRefAuto{FiniteSemigroupCanonicalTableCodeComplete}[thm]{1,2}},3}}
+ \proofstepwidestar[1,2,3]{n_A=n_B\land W_A=W_B}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{\FormulaRefAuto{FiniteSemigroupCanonicalTableCodeDef}[def]{1,2,4}}}
+ \proofstepwidestar[1,2,3]{\mu_A=\mu_B}{\FormulaRefAuto{B37TMinimalCodeDef}[def]{1,2,\rAEa{5},\rAEb{5}}}
+ \proofstepwidestar[1,2,3]{\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\FormulaRefAuto{B37TMinimalCodeDef}[def]{1,2,\rAEa{5},6}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Gleiche minimale Codes liefern einen Isomorphismus]{%
+ \begin{aligned}[t]
+ &\FiniteSemigroupAlg{A}{\star}\dsep\FiniteSemigroupAlg{B}{\diamond}\dsep
+ \operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)\vdash{}\\
+ &\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}
+ \end{aligned}
+}{B37TMinimalCodeBackward}{\DeltaRow{Mengen}{A\dsep B\dsep n_A\dsep n_B\dsep W_A\dsep W_B}\DeltaRow{Funktionen}{\star\dsep\diamond\dsep e_A\dsep e_B\dsep f}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[2]{\FiniteSemigroupAlg{B}{\diamond}}{\rA}
+ \proofstepwidestar[3]{\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\rA}
+ \proofstepwidestar[1,2,3]{n_A=n_B\land\mu_A=\mu_B}{\FormulaRefAuto{(a,b)=(c,d)\eqvdash a=c\land b=d}[thm]{\FormulaRefAuto{B37TMinimalCodeDef}[def]{1,2,3}}}
+ \proofstepwidestar[1]{\mu_A\in W_A}{\rAEa{\FormulaRefAuto{B37TLexMinimumMembership}[thm]{1}}}
+ \proofstepwidestar[2]{\mu_B\in W_B}{\rAEa{\FormulaRefAuto{B37TLexMinimumMembership}[thm]{2}}}
+ \proofstepwidestar[1]{n_A\in\mathbb N}{\FormulaRefAuto{FiniteCardNatural}[thm]{\FormulaRefAuto{FiniteSemigroupFinitenessAxiom}[ax]{1}}}
+ \proofstepwidestar[1]{\exists e_A\,(e_A\colon I_{n_A}\bij A\land\mu_A=w_{n_A}(m_{\star,e_A}))}{\FormulaRefAuto{FiniteSemigroupCanonicalTableCodeDef}[def]{1,5}}
+ \proofstepwidestar[9]{e_A\colon I_{n_A}\bij A\land\mu_A=w_{n_A}(m_{\star,e_A})}{\rA}
+ \proofstepwidestar[1,2,3]{\exists e_B\,(e_B\colon I_{n_A}\bij B\land\mu_A=w_{n_A}(m_{\diamond,e_B}))}{\rIE{\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEa{4}},\FormulaRefAuto{a=b\vdash b=a}[thm]{\rAEb{4}},\FormulaRefAuto{FiniteSemigroupCanonicalTableCodeDef}[def]{2,6}}}
+ \proofstepwidestar[11]{e_B\colon I_{n_A}\bij B\land\mu_A=w_{n_A}(m_{\diamond,e_B})}{\rA}
+ \proofstepwidestar[9,11]{w_{n_A}(m_{\star,e_A})=w_{n_A}(m_{\diamond,e_B})}{\rIE{\rAEb{9},\rAEb{11}}}
+ \proofstepwidestar[1,9]{m_{\star,e_A}\colon I_{n_A}\times I_{n_A}\to I_{n_A}}{\FormulaRefAuto{FiniteSemigroupMultiplicationTableDef}[def]{1,7,\rAEa{9}}}
+ \proofstepwidestar[1,2,11]{m_{\diamond,e_B}\colon I_{n_A}\times I_{n_A}\to I_{n_A}}{\FormulaRefAuto{FiniteSemigroupMultiplicationTableDef}[def]{2,7,\rAEa{11}}}
+ \proofstepwidestar[1,2,9,11]{m_{\star,e_A}=m_{\diamond,e_B}}{\FormulaRefAuto{FiniteSemigroupTableTupleInjective}[thm]{7,13,14,12}}
+ \proofstepwidestar[1,2,9,11]{\FiniteSemigroupIso{e_B\circ e_A^{-1}}{A,\star}{B,\diamond}}{\FormulaRefAuto{B37TableCodeCommonTableIsomorphism}[thm]{1,2,7,\rAEa{9},\rAEa{11},15}}
+ \proofstepwidestar[1,2,9,11]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rEI{16}}
+ \proofstepwidestar[1,2,3,9]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rEE{10,11,17}}
+ \proofstepwidestar[1,2,3]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rEE{8,9,18}}
+\end{tabproofwide}
+
+\Needspace{14\baselineskip}
+\FormulaThmDeltaK[Der minimale Tafelcode ist vollständig]{%
+ \begin{aligned}[t]
+ &\FiniteSemigroupAlg{A}{\star}\dsep\FiniteSemigroupAlg{B}{\diamond}\vdash{}\\
+ &\bigl(\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}\bigr)
+ \leftrightarrow\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)
+ \end{aligned}
+}{B37TMinimalCodeCriterion}{\DeltaRow{Mengen}{A\dsep B}\DeltaRow{Funktionen}{\star\dsep\diamond\dsep f}}
+\begin{tabproofwide}
+ \proofstepwidestar[1]{\FiniteSemigroupAlg{A}{\star}}{\rA}
+ \proofstepwidestar[2]{\FiniteSemigroupAlg{B}{\diamond}}{\rA}
+ \proofstepwidestar[3]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rA}
+ \proofstepwidestar[1,2,3]{\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\FormulaRefAuto{B37TMinimalCodeForward}[thm]{1,2,3}}
+ \proofstepwidestar[1,2]{(\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond})\to\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\rRI{3,4}}
+ \proofstepwidestar[6]{\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\rA}
+ \proofstepwidestar[1,2,6]{\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\FormulaRefAuto{B37TMinimalCodeBackward}[thm]{1,2,6}}
+ \proofstepwidestar[1,2]{\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)\to\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond}}{\rRI{6,7}}
+ \proofstepwidestar[1,2]{(\exists f\,\FiniteSemigroupIso{f}{A,\star}{B,\diamond})\leftrightarrow\operatorname{mcan}(A,\star)=\operatorname{mcan}(B,\diamond)}{\rLRI{5,8}}
+\end{tabproofwide}
+Die erste Komponente \(n_A\) gehört ausdrücklich zum minimalen Code.
+Der Nachweis verwendet keine Nichtleerheit von \(A\) oder \(B\);
+im Fall \(n_A=0\) ist der einzige Kandidat das leere Tupel.

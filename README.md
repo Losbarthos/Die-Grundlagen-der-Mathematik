@@ -186,11 +186,185 @@ ihre Nummern und Verweisziele in Band 28 und im Gesamtband.
 Das Mengenprodukt ist in Def. 28.2.4.1 unmittelbar als Termbild definiert;
 H18 hält diese Definitionsanwendung unter seiner bisherigen Nummer fest.
 
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 03](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 03 Mengenlehre/Leitfaden der Hauptresultate/Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf>)
+gibt eine Übersicht über wichtige Definitionen und Sätze der Mengenlehre in ZF,
+also ohne Auswahlaxiom. Die Auswahl ist mit der Gesamtbandstruktur abgeglichen
+und belässt Themen anderer Fachbände dort, insbesondere Relationen und Funktionen
+sowie endliche Mengen und die weiterführende axiomatische Mengenlehre aus Band 48.
+Sie enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-set-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 04](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 04 Totale Relationen/Leitfaden der Hauptresultate/Bd. 04 - Totale Relationen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen und Hauptresultate über linkstotale Relationen:
+Totalitätskriterien, Randfälle, Einschränkungen, Mengenoperationen,
+Verkettungen, Paarbildungen und Modelle aus Mengenfamilien.
+Die Aussagen benötigen nur Mengenlehre ohne Auswahlaxiom und Totalität.
+Funktionen, allgemeine Relationsalgebra und zusätzliche Strukturtheorien
+werden nicht entwickelt. Die Auswahl enthält keine Beweise und erhebt
+keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-total-relations-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 05](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 05 Funktionen/Leitfaden der Hauptresultate/Bd. 05 - Funktionen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen und zentrale Resultate über allgemeine Funktionen:
+Charakterisierungen, Bilder und Urbilder, Fasern, Einschränkungen,
+Zusammenfügen, Erweiterungen, Komposition und Funktionenmengen.
+Grundlage sind Mengenlehre ohne Auswahlaxiom, Totalität und funktionale
+Eindeutigkeit. Die besonderen Eigenschaftstheorien aus den Bänden 06–08
+und andere Strukturtheorien bleiben ihren eigenen Bänden vorbehalten.
+Die Auswahl enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-functions-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 06](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 06 Injektive Funktionen/Leitfaden der Hauptresultate/Bd. 06 - Injektive Funktionen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen speziell
+für injektive Funktionen: Injektivitätskriterien, Bild- und Urbildregeln,
+Einschränkungen, Zusammenfügen, Komposition und mengenbasierte Konstruktionen.
+Die Aussagen folgen aus Mengenlehre ohne Auswahlaxiom und Injektivität.
+Allgemeine Funktionstheorie, Surjektivität, Bijektivität, Ordnungs- und
+Äquivalenzrelationen sowie zusätzliche Strukturtheorien bleiben außerhalb.
+Die Auswahl enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-injective-functions-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 07](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 07 Surjektive Funktionen/Leitfaden der Hauptresultate/Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen speziell
+für surjektive Funktionen auf Mengen: Bild- und Faserkriterien, Urbildtests,
+Einschränkungen, Komposition, Rechtskürzen, Faktorisierung und Konstruktionen.
+Cantors Satz beschreibt eine Grenze möglicher Surjektionen.
+Alle Aussagen gelten in ZF ohne Auswahlaxiom. Injektivität, Bijektivität,
+allgemeine Funktionssätze und zusätzliche Strukturtheorien bleiben außerhalb.
+Die Auswahl enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-surjective-functions-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 08](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Leitfaden der Hauptresultate/Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate.pdf>)
+sammelt Charakterisierungen der Bijektivität, Umkehrfunktionen,
+Komposition, Teilmengenkorrespondenz, bijektive Erweiterungen und
+Konstruktionen auf Produkten, markierten Vereinigungen und Funktionenmengen.
+Alle Aussagen gelten in ZF ohne Auswahlaxiom. Reine Injektivitäts- und
+Surjektivitätssätze, allgemeine Funktionstheorie, Ordnungs- und
+Äquivalenzrelationen sowie weitere Strukturtheorien bleiben außerhalb.
+Die Auswahl enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-bijective-functions-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 09](<output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 09 Auswahlprinzip/Leitfaden der Hauptresultate/Bd. 09 - Auswahlprinzip - Leitfaden der Hauptresultate.pdf>)
+sammelt die mengenbasierten Fassungen und direkten Folgen des Auswahlprinzips:
+Auswahlmengen und Auswahlfunktionen, nichtleere Produkte, partielle und
+vorgegebene Auswahlen, disjunkte Verfeinerungen sowie vollständige
+Distributivgesetze. Die Aussagen sind ausdrücklich auf ZF mit Auswahlaxiom
+bezogen; ihre allgemeine Auswahlstärke und leere Randfälle werden angegeben.
+Allgemeine Mengen- und Funktionssätze, spezielle Injektivitäts- und
+Surjektivitätstheorie sowie Ordnungs-, Äquivalenz-, algebraische und
+topologische Strukturen bleiben ausgeklammert.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-choice-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 11](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 11 Äquivalenzrelationen/Leitfaden der Hauptresultate/Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen aus den
+Äquivalenzaxiomen: Äquivalenzklassen, Quotienten und Partitionen,
+Sättigungen, Einschränkungen und erzeugte Äquivalenzrelationen.
+Allgemeine Funktionstheorie, spezielle Injektivitäts-, Surjektivitäts- und
+Bijektivitätssätze, Ordnungsrelationen und zusätzliche Strukturaxiome
+bleiben außerhalb. Die Auswahl enthält keine Beweise und erhebt keinen
+Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-equivalence-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 12](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 12 Halbordnungen/Leitfaden der Hauptresultate/Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen aus den
+Halbordnungsaxiomen: strenge Ordnung und Dualität, Extremalelemente,
+Einschränkungen, untere und obere Mengen, Intervalle sowie Konstruktionen
+und erzeugte Halbordnungen. Die Grundlage ist ZF; zusätzliche Strukturaxiome,
+allgemeine Funktionstheorie, Äquivalenzrelationen und die in eigenen Bänden
+behandelten Schranken, Infima, Suprema, Verbände und totalen Ordnungen
+bleiben außerhalb. Die Auswahl enthält keine Beweise und erhebt keinen
+Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-partial-orders-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 13](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 13 Schranken, Infima und Suprema/Leitfaden der Hauptresultate/Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen zu
+Schranken, Infima und Suprema in einer gegebenen Halbordnung. Der Leitfaden
+behandelt Schrankenmengen, Beschränktheit, Eindeutigkeit und Rechenregeln
+für existierende Infima und Suprema. Zusätzliche Strukturaxiome sowie
+allgemeine Funktionstheorie, Äquivalenzrelationen und die allgemeine Theorie
+der Halbordnungen bleiben den jeweiligen Bänden vorbehalten. Die Auswahl
+enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-bounds-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 14](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 14 Paarinfima und Paarsuprema/Leitfaden der Hauptresultate/Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Rechenregeln für
+Paarinfima und Paarsuprema. Die jeweils benötigte Existenz wird ausdrücklich
+vorausgesetzt; zusätzliche Strukturaxiome werden nicht eingeführt.
+Allgemeine Funktionstheorie, Äquivalenzrelationen, Halbordnungen und
+allgemeine Resultate zu Infima und Suprema bleiben ihren eigenen Bänden
+vorbehalten. Die Auswahl enthält keine Beweise und erhebt keinen
+Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-pair-extrema-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 15](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 15 Totale Ordnungen/Leitfaden der Hauptresultate/Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen und Charakterisierungen totaler Ordnungen sowie
+zentrale Folgerungen aus der Vergleichbarkeit: Trichotomie, auswählende
+Minima und Maxima, endliche geordnete Teilmengen, Intervalle, konvexe
+Teilmengen, Anfangs- und Endabschnitte, Schnitte und
+ordnungsspezifische Konstruktionen. Allgemeine Funktionstheorie,
+Äquivalenzrelationen, Halbordnungen und allgemeine Resultate zu Infima
+und Suprema bleiben ihren eigenen Bänden vorbehalten. Die Auswahl
+setzt keine zusätzlichen Strukturaxiome voraus, enthält keine Beweise
+und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-total-orders-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 45](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Leitfaden der Hauptresultate/Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate.pdf>)
+sammelt Definitionen, Charakterisierungen und zentrale Folgerungen der
+Halbverbands- und Verbandsaxiome. Allgemeine Funktionstheorie,
+Äquivalenzrelationen, Halbordnungen, totale Ordnungen und allgemeine
+Resultate zu Infima und Suprema bleiben ihren eigenen Bänden vorbehalten.
+Zusätzliche axiomatische Strukturen werden nicht behandelt. Die Auswahl
+enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-lattice-main-results.ps1`.
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 47](<output/10 Metrische Räume/Ergänzungen/Bd. 47 Metrische Räume und Vollständigkeit/Leitfaden der Hauptresultate/Bd. 47 - Metrische Räume und Vollständigkeit - Leitfaden der Hauptresultate.pdf>)
+sammelt zentrale metrische Definitionen und Sätze zu Konvergenz, Vollständigkeit,
+totaler Beschränktheit, Kompaktheit, metrischen Abbildungen, Vervollständigung,
+Banach, Baire und metrischen Funktionenräumen einschließlich Arzelà–Ascoli.
+Ergänzt sind McShane–Whitney, Edelstein, das gleichmäßige Cauchy-Kriterium,
+Kuratowski–Fréchet sowie Hausdorffmetrik und Blaschkes Auswahlsatz.
+Allgemeine Funktionen-, Relations- und Ordnungstheorie sowie andere axiomatische
+Raumstrukturen werden nicht entwickelt. Ein verlinkter Wegweiser ordnet die
+Voraussetzungen den Hauptresultaten zu. Quellen: `editions/b47-main-results.tex`
+und `tex/b47/main-results/`.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-metric-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 28](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Leitfaden der Hauptresultate/Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate.pdf>)
+ordnet wichtige Definitionen und Sätze über allgemeine Halbgruppen:
+Produkte und Potenzen, freie Halbgruppen, Kongruenzen und Quotienten,
+Ideale, Green-Relationen, algebraische Verbände, allgemeine Einbettungen
+und Gleichungsklassen. Die Grundstruktur benötigt nur
+eine abgeschlossene assoziative Verknüpfung; Endlichkeit, ein neutrales Element
+und weitere Strukturaxiome werden nicht vorausgesetzt. Die Auswahl enthält
+keine Beweise und erhebt keinen Vollständigkeitsanspruch. Sie ergänzt den
+[Leitfaden für endliche Halbgruppen zu Band 37](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Leitfaden der Hauptresultate/Bd. 37 - Endliche Halbgruppen - Leitfaden der Hauptresultate.pdf>).
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-semigroup-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 40](<output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Leitfaden der Hauptresultate/Bd. 40 - Gruppen - Leitfaden der Hauptresultate.pdf>)
+ordnet gruppenspezifische Definitionen, Charakterisierungen und Hauptsätze:
+Untergruppen und Nebenklassen, Normalteiler und Isomorphiesätze,
+Gruppenwirkungen und Cayley, Produkte und semidirekte Produkte,
+freie Gruppen und Präsentationen sowie die Rekonstruktion zweier Gruppen
+aus ihren Potenzhalbgruppen. Allgemeine Funktionen-, Relations- und
+Ordnungstheorie sowie Spezialtheorie endlicher oder abelscher Gruppen
+bleiben ihren eigenen Bänden vorbehalten. Die Auswahl enthält keine
+Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-groups-main-results.ps1`.
+
 Die [Lesefassung „Endliche Halbgruppen erkennen“](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>)
 führt anhand einer Dreierhalbgruppe von wiederkehrenden Potenzen und Idealen
 über Multiplikationstafeln bis zur Rekonstruktionsfrage. Band 37 enthält
-die Aussagen und ihre Beweistabellen; die Lesefassung erklärt den Beweisweg
-und die Reichweite des endlichen Suchverfahrens.
+die nummerierten Aussagen; die Tafelbeweise stehen im eigenen Beweisband.
+Die Lesefassung erklärt den Beweisweg und die Reichweite des endlichen Suchverfahrens.
+
+Index und Periode endlicher Halbgruppen besitzen eine eigene
+[Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Index und Periode/Bd. 37 - Index und Periode - Lesefassung.pdf>) und
+[Beweistabellen](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Index und Periode/Bd. 37 - Index und Periode - Beweistabellen.pdf>).
+Das Paar behandelt erste Potenzwiederholungen, die Eindeutigkeit von Index und
+Periode, die periodische Fortsetzung, die Größe der monogenen Unterhalbgruppe
+und idempotente Potenzen. Alle sechzehn öffentlichen Sätze sowie Definitionen
+und Axiome behalten ihre Nummern und Originalaussagen in Band 37. Die
+Beweistabellen geben die vollständige jeweilige Aussage vor dem Beweis wieder
+und ergänzen zwei Wohldefiniertheitssätze unter Kennung `37I`.
 
 Die Multiplikationstafeln und die Isomorphie endlicher Halbgruppen aus
 Band 37 sind in einer eigenen [Lesefassung](<output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Multiplikationstafeln und Isomorphie/Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf>) und
@@ -199,7 +373,8 @@ Das Paar führt von nummerierten Tafeln über Umbenennungen, Orbits und
 Automorphismen zum vollständigen kanonischen Tafelcode und zum endlichen
 Isomorphietest. Definitionen und zentrale Sätze bleiben in Band 37;
 die Beweistabellen enthalten die sieben bisherigen H-Hilfsresultate
-unter ihren unveränderten Nummern. Die Überblickslesefassung verlinkt
+unter ihren unveränderten Nummern sowie ergänzende Hilfssätze mit Kennung 37T.
+Die Überblickslesefassung verlinkt
 diese ausführliche Behandlung.
 
 Die Nullprodukt-Rekonstruktion aus Band 37 besitzt eine

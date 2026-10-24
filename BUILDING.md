@@ -107,12 +107,58 @@ pwsh -NoProfile -File ./scripts/audit-build.ps1 -IncludeMain
 python ./scripts/publish-pdfs.py --audit-only
 ```
 
+## Index und Periode endlicher Halbgruppen
+
+`tex/b37/index-period/` contains the reading and proof companions for B37's
+index/period and idempotent-power sections. All sixteen original public
+theorems, definitions and axioms stay in B37 with their complete formulas,
+numbers and PDF destinations. Only two new well-definedness statements use
+the private prefix `37I`. The immutable snapshot in
+`scripts/index-period-manifest.json` protects the complete B37 registry.
+The reading edition registers no statements.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-index-period-editions.ps1 -Python /path/to/python
+```
+
+`-EditionsOnly` builds just this pair after B37 has been rebuilt. The order is
+`index-period-editions.py prepare`, proof compilation, `prepare-reading`,
+reading compilation, then `audit`. No new B37 bootstrap is needed because no
+old declarations move to this pair. The targeted builder also prepares the
+existing table-isomorphism H imports before any B37 rebuild. Its normal mode
+refreshes the other B37 companions, B00 and the main volume before publishing.
+`-SkipMain`, `-SkipVolumeBuild` and `-SkipPublish` retain their usual meanings.
+
+`build-all.ps1` builds both new B37 pairs before the null-product companion
+and its overview reading. The null-product builder can reuse this pair via
+`-SkipIndexPeriodBuild`; it checks the required artifacts before skipping.
+Publication uses `--index-period-editions` and the folder
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Index und Periode/`.
+A full publication selects both editions when either build artifact exists.
+
+The shared `\RegistryStatement[heading]{ID}` renderer repeats the original
+registered formula and Delta context without a new declaration or number.
+The default heading is “Zu beweisende Aussage”; topic aliases are
+`\IndexPeriodStatement` and `\TableIsomorphismsStatement`. Use them before
+a proof table (inside a split wrapper only before opening its next table).
+They must not be placed inside an open longtable.
+
+```powershell
+python -m unittest discover -s tests -p test_index_period_editions.py
+python -m unittest discover -s tests -p test_table_isomorphisms_editions.py
+```
+
+The edition audit verifies statement ownership, complete original metadata,
+numbering, imported labels and reciprocal PDF links; it is not a formal proof
+checker.
+
 ## Multiplikationstafeln und Isomorphie endlicher Halbgruppen
 
 `tex/b37/table-isomorphisms/` contains the reading and proof companions for
 B37's multiplication-table section. All nine definitions and nine public
-theorems remain in B37. The proof edition owns exactly the seven original
-H-results, with their original semantic IDs, labels, numbers and destinations.
+theorems remain in B37. The proof edition owns the seven original
+H-results, with their original semantic IDs, labels, numbers and destinations,
+and explicitly listed supplementary results under the private prefix `37T`.
 The reading edition registers no statements. The immutable snapshot in
 `scripts/table-isomorphisms-manifest.json` protects the complete B37 baseline;
 only the seven H declarations change owner.
@@ -170,6 +216,316 @@ Das Importskript `finite-semigroups-edition.py` prüft mit `audit`
 Aussagenbesitz, Aktualität der Verweise und PDF-Zielmarken. Die kleine
 exhaustive Prüfung kontrolliert alle Tafeln der Ordnung zwei und das
 Dreierbeispiel; sie ist keine formale Prüfung der allgemeinen Beweise.
+
+## Mengenlehre in ZF: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 03 verwendet den Einstieg
+`editions/b03-main-results.tex` und die Quellen unter `tex/b03/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-set-main-results.ps1
+```
+
+Der Builder prüft den LaTeX-Lauf und die internen Verweise und veröffentlicht
+`Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf` unter
+`output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 03 Mengenlehre/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der eigene Jobname lautet
+`_B03-main-results`; Artefakte liegen in `registry/main-results/`, Konsolenlogs
+in `tmp/main-results/`. Die PDF enthält keine externen PDF-Zielverweise und
+wird direkt kopiert. Der zentrale Publisher registriert sie als reguläre
+Ergänzung; `build-all.ps1` baut den eigenständigen Leitfaden nicht neu.
+
+## Totale Relationen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 04 verwendet
+`editions/b04-main-results.tex` und `tex/b04/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-total-relations-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 04 - Totale Relationen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 04 Totale Relationen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B04-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `4H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Allgemeine Funktionen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 05 verwendet
+`editions/b05-main-results.tex` und `tex/b05/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-functions-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 05 - Funktionen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 05 Funktionen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B05-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `5H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Injektive Funktionen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 06 verwendet
+`editions/b06-main-results.tex` und `tex/b06/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-injective-functions-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 06 - Injektive Funktionen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 06 Injektive Funktionen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B06-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `6H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Surjektive Funktionen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 07 verwendet
+`editions/b07-main-results.tex` und `tex/b07/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-surjective-functions-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 07 Surjektive Funktionen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B07-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `7H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Bijektive Funktionen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 08 verwendet
+`editions/b08-main-results.tex` und `tex/b08/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-bijective-functions-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B08-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `8H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Äquivalenzrelationen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 11 verwendet
+`editions/b11-main-results.tex` und `tex/b11/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-equivalence-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf`
+unter `output/03 Relationen und Funktionen/Ergänzungen/Bd. 11 Äquivalenzrelationen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B11-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `11H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Halbordnungen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 12 verwendet
+`editions/b12-main-results.tex` und `tex/b12/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-partial-orders-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate.pdf`
+unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 12 Halbordnungen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B12-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `12H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Schranken, Infima und Suprema: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 13 verwendet
+`editions/b13-main-results.tex` und `tex/b13/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-bounds-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate.pdf`
+unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 13 Schranken, Infima und Suprema/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B13-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `13H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Paarinfima und Paarsuprema: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 14 verwendet
+`editions/b14-main-results.tex` und `tex/b14/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-pair-extrema-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate.pdf`
+unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 14 Paarinfima und Paarsuprema/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B14-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `14H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Totale Ordnungen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 15 verwendet
+`editions/b15-main-results.tex` und `tex/b15/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-total-orders-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate.pdf`
+unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 15 Totale Ordnungen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B15-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `15H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Halbverbände und Verbände: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 45 verwendet
+`editions/b45-main-results.tex` und `tex/b45/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-lattice-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate.pdf`
+unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B45-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `45H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher
+registriert sie als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Allgemeine Halbgruppen: Leitfaden der Hauptresultate
+
+Die beweisfreie Ergänzung zu Band 28 verwendet die Projektpräambel aus
+`main.tex`, den Einstieg `editions/b28-main-results.tex` und die Quellen unter
+`tex/b28/main-results/`. Der separate Build benötigt keinen Neuaufbau der
+Fachbände:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-semigroup-main-results.ps1
+```
+
+Der Builder prüft den LaTeX-Lauf und die internen Verweise und veröffentlicht
+`Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate.pdf` unter
+`output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname
+`_B28-main-results` trennt die Artefakte von denen der übrigen Leitfäden;
+alle liegen in `registry/main-results/`, die Konsolenlogs in `tmp/main-results/`.
+Die PDF enthält keine externen PDF-Zielverweise und wird direkt kopiert.
+Der zentrale Publisher registriert die Leitfäden als reguläre Ergänzungen.
+`build-all.ps1` baut diese eigenständigen Leitfäden nicht neu.
+
+## Endliche Halbgruppen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung verwendet die Projektpräambel aus
+`main.tex`; ihre Quellen liegen unter `tex/b37/main-results/` mit dem Einstieg
+`editions/b37-main-results.tex`. Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-main-results.ps1
+```
+
+Der Builder prüft den LaTeX-Lauf und die Verweise und veröffentlicht die PDF
+unter `output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Artefakte liegen in
+`registry/main-results/`, Konsolenlogs in `tmp/main-results/`.
+Die selbstständige Ergänzung enthält keine externen PDF-Zielverweise und
+wird deshalb direkt kopiert. Sie ist außerdem im zentralen Publikationsskript
+als reguläre Ergänzung registriert:
+
+```powershell
+python ./scripts/publish-pdfs.py --main-results-only
+```
+
+Dieser zweite Weg veröffentlicht alle in `MAIN_RESULTS_NAMES` registrierten Leitfäden;
+er setzt deren Buildprodukte voraus und prüft die Verweise aller aktuellen PDFs.
+Bei einer vollständigen Veröffentlichung ohne `--main-results-only` wird jeder
+Leitfaden einzeln übernommen, sobald sein Buildprodukt vorliegt.
+`build-all.ps1` baut die Leitfäden nicht neu. Der vollständige Band 37 behält
+seine bisherige Quelle und Ausgabe.
+
+## Gruppen: Leitfaden der Hauptresultate
+
+Die beweisfreie Ergänzung zu Band 40 verwendet die Projektpräambel aus
+`main.tex`, den Einstieg `editions/b40-main-results.tex` und die Quellen
+unter `tex/b40/main-results/`. Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-groups-main-results.ps1
+```
+
+Der Builder prüft den LaTeX-Lauf und die internen Verweise und veröffentlicht
+`Bd. 40 - Gruppen - Leitfaden der Hauptresultate.pdf` unter
+`output/08 Gruppen/Ergänzungen/Bd. 40 Gruppen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B40-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Aussage-Nummern tragen
+den Präfix `40H`; die kanonische Registry von Band 40 bleibt unverändert.
+Die PDF enthält keine externen PDF-Zielverweise und wird direkt kopiert.
+Der zentrale Publisher registriert sie als reguläre Ergänzung;
+`build-all.ps1` baut diesen Leitfaden nicht neu.
 
 ## Standalone volumes / Einzelbände
 

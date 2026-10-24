@@ -1,0 +1,26 @@
+% Navigation zwischen Band 37 und dem Paar über Index und Periode.
+\begin{luacode*}
+  local job = tex.jobname or ""
+  local directory, main_directory = "registry/index-period/", "registry/"
+  if job:match("^_B[0-9][0-9]$") then
+    directory, main_directory = "index-period/", ""
+  elseif job:match("^_B37%-index%-period%-") then
+    directory, main_directory = "", "../"
+  elseif job:match("^_B[0-9][0-9]%-.+") then
+    directory, main_directory = "../index-period/", "../"
+  end
+  tex.sprint("\\gdef\\IndexPeriodEditionDirectory{" .. directory .. "}")
+  tex.sprint("\\gdef\\IndexPeriodMainDirectory{" .. main_directory .. "}")
+\end{luacode*}
+\newcommand{\IndexPeriodReadingLink}{%
+  \href{\IndexPeriodEditionDirectory_B37-index-period-reading.pdf\#index-period.reading}{Lesefassung}}
+\newcommand{\IndexPeriodProofsLink}{%
+  \href{\IndexPeriodEditionDirectory_B37-index-period-proofs.pdf\#index-period.proofs}{Beweistabellen}}
+\newcommand{\IndexPeriodMainLink}{%
+  \href{\IndexPeriodMainDirectory_B37.pdf\#index-period.main}{Einordnung in Band~37}}
+\newcommand{\IndexPeriodProofLink}[1]{%
+  \href{\IndexPeriodEditionDirectory_B37-index-period-proofs.pdf\#index-period.proof.#1}{Zugehörige Beweistabelle}}
+\newcommand{\IndexPeriodProofTarget}[1]{%
+  \par\Needspace{10\baselineskip}\hypertarget{index-period.proof.#1}{}}
+
+\NewDocumentCommand{\IndexPeriodStatement}{O{Zu beweisende Aussage}m}{\RegistryStatement[#1]{#2}}

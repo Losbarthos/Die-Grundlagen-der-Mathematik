@@ -190,6 +190,8 @@ def main():
     sources.extend(sorted((ROOT / "tex/b40/reconstruction").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b37/nullproducts").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b37/table-isomorphisms").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b37/index-period").glob("*.tex")))
+    sources.extend(sorted((ROOT / "tex/b37/structure").glob("*.tex")))
     sources.extend(sorted((ROOT / "tex/b37/tables").glob("*.tex")))
     data = [inventory(p) for p in sources]
     target = ROOT / args.output

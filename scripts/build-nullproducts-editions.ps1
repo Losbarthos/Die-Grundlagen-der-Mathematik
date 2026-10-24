@@ -5,6 +5,7 @@ param(
     [switch]$SkipVolumeBuild,
     [switch]$SkipZeroTransportBuild,
     [switch]$SkipTableIsomorphismsBuild,
+    [switch]$SkipIndexPeriodBuild,
     [switch]$SkipMain,
     [switch]$SkipPublish
 )
@@ -74,6 +75,15 @@ try {
             }
         }
     }
+    if (-not $SkipIndexPeriodBuild) {
+        & (Join-Path $PSScriptRoot 'build-index-period-editions.ps1') -EditionsOnly -Python $Python
+    } else {
+        foreach ($edition in @('proofs', 'reading')) {
+            foreach ($extension in @('aux', 'pdf', 'registry.tsv')) {
+                Assert-Artifact -RelativePath "registry/index-period/_B37-index-period-$edition.$extension" -NotBefore ([datetime]::MinValue) -AllowEmpty:($edition -eq 'reading' -and $extension -eq 'registry.tsv')
+            }
+        }
+    }
     & $Python (Join-Path $PSScriptRoot 'nullproducts-editions.py') prepare
     if ($LASTEXITCODE -ne 0) { throw 'Nullproducts import preparation failed.' }
     Invoke-NullproductsLatexmk -Source 'editions/b37-nullproducts-proofs.tex' -Job '_B37-nullproducts-proofs' -Directory 'registry/nullproducts'
@@ -99,7 +109,7 @@ try {
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B00', 'B37')
     }
     if (-not $SkipPublish) {
-        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport', '--finite-semigroups', '--table-isomorphisms-editions')
+        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--nullproducts', '--zero-transport', '--finite-semigroups', '--table-isomorphisms-editions', '--index-period-editions')
         if ($SkipMain) { $arguments += '--skip-main' }
         & $Python @arguments
         if ($LASTEXITCODE -ne 0) { throw 'Nullproducts publication or link audit failed.' }

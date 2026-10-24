@@ -1,6 +1,6 @@
 # PDF-Übersicht
 
-Stand: 18. Oktober 2026.
+Stand: 23. Oktober 2026.
 
 Diese Übersicht verlinkt die Bände B00 bis B48, den Gesamtband und ausgewählte Begleitfassungen; alle aktuellen PDFs sind im [Bandverzeichnis](../VOLUMES.md) verlinkt. Die Bandnummern und Dateinamen bleiben erhalten; die Ordnernummern legen die Reihenfolge der Themen fest.
 
@@ -35,6 +35,15 @@ Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweil
 | B46 | [Bd. 46 - Frankls Vermutung](<../output/02 Mengenlehre und Mengenfamilien/Bd. 46 - Frankls Vermutung.pdf>) |
 | B48 | [Bd. 48 - Axiomatische Mengenlehre II](<../output/02 Mengenlehre und Mengenfamilien/Bd. 48 - Axiomatische Mengenlehre II.pdf>) |
 
+### Ergänzungen / Bd. 03 Mengenlehre / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl wichtiger Definitionen und Sätze über Mengen in ZF,
+ohne Auswahlaxiom und unter Beachtung der Themenzuständigkeit anderer Bände.
+
+| Darstellung | PDF |
+|---|---|
+| B03 Leitfaden | [Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate](<../output/02 Mengenlehre und Mengenfamilien/Ergänzungen/Bd. 03 Mengenlehre/Leitfaden der Hauptresultate/Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf>) |
+
 ## 03 Relationen und Funktionen
 
 | Band | PDF |
@@ -46,12 +55,60 @@ Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweil
 | B08 | [Bd. 08 - Bijektive Funktionen](<../output/03 Relationen und Funktionen/Bd. 08 - Bijektive Funktionen.pdf>) |
 | B11 | [Bd. 11 - Äquivalenzrelationen](<../output/03 Relationen und Funktionen/Bd. 11 - Äquivalenzrelationen.pdf>) |
 
+### Ergänzungen / Bd. 05 Funktionen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl wichtiger Definitionen, Charakterisierungen und Sätze
+über allgemeine Funktionen auf mengentheoretischer Grundlage ohne Auswahlaxiom.
+
+| Darstellung | PDF |
+|---|---|
+| B05 Leitfaden | [Bd. 05 - Funktionen - Leitfaden der Hauptresultate](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 05 Funktionen/Leitfaden der Hauptresultate/Bd. 05 - Funktionen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 06 Injektive Funktionen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl wichtiger Definitionen, Charakterisierungen und Folgerungen
+speziell für injektive Funktionen auf Mengen, ohne Auswahlaxiom und weitere
+Strukturtheorien.
+
+| Darstellung | PDF |
+|---|---|
+| B06 Leitfaden | [Bd. 06 - Injektive Funktionen - Leitfaden der Hauptresultate](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 06 Injektive Funktionen/Leitfaden der Hauptresultate/Bd. 06 - Injektive Funktionen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 07 Surjektive Funktionen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl wichtiger Definitionen, Charakterisierungen und Folgerungen
+speziell für surjektive Funktionen auf Mengen, ohne Auswahlaxiom und weitere
+Strukturtheorien.
+
+| Darstellung | PDF |
+|---|---|
+| B07 Leitfaden | [Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 07 Surjektive Funktionen/Leitfaden der Hauptresultate/Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate.pdf>) |
+
 ### Ergänzungen / Bd. 08 Bijektive Funktionen / Cantor-Bernstein
 
 | Darstellung | PDF |
 |---|---|
 | B08 Beweistabellen | [Bd. 08 - Cantor-Bernstein - Beweistabellen](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Beweistabellen.pdf>) |
 | B08 Lesefassung | [Bd. 08 - Cantor-Bernstein - Lesefassung](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein/Bd. 08 - Cantor-Bernstein - Lesefassung.pdf>) |
+
+### Ergänzungen / Bd. 08 Bijektive Funktionen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Charakterisierungen und Hauptresultate zu Bijektionen
+zwischen Mengen, ohne Auswahlaxiom und zusätzliche Strukturtheorien.
+
+| Darstellung | PDF |
+|---|---|
+| B08 Leitfaden | [Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 08 Bijektive Funktionen/Leitfaden der Hauptresultate/Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 11 Äquivalenzrelationen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Folgerungen aus den Äquivalenzaxiomen, ohne allgemeine Funktionstheorie,
+Ordnungsrelationen oder zusätzliche Strukturaxiome.
+
+| Darstellung | PDF |
+|---|---|
+| B11 Leitfaden | [Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate](<../output/03 Relationen und Funktionen/Ergänzungen/Bd. 11 Äquivalenzrelationen/Leitfaden der Hauptresultate/Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf>) |
 
 ## 04 Zahlen und Folgen
 
@@ -73,6 +130,68 @@ Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweil
 | B15 | [Bd. 15 - Totale Ordnungen](<../output/05 Ordnungen und Verbände/Bd. 15 - Totale Ordnungen.pdf>) |
 | B16 | [Bd. 16 - Wohlordnungen und Auswahlaxiom](<../output/05 Ordnungen und Verbände/Bd. 16 - Wohlordnungen und Auswahlaxiom.pdf>) |
 | B45 | [Bd. 45 - Halbverbände und Verbände](<../output/05 Ordnungen und Verbände/Bd. 45 - Halbverbände und Verbände.pdf>) |
+
+### Ergänzungen / Bd. 12 Halbordnungen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Folgerungen aus den Halbordnungsaxiomen in ZF, ohne allgemeine
+Funktionstheorie, Äquivalenzrelationen oder zusätzliche Strukturaxiome.
+Schranken, Infima, Suprema, Verbände und totale Ordnungen bleiben in
+ihren eigenen Bänden.
+
+| Darstellung | PDF |
+|---|---|
+| B12 Leitfaden | [Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate](<../output/05 Ordnungen und Verbände/Ergänzungen/Bd. 12 Halbordnungen/Leitfaden der Hauptresultate/Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 13 Schranken, Infima und Suprema / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Folgerungen zu Schranken, Infima und Suprema in einer gegebenen
+Halbordnung. Allgemeine Funktionstheorie, Äquivalenzrelationen,
+allgemeine Halbordnungstheorie und zusätzliche Strukturaxiome bleiben
+in ihren eigenen Bänden.
+
+| Darstellung | PDF |
+|---|---|
+| B13 Leitfaden | [Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate](<../output/05 Ordnungen und Verbände/Ergänzungen/Bd. 13 Schranken, Infima und Suprema/Leitfaden der Hauptresultate/Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 14 Paarinfima und Paarsuprema / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Rechenregeln für Paarinfima und Paarsuprema bei ausdrücklich genannter
+Existenz. Allgemeine Funktionstheorie, Äquivalenzrelationen,
+Halbordnungen, allgemeine Resultate zu Infima und Suprema sowie
+zusätzliche Strukturaxiome bleiben in ihren eigenen Bänden.
+
+| Darstellung | PDF |
+|---|---|
+| B14 Leitfaden | [Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate](<../output/05 Ordnungen und Verbände/Ergänzungen/Bd. 14 Paarinfima und Paarsuprema/Leitfaden der Hauptresultate/Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 15 Totale Ordnungen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Folgerungen totaler Vergleichbarkeit: Trichotomie, Minima und Maxima,
+endliche geordnete Teilmengen, Intervalle, konvexe Teilmengen,
+Anfangs- und Endabschnitte, Schnitte und ordnungsspezifische Konstruktionen.
+Allgemeine Funktionstheorie, Äquivalenzrelationen, Halbordnungen,
+allgemeine Resultate zu Infima und Suprema sowie zusätzliche
+Strukturaxiome bleiben in ihren eigenen Bänden.
+
+| Darstellung | PDF |
+|---|---|
+| B15 Leitfaden | [Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate](<../output/05 Ordnungen und Verbände/Ergänzungen/Bd. 15 Totale Ordnungen/Leitfaden der Hauptresultate/Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 45 Halbverbände und Verbände / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl der Definitionen, Charakterisierungen und zentralen
+Folgerungen der Halbverbands- und Verbandsaxiome. Allgemeine Funktionstheorie,
+Äquivalenzrelationen, Halbordnungen, totale Ordnungen und allgemeine Resultate
+zu Infima und Suprema bleiben in ihren eigenen Bänden. Zusätzliche
+axiomatische Strukturen werden nicht behandelt.
+
+| Darstellung | PDF |
+|---|---|
+| B45 Leitfaden | [Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate](<../output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Leitfaden der Hauptresultate/Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate.pdf>) |
 
 ## 06 Graphen, Bäume und Wörter
 
@@ -101,6 +220,15 @@ Prosabeweisen unter `Ergänzungen/Bd. NN Titel/experimentell/<Thema>/` im jeweil
 | B37 | [Bd. 37 - Endliche Halbgruppen](<../output/07 Halbgruppen und Monoide/Bd. 37 - Endliche Halbgruppen.pdf>) |
 | B38 | [Bd. 38 - Monoide](<../output/07 Halbgruppen und Monoide/Bd. 38 - Monoide.pdf>) |
 
+### Ergänzungen / Bd. 28 Halbgruppen / Leitfaden der Hauptresultate
+
+Beweisfreie Auswahl wichtiger Definitionen und Sätze über allgemeine
+Halbgruppen ohne zusätzliche Strukturaxiome oder Endlichkeitsannahme.
+
+| Darstellung | PDF |
+|---|---|
+| B28 Leitfaden | [Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 28 Halbgruppen/Leitfaden der Hauptresultate/Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate.pdf>) |
+
 ### Ergänzungen / Bd. 31 Rechtecksbänder / e-Koordinatenabbildung
 
 Lesefassung zu Abschnitt 31.2.2 mit Beispielen, sprachlichen Beweisen,
@@ -117,6 +245,19 @@ zu allen sechzehn Sätzen.
 | Darstellung | PDF |
 |---|---|
 | B37 Lesefassung | [Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Endliche Halbgruppen/Bd. 37 - Endliche Halbgruppen erkennen - Lesefassung.pdf>) |
+
+### Ergänzungen / Bd. 37 Endliche Halbgruppen / Leitfaden der Hauptresultate
+
+| Darstellung | PDF |
+|---|---|
+| B37 Leitfaden | [Bd. 37 - Endliche Halbgruppen - Leitfaden der Hauptresultate](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Leitfaden der Hauptresultate/Bd. 37 - Endliche Halbgruppen - Leitfaden der Hauptresultate.pdf>) |
+
+### Ergänzungen / Bd. 37 Endliche Halbgruppen / Index und Periode
+
+| Darstellung | PDF |
+|---|---|
+| B37 Lesefassung | [Bd. 37 - Index und Periode - Lesefassung](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Index und Periode/Bd. 37 - Index und Periode - Lesefassung.pdf>) |
+| B37 Beweistabellen | [Bd. 37 - Index und Periode - Beweistabellen](<../output/07 Halbgruppen und Monoide/Ergänzungen/Bd. 37 Endliche Halbgruppen/Index und Periode/Bd. 37 - Index und Periode - Beweistabellen.pdf>) |
 
 ### Ergänzungen / Bd. 37 Endliche Halbgruppen / Multiplikationstafeln und Isomorphie
 

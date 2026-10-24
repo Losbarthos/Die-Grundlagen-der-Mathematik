@@ -1,0 +1,21 @@
+% Vollständige Originalaussagen aus den geladenen Registern wiedergeben.
+% Dieser Renderer erzeugt keine Deklaration, Nummer oder lokale Registryzeile.
+\NewDocumentCommand{\RegistryStatement}{O{Zu beweisende Aussage}m}{%
+  \par\begingroup
+  \renewcommand{\ProofReferencesTitle}{#1}
+  \directlua{
+    local id = "\luaescapestring{#2}"
+    local identity = thmlookup.by_id[id]
+    local label = identity and identity.label or id
+    local record = thmlookup.by_label[label]
+    if not record or not record.display or record.display == "" then
+      tex.error("Original statement missing: " .. id,
+        {"Rebuild the owning volume and refresh this edition's registry imports."})
+    else
+      tex.sprint("\\ProofReferencesTable{\\ProofReferenceEntry{" ..
+        record.display .. "}{" .. (record.delta or "") .. "}{" ..
+        record.env .. "}{" .. label .. "}{" .. (record.number or "?") .. "}}")
+    end
+  }%
+  \endgroup
+}

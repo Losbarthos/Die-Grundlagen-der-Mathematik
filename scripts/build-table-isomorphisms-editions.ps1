@@ -71,7 +71,7 @@ try {
         Assert-CleanLog -RelativePath "$base.log"
         Assert-CleanDebugLog -RelativePath "$base.debug.log"
         Assert-CleanPdfText -RelativePath "$base.pdf"
-        Assert-RegistryLabelsInAux -RegistryPath "$base.registry.tsv" -AuxPath "$base.aux" -ExpectedNumberPrefix '37'
+        Assert-RegistryLabelsInAux -RegistryPath "$base.registry.tsv" -AuxPath "$base.aux" -ExpectedNumberPrefixes @('37', '37T')
     }
     if (-not $SkipMain) {
         Invoke-TableIsomorphismsLatexmk -Source 'main.tex' -Job 'main' -Directory '.'
@@ -80,7 +80,7 @@ try {
         & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @('B00', 'B37')
     }
     if (-not $SkipPublish) {
-        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--table-isomorphisms-editions', '--nullproducts', '--zero-transport', '--finite-semigroups')
+        $arguments = @((Join-Path $PSScriptRoot 'publish-pdfs.py'), '--bands', 'B00', 'B37', '--table-isomorphisms-editions', '--index-period-editions', '--nullproducts', '--zero-transport', '--finite-semigroups')
         if ($SkipMain) { $arguments += '--skip-main' }
         & $Python @arguments
         if ($LASTEXITCODE -ne 0) { throw 'TableIsomorphisms publication or link audit failed.' }

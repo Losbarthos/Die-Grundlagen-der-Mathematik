@@ -98,6 +98,10 @@ RECONSTRUCTION_NAMES = {
     "_B40-reconstruction-reading.pdf": "Bd. 40 - Gruppenrekonstruktion - Lesefassung.pdf",
     "_B40-reconstruction-proofs.pdf": "Bd. 40 - Gruppenrekonstruktion - Beweistabellen.pdf",
 }
+INDEX_PERIOD_NAMES = {
+    "_B37-index-period-reading.pdf": "Bd. 37 - Index und Periode - Lesefassung.pdf",
+    "_B37-index-period-proofs.pdf": "Bd. 37 - Index und Periode - Beweistabellen.pdf",
+}
 TABLE_ISOMORPHISMS_NAMES = {
     "_B37-table-isomorphisms-reading.pdf": "Bd. 37 - Multiplikationstafeln und Isomorphie - Lesefassung.pdf",
     "_B37-table-isomorphisms-proofs.pdf": "Bd. 37 - Multiplikationstafeln und Isomorphie - Beweistabellen.pdf",
@@ -126,17 +130,37 @@ TWO_PRODUCTS_NAMES = {
 CONTEXT_PROFILES_NAMES = {
     "_B37-context-profiles-reading.pdf": "Bd. 37 - Kontextprofile und Induktion - Lesefassung.pdf",
 }
+MAIN_RESULTS_NAMES = {
+    "_B03-main-results.pdf": "Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf",
+    "_B04-main-results.pdf": "Bd. 04 - Totale Relationen - Leitfaden der Hauptresultate.pdf",
+    "_B05-main-results.pdf": "Bd. 05 - Funktionen - Leitfaden der Hauptresultate.pdf",
+    "_B06-main-results.pdf": "Bd. 06 - Injektive Funktionen - Leitfaden der Hauptresultate.pdf",
+    "_B07-main-results.pdf": "Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate.pdf",
+    "_B08-main-results.pdf": "Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate.pdf",
+    "_B09-main-results.pdf": "Bd. 09 - Auswahlprinzip - Leitfaden der Hauptresultate.pdf",
+    "_B11-main-results.pdf": "Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf",
+    "_B12-main-results.pdf": "Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate.pdf",
+    "_B13-main-results.pdf": "Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate.pdf",
+    "_B14-main-results.pdf": "Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate.pdf",
+    "_B15-main-results.pdf": "Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate.pdf",
+    "_B28-main-results.pdf": "Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate.pdf",
+    "_B37-main-results.pdf": "Bd. 37 - Endliche Halbgruppen - Leitfaden der Hauptresultate.pdf",
+    "_B40-main-results.pdf": "Bd. 40 - Gruppen - Leitfaden der Hauptresultate.pdf",
+    "_B45-main-results.pdf": "Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate.pdf",
+    "_B47-main-results.pdf": "Bd. 47 - Metrische Räume und Vollständigkeit - Leitfaden der Hauptresultate.pdf",
+}
 INDEPENDENT_READINGS = {
     "three-products": THREE_PRODUCTS_NAMES,
     "two-products": TWO_PRODUCTS_NAMES,
     "context-profiles": CONTEXT_PROFILES_NAMES,
+    "main-results": MAIN_RESULTS_NAMES,
 }
-INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES}
+INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES, **MAIN_RESULTS_NAMES}
 MANUAL_READING_NAMES = {
     "context-equivalence-reading.pdf": "Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf",
 }
-EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(INDEPENDENT_READING_NAMES.values()) | set(MANUAL_READING_NAMES.values())
-SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_ISOMORPHISMS_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **TABLE_ISOMORPHISMS_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
+EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(THREE_PRODUCTS_NAMES.values()) | set(TWO_PRODUCTS_NAMES.values()) | set(CONTEXT_PROFILES_NAMES.values()) | set(MANUAL_READING_NAMES.values())
+SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_ISOMORPHISMS_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **TABLE_ISOMORPHISMS_NAMES, **INDEX_PERIOD_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
     **{name: "Mogiljanskaja-Gegenbeispiel" for name in MOGILJANSKAJA_NAMES.values()},
@@ -152,11 +176,13 @@ SUPPLEMENT_TOPICS = {
     **{name: "Gruppenrekonstruktion" for name in RECONSTRUCTION_NAMES.values()},
     **{name: "Nullprodukt-Rekonstruktion" for name in NULLPRODUCTS_NAMES.values()},
     **{name: "Multiplikationstafeln und Isomorphie" for name in TABLE_ISOMORPHISMS_NAMES.values()},
+    **{name: "Index und Periode" for name in INDEX_PERIOD_NAMES.values()},
     **{name: "Nullelement-Transport" for name in ZERO_TRANSPORT_NAMES.values()},
     **{name: "Endliche Halbgruppen" for name in FINITE_SEMIGROUPS_NAMES.values()},
     **{name: "Dreiprodukt-Rekonstruktion" for name in THREE_PRODUCTS_NAMES.values()},
     **{name: "Zweiprodukt-Rekonstruktion" for name in TWO_PRODUCTS_NAMES.values()},
     **{name: "Kontextprofile und Induktion" for name in CONTEXT_PROFILES_NAMES.values()},
+    **{name: "Leitfaden der Hauptresultate" for name in MAIN_RESULTS_NAMES.values()},
     **{name: "Kontextäquivalenz" for name in MANUAL_READING_NAMES.values()},
     **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
 }
@@ -597,6 +623,8 @@ def main():
                         help="Also publish both Frankl special-case companion editions; require both build artifacts.")
     parser.add_argument("--reconstruction", action="store_true",
                         help="Also publish both group-reconstruction companion editions; require both build artifacts.")
+    parser.add_argument("--index-period-editions", action="store_true",
+                        help="Also publish both B37 index/period editions; require both build artifacts.")
     parser.add_argument("--table-isomorphisms-editions", action="store_true",
                         help="Also publish both B37 table-isomorphism editions; require both build artifacts.")
     parser.add_argument("--nullproducts", action="store_true",
@@ -624,7 +652,7 @@ def main():
     only_edition = args.coordinates_only or any(
         getattr(args, directory.replace("-", "_") + "_only") for directory in INDEPENDENT_READINGS)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.bands or only_edition:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.bands or only_edition:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
@@ -632,7 +660,7 @@ def main():
         args.skip_main or args.bands or args.csb_pilot or args.mogiljanskaja
         or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences
         or args.integers or args.semilattice or args.frankl
-        or args.reconstruction or args.table_isomorphisms_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
+        or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
         or args.coordinates
     ):
         parser.error("Single-edition publication cannot be combined with other publication selections")
@@ -822,6 +850,18 @@ def main():
     all_publications.extend(publication for publication in table_isomorphisms_publications
                             if publish_table_isomorphisms or publication[1].is_file())
 
+    index_period_publications = [
+        (ROOT / "registry" / "index-period" / source, publication_path(destination))
+        for source, destination in INDEX_PERIOD_NAMES.items()
+    ]
+    publish_index_period = args.index_period_editions or (
+        full_publish and any(source.is_file() for source, _ in index_period_publications)
+    )
+    if publish_index_period:
+        publications.extend(index_period_publications)
+    all_publications.extend(publication for publication in index_period_publications
+                            if publish_index_period or publication[1].is_file())
+
     nullproducts_publications = [
         (ROOT / "registry" / "nullproducts" / source, publication_path(destination))
         for source, destination in NULLPRODUCTS_NAMES.items()
@@ -880,6 +920,13 @@ def main():
             for source, destination in edition_names.items()
         ]
         selected = getattr(args, directory.replace("-", "_") + "_only")
+        if directory == "main-results" and full_publish:
+            # The main-results guides are built independently.
+            publications.extend(publication for publication in independent_publications
+                                if publication[0].is_file())
+            all_publications.extend(publication for publication in independent_publications
+                                    if publication[0].is_file() or publication[1].is_file())
+            continue
         publish_reading = selected or (full_publish and any(source.is_file()
                                                            for source, _ in independent_publications))
         if publish_reading:
