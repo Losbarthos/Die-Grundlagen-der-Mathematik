@@ -1,0 +1,39 @@
+% Private Newton registry: no main-volume or guide statements are redeclared.
+\begin{luacode*}
+  local directory = "registry/newton/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, band in ipairs({"B01", "B02", "B10", "B19"}) do
+    local base = "registry/_" .. band
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. band .. ".pdf]")
+    thmlookup.load_registry_file(base .. ".registry.tsv")
+  end
+\end{luacode*}
+\externaldocument{registry/main-results/_B21-main-results}[../main-results/_B21-main-results.pdf]
+\renewcommand{\FormulaBandID}{21N}
+\setcounter{file}{21}
+\renewcommand{\theformulaThm}{21N.\arabic{formulaThm}}
+\renewcommand{\theHtable}{newton.proofs.\arabic{table}}
+\renewcommand{\theHfigure}{newton.proofs.\arabic{figure}}
+\setlength{\emergencystretch}{2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.35em plus .1em minus .1em}
+\clubpenalty=10000
+\widowpenalty=10000
+\allowdisplaybreaks[1]
+\newcommand{\Nseq}{\mathbb R^{\mathbb N}}
+\newcommand{\Nlemma}[4]{%
+  \par\Needspace{9\baselineskip}%
+  \hypertarget{newton.lemma.#1}{}\FormulaThmAuto[#2; \ensuremath{\mathsf{#1}}]{#3}[#3][#4]%
+
+}
+\newcommand{\Nref}[1]{\hyperlink{newton.lemma.#1}{\ensuremath{\mathsf{#1}}}}
+\newcommand{\Nwhy}[1]{\text{\parbox[t]{\linewidth}{\raggedright #1}}}
+\newcommand{\NR}{\hyperref[thm:auto:19.7.1.1]{\ensuremath{\mathsf R}}}
+\newcommand{\NF}{\hyperref[thm:auto:10.4.10.1]{\ensuremath{\mathsf F}}}
+\newcommand{\NI}[1]{\hyperref[thm:auto:10.4.4.17]{\mathsf I}(#1)}
+\newcommand{\Nguide}{\hyperref[b21guide:thm:newton]{Theorem~\ref*{b21guide:thm:newton}}}
+
+\usepackage{etoolbox}
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{} 

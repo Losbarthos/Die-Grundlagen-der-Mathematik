@@ -54,7 +54,7 @@ Dreiprodukt-Rekonstruktion und zu Kontextprofilen und Induktion aus Band 37.
 | `01 Logik` | Bd. 01–02 |
 | `02 Mengenlehre und Mengenfamilien` | Bd. 03, 09, 20, 46, 48; Leitfaden unter `Ergänzungen/Bd. 03 Mengenlehre/Leitfaden der Hauptresultate`; Begleitfassungen unter `Ergänzungen/Bd. 46 Frankls Vermutung/Frankls Spezialfälle` |
 | `03 Relationen und Funktionen` | Bd. 04–08, 11; Leitfäden unter `Ergänzungen/Bd. 04 Totale Relationen/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 05 Funktionen/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 06 Injektive Funktionen/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 07 Surjektive Funktionen/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 08 Bijektive Funktionen/Leitfaden der Hauptresultate` und `Ergänzungen/Bd. 11 Äquivalenzrelationen/Leitfaden der Hauptresultate`; Cantor–Bernstein-Begleitfassungen unter `Ergänzungen/Bd. 08 Bijektive Funktionen/Cantor-Bernstein` |
-| `04 Zahlen und Folgen` | Bd. 10, 17–19, 21; Begleitfassungen unter `Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz` und `Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen` |
+| `04 Zahlen und Folgen` | Bd. 10, 17–19, 21; Leitfäden unter `Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfaden der Hauptresultate` und `Ergänzungen/Bd. 21 Folgen/Leitfaden der Hauptresultate`; Begleitfassungen unter `Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz` und `Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen` |
 | `05 Ordnungen und Verbände` | Bd. 12–16, 45; Leitfäden unter `Ergänzungen/Bd. 12 Halbordnungen/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 13 Schranken, Infima und Suprema/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 14 Paarinfima und Paarsuprema/Leitfaden der Hauptresultate`, `Ergänzungen/Bd. 15 Totale Ordnungen/Leitfaden der Hauptresultate` und `Ergänzungen/Bd. 45 Halbverbände und Verbände/Leitfaden der Hauptresultate`; Begleitfassungen unter `Ergänzungen/Bd. 45 Halbverbände und Verbände/Halbverbände und Ordnung` |
 | `06 Graphen, Bäume und Wörter` | Bd. 22–27 |
 | `07 Halbgruppen und Monoide` | Bd. 28–38; Mogiljanskaja-Begleitfassungen unter `Ergänzungen/Bd. 28 Halbgruppen/Mogiljanskaja-Gegenbeispiel`; drei experimentelle Rekonstruktions-Lesefassungen unter `Ergänzungen/Bd. 37 Endliche Halbgruppen/experimentell` |
@@ -307,6 +307,28 @@ Die Auswahl erhebt keinen Vollständigkeitsanspruch.
 Der separate Build und die Veröffentlichung erfolgen mit
 `pwsh -NoProfile -File ./scripts/build-bijective-functions-main-results.ps1`.
 
+## Natürliche Zahlen: Leitfaden der Hauptresultate
+
+Die beweisfreie Ergänzung zu Band 10 ordnet die zentralen Definitionen
+und Folgerungen aus den Peano-Grundlagen: Nachfolger, Induktion und
+Rekursion, natürliche Arithmetik und konkrete Vergleichsgesetze,
+Potenzen, endliche Summen und Produkte, Teilbarkeit, Primzahlen und
+Stellenwertdarstellungen. Weitere Hauptresultate betreffen natürliche
+Wurzelwerte, Primexponenten, Restgleichungen, Darstellungen durch Quadrate,
+pythagoreische Tripel, Teileranzahl, Teilersumme und Eulers Funktion sowie
+Potenzperioden, primitive Wurzeln, Carmichael-Zahlen, quadratische Restwerte
+und gerade vollkommene Zahlen.
+Allgemeine Funktionssätze, allgemeine
+Ordnungs- und Äquivalenzrelationen sowie andere Zahlbereiche werden
+nicht entwickelt. Die Auswahl erhebt keinen Vollständigkeitsanspruch.
+
+| Ergänzung | Datei |
+| --- | --- |
+| Leitfaden der Hauptresultate | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfaden der Hauptresultate/Bd. 10 - Natürliche Zahlen - Leitfaden der Hauptresultate.pdf>) |
+
+Der separate Build und die Veröffentlichung erfolgen mit
+`pwsh -NoProfile -File ./scripts/build-natural-numbers-main-results.ps1`.
+
 ## Äquivalenzrelationen: Leitfaden der Hauptresultate
 
 Die beweisfreie Ergänzung zu Band 11 sammelt die Definitionen,
@@ -394,6 +416,50 @@ Vollständigkeitsanspruch.
 
 Der separate Build und die Veröffentlichung erfolgen mit
 `pwsh -NoProfile -File ./scripts/build-total-orders-main-results.ps1`.
+
+## Folgen: Leitfaden der Hauptresultate
+
+Die beweisfreie Ergänzung zu Band 21 behandelt endliche Folgen und Rekursion,
+Rest- und Teilfolgen sowie Konvergenz reeller Folgen. Zu den Hauptresultaten
+gehören Grenzwertregeln, Bolzano–Weierstraß, Häufungswert- und Cauchy-Kriterien,
+monotone Konvergenz, bestimmte Divergenz, Standardgrenzwerte und Cesàro-Mittel.
+Allgemeine Funktions- und Ordnungstheorie sowie Infimums- und Supremumssätze
+werden nicht wiederholt; andere axiomatische Zielstrukturen bleiben ausgespart.
+
+| Ergänzung | Datei |
+| --- | --- |
+| Leitfaden der Hauptresultate | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Leitfaden der Hauptresultate/Bd. 21 - Folgen - Leitfaden der Hauptresultate.pdf>) |
+
+Der separate Build und die Veröffentlichung erfolgen mit
+`pwsh -NoProfile -File ./scripts/build-sequences-main-results.ps1`.
+
+## Folgen: Newtondarstellung und endliche Differenzen
+
+Die [Lesefassung zu Theorem 21H.5.4.1](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Newtondarstellung und endliche Differenzen/Bd. 21 - Newtondarstellung und endliche Differenzen - Lesefassung.pdf>)
+erklärt die Herkunft der Newtondarstellung, die Rolle der Anfangsdifferenzen
+und den Abbruch bei polynomialen Folgen, mit Beispielen und historischen Originalquellen.
+Die separaten [Beweistabellen](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Newtondarstellung und endliche Differenzen/Bd. 21 - Newtondarstellung und endliche Differenzen - Beweistabellen.pdf>)
+führen die benötigten Hilfsschritte und den vollständigen Hauptbeweis aus.
+Im Leitfaden bleibt die Aussage mit Verweisen auf beide Ergänzungen.
+Beide Begleitfassungen stehen im regulären Ergänzungsordner.
+
+Build: `pwsh -NoProfile -File ./scripts/build-newton-editions.ps1`.
+Der bisherige Aufruf `build-newton-reading.ps1` bleibt als Einstieg erhalten.
+Leitfaden, Lesefassung und Beweistabellen sind miteinander verlinkt.
+
+## Folgen: Teleskopformel und Abelsche partielle Summation
+
+Die [Lesefassung zu Theorem 21H.5.5.1](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/experimentell/Teleskopformel und Abelsche partielle Summation/Bd. 21 - Teleskopformel und Abelsche partielle Summation - Lesefassung.pdf>)
+erklärt das Teleskopieren und die Umformung gewichteter Summen durch
+Partialsummen. Kurze Prosabeweise, anschauliche Beispiele und historische
+Originalquellen führen zu den Kernideen für spätere Beweistabellen.
+Im Leitfaden bleibt die Satzaussage mit Verweis auf die Ergänzung.
+Die Lesefassung steht bis zur Ergänzung formaler Beweistabellen im
+experimentellen Ergänzungsordner.
+
+Build: `pwsh -NoProfile -File ./scripts/build-abel-reading.ps1`.
+Leitfaden und Lesefassung sind miteinander verlinkt und werden gemeinsam
+veröffentlicht.
 
 ## Halbverbände und Verbände: Leitfaden der Hauptresultate
 

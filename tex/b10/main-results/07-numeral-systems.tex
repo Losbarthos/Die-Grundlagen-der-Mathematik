@@ -1,0 +1,228 @@
+\chapter{Ziffern und Stellenwertsysteme}
+\label{b10guide:ch:numerals}
+
+Dieses Kapitel behandelt natürliche Zahlen und ihre endlichen Zahlzeichen.
+Die Indexschreibweise für Ziffern führt keine allgemeine Folgentheorie ein.
+Die Begriffe knüpfen an das letzte Kapitel des Hauptbands an;
+Existenz, Eindeutigkeit und Ziffernauswertung werden hier als
+zentrale Folgerungen ergänzt. Zum Abgleich dient \cite{natdigits}.
+
+\section{Basis, Auswertung und Normalform}
+
+\begin{definition}[Basis, Ziffern und Zahlzeichen]
+\label{b10guide:def:digits}
+Eine \emph{Basis} ist eine natürliche Zahl $b\ge2$.
+Die zugehörigen Ziffern sind die Elemente von
+$D_b:=\{d\in\mathbb N\mid d<b\}$.
+Für eine Länge $k\ge1$ sind Zifferndaten eine Funktion
+\[
+ d\colon\{i\in\mathbb N\mid i<k\}\longrightarrow D_b,
+ \qquad d_i:=d(i).
+\]
+Das Zahlzeichen $(d_{k-1}\cdots d_1d_0)_b$ hat den Wert
+\[
+ V_b(d):=\sum_{i<k}d_i b^i.
+\]
+Die rechte Ziffer gehört also zur Potenz $b^0=1$.
+Für $k=1$ wird nur $(d_0)_b$ geschrieben.
+\end{definition}
+
+\begin{definition}[Normalisierte Darstellung]
+Eine Darstellung der Länge $k\ge1$ heißt \emph{normalisiert},
+wenn $k=1$ oder $d_{k-1}\ne0$ gilt.
+Die Darstellung der Null ist das einzelne Zahlzeichen $(0)_b$.
+\end{definition}
+
+\begin{theorem}[Existenz und Eindeutigkeit der Stellenwertdarstellung]
+\label{b10guide:thm:digits}
+Für jede Basis $b\ge2$ und jede Zahl $n\in\mathbb N$ gibt es
+genau eine Länge $k\ge1$ und genau eine normalisierte Ziffernbelegung
+$d$ dieser Länge mit
+\[
+ n=\sum_{i<k}d_i b^i.
+\]
+Für $n>0$ ist die höchste Ziffer $d_{k-1}$ positiv.
+Ohne die Normalisierungsbedingung sind zusätzliche führende Nullen möglich.
+\end{theorem}
+
+\begin{theorem}[Stellenzahl und Potenzschranken]
+Für jede Ziffernbelegung $d$ der Länge $k\ge1$ gilt
+\[
+ 0\le V_b(d)<b^k.
+\]
+Für eine normalisierte Darstellung einer Zahl $n>0$ gilt genauer
+\[
+ b^{k-1}\le n<b^k.
+\]
+Diese beiden Ungleichungen charakterisieren ihre Stellenzahl $k$.
+\end{theorem}
+
+\section{Ziffern auswerten und zurückgewinnen}
+
+\begin{theorem}[Ziffern durch Quotienten und Reste]
+Ist $n=V_b(d)$ eine Darstellung der Länge $k\ge1$, so gilt
+für $0\le i<k$
+\[
+ d_i=\bigl(n\mathbin{\mathrm{div}}b^i\bigr)\mathbin{\mathrm{mod}}b.
+\]
+Für jedes $j\in\mathbb N$ mit $j\le k$ gilt außerdem
+\[
+ n\mathbin{\mathrm{mod}}b^j=\sum_{i<j}d_i b^i,
+ \qquad
+ n\mathbin{\mathrm{div}}b^k=0.
+\]
+Bei $j=0$ sind beide Seiten der ersten Gleichung $0$.
+\end{theorem}
+
+\begin{theorem}[Horner-Auswertung]
+Für Ziffern $d_0,\ldots,d_{k-1}$ mit $k\ge1$ seien
+\[
+ h_0=0,\qquad h_{j+1}=b h_j+d_{k-1-j}\quad(0\le j<k).
+\]
+Dann ist $h_k=V_b(d)$.
+\end{theorem}
+
+\begin{theorem}[Führende Nullen, Stellenverschiebung und Aneinanderfügen]
+Eine führende Null ändert den Wert eines Zahlzeichens nicht.
+Das Anhängen von $r$ Nullen rechts multipliziert seinen Wert mit $b^r$.
+Für Ziffernblöcke $d$ der Länge $k\ge1$ und $e$ der Länge
+$\ell\ge1$ gilt
+\[
+ V_b(d_{k-1}\cdots d_0e_{\ell-1}\cdots e_0)
+ =b^\ell V_b(d)+V_b(e).
+\]
+Hier bezeichnet $V_b$ auf einem ausgeschriebenen Ziffernblock
+dieselbe Stellenwertsumme wie in Definition~\ref{b10guide:def:digits}.
+\end{theorem}
+
+\begin{theorem}[Zahlenvergleich an der höchsten abweichenden Stelle]
+Haben zwei verschiedene Ziffernbelegungen $d,e$ dieselbe Länge $k$,
+und ist $j<k$ die höchste Stelle mit $d_j\ne e_j$, so gilt
+\[
+ V_b(d)<V_b(e)\quad\Longleftrightarrow\quad d_j<e_j.
+\]
+Bei normalisierten Darstellungen positiver Zahlen ist die Zahl
+mit weniger Stellen stets die kleinere.
+\end{theorem}
+
+\section{Teilbarkeitsregeln und gebräuchliche Basen}
+
+\begin{theorem}[Endziffern- und Quersummenregel]
+Für $n=V_b(d)$ und $q\in\mathbb N_+$ gilt:
+\[
+\begin{aligned}
+ q\mid b\quad&\Longrightarrow\quad
+       \bigl(q\mid n\ \Longleftrightarrow\ q\mid d_0\bigr),\\
+ q\mid(b-1)\quad&\Longrightarrow\quad
+       \Bigl(q\mid n\ \Longleftrightarrow\ q\mid\sum_{i<k}d_i\Bigr).
+\end{aligned}
+\]
+Insbesondere gilt $b\mid n\Longleftrightarrow d_0=0$.
+Allgemeiner hängt für $1\le j\le k$ und $q\mid b^j$
+die Teilbarkeit durch $q$ nur von den letzten $j$ Ziffern ab:
+\[
+ q\mid n\quad\Longleftrightarrow\quad q\mid\sum_{i<j}d_i b^i.
+\]
+\end{theorem}
+
+\begin{definition}[Dualsystem und Dezimalsystem]
+Das \emph{Dualsystem} ist das Stellenwertsystem zur Basis $2$ mit
+Ziffern $0,1$; das \emph{Dezimalsystem} ist das Stellenwertsystem
+zur Basis $10$ mit Ziffern $0,1,\ldots,9$.
+Die Basisangabe kann im Dezimalsystem entfallen.
+\end{definition}
+
+\begin{theorem}[Teilbarkeitsregeln im Dezimalsystem]
+Eine dezimal dargestellte natürliche Zahl ist genau dann
+\begin{itemize}
+ \item durch $2$ beziehungsweise $5$ teilbar, wenn ihre letzte
+       Ziffer durch $2$ beziehungsweise $5$ teilbar ist;
+ \item durch $4$ beziehungsweise $8$ teilbar, wenn der Wert ihrer
+       letzten zwei beziehungsweise drei Ziffern entsprechend teilbar ist;
+ \item durch $3$ beziehungsweise $9$ teilbar, wenn ihre Quersumme
+       entsprechend teilbar ist.
+\end{itemize}
+Bei kürzeren Zahlzeichen werden für die Regel über zwei oder drei
+Endziffern links Nullen ergänzt.
+\end{theorem}
+
+\begin{theorem}[Quersummen an geraden und ungeraden Stellen]
+\label{b10guide:thm:alternating-digit-sums}
+Sei $n=\sum_{i<k}d_i b^i$ eine Zifferndarstellung zur Basis $b\ge2$.
+Die Summen der Ziffern an geraden beziehungsweise ungeraden Stellen seien
+\[
+ E:=\sum_{\substack{i<k\\i\text{ gerade}}}d_i,
+ \qquad O:=\sum_{\substack{i<k\\i\text{ ungerade}}}d_i;
+\]
+eine leere Summe ist $0$. Für jedes $q\in\mathbb N_+$ mit $q\mid(b+1)$ gilt
+\[
+ q\mid n\quad\Longleftrightarrow\quad
+ E\mathbin{\mathrm{mod}}q=O\mathbin{\mathrm{mod}}q.
+\]
+Insbesondere ist eine Dezimalzahl genau dann durch $11$ teilbar,
+wenn ihre beiden Ziffernsummen denselben Rest bei Division durch $11$ haben.
+Die Stellenzählung beginnt rechts mit $0$.
+\end{theorem}
+
+\section{Binomialkoeffizienten aus Ziffern}
+
+\begin{theorem}[Satz von Lucas]
+\label{b10guide:thm:lucas}
+Seien $p$ eine Primzahl, $n,k\in\mathbb N$ und $\ell\ge1$ mit
+$n<p^\ell$ und $k<p^\ell$. Schreibe, gegebenenfalls mit führenden Nullen,
+\[
+ n=\sum_{i<\ell}n_i p^i,\qquad
+ k=\sum_{i<\ell}k_i p^i,\qquad n_i,k_i<p.
+\]
+Dann gilt
+\[
+ \binom{n}{k}\mathbin{\mathrm{mod}}p
+ =\left(\prod_{i<\ell}\binom{n_i}{k_i}\right)
+       \mathbin{\mathrm{mod}}p.
+\]
+Insbesondere charakterisieren die Ziffern die Nichtteilbarkeit:
+\[
+ p\nmid\binom{n}{k}\quad\Longleftrightarrow\quad
+       \forall i<\ell\;(k_i\le n_i).
+\]
+Auch hier gilt $\binom{n}{k}=0$ für $k>n$; zusätzliche führende
+Nullen ändern die Aussagen nicht \cite{natlucas}.
+\end{theorem}
+
+\Needspace{28\baselineskip}
+\begin{theorem}[Kummers Übertragssatz und Quersummenformeln]
+\label{b10guide:thm:kummer}
+Seien $p$ eine Primzahl und $k,n\in\mathbb N$ mit $k\le n$.
+Für $j<n$ setze
+\[
+ c_j=\begin{cases}
+ 1,&p^{j+1}\le
+    (k\mathbin{\mathrm{mod}}p^{j+1})
+    +((n-k)\mathbin{\mathrm{mod}}p^{j+1}),\\
+ 0,&\text{sonst}.
+ \end{cases}
+\]
+Dann gilt
+\[
+ v_p\!\binom{n}{k}=\sum_{j<n}c_j.
+\]
+Dabei ist $c_j=1$ genau dann, wenn bei der Addition von $k$ und
+$n-k$ zur Basis $p$ ein Übertrag aus den untersten $j+1$ Stellen
+in die nächste Stelle erfolgt.
+
+Für $t\in\mathbb N$ bezeichne $s_p(t)$ die Summe der Ziffern
+seiner normalisierten Darstellung zur Basis $p$, also
+$s_p(t)=\sum_{i<\ell}t_i$ für $t=\sum_{i<\ell}t_i p^i$;
+insbesondere ist $s_p(0)=0$. Dann gelten die natürlichen Gleichungen
+\[
+ \begin{aligned}
+ s_p(k)+s_p(n-k)
+    &=s_p(n)+(p-1)v_p\!\binom{n}{k},\\
+ n&=s_p(n)+(p-1)v_p(n!).
+ \end{aligned}
+\]
+Die zweite Gleichung ist die Quersummenform der Legendre-Formel.
+Für $n=0$ ist $k=0$, die Übertragssumme ist leer und die beiden
+auftretenden Primexponenten sind $0$. Wegen $k\le n$ ist $\binom{n}{k}>0$;
+ein Primexponent der Null wird nicht verwendet \cite{natlegendre}.
+\end{theorem}

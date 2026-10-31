@@ -336,6 +336,26 @@ den Präfix `8H`. Die PDF enthält keine externen PDF-Zielverweise
 und wird direkt kopiert. Der zentrale Publisher registriert sie
 als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
 
+## Natürliche Zahlen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 10 verwendet
+`editions/b10-main-results.tex` und `tex/b10/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-natural-numbers-main-results.ps1
+```
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 10 - Natürliche Zahlen - Leitfaden der Hauptresultate.pdf`
+unter `output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B10-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Aussage-Nummern tragen
+den Präfix `10H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
 ## Äquivalenzrelationen: Leitfaden der Hauptresultate
 
 Die eigenständige, beweisfreie Ergänzung zu Band 11 verwendet
@@ -433,6 +453,26 @@ unter `output/05 Ordnungen und Verbände/Ergänzungen/Bd. 15 Totale Ordnungen/Le
 `_B15-main-results`; Artefakte liegen in `registry/main-results/`,
 Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
 den Präfix `15H`. Die PDF enthält keine externen PDF-Zielverweise
+und wird direkt kopiert. Der zentrale Publisher registriert sie
+als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+
+## Folgen: Leitfaden der Hauptresultate
+
+Die eigenständige, beweisfreie Ergänzung zu Band 21 verwendet
+`editions/b21-main-results.tex` und `tex/b21/main-results/`.
+Sie wird ohne Neuaufbau der Fachbände gebaut:
+
+~~~powershell
+pwsh -NoProfile -File ./scripts/build-sequences-main-results.ps1
+~~~
+
+Der Builder prüft den LuaLaTeX-Lauf, interne Verweise und übervolle Boxen.
+Er veröffentlicht `Bd. 21 - Folgen - Leitfaden der Hauptresultate.pdf`
+unter `output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Leitfaden der Hauptresultate/`.
+`-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
+`_B21-main-results`; Artefakte liegen in `registry/main-results/`,
+Konsolenlogs in `tmp/main-results/`. Die eigenen Satznummern tragen
+den Präfix `21H`. Die PDF enthält keine externen PDF-Zielverweise
 und wird direkt kopiert. Der zentrale Publisher registriert sie
 als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
 
@@ -1417,6 +1457,55 @@ collection. The publication paths are `output/07 Halbgruppen und Monoide/Ergänz
 Full publication also includes each available reading artifact.
 Imported source and PDF provenance is recorded in
 `scripts/experimental-reading-provenance.json`; mathematical content is unchanged.
+
+## Newtondarstellung und endliche Differenzen (Band 21)
+
+`editions/b21-newton-reading.tex` und `editions/b21-newton-proofs.tex` sind die
+getrennten Begleitfassungen zu Theorem 21H.5.4.1 des Folgenleitfadens.
+Die Texte liegen unter `tex/b21/newton/`; im Leitfaden bleiben die
+unveränderte Satzaussage und Verweise auf die Ergänzungen.
+Beide PDFs liegen unter
+`output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Newtondarstellung und endliche Differenzen/`.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-newton-editions.ps1
+```
+
+Der Aufruf baut zunächst den Leitfaden mit seinen Verweisen, dann die
+Beweistabellen und die Lesefassung. Referenzen, übervolle Boxen und vorhandene
+Lookup-Diagnosen werden geprüft. `-SkipPublish` beschränkt den Lauf auf den
+Build. `build-newton-reading.ps1` bleibt mit denselben Parametern als
+kompatibler Einstieg in diesen gemeinsamen Build erhalten.
+
+Die Publisher-Option `--newton-only` veröffentlicht beide Begleitfassungen
+zusammen mit dem Folgenleitfaden und prüft die relativen PDF-Verweise im
+gesamten publizierten Bestand. Erst nach erfolgreicher Prüfung wird die
+frühere experimentelle Lesefassung entfernt, sofern kein geprüfter Verweis
+mehr auf ihren alten Ort zeigt. Andere PDFs werden weder ersetzt noch
+verschoben. `--sequences-only` aktualisiert weiterhin nur den Leitfaden.
+
+## Teleskopformel und Abelsche partielle Summation (Band 21)
+
+`editions/b21-abel-reading.tex` ist die eigenständige Lesefassung zu
+Theorem 21H.5.5.1 des Folgenleitfadens. Ihre Quellen stehen unter
+`tex/b21/abel/`. Sie enthält kurze Prosabeweise, anschauliche Beispiele,
+historische Originalquellen und die Bausteine für spätere Beweistabellen.
+Der Leitfaden behält die Satzaussage und verlinkt die Lesefassung.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-abel-reading.ps1
+```
+
+Der Builder aktualisiert den Folgenleitfaden und die Lesefassung und prüft
+Referenzen, übervolle Boxen und den PDF-Text. `-SkipPublish` beschränkt den
+Lauf auf den Build. Die Artefakte liegen unter `registry/abel/`, die
+Konsolenprotokolle unter `tmp/abel-reading/`.
+
+`publish-pdfs.py --abel-only` veröffentlicht die Lesefassung zusammen mit
+dem Folgenleitfaden und prüft die relativen PDF-Verweise im gesamten
+publizierten Bestand. Solange keine Beweistabellen vorliegen, steht die
+Lesefassung unter
+`output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/experimentell/Teleskopformel und Abelsche partielle Summation/`.
 
 ## Experimental context-equivalence reading edition
 

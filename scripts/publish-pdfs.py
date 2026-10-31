@@ -130,6 +130,13 @@ TWO_PRODUCTS_NAMES = {
 CONTEXT_PROFILES_NAMES = {
     "_B37-context-profiles-reading.pdf": "Bd. 37 - Kontextprofile und Induktion - Lesefassung.pdf",
 }
+NEWTON_NAMES = {
+    "_B21-newton-reading.pdf": "Bd. 21 - Newtondarstellung und endliche Differenzen - Lesefassung.pdf",
+    "_B21-newton-proofs.pdf": "Bd. 21 - Newtondarstellung und endliche Differenzen - Beweistabellen.pdf",
+}
+ABEL_NAMES = {
+    "_B21-abel-reading.pdf": "Bd. 21 - Teleskopformel und Abelsche partielle Summation - Lesefassung.pdf",
+}
 MAIN_RESULTS_NAMES = {
     "_B03-main-results.pdf": "Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf",
     "_B04-main-results.pdf": "Bd. 04 - Totale Relationen - Leitfaden der Hauptresultate.pdf",
@@ -138,11 +145,13 @@ MAIN_RESULTS_NAMES = {
     "_B07-main-results.pdf": "Bd. 07 - Surjektive Funktionen - Leitfaden der Hauptresultate.pdf",
     "_B08-main-results.pdf": "Bd. 08 - Bijektive Funktionen - Leitfaden der Hauptresultate.pdf",
     "_B09-main-results.pdf": "Bd. 09 - Auswahlprinzip - Leitfaden der Hauptresultate.pdf",
+    "_B10-main-results.pdf": "Bd. 10 - Natürliche Zahlen - Leitfaden der Hauptresultate.pdf",
     "_B11-main-results.pdf": "Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf",
     "_B12-main-results.pdf": "Bd. 12 - Halbordnungen - Leitfaden der Hauptresultate.pdf",
     "_B13-main-results.pdf": "Bd. 13 - Schranken, Infima und Suprema - Leitfaden der Hauptresultate.pdf",
     "_B14-main-results.pdf": "Bd. 14 - Paarinfima und Paarsuprema - Leitfaden der Hauptresultate.pdf",
     "_B15-main-results.pdf": "Bd. 15 - Totale Ordnungen - Leitfaden der Hauptresultate.pdf",
+    "_B21-main-results.pdf": "Bd. 21 - Folgen - Leitfaden der Hauptresultate.pdf",
     "_B28-main-results.pdf": "Bd. 28 - Halbgruppen - Leitfaden der Hauptresultate.pdf",
     "_B37-main-results.pdf": "Bd. 37 - Endliche Halbgruppen - Leitfaden der Hauptresultate.pdf",
     "_B40-main-results.pdf": "Bd. 40 - Gruppen - Leitfaden der Hauptresultate.pdf",
@@ -153,13 +162,15 @@ INDEPENDENT_READINGS = {
     "three-products": THREE_PRODUCTS_NAMES,
     "two-products": TWO_PRODUCTS_NAMES,
     "context-profiles": CONTEXT_PROFILES_NAMES,
+    "newton": NEWTON_NAMES,
+    "abel": ABEL_NAMES,
     "main-results": MAIN_RESULTS_NAMES,
 }
-INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES, **MAIN_RESULTS_NAMES}
+INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES, **NEWTON_NAMES, **ABEL_NAMES, **MAIN_RESULTS_NAMES}
 MANUAL_READING_NAMES = {
     "context-equivalence-reading.pdf": "Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf",
 }
-EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(THREE_PRODUCTS_NAMES.values()) | set(TWO_PRODUCTS_NAMES.values()) | set(CONTEXT_PROFILES_NAMES.values()) | set(MANUAL_READING_NAMES.values())
+EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(THREE_PRODUCTS_NAMES.values()) | set(TWO_PRODUCTS_NAMES.values()) | set(CONTEXT_PROFILES_NAMES.values()) | set(ABEL_NAMES.values()) | set(MANUAL_READING_NAMES.values())
 SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_ISOMORPHISMS_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **TABLE_ISOMORPHISMS_NAMES, **INDEX_PERIOD_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
@@ -182,6 +193,8 @@ SUPPLEMENT_TOPICS = {
     **{name: "Dreiprodukt-Rekonstruktion" for name in THREE_PRODUCTS_NAMES.values()},
     **{name: "Zweiprodukt-Rekonstruktion" for name in TWO_PRODUCTS_NAMES.values()},
     **{name: "Kontextprofile und Induktion" for name in CONTEXT_PROFILES_NAMES.values()},
+    **{name: "Newtondarstellung und endliche Differenzen" for name in NEWTON_NAMES.values()},
+    **{name: "Teleskopformel und Abelsche partielle Summation" for name in ABEL_NAMES.values()},
     **{name: "Leitfaden der Hauptresultate" for name in MAIN_RESULTS_NAMES.values()},
     **{name: "Kontextäquivalenz" for name in MANUAL_READING_NAMES.values()},
     **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
@@ -467,7 +480,7 @@ def assert_build_ready(source, reader):
     if re.fullmatch(r"_B\d{2}", source.stem) or source.name in SUPPLEMENT_NAMES:
         debug = source.with_suffix(".debug.log")
         log = source.with_suffix(".log")
-        required_logs = (log,) if source.name in INDEPENDENT_READING_NAMES else (debug, log)
+        required_logs = (log,) if source.name in INDEPENDENT_READING_NAMES and source.name != "_B21-newton-proofs.pdf" else (debug, log)
         for required in required_logs:
             if not required.is_file():
                 raise FileNotFoundError(f"Missing build diagnostic: {required}")
@@ -572,6 +585,7 @@ def audit(paths, root=OUTPUT):
         print(f"PDF links passed: {path.name} ({len(reader.pages)} pages, {local_total} local links, {total} external links)", flush=True)
     print(f"PDF link audit passed: {len(paths)} files, {page_total} pages, "
           f"{local_link_total} local links, {external_link_total} external links.", flush=True)
+    return set(cache)
 
 
 def remove_legacy_coordinate_publications():
@@ -590,6 +604,31 @@ def remove_legacy_coordinate_publications():
             print(f"Removed replaced publication: {name}", flush=True)
     if directory.is_dir() and not any(directory.iterdir()):
         directory.rmdir()
+
+
+def remove_legacy_newton_publication(linked_targets):
+    """Retire only the old Newton reading after the linked set has passed."""
+    for name in NEWTON_NAMES.values():
+        if not publication_path(name).is_file():
+            raise FileNotFoundError(f"Missing new Newton publication: {name}")
+    reading_name = NEWTON_NAMES["_B21-newton-reading.pdf"]
+    destination = publication_path(reading_name)
+    legacy = destination.parent.parent / "experimentell" / destination.parent.name / reading_name
+    if not legacy.resolve().is_relative_to(OUTPUT.resolve()):
+        raise ValueError(f"Legacy Newton publication outside output: {legacy}")
+    if not legacy.is_file():
+        return
+    if legacy.resolve() in linked_targets:
+        print(f"Retained linked legacy Newton reading: {legacy}", flush=True)
+        return
+    try:
+        legacy.unlink()
+    except PermissionError:
+        print(f"Retained open legacy Newton reading: {legacy}", flush=True)
+        return
+    print(f"Removed replaced experimental publication: {reading_name}", flush=True)
+    if not any(legacy.parent.iterdir()):
+        legacy.parent.rmdir()
 
 
 def main():
@@ -638,6 +677,8 @@ def main():
     edition_only = parser.add_mutually_exclusive_group()
     edition_only.add_argument("--coordinates-only", "--coordinates-proofs-only", dest="coordinates_only", action="store_true",
                               help="Publish only both B31 coordinate editions; audit all current PDFs.")
+    edition_only.add_argument("--sequences-only", action="store_true",
+                              help="Publish only the B21 sequences guide; audit all current PDFs.")
     for directory in INDEPENDENT_READINGS:
         edition_only.add_argument(f"--{directory}-only", action="store_true",
                                   help=f"Publish only the independent {directory} reading; audit all current PDFs.")
@@ -649,7 +690,7 @@ def main():
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     names.update(SUPPLEMENT_NAMES)
     names.update(PUBLICATION_ALIASES)
-    only_edition = args.coordinates_only or any(
+    only_edition = args.coordinates_only or args.sequences_only or any(
         getattr(args, directory.replace("-", "_") + "_only") for directory in INDEPENDENT_READINGS)
     if args.organize_existing:
         if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.bands or only_edition:
@@ -920,6 +961,12 @@ def main():
             for source, destination in edition_names.items()
         ]
         selected = getattr(args, directory.replace("-", "_") + "_only")
+        if directory == "main-results" and (args.sequences_only or args.newton_only or args.abel_only):
+            publications.extend(publication for publication in independent_publications
+                                if publication[0].name == "_B21-main-results.pdf")
+            all_publications.extend(publication for publication in independent_publications
+                                    if publication[0].name == "_B21-main-results.pdf" or publication[1].is_file())
+            continue
         if directory == "main-results" and full_publish:
             # The main-results guides are built independently.
             publications.extend(publication for publication in independent_publications
@@ -991,7 +1038,9 @@ def main():
                 temporary.unlink()
             writer.close()
             print(f"Published: {destination.name}", flush=True)
-    audit([destination for _, destination in all_publications])
+    linked_targets = audit([destination for _, destination in all_publications])
+    if not args.audit_only and any(source.name == "_B21-newton-proofs.pdf" for source, _ in publications):
+        remove_legacy_newton_publication(linked_targets)
     if not args.audit_only and publish_coordinates:
         remove_legacy_coordinate_publications()
 

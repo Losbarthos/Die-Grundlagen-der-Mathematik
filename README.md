@@ -255,6 +255,17 @@ Surjektivitätstheorie sowie Ordnungs-, Äquivalenz-, algebraische und
 topologische Strukturen bleiben ausgeklammert.
 Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-choice-main-results.ps1`.
 
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 10](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfaden der Hauptresultate/Bd. 10 - Natürliche Zahlen - Leitfaden der Hauptresultate.pdf>)
+sammelt Peano-Grundlagen, Nachfolger und Induktion, Rekursion sowie
+Arithmetik und konkrete Vergleichsgesetze der natürlichen Zahlen.
+Weitere Schwerpunkte sind Teilbarkeit und Primexponenten,
+Stellenwertdarstellungen und Überträge, natürliche Restgleichungen und
+Potenzperioden, quadratische Restwerte, Primzahlen, Quadratsummen sowie Teilerfunktionen und
+gerade vollkommene Zahlen. Allgemeine Funktions- und Ordnungstheorie,
+Äquivalenzrelationen und andere Zahlbereiche bleiben ihren eigenen
+Bänden vorbehalten. Die eigenständigen Aussage-Nummern tragen den Präfix `10H`.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-natural-numbers-main-results.ps1`.
+
 Der beweisfreie [Leitfaden der Hauptresultate zu Band 11](<output/03 Relationen und Funktionen/Ergänzungen/Bd. 11 Äquivalenzrelationen/Leitfaden der Hauptresultate/Bd. 11 - Äquivalenzrelationen - Leitfaden der Hauptresultate.pdf>)
 sammelt Definitionen, Charakterisierungen und zentrale Folgerungen aus den
 Äquivalenzaxiomen: Äquivalenzklassen, Quotienten und Partitionen,
@@ -307,6 +318,17 @@ und Suprema bleiben ihren eigenen Bänden vorbehalten. Die Auswahl
 setzt keine zusätzlichen Strukturaxiome voraus, enthält keine Beweise
 und erhebt keinen Vollständigkeitsanspruch.
 Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-total-orders-main-results.ps1`.
+
+Der beweisfreie [Leitfaden der Hauptresultate zu Band 21](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 21 Folgen/Leitfaden der Hauptresultate/Bd. 21 - Folgen - Leitfaden der Hauptresultate.pdf>)
+sammelt folgenspezifische Definitionen und Sätze zu endlichen Folgen,
+Rekursion, Rest- und Teilfolgen sowie reeller Konvergenz. Er enthält
+Grenzwertregeln, Häufungswerte, Bolzano–Weierstraß, Cauchy-Kriterien,
+monotone Konvergenz, bestimmte Divergenz, Standardgrenzwerte und
+Cesàro-Mittel einschließlich Stolz–Cesàro. Die reelle Zielmenge wird
+ausdrücklich vorausgesetzt; allgemeine Funktionen, Äquivalenzrelationen,
+Ordnungen und Infimums-/Supremumstheorie bleiben ihren eigenen Bänden.
+Die Auswahl enthält keine Beweise und erhebt keinen Vollständigkeitsanspruch.
+Build und Veröffentlichung: `pwsh -NoProfile -File ./scripts/build-sequences-main-results.ps1`.
 
 Der beweisfreie [Leitfaden der Hauptresultate zu Band 45](<output/05 Ordnungen und Verbände/Ergänzungen/Bd. 45 Halbverbände und Verbände/Leitfaden der Hauptresultate/Bd. 45 - Halbverbände und Verbände - Leitfaden der Hauptresultate.pdf>)
 sammelt Definitionen, Charakterisierungen und zentrale Folgerungen der
