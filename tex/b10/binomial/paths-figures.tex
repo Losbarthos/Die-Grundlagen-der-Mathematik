@@ -1,0 +1,110 @@
+% Kompakte Wegezeichnungen nur fuer die Lesefassung.
+% Die normalen Zahleneintraege zaehlen immer Wege ab der Spitze.
+\definecolor{pathorange}{RGB}{161,81,16}
+\tikzset{
+ binpathnode/.style={circle,fill=white,inner sep=.4pt,minimum size=4.8mm,
+   font=\fontsize{9}{10.5}\selectfont},
+ binpathmark/.style={binpathnode,fill=pascalpale,draw=pascalblue!65,
+   line width=.45pt,text=pascalblue},
+ binpathlabel/.style={font=\fontsize{8.5}{10}\selectfont},
+ binpatharr/.style={-{Stealth[length=1.4mm]},shorten <=2.5mm,
+   shorten >=2.5mm,line width=.85pt},
+ binpathbase/.style={black!25,line width=.35pt}
+}
+\newcommand{\BinPathEdges}[1]{%
+ \pgfmathtruncatemacro{\binpathlast}{#1-1}%
+ \foreach \n in {0,...,\binpathlast} {
+  \foreach \k in {0,...,\n} {
+   \draw[binpathbase] ({2*\k-\n},-\n)--({2*\k-\n-1},-\n-1);
+   \draw[binpathbase] ({2*\k-\n},-\n)--({2*\k-\n+1},-\n-1);
+  }
+ }
+}
+\newcommand{\BinPathNumbers}[2]{%
+ \node[binpathlabel,anchor=east,text=black!65] at (#2,.65) {Zeile};
+ \foreach \n in {0,...,#1} {
+  \node[binpathlabel,anchor=east,text=black!65] at (#2,-\n) {\n};
+  \foreach \k in {0,...,\n} {
+   \pgfmathtruncatemacro{\binpathvalue}{factorial(\n)/(factorial(\k)*factorial(\n-\k))}%
+   \node[binpathnode] at ({2*\k-\n},-\n) {\binpathvalue};
+  }
+ }
+}
+
+\newcommand{\PascalWegeStart}{%
+ \begin{tikzpicture}[x=7mm,y=9mm]
+  \BinPathEdges{4}
+  \draw[binpatharr,pascalblue] (0,0)--(1,-1);
+  \draw[binpatharr,pascalblue] (1,-1)--(0,-2);
+  \draw[binpatharr,pascalblue] (0,-2)--(-1,-3);
+  \draw[binpatharr,pascalblue] (-1,-3)--(0,-4);
+  \BinPathNumbers{4}{-5.3}
+  \node[binpathmark] at (0,-4) {6};
+  \node[binpathlabel,anchor=south] at (0,.4) {Start};
+  \node[binpathlabel,fill=white,inner sep=.5pt] at (-.85,-.4) {$L$};
+  \node[binpathlabel,fill=white,inner sep=.5pt] at (.85,-.4) {$R$};
+  \node[binpathlabel,anchor=north] at (0,-4.4) {$(n,k)=(4,2)$};
+  \node[binpathlabel,anchor=west,align=left] at (4.8,-1.7)
+     {Beispielweg: $RLLR$\\[2pt]4 Schritte insgesamt,\\2 davon nach rechts.};
+  \node[binpathlabel,anchor=west,align=left] at (4.8,-3.2)
+     {$L$: $k$ bleibt gleich.\\$R$: $k$ steigt um $1$.};
+ \end{tikzpicture}%
+}
+
+\newcommand{\PascalWegeVandermonde}{%
+ \begin{tikzpicture}[x=6mm,y=8mm]
+  \fill[black!4,rounded corners=1mm] (-5.8,-1.63) rectangle (5.8,-2.37);
+  \BinPathEdges{5}
+  % Beide Wege von der Spitze zur mittleren Station B.
+  \foreach \u/\v in {-1/-1,1/-1} {
+   \draw[binpatharr,pascalblue] (0,0)--(\u,\v);
+   \draw[binpatharr,pascalblue] (\u,\v)--(0,-2);
+  }
+  % Vereinigung der drei Weiterwege B -> (5,3).
+  \foreach \xa/\ya/\xb/\yb in {
+    0/-2/-1/-3,0/-2/1/-3,-1/-3/0/-4,
+    1/-3/0/-4,1/-3/2/-4,0/-4/1/-5,2/-4/1/-5} {
+   \draw[binpatharr,pathorange] (\xa,\ya)--(\xb,\yb);
+  }
+  \BinPathNumbers{5}{-6.6}
+  \node[binpathmark] at (0,-2) {2};
+  \node[binpathmark] at (1,-5) {10};
+  \node[binpathlabel,anchor=south] at (0,.4) {Start};
+  \foreach \x/\name in {-2/A,0/B,2/C}
+   \node[binpathlabel,fill=white,inner sep=.5pt] at (\x,-2.58) {\name};
+  \draw[pascalblue,line width=.85pt] (5.3,-.8)--(5.9,-.8);
+  \node[binpathlabel,anchor=west] at (6.1,-.8) {2 Hinwege nach B};
+  \draw[pathorange,line width=.85pt] (5.3,-2.9)--(5.9,-2.9);
+  \node[binpathlabel,anchor=west,align=left] at (6.1,-2.9)
+     {3 Weiterwege\\von B zum Ziel};
+  \node[binpathlabel,anchor=west,align=left] at (6.1,-4.4)
+     {$2\cdot3=6$\\Wege über B};
+  \node[binpathlabel,anchor=north] at (1,-5.42) {Ziel $(5,3)$};
+ \end{tikzpicture}%
+}
+
+\newcommand{\PascalWegeDiagonal}{%
+ \begin{tikzpicture}[x=6mm,y=7.2mm]
+  \BinPathEdges{6}
+  % Nach dem letzten R-Schritt fuehrt nur noch L zum Ziel.
+  \foreach \xa/\ya/\xb/\yb in {3/-3/2/-4,2/-4/1/-5,1/-5/0/-6}
+   \draw[binpatharr,pascalblue] (\xa,\ya)--(\xb,\yb);
+  % Vier moegliche Orte des letzten R-Schritts.
+  \foreach \xa/\ya/\xb/\yb in {2/-2/3/-3,1/-3/2/-4,0/-4/1/-5,-1/-5/0/-6}
+   \draw[binpatharr,pathorange] (\xa,\ya)--(\xb,\yb);
+  \BinPathNumbers{6}{-7.2}
+  \foreach \x/\y/\v in {2/-2/1,1/-3/3,0/-4/6,-1/-5/10}
+   \node[binpathmark] at (\x,\y) {\v};
+  \node[binpathmark] at (0,-6) {20};
+  \node[binpathlabel,anchor=south] at (0,.4) {Start};
+  \draw[pathorange,-{Stealth[length=1.4mm]},line width=.85pt]
+     (6.1,-2.1)--(6.9,-2.1);
+  \node[binpathlabel,anchor=west,align=left] at (7.1,-2.1)
+     {letzter\\$R$-Schritt};
+  \draw[pascalblue,-{Stealth[length=1.4mm]},line width=.85pt]
+     (6.1,-4.1)--(6.9,-4.1);
+  \node[binpathlabel,anchor=west,align=left] at (7.1,-4.1)
+     {danach\\nur noch $L$};
+  \node[binpathlabel,anchor=north] at (0,-6.45) {Ziel $(6,3)$};
+ \end{tikzpicture}%
+}

@@ -1,0 +1,122 @@
+% Gemeinsames A4-Querformat mit A5-Text und karierter Notizhälfte.
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage[a4paper,landscape,top=18mm,bottom=16mm,left=12mm,right=160.5mm]{geometry}
+\usepackage{enumitem}
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{10.5}{13}}
+\makeatother
+\normalsize
+\setlist{nosep,leftmargin=1.5em,topsep=.35em}
+\pagestyle{empty}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{etoolbox}
+\usepackage[hidelinks]{hyperref}
+\definecolor{pascalblue}{RGB}{22,89,112}
+\definecolor{pascalpale}{RGB}{231,241,244}
+\newcommand{\N}{\mathbb N}
+\newcommand{\GuideRef}[2]{\href{../main-results/_B10-main-results.pdf\#formula#1}{#2}}
+\newcommand{\NewtonLink}{\href{../newton/_B21-newton-reading.pdf\#newton.reading}{Lesefassung zur Newtondarstellung und zu endlichen Differenzen}}
+\newtheorem*{satz}{Satz}
+\newtheorem*{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{beispiel}{Beispiel}
+\newcommand{\Beweisidee}{\par\smallskip\textbf{Beweisidee.}\ }
+\newcommand{\PascalDreieck}[1]{%
+\begin{tikzpicture}[x=0.62cm,y=0.52cm,
+ entry/.style={minimum width=6mm,minimum height=5mm,inner sep=1pt,font=\small},
+ binhighlight/.style={fill=pascalpale,text=pascalblue,rounded corners=2pt,font=\small\bfseries}]
+ \foreach \n/\row in {0/{1},1/{1,1},2/{1,2,1},3/{1,3,3,1},4/{1,4,6,4,1},5/{1,5,10,10,5,1},6/{1,6,15,20,15,6,1}} {
+  \node[anchor=east,font=\small,text=black!65] at (-7,-\n) {$n=\n$};
+  \foreach \v [count=\k from 0] in \row {
+   \ifnum#1=1
+    \ifnum\n=4
+     \ifnum\k=2 \node[entry,binhighlight] at ({2*\k-\n},-\n) {\v};
+     \else \node[entry] at ({2*\k-\n},-\n) {\v};\fi
+    \else \node[entry] at ({2*\k-\n},-\n) {\v};\fi
+   \else
+    \pgfmathtruncatemacro{\selected}{(\k==2 && \n>=2 && \n<=5) || (\n==6 && \k==3)}
+    \ifnum\selected=1 \node[entry,binhighlight] at ({2*\k-\n},-\n) {\v};
+    \else \node[entry] at ({2*\k-\n},-\n) {\v};\fi
+   \fi
+  }
+ }
+ \ifnum#1=1
+  \draw[-{Stealth[length=1.5mm]},pascalblue,shorten >=3mm,shorten <=3mm] (-1,-3) -- (0,-4);
+  \draw[-{Stealth[length=1.5mm]},pascalblue,shorten >=3mm,shorten <=3mm] (1,-3) -- (0,-4);
+ \fi
+\end{tikzpicture}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.42em plus .08em minus .08em}
+\setlength{\emergencystretch}{1.5em}
+\setcounter{tocdepth}{1}
+\newlength{\BinWorkHeight}
+\newcommand{\ExerciseSpace}[1]{%
+ \par\smallskip\begingroup
+ \setlength{\BinWorkHeight}{\dimexpr\pagegoal-\pagetotal-2\baselineskip\relax}%
+ \ifdim\BinWorkHeight>#1mm\setlength{\BinWorkHeight}{#1mm}\fi
+ \ifdim\BinWorkHeight>12mm
+  \vfill{\small\sffamily Deine Rechnung oder Skizze}\par\nobreak
+  \begin{tikzpicture}
+   \draw[step=5mm,black!22,line width=.2pt] (0,0) grid (120mm,\BinWorkHeight);
+  \end{tikzpicture}
+ \fi\endgroup}
+\newcommand{\Exercise}[2]{%
+ \clearpage
+ \ifnum#1=1
+  \section{Übungsblätter}\label{bin:exercises}
+  Arbeite zuerst ohne die Lösungen ab Seite~\pageref{bin:solutions}.
+  Nutze das Karofeld rechts und den freien Raum unter der Aufgabe.
+ \fi
+ \subsection*{Aufgabe #1: #2}\phantomsection\label{bin:exercise-#1}}
+\newcommand{\ExtraWork}[2]{%
+ \clearpage\subsection*{Arbeitsraum zu Aufgabe #1}
+ \textbf{Hinweis, falls du ihn brauchst.} #2\par
+ \ExerciseSpace{130}}
+\AddToHook{shipout/background}{%
+ \begin{tikzpicture}[remember picture,overlay]
+  \begin{scope}[shift={(current page.north west)},x=1mm,y=-1mm]
+   \ifnum\value{page}>1
+    \node[anchor=west,font=\sffamily\fontsize{7.5}{9}\selectfont,text=black!55]
+       at (12,10) {BAND 10\quad BINOMIALKOEFFIZIENTEN\quad \BinBookletLabel};
+    \draw[black!25,line width=.25pt] (12,13)--(136.5,13);
+   \fi
+   \node[anchor=west,font=\sffamily\fontsize{8.5}{10}\selectfont,text=black!65]
+      at (161,13) {NOTIZEN\quad Fragen, Ideen und Rechnungen};
+   \begin{scope}[shift={(161,22)}]
+    \draw[step=5mm,black!22,line width=.2pt] (0,0) grid (125,170);
+   \end{scope}
+   \node[font=\sffamily\fontsize{8}{10}\selectfont,text=black!60]
+      at (74.25,201) {\BinPageLabel{} \thepage};
+   \node[font=\sffamily\fontsize{8}{10}\selectfont,text=black!60]
+      at (223.5,201) {Notizen zu \BinPageLabel{} \thepage};
+  \end{scope}
+ \end{tikzpicture}}
+\newcommand{\PascalEltern}{%
+ \begin{tikzpicture}[x=1mm,y=1mm,
+  parent/.style={draw=pascalblue!50,fill=pascalpale,rounded corners=2pt,inner sep=6pt},
+  arr/.style={-{Stealth[length=2mm]},pascalblue,line width=.7pt}]
+  \node[parent] (L) at (-24,0) {$\displaystyle\binom n{k-1}$};
+  \node[parent] (R) at (24,0) {$\displaystyle\binom nk$};
+  \node[parent] (C) at (0,-26) {$\displaystyle\binom{n+1}k$};
+  \node[font=\small,anchor=east] at (-43,0) {Zeile $n$};
+  \node[font=\small,anchor=east] at (-25,-26) {Zeile $n+1$};
+  \draw[arr] (L.south)--(C.north west);
+  \draw[arr] (R.south)--(C.north east);
+  \node[font=\footnotesize,anchor=south] at (-24,8) {Index $k-1$};
+  \node[font=\footnotesize,anchor=south] at (24,8) {Index $k$};
+  \node[font=\footnotesize,anchor=north] at (0,-34) {Index $k$ in der neuen Zeile};
+ \end{tikzpicture}}
+\allowdisplaybreaks[1]
+\clubpenalty=10000
+\widowpenalty=10000
+\BeforeBeginEnvironment{satz}{\Needspace{6\baselineskip}}
+\BeforeBeginEnvironment{definition}{\Needspace{6\baselineskip}}
+\BeforeBeginEnvironment{beispiel}{\Needspace{5\baselineskip}}
+\pretocmd{\section}{\Needspace{9\baselineskip}}{}{}

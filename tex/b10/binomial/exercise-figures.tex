@@ -1,0 +1,54 @@
+% Leere Wegeskizzen fuer Aufgaben: keine Eintraege, Wegzahlen oder Loesungspfade.
+\tikzset{
+ binexpathnode/.style={circle,draw=black!45,fill=white,line width=.35pt,
+   minimum size=2.2mm,inner sep=0pt},
+ binexpathmark/.style={binexpathnode,draw=pascalblue,fill=pascalpale,
+   line width=.7pt,minimum size=3mm},
+ binexpathlabel/.style={font=\fontsize{8.5}{10}\selectfont},
+ binexpathbase/.style={black!25,line width=.35pt}
+}
+\newcommand{\BinExercisePathEdges}[1]{%
+ \pgfmathtruncatemacro{\binexlast}{#1-1}%
+ \foreach \n in {0,...,\binexlast} {
+  \foreach \k in {0,...,\n} {
+   \draw[binexpathbase] ({2*\k-\n},-\n)--({2*\k-\n-1},-\n-1);
+   \draw[binexpathbase] ({2*\k-\n},-\n)--({2*\k-\n+1},-\n-1);
+  }
+ }
+}
+\newcommand{\BinExercisePathNodes}[2]{%
+ \node[binexpathlabel,anchor=east,text=black!65] at (#2,.6) {Zeile};
+ \foreach \n in {0,...,#1} {
+  \node[binexpathlabel,anchor=east,text=black!65] at (#2,-\n) {\n};
+  \foreach \k in {0,...,\n}
+   \node[binexpathnode] at ({2*\k-\n},-\n) {};
+ }
+ \node[binexpathmark] at (0,0) {};
+ \node[binexpathlabel,anchor=south] at (0,.35) {Start};
+}
+
+\newcommand{\PascalAufgabeStart}{%
+ \begin{tikzpicture}[x=7mm,y=6mm]
+  \BinExercisePathEdges{4}
+  \BinExercisePathNodes{4}{-5.2}
+  \node[binexpathmark] at (0,-4) {};
+  \node[binexpathlabel,anchor=west] at (.45,-4) {Ziel};
+  \foreach \k in {0,...,4}
+   \node[binexpathlabel,anchor=north] at ({2*\k-4},-4.5) {$k=\k$};
+ \end{tikzpicture}%
+}
+
+\newcommand{\PascalAufgabeSchnitt}{%
+ \begin{tikzpicture}[x=7mm,y=6mm]
+  \fill[pascalpale,rounded corners=.8mm]
+    (-5.5,-1.65) rectangle (5.5,-2.35);
+  \BinExercisePathEdges{5}
+  \BinExercisePathNodes{5}{-6.2}
+  \foreach \x/\name in {-2/A,0/B,2/C} {
+   \node[binexpathnode,draw=pascalblue!60] at (\x,-2) {};
+   \node[binexpathlabel,fill=white,inner sep=.3pt] at (\x,-2.6) {\name};
+  }
+  \node[binexpathmark] at (1,-5) {};
+  \node[binexpathlabel,anchor=west] at (1.45,-5) {Ziel};
+ \end{tikzpicture}%
+}

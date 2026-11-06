@@ -625,6 +625,28 @@ Anwendungen nötigen Eigenschaften der Rekursionsabbildung.
 | Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Lesefassung.pdf>) |
 | Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Dedekindscher Rekursionssatz/Bd. 10 - Dedekindscher Rekursionssatz - Beweistabellen.pdf>) |
 
+## Binomialkoeffizienten und das Pascalsche Dreieck: zwei Hefte zu Band 10
+
+Die Lesefassung entwickelt das arithmetische Satzpaket des Leitfadens:
+Pascal-Rekursion, Grundformeln und Fakultätenformel, binomischer Lehrsatz,
+Zeilen- und Diagonalsummen, Vandermondes Identität und Quadratsumme.
+Vollständige Prosabeweise und durchgerechnete Beispiele verbinden die
+Aussagen. Die Zuordnung zu den einzelnen Leitfadensätzen bleibt erhalten.
+Das separate Übungsheft enthält die Aufgaben und ausführlichen Lösungen.
+Beide Hefte besitzen ein eigenes Deckblatt und eine eigene Seitenzählung.
+Ohne Tabellenbeweis-Begleitband stehen die Ausgaben im Ordner `experimentell`.
+
+| Heft | Bildschirmansicht / flaches Heften | Druckbroschüre zum Falten |
+| --- | --- | --- |
+| Lesefassung | [Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Lesefassung.pdf>) | [Lesefassung als Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Druckbroschüre.pdf>) |
+| Aufgaben und Lösungen | [Übungsheft](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten - Übungsheft.pdf>) | [Übungsheft als Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten - Übungsheft - Druckbroschüre.pdf>) |
+
+Die Bildschirmfassungen zeigen Text links und karierte Notizfläche rechts
+auf A4 quer. Die beiden Druckbroschüren sind jeweils bereits für das Falten
+angeordnet. Jedes Heft separat drucken: A4 quer, tatsächliche Größe 100 %,
+Duplex an der kurzen Kante, keine zusätzliche Broschürenfunktion.
+Die Bögen je Heft in Reihenfolge zusammenlegen, mittig falten und im Falz heften.
+
 ## Klammerungsunabhängigkeit: ergänzende Darstellungen / Companion editions
 
 „Warum wir Klammern weglassen dürfen“ erklärt die Unabhängigkeit endlicher
@@ -657,6 +679,27 @@ benötigten Aussagen mit ihren bisherigen Nummern und Verweiszielen.
 | --- | --- |
 | Lesefassung / Reading edition | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Lesefassung.pdf>) |
 | Beweistabellen / Proof tables | [PDF](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 17 Ganze Zahlen/Ganze Zahlen/Bd. 17 - Ganze Zahlen - Beweistabellen.pdf>) |
+
+## Dedekindsche Schnitte und Vollständigkeit: zwei Hefte zu Band 19
+
+„Lücken schließen“ erklärt Schnittbedingungen, rationale Hauptschnitte,
+Ordnungseinbettung, Vergleichbarkeit und die Supremumsformel für nichtleere,
+nach oben beschränkte Schnittfamilien. Die Lesebeweise sind kurz und vollständig.
+Das Übungsheft enthält acht Aufgaben und ihre Lösungen; die formalen Tabellen
+stehen separat und verwenden dieselben Quellen wie der Fachband.
+
+| Ausgabe | Bildschirmansicht / flaches Heften | Druckbroschüre zum Falten |
+| --- | --- | --- |
+| Lesen und Verstehen | [Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Lesefassung.pdf>) | [Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Druckbroschüre.pdf>) |
+| Übungen und Lösungen | [Übungsheft](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft.pdf>) | [Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft - Druckbroschüre.pdf>) |
+| Formale Ableitungen | [Beweistabellen](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Beweistabellen.pdf>) | Separates A4-Referenzheft |
+
+Die Lesefassung umfasst 16 A4-Querseiten, das Übungsheft 15. Die gefalteten
+Fassungen umfassen jeweils 32 A5-Seiten auf acht A4-Bögen; Text und passende
+Notizseite liegen einander gegenüber. Jedes Heft separat auf A4 quer,
+mit tatsächlicher Größe 100 % und Duplex an der kurzen Kante drucken.
+Keine zusätzliche Broschürenfunktion einschalten. Bögen in Reihenfolge
+zusammenlegen, mittig falten und im Falz heften.
 
 ## Formale Differenzen: ergänzende Darstellungen / Companion editions
 

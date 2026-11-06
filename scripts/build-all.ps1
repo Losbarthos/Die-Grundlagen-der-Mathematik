@@ -355,6 +355,9 @@ try {
                 & (Join-Path $PSScriptRoot 'audit-build.ps1') -Bands @($deferredBand)
             }
         }
+        if ($band -eq 'B19') {
+            & (Join-Path $PSScriptRoot 'build-cuts-editions.ps1') -EditionsOnly -SkipPublish -Python $Python
+        }
         if ($band -eq $pilotTriggerBand) {
             & (Join-Path $PSScriptRoot 'build-csb-pilot.ps1') -EditionsOnly -Python $Python
             $pilotsBuilt = $true

@@ -1,0 +1,689 @@
+An den Rändern steht eine $1$; dazwischen entsteht jede Zahl als Summe
+der beiden Zahlen schräg darüber. Diese Lesefassung erklärt die
+Binomialaussagen aus Abschnitt~5.3 des Leitfadens zu Band~10 mit
+vollständigen Beweisen. Wege durch das Dreieck verbinden die einzelnen
+Themen; die Zuordnung zu den Leitfadensätzen steht in Abschnitt~\ref{bin:map}.
+
+\textbf{Voraussetzungen und Schreibweise.}
+Wir verwenden $\N=\{0,1,2,\ldots\}$, Induktion, Rekursion und die
+Rechengesetze der natürlichen Zahlen. Es gilt $a^0=1$, auch für $a=0$;
+eine leere Summe ist $0$. Differenzen wie $n-k$ bilden wir nur für $k\le n$.
+Die arithmetischen Beweise bleiben in $\N$; Wege und Auswahlen ergänzen
+sie durch elementares Zählen.
+
+\textbf{Mit dem Heft arbeiten.}
+Nutze die Karoseite für eigene Wege, Rechenschritte und Fragen.
+Acht Aufgaben mit Arbeitsraum und Lösungen stehen im separaten
+\href{_B10-binomial-exercises.pdf\#binomial.exercises}{Übungsheft}.
+
+\medskip\tableofcontents
+\clearpage
+
+\section{Das Dreieck entsteht Zeile für Zeile}
+\label{bin:construction}
+
+Die ersten sieben Zeilen sehen so aus:
+\begin{center}
+\PascalDreieck{1}
+\end{center}
+Die Zeilenzählung beginnt bei $n=0$. Innerhalb der Zeile zählen wir
+von links ebenfalls ab $0$. Der Eintrag an Stelle $k$ in Zeile $n$
+heißt \emph{Binomialkoeffizient} und wird $\binom nk$ geschrieben,
+gesprochen: \glqq $n$ über $k$\grqq. Beispielsweise ist
+\[
+ \binom42=6=3+3=\binom31+\binom32.
+\]
+Die untere Zahl ist ein Index, kein Nenner. Das Symbol bezeichnet
+einen einzelnen Eintrag des Dreiecks.
+
+\subsection*{Eine Regel, die auch die Ränder erfasst}
+
+Für Rechnungen ist es praktisch, jede Zeile rechts durch Nullen
+fortzusetzen. So lautet etwa die ganze Zeile $4$:
+$1,4,6,4,1,0,0,\ldots$. Die Nullen werden im Dreieck nicht mitgezeichnet.
+
+\begin{definition}[Pascal-Rekursion]
+Für $n,k\in\N$ setzen wir
+\begin{equation}\tag{P}\label{bin:pascal}
+ \begin{aligned}
+ \binom00&=1,&\binom0{k+1}&=0,\\
+ \binom{n+1}0&=1,&
+ \binom{n+1}{k+1}&=\binom nk+\binom n{k+1}.
+ \end{aligned}
+\end{equation}
+\end{definition}
+Die Regel für $k+1$ addiert genau die beiden Einträge schräg darüber.
+Zum Beispiel entsteht die nächste Zeile aus $1,3,3,1,0,\ldots$ durch
+\[
+ 1,\quad 1+3,\quad 3+3,\quad 3+1,\quad 1+0,\quad 0+0,\ldots.
+\]
+So erhält man $1,4,6,4,1,0,\ldots$.
+
+\textbf{Warum ist damit jeder Eintrag eindeutig festgelegt?}
+Die Anfangszeile ist vollständig bekannt. Ist eine Zeile bekannt,
+so bestimmen die beiden Regeln jede Stelle der nächsten Zeile durch
+eine einzige natürliche Zahl. Induktion zeigt daher, dass zwei
+Zahlensysteme mit diesen Regeln in jeder Zeile übereinstimmen.
+Auch die Existenz folgt aus dem Rekursionssatz von Band~10:
+Man betrachtet eine Zeile als Abbildung $f\colon\N\to\N$ und bildet
+daraus die neue Zeile $Tf$ durch
+\[
+ (Tf)(0)=1,\qquad (Tf)(k+1)=f(k)+f(k+1).
+\]
+Der Operator $T$ führt Abbildungen $\N\to\N$ wieder in solche
+Abbildungen über. Seine wiederholte Anwendung auf die Anfangszeile
+liefert die gesuchte Folge von Zeilen.
+
+\subsection{Was die Zahlen zählen: Wege durch das Dreieck}
+\label{bin:paths}
+
+Wir starten an der Spitze $(0,0)$. Ein Schritt führt schräg nach links
+unten ($L$) oder rechts unten ($R$). Die Stelle zählt innerhalb jeder
+Zeile ab $0$; deshalb gilt
+\[
+ L:(n,k)\longmapsto(n+1,k),\qquad
+ R:(n,k)\longmapsto(n+1,k+1).
+\]
+Nach $n$ Schritten mit genau $k$ Rechtsschritten endet der Weg bei
+$(n,k)$. Der obere Index zählt also \emph{alle Schritte}, der untere
+\emph{die Rechtsschritte}. Die Zeichnung zeigt den Weg $RLLR$ nach $(4,2)$.
+\begin{center}\PascalWegeStart\end{center}
+
+\begin{satz}[Wegeinterpretation]
+Die Anzahl der Wege von der Spitze nach $(n,k)$ ist $\binom nk$.
+Für $k>n$ gibt es keinen solchen Weg; die Anzahl ist $0$.
+\end{satz}
+\begin{proof}
+Nennen wir die Anzahl zunächst $W(n,k)$. An der Spitze gibt es genau
+einen Weg ohne Schritte: $W(0,0)=1$. Ohne Schritte erreicht man keine
+positive Stelle, also $W(0,k+1)=0$. Zum linken Rand führt nur der Weg
+aus lauter $L$, daher $W(n+1,0)=1$.
+
+Ein Weg nach $(n+1,k+1)$ endet entweder mit $R$ von $(n,k)$ oder
+mit $L$ von $(n,k+1)$. Entfernen des letzten Schritts und erneutes
+Anhängen sind zueinander umkehrbar. Die beiden Klassen sind disjunkt
+und erfassen alle Wege. Deshalb
+\[
+ W(n+1,k+1)=W(n,k)+W(n,k+1).
+\]
+Anfangswerte und Rekursion stimmen mit \eqref{bin:pascal} überein.
+Die dort bewiesene Eindeutigkeit liefert $W(n,k)=\binom nk$.
+Auch außerhalb des Dreiecks passt dies: Mehr als $n$ Rechtsschritte
+in insgesamt $n$ Schritten sind unmöglich.
+\end{proof}
+
+Zum Beispiel führen genau die sechs Schrittfolgen
+\[
+ LLRR,\ LRLR,\ LRRL,\ RLLR,\ RLRL,\ RRLL
+\]
+nach $(4,2)$. Somit zählt die $6$ an dieser Stelle sechs verschiedene
+Wege; die Zeichnung hebt einen davon hervor.
+
+\subsection{Die Indizes merken: einer weniger, einer gleich}
+\label{bin:indices}
+
+Wir benennen den \emph{gesuchten Eintrag} zuerst: Er steht in der neuen
+Zeile $n+1$ an der Stelle $k$. Für $k\ge1$ lautet die Pascal-Regel dann
+\begin{equation}\tag{P'}\label{bin:pascal-k}
+ \boxed{\displaystyle
+ \binom{n+1}k=\binom n{k-1}+\binom nk.}
+\end{equation}
+Beide Eltern stehen eine Zeile höher, also in Zeile $n$.
+Links oben steht der Index $k-1$, rechts oben der Index $k$:
+\begin{center}\PascalEltern\end{center}
+
+Der Index $k$ bezeichnet keine feste senkrechte Bildspalte.
+Die längere neue Zeile wird beim Zentrieren um einen halben Abstand
+nach links versetzt. Deshalb liegt ihr Eintrag $k$ zwischen den alten
+Stellen $k-1$ und $k$.
+
+\textbf{Mit Wegen merken.} Ist der letzte Schritt ein $R$, enthält er
+schon einen der insgesamt $k$ Rechtsschritte: Vorher waren es $k-1$.
+Ist der letzte Schritt ein $L$, bleibt ihre Anzahl $k$.
+So entstehen genau die beiden Summanden in \eqref{bin:pascal-k}.
+
+\medskip
+\noindent\fcolorbox{pascalblue!55}{pascalpale}{%
+\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\textbf{Merksatz:}\quad Oben eine Zeile zurück;\\
+unten einmal weniger, einmal gleich.
+\end{minipage}}
+
+Am linken Rand $k=0$ gilt direkt $\binom{n+1}0=1$; ein Index $-1$
+wird nicht benötigt. Die Regeln (P) und (P') sind dieselbe Aussage:
+In (P) heißt die Zielstelle $k+1$, in (P') heißt sie $k$.
+
+\section{Randwerte, Nullen und Spiegelung}
+\label{bin:basic}
+
+Im Wegenetz sind die Randwerte sofort verständlich: Am linken Rand
+führt jeder Schritt nach links, am rechten jeder nach rechts. Beide
+Wege sind eindeutig. Jede Stelle $0\le k\le n$ ist erreichbar, etwa
+mit zuerst $k$ Schritten $R$ und dann $n-k$ Schritten $L$.
+Für $\binom n1$ kann der einzige Rechtsschritt an jeder der $n$
+Positionen stehen. Der folgende Induktionsbeweis bestätigt alle Aussagen.
+
+\begin{satz}[Randwerte und positive Einträge]
+Für alle $n,k\in\N$ gilt
+\begin{equation}\tag{G}\label{bin:boundary}
+ \binom n0=\binom nn=1,\qquad
+ \binom nk=0\ \Longleftrightarrow\ k>n,\qquad
+ \binom n1=n.
+\end{equation}
+Insbesondere sind alle Einträge mit $0\le k\le n$ positiv.
+\end{satz}
+
+\begin{proof}
+Wir beweisen zuerst Randwerte, Positivität und Nullen gemeinsam durch
+Induktion über $n$. In Zeile $0$ steht an Stelle $0$ die Zahl $1$;
+an allen späteren Stellen steht $0$. Damit gelten diese Aussagen am Anfang.
+
+Sie seien für Zeile $n$ richtig. Der linke Rand der nächsten Zeile ist
+nach Definition $1$. Am rechten Rand liefert die Rekursion
+\[
+ \binom{n+1}{n+1}=\binom nn+\binom n{n+1}=1+0=1.
+\]
+Für $1\le k\le n+1$ gilt
+\[
+ \binom{n+1}k=\binom n{k-1}+\binom nk.
+\]
+Der erste Summand ist positiv, weil $0\le k-1\le n$; der zweite ist
+eine natürliche Zahl. Daher ist die Summe positiv.
+Für $k>n+1$ liegen dagegen sowohl $k-1$ als auch $k$ rechts außerhalb
+der alten Zeile. Beide Summanden sind $0$. Das beweist zugleich,
+dass genau die Stellen außerhalb des Dreiecks verschwinden.
+
+Für die letzte Formel beginnen wir mit $\binom01=0$. Aus
+$\binom n1=n$ folgt
+\[
+ \binom{n+1}1=\binom n0+\binom n1=1+n=n+1.
+\]
+Eine zweite Induktion liefert also $\binom n1=n$ für alle $n$.
+\end{proof}
+
+\begin{satz}[Symmetrie]
+Für $0\le k\le n$ gilt
+\begin{equation}\tag{S}\label{bin:symmetry}
+ \binom nk=\binom n{n-k}.
+\end{equation}
+\end{satz}
+
+\Beweisidee Vertausche in jedem Weg $L$ und $R$. Ein Weg mit $k$
+Rechtsschritten wird zu einem mit $n-k$ Rechtsschritten; erneutes
+Vertauschen gibt den ursprünglichen Weg zurück. Diese eindeutige
+Paarung erklärt die Symmetrie. Arithmetisch folgt sie so:
+
+\begin{proof}
+Die Zeile $0$ besteht im Dreieck nur aus einer $1$ und ist symmetrisch.
+Sei die Symmetrie für Zeile $n$ bewiesen. In Zeile $n+1$ stimmen
+die beiden Ränder überein, weil dort jeweils $1$ steht.
+Für einen inneren Index $1\le k\le n$ gilt
+\[
+ \begin{aligned}
+ \binom{n+1}k
+ &=\binom n{k-1}+\binom nk\\
+ &=\binom n{n+1-k}+\binom n{n-k}\\
+ &=\binom{n+1}{n+1-k}.
+ \end{aligned}
+\]
+Die mittlere Gleichheit verwendet zweimal die Induktionsannahme,
+die letzte Gleichheit die Pascal-Rekursion und die Vertauschbarkeit
+der Addition. Damit ist auch Zeile $n+1$ symmetrisch.
+\end{proof}
+
+\begin{beispiel}[Was sich sofort ablesen lässt]
+In Zeile $6$ stehen $1,6,15,20,15,6,1$. Insbesondere sind
+$\binom62=\binom64=15$ und $\binom65=\binom61=6$.
+Dagegen ist $\binom67=0$. Eine Stelle rechts vom Dreieck ist
+wohldefiniert; sie hat den Wert $0$.
+\end{beispiel}
+
+\subsection{Ein Weg ist zugleich eine Auswahl}
+\label{bin:selection}
+
+Ein Weg ist eindeutig bestimmt, sobald die Positionen seiner
+Rechtsschritte feststehen. Beispielsweise gehört zur Schrittfolge
+$RLLR$ die Auswahl $\{1,4\}$ aus den vier Schrittpositionen.
+Umgekehrt macht jede Auswahl von $k$ Positionen aus $n$ einen Weg:
+An den gewählten Stellen gehen wir nach rechts, sonst nach links.
+Beide Zuordnungen heben einander auf. Daher zählt $\binom nk$ auch
+die Auswahlen von $k$ aus $n$ verschiedenen Gegenständen, ohne
+Reihenfolge und ohne Wiederholung.
+
+Für $n=4$, $k=2$ entsprechen die sechs Wege den sechs Auswahlen
+\[
+ \{1,2\},\ \{1,3\},\ \{1,4\},\ \{2,3\},\ \{2,4\},\ \{3,4\}.
+\]
+Die Pascal-Zerlegung nach dem letzten Schritt wird dabei zur Zerlegung
+nach der letzten Position: Sie ist ausgewählt ($R$) oder nicht ($L$).
+Damit beschreiben Wege und Auswahlen dieselben Zahlen.
+
+\section{Ein einzelner Eintrag ohne die vorherigen Zeilen}
+\label{bin:factorials}
+
+Die Rekursion ist bequem, wenn man eine ganze Zeile benötigt.
+Für einen einzelnen Eintrag weit unten im Dreieck wäre es umständlich,
+alle vorherigen Zeilen aufzubauen. Hier helfen die Fakultäten.
+
+Wir erinnern an
+\[
+ 0!=1,\qquad (n+1)!=(n+1)n!.
+\]
+Insbesondere sind $1!=1$, $2!=2$, $3!=6$, $4!=24$.
+Jede Fakultät ist positiv: Das gilt für $0!=1$; ist $n!>0$,
+so ist auch $(n+1)n!>0$. Damit ist die Behauptung durch Induktion bewiesen.
+
+\begin{satz}[Fakultätenformel]
+Für $0\le k\le n$ gilt
+\begin{equation}\tag{F}\label{bin:factorial}
+ \boxed{\displaystyle k!(n-k)!\binom nk=n!.}
+\end{equation}
+Der Binomialkoeffizient ist die einzige natürliche Zahl, die diese
+Gleichung erfüllt.
+\end{satz}
+
+\Beweisidee Ein Weg nach $(n,k)$ ist eine Anordnung von $k$ Zeichen $R$
+und $n-k$ Zeichen $L$. Beschriften wir alle Zeichen einzeln, gibt es
+$n!$ Anordnungen: Für die Plätze bestehen nacheinander $n,n-1,\ldots,1$
+Wahlmöglichkeiten. Jeder unbeschriftete Weg entsteht dabei genau
+$k!(n-k)!$-mal, durch Vertauschen der $R$-Beschriftungen und der
+$L$-Beschriftungen. So erklärt das Wegemodell bereits die Gleichung (F).
+Für null Zeichen gibt es eine leere Anordnung. Es folgt der arithmetische
+Beweis ohne vorausgesetzte Division.
+
+\begin{proof}
+Wir führen Induktion über $n$, jeweils für alle $k\le n$.
+Für $n=0$ ist nur $k=0$ möglich, und es gilt $0!0!\binom00=1=0!$.
+
+Die Formel gelte nun in Zeile $n$. In der nächsten Zeile sind die
+Randfälle $k=0$ und $k=n+1$ sofort richtig, weil die Binomialkoeffizienten
+an beiden Rändern $1$ sind. Sei also $1\le k\le n$.
+Mit der Rekursion erhalten wir
+\[
+ \begin{aligned}
+ &k!(n+1-k)!\binom{n+1}k\\
+ &\quad=k!(n+1-k)!\binom n{k-1}
+       +k!(n+1-k)!\binom nk.
+ \end{aligned}
+\]
+Für den ersten Summanden benutzen wir $k!=k(k-1)!$ und die
+Induktionsannahme am Index $k-1$:
+\[
+ \begin{aligned}
+ &k!(n+1-k)!\binom n{k-1}\\
+ &\quad=k\bigl((k-1)!(n-(k-1))!\binom n{k-1}\bigr)\\
+ &\quad=kn!.
+ \end{aligned}
+\]
+Für den zweiten benutzen wir $(n+1-k)!=(n+1-k)(n-k)!$ und die
+Induktionsannahme am Index $k$:
+\[
+ \begin{aligned}
+ &k!(n+1-k)!\binom nk\\
+ &\quad=(n+1-k)\bigl(k!(n-k)!\binom nk\bigr)\\
+ &\quad=(n+1-k)n!.
+ \end{aligned}
+\]
+Zusammen ergibt dies
+\[
+ kn!+(n+1-k)n!=(n+1)n!=(n+1)!.
+\]
+Damit ist die Formel bewiesen. Schließlich ist $k!(n-k)!$ positiv.
+Erfüllen zwei natürliche Zahlen die Gleichung \eqref{bin:factorial},
+kann man diesen gemeinsamen positiven Faktor kürzen; die Zahlen sind gleich.
+\end{proof}
+
+Die vertraute Schreibweise
+\[
+ \binom nk=\frac{n!}{k!(n-k)!}\qquad(0\le k\le n)
+\]
+bezeichnet somit eine \emph{exakte Division}: Der Zähler ist ein
+natürliches Vielfaches des Nenners. Die Existenz des Ergebnisses in
+$\N$ wurde durch die Rekursion gesichert, bevor wir einen Bruch schreiben.
+Für $k>n$ verwenden wir weiterhin den Wert $0$ aus \eqref{bin:boundary};
+eine Fakultät von $n-k$ wird dann nicht gebildet.
+
+\begin{beispiel}[Zwei Plätze unter zehn]
+Für $\binom{10}2$ liefert die Fakultätenformel
+\[
+ 2!\,8!\binom{10}2=10!=10\cdot9\cdot8!.
+\]
+Nach Kürzen von $8!$ bleibt $2\binom{10}2=90$, also
+$\binom{10}2=45$. Nach der Symmetrie ist auch $\binom{10}8=45$.
+Man muss weder die zehnte Zeile noch große Fakultäten ausrechnen.
+\end{beispiel}
+
+\section{Warum das Dreieck beim Potenzieren erscheint}
+\label{bin:theorem}
+
+Beim Ausmultiplizieren von $(a+b)^2$ entstehen die drei Terme
+$b^2+2ab+a^2$, bei $(a+b)^3$ die vier Terme
+$b^3+3ab^2+3a^2b+a^3$. Die Koeffizienten sind die Zeilen $2$ und $3$.
+Wir ordnen die Terme hier nach aufsteigenden Potenzen von $a$.
+
+\begin{satz}[Binomischer Lehrsatz]
+Für $a,b,n\in\N$ gilt
+\begin{equation}\tag{B}\label{bin:binomial-theorem}
+ \boxed{\displaystyle
+ (a+b)^n=\sum_{k=0}^n\binom nk a^k b^{n-k}.}
+\end{equation}
+\end{satz}
+
+\Beweisidee Beim Ausmultiplizieren der $n$ Faktoren $(a+b)$ wählen wir
+in jedem Faktor $a$ oder $b$. Lies $a$ als Rechtsschritt und $b$ als
+Linksschritt. Jede Schrittfolge liefert genau ein Produkt. Die
+$\binom nk$ Wege nach $(n,k)$ liefern alle $a^kb^{n-k}$; nach Endpunkten
+zusammengefasst ergibt sich (B). Auch bei $a=0$ oder $b=0$ bleibt dies
+richtig, mit der vereinbarten Potenzkonvention. Die folgende Induktion
+führt das Zusammenfassen der Terme vollständig aus.
+
+\begin{proof}
+Wir halten $a,b$ fest und führen Induktion über $n$.
+Für $n=0$ ist die linke Seite $1$. Rechts steht nur
+$\binom00a^0b^0=1$. Dies gilt auch, wenn $a$ oder $b$ null ist.
+
+Sei die Formel für $n$ bewiesen. Dann ergeben das Distributivgesetz
+und die Potenzregeln
+\[
+ \begin{aligned}
+ (a+b)^{n+1}
+ &=(a+b)\sum_{k=0}^n\binom nk a^k b^{n-k}\\
+ &=\sum_{k=0}^n\binom nk a^{k+1}b^{n-k}\\
+ &\quad+\sum_{k=0}^n\binom nk a^k b^{n+1-k}.
+ \end{aligned}
+\]
+In der ersten Summe setzen wir $j=k+1$. Aus den Grenzen $0\le k\le n$
+werden $1\le j\le n+1$, und die erste Summe wird zu
+\[
+ \sum_{j=1}^{n+1}\binom n{j-1}a^j b^{n+1-j}.
+\]
+Nun benennen wir $j$ wieder in $k$ um. Für $1\le k\le n$ enthalten
+beide Summen denselben Faktor $a^k b^{n+1-k}$.
+Der Term $k=0$ kommt nur aus der zweiten, der Term $k=n+1$ nur
+aus der ersten Summe. Mit den Randwerten $\binom n0=\binom nn=1$
+erhalten wir daher
+\[
+ \begin{aligned}
+ (a+b)^{n+1}
+ &=b^{n+1}+a^{n+1}\\
+ &\quad+\sum_{k=1}^n\left(\binom n{k-1}+\binom nk\right)
+        a^k b^{n+1-k}\\
+ &=b^{n+1}+a^{n+1}\\
+ &\quad+\sum_{k=1}^n\binom{n+1}k a^k b^{n+1-k}\\
+ &=\sum_{k=0}^{n+1}\binom{n+1}k a^k b^{n+1-k}.
+ \end{aligned}
+\]
+Beim Zusammenfassen der Koeffizienten wird die Pascal-Rekursion
+verwendet. In der letzten Zeile werden
+die beiden Randterme wieder in die Summe aufgenommen. Ist $n=0$,
+ist die innere Summe leer; dieselbe Rechnung liefert dann $b+a$.
+\end{proof}
+
+\begin{beispiel}[Die vierte Potenz]
+Die Zeile $1,4,6,4,1$ liefert
+\[
+ (a+b)^4=b^4+4ab^3+6a^2b^2+4a^3b+a^4.
+\]
+Für $a=2$ und $b=3$ wird daraus
+\[
+ 5^4=81+216+216+96+16=625.
+\]
+Die sechs Wege nach $(4,2)$ entsprechen genau den sechs Produkten
+mit zweimal $a$ und zweimal $b$. Deshalb steht vor $a^2b^2$ die Zahl $6$.
+\end{beispiel}
+
+\section{Zeilen und Diagonalen summieren}
+\label{bin:sums}
+
+Im Wegemodell erklären wir Summen durch Ordnen der Wege:
+nach ihrem Endpunkt für Zeilensummen und nach dem letzten
+Rechtsschritt für Diagonalensummen.
+
+\begin{satz}[Zeilensumme]
+Für jedes $n\in\N$ gilt
+\begin{equation}\tag{Z}\label{bin:rowsum}
+ \sum_{k=0}^n\binom nk=2^n.
+\end{equation}
+\end{satz}
+\begin{proof}
+Bei jedem Schritt gibt es unabhängig zwei Richtungen. Daher gibt es
+$2^n$ Wege der Länge $n$, bei $n=0$ genau einen leeren Weg.
+Jeder endet an genau einer Stelle $k$ der Zeile $n$; diese Klasse hat
+$\binom nk$ Wege. Addition über die disjunkten Endpunktklassen beweist
+die Formel. Arithmetisch erhält man dieselbe Gleichung aus
+\eqref{bin:binomial-theorem} mit $a=b=1$.
+\end{proof}
+
+Beispielsweise zählt $1+4+6+4+1=16=2^4$ alle Wege mit vier Schritten.
+
+\subsection*{Die Summe entlang einer Diagonale}
+
+Halten wir den unteren Index $r$ fest und erhöhen nur den oberen,
+lesen wir eine schräge Diagonale. Bei $r=2$ beginnt sie mit
+$1,3,6,10,15,\ldots$. Eine endliche Anfangssumme steht eine Zeile
+tiefer in der nächsten Diagonale:
+\begin{center}
+\PascalWegeDiagonal
+\end{center}
+Die markierten Einträge zeigen
+\[
+ \binom22+\binom32+\binom42+\binom52
+ =1+3+6+10=20=\binom63.
+\]
+
+\begin{satz}[Diagonalensumme]
+Für alle $n,r\in\N$ gilt
+\begin{equation}\tag{D}\label{bin:diagonal}
+ \boxed{\displaystyle
+ \sum_{i=0}^n\binom{i+r}r=\binom{n+r+1}{r+1}.}
+\end{equation}
+\end{satz}
+
+\begin{proof}[Beweis mit Wegen]
+Ein Weg zum Ziel $(n+r+1,r+1)$ hat $r+1$ Rechtsschritte und $n$
+Linksschritte. Sein letzter Rechtsschritt folgt nach genau $i$
+Linksschritten und $r$ Rechtsschritten, für ein eindeutiges $i$ mit
+$0\le i\le n$. Der Weg davor endet also bei $(i+r,r)$ und kann auf
+$\binom{i+r}r$ Arten gewählt werden. Danach folgen der letzte Schritt
+$R$ und zwingend $n-i$ Schritte $L$. Umgekehrt ergibt jeder solche
+Anfangsweg genau einen vollständigen Weg dieser Klasse.
+
+Die Klassen für $i=0,\ldots,n$ sind disjunkt und erfassen alle Wege
+zum Ziel. Ihre Anzahlen addieren sich deshalb zu
+$\binom{n+r+1}{r+1}$. Im Bild ist $r=2$, $n=3$: Die Zahlen
+$1,3,6,10$ zählen die möglichen Anfangswege vor dem letzten $R$.
+\end{proof}
+
+\begin{proof}[Arithmetischer Beweis]
+Wir halten $r$ fest und führen Induktion über $n$.
+Für $n=0$ lautet die Gleichung
+$\binom rr=\binom{r+1}{r+1}$; beide Seiten sind $1$.
+Die Formel gelte für $n$. Für die um einen Summanden längere Summe gilt
+\[
+ \begin{aligned}
+ \sum_{i=0}^{n+1}\binom{i+r}r
+ &=\left(\sum_{i=0}^n\binom{i+r}r\right)+\binom{n+r+1}r\\
+ &=\binom{n+r+1}{r+1}+\binom{n+r+1}r\\
+ &=\binom{n+r+2}{r+1}.
+ \end{aligned}
+\]
+Die zweite Gleichheit ist die Induktionsannahme, die dritte die
+Pascal-Rekursion. Dies ist genau die Behauptung für $n+1$.
+\end{proof}
+
+\begin{beispiel}[Die Summe der ersten natürlichen Zahlen]
+Für $r=1$ und $\binom{i+1}1=i+1$ liefert \eqref{bin:diagonal}
+\[
+ 1+2+\cdots+(n+1)=\binom{n+2}2.
+\]
+Aus der Fakultätenformel folgt durch Kürzen von $n!$
+\[
+ 2\binom{n+2}2=(n+1)(n+2).
+\]
+Damit erhalten wir die natürliche Gleichung
+\[
+ 2\sum_{i=0}^n(i+1)=(n+1)(n+2).
+\]
+Bei $n=3$ ist dies $2(1+2+3+4)=4\cdot5$.
+Für $r=0$ besagt dieselbe Diagonalensummenformel einfach:
+$n+1$ Einsen ergeben $\binom{n+1}1=n+1$.
+\end{beispiel}
+
+\section{Zwei Zeilen zusammenfügen: Vandermonde}
+\label{bin:vandermonde-section}
+
+Die Pascal-Regel ordnet Wege nach ihrem letzten Schritt.
+Nun wählen wir eine beliebige Zwischenzeile: Jeder Weg trifft sie an
+genau einer Stelle. An jeder Station kombinieren wir Hinwege und
+Weiterwege; anschließend addieren wir über alle Stationen.
+
+\begin{satz}[Vandermondesche Identität]
+Für alle $m,n,r\in\N$ gilt
+\begin{equation}\tag{V}\label{bin:vandermonde}
+ \boxed{\displaystyle
+ \sum_{k=0}^r\binom mk\binom n{r-k}=\binom{m+n}r.}
+\end{equation}
+\end{satz}
+
+\begin{center}\PascalWegeVandermonde\end{center}
+Im Bild führen $2$ Hinwege zur Station B und $3$ Weiterwege von B
+zum Ziel. Jeder Hinweg passt zu jedem Weiterweg: Über B führen
+$2\cdot3=6$ Wege. Über A und C kommen $1\cdot1$ und $1\cdot3$ hinzu.
+Insgesamt sind es $10=\binom53$ Wege.
+
+\begin{proof}[Beweis mit Wegen]
+Sei zunächst $r\le m+n$. Ein Weg nach $(m+n,r)$ hat insgesamt
+$m+n$ Schritte, darunter $r$ Rechtsschritte. Nach den ersten $m$
+Schritten steht er an genau einer Stelle $(m,k)$, wobei $0\le k\le r$.
+Den Hinweg kann man auf $\binom mk$ Arten wählen.
+
+Für den Weiterweg bleiben $n$ Schritte, davon $r-k$ nach rechts.
+Beginnt man die Schrittzählung an der Zwischenstation neu, gibt es
+also $\binom n{r-k}$ Weiterwege. Diese Zahl zählt \emph{ab der Station};
+sie ist nicht der globale Eintrag an einem späteren Punkt des Dreiecks.
+Jeder Hinweg lässt sich mit jedem Weiterweg verbinden. Umgekehrt
+gewinnt man beide Teile eindeutig zurück, indem man nach dem $m$-ten
+Schritt trennt. Somit gibt es genau
+$\binom mk\binom n{r-k}$ Wege über diese Station.
+
+Die Stationsklassen sind disjunkt und vollständig. Addition beweist
+(V). Unmögliche Stationen oder Weiterwege tragen $0$ bei. Ist
+$r>m+n$, ist das Ziel unerreichbar. Auch jeder Summand ist dann $0$:
+Aus $k\le m$ und $r-k\le n$ würde $r\le m+n$ folgen. Damit gilt die
+Gleichung auch außerhalb des Dreiecks.
+\end{proof}
+
+\textbf{Dasselbe als Kugelauswahl.}
+Teile $m+n$ unterscheidbare Kugeln in Gruppen mit $m$ und $n$ Kugeln.
+Jede Auswahl von $r$ Kugeln enthält eindeutig $k$ aus der ersten und
+$r-k$ aus der zweiten Gruppe. Für festes $k$ werden die Möglichkeiten
+multipliziert, über die möglichen $k$ addiert. Im Wegemodell sind die
+ausgewählten Positionen gerade die Rechtsschritte in den beiden Wegteilen.
+
+\begin{proof}[Arithmetischer Beweis]
+Wir halten $m$ fest und setzen
+\[
+ V_n(r):=\sum_{k=0}^r\binom mk\binom n{r-k}.
+\]
+Wir führen Induktion \emph{nur über $n$}, jeweils für alle $r\in\N$.
+Bei $n=0$ ist $\binom0{r-k}$ nur für $k=r$ ungleich $0$ und dort $1$.
+Daher $V_0(r)=\binom mr=\binom{m+0}r$.
+
+Die Behauptung gelte für $n$ und alle $r$. Für $r=0$ ist unmittelbar
+$V_{n+1}(0)=1=\binom{m+n+1}0$. Sei nun $r\ge1$.
+Wir spalten den letzten Summanden $k=r$ ab. In den übrigen Summanden
+ist $r-k\ge1$, sodass Pascal ohne negative Indizes anwendbar ist:
+\[
+ \begin{aligned}
+ V_{n+1}(r)
+ &=\binom mr+\sum_{k=0}^{r-1}\binom mk\binom{n+1}{r-k}\\
+ &=\binom mr+\sum_{k=0}^{r-1}\binom mk
+       \left[\binom n{r-k}+\binom n{r-1-k}\right]\\
+ &=V_n(r)+V_n(r-1).
+ \end{aligned}
+\]
+Die erste Teilsumme wird durch den abgespaltenen Term
+$\binom mr=\binom mr\binom n0$ zu $V_n(r)$ ergänzt;
+die zweite ist bereits $V_n(r-1)$.
+Mit der Induktionsannahme bei $r$ und $r-1$ und nochmals Pascal folgt
+\[
+ V_{n+1}(r)=\binom{m+n}r+\binom{m+n}{r-1}
+          =\binom{m+n+1}r.
+\]
+Die Annahme musste für \emph{alle} $r$ gelten, weil beide Nachbarwerte
+benötigt werden. Damit ist der Schritt $n\to n+1$ vollständig.
+\end{proof}
+
+\subsection*{Eine Summe von Quadraten}
+
+\begin{satz}[Quadratsumme einer Zeile]
+Für jedes $n\in\N$ gilt
+\begin{equation}\tag{Q}\label{bin:squares}
+ \sum_{k=0}^n\binom nk^2=\binom{2n}n.
+\end{equation}
+\end{satz}
+\Beweisidee Schneide jeden Weg nach $(2n,n)$ in der Mitte, nach $n$
+Schritten. Zur Station $(n,k)$ gibt es $\binom nk$ Hinwege; von dort
+noch $\binom n{n-k}=\binom nk$ Weiterwege. Deshalb entsteht an jeder
+Station ein Quadrat. Die Formel folgt genau dieser Zerlegung:
+\begin{proof}
+Setze in \eqref{bin:vandermonde} die beiden oberen Indizes gleich $n$
+und den unteren Index ebenfalls gleich $n$. Dann folgt
+\[
+ \binom{2n}n=\sum_{k=0}^n\binom nk\binom n{n-k}.
+\]
+Für jeden Summanden ist $0\le k\le n$. Nach der Symmetrie
+\eqref{bin:symmetry} ist deshalb $\binom n{n-k}=\binom nk$.
+Das macht jedes Produkt zum behaupteten Quadrat.
+\end{proof}
+
+\begin{beispiel}
+Die Zeile $3$ ist $1,3,3,1$. Ihre Quadratsumme beträgt
+\[
+ 1^2+3^2+3^2+1^2=20=\binom63.
+\]
+Die gewöhnliche Zeilensumme wäre dagegen $1+3+3+1=8=2^3$.
+Bei $n=0$ ergeben beide Formeln den Wert $1$.
+\end{beispiel}
+
+\section{Zusammenhang und Zuordnung zum Leitfaden}
+\label{bin:map}
+
+Alle Wegeideen beruhen auf derselben bewiesenen Zählinterpretation.
+Wir spiegeln Wege, ordnen sie nach Endpunkten oder dem letzten
+Rechtsschritt und zerlegen sie an einer Zwischenzeile. Die arithmetischen
+Beweise sichern dieselben Zusammenhänge mit Rekursion und Induktion.
+
+Die lokalen Gleichungsmarken (P) bis (Q) dienen der Orientierung.
+Für die Zuordnung zum Leitfaden gelten die folgenden Nummern:
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}p{.35\linewidth}X@{}}
+\toprule
+Leitfaden Band 10 & Inhalt und Stelle\\
+\midrule
+\GuideRef{Def.75}{Definition 10H.5.3.2}
+ & Pascal-Rekursion, Existenz und Eindeutigkeit
+ (Abschnitt~\ref{bin:construction})\\
+\GuideRef{Thm.76}{Theorem 10H.5.3.2}
+ & Randwerte, Nullen, $\binom n1=n$, Symmetrie, Fakultätenformel
+ (Abschnitte~\ref{bin:basic} und~\ref{bin:factorials})\\
+\GuideRef{Thm.77}{Theorem 10H.5.3.3}
+ & Binomischer Lehrsatz
+ (Abschnitt~\ref{bin:theorem})\\
+\GuideRef{Thm.78}{Theorem 10H.5.3.4}
+ & Zeilen- und Diagonalensummen
+ (Abschnitt~\ref{bin:sums})\\
+\GuideRef{Thm.79}{Theorem 10H.5.3.5}
+ & Vandermonde und Quadratsumme
+ (Abschnitt~\ref{bin:vandermonde-section})\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\textbf{Weiterlesen.}
+Die \NewtonLink{} entwickelt Folgen aus ihren Anfangsdifferenzen.
+Die Pascal-Rekursion und die Diagonalensummen bereiten diesen späteren
+Einsatz vor. 

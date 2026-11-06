@@ -1,0 +1,91 @@
+% A4 quer mit zwei A5-Hälften: Text links, Notizen rechts.
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage[a4paper,landscape,top=18mm,bottom=16mm,left=12mm,right=160.5mm]{geometry}
+\usepackage{enumitem}
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{10.5}{13}}
+\makeatother
+\normalsize
+\setlist{nosep,leftmargin=1.5em,topsep=.35em}
+\pagestyle{empty}
+\usepackage{microtype,needspace,etoolbox}
+\usepackage[hidelinks]{hyperref}
+\definecolor{cutsblue}{RGB}{22,89,112}
+\definecolor{cutspale}{RGB}{231,241,244}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newtheorem*{satz}{Satz}
+\newtheorem*{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{beispiel}{Beispiel}
+\newcommand{\Beweisidee}{\par\smallskip\textbf{Beweisidee.}\ }
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.42em plus .08em minus .08em}
+\setlength{\emergencystretch}{1.5em}
+\setcounter{tocdepth}{1}
+\newlength{\CutsWorkHeight}
+\newcommand{\ExerciseSpace}[1]{%
+ \par\smallskip\begingroup
+ \setlength{\CutsWorkHeight}{\dimexpr\pagegoal-\pagetotal-2\baselineskip\relax}%
+ \ifdim\CutsWorkHeight>#1mm\setlength{\CutsWorkHeight}{#1mm}\fi
+ \ifdim\CutsWorkHeight>12mm
+  \vfill{\small\sffamily Deine Rechnung oder Skizze}\par\nobreak
+  \begin{tikzpicture}
+   \draw[step=5mm,black!22,line width=.2pt] (0,0) grid (120mm,\CutsWorkHeight);
+  \end{tikzpicture}
+ \fi\endgroup}
+\newcommand{\Exercise}[2]{%
+ \clearpage
+ \ifnum#1=1
+  \section{Übungsblätter}\label{cuts:exercises}
+  Arbeite zuerst ohne die Lösungen ab Seite~\pageref{cuts:solutions}.
+  Nutze die Karoflächen für Skizzen und eigene Beweise.
+ \fi
+ \subsection*{Aufgabe #1: #2}\phantomsection\label{cuts:exercise-#1}}
+\newcommand{\ExtraWork}[2]{%
+ \clearpage\subsection*{Arbeitsraum zu Aufgabe #1}
+ \textbf{Hinweis, falls du ihn brauchst.} #2\par\ExerciseSpace{130}}
+\AddToHook{shipout/background}{%
+ \begin{tikzpicture}[remember picture,overlay]
+  \begin{scope}[shift={(current page.north west)},x=1mm,y=-1mm]
+   \ifnum\value{page}>1
+    \node[anchor=west,font=\sffamily\fontsize{7.5}{9}\selectfont,text=black!55]
+       at (12,10) {BAND 19\quad DEDEKINDSCHE SCHNITTE\quad \CutsBookletLabel};
+    \draw[black!25,line width=.25pt] (12,13)--(136.5,13);
+    \node[font=\sffamily\fontsize{8}{10}\selectfont,text=black!60]
+      at (74.25,201) {\CutsPageLabel{} \thepage};
+   \fi
+   \node[anchor=west,font=\sffamily\fontsize{8.5}{10}\selectfont,text=black!65]
+      at (161,13) {NOTIZEN\quad Fragen, Ideen und Beweise};
+   \begin{scope}[shift={(161,22)}]
+    \draw[step=5mm,black!22,line width=.2pt] (0,0) grid (125,170);
+   \end{scope}
+   \node[font=\sffamily\fontsize{8}{10}\selectfont,text=black!60]
+      at (223.5,201) {Notizen zu \CutsPageLabel{} \thepage};
+  \end{scope}
+ \end{tikzpicture}}
+\newcommand{\CutsCoverFigure}{%
+\begin{tikzpicture}[x=1cm,y=1cm]
+ \fill[cutspale] (0,-.25) rectangle (6.2,.25);
+ \draw[-{Stealth[length=2mm]},black!55] (0,0)--(10,0) node[right] {$\Q$};
+ \draw[cutsblue,line width=1.3pt] (0,0)--(6.2,0);
+ \draw[cutsblue,fill=white,line width=.9pt] (6.2,0) circle (2pt);
+ \node[below=5mm] at (6.2,0) {$q$};
+ \node[text=cutsblue] at (3.1,.8) {$\widehat q=\{p\in\Q\mid p<q\}$};
+ \node[align=center,font=\small,text=black!65] at (5,-1.3)
+ {Eine Zahl durch alles beschreiben,\\was links von ihr liegt.};
+\end{tikzpicture}}
+\allowdisplaybreaks[1]
+\clubpenalty=10000
+\widowpenalty=10000
+\BeforeBeginEnvironment{satz}{\Needspace{6\baselineskip}}
+\BeforeBeginEnvironment{definition}{\Needspace{6\baselineskip}}
+\BeforeBeginEnvironment{beispiel}{\Needspace{5\baselineskip}}
+\pretocmd{\section}{\Needspace{9\baselineskip}}{}{}

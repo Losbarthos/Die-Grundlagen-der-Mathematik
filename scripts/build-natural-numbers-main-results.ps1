@@ -1,5 +1,8 @@
-﻿[CmdletBinding()]
-param([switch]$SkipPublish)
+[CmdletBinding()]
+param(
+    [string]$Python = 'python',
+    [switch]$SkipPublish
+)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -8,13 +11,14 @@ $artifactDirectory = 'registry/main-results'
 $job = '_B10-main-results'
 $source = 'editions/b10-main-results.tex'
 $logDirectory = Join-Path $repoRoot 'tmp/main-results'
-$publicationDirectory = Join-Path $repoRoot 'output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfaden der Hauptresultate'
-$publicationName = 'Bd. 10 - Natürliche Zahlen - Leitfaden der Hauptresultate.pdf'
 
 foreach ($command in @('latexmk', 'lualatex')) {
     if (-not (Get-Command $command -ErrorAction SilentlyContinue)) {
         throw "Required command '$command' was not found on PATH."
     }
+}
+if (-not $SkipPublish -and -not (Get-Command $Python -ErrorAction SilentlyContinue)) {
+    throw "Required Python command '$Python' was not found."
 }
 if (-not (Test-Path -LiteralPath (Join-Path $repoRoot $source) -PathType Leaf)) {
     throw "Missing guide source: $source"
@@ -48,11 +52,17 @@ try {
         throw "Unresolved references or overfull boxes in $artifactBase.log"
     }
     if (-not $SkipPublish) {
-        # This self-contained guide has no links to external PDF destinations.
-        New-Item -ItemType Directory -Force -Path $publicationDirectory | Out-Null
-        $destination = Join-Path $publicationDirectory $publicationName
-        Copy-Item -LiteralPath "$artifactBase.pdf" -Destination $destination -Force
-        Write-Host "Published: $destination"
+        $publishLog = Join-Path $logDirectory "$job.publish.log"
+        try {
+            $ErrorActionPreference = 'Continue'
+            & $Python (Join-Path $PSScriptRoot 'publish-pdfs.py') --natural-numbers-only *> $publishLog
+            $publishExitCode = $LASTEXITCODE
+        } finally { $ErrorActionPreference = $nativeErrorPreference }
+        if ($publishExitCode -ne 0) {
+            Get-Content -LiteralPath $publishLog -Tail 55 | Write-Host
+            throw 'B10 guide publication or complete PDF link audit failed.'
+        }
+        Write-Host 'B10 guide built and published; complete PDF link audit passed.' 
     } else {
         Write-Host 'B10 main-results guide built; LaTeX reference checks passed.'
     }

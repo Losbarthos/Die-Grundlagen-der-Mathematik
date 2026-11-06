@@ -69,6 +69,23 @@ Die Konstruktion über den kleinsten rekursionsadmissiblen Graphen und ihre
 Hilfsaussagen stehen in den Begleitfassungen. Die Beweistabellen sind mit
 dem eigenen Nummernpräfix `10E` die Referenzquelle für diese Konstruktion.
 
+Die [Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Lesefassung.pdf>) zu Band 10 führt von der Pascal-Rekursion über
+Fakultätenformel und binomischen Lehrsatz zu Zeilen- und Diagonalsummen
+sowie Vandermondes Identität. Sie enthält vollständige Prosabeweise,
+Beispiele und die Zuordnung zum Leitfaden der Hauptresultate.
+Das separate [Übungsheft](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten - Übungsheft.pdf>) enthält die Aufgaben und ausführlichen
+Lösungen. Beide Hefte besitzen ein eigenes Deckblatt und eine eigene
+Seitenzählung; ihre A4-Querformatseiten verbinden Text und karierte
+Notizfläche für die Bildschirmansicht oder das flache Heften.
+
+Zum Falten gibt es zwei getrennte, fertig angeordnete Druckdateien:
+[Lesefassung als Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Druckbroschüre.pdf>) und
+[Übungsheft als Druckbroschüre](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/Bd. 10 - Binomialkoeffizienten - Übungsheft - Druckbroschüre.pdf>).
+Jedes Heft separat auf A4 quer, mit tatsächlicher Größe 100 % und Duplex an
+der kurzen Kante drucken; keine weitere Broschürenfunktion einschalten.
+Die Bögen je Heft in Reihenfolge zusammenlegen, mittig falten und heften.
+Alle vier PDFs entstehen mit `scripts/build-binomial-reading.ps1`.
+
 Ein [Ausbauvorschlag bis zu Gödels Unvollständigkeitssätzen](docs/goedel-ausbau.md)
 beschreibt mögliche zusätzliche Fachbände und ihre Voraussetzungen.
 
@@ -94,6 +111,19 @@ Die Modellkonstruktion und alle 94 Tabellenbeweise stehen im Ergänzungsband;
 seine lokalen Aussagen tragen den Präfix `17E`. Band 17 und der Gesamtband
 behalten die vollständige Axiomatik, den Modellsatz und die öffentlich
 benötigten Aussagen mit ihren bisherigen Nummern und Verweiszielen.
+
+Die Dedekindschen Schnitte aus Band 19 besitzen die [Lesefassung „Lücken schließen“](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Lesefassung.pdf>),
+ein separates [Übungsheft](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft.pdf>) und [Beweistabellen](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Beweistabellen.pdf>).
+Der kurze Lesebogen führt von rationalen Hauptschnitten über die totale
+Inklusionsordnung zur Vereinigung als Supremum. Acht Aufgaben mit
+vollständigen Lösungen begleiten die Argumentation. Beide Hefte haben
+A4-Querseiten mit Text links und karierten Notizen rechts. Für das Falten
+stehen die [Druckbroschüre der Lesefassung](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Druckbroschüre.pdf>) und die
+[Druckbroschüre des Übungshefts](<output/04 Zahlen und Folgen/Ergänzungen/Bd. 19 Reelle Zahlen/Dedekindsche Schnitte und Vollständigkeit/Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft - Druckbroschüre.pdf>) bereit;
+jede benötigt acht A4-Bögen und ergibt 32 A5-Seiten einschließlich Notizseiten.
+Die formalen Tabellen bleiben in einem eigenen PDF. Sie werden in Band 19
+und im Beweisheft aus denselben Quellen gesetzt; sämtliche Nummern bleiben erhalten.
+Build: `pwsh -NoProfile -File ./scripts/build-cuts-editions.ps1`.
 
 Die formalen Differenzen und der Einbettungssatz aus Band 41 besitzen eine
 [Lesefassung](<output/08 Gruppen/Ergänzungen/Bd. 41 Abelsche Gruppen/Formale Differenzen/Bd. 41 - Formale Differenzen - Lesefassung.pdf>)

@@ -137,6 +137,19 @@ NEWTON_NAMES = {
 ABEL_NAMES = {
     "_B21-abel-reading.pdf": "Bd. 21 - Teleskopformel und Abelsche partielle Summation - Lesefassung.pdf",
 }
+BINOMIAL_NAMES = {
+    "_B10-binomial-reading.pdf": "Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Lesefassung.pdf",
+    "_B10-binomial-booklet.pdf": "Bd. 10 - Binomialkoeffizienten und das Pascalsche Dreieck - Druckbroschüre.pdf",
+    "_B10-binomial-exercises.pdf": "Bd. 10 - Binomialkoeffizienten - Übungsheft.pdf",
+    "_B10-binomial-exercises-booklet.pdf": "Bd. 10 - Binomialkoeffizienten - Übungsheft - Druckbroschüre.pdf",
+}
+CUTS_NAMES = {
+    "_B19-cuts-reading.pdf": "Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Lesefassung.pdf",
+    "_B19-cuts-booklet.pdf": "Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Druckbroschüre.pdf",
+    "_B19-cuts-exercises.pdf": "Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft.pdf",
+    "_B19-cuts-exercises-booklet.pdf": "Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Übungsheft - Druckbroschüre.pdf",
+    "_B19-cuts-proofs.pdf": "Bd. 19 - Dedekindsche Schnitte und Vollständigkeit - Beweistabellen.pdf",
+}
 MAIN_RESULTS_NAMES = {
     "_B03-main-results.pdf": "Bd. 03 - Mengenlehre - Leitfaden der Hauptresultate.pdf",
     "_B04-main-results.pdf": "Bd. 04 - Totale Relationen - Leitfaden der Hauptresultate.pdf",
@@ -164,13 +177,15 @@ INDEPENDENT_READINGS = {
     "context-profiles": CONTEXT_PROFILES_NAMES,
     "newton": NEWTON_NAMES,
     "abel": ABEL_NAMES,
+    "binomial": BINOMIAL_NAMES,
+    "cuts": CUTS_NAMES,
     "main-results": MAIN_RESULTS_NAMES,
 }
-INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES, **NEWTON_NAMES, **ABEL_NAMES, **MAIN_RESULTS_NAMES}
+INDEPENDENT_READING_NAMES = {**THREE_PRODUCTS_NAMES, **TWO_PRODUCTS_NAMES, **CONTEXT_PROFILES_NAMES, **NEWTON_NAMES, **ABEL_NAMES, **BINOMIAL_NAMES, **CUTS_NAMES, **MAIN_RESULTS_NAMES}
 MANUAL_READING_NAMES = {
     "context-equivalence-reading.pdf": "Bd. 28 - Kontextäquivalenz - Experimentelle Lesefassung.pdf",
 }
-EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(THREE_PRODUCTS_NAMES.values()) | set(TWO_PRODUCTS_NAMES.values()) | set(CONTEXT_PROFILES_NAMES.values()) | set(ABEL_NAMES.values()) | set(MANUAL_READING_NAMES.values())
+EXPERIMENTAL_NAMES = set(COMPACTNESS_NAMES.values()) | set(THREE_PRODUCTS_NAMES.values()) | set(TWO_PRODUCTS_NAMES.values()) | set(CONTEXT_PROFILES_NAMES.values()) | set(ABEL_NAMES.values()) | set(BINOMIAL_NAMES.values()) | set(MANUAL_READING_NAMES.values())
 SUPPLEMENT_NAMES = {**CSB_PILOT_NAMES, **MOGILJANSKAJA_NAMES, **DEDEKIND_NAMES, **BRACKETING_NAMES, **POWER_ISOMORPHISMS_NAMES, **POWER_NAMES, **COORDINATES_NAMES, **DIFFERENCES_NAMES, **INTEGERS_NAMES, **SEMILATTICE_NAMES, **FRANKL_NAMES, **RECONSTRUCTION_NAMES, **NULLPRODUCTS_NAMES, **TABLE_ISOMORPHISMS_NAMES, **INDEX_PERIOD_NAMES, **ZERO_TRANSPORT_NAMES, **FINITE_SEMIGROUPS_NAMES, **COMPACTNESS_NAMES, **INDEPENDENT_READING_NAMES, **MANUAL_READING_NAMES}
 SUPPLEMENT_TOPICS = {
     **{name: "Cantor-Bernstein" for name in CSB_PILOT_NAMES.values()},
@@ -195,6 +210,8 @@ SUPPLEMENT_TOPICS = {
     **{name: "Kontextprofile und Induktion" for name in CONTEXT_PROFILES_NAMES.values()},
     **{name: "Newtondarstellung und endliche Differenzen" for name in NEWTON_NAMES.values()},
     **{name: "Teleskopformel und Abelsche partielle Summation" for name in ABEL_NAMES.values()},
+    **{name: "Binomialkoeffizienten und das Pascalsche Dreieck" for name in BINOMIAL_NAMES.values()},
+    **{name: "Dedekindsche Schnitte und Vollständigkeit" for name in CUTS_NAMES.values()},
     **{name: "Leitfaden der Hauptresultate" for name in MAIN_RESULTS_NAMES.values()},
     **{name: "Kontextäquivalenz" for name in MANUAL_READING_NAMES.values()},
     **{name: "Totale Beschränktheit und Kompaktheit" for name in COMPACTNESS_NAMES.values()},
@@ -480,7 +497,7 @@ def assert_build_ready(source, reader):
     if re.fullmatch(r"_B\d{2}", source.stem) or source.name in SUPPLEMENT_NAMES:
         debug = source.with_suffix(".debug.log")
         log = source.with_suffix(".log")
-        required_logs = (log,) if source.name in INDEPENDENT_READING_NAMES and source.name != "_B21-newton-proofs.pdf" else (debug, log)
+        required_logs = (log,) if source.name in INDEPENDENT_READING_NAMES and source.name not in {"_B21-newton-proofs.pdf", "_B19-cuts-proofs.pdf"} else (debug, log)
         for required in required_logs:
             if not required.is_file():
                 raise FileNotFoundError(f"Missing build diagnostic: {required}")
@@ -503,6 +520,21 @@ def assert_build_ready(source, reader):
             re.IGNORECASE,
         ):
             raise ValueError(f"{source.name}: unresolved build diagnostics in {log.name}")
+    binomial_print_sources = {
+        "_B10-binomial-booklet.pdf": "_B10-binomial-reading.pdf",
+        "_B10-binomial-exercises-booklet.pdf": "_B10-binomial-exercises.pdf",
+        "_B19-cuts-booklet.pdf": "_B19-cuts-reading.pdf",
+        "_B19-cuts-exercises-booklet.pdf": "_B19-cuts-exercises.pdf",
+    }
+    if source.name in binomial_print_sources:
+        fields = dict(line.split(": ", 1) for line in source.with_suffix(".log").read_text(encoding="utf-8").splitlines() if ": " in line)
+        if fields.get("Status") != "complete" or not fields.get("Generator", "").startswith("impose-binomial-booklet.py"):
+            raise ValueError(f"{source.name}: missing completed imposition diagnostic")
+        reading = source.with_name(binomial_print_sources[source.name])
+        if fields.get("Source SHA256") != hashlib.sha256(reading.read_bytes()).hexdigest():
+            raise ValueError(f"{source.name}: source PDF changed after imposition")
+        if fields.get("Output SHA256") != hashlib.sha256(source.read_bytes()).hexdigest():
+            raise ValueError(f"{source.name}: output PDF differs from imposition diagnostic")
     audit_reference_markers(reader, source)
 
 
@@ -674,11 +706,15 @@ def main():
                         help="Also publish both general zero-transport editions; require both build artifacts.")
     parser.add_argument("--compactness", action="store_true",
                         help="Also publish both compactness editions; require both build artifacts.")
+    parser.add_argument("--cuts-editions", action="store_true",
+                        help="Also publish the B19 cuts reading, exercises, proof companion and both booklets.")
     edition_only = parser.add_mutually_exclusive_group()
     edition_only.add_argument("--coordinates-only", "--coordinates-proofs-only", dest="coordinates_only", action="store_true",
                               help="Publish only both B31 coordinate editions; audit all current PDFs.")
     edition_only.add_argument("--sequences-only", action="store_true",
                               help="Publish only the B21 sequences guide; audit all current PDFs.")
+    edition_only.add_argument("--natural-numbers-only", action="store_true",
+                              help="Publish only the B10 natural-numbers guide; audit all current PDFs.")
     for directory in INDEPENDENT_READINGS:
         edition_only.add_argument(f"--{directory}-only", action="store_true",
                                   help=f"Publish only the independent {directory} reading; audit all current PDFs.")
@@ -690,10 +726,10 @@ def main():
     names = {f"_{row['band']}.pdf": Path(row["source"]).with_suffix(".pdf").name for row in graph}
     names.update(SUPPLEMENT_NAMES)
     names.update(PUBLICATION_ALIASES)
-    only_edition = args.coordinates_only or args.sequences_only or any(
+    only_edition = args.coordinates_only or args.sequences_only or args.natural_numbers_only or any(
         getattr(args, directory.replace("-", "_") + "_only") for directory in INDEPENDENT_READINGS)
     if args.organize_existing:
-        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.bands or only_edition:
+        if args.audit_only or args.skip_main or args.csb_pilot or args.mogiljanskaja or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences or args.integers or args.semilattice or args.frankl or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness or args.coordinates or args.cuts_editions or args.bands or only_edition:
             parser.error("--organize-existing cannot be combined with other options")
         organize_existing(names)
         return
@@ -702,7 +738,7 @@ def main():
         or args.dedekind or args.bracketing_editions or args.power_isomorphisms_editions or args.power or args.differences
         or args.integers or args.semilattice or args.frankl
         or args.reconstruction or args.table_isomorphisms_editions or args.index_period_editions or args.nullproducts or args.zero_transport or args.finite_semigroups or args.compactness
-        or args.coordinates
+        or args.coordinates or args.cuts_editions
     ):
         parser.error("Single-edition publication cannot be combined with other publication selections")
     flat = [path for path in OUTPUT.glob("*.pdf") if path.name in set(names.values()) | {MAIN_NAME}]
@@ -960,12 +996,16 @@ def main():
             (ROOT / "registry" / directory / source, publication_path(destination))
             for source, destination in edition_names.items()
         ]
-        selected = getattr(args, directory.replace("-", "_") + "_only")
-        if directory == "main-results" and (args.sequences_only or args.newton_only or args.abel_only):
+        selected = getattr(args, directory.replace("-", "_") + "_only") or (directory == "cuts" and args.cuts_editions)
+        if directory == "main-results" and (
+            args.sequences_only or args.newton_only or args.abel_only
+            or args.natural_numbers_only or args.binomial_only
+        ):
+            guide = "_B10-main-results.pdf" if (args.natural_numbers_only or args.binomial_only) else "_B21-main-results.pdf"
             publications.extend(publication for publication in independent_publications
-                                if publication[0].name == "_B21-main-results.pdf")
+                                if publication[0].name == guide)
             all_publications.extend(publication for publication in independent_publications
-                                    if publication[0].name == "_B21-main-results.pdf" or publication[1].is_file())
+                                    if publication[0].name == guide or publication[1].is_file())
             continue
         if directory == "main-results" and full_publish:
             # The main-results guides are built independently.

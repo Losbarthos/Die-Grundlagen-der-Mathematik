@@ -352,9 +352,11 @@ unter `output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/Leitfa
 `-SkipPublish` beschränkt den Lauf auf den Build. Der Jobname lautet
 `_B10-main-results`; Artefakte liegen in `registry/main-results/`,
 Konsolenlogs in `tmp/main-results/`. Die eigenen Aussage-Nummern tragen
-den Präfix `10H`. Die PDF enthält keine externen PDF-Zielverweise
-und wird direkt kopiert. Der zentrale Publisher registriert sie
-als reguläre Ergänzung; `build-all.ps1` baut sie nicht neu.
+den Präfix `10H`. Die PDF verweist auf die Binomial-Lesefassung und wird
+mit `publish-pdfs.py --natural-numbers-only` einschließlich relativer
+Linkumschreibung und Prüfung aller publizierten PDF-Ziele veröffentlicht.
+`-Python` wählt den Python-Interpreter. Der zentrale Publisher registriert
+den Leitfaden als reguläre Ergänzung; `build-all.ps1` baut ihn nicht neu.
 
 ## Äquivalenzrelationen: Leitfaden der Hauptresultate
 
@@ -1484,6 +1486,65 @@ frühere experimentelle Lesefassung entfernt, sofern kein geprüfter Verweis
 mehr auf ihren alten Ort zeigt. Andere PDFs werden weder ersetzt noch
 verschoben. `--sequences-only` aktualisiert weiterhin nur den Leitfaden.
 
+## Binomialkoeffizienten und das Pascalsche Dreieck (Band 10)
+
+Die Ergänzung besteht aus zwei unabhängig gebundenen Heften:
+`editions/b10-binomial-reading.tex` enthält die zusammenhängende Lesefassung
+mit Beweisen, Beispielen und Quellen; `editions/b10-binomial-exercises.tex`
+enthält die Aufgaben und ausführlichen Lösungen. Texte und gemeinsame
+Satzkonfiguration liegen unter `tex/b10/binomial/`. Beide Hefte besitzen
+ein eigenes Deckblatt und eine eigene Seitenzählung.
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-binomial-reading.ps1
+```
+
+Der Builder aktualisiert den Band-10-Leitfaden und beide Hefte, prüft
+Referenzen, übervolle Boxen und den PDF-Text und erzeugt anschließend zu
+jedem Heft eine gesonderte Druckbroschüre. `-SkipPublish` beschränkt den Lauf
+auf diese Erstellung und Prüfung. Artefakte liegen unter `registry/binomial/`,
+Konsolenprotokolle unter `tmp/binomial-reading/`. Python mit `pypdf` wird auch
+ohne Publikation benötigt.
+
+| Heft | Bildschirm-/Quell-PDF | Imponierte Druck-PDF |
+| --- | --- | --- |
+| Lesefassung | `_B10-binomial-reading.pdf` | `_B10-binomial-booklet.pdf` |
+| Aufgaben und Lösungen | `_B10-binomial-exercises.pdf` | `_B10-binomial-exercises-booklet.pdf` |
+
+Die Bildschirmfassungen verwenden A4 im Querformat: links eine Textseite,
+rechts karierte Notizfläche. Sie dienen der Bildschirmansicht und dem
+flachen Heften. `scripts/impose-binomial-booklet.py --edition reading`
+beziehungsweise `--edition exercises` erzeugt daraus jeweils die passende
+Druckfassung mit eigenen PDF-Metadaten. Jede Hälfte bleibt 148,5 × 210 mm
+groß; Schrift und Vektorzeichnungen werden weder verkleinert noch gerastert.
+Die linke Hälfte der ersten Quellseite bildet jeweils das Deckblatt. Für
+alle weiteren Quellseiten folgen Text links und Notizen rechts als
+gegenüberliegende A5-Seiten. Leere Seiten ergänzen den Umfang jedes Hefts
+auf ein Vielfaches von vier und bilden die Rückseite seines Umschlags.
+Annotationen und PDF-Verweise entfallen nur in den Druckfassungen.
+
+**Druck der beiden Druckbroschüren:** Jedes Heft separat auf A4 quer,
+mit tatsächlicher Größe beziehungsweise 100 % und beidseitiger Wendung an
+der **kurzen Kante** drucken. Keine zusätzliche Broschürenfunktion im
+Druckdialog einschalten. Die ausgegebenen Bögen je Heft in der vorgegebenen
+Reihenfolge zusammenlegen, mittig falten und im Falz heften.
+Die Seiten sind bereits passend angeordnet.
+
+Jeder Impositionslauf schreibt ein eigenes, ausdrücklich als Generatorprotokoll
+gekennzeichnetes `.log` mit SHA-256-Prüfsummen sowie Seiten-, Blatt- und
+Bogenanzahl. Die vollständigen Seitenzuordnungen stehen unter
+`tmp/binomial-reading/booklet-page-plan.json` für die Lesefassung und
+`tmp/binomial-reading/exercises-booklet-page-plan.json` für das Übungsheft.
+Der Publisher prüft für jede Druckfassung separat, dass sie und ihre
+zugehörige Quelle noch den Prüfsummen dieses Laufs entsprechen.
+
+`publish-pdfs.py --binomial-only` veröffentlicht alle vier Heft-PDFs und den
+Leitfaden und prüft die relativen PDF-Verweise im gesamten publizierten
+Bestand. `--natural-numbers-only` aktualisiert nur den Leitfaden; dessen
+Builder verwendet ebenfalls diesen Publisher. Solange keine Beweistabellen
+vorliegen, stehen alle vier Fassungen unter
+`output/04 Zahlen und Folgen/Ergänzungen/Bd. 10 Natürliche Zahlen/experimentell/Binomialkoeffizienten und das Pascalsche Dreieck/`.
+
 ## Teleskopformel und Abelsche partielle Summation (Band 21)
 
 `editions/b21-abel-reading.tex` ist die eigenständige Lesefassung zu
@@ -1598,3 +1659,38 @@ the local `tmp/` workspace. Reader-facing snapshots in `output/` are an
 explicit exception and remain under version control.
 
 [Back to the README / Zurück zur README](README.md)
+
+## Dedekindsche Schnitte und Vollständigkeit: Lesebroschüren und Beweistabellen
+
+```powershell
+pwsh -NoProfile -File ./scripts/build-cuts-editions.ps1
+```
+
+Der gezielte Build aktualisiert Band 19, die drei Ergänzungen, die beiden
+Druckbroschüren und den Gesamtband. `-EditionsOnly` verwendet einen aktuellen
+Band 19 und baut nur die Ergänzungen; `-SkipMain` lässt den Gesamtband aus,
+`-SkipPublish` die Veröffentlichung. Vorangehende Fachbände müssen wie bei
+anderen gezielten Editionsbuilds bereits aktuelle Register besitzen.
+
+Die Quellen unter `tex/b19/cuts/proofs-source-*.tex` werden von Band 19 und
+der Beweisedition gemeinsam eingelesen. Nur Band 19 deklariert die Aussagen;
+die Beweisedition zeigt ihre kanonischen Metadaten mit `RegistryStatement`
+und besitzt ein leeres eigenes Register. Die beiden korrigierten Hilfssätze
+verlangen ausdrücklich die Schnittmitgliedschaft der Vereinigung.
+
+`scripts/cuts-manifest.json` hält den Stand vor dieser Änderung fest.
+`python scripts/check-cuts-editions.py` prüft unveränderte IDs, Nummern,
+Aussagen (außer den beiden korrigierten Hilfssätzen), Beweisziele und die
+Druckreihenfolge. Der Build prüft außerdem Referenzen, PDF-Text und Überläufe
+in allen drei Ergänzungen. Dies ersetzt keine mathematische Beweisprüfung.
+
+Die Broschüren verwenden unverändert die vektorielle Ausschießfunktion der
+Binomialhefte, ohne Skalierung. `scripts/impose-cuts-booklets.py` legt die
+Seitenpläne unter `tmp/cuts-editions/` ab. Die Lesefassung darf höchstens
+20, das Übungsheft höchstens 18 Quellseiten umfassen; das entspricht den
+aktuellen Binomialheften. Die Druckdateien enthalten keine Linkannotationen.
+
+Veröffentlichung nur der Ergänzungen: `python scripts/publish-pdfs.py --cuts-only`.
+Gemeinsam mit dem korrigierten Band und Gesamtband:
+`python scripts/publish-pdfs.py --bands B19 --cuts-editions`.
+Der Gesamtbuild ruft den Editionsbuild unmittelbar nach Band 19 auf.

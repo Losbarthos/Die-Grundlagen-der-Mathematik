@@ -1,0 +1,73 @@
+% Kanonische Aussagen und Referenzziele stammen ausschließlich aus Band 19.
+\begin{luacode*}
+  local directory = "registry/cuts/"
+  thmlookup.registry_path = directory .. tex.jobname .. ".registry.tsv"
+  thmlookup.debug_path = directory .. tex.jobname .. ".debug.log"
+  thmlookup.prepare_run()
+  for _, predecessor in ipairs(banddeps.graph.B19.predecessors) do
+    local base = banddeps.graph[predecessor].artifact_base
+    tex.sprint("\\externaldocument{" .. base .. "}[../_" .. predecessor .. ".pdf]")
+  end
+  tex.sprint("\\externaldocument{registry/_B19}[../_B19.pdf]")
+  banddeps.load_predecessor_registries("B19")
+  thmlookup.load_registry_file("registry/_B19.registry.tsv")
+\end{luacode*}
+\renewcommand{\FormulaBandID}{19}
+\setcounter{file}{19}
+\providecommand{\CutsCurrentNumber}{19.0.0.0}
+% Split-Tabellen setzen ihren Elternsatz aus diesem Standardzählerbild.
+\renewcommand{\theformulaThm}{\CutsCurrentNumber}
+\renewcommand{\theHtable}{cuts.\arabic{chapter}.\arabic{table}}
+\renewcommand{\theHfigure}{cuts.\arabic{chapter}.\arabic{figure}}
+\renewcommand{\theHproofpartnr}{cuts.\mxProofPartParent.\arabic{proofpartnr}}
+\providecommand{\RealCut}[1]{\operatorname{Cut}_{\mathbb Q}\!\left(#1\right)}
+\providecommand{\RealHat}[1]{\widehat{#1}}
+\providecommand{\RealEmb}{\iota_{\mathbb R}}
+\providecommand{\RealLe}{\mathrel{\leq_{\mathbb R}}}
+\providecommand{\RealLt}{\mathrel{<_{\mathbb R}}}
+
+% Derselbe Quelltext wird hier als importierte Aussage ausgegeben. Keine
+% zusätzliche Deklaration, kein eigener Formelzähler, kein neues Registryziel.
+\newcommand{\CutsCanonicalStatement}[1]{%
+  \par\Needspace{12\baselineskip}%
+  \hypertarget{cuts.proof.#1}{}%
+  \directlua{
+    local identity = thmlookup.by_id["\luaescapestring{#1}"]
+    local record = identity and thmlookup.by_label[identity.label]
+    if not record then
+      tex.error("Missing canonical cut statement: \luaescapestring{#1}")
+    else
+      tex.sprint("\\gdef\\CutsCurrentNumber{" .. record.number .. "}")
+    end
+  }%
+  \ProofPartSetParent{\CutsCurrentNumber}%
+  \setcounter{proofpartnr}{0}%
+  \RegistryStatement[Aussage aus Band 19]{#1}%
+}
+\RenewDocumentCommand{\FormulaDefDeltaK}{o m m +m}{\CutsCanonicalStatement{#3}}
+\RenewDocumentCommand{\FormulaAxiomDeltaK}{o m m +m}{\CutsCanonicalStatement{#3}}
+\RenewDocumentCommand{\FormulaThmDeltaK}{o m m +m}{\CutsCanonicalStatement{#3}}
+
+% Die H-Aussagen stehen ebenso ausschließlich im Bandregister. Die shared
+% Tabellenkörper benutzen ihre kanonischen Nummern, setzen aber keine Labels.
+\RenewDocumentCommand{\mxProofPartOpen}{m o m o o}{%
+  \par\Needspace{9\baselineskip}\medskip
+  \stepcounter{proofpartnr}%
+  \edef\mxPPLbl{thm:pp:\mxProofPartParent:\arabic{proofpartnr}}%
+  \noindent
+  \IfNoValueTF{#2}{\textbf{Teil}}{\textbf{#2}}%
+  \hfill\ProofReferencesWithoutRecording{\ThmLookupEmitRef{theorem}{\mxPPLbl}}%
+  \par\[#3\]\par\small
+  \setcounter{proofstepnr}{0}%
+  \setlength{\tabcolsep}{2pt}%
+  \renewcommand{\arraystretch}{1.15}%
+  \begin{longtable}{#1}%
+}
+
+% Auch der allgemeine Beweisbeginn und unnummerierte Teilüberschriften
+% bleiben mit wenigstens einigen folgenden Tabellenzeilen zusammen.
+\AddToHook{env/tabproofsplitwide/before}{\par\Needspace{13\baselineskip}}
+\AddToHook{env/tabproofsplit/before}{\par\Needspace{13\baselineskip}}
+\let\CutsOriginalProofPartWide\proofpartwide
+\renewcommand{\proofpartwide}[1]{%
+  \par\Needspace{6\baselineskip}\CutsOriginalProofPartWide{#1}}
